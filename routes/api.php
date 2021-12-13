@@ -27,7 +27,7 @@ Route::prefix("v1")->group(function(){
     Route::prefix("auth")->group(function(){
         Route::post("login",[\App\Http\Controllers\AuthController::class,'login']);
         Route::post("logout",[\App\Http\Controllers\AuthController::class,'logout']);
-        Route::post("refresh_token",[\App\Http\Controllers\AuthController::class,'refresh']);
+        Route::post("refresh-token",[\App\Http\Controllers\AuthController::class,'refresh']);
         Route::post("me",[\App\Http\Controllers\AuthController::class,'me']);
     });
 });
