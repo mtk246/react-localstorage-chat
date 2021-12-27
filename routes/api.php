@@ -26,8 +26,12 @@ Route::prefix("v1")->group(function(){
 
     Route::prefix("auth")->group(function(){
         Route::post("login",[\App\Http\Controllers\AuthController::class,'login']);
-        Route::post("logout",[\App\Http\Controllers\AuthController::class,'logout']);
-        Route::post("refresh-token",[\App\Http\Controllers\AuthController::class,'refresh']);
-        Route::post("me",[\App\Http\Controllers\AuthController::class,'me']);
+        Route::get("logout",[\App\Http\Controllers\AuthController::class,'logout']);
+        Route::get("refresh_token",[\App\Http\Controllers\AuthController::class,'refresh']);
+        Route::get("me",[\App\Http\Controllers\AuthController::class,'me']);
+    });
+
+    Route::prefix("user")->group(function(){
+        Route::post("/",[\App\Http\Controllers\UserController::class,'createUser'])->middleware(['auth:api','role:SUPER_USER']);
     });
 });
