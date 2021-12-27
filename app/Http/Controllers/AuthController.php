@@ -21,7 +21,7 @@ class AuthController extends Controller
     {
         $dataValidated = $request->validated();
 
-        if(! $token = auth()->attempt($dataValidated)){
+        if( !$token = auth()->attempt($dataValidated) ){
             return response()->json(['error' => 'User Unauthorized'], 401);
         }
 
@@ -69,11 +69,12 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token): \Illuminate\Http\JsonResponse
     {
+        $user = auth()->user();
         return response()->json([
-            'user' => auth()->user(),
+            'user'         => $user->load("permissions")->load("roles"),
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60
         ]);
     }
 }
