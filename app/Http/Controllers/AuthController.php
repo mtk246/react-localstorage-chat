@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -69,6 +70,9 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token): \Illuminate\Http\JsonResponse
     {
+        /**
+         * @var $user User
+         */
         $user = auth()->user();
         return response()->json([
             'user'         => $user->load("permissions")->load("roles"),
