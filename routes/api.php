@@ -34,5 +34,6 @@ Route::prefix("v1")->group(function(){
     Route::prefix("user")->group(function(){
         Route::post("/",[\App\Http\Controllers\UserController::class,'createUser'])->middleware(['auth:api','role:SUPER_USER']);
         Route::post("send-email-rescue-pass",[\App\Http\Controllers\UserController::class,'sendEmailRescuePass']);
+        Route::post("change-password/{token}",[\App\Http\Controllers\UserController::class,'changePassword']);
     });
 });
