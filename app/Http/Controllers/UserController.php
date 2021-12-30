@@ -180,49 +180,16 @@ class UserController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="name",
+     *                     property="password",
      *                     type="string"
      *                 ),
-     *                 @OA\Property(
-     *                     property="email",
-     *                     type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="password",
-     *                    type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="DBO",
-     *                    type="date"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="sex",
-     *                    type="char"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="firstName",
-     *                    type="string"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="lastName",
-     *                    type="char"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="middleName",
-     *                    type="char"
-     *                 ),
-     *                 @OA\Property(
-     *                    property="roles",
-     *                    type="array",
-     *                    items=@OA\Property(type="string")
-     *                 ),
-     *                 example={"name": "JessicaSmith","password": "12345678","email": "hola@mundo.com","DBO": "2021-12-31","sex":"F","firstName":"Jhon","lastName":"Due","middleName":"Due","roles":{"role1","role2"}}
+     *                 example={"password": "12345678"}
      *             )
      *         )
      *     ),
      *     @OA\Response(
-     *        response="201",
-     *        description="Model User with roles and permission",
+     *        response="200",
+     *        description="password changed",
      *     ),
      *     @OA\Response(
      *        response="500",
