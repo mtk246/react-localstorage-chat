@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $user = User::create([
             "name"       => Faker\Provider\en_US\Person::firstNameMale(),
             "email"      => "admin@billing.com",
-            "password"   => Hash::make('helloworld'),
+            "password"   => bcrypt('helloworld'),
             "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
             "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
             "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),

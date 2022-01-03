@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Mail\SendEmailRecoveryPassword;
 use App\Models\User;
@@ -29,10 +30,10 @@ class UserRepository{
     }
 
     /**
-     * @param $email
+     * @param string $email
      * @return User|Builder|Model|object|null
      */
-    public function findUserByEmail($email){
+    public function findUserByEmail(string $email){
         if( !$email ) return null;
 
         return User::whereEmail($email)->first();
@@ -46,10 +47,10 @@ class UserRepository{
     }
 
     /**
-     * @param $email
+     * @param string $email
      * @return bool|null
      */
-    public function sendEmailToRescuePassword($email): ?bool
+    public function sendEmailToRescuePassword(string $email): ?bool
     {
         try{
             $user = $this->findUserByEmail($email);
@@ -74,10 +75,10 @@ class UserRepository{
 
     /**
      * @param Request $request
-     * @param $token
+     * @param string $token
      * @return bool|null
      */
-    public function changePassword(Request $request,$token): ?bool
+    public function changePassword(Request $request,string $token): ?bool
     {
         try {
             $strData = \Crypt::decrypt($token);
@@ -95,5 +96,34 @@ class UserRepository{
         }
 
         return true;
+    }
+
+    /**
+     * @param EditUserRequest $request
+     * @param int $id
+     * @return bool|int
+     */
+    public function editUser(EditUserRequest $request,int $id){
+        $data = $request->validated();
+        return User::whereId($id)->update($data);
+    }
+
+    /**
+     * @param bool $status
+     * @param int $id
+     * @return bool|int
+     */
+    public function changeStatus(bool $status,int $id){
+        return User::whereId($id)->update(['available' => $status]);
+    }
+
+    /**
+     * @param int $id
+     * @return User|Builder|Model|object|null
+     */
+    public function getOneUser(int $id){
+        $user = User::whereId($id)->first();
+
+        return is_null($user) ? null : $user;
     }
 }

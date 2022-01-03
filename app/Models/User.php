@@ -54,6 +54,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddleName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSex($value)
+ * @property string|null $token
+ * @property bool $available
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -74,6 +78,7 @@ class User extends Authenticatable implements JWTSubject
         'lastName',
         'middleName',
         'token',
+        'available'
     ];
 
     /**

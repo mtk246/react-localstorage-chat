@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "https://mcc.ciph3r.co",
+            "url": "http://localhost",
             "description": "Demo API Server"
         }
     ],
@@ -110,14 +110,14 @@
                 ]
             }
         },
-        "/api/v1/user/": {
+        "/api/v1/user": {
             "post": {
                 "tags": [
                     "Users"
                 ],
                 "summary": "Create Users, endpoint to create users",
                 "description": "Create User",
-                "operationId": "f43914184ab28485d214312da63ba8c2",
+                "operationId": "513dd61f2f11eb4c69388ad75b1cc7ac",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -166,8 +166,8 @@
                                     "lastName": "Due",
                                     "middleName": "Due",
                                     "roles": [
-                                        "role1",
-                                        "role2"
+                                        "BILLER",
+                                        "COLLECTOR"
                                     ]
                                 }
                             }
@@ -181,7 +181,12 @@
                     "500": {
                         "description": "Exception"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/v1/user/send-email-rescue-pass": {
@@ -219,12 +224,7 @@
                     "500": {
                         "description": "Exception"
                     }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
+                }
             }
         },
         "/api/v1/user/change-password/{token}": {

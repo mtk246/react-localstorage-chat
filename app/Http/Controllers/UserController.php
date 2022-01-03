@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ChangeStatusRequest;
+use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use PHPUnit\Exception;
 
 /**
  *
@@ -34,10 +37,11 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/user/",
+     *     path="/api/v1/user",
      *     summary="Create Users, endpoint to create users",
      *     description="Create User",
      *     tags={"Users"},
+     *     security={{"bearer_token":{}}},
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="application/json",
@@ -79,7 +83,7 @@ class UserController extends Controller
      *                    type="array",
      *                    items=@OA\Property(type="string")
      *                 ),
-     *                 example={"name": "JessicaSmith","password": "12345678","email": "hola@mundo.com","DBO": "2021-12-31","sex":"F","firstName":"Jhon","lastName":"Due","middleName":"Due","roles":{"role1","role2"}}
+     *                 example={"name": "JessicaSmith","password": "12345678","email": "hola@mundo.com","DBO": "2021-12-31","sex":"F","firstName":"Jhon","lastName":"Due","middleName":"Due","roles":{"BILLER","COLLECTOR"}}
      *             )
      *         )
      *     ),
@@ -115,7 +119,6 @@ class UserController extends Controller
      *     path="/api/v1/user/send-email-rescue-pass",
      *     summary="Rescue password,Solicitude email to rescue password",
      *     description="Solicitude email to rescue password",
-     *     security={{"bearer_token":{}}},
      *     tags={"Users"},
      *     @OA\RequestBody(
      *         @OA\MediaType(
@@ -208,5 +211,62 @@ class UserController extends Controller
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
+    }
+
+    /**
+     * @param EditUserRequest $request
+     * @param null $id
+     * @return JsonResponse
+     */
+    public function editUser(EditUserRequest $request,$id=null): JsonResponse
+    {
+        try{
+
+            if(is_null($id)) $id = auth()->id();
+
+            $rs = $this->userRepository->editUser($request,$id);
+
+            return $rs ? response()->json($rs) : response()->json("error updating user",400);
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage(),500);
+        }
+    }
+
+    /**
+     * @param ChangeStatusRequest $request
+     * @param null $id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusRequest $request,$id=null): JsonResponse
+    {
+        try{
+            if(!is_null($id)) $id = auth()->id();
+
+            $data = $request->input("available");
+
+            $rs = $this->userRepository->changeStatus($data,$id);
+
+            return $rs ? response()->json($rs) : response()->json("error changing status",400);
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage(),500);
+        }
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getAllUsers(): JsonResponse
+    {
+        return response()->json($this->userRepository->getAllUsers());
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getOneUser(int $id): JsonResponse
+    {
+        $rs = $this->userRepository->getOneUser($id);
+        return $rs ? response()->json($rs) : response()->json("user not found",404);
     }
 }

@@ -72,10 +72,9 @@ class AuthController extends Controller
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
         $dataValidated = $request->validated();
-	$user=User::where('email', $request->email)->first();
-	$password=$user->makeVisible('password')->toArray();
-        if( !$token = \Auth::attempt($dataValidated) ){
-            return response()->json(['error' => 'User Unauthorized', 'user'=>$user, 'request'=>$request->password, 'password'=>\Hash::check($request->password, $user->password)], 401);
+
+        if( !$token = auth()->attempt($dataValidated) ){
+            return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -102,7 +101,7 @@ class AuthController extends Controller
      */
     public function me(): \Illuminate\Http\JsonResponse
     {
-        return response()->json(auth()->user());
+        return response()->json(auth()->user()->load("roles")->load("permissions"));
     }
 
     /**
@@ -139,7 +138,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/auth/refresh_token",
+     *     path="/api/v1/auth/refresh-token",
      *     summary="refresh_token, refresh token",
      *     description="Refresh Token",
      *     tags={"Authentication"},
@@ -162,7 +161,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token): \Illuminate\Http\JsonResponse
+    protected function respondWithToken(string $token): \Illuminate\Http\JsonResponse
     {
         /**
          * @var $user User
