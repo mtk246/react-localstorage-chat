@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Faker;
-
+use Hash;
 class UserSeeder extends Seeder
 {
     /**
@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $user = User::create([
             "name"       => Faker\Provider\en_US\Person::firstNameMale(),
             "email"      => "admin@billing.com",
-            "password"   => bcrypt("helloworld"),
+            "password"   => Hash::make('helloworld'),
             "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
             "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
             "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
