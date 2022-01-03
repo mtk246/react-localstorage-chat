@@ -72,9 +72,10 @@ class AuthController extends Controller
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
         $dataValidated = $request->validated();
-
-        if( !$token = auth()->attempt($dataValidated) ){
-            return response()->json(['error' => 'User Unauthorized'], 401);
+	$user=User::where('email', $request->email)->first();
+	$password=$user->makeVisible('password')->toArray();
+        if( !$token = \Auth::attempt($dataValidated) ){
+            return response()->json(['error' => 'User Unauthorized', 'user'=>$user, 'request'=>$request->password, 'password'=>\Hash::check($request->password, $user->password)], 401);
         }
 
         return $this->respondWithToken($token);

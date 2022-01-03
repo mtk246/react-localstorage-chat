@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost",
+            "url": "https://mcc.ciph3r.co",
             "description": "Demo API Server"
         }
     ],
@@ -250,60 +250,21 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    },
                                     "password": {
                                         "type": "string"
-                                    },
-                                    "DBO": {
-                                        "type": "date"
-                                    },
-                                    "sex": {
-                                        "type": "char"
-                                    },
-                                    "firstName": {
-                                        "type": "string"
-                                    },
-                                    "lastName": {
-                                        "type": "char"
-                                    },
-                                    "middleName": {
-                                        "type": "char"
-                                    },
-                                    "roles": {
-                                        "type": "array",
-                                        "items": {
-                                            "property": null,
-                                            "type": "string"
-                                        }
                                     }
                                 },
                                 "type": "object",
                                 "example": {
-                                    "name": "JessicaSmith",
-                                    "password": "12345678",
-                                    "email": "hola@mundo.com",
-                                    "DBO": "2021-12-31",
-                                    "sex": "F",
-                                    "firstName": "Jhon",
-                                    "lastName": "Due",
-                                    "middleName": "Due",
-                                    "roles": [
-                                        "role1",
-                                        "role2"
-                                    ]
+                                    "password": "12345678"
                                 }
                             }
                         }
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Model User with roles and permission"
+                    "200": {
+                        "description": "password changed"
                     },
                     "500": {
                         "description": "Exception"
