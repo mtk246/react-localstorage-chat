@@ -40,5 +40,11 @@ Route::prefix("v1")->group(function(){
         Route::get("permissions",[\App\Http\Controllers\RolePermissionController::class,'getPermissions']);
         Route::get("role/{id}",[\App\Http\Controllers\RolePermissionController::class,'getOneRole']);
         Route::get("permission/{id}",[\App\Http\Controllers\RolePermissionController::class,'getOnePermission']);
+        Route::post("create-role",[\App\Http\Controllers\RolePermissionController::class,'createRole']);
+        Route::post("create-permission",[\App\Http\Controllers\RolePermissionController::class,'createPermission']);
+        Route::patch("assign-permissions-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionsRole']);
+        Route::patch("assign-permissions-user/{permission_id}/{user_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionUser']);
+        Route::patch("assign-role-user/{user_id}/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'assignRoleUser']);
+
     });
 });

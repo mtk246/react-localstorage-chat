@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
@@ -46,6 +49,128 @@ class RolePermissionRepository
         try {
             return Permission::findById($id);
         }catch (PermissionDoesNotExist | \Exception $e){
+            return null;
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return Builder|Model
+     */
+    public function createRole(string $name){
+        return Role::create(["name" => $name]);
+    }
+
+    /**
+     * @param string $name
+     * @return Builder|Model
+     */
+    public function createPermission(string $name){
+        return Permission::create(["name" => $name]);
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $permission_id
+     * @return \Spatie\Permission\Contracts\Role|null
+     */
+    public function assignPermissionRole(int $role_id,int $permission_id): ?\Spatie\Permission\Contracts\Role
+    {
+        try {
+            $role = Role::findById($role_id);
+            $permission = Permission::findById($permission_id);
+
+            return $role->givePermissionTo($permission->name);
+        }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
+            return null;
+        }
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $user_id
+     * @return User|Builder|Model|object|null
+     */
+    public function assignRoleUser(int $role_id,int $user_id){
+        try{
+            $role = Role::findById($role_id);
+            $user = User::whereId($user_id)->first();
+
+            if( is_null($user) ) return null;
+
+            return $user->assignRole($role);
+        }catch(RoleDoesNotExist | \Exception $exception){
+            return null;
+        }
+    }
+
+    /**
+     * @param int $permission_id
+     * @param int $user_id
+     * @return User|Builder|Model|object|null
+     */
+    public function assignPermissionUser(int $permission_id,int $user_id){
+        try{
+            $permission = Permission::findById($permission_id);
+            $user = User::whereId($user_id)->first();
+
+            if( is_null($user) ) return null;
+
+            return $user->givePermissionTo($permission);
+        }catch(PermissionDoesNotExist | \Exception $exception){
+            return null;
+        }
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $user_id
+     * @return User|Builder|Model|object|null
+     */
+    public function revokeRoleUser(int $role_id,int $user_id){
+        try{
+            $role = Role::findById($role_id);
+            $user = User::whereId($user_id)->first();
+
+            if( is_null($user) ) return null;
+
+            return $user->removeRole($role);
+        }catch (RoleDoesNotExist | \Exception $e){
+            return null;
+        }
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $permission_id
+     * @return User|Builder|Model|object|null
+     */
+    public function revokePermissionUser(int $user_id,int $permission_id){
+        try{
+            $permission = Permission::findById($permission_id);
+            $user = User::whereId($user_id)->first();
+
+            if( is_null($user) ) return null;
+
+            return $user->revokePermissionTo($permission);
+        }catch (PermissionDoesNotExist | \Exception $e){
+            return null;
+        }
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $permission_id
+     * @return \Spatie\Permission\Contracts\Role|null
+     */
+    public function revokePermissionRole(int $role_id,int $permission_id): ?\Spatie\Permission\Contracts\Role
+    {
+        try{
+            $role = Role::findById($role_id);
+            $permission = Permission::findById($permission_id);
+
+            return $role->revokePermissionTo($permission);
+        }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
             return null;
         }
     }
