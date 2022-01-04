@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
@@ -72,9 +73,9 @@ class RolePermissionRepository
     /**
      * @param int $role_id
      * @param int $permission_id
-     * @return \Spatie\Permission\Contracts\Role|null
+     * @return JsonResponse|\Spatie\Permission\Contracts\Role
      */
-    public function assignPermissionRole(int $role_id,int $permission_id): ?\Spatie\Permission\Contracts\Role
+    public function assignPermissionRole(int $role_id,int $permission_id)
     {
         try {
             $role = Role::findById($role_id);
@@ -82,14 +83,14 @@ class RolePermissionRepository
 
             return $role->givePermissionTo($permission->name);
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
-            return null;
+            return response()->json($e->getMessage(),500);
         }
     }
 
     /**
      * @param int $role_id
      * @param int $user_id
-     * @return User|Builder|Model|object|null
+     * @return User|Builder|Model|JsonResponse|object|null
      */
     public function assignRoleUser(int $role_id,int $user_id){
         try{
@@ -100,14 +101,14 @@ class RolePermissionRepository
 
             return $user->assignRole($role);
         }catch(RoleDoesNotExist | \Exception $exception){
-            return null;
+            return response()->json($exception->getMessage(),500);
         }
     }
 
     /**
      * @param int $permission_id
      * @param int $user_id
-     * @return User|Builder|Model|object|null
+     * @return User|Builder|Model|JsonResponse|object|null
      */
     public function assignPermissionUser(int $permission_id,int $user_id){
         try{
@@ -118,14 +119,14 @@ class RolePermissionRepository
 
             return $user->givePermissionTo($permission);
         }catch(PermissionDoesNotExist | \Exception $exception){
-            return null;
+            return response()->json($exception->getMessage(),500);
         }
     }
 
     /**
      * @param int $role_id
      * @param int $user_id
-     * @return User|Builder|Model|object|null
+     * @return User|Builder|Model|JsonResponse|object|null
      */
     public function revokeRoleUser(int $role_id,int $user_id){
         try{
@@ -136,14 +137,14 @@ class RolePermissionRepository
 
             return $user->removeRole($role);
         }catch (RoleDoesNotExist | \Exception $e){
-            return null;
+            return response()->json($e->getMessage(),500);
         }
     }
 
     /**
      * @param int $user_id
      * @param int $permission_id
-     * @return User|Builder|Model|object|null
+     * @return User|Builder|Model|JsonResponse|object|null
      */
     public function revokePermissionUser(int $user_id,int $permission_id){
         try{
@@ -154,16 +155,16 @@ class RolePermissionRepository
 
             return $user->revokePermissionTo($permission);
         }catch (PermissionDoesNotExist | \Exception $e){
-            return null;
+            return response()->json($e->getMessage(),500);
         }
     }
 
     /**
      * @param int $role_id
      * @param int $permission_id
-     * @return \Spatie\Permission\Contracts\Role|null
+     * @return JsonResponse|\Spatie\Permission\Contracts\Role
      */
-    public function revokePermissionRole(int $role_id,int $permission_id): ?\Spatie\Permission\Contracts\Role
+    public function revokePermissionRole(int $role_id,int $permission_id)
     {
         try{
             $role = Role::findById($role_id);
@@ -171,7 +172,7 @@ class RolePermissionRepository
 
             return $role->revokePermissionTo($permission);
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
-            return null;
+            return response()->json($e->getMessage(),500);
         }
     }
 }

@@ -90,7 +90,7 @@ class RolePermissionController extends Controller
     {
         $rs = $this->RolePermissionRepository->assignPermissionRole($role_id,$permission_id);
 
-        return $rs ? response()->json($rs) : response()->json("error assign permissions to role (role or permission not found)",400);
+        return $rs ? response()->json($rs) : response()->json("error assign permissions to role (role or permission not found)",404);
     }
 
     /**
@@ -102,7 +102,7 @@ class RolePermissionController extends Controller
     {
         $rs = $this->RolePermissionRepository->assignRoleUser($role_id,$user_id);
 
-        return $rs ? response()->json($rs) : response()->json("error assign role to user (user or role not found)",400);
+        return $rs ? response()->json($rs) : response()->json("error assign role to user (user or role not found)",404);
     }
 
     /**
@@ -114,6 +114,42 @@ class RolePermissionController extends Controller
     {
         $rs = $this->RolePermissionRepository->assignPermissionUser($permission_id,$user_id);
 
-        return $rs ? response()->json($rs) : response()->json("error assign permission to user (user or permission not found)",400);
+        return $rs ? response()->json($rs) : response()->json("error assign permission to user (user or permission not found)",404);
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $role_id
+     * @return JsonResponse
+     */
+    public function revokeRoleUser(int $user_id,int $role_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->revokeRoleUser($role_id,$user_id);
+
+        return $rs ? response()->json($rs) : response()->json("error revoking role user (role or user not found)",404);
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $permission_id
+     * @return JsonResponse
+     */
+    public function revokePermissionRole(int $role_id,int $permission_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->revokePermissionRole($role_id,$permission_id);
+
+        return $rs ? response()->json($rs) : response()->json("error, revoking permission role (role or permision not found)",404);
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $permission_id
+     * @return JsonResponse
+     */
+    public function revokePermissionUser(int $user_id,int $permission_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->revokePermissionUser($user_id,$permission_id);
+
+        return $rs ? response()->json($rs) : response()->json("error, revoking permission user (user or permission not found)",404);
     }
 }
