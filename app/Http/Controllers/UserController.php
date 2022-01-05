@@ -246,7 +246,7 @@ class UserController extends Controller
 
             $rs = $this->userRepository->changeStatus($data,$id);
 
-            return $rs ? response()->json($rs) : response()->json("error changing status",400);
+            return $rs ? response()->json([],204) : response()->json("error changing status",400);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
