@@ -12,11 +12,11 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `create users`          | `/user/`               |yes             |Create Users  |         
 | 2 |PATCH | `change status user`| `/user/{user_id?}/change-status`        |yes            |change status users|
-| 2 |PUT | `edit users`          | `/user/{user_id?}`|yes|Update data users|
-| 2 |GET | `get all users`   | `/user/` |yes            |get all users|
-| 2 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
-| 2 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
-| 2 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
+| 3 |PUT | `edit users`          | `/user/{user_id?}`|yes|Update data users|
+| 4 |GET | `get all users`   | `/user/` |yes            |get all users|
+| 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
+| 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
+| 7 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null

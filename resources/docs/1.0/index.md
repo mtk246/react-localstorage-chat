@@ -6,3 +6,6 @@
 
 - ## Users
     - [Users](/{{route}}/{{version}}/user)
+
+- ## Permission
+    - [Permissions](/{{route}}/{{version}}/permission)
