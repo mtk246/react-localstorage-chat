@@ -11,7 +11,7 @@
 | # | Name    | Value   |
 | : |   :-    |  :      |
 | 1 | Token   | Bearer  |
-| 2 | BaseUrl | https://mcc.ciph3r.co/api/v1/|
+| 2 | BaseUrl | https://mcc.ciph3r.co:81/api/v1/|
 | 2 | headers | `Accept:application/json` and `Content-Type:application/json` |
 
 
