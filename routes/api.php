@@ -32,7 +32,7 @@ Route::prefix("v1")->group(function(){
         Route::post("send-email-rescue-pass",[\App\Http\Controllers\UserController::class,'sendEmailRescuePass']);
         Route::post("change-password/{token}",[\App\Http\Controllers\UserController::class,'changePassword']);
         Route::patch("{id?}/change-status",[\App\Http\Controllers\UserController::class,'changeStatus'])->middleware('auth:api');
-        Route::put("{id?    }",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
+        Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
     });
 
     Route::prefix("permission")->middleware("auth:api")->group(function(){

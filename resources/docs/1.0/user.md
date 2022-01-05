@@ -15,7 +15,8 @@
 | 2 |PUT | `edit users`          | `/user/{user_id?}`|yes|Update data users|
 | 2 |GET | `get all users`   | `/user/` |yes            |get all users|
 | 2 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
-| 2 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no            |send email to recovery password|
+| 2 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
+| 2 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -351,3 +352,79 @@
 #
 
 >{warning} response 404 when is empty
+
+
+
+
+
+
+#-Send email to recovery password
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Body request example
+
+```json
+{
+    "email":"admin@admin.com"
+}
+```
+
+>{success} 204 response empty, email sent
+
+#
+
+>{warning} 404 user not found, 500 some exception
+
+
+#-Send email to recovery password
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Body request example
+
+```json
+{
+    "email":"admin@admin.com"
+}
+```
+
+>{success} 204 response empty, email sent
+
+#
+
+>{warning} 404 user not found, 500 some exception#-Send email to recovery password
+
+
+
+
+
+
+#-Change Password
+## Param in path
+`token string`
+## Body request example
+
+```json
+{
+    "password":"some password"
+}
+```
+
+>{success} 204 response empty, password changed
+
+#
+
+>{warning} 404 user not found, 500 some exception

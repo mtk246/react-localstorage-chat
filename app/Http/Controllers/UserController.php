@@ -152,7 +152,7 @@ class UserController extends Controller
 
             if(is_null($rs)) return response()->json("User not found",403);
 
-            return ($rs) ? response()->json("Rescue Email was sent") : response()->json("Error, a error have occurred",403);
+            return ($rs) ? response()->json([],204) : response()->json("Error, a error have occurred",403);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
@@ -207,7 +207,7 @@ class UserController extends Controller
 
             if(is_null($rs)) return response()->json("Error, token not exist",403);
 
-            return ($rs) ? response()->json("Password changed successfully") : response()->json("Error, a error have occurred",403);
+            return ($rs) ? response()->json([],204) : response()->json("Error, a error have occurred",403);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }

@@ -67,7 +67,7 @@ class UserRepository{
 
             \Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName,$url));
         }catch (\Exception $e){
-            return false;
+            dd($e);
         }
 
         return true;

@@ -30,7 +30,7 @@ class SendEmailRecoveryPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name')
+        return $this->view('emails.rescue_password')
             ->subject("Recovery Password");
     }
 }
