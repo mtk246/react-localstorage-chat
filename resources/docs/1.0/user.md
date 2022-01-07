@@ -360,13 +360,6 @@
 
 #-Send email to recovery password
 
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
 
 ## Body request example
 
