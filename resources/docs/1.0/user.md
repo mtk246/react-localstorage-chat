@@ -156,7 +156,7 @@
 
 
 
-#-Ger all users
+#-Get all users
 
 ## Param in header
 
@@ -333,7 +333,7 @@
 
 
 
-#-Ger one user
+#-Get one user
 
 ## Param in header
 
@@ -374,32 +374,6 @@
 #
 
 >{warning} 404 user not found, 500 some exception
-
-
-#-Send email to recovery password
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Body request example
-
-```json
-{
-    "email":"admin@admin.com"
-}
-```
-
->{success} 204 response empty, email sent
-
-#
-
->{warning} 404 user not found, 500 some exception#-Send email to recovery password
-
 
 
 
