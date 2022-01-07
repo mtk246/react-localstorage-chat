@@ -1,4 +1,4 @@
 <p>
-    Hola, {{ $completeName }}. Si te ha llego este correo es porque solicitaste recuperar tu contrase#a, para continuar
-    con el proceso por favor haz click en el siguiente link <a href="{{ $url }}">Recuperar password</a>
+    Hello, {{ $completeName }}. If you received this email, it is because you
+    requested to recover your password, to continue with the process please click on the following link <a href="{{ $url }}">Recuperar password</a>
 </p>
