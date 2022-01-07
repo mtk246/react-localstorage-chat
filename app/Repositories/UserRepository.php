@@ -62,7 +62,7 @@ class UserRepository{
             $user->token = $token;
             $user->save();
 
-            $url = env("URL_FRONTEND") . "change-password/" . $token;
+            $url = env("URL_FRONTEND") . $token;
             $fullName = $user->firstName ." ".$user->lastName;
 
             \Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName,$url));
