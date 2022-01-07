@@ -13,7 +13,7 @@
 | 1 |POST| `login`   | `/auth/login`         |no             |to make login  |         
 | 2 |GET| `logout`  | `/auth/logout`        |yes            |to logout from app|
 | 2 |GET| `me`      | `/auth/me`            |yes            |get info from user authenticate|
-| 2 |GET| `refresh-token`  | `/auth/logout` |yes            |to refresh token auth|
+| 2 |GET| `refresh-token`  | `/auth/refresh-token` |yes            |to refresh token auth|
 
 
 
