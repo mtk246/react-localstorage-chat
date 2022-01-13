@@ -71,8 +71,6 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
-        $timeInit = microtime(true);
-
         $dataValidated = $request->validated();
 
         $data = [
@@ -81,22 +79,17 @@ class AuthController extends Controller
             "machine_used" => $request->ip(),
             "start_date"   => now(),
             "end_date"     => now(),
-            "location"     => $request->ip(), 
+            "location"     => $request->ip(),
+            "time"         => now()->toTimeString(),
         ];
 
         if( !$token = auth()->attempt($dataValidated) ){
-            $timeEnd = microtime(true);
-            $executionTime = ($timeEnd - $timeInit) / 60;
-            $data['time'] = $executionTime;
             MetadataController::saveLogAuditory($data,null,$request->input("email"));
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
-        $timeEnd = microtime(true);
-        $executionTime = ($timeEnd - $timeInit) / 60;
-        $data['time']  = $executionTime;
         MetadataController::saveLogAuditory($data,null,$request->input("email"));
-        
+
         return $this->respondWithToken($token);
     }
 
@@ -121,21 +114,18 @@ class AuthController extends Controller
      */
     public function me(Request $request): \Illuminate\Http\JsonResponse
     {
-        $timeInit = microtime(true);
         $user = auth()->user()->load("roles")->load("permissions");
-        
+
         $data = [
             "dataset_name" => "Get me",
             "description"  => "Get information user authenticated",
             "machine_used" => $request->ip(),
             "start_date"   => now(),
             "end_date"     => now(),
-            "location"     => $request->ip(), 
+            "location"     => $request->ip(),
+            "time"         => now()->toTimeString(),
         ];
-        
-        $timeEnd = microtime(true);
-        $executionTime = ($timeEnd - $timeInit) / 60;
-        $data['time']  = $executionTime;
+
         MetadataController::saveLogAuditory($data,$user->id,null);
 
         return response()->json($user);
@@ -163,19 +153,16 @@ class AuthController extends Controller
      */
     public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
-        $timeInit = microtime(true);
         $data = [
             "dataset_name" => "Logout",
             "description"  => "exit from app",
             "machine_used" => $request->ip(),
             "start_date"   => now(),
             "end_date"     => now(),
-            "location"     => $request->ip(), 
+            "location"     => $request->ip(),
+            "time"         => now()->toTimeString(),
         ];
-        
-        $timeEnd = microtime(true);
-        $executionTime = ($timeEnd - $timeInit) / 60;
-        $data['time']  = $executionTime;
+
         MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         auth()->logout();
 
@@ -204,19 +191,16 @@ class AuthController extends Controller
      */
     public function refresh(Request $request): \Illuminate\Http\JsonResponse
     {
-        $timeInit = microtime(true);
         $data = [
             "dataset_name" => "Refresh Token",
             "description"  => "Refresh token authentication",
             "machine_used" => $request->ip(),
             "start_date"   => now(),
             "end_date"     => now(),
-            "location"     => $request->ip(), 
+            "location"     => $request->ip(),
+            "time"         => now()->toTimeString(),
         ];
-        
-        $timeEnd = microtime(true);
-        $executionTime = ($timeEnd - $timeInit) / 60;
-        $data['time']  = $executionTime;
+
         MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         return $this->respondWithToken(auth()->refresh());
     }
