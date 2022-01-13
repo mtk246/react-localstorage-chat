@@ -26,10 +26,9 @@
 
 
 
->{primary} Remember you always must send in "BODY REQUEST" these data:
+>{primary} Remember you always must send in "HEADER as " these data:
 ```json
 {
-    "ip_machine": "string",
     "mac_machine": "string",
     "location": "string",
     "machine_used": "string"

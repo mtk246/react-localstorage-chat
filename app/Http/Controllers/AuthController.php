@@ -83,6 +83,10 @@ class AuthController extends Controller
             "time"         => now()->toTimeString(),
         ];
 
+        if( $this->checkIsLogged($request->input("email")) ){
+            return response()->json("this user has a session active in other device",401);
+        }
+
         if( !$token = auth()->attempt($dataValidated) ){
             MetadataController::saveLogAuditory($data,null,$request->input("email"));
             return response()->json(['error' => 'Bad Credencials'], 401);
@@ -91,6 +95,12 @@ class AuthController extends Controller
         MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
         return $this->respondWithToken($token);
+    }
+
+    public function checkIsLogged($email){
+        $user = User::whereEmail($email)->first();
+
+        return $user->isLogged;
     }
 
     /**
@@ -164,6 +174,7 @@ class AuthController extends Controller
         ];
 
         MetadataController::saveLogAuditory($data,auth()->user()->id,null);
+        User::whereId(auth()->id())->update(["isLogged" => false]);
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
@@ -218,6 +229,8 @@ class AuthController extends Controller
          * @var $user User
          */
         $user = auth()->user();
+        User::whereId($user->id)->update(["isLogged" => true]);
+
         return response()->json([
             'user'         => $user->load("permissions")->load("roles"),
             'access_token' => $token,

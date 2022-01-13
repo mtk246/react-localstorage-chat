@@ -84,6 +84,7 @@ class User extends Authenticatable implements JWTSubject
         'middleName',
         'token',
         'available',
+        'isLogged'
     ];
 
     /**
@@ -136,5 +137,13 @@ class User extends Authenticatable implements JWTSubject
             "user_id",
             "billing_company_id"
         );
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function metadata(): HasOne
+    {
+        return $this->hasOne(Metadata::class);
     }
 }
