@@ -22,6 +22,8 @@ class CreateMetadataTable extends Migration
             $table->date("end_date");
             $table->time("time",1);
             $table->string("location",50)->nullable();
+            $table->string("ip_machine",20)->nullable();
+            $table->string("mac_machine",50)->nullable();
             $table->foreignIdFor(\App\Models\User::class)->nullable();
             $table->timestamps();
         });

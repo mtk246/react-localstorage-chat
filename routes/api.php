@@ -51,4 +51,17 @@ Route::prefix("v1")->group(function(){
         Route::patch("remove-permission-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionRole']);
         Route::patch("remove-role-user/{user_id}/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'revokeRoleUser']);
     });
+
+    Route::prefix("billing-company")->group(function(){
+        Route::post("create",
+            [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/{user_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
+            "auth:api",
+        ]);
+    });
 });

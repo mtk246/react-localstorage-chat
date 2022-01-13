@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Mail\SendEmailRecoveryPassword;
+use App\Models\BillingCompany;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,6 +23,11 @@ class UserRepository{
         $validated = $request->validated();
 
         $user = User::create($validated);
+
+        if($request->has("company-billing")){
+            $company = BillingCompany::create(["name" => $request->input("company-billing")]);
+            $user->billingCompanyUser()->attach($company->id);
+        }
 
         if( isset( $validated['roles'] ) )
             $user->assignRole($validated['roles']);

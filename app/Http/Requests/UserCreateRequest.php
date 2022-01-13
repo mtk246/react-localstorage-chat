@@ -32,7 +32,8 @@ class UserCreateRequest extends FormRequest
             'firstName'  => "required|string|max:20",
             'lastName'   => "required|string|max:20",
             'middleName' => "required|string|max:20",
-            'roles'      => "sometimes|array"
+            'roles'      => "sometimes|array",
+            'company_billing' => "sometimes|string|max:50"
         ];
     }
 }

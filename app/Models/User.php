@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToManyAlias;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -58,6 +60,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property bool $available
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
+ * @property int|null $billing_company_user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBillingCompanyUserId($value)
+ * @property-read \App\Models\BillingCompanyUser|null $billingCompanyUser
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -78,7 +83,7 @@ class User extends Authenticatable implements JWTSubject
         'lastName',
         'middleName',
         'token',
-        'available'
+        'available',
     ];
 
     /**
@@ -118,5 +123,18 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    /**
+     * @return BelongsToManyAlias
+     */
+    public function billingCompanyUser(): BelongsToManyAlias
+    {
+        return $this->belongsToMany(
+            BillingCompany::class,
+            "billing_company_users",
+            "user_id",
+            "billing_company_id"
+        );
     }
 }

@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use PHPUnit\Exception;
 
 /**
  *

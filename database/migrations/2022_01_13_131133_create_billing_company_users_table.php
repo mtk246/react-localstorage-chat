@@ -15,8 +15,7 @@ class CreateBillingCompanyUsersTable extends Migration
     {
         Schema::create('billing_company_users', function (Blueprint $table) {
             $table->id();
-            $table->integer("IDbcu");
-            $table->string("pfkSSN",15);
+            $table->foreignIdFor(\App\Models\User::class);
             $table->foreignIdFor(\App\Models\BillingCompany::class);
             $table->timestamps();
         });
