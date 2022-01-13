@@ -39,7 +39,8 @@
     "firstName":"test",
     "lastName":"test",
     "middleName":"testing",
-    "roles":["ACCOUNT_MANAGER"]
+    "roles":["ACCOUNT_MANAGER"],
+    "company-billing": "someCompany"
 }
 ```
 

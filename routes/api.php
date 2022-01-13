@@ -57,10 +57,10 @@ Route::prefix("v1")->group(function(){
             [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);
-        Route::get("/{user_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
+        Route::get("/user/{user_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
             "auth:api",
         ]);
-        Route::get("/",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
+        Route::get("/",[\App\Http\Controllers\BillingCompanyController::class,'getAllBillingCompany'])->middleware([
             "auth:api",
         ]);
     });

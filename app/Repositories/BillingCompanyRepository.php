@@ -13,7 +13,7 @@ class BillingCompanyRepository
     }
 
     public function getAllBillingCompanyByUser($user_id){
-        return User::whereId($user_id)->billingCompanyUser;
+        return User::whereId($user_id)->with("billingCompanyUser")->first();
     }
 
     public function getAllBillingCompany(){

@@ -9,3 +9,6 @@
 
 - ## Permission
     - [Permissions](/{{route}}/{{version}}/permission)
+
+- ## Billing-Company
+    - [Billing-Company](/{{route}}/{{version}}/billing-company)

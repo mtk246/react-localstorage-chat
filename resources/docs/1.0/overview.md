@@ -19,3 +19,19 @@
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
+
+
+
+#
+
+
+
+>{primary} Remember you always must send in "BODY REQUEST" these data:
+```json
+{
+    "ip_machine": "string",
+    "mac_machine": "string",
+    "location": "string",
+    "machine_used": "string"
+}
+```
