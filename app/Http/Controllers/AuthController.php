@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\MetadataController;
 /**
  * @OA\Info(title="Api Medical billing",version="1.0")
  *
@@ -71,18 +71,38 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
+        $timeInit = microtime(true);
+
         $dataValidated = $request->validated();
 
+        $data = [
+            "dataset_name" => "LOGIN",
+            "description"  => "making login",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+
         if( !$token = auth()->attempt($dataValidated) ){
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time'] = $executionTime;
+            MetadataController::saveLogAuditory($data,null,$request->input("email"));
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,null,$request->input("email"));
+        
         return $this->respondWithToken($token);
     }
 
     /**
      * Get the authenticated User.
-     *
+     * @param Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
 
@@ -99,14 +119,32 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function me(): \Illuminate\Http\JsonResponse
+    public function me(Request $request): \Illuminate\Http\JsonResponse
     {
-        return response()->json(auth()->user()->load("roles")->load("permissions"));
+        $timeInit = microtime(true);
+        $user = auth()->user()->load("roles")->load("permissions");
+        
+        $data = [
+            "dataset_name" => "Get me",
+            "description"  => "Get information user authenticated",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+        
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,$user->id,null);
+
+        return response()->json($user);
     }
 
     /**
      * Log the user out (Invalidate the token).
      *
+     * @param Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
 
@@ -123,8 +161,22 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function logout(): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
+        $timeInit = microtime(true);
+        $data = [
+            "dataset_name" => "Logout",
+            "description"  => "exit from app",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+        
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         auth()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
@@ -133,6 +185,7 @@ class AuthController extends Controller
     /**
      * Refresh a token.
      *
+     * @param Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
 
@@ -149,8 +202,22 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function refresh(): \Illuminate\Http\JsonResponse
+    public function refresh(Request $request): \Illuminate\Http\JsonResponse
     {
+        $timeInit = microtime(true);
+        $data = [
+            "dataset_name" => "Refresh Token",
+            "description"  => "Refresh token authentication",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+        
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         return $this->respondWithToken(auth()->refresh());
     }
 

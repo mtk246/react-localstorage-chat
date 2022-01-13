@@ -100,8 +100,23 @@ class UserController extends Controller
     public function createUser(UserCreateRequest $request): JsonResponse
     {
         try{
+            $timeInit = microtime(true);
+            $data = [
+                "dataset_name" => "Create user",
+                "description"  => "creation a new user",
+                "machine_used" => $request->ip(),
+                "start_date"   => now(),
+                "end_date"     => now(),
+                "location"     => $request->ip(), 
+            ];
+
             /** @var  $user User*/
             $user = $this->userRepository->create($request);
+            
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time']  = $executionTime;
+            MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
             return response()->json($user->load("roles"),201);
         }catch (\Exception $e){
@@ -148,7 +163,23 @@ class UserController extends Controller
     public function sendEmailRescuePass(SendRescuePassRequest $request): JsonResponse
     {
         try{
+            $timeInit = microtime(true);
+            $data = [
+                "dataset_name" => "send email recover password",
+                "description"  => "solicitude email to recover password",
+                "machine_used" => $request->ip(),
+                "start_date"   => now(),
+                "end_date"     => now(),
+                "location"     => $request->ip(), 
+            ];
+
             $rs = $this->userRepository->sendEmailToRescuePassword($request->input("email"));
+            
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time']  = $executionTime;
+            MetadataController::saveLogAuditory($data,null,$request->input("email"));
+            
 
             if(is_null($rs)) return response()->json("User not found",403);
 
@@ -203,13 +234,46 @@ class UserController extends Controller
     public function changePassword(ChangePasswordRequest $request,$token): JsonResponse
     {
         try{
+            $timeInit = microtime(true);
+
+            $user = $this->getInfoToken($token);
+
+            if(!$user){
+                return response()->json("token expired",403);
+            }
+
+            $data = [
+                "dataset_name" => "change password",
+                "description"  => "user change password",
+                "machine_used" => $request->ip(),
+                "start_date"   => now(),
+                "end_date"     => now(),
+                "location"     => $request->ip(), 
+            ];
+
             $rs = $this->userRepository->changePassword($request,$token);
+            
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time']  = $executionTime;
+            MetadataController::saveLogAuditory($data,$user->id,null);
+            
 
             if(is_null($rs)) return response()->json("Error, token not exist",403);
 
             return ($rs) ? response()->json([],204) : response()->json("Error, a error have occurred",403);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
+        }
+    }
+
+    public function getInfoToken(string $token){
+        try{
+            $strData = \Crypt::decrypt($token);
+            $dataSplit = explode("@#@#$",$strData);
+            return User::where("token",$token)->where("email",$dataSplit[1])->first();
+        }catch(\Exception $exception){
+            return false;
         }
     }
 
@@ -221,10 +285,25 @@ class UserController extends Controller
     public function editUser(EditUserRequest $request,$id=null): JsonResponse
     {
         try{
+            $timeInit = microtime(true);
 
             if(is_null($id)) $id = auth()->id();
 
+            $data = [
+                "dataset_name" => "edit user",
+                "description"  => "updating info user",
+                "machine_used" => $request->ip(),
+                "start_date"   => now(),
+                "end_date"     => now(),
+                "location"     => $request->ip(), 
+            ];
+
             $rs = $this->userRepository->editUser($request,$id);
+            
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time']  = $executionTime;
+            MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
             return $rs ? response()->json($rs) : response()->json("error updating user",400);
         }catch (\Exception $exception){
@@ -240,11 +319,27 @@ class UserController extends Controller
     public function changeStatus(ChangeStatusRequest $request,$id=null): JsonResponse
     {
         try{
+            $timeInit = microtime(true);
+            
             if(!is_null($id)) $id = auth()->id();
+
+            $data = [
+                "dataset_name" => "change status",
+                "description"  => "change status users",
+                "machine_used" => $request->ip(),
+                "start_date"   => now(),
+                "end_date"     => now(),
+                "location"     => $request->ip(), 
+            ];
 
             $data = $request->input("available");
 
             $rs = $this->userRepository->changeStatus($data,$id);
+            
+            $timeEnd = microtime(true);
+            $executionTime = ($timeEnd - $timeInit) / 60;
+            $data['time']  = $executionTime;
+            MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
             return $rs ? response()->json([],204) : response()->json("error changing status",400);
         }catch (\Exception $exception){
@@ -253,20 +348,59 @@ class UserController extends Controller
     }
 
     /**
+     * 
+     * @param Illuminate\Http\Request $request
      * @return JsonResponse
      */
-    public function getAllUsers(): JsonResponse
+    public function getAllUsers(Request $request): JsonResponse
     {
-        return response()->json($this->userRepository->getAllUsers());
+        $timeInit = microtime(true);  
+        
+        $data = [
+            "dataset_name" => "get all users",
+            "description"  => "get all users",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+
+        $data = $request->input("available");
+
+        $rs = $this->userRepository->getAllUsers();
+        
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
+        return response()->json($rs);
     }
 
     /**
      * @param int $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getOneUser(int $id): JsonResponse
+    public function getOneUser(Request $request,int $id): JsonResponse
     {
+        $timeInit = microtime(true);  
+        
+        $data = [
+            "dataset_name" => "get all users",
+            "description"  => "get all users",
+            "machine_used" => $request->ip(),
+            "start_date"   => now(),
+            "end_date"     => now(),
+            "location"     => $request->ip(), 
+        ];
+
         $rs = $this->userRepository->getOneUser($id);
+        
+        $timeEnd = microtime(true);
+        $executionTime = ($timeEnd - $timeInit) / 60;
+        $data['time']  = $executionTime;
+        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
+        
         return $rs ? response()->json($rs) : response()->json("user not found",404);
     }
 }
