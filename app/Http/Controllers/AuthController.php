@@ -83,9 +83,9 @@ class AuthController extends Controller
             "time"         => now()->toTimeString(),
         ];
 
-        if( $this->checkIsLogged($request->input("email")) ){
-            return response()->json("this user has a session active in other device",401);
-        }
+//        if( $this->checkIsLogged($request->input("email")) ){
+//            return response()->json("this user has a session active in other device",401);
+//        }
 
         if( !$token = auth()->attempt($dataValidated) ){
             MetadataController::saveLogAuditory($data,null,$request->input("email"));
