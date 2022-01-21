@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Mail\GenerateNewPassword;
 use App\Mail\SendEmailRecoveryPassword;
 use App\Models\BillingCompany;
 use App\Models\User;
@@ -24,12 +26,24 @@ class UserRepository{
         $user = User::create($validated);
 
         if($request->has("company-billing")){
-            $company = BillingCompany::create(["name" => $request->input("company-billing")]);
+            $company = BillingCompany::create($request->input("company-billing"));
             $user->billingCompanyUser()->attach($company->id);
         }
 
         if( isset( $validated['roles'] ) )
             $user->assignRole($validated['roles']);
+
+        $token = encrypt($user->id."@#@#$".$user->email);
+        $user->token = $token;
+        $user->save();
+
+        \Mail::to($user->email)->send(
+            new GenerateNewPassword(
+            $user->firstName.' '.$user->lastName,
+            $user->email,
+            env('URL_FRONT') . $token
+            )
+        );
 
         return $user;
     }
@@ -130,5 +144,27 @@ class UserRepository{
         $user = User::whereId($id)->first();
 
         return is_null($user) ? null : $user;
+    }
+
+    /**
+     * @param ImgProfileRequest $request
+     * @return string
+     */
+    public function updateImgProfile(ImgProfileRequest $request): string
+    {
+        if(!file_exists(public_path("/img-profile")))
+            mkdir(public_path("/img-profile/"));
+
+        $file = $request->file('img');
+        $fullNameFile = strtotime('now') . $file->getClientOriginalExtension();
+        $file->move(public_path("/img-profile/"),$fullNameFile);
+
+        $pathNameFile = public_path("/img-profile" . $fullNameFile);
+
+        User::whereId(auth()->id())->update([
+            'img-profile' => $pathNameFile,
+        ]);
+
+        return $pathNameFile;
     }
 }

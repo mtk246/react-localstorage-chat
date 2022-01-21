@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Models\User;
@@ -369,5 +370,16 @@ class UserController extends Controller
         MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
         return $rs ? response()->json($rs) : response()->json("user not found",404);
+    }
+
+    /**
+     * @param ImgProfileRequest $request
+     * @return JsonResponse
+     */
+    public function updateImgProfile(ImgProfileRequest $request): JsonResponse
+    {
+        $rs = $this->userRepository->updateImgProfile($request);
+
+        return ($rs) ? response()->json($rs) : response()->json("error updating image profile",400);
     }
 }

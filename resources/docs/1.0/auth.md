@@ -35,7 +35,7 @@
     {
     "user": {
         "id": 1,
-        "name": "hola",
+        "username": "hola",
         "email": "admin@billing.com",
         "email_verified_at": null,
         "created_at": "2021-12-23T18:08:35.000000Z",
@@ -131,7 +131,7 @@
 ```json
 {
     "id": 1,
-    "name": "hola",
+    "username": "hola",
     "email": "admin@billing.com",
     "email_verified_at": null,
     "created_at": "2021-12-23T18:08:35.000000Z",
@@ -203,7 +203,7 @@
 {
     "user": {
         "id": 1,
-        "name": "hola",
+        "username": "hola",
         "email": "admin@billing.com",
         "email_verified_at": null,
         "created_at": "2021-12-23T18:08:35.000000Z",

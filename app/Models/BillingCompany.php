@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\BillingCompany
@@ -21,6 +22,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $code
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCode($value)
+ * @property-read \App\Models\Address|null $address
+ * @property-read \App\Models\Contact|null $contact
  */
 class BillingCompany extends Model
 {
@@ -28,6 +35,7 @@ class BillingCompany extends Model
 
     protected $fillable = [
         "name",
+        "code"
     ];
 
     protected $table = "billing_companies";
@@ -43,5 +51,21 @@ class BillingCompany extends Model
             "billing_company_id",
             "user_id"
         );
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function contact(): HasOne
+    {
+        return $this->hasOne(Contact::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function address(): HasOne
+    {
+        return $this->hasOne(Address::class);
     }
 }

@@ -24,16 +24,15 @@ class UserCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => "required|string|max:20",
+            'username'  => "required|string|max:20",
             'email' => "required|string|email:rfc",
-            'password' => "required|string|min:8",
             'DOB' => "required|date",
             'sex' => "required|string|max:1",
             'firstName'  => "required|string|max:20",
             'lastName'   => "required|string|max:20",
             'middleName' => "required|string|max:20",
             'roles'      => "sometimes|array",
-            'company_billing' => "sometimes|string|max:50"
+            'company-billing' => "sometimes|array"
         ];
     }
 }

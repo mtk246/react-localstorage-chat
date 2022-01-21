@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCompanyBilling extends FormRequest
+class ImgProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,7 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string|max:50",
-            "code" => "required|string",
-            "address" => "required|array",
-            "contact" => "required|array"
+            "img" => "required|file|mimes:jpg,png|max:1024"
         ];
     }
 }

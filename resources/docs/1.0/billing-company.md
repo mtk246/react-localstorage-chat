@@ -13,6 +13,8 @@
 | 1 |POST| `Create Billing Company`          | `/billing-company/create`               |yes             |Create Companies  |         
 | 2 |GET | `Get company by user`| `/billing-company/user/{user_id}`        |yes            |Get Companies By Users|
 | 3 |GET | `Get all Companies`          | `/billing-company`|yes|Get All Companies|
+| 4 |GET | `Get Company by code`          | `/billing-company/get-by-code/{code}`|yes|Get Company by code|
+| 5 |GET | `Get Company by name`          | `/billing-company/get-by-name/{name}`|yes|Get Company by name|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -25,7 +27,19 @@
 
 ```json
 {
-    "name":"someCompany"
+    "name":"fdgf",
+    "code":"someCode",
+    "address":{
+        "address":"dfsdf",
+        "city":"cdfsf",
+        "state":"sdsfsd",
+        "zip":"3234"
+    },
+    "contact":{
+        "phone":"55433",
+        "fax":"fsdfs",
+        "email":"dsfsd@.com"
+    }
 }
 ```
 
@@ -152,3 +166,87 @@
 
 
 >{warning} possible errors: 404 when user not found 
+
+
+
+#
+
+#-Get Company by code
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "code": string
+}
+```
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+
+    {
+        "id": 1,
+        "name": "someCompany",
+        "created_at": "2022-01-13T18:59:15.000000Z",
+        "updated_at": "2022-01-13T18:59:15.000000Z"
+    }
+
+```
+
+
+>{warning} possible errors: 404 when user not found 
+
+
+
+
+#
+
+#-Get Company by name
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "name": string
+}
+```
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+
+    {
+        "id": 1,
+        "name": "someCompany",
+        "created_at": "2022-01-13T18:59:15.000000Z",
+        "updated_at": "2022-01-13T18:59:15.000000Z"
+    }
+
+```
+
+
+>{warning} possible errors: 404 when user not found 
+

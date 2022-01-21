@@ -33,6 +33,7 @@ Route::prefix("v1")/*->middleware('audit')*/->group(function(){
         Route::post("change-password/{token}",[\App\Http\Controllers\UserController::class,'changePassword']);
         Route::patch("{id?}/change-status",[\App\Http\Controllers\UserController::class,'changeStatus'])->middleware('auth:api');
         Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
+        Route::patch("img-profile",[\App\Http\Controllers\UserController::class,'updateImgProfile'])->middleware(['auth:api']);
     });
 
     Route::prefix("permission")->middleware("auth:api")->group(function(){
@@ -61,6 +62,12 @@ Route::prefix("v1")/*->middleware('audit')*/->group(function(){
             "auth:api",
         ]);
         Route::get("/",[\App\Http\Controllers\BillingCompanyController::class,'getAllBillingCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("get-by-code/{code}",[\App\Http\Controllers\BillingCompanyController::class,'getByCode'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("get-by-name/{name}",[\App\Http\Controllers\BillingCompanyController::class,'getByName'])->middleware([
             "auth:api",
         ]);
     });

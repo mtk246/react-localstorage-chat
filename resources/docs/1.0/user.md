@@ -17,6 +17,7 @@
 | 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
 | 7 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
+| 8 |PATCH | `update image user`   | `/user/img-profile` |yes|update image profile|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -31,16 +32,18 @@
 
 ```json
 {
-    "name":"test",
-    "email":"testfff@test.com",
-    "password":"hovbgbgbla1frf2345",
+    "username":"tesfvrtrdt",
+    "email":"ghgfvbgfr@test.com",
     "DOB":"2021-12-26",
     "sex":"m",
     "firstName":"test",
     "lastName":"test",
     "middleName":"testing",
     "roles":["ACCOUNT_MANAGER"],
-    "company-billing": "someCompany"
+    "company-billing":{
+        "name":"someNameCompanyBilling",
+        "code":"Somecode"
+    }
 }
 ```
 
@@ -62,7 +65,7 @@
 
 ```json
 {
-    "name": "test",
+    "username": "test",
     "email": "testffddf@test.com",
     "DOB": "2021-12-26",
     "sex": "m",
@@ -135,7 +138,7 @@
 
 ```json
 {
-    "name":"hola",
+    "username":"hola",
     "email":"admin@admin.com",
     "DOB":"2021-12-26",
     "sex":"m",
@@ -178,7 +181,7 @@
 [
     {
         "id": 2,
-        "name": "usertes",
+        "username": "usertes",
         "email": "usertest@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T07:02:27.000000Z",
@@ -193,7 +196,7 @@
     },
     {
         "id": 4,
-        "name": "test",
+        "username": "test",
         "email": "test1@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T07:07:58.000000Z",
@@ -208,7 +211,7 @@
     },
     {
         "id": 5,
-        "name": "test",
+        "username": "test",
         "email": "test2@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T07:14:29.000000Z",
@@ -223,7 +226,7 @@
     },
     {
         "id": 6,
-        "name": "test",
+        "username": "test",
         "email": "test2ee@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T07:52:28.000000Z",
@@ -238,7 +241,7 @@
     },
     {
         "id": 7,
-        "name": "test",
+        "username": "test",
         "email": "test244ee@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T08:01:07.000000Z",
@@ -253,7 +256,7 @@
     },
     {
         "id": 8,
-        "name": "test",
+        "username": "test",
         "email": "test565@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T08:19:42.000000Z",
@@ -268,7 +271,7 @@
     },
     {
         "id": 10,
-        "name": "test",
+        "username": "test",
         "email": "testfff@test.com",
         "email_verified_at": null,
         "created_at": "2022-01-03T15:05:57.000000Z",
@@ -283,7 +286,7 @@
     },
     {
         "id": 3,
-        "name": "test",
+        "username": "test",
         "email": "test@test.com",
         "email_verified_at": null,
         "created_at": "2021-12-27T07:03:51.000000Z",
@@ -298,7 +301,7 @@
     },
     {
         "id": 12,
-        "name": "test",
+        "username": "test",
         "email": "testffddf@test.com",
         "email_verified_at": null,
         "created_at": "2022-01-05T17:55:17.000000Z",
@@ -313,7 +316,7 @@
     },
     {
         "id": 1,
-        "name": "hola",
+        "username": "hola",
         "email": "admin@billing.com",
         "email_verified_at": null,
         "created_at": "2021-12-23T18:08:35.000000Z",
@@ -394,5 +397,30 @@
 >{success} 204 response empty, password changed
 
 #
+
+>{warning} 404 user not found, 500 some exception
+
+
+#
+
+#-Change image user
+## Body request example
+
+```json
+{
+    "img":"file"
+}
+```
+
+>{success} 200 Response 
+> ```json
+{
+    "path":"somepath"
+}
+```
+
+
+#
+
 
 >{warning} 404 user not found, 500 some exception

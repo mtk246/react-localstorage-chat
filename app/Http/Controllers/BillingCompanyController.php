@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCompanyBilling;
 use App\Repositories\BillingCompanyRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BillingCompanyController extends Controller
@@ -17,9 +18,9 @@ class BillingCompanyController extends Controller
 
     /**
      * @param CreateCompanyBilling $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function createCompany(CreateCompanyBilling $request): \Illuminate\Http\JsonResponse
+    public function createCompany(CreateCompanyBilling $request): JsonResponse
     {
         $rs = $this->billingCompanyRepository->createBillingCompany($request->validated());
 
@@ -28,9 +29,9 @@ class BillingCompanyController extends Controller
 
     /**
      * @param mixed $user_id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getBillingCompanyByUser($user_id): \Illuminate\Http\JsonResponse
+    public function getBillingCompanyByUser($user_id): JsonResponse
     {
         $rs = $this->billingCompanyRepository->getAllBillingCompanyByUser($user_id);
 
@@ -38,12 +39,34 @@ class BillingCompanyController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function getAllBillingCompany(): \Illuminate\Http\JsonResponse
+    public function getAllBillingCompany(): JsonResponse
     {
         $rs = $this->billingCompanyRepository->getAllBillingCompany();
 
         return response()->json($rs);
+    }
+
+    /**
+     * @param string $code
+     * @return JsonResponse
+     */
+    public function getByCode(string $code): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->getByCode($code);
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([],404);
+    }
+
+    /**
+     * @param string $name
+     * @return JsonResponse
+     */
+    public function getByName(string $name): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->getByName($name);
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([],404);
     }
 }

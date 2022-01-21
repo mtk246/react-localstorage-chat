@@ -87,12 +87,11 @@ class AuthController extends Controller
 //            return response()->json("this user has a session active in other device",401);
 //        }
 
+        MetadataController::saveLogAuditory($data,null,$request->input("email"));
+
         if( !$token = auth()->attempt($dataValidated) ){
-            MetadataController::saveLogAuditory($data,null,$request->input("email"));
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
-
-        MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
         return $this->respondWithToken($token);
     }

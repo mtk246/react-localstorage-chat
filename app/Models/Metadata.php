@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $mac_machine
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereIpMachine($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereMacMachine($value)
+ * @property-read \App\Models\User|null $user
  */
 class Metadata extends Model
 {
