@@ -6,6 +6,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Mail\GenerateNewPassword;
+use App\Mail\RecoveryUserMail;
 use App\Mail\SendEmailRecoveryPassword;
 use App\Models\BillingCompany;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserRepository{
 
@@ -166,5 +168,29 @@ class UserRepository{
         ]);
 
         return $pathNameFile;
+    }
+
+    /**
+     * @param string $email
+     * @return bool|null
+     */
+    public function recoveryUser(string $email): ?bool
+    {
+        $user = User::whereEmail($email)->first();
+
+        if(is_null($user)) return null;
+
+        $token = encrypt($user->id."@#@#$".$user->email);
+
+        $user->token = $token;
+        $user->save();
+
+        Mail::to($user->email)->send(
+            new RecoveryUserMail(
+            $user->firstName.' '.$user->lastName,
+            $user->email,
+            env('URL_FRONT') . $token)
+        );
+        return true;
     }
 }

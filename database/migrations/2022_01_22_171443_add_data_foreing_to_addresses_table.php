@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClearingHousesTable extends Migration
+class AddDataForeingToAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateClearingHousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('clearing_houses', function (Blueprint $table) {
-            $table->id();
-            $table->string("code");
-            $table->string("name");
-            $table->boolean("status")->default(false);
-            $table->timestamps();
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\ClearingHouse::class)->nullable();
+            $table->foreignIdFor(\App\Models\Facility::class)->nullable();
         });
     }
 
@@ -29,6 +26,8 @@ class CreateClearingHousesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clearing_houses');
+        Schema::table('addresses', function (Blueprint $table) {
+
+        });
     }
 }

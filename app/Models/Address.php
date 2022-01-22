@@ -36,6 +36,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereZip($value)
  * @mixin \Eloquent
  * @property-read \App\Models\ClearingHouse $clearingHouse
+ * @property int|null $clearing_house_id
+ * @property int|null $facility_id
+ * @property-read \App\Models\Facility|null $facility
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereClearingHouseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereFacilityId($value)
  */
 class Address extends Model
 {
@@ -48,7 +53,9 @@ class Address extends Model
         "state",
         "zip",
         "user_id",
-        "billing_company_id"
+        "billing_company_id",
+        "clearing_house_id",
+        "facility_id",
     ];
 
     /**
@@ -73,5 +80,13 @@ class Address extends Model
     public function clearingHouse(): BelongsTo
     {
         return $this->belongsTo(ClearingHouse::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function facility(): BelongsTo
+    {
+        return $this->belongsTo(Facility::class);
     }
 }

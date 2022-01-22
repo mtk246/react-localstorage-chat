@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClearingHousesTable extends Migration
+class AddDateSsnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateClearingHousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('clearing_houses', function (Blueprint $table) {
-            $table->id();
-            $table->string("code");
-            $table->string("name");
-            $table->boolean("status")->default(false);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string("ssn")->nullable();
+            $table->date("dateOfBirth")->nullable();
         });
     }
 
@@ -29,6 +26,9 @@ class CreateClearingHousesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clearing_houses');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn("ssn");
+            $table->dropColumn("dateOfBirth");
+        });
     }
 }

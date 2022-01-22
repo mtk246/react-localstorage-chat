@@ -6,8 +6,10 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
+use App\Http\Requests\RecoveryUserRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Mail\RecoveryUserMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
@@ -381,5 +383,11 @@ class UserController extends Controller
         $rs = $this->userRepository->updateImgProfile($request);
 
         return ($rs) ? response()->json($rs) : response()->json("error updating image profile",400);
+    }
+
+    public function recoveryUser(RecoveryUserRequest $request){
+        $rs = $this->userRepository->recoveryUser($request->input("email"));
+
+        return $rs ? response()->send([],204) : response()->json("Error user not found",404);
     }
 }

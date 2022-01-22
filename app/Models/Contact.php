@@ -32,6 +32,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\Models\ClearingHouse $clearingHouse
+ * @property int|null $clearing_house_id
+ * @property int|null $facility_id
+ * @property-read \App\Models\Facility|null $facility
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereClearingHouseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFacilityId($value)
  */
 class Contact extends Model
 {
@@ -68,4 +73,13 @@ class Contact extends Model
     {
         return $this->belongsTo(ClearingHouse::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function facility(): BelongsTo
+    {
+        return $this->belongsTo(Facility::class);
+    }
+
 }

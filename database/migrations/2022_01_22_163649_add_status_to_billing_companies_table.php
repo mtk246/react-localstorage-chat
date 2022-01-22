@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClearingHousesTable extends Migration
+class AddStatusToBillingCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateClearingHousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('clearing_houses', function (Blueprint $table) {
-            $table->id();
-            $table->string("code");
-            $table->string("name");
+        Schema::table('billing_companies', function (Blueprint $table) {
             $table->boolean("status")->default(false);
-            $table->timestamps();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateClearingHousesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clearing_houses');
+        Schema::table('billing_companies', function (Blueprint $table) {
+            $table->dropColumn("status");
+        });
     }
 }

@@ -16,6 +16,7 @@
 | 4 |GET | `get all users`   | `/user/` |yes            |get all users|
 | 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
+| 6 |POST | `send email to recovery user`   | `/user/send-email-rescue-user` |no|send email to recovery user|
 | 7 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 8 |PATCH | `update image user`   | `/user/img-profile` |yes|update image profile|
 

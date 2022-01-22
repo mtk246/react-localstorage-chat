@@ -15,6 +15,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @mixin \Eloquent
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property bool $ack
+ * @property int $org_type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereAck($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereOrgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
  */
 class ClearingHouse extends Model
 {
@@ -24,8 +38,7 @@ class ClearingHouse extends Model
     protected $fillable = [
         "code",
         "name",
-        "ack",
-        "org_type"
+        "status"
     ];
 
     /**

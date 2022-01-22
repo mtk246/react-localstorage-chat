@@ -70,6 +70,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  * @mixin \Eloquent
+ * @property string|null $ssn
+ * @property string|null $dateOfBirth
+ * @property string|null $img_profile
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDateOfBirth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImgProfile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSsn($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -93,6 +99,8 @@ class User extends Authenticatable implements JWTSubject
         'available',
         'isLogged',
         'img_profile',
+        'ssn',
+        'dateOfBirth'
     ];
 
     /**
