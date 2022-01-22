@@ -12,3 +12,9 @@
 
 - ## Billing-Company
     - [Billing-Company](/{{route}}/{{version}}/billing-company)
+
+- ## Clearing-House
+    - [Clearing-House](/{{route}}/{{version}}/clearing-house)
+
+- ## Facility
+    - [Clearing-House](/{{route}}/{{version}}/facility)

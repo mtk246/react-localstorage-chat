@@ -84,4 +84,16 @@ Route::prefix("v1")/*->middleware('audit')*/->group(function(){
             "auth:api",
         ]);
     });
+
+    Route::prefix("facility")->group(function(){
+        Route::post("/",[\App\Http\Controllers\FacilityController::class,'create'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/",[\App\Http\Controllers\FacilityController::class,'getAllFacilities'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/{id}",[\App\Http\Controllers\FacilityController::class,'getOneFacility'])->middleware([
+            "auth:api",
+        ]);
+    });
 });
