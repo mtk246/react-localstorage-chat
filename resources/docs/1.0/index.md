@@ -18,3 +18,6 @@
 
 - ## Facility
     - [Clearing-House](/{{route}}/{{version}}/facility)
+
+- ## Company
+    - [Company](/{{route}}/{{version}}/company)

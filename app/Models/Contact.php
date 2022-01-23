@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\Facility|null $facility
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereClearingHouseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFacilityId($value)
+ * @property int|null $company_id
+ * @property-read \App\Models\Company|null $company
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCompanyId($value)
  */
 class Contact extends Model
 {
@@ -82,4 +85,11 @@ class Contact extends Model
         return $this->belongsTo(Facility::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

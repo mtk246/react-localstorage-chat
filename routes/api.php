@@ -96,4 +96,16 @@ Route::prefix("v1")/*->middleware('audit')*/->group(function(){
             "auth:api",
         ]);
     });
+
+    Route::prefix("company")->group(function(){
+        Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/",[\App\Http\Controllers\CompanyController::class,'getAllCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/{id}",[\App\Http\Controllers\CompanyController::class,'getOneCompany'])->middleware([
+            "auth:api",
+        ]);
+    });
 });
