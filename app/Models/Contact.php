@@ -17,29 +17,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $clearing_house_id
+ * @property int|null $facility_id
+ * @property int|null $company_id
  * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @property-read \App\Models\ClearingHouse|null $clearingHouse
+ * @property-read \App\Models\Company|null $company
+ * @property-read \App\Models\Facility|null $facility
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereClearingHouseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFacilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFax($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
  * @mixin \Eloquent
- * @property-read \App\Models\ClearingHouse $clearingHouse
- * @property int|null $clearing_house_id
- * @property int|null $facility_id
- * @property-read \App\Models\Facility|null $facility
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereClearingHouseId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFacilityId($value)
- * @property int|null $company_id
- * @property-read \App\Models\Company|null $company
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCompanyId($value)
  */
 class Contact extends Model
 {

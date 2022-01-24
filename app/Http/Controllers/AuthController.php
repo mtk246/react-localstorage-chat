@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Models\Device;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\MetadataController;
+use Illuminate\Support\Str;
+
 /**
  * @OA\Info(title="Api Medical billing",version="1.0")
  *
@@ -33,7 +37,7 @@ class AuthController extends Controller
 
     /**
      * @param LoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
 
     /**
@@ -69,7 +73,7 @@ class AuthController extends Controller
      *     ),
      * )
      */
-    public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
         $dataValidated = $request->validated();
 
@@ -93,7 +97,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token,$request->ip(),$request->userAgent());
     }
 
     public function checkIsLogged($email){
@@ -105,7 +109,7 @@ class AuthController extends Controller
     /**
      * Get the authenticated User.
      * @param Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
 
     /**
@@ -121,7 +125,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function me(Request $request): \Illuminate\Http\JsonResponse
+    public function me(Request $request): JsonResponse
     {
         $user = auth()->user()->load("roles")->load("permissions");
 
@@ -144,7 +148,7 @@ class AuthController extends Controller
      * Log the user out (Invalidate the token).
      *
      * @param Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
 
     /**
@@ -160,7 +164,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         $data = [
             "dataset_name" => "Logout",
@@ -183,7 +187,7 @@ class AuthController extends Controller
      * Refresh a token.
      *
      * @param Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
 
     /**
@@ -199,7 +203,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function refresh(Request $request): \Illuminate\Http\JsonResponse
+    public function refresh(Request $request): JsonResponse
     {
         $data = [
             "dataset_name" => "Refresh Token",
@@ -212,23 +216,58 @@ class AuthController extends Controller
         ];
 
         MetadataController::saveLogAuditory($data,auth()->user()->id,null);
-        return $this->respondWithToken(auth()->refresh());
+        return response()->json(auth()->refresh());
     }
 
+
+
     /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $token
+     * @param string $ip
+     * @param string $os
+     * @return JsonResponse
      */
-    protected function respondWithToken(string $token): \Illuminate\Http\JsonResponse
+    protected function respondWithToken(string $token,string $ip,string $os): JsonResponse
     {
         /**
          * @var $user User
          */
         $user = auth()->user();
-        User::whereId($user->id)->update(["isLogged" => true]);
+        //User::whereId($user->id)->update(["isLogged" => true]);
+//        $device = DeviceController::searchDeviceByIp($ip);
+//
+//        if( !$device ){
+//            DeviceController::logNewDevice([
+//                "email" => $user->email,
+//                "ip"    => $ip,
+//                "os"    => $os,
+//                "code_temp" => Str::random(6),
+//                "user_id"   => $user->id
+//            ]);
+//
+//            User::whereId($user->id)->update([
+//                "isBlocked" => true
+//            ]);
+//
+//            return response()->json(
+//                $token,
+//                403
+//            );
+//        }
+//        else{
+//            if(!$device->status){
+//                $ctrlDevice = new DeviceController();
+//                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
+//                User::whereId($user->id)->update([
+//                    "isBlocked" => true
+//                ]);
+//
+//                return response()->json(
+//                    $token,
+//                    403
+//                );
+//            }
+//        }
 
         return response()->json([
             'user'         => $user->load("permissions")->load("roles"),

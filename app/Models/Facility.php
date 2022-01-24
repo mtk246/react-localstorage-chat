@@ -11,10 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
 /**
  * App\Models\Facility
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
- * @mixin \Eloquent
  * @property int $id
  * @property int $type
  * @property string $name
@@ -27,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\BillingCompany|null $billingCompany
  * @property-read \App\Models\Contact $contact
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
@@ -36,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Facility extends Model
 {

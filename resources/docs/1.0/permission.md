@@ -11,8 +11,8 @@
 | : |        |   :-                       |  :                      |               |                    |  
 | 1 |GET     | `Get all roles`            | `/permission/roles`               |yes             |Get all roles  |         
 | 2 |GET     | `Get all permissions`      | `/permission/permissions`        |yes            |Get all permissions|
-| 3 |GET     | `Get one role`             | `/permission/{role_id}`|yes|Get one role|
-| 4 |GET     | `Get one permission`       | `/permission/{permission_id}` |yes            |Get one permission|
+| 3 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
+| 4 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
 | 5 |POST    | `Create Role`              | `/permission/create-role` |yes|Create role|
 | 6 |POST    | `Create Permission`        | `/permission/create-permission` |yes|Create Permission|
 | 7 |PATCH   | `assign permission role`   | `/permission/assign-permissions-role/{role_id}/{permission_id}` |yes|assign permission role|

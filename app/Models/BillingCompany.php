@@ -15,23 +15,23 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $code
+ * @property bool $status
+ * @property-read \App\Models\Address|null $address
+ * @property-read \App\Models\Contact|null $contact
+ * @property-read \App\Models\Facility $facility
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property string|null $code
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCode($value)
- * @property-read \App\Models\Address|null $address
- * @property-read \App\Models\Contact|null $contact
- * @property bool $status
- * @property-read \App\Models\Facility $facility
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereStatus($value)
  */
 class BillingCompany extends Model
 {

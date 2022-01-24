@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix("v1")/*->middleware('audit')*/->group(function(){
+Route::prefix("v1")/*->middleware('audit')*/
+/*->middleware('checkAvailable')*/->group(function(){
 
     Route::get("/",function(){
         return response()->json(["message"=>"Api Running"]);
@@ -107,5 +108,9 @@ Route::prefix("v1")/*->middleware('audit')*/->group(function(){
         Route::get("/{id}",[\App\Http\Controllers\CompanyController::class,'getOneCompany'])->middleware([
             "auth:api",
         ]);
+    });
+
+    Route::prefix("device")->group(function(){
+        Route::post("allow-device",[\App\Http\Controllers\DeviceController::class,'allowDevice']);
     });
 });

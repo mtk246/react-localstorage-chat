@@ -17,9 +17,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $end_date
  * @property string $time
  * @property string|null $location
+ * @property string|null $ip_machine
+ * @property string|null $mac_machine
  * @property int|null $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata query()
@@ -28,18 +31,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereIpMachine($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereMacMachine($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereMachineUsed($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereUserId($value)
  * @mixin \Eloquent
- * @property string|null $ip_machine
- * @property string|null $mac_machine
- * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereIpMachine($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereMacMachine($value)
- * @property-read \App\Models\User|null $user
  */
 class Metadata extends Model
 {

@@ -31,12 +31,18 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $token
  * @property bool $available
  * @property bool $isLogged
+ * @property string|null $ssn
+ * @property string|null $dateOfBirth
+ * @property string|null $img_profile
+ * @property bool $isBlocked
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $address
  * @property-read int|null $address_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanyUser
  * @property-read int|null $billing_company_user_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contact[] $contact
  * @property-read int|null $contact_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Device[] $devices
+ * @property-read int|null $devices_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Metadata[] $metadata
  * @property-read int|null $metadata_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
@@ -56,26 +62,24 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDOB($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDateOfBirth($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImgProfile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBlocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLogged($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddleName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSex($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSsn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  * @mixin \Eloquent
- * @property string|null $ssn
- * @property string|null $dateOfBirth
- * @property string|null $img_profile
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDateOfBirth($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereImgProfile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSsn($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -100,7 +104,8 @@ class User extends Authenticatable implements JWTSubject
         'isLogged',
         'img_profile',
         'ssn',
-        'dateOfBirth'
+        'dateOfBirth',
+        'isBlocked'
     ];
 
     /**
@@ -177,5 +182,13 @@ class User extends Authenticatable implements JWTSubject
     public function address(): HasManyAlias
     {
         return $this->hasMany(Address::class);
+    }
+
+    /**
+     * @return HasManyAlias
+     */
+    public function devices(): HasManyAlias
+    {
+        return $this->hasMany(Device::class);
     }
 }
