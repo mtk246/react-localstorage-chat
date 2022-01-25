@@ -34,16 +34,18 @@
 
 ```json
 {
-    "username":"tesfvrtrdt",
-    "email":"ghgfvbgfr@test.com",
+    "username":"eedddfdfdf",
+    "email":"eeeddd@test.com",
     "DOB":"2021-12-26",
     "sex":"m",
     "firstName":"test",
     "lastName":"test",
     "middleName":"testing",
     "roles":["ACCOUNT_MANAGER"],
+    "ssn":"345345",
+    "dateOfBirth":"1990-11-11",
     "company-billing":{
-        "name":"someNameCompanyBilling",
+        "name":"someNameCdddompanyBilling001",
         "code":"Somecode"
     }
 }
@@ -67,16 +69,19 @@
 
 ```json
 {
-    "username": "test",
-    "email": "testffddf@test.com",
+    "username": "eedddfdfdf",
+    "email": "eeeddd@test.com",
     "DOB": "2021-12-26",
     "sex": "m",
     "firstName": "test",
     "lastName": "test",
     "middleName": "testing",
-    "updated_at": "2022-01-05T17:55:17.000000Z",
-    "created_at": "2022-01-05T17:55:17.000000Z",
-    "id": 12,
+    "ssn": "345345",
+    "dateOfBirth": "1990-11-11",
+    "updated_at": "2022-01-25T13:49:58.000000Z",
+    "created_at": "2022-01-25T13:49:58.000000Z",
+    "id": 22,
+    "token": "eyJpdiI6ImFNZmJNZjRyUnFaRzh5b2RuWlUwTEE9PSIsInZhbHVlIjoiK0NtSTRiS3JHWjFicU5ZZGhsZjNrR2xHMGU2M3RWNFVBdk9USzFlMDV3cz0iLCJtYWMiOiJkZTVhNmFkYTQzYzQyYTFhMjVmNTEzNzNmY2Q2ZDhkNjEwNmM0MmE4ZDQxMjcyMmU4YzVkMDgyZGVkMzhmNjJkIiwidGFnIjoiIn0=",
     "roles": [
         {
             "id": 6,
@@ -85,7 +90,7 @@
             "created_at": "2021-12-23T18:08:35.000000Z",
             "updated_at": "2021-12-23T18:08:35.000000Z",
             "pivot": {
-                "model_id": 12,
+                "model_id": 22,
                 "role_id": 6,
                 "model_type": "App\\Models\\User"
             }
@@ -140,13 +145,15 @@
 
 ```json
 {
-    "username":"hola",
-    "email":"admin@admin.com",
+    "username":"eedddfdfdf",
+    "email":"eeeddd@test.com",
     "DOB":"2021-12-26",
     "sex":"m",
     "firstName":"test",
     "lastName":"test",
-    "middleName":"testing"
+    "middleName":"testing",
+    "ssn":"345345",
+    "dateOfBirth":"1990-11-11"
 }
 ```
 

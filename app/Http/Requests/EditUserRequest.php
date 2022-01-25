@@ -32,7 +32,9 @@ class EditUserRequest extends FormRequest
             'firstName'  => "sometimes|string|max:20",
             'lastName'   => "sometimes|string|max:20",
             'middleName' => "sometimes|string|max:20",
-            'roles'      => "sometimes|array"
+            'roles'      => "sometimes|array",
+            'ssn'        => "sometimes|string",
+            'dateOfBirth'=> "sometimes|date",
         ];
     }
 }

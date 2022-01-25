@@ -31,6 +31,8 @@ class UserCreateRequest extends FormRequest
             'firstName'  => "required|string|max:20",
             'lastName'   => "required|string|max:20",
             'middleName' => "required|string|max:20",
+            'ssn'        => "required|string",
+            'dateOfBirth'=> "required|date",
             'roles'      => "sometimes|array",
             'company-billing' => "sometimes|array"
         ];
