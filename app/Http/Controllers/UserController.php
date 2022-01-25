@@ -390,4 +390,15 @@ class UserController extends Controller
 
         return $rs ? response()->send([],204) : response()->json("Error user not found",404);
     }
+
+    /**
+     * @param ChangePasswordRequest $request
+     * @return JsonResponse
+     */
+    public function changePasswordForm(ChangePasswordRequest $request): JsonResponse
+    {
+        $rs = $this->userRepository->changePasswordForm($request->input("password"));
+
+        return $rs ? response()->json([],204) : response()->json("Error updating password",400);
+    }
 }

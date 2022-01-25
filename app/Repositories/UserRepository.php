@@ -193,4 +193,8 @@ class UserRepository{
         );
         return true;
     }
+
+    public function changePasswordForm(string $password){
+        return User::whereId(auth()->id())->update(["password" => bcrypt($password)]);
+    }
 }

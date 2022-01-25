@@ -36,6 +36,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("{id?}/change-status",[\App\Http\Controllers\UserController::class,'changeStatus'])->middleware('auth:api');
         Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
         Route::patch("img-profile",[\App\Http\Controllers\UserController::class,'updateImgProfile'])->middleware(['auth:api']);
+        Route::patch("update-password",[\App\Http\Controllers\UserController::class,'changePasswordForm'])->middleware(['auth:api']);
     });
 
     Route::prefix("permission")->middleware("auth:api")->group(function(){

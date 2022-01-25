@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\MetadataController;
 use Illuminate\Support\Str;
 
 /**
@@ -219,8 +217,6 @@ class AuthController extends Controller
         return response()->json(auth()->refresh());
     }
 
-
-
     /**
      * @param string $token
      * @param string $ip
@@ -234,40 +230,40 @@ class AuthController extends Controller
          */
         $user = auth()->user();
         //User::whereId($user->id)->update(["isLogged" => true]);
-//        $device = DeviceController::searchDeviceByIp($ip);
-//
-//        if( !$device ){
-//            DeviceController::logNewDevice([
-//                "email" => $user->email,
-//                "ip"    => $ip,
-//                "os"    => $os,
-//                "code_temp" => Str::random(6),
-//                "user_id"   => $user->id
-//            ]);
-//
-//            User::whereId($user->id)->update([
-//                "isBlocked" => true
-//            ]);
-//
-//            return response()->json(
-//                $token,
-//                403
-//            );
-//        }
-//        else{
-//            if(!$device->status){
-//                $ctrlDevice = new DeviceController();
-//                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
-//                User::whereId($user->id)->update([
-//                    "isBlocked" => true
-//                ]);
-//
-//                return response()->json(
-//                    $token,
-//                    403
-//                );
-//            }
-//        }
+        $device = DeviceController::searchDeviceByIp($ip);
+
+        if( !$device ){
+            DeviceController::logNewDevice([
+                "email" => $user->email,
+                "ip"    => $ip,
+                "os"    => $os,
+                "code_temp" => Str::random(6),
+                "user_id"   => $user->id
+            ]);
+
+            User::whereId($user->id)->update([
+                "isBlocked" => true
+            ]);
+
+            return response()->json(
+                $token,
+                403
+            );
+        }
+        else{
+            if(!$device->status){
+                $ctrlDevice = new DeviceController();
+                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
+                User::whereId($user->id)->update([
+                    "isBlocked" => true
+                ]);
+
+                return response()->json(
+                    $token,
+                    403
+                );
+            }
+        }
 
         return response()->json([
             'user'         => $user->load("permissions")->load("roles"),
