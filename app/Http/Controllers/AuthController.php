@@ -232,38 +232,38 @@ class AuthController extends Controller
         //User::whereId($user->id)->update(["isLogged" => true]);
         $device = DeviceController::searchDeviceByIp($ip);
 
-        if( !$device ){
-            DeviceController::logNewDevice([
-                "email" => $user->email,
-                "ip"    => $ip,
-                "os"    => $os,
-                "code_temp" => Str::random(6),
-                "user_id"   => $user->id
-            ]);
-
-            User::whereId($user->id)->update([
-                "isBlocked" => true
-            ]);
-
-            return response()->json(
-                $token,
-                403
-            );
-        }
-        else{
-            if(!$device->status){
-                $ctrlDevice = new DeviceController();
-                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
-                User::whereId($user->id)->update([
-                    "isBlocked" => true
-                ]);
-
-                return response()->json(
-                    $token,
-                    403
-                );
-            }
-        }
+//        if( !$device ){
+//            DeviceController::logNewDevice([
+//                "email" => $user->email,
+//                "ip"    => $ip,
+//                "os"    => $os,
+//                "code_temp" => Str::random(6),
+//                "user_id"   => $user->id
+//            ]);
+//
+//            User::whereId($user->id)->update([
+//                "isBlocked" => true
+//            ]);
+//
+//            return response()->json(
+//                $token,
+//                403
+//            );
+//        }
+//        else{
+//            if(!$device->status){
+//                $ctrlDevice = new DeviceController();
+//                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
+//                User::whereId($user->id)->update([
+//                    "isBlocked" => true
+//                ]);
+//
+//                return response()->json(
+//                    $token,
+//                    403
+//                );
+//            }
+//        }
 
         return response()->json([
             'user'         => $user->load("permissions")->load("roles"),
