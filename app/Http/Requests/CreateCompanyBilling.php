@@ -24,8 +24,8 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string|max:50",
-            "code" => "required|string",
+            "name" => "required|string|unique:billing_companies,name|max:50",
+            "code" => "required|unique:billing_companies,code|string",
             "address" => "required|array",
             "contact" => "required|array"
         ];

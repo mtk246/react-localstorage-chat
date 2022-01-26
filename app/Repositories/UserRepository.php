@@ -15,39 +15,56 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class UserRepository{
 
     /**
-     * @return User|Model
-     * @var $request UserCreateRequest
+     * @param UserCreateRequest $request
+     * @return User|Model|null
+     * @throws Throwable
      */
     public function create(UserCreateRequest $request){
-        $validated = $request->validated();
+        try{
+            \DB::beginTransaction();
+            $validated = $request->validated();
 
-        $user = User::create($validated);
+            $user = User::create($validated);
 
-        if($request->has("company-billing")){
-            $company = BillingCompany::create($request->input("company-billing"));
-            $user->billingCompanyUser()->attach($company->id);
+            if($request->has("company-billing")){
+                $company = BillingCompany::create($request->input("company-billing"));
+                $user->billingCompanyUser()->attach($company->id);
+            }
+
+            if( isset( $validated['roles'] ) )
+                $user->assignRole($validated['roles']);
+
+            $token = encrypt($user->id."@#@#$".$user->email);
+            $user->token = $token;
+            $user->save();
+
+            \Mail::to($user->email)->send(
+                new GenerateNewPassword(
+                    $user->firstName.' '.$user->lastName,
+                    $user->email,
+                    env('URL_FRONT') . $token
+                )
+            );
+            \DB::commit();;
+            return $user;
+        }catch (\Exception $e){
+            \DB::rollBack();
+            return null;
         }
+    }
 
-        if( isset( $validated['roles'] ) )
-            $user->assignRole($validated['roles']);
-
-        $token = encrypt($user->id."@#@#$".$user->email);
-        $user->token = $token;
-        $user->save();
-
-        \Mail::to($user->email)->send(
-            new GenerateNewPassword(
-            $user->firstName.' '.$user->lastName,
-            $user->email,
-            env('URL_FRONT') . $token
-            )
-        );
-
-        return $user;
+    /**
+     * @param array $dataCompany
+     * @return BillingCompany|Builder|Model|object|null
+     */
+    public function checkCompanyBilling(array $dataCompany){
+        return BillingCompany::where("code",$dataCompany["code"])
+            ->orWhere("name",$dataCompany["name"])->first();
     }
 
     /**

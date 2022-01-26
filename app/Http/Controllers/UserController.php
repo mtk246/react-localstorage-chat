@@ -112,12 +112,20 @@ class UserController extends Controller
                 "time"         => now()->toTimeString(),
             ];
 
+            if( $request->has('company-billing') ){
+                if($this->userRepository->checkCompanyBilling($request->input('company-billing'))){
+                    return response()->json("Error company billing with those data existent",403);
+                }
+            }
+
             /** @var  $user User*/
             $user = $this->userRepository->create($request);
             MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
             return response()->json($user->load("roles"),201);
         }catch (\Exception $e){
+            return response()->json($e->getMessage(),500);
+        } catch (\Throwable $e) {
             return response()->json($e->getMessage(),500);
         }
     }
@@ -172,9 +180,7 @@ class UserController extends Controller
             ];
 
             $rs = $this->userRepository->sendEmailToRescuePassword($request->input("email"));
-
             MetadataController::saveLogAuditory($data,null,$request->input("email"));
-
 
             if(is_null($rs)) return response()->json("User not found",403);
 
