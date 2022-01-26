@@ -50,6 +50,7 @@ class RolePermissionRepository
         try {
             return Permission::findById($id);
         }catch (PermissionDoesNotExist | \Exception $e){
+            dd($e->getMessage());
             return null;
         }
     }
