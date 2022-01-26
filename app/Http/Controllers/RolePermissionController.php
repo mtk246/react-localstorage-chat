@@ -52,7 +52,7 @@ class RolePermissionController extends Controller
     {
         $rs = $this->RolePermissionRepository->getOnePermission($id);
 
-        return !is_null($rs) ? response()->json($rs) : response()->json("permission not found",404);
+        return response()->json($rs);
     }
 
     /**
