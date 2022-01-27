@@ -18,7 +18,7 @@
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
 | 7 |POST | `send email to recovery user`   | `/user/send-email-rescue-user` |no|send email to recovery user|
 | 8 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
-| 9 |PATCH | `update image user`   | `/user/img-profile` |yes|update image profile|
+| 9 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
 | 10|PATCH | `update password`   | `/user/update-password` |yes|update password|
 
 
