@@ -32,8 +32,7 @@ class UserRepository{
             $user = User::create($validated);
 
             if($request->has("company-billing")){
-                $company = BillingCompany::create($request->input("company-billing"));
-                $user->billingCompanyUser()->attach($company->id);
+                $user->billingCompanyUser()->attach($request->input("company-billing"));
             }
 
             if( isset( $validated['roles'] ) )
@@ -59,12 +58,11 @@ class UserRepository{
     }
 
     /**
-     * @param array $dataCompany
+     * @param int $company_id
      * @return BillingCompany|Builder|Model|object|null
      */
-    public function checkCompanyBilling(array $dataCompany){
-        return BillingCompany::where("code",$dataCompany["code"])
-            ->orWhere("name",$dataCompany["name"])->first();
+    public function checkCompanyBilling(int $company_id){
+        return BillingCompany::whereId($company_id)->first();
     }
 
     /**

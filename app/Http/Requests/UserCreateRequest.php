@@ -34,7 +34,7 @@ class UserCreateRequest extends FormRequest
             'ssn'        => "required|string",
             'dateOfBirth'=> "required|date",
             'roles'      => "sometimes|array",
-            'company-billing' => "sometimes|array"
+            'company-billing' => "sometimes|integer"
         ];
     }
 }

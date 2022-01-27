@@ -44,10 +44,7 @@
     "roles":["ACCOUNT_MANAGER"],
     "ssn":"345345",
     "dateOfBirth":"1990-11-11",
-    "company-billing":{
-        "name":"someNameCdddompanyBilling001",
-        "code":"Somecode"
-    }
+    "company-billing":1
 }
 ```
 

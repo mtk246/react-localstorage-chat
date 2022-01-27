@@ -113,8 +113,8 @@ class UserController extends Controller
             ];
 
             if( $request->has('company-billing') ){
-                if($this->userRepository->checkCompanyBilling($request->input('company-billing'))){
-                    return response()->json("Error company billing with those data existent",403);
+                if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ){
+                    return response()->json("Error company billing dont existent",403);
                 }
             }
 
