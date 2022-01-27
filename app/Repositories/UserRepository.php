@@ -79,7 +79,7 @@ class UserRepository{
      * @return User[]|Collection
      */
     public function getAllUsers(){
-        return User::get();
+        return User::with("roles")->get();
     }
 
     /**
@@ -158,7 +158,7 @@ class UserRepository{
      * @return User|Builder|Model|object|null
      */
     public function getOneUser(int $id){
-        $user = User::whereId($id)->first();
+        $user = User::whereId($id)->with("roles")->first();
 
         return is_null($user) ? null : $user;
     }
