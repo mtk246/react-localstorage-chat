@@ -176,10 +176,10 @@ class UserRepository{
         $fullNameFile = strtotime('now') . $file->getClientOriginalExtension();
         $file->move(public_path("/img-profile/"),$fullNameFile);
 
-        $pathNameFile = public_path("/img-profile" . $fullNameFile);
+        $pathNameFile = asset("/img-profile/" . $fullNameFile);
 
         User::whereId(auth()->id())->update([
-            'img-profile' => $pathNameFile,
+            'img_profile' => $pathNameFile,
         ]);
 
         return $pathNameFile;
