@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusCompaniesTable extends Migration
+class AddStatusTaxIdTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddStatusCompaniesTable extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
-            //
+            $table->integer("tax_id")->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusCompaniesTable extends Migration
     public function down()
     {
         Schema::table('companies', function (Blueprint $table) {
-            //
+            $table->dropColumn("tax_id");
         });
     }
 }

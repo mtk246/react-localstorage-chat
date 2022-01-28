@@ -46,7 +46,7 @@ class Company extends Model
         "taxonomy",
         "npi",
         "email",
-        "status"
+        "tax_id",
     ];
 
     /**

@@ -16,7 +16,7 @@
 | 4 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
 | 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
 | 6 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-|  |PUT | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 7 |PUT | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 
 
 
@@ -40,7 +40,8 @@
         "name":"someName0101",
         "taxonomy":"45345345",
         "npi":"323efsd",
-        "email": "some@email.com"
+        "email": "some@email.com",
+        "tax_id": 343
     },"address":{
         "address":"dfsdf",
         "city":"sdfsdf",
@@ -77,6 +78,7 @@
     "taxonomy": "45345345",
     "npi": "323efsd",
     "email": "some@email.com",
+    "tax_id": 343,
     "updated_at": "2022-01-23T20:27:53.000000Z",
     "created_at": "2022-01-23T20:27:53.000000Z",
     "id": 2
@@ -113,6 +115,7 @@
         "taxonomy": 45345345,
         "npi": "323efsd",
         "email": "some@email.com",
+        "tax_id": 343,
         "created_at": "2022-01-23T20:27:45.000000Z",
         "updated_at": "2022-01-23T20:27:45.000000Z"
     },
@@ -124,6 +127,7 @@
         "taxonomy": 45345345,
         "npi": "323efsd",
         "email": "some@email.com",
+        "tax_id": 343,
         "created_at": "2022-01-23T20:27:53.000000Z",
         "updated_at": "2022-01-23T20:27:53.000000Z"
     }
@@ -161,6 +165,7 @@
     "taxonomy": "45345345",
     "npi": "323efsd",
     "email": "some@email.com",
+    "tax_id": 343,
     "updated_at": "2022-01-23T20:27:53.000000Z",
     "created_at": "2022-01-23T20:27:53.000000Z",
     "id": 2
