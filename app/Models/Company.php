@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $npi
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $email
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Company query()
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
@@ -43,6 +45,8 @@ class Company extends Model
         "status",
         "taxonomy",
         "npi",
+        "email",
+        "status"
     ];
 
     /**

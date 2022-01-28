@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeStatusCompanyRequest;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\CompanyCreateRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use App\Repositories\CompanyRepository;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 #use Illuminate\Http\Request;
 
@@ -46,5 +50,51 @@ class CompanyController extends Controller
         $rs = $this->companyRepository->getOneCompany($id);
 
         return $rs ? response()->json($rs) : response()->json("error company not found",404);
+    }
+
+    /**
+     * @param CompanyUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function updateCompany(CompanyUpdateRequest $request,int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->updateCompany($request->validated(),$id);
+
+        return $rs ? response()->json($rs) : response()->json("Error updating company",400);
+    }
+
+    /**
+     * @param string $email
+     * @return JsonResponse
+     */
+    public function getOneByEmail(string $email): JsonResponse
+    {
+        $rs = $this->companyRepository->getOneByEmail($email);
+
+        return $rs ? response()->json($rs) : response()->json("company not found",404);
+    }
+
+    /**
+     * @param string $name
+     * @return JsonResponse
+     */
+    public function getByName(string $name): JsonResponse
+    {
+        $rs = $this->companyRepository->getByName($name);
+
+        return $rs ? response()->json($rs) : response()->json("company not found",404);
+    }
+
+    /**
+     * @param ChangeStatusCompanyRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusCompanyRequest $request,int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->changeStatus($request->input("status"),$id);
+
+        return $rs ? response()->json($rs) : response()->json("error updating status",400);
     }
 }

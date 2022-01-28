@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property bool $ack
- * @property int $org_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $status
@@ -22,12 +20,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereAck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereOrgType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
  * @mixin \Eloquent

@@ -45,4 +45,46 @@ class CompanyRepository
 
         return $company;
     }
+
+    /**
+     * @param array $data
+     * @param int $id
+     * @return Company|Builder|Model|object|null
+     */
+    public function updateCompany(array $data,int $id){
+        if(isset($data["company"])){
+            Company::whereId($id)->update($data['company']);
+        }
+
+        if(isset($data["address"])){
+            Company::whereId($id)->update($data['address']);
+        }
+
+        if(isset($data["contact"])){
+            Company::whereId($id)->update($data['contact']);
+        }
+
+        return Company::whereId($id)->first();
+    }
+
+    /**
+     * @param string $email
+     * @return Company|Builder|Model|object|null
+     */
+    public function getOneByEmail(string $email){
+        return Company::where("email",$email)->first();
+    }
+
+    /**
+     * @param string $name
+     * @return Company[]|Builder[]|Collection
+     */
+    public function getByName(string $name){
+        return Company::where("name","ILIKE","%${name}%")->get();
+    }
+
+
+    public function changeStatus(int $status,int $id){
+        return Company::whereId($id)->update(["status"=>$status]);
+    }
 }

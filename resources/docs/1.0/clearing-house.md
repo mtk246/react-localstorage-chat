@@ -14,7 +14,7 @@
 | 2 |GET | `Get all clearing house`                   | `/clearing-house/`        |yes            |Get all Clearing House|
 | 3 |GET | `Get one Clearing house`                   | `/clearing-house/{id}`|yes|Get one Clearing House|
 | 4 |PUT | `Update one Clearing house`                | `/clearing-house/{id}`|yes|Update one Clearing House|
-| 5 |GET | `Get one Clearing house by name`           | `/clearing-house/{name}`|yes|Get one Clearing House by name|
+| 5 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
 | 6 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
 
 

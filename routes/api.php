@@ -86,9 +86,17 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
 
-        Route::put("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"updateClearingHouse"]);
-        Route::get("/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getOneByName"]);
-        Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"]);
+        Route::put("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"updateClearingHouse"])->middleware([
+            "auth:api",
+        ]);
+
+        Route::get("/get-by-name/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getOneByName"])->middleware([
+            "auth:api",
+        ]);
+
+        Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("facility")->group(function(){
@@ -111,6 +119,18 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
         Route::get("/{id}",[\App\Http\Controllers\CompanyController::class,'getOneCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/get-by-name/{name}",[\App\Http\Controllers\CompanyController::class,'getByName'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/get-by-email/{email}",[\App\Http\Controllers\CompanyController::class,'getOneByEmail'])->middleware([
+            "auth:api",
+        ]);
+        Route::put("/{id}",[\App\Http\Controllers\CompanyController::class,'updateCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/change-status/{id}",[\App\Http\Controllers\CompanyController::class,'changeStatus'])->middleware([
             "auth:api",
         ]);
     });
