@@ -19,7 +19,7 @@
 
 
 
->{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a integer
+>{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
 
 
 # 
@@ -283,7 +283,7 @@
 
 ```json
 {
-    "status":"someIntegerStatus"
+    "status":"boolean"
 }
 ```
 
