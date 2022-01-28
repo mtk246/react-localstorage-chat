@@ -21,7 +21,7 @@
 
 # 
 
-#-Create Clearing House
+#-Create Facility
 
 <a name="section-3"></a>
 ## Body request example

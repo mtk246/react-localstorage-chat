@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $org_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $status
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereOrgType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
@@ -38,7 +40,7 @@ class ClearingHouse extends Model
     protected $fillable = [
         "code",
         "name",
-        "status"
+        "status",
     ];
 
     /**

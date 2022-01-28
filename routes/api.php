@@ -85,6 +85,10 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getOneClearingHouse'])->middleware([
             "auth:api",
         ]);
+
+        Route::put("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"updateClearingHouse"]);
+        Route::get("/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getOneByName"]);
+        Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"]);
     });
 
     Route::prefix("facility")->group(function(){

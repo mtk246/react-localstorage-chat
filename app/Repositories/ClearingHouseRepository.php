@@ -46,4 +46,29 @@ class ClearingHouseRepository
 
         return !is_null($clearing) ? $clearing : null;
     }
+
+    public function updateClearingHouse(array $data,int $id){
+
+        if(isset($data['clearing-house'])){
+            ClearingHouse::whereId($id)->update($data['clearing-house']);
+        }
+
+        if(isset($data['address'])){
+            Address::whereClearingHouseId($id)->update($data['address']);
+        }
+
+        if(isset($data['contact'])){
+            Contact::whereClearingHouseId($id)->update($data['contact']);
+        }
+
+        return ClearingHouse::whereId($id)->first();
+    }
+
+    public function getOneByName(string $name){
+        return ClearingHouse::where("name","ILIKE","%${name}%")->get();
+    }
+
+    public function changeStatus($status,int $id){
+        return ClearingHouse::whereId($id)->update(['status'=>$status]);
+    }
 }

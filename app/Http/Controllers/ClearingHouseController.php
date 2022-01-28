@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ChangeStatusClearingHouseRequest;
 use App\Http\Requests\ClearinCreateRequest;
+use App\Http\Requests\UpdateClearingHouse;
 use App\Repositories\ClearingHouseRepository;
 use Illuminate\Http\JsonResponse;
 #use Illuminate\Http\Request;
@@ -46,5 +49,40 @@ class ClearingHouseController extends Controller
         $rs = $this->clearingRepository->getOneClearingHouse($id);
 
         return is_null($rs) ? response()->json("clearing house not found",404) : response()->json($rs);
+    }
+
+    /**
+     * @param UpdateClearingHouse $request
+     * @param int $clearing_id
+     * @return JsonResponse
+     */
+    public function updateClearingHouse(UpdateClearingHouse $request,int $clearing_id): JsonResponse
+    {
+        $rs = $this->clearingRepository->updateClearingHouse($request->validated(),$clearing_id);
+
+        return $rs ? response()->json($rs) : response()->json("Error updating clearing house",400);
+    }
+
+    /**
+     * @param string $name
+     * @return JsonResponse
+     */
+    public function getOneByName(string $name): JsonResponse
+    {
+        $rs = $this->clearingRepository->getOneClearingHouse($name);
+
+        return $rs ? response()->json([],204) : response()->json("Error updating clearing not found",404);
+    }
+
+    /**
+     * @param ChangeStatusClearingHouseRequest $request
+     * @param int $clearing_id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusClearingHouseRequest $request,int $clearing_id): JsonResponse
+    {
+        $rs = $this->clearingRepository->changeStatus($request->input("status"),$clearing_id);
+
+        return $rs ? response()->json($rs) : response()->json("Error updating status",400);
     }
 }

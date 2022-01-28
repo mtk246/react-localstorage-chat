@@ -76,7 +76,7 @@ class UserRepository{
     }
 
     /**
-     * @return User[]|Collection
+     * @return Builder[]|Collection
      */
     public function getAllUsers(){
         return User::with("roles")->get();
