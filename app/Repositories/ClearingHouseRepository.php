@@ -34,7 +34,10 @@ class ClearingHouseRepository
      * @return ClearingHouse[]|Collection
      */
     public function getAllClearingHouse(){
-        return ClearingHouse::get();
+        return ClearingHouse::with([
+            "address",
+            "contact"
+        ])->get();
     }
 
     /**
@@ -61,11 +64,17 @@ class ClearingHouseRepository
             Contact::whereClearingHouseId($id)->update($data['contact']);
         }
 
-        return ClearingHouse::whereId($id)->first();
+        return ClearingHouse::whereId($id)->with([
+            "address",
+            "contact"
+        ])->first();
     }
 
     public function getOneByName(string $name){
-        return ClearingHouse::where("name","ILIKE","%${name}%")->get();
+        return ClearingHouse::with([
+            "address",
+            "contact"
+        ])->where("name","ILIKE","%${name}%")->get();
     }
 
     public function changeStatus($status,int $id){

@@ -69,7 +69,7 @@ class ClearingHouseController extends Controller
      */
     public function getOneByName(string $name): JsonResponse
     {
-        $rs = $this->clearingRepository->getOneClearingHouse($name);
+        $rs = $this->clearingRepository->getOneByName($name);
 
         return $rs ? response()->json([],204) : response()->json("Error updating clearing not found",404);
     }
