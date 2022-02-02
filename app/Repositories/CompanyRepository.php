@@ -18,8 +18,8 @@ class CompanyRepository
     public function createCompany(array $data){
         $company = Company::create($data["company"]);
 
-        $data["contact"]["facility_id"] = $company->id;
-        $data["address"]["facility_id"] = $company->id;
+        $data["contact"]["company_id"] = $company->id;
+        $data["address"]["company_id"] = $company->id;
 
         Address::create($data["address"]);
         Contact::create($data["contact"]);
@@ -31,7 +31,10 @@ class CompanyRepository
      * @return Company[]|Collection
      */
     public function getAllCompanies(){
-        return Company::get();
+        return Company::with([
+            "address",
+            "contact"
+        ])->get();
     }
 
     /**
@@ -39,7 +42,10 @@ class CompanyRepository
      * @return Company|Builder|Model|object|null
      */
     public function getOneCompany(int $id){
-        $company = Company::whereId($id)->first();
+        $company = Company::whereId($id)->with([
+            "address",
+            "contact"
+        ])->first();
 
         if(is_null($company)) return null;
 
@@ -64,7 +70,10 @@ class CompanyRepository
             Company::whereId($id)->update($data['contact']);
         }
 
-        return Company::whereId($id)->first();
+        return Company::whereId($id)->with([
+            "address",
+            "contact"
+        ])->first();
     }
 
     /**
@@ -72,7 +81,10 @@ class CompanyRepository
      * @return Company|Builder|Model|object|null
      */
     public function getOneByEmail(string $email){
-        return Company::where("email",$email)->first();
+        return Company::where("email",$email)->with([
+            "address",
+            "contact"
+        ])->first();
     }
 
     /**
@@ -80,10 +92,17 @@ class CompanyRepository
      * @return Company[]|Builder[]|Collection
      */
     public function getByName(string $name){
-        return Company::where("name","ILIKE","%${name}%")->get();
+        return Company::where("name","ILIKE","%${name}%")->with([
+            "address",
+            "contact"
+        ])->get();
     }
 
-
+    /**
+     * @param int $status
+     * @param int $id
+     * @return bool|int
+     */
     public function changeStatus(int $status,int $id){
         return Company::whereId($id)->update(["status"=>$status]);
     }

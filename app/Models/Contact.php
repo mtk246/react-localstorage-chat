@@ -51,6 +51,9 @@ class Contact extends Model
         "email",
         "user_id",
         "billing_company_id",
+        "company_id",
+        "facility_id",
+        "clearing_house_id",
     ];
 
     /**

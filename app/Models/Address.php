@@ -57,6 +57,7 @@ class Address extends Model
         "billing_company_id",
         "clearing_house_id",
         "facility_id",
+        "company_id"
     ];
 
     /**

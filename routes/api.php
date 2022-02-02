@@ -82,7 +82,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\ClearingHouseController::class,'getAllClearingHouse'])->middleware([
             "auth:api",
         ]);
-        Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getOneClearingHouse'])->middleware([
+        Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getO neClearingHouse'])->middleware([
             "auth:api",
         ]);
 
@@ -107,6 +107,18 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
         Route::get("/{id}",[\App\Http\Controllers\FacilityController::class,'getOneFacility'])->middleware([
+            "auth:api",
+        ]);
+
+        Route::put("/{id}",[\App\Http\Controllers\FacilityController::class,'updateFacility'])->middleware([
+            "auth:api",
+        ]);
+
+        Route::patch("/{id}/change-status",[\App\Http\Controllers\FacilityController::class,'changeStatus'])->middleware([
+            "auth:api",
+        ]);
+
+        Route::get("/{id}/get-by-name",[\App\Http\Controllers\FacilityController::class,'getByName'])->middleware([
             "auth:api",
         ]);
     });

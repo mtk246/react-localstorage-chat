@@ -95,6 +95,6 @@ class CompanyController extends Controller
     {
         $rs = $this->companyRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json($rs) : response()->json("error updating status",400);
+        return $rs ? response()->json([],204) : response()->json("error updating status",400);
     }
 }

@@ -37,6 +37,6 @@ class BillingCompanyRepository
     }
 
     public function getByName($name){
-        return BillingCompany::where("name","ilike","%${name}%")->first();
+        return BillingCompany::where("name","ilike","%${name}%")->get();
     }
 }

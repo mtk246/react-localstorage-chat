@@ -98,37 +98,181 @@
         "id": 1,
         "code": "someCode",
         "name": "someName",
-        "ack": false,
-        "org_type": 0,
         "created_at": "2022-01-22T19:44:24.000000Z",
-        "updated_at": "2022-01-22T19:44:24.000000Z"
+        "updated_at": "2022-01-22T19:44:24.000000Z",
+        "status": 0,
+        "address": {
+            "id": 2,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-01-22T19:44:24.000000Z",
+            "updated_at": "2022-01-22T19:44:24.000000Z",
+            "clearing_house_id": 1,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": null
     },
     {
         "id": 2,
         "code": "someCode",
         "name": "someName",
-        "ack": false,
-        "org_type": 0,
         "created_at": "2022-01-22T19:46:01.000000Z",
-        "updated_at": "2022-01-22T19:46:01.000000Z"
+        "updated_at": "2022-01-22T19:46:01.000000Z",
+        "status": 0,
+        "address": null,
+        "contact": null
     },
     {
         "id": 3,
         "code": "someCode",
         "name": "someName",
-        "ack": false,
-        "org_type": 0,
         "created_at": "2022-01-22T19:46:40.000000Z",
-        "updated_at": "2022-01-22T19:46:40.000000Z"
+        "updated_at": "2022-01-22T19:46:40.000000Z",
+        "status": 0,
+        "address": null,
+        "contact": null
     },
     {
         "id": 4,
         "code": "someCode",
         "name": "someName",
-        "ack": false,
-        "org_type": 0,
         "created_at": "2022-01-22T19:47:10.000000Z",
-        "updated_at": "2022-01-22T19:47:10.000000Z"
+        "updated_at": "2022-01-22T19:47:10.000000Z",
+        "status": 0,
+        "address": {
+            "id": 4,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-01-22T19:47:10.000000Z",
+            "updated_at": "2022-01-22T19:47:10.000000Z",
+            "clearing_house_id": 4,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": null
+    },
+    {
+        "id": 5,
+        "code": "someCodeere",
+        "name": "someNameere",
+        "created_at": "2022-02-02T17:49:35.000000Z",
+        "updated_at": "2022-02-02T17:49:35.000000Z",
+        "status": 0,
+        "address": {
+            "id": 12,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T17:49:35.000000Z",
+            "updated_at": "2022-02-02T17:49:35.000000Z",
+            "clearing_house_id": 5,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": null
+    },
+    {
+        "id": 6,
+        "code": "someCodeereee",
+        "name": "someNameereee",
+        "created_at": "2022-02-02T17:51:14.000000Z",
+        "updated_at": "2022-02-02T17:51:14.000000Z",
+        "status": 0,
+        "address": {
+            "id": 13,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T17:51:14.000000Z",
+            "updated_at": "2022-02-02T17:51:14.000000Z",
+            "clearing_house_id": 6,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": null
+    },
+    {
+        "id": 7,
+        "code": "someCodeereee",
+        "name": "someNameereee",
+        "created_at": "2022-02-02T17:52:11.000000Z",
+        "updated_at": "2022-02-02T17:52:11.000000Z",
+        "status": 0,
+        "address": null,
+        "contact": null
+    },
+    {
+        "id": 8,
+        "code": "someCodeereee44",
+        "name": "someNameereee44",
+        "created_at": "2022-02-02T17:53:44.000000Z",
+        "updated_at": "2022-02-02T17:53:44.000000Z",
+        "status": 0,
+        "address": {
+            "id": 14,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T17:53:44.000000Z",
+            "updated_at": "2022-02-02T17:53:44.000000Z",
+            "clearing_house_id": 8,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": null
+    },
+    {
+        "id": 9,
+        "code": "someCodeereee44g",
+        "name": "someNameereee44g",
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "status": 0,
+        "address": {
+            "id": 15,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T17:56:41.000000Z",
+            "updated_at": "2022-02-02T17:56:41.000000Z",
+            "clearing_house_id": 9,
+            "facility_id": null,
+            "company_id": null
+        },
+        "contact": {
+            "id": 13,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "fg@gh.com",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T17:56:41.000000Z",
+            "updated_at": "2022-02-02T17:56:41.000000Z",
+            "clearing_house_id": 9,
+            "facility_id": null,
+            "company_id": null
+        }
     }
 ]
 ```
@@ -159,14 +303,40 @@
 
 ```json
     {
-        "id": 1,
-        "code": "someCode",
-        "name": "someName",
-        "ack": false,
-        "org_type": 0,
-        "created_at": "2022-01-22T19:44:24.000000Z",
-        "updated_at": "2022-01-22T19:44:24.000000Z"
+    "id": 9,
+    "code": "someCodeereee44g",
+    "name": "someNameereee44g",
+    "created_at": "2022-02-02T17:56:41.000000Z",
+    "updated_at": "2022-02-02T17:56:41.000000Z",
+    "status": 0,
+    "address": {
+        "id": 15,
+        "address": "dfsdf",
+        "city": "sdfsdf",
+        "state": "dsfsdf",
+        "zip": "234",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
+    },
+    "contact": {
+        "id": 13,
+        "phone": "34324234",
+        "fax": "567674576457",
+        "email": "fg@gh.com",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
     }
+}
 ```
 
 
@@ -224,11 +394,39 @@
 
 ```json
 {
-    "code": "someCode",
-    "name": "someName",
-    "updated_at": "2022-01-22T19:47:10.000000Z",
-    "created_at": "2022-01-22T19:47:10.000000Z",
-    "id": 4
+    "id": 9,
+    "code": "someCodeereee44g",
+    "name": "someNameereee44g",
+    "created_at": "2022-02-02T17:56:41.000000Z",
+    "updated_at": "2022-02-02T17:56:41.000000Z",
+    "status": 0,
+    "address": {
+        "id": 15,
+        "address": "dfsdf",
+        "city": "sdfsdf",
+        "state": "dsfsdf",
+        "zip": "234",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
+    },
+    "contact": {
+        "id": 13,
+        "phone": "34324234",
+        "fax": "567674576457",
+        "email": "fg@gh.com",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
+    }
 }
 ```
 
@@ -263,11 +461,39 @@
 
 ```json
 {
-    "code": "someCode",
-    "name": "someName",
-    "updated_at": "2022-01-22T19:47:10.000000Z",
-    "created_at": "2022-01-22T19:47:10.000000Z",
-    "id": 4
+    "id": 9,
+    "code": "someCodeereee44g",
+    "name": "someNameereee44g",
+    "created_at": "2022-02-02T17:56:41.000000Z",
+    "updated_at": "2022-02-02T17:56:41.000000Z",
+    "status": 0,
+    "address": {
+        "id": 15,
+        "address": "dfsdf",
+        "city": "sdfsdf",
+        "state": "dsfsdf",
+        "zip": "234",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
+    },
+    "contact": {
+        "id": 13,
+        "phone": "34324234",
+        "fax": "567674576457",
+        "email": "fg@gh.com",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T17:56:41.000000Z",
+        "updated_at": "2022-02-02T17:56:41.000000Z",
+        "clearing_house_id": 9,
+        "facility_id": null,
+        "company_id": null
+    }
 }
 ```
 

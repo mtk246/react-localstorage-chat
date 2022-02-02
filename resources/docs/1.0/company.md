@@ -114,10 +114,12 @@
         "status": false,
         "taxonomy": 45345345,
         "npi": "323efsd",
-        "email": "some@email.com",
-        "tax_id": 343,
         "created_at": "2022-01-23T20:27:45.000000Z",
-        "updated_at": "2022-01-23T20:27:45.000000Z"
+        "updated_at": "2022-01-23T20:27:45.000000Z",
+        "email": null,
+        "tax_id": 0,
+        "address": null,
+        "contact": null
     },
     {
         "id": 2,
@@ -126,10 +128,77 @@
         "status": false,
         "taxonomy": 45345345,
         "npi": "323efsd",
-        "email": "some@email.com",
-        "tax_id": 343,
         "created_at": "2022-01-23T20:27:53.000000Z",
-        "updated_at": "2022-01-23T20:27:53.000000Z"
+        "updated_at": "2022-01-23T20:27:53.000000Z",
+        "email": null,
+        "tax_id": 0,
+        "address": null,
+        "contact": null
+    },
+    {
+        "id": 3,
+        "code": "somecode2",
+        "name": "someName01012",
+        "status": false,
+        "taxonomy": 45345345,
+        "npi": "323efsd",
+        "created_at": "2022-02-02T18:14:23.000000Z",
+        "updated_at": "2022-02-02T18:14:23.000000Z",
+        "email": null,
+        "tax_id": 0,
+        "address": null,
+        "contact": {
+            "id": 14,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "fg@gh.com",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T18:14:23.000000Z",
+            "updated_at": "2022-02-02T18:14:23.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": 3
+        }
+    },
+    {
+        "id": 4,
+        "code": "somecode22",
+        "name": "someName010122",
+        "status": false,
+        "taxonomy": 45345345,
+        "npi": "323efsd",
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "email": null,
+        "tax_id": 0,
+        "address": {
+            "id": 17,
+            "address": "dfsdf",
+            "city": "sdfsdf",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T18:15:53.000000Z",
+            "updated_at": "2022-02-02T18:15:53.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": 4
+        },
+        "contact": {
+            "id": 15,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "fg@gh.com",
+            "user_id": null,
+            "billing_company_id": null,
+            "created_at": "2022-02-02T18:15:53.000000Z",
+            "updated_at": "2022-02-02T18:15:53.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": 4
+        }
     }
 ]
 ```
@@ -160,15 +229,43 @@
 
 ```json
     {
-    "code": "somecode",
-    "name": "someName0101",
-    "taxonomy": "45345345",
+    "id": 4,
+    "code": "somecode22",
+    "name": "someName010122",
+    "status": false,
+    "taxonomy": 45345345,
     "npi": "323efsd",
-    "email": "some@email.com",
-    "tax_id": 343,
-    "updated_at": "2022-01-23T20:27:53.000000Z",
-    "created_at": "2022-01-23T20:27:53.000000Z",
-    "id": 2
+    "created_at": "2022-02-02T18:15:53.000000Z",
+    "updated_at": "2022-02-02T18:15:53.000000Z",
+    "email": null,
+    "tax_id": 0,
+    "address": {
+        "id": 17,
+        "address": "dfsdf",
+        "city": "sdfsdf",
+        "state": "dsfsdf",
+        "zip": "234",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": 4
+    },
+    "contact": {
+        "id": 15,
+        "phone": "34324234",
+        "fax": "567674576457",
+        "email": "fg@gh.com",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": 4
+    }
 }
 ```
 
@@ -176,3 +273,116 @@
 #
 
 >{warning} 404 clearing found not found
+
+
+#-Update Company
+
+<a name="section-3"></a>
+## Body request example
+
+
+#
+
+```json
+{
+    "company":{
+        "code":"somecode",
+        "name":"someName0101",
+        "taxonomy":"45345345",
+        "npi":"323efsd",
+        "email": "some@email.com",
+        "tax_id": 343
+    },"address":{
+        "address":"dfsdf",
+        "city":"sdfsdf",
+        "state":"dsfsdf",
+        "zip":"234"
+    },
+    "contact":{
+        "phone":"34324234",
+        "fax":"567674576457",
+        "email":"fg@gh.com"
+    }
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 clearing house created
+
+
+#
+
+```json
+    {
+    "id": 4,
+    "code": "somecode22",
+    "name": "someName010122",
+    "status": false,
+    "taxonomy": 45345345,
+    "npi": "323efsd",
+    "created_at": "2022-02-02T18:15:53.000000Z",
+    "updated_at": "2022-02-02T18:15:53.000000Z",
+    "email": null,
+    "tax_id": 0,
+    "address": {
+        "id": 17,
+        "address": "dfsdf",
+        "city": "sdfsdf",
+        "state": "dsfsdf",
+        "zip": "234",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": 4
+    },
+    "contact": {
+        "id": 15,
+        "phone": "34324234",
+        "fax": "567674576457",
+        "email": "fg@gh.com",
+        "user_id": null,
+        "billing_company_id": null,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": 4
+    }
+}
+```
+
+
+
+#
+
+
+#-Change status Company
+
+<a name="section-3"></a>
+## Body request example
+
+```json
+{
+    "status":"boolean"
+}
+```
+
+
+## Response
+
+> {success} 204 Good response
+
+
+#

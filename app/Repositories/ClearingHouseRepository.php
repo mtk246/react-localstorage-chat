@@ -45,7 +45,10 @@ class ClearingHouseRepository
      * @return ClearingHouse|Builder|Model|object|null
      */
     public function getOneClearingHouse(int $clearing_id){
-        $clearing = ClearingHouse::whereId($clearing_id)->first();
+        $clearing = ClearingHouse::whereId($clearing_id)->with([
+            "address",
+            "contact"
+        ])->first();
 
         return !is_null($clearing) ? $clearing : null;
     }
