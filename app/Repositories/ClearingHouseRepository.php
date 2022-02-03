@@ -77,7 +77,7 @@ class ClearingHouseRepository
         return ClearingHouse::with([
             "address",
             "contact"
-        ])->where("name","ILIKE","%${name}%")->get();
+        ])->where("name","ILIKE","%${name}")->get();
     }
 
     public function changeStatus($status,int $id){

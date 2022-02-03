@@ -82,7 +82,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\ClearingHouseController::class,'getAllClearingHouse'])->middleware([
             "auth:api",
         ]);
-        Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getO neClearingHouse'])->middleware([
+        Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getOneClearingHouse'])->middleware([
             "auth:api",
         ]);
 
