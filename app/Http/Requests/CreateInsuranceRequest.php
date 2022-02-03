@@ -13,7 +13,7 @@ class CreateInsuranceRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,19 @@ class CreateInsuranceRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "insurance" => "required|array",
+            'insurance.name' => "required|string|unique:insurance_companies,name",
+            'insurance.naic' => "required|string",
+            'insurance.file_method' => "required|string",
+            "address" => "required|array",
+            'address.address' => "required|string",
+            'address.city' => "required|string",
+            'address.state' => "required|string",
+            'address.zip' => "required|numeric",
+            "contact" => "required|array",
+            "contact.phone" => "required|string",
+            "contact.fax" => "required|string",
+            "contact.email" => "required|email:rfc",
         ];
     }
 }

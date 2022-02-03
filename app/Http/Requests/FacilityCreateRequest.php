@@ -25,8 +25,21 @@ class FacilityCreateRequest extends FormRequest
     {
         return [
             "facility" => "required|array",
-            "address"  => "required|array",
-            "contact"  => "required|array",
+            "facility.type" => "required|integer",
+            "facility.name" => "required|string|unique:facilities,name",
+            "facility.company_name" => "required|string|unique:facilities,name",
+            "facility.npi" => "required|string",
+            "facility.taxonomy" => "required|string",
+            "facility.billing_company_id" => "required|integer",
+            "address" => "required|array",
+            'address.address' => "required|string",
+            'address.city' => "required|string",
+            'address.state' => "required|string",
+            'address.zip' => "required|numeric",
+            "contact" => "required|array",
+            "contact.phone" => "required|string",
+            "contact.fax" => "required|string",
+            "contact.email" => "required|email:rfc",
         ];
     }
 }

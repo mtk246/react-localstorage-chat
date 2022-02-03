@@ -391,7 +391,12 @@ class UserController extends Controller
         return ($rs) ? response()->json($rs) : response()->json("error updating image profile",400);
     }
 
-    public function recoveryUser(RecoveryUserRequest $request){
+    /**
+     * @param RecoveryUserRequest $request
+     * @return JsonResponse
+     */
+    public function recoveryUser(RecoveryUserRequest $request): JsonResponse
+    {
         $rs = $this->userRepository->recoveryUser($request->input("email"));
 
         return $rs ? response()->json([],204) : response()->json("Error user not found",404);

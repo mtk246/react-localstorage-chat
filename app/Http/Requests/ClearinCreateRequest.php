@@ -27,7 +27,14 @@ class ClearinCreateRequest extends FormRequest
             "code" => "required|string",
             "name" => "required|string",
             "address" => "required|array",
+            'address.address' => "required|string",
+            'address.city' => "required|string",
+            'address.state' => "required|string",
+            'address.zip' => "required|numeric",
             "contact" => "required|array",
+            "contact.phone" => "required|string",
+            "contact.fax" => "required|string",
+            "contact.email" => "required|email:rfc",
         ];
     }
 }

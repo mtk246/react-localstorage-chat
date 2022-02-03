@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateFacilityRequest extends FormRequest
+class UpdateInsuranceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,10 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            "facility" => "sometimes|array",
-            "facility.type" => "sometimes|integer",
-            "facility.name" => "sometimes|string|unique:facilities,name",
-            "facility.company_name" => "sometimes|string|unique:facilities,name",
-            "facility.npi" => "sometimes|string",
-            "facility.taxonomy" => "sometimes|string",
-            "facility.billing_company_id" => "sometimes|integer",
+            "insurance" => "sometimes|array",
+            'insurance.name' => "sometimes|string",
+            'insurance.naic' => "sometimes|string",
+            'insurance.file_method' => "sometimes|string",
             "address" => "sometimes|array",
             'address.address' => "sometimes|string",
             'address.city' => "sometimes|string",

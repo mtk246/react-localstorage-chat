@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeStatusInsuraceRequest;
 use App\Http\Requests\CreateInsuranceRequest;
+use App\Http\Requests\UpdateInsuranceRequest;
 use App\Repositories\InsuranceCompanyRepository;
 use Illuminate\Http\JsonResponse;
 #use Illuminate\Http\Request;
@@ -58,5 +60,28 @@ class InsuranceCompanyController extends Controller
         return response()->json($rs);
     }
 
+    /**
+     * @param ChangeStatusInsuraceRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusInsuraceRequest $request,int $id): JsonResponse
+    {
+        $rs = $this->InsuranceRepository->changeStatus($request->input("status"),$id);
+
+        return $rs ? response()->json($rs) : response()->json("Error, insurance not found",404);
+    }
+
+    /**
+     * @param UpdateInsuranceRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function updateInsurance(UpdateInsuranceRequest $request,int $id): JsonResponse
+    {
+        $rs = $this->InsuranceRepository->updateInsurance($request->validated(),$id);
+
+        return $rs ? response()->json($rs) : response()->json("Error! updating insurance",400);
+    }
 
 }

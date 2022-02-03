@@ -150,4 +150,17 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("device")->group(function(){
         Route::post("allow-device",[\App\Http\Controllers\DeviceController::class,'allowDevice']);
     });
+
+    Route::prefix("insurance-company")->middleware([
+        "auth:api",
+        'role:SUPER_USER',
+        'role:BILLER',
+    ])->group(function(){
+        Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
+        Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);
+        Route::post("/",[\App\Http\Controllers\InsuranceCompanyController::class,'createInsurance']);
+        Route::get("/",[\App\Http\Controllers\InsuranceCompanyController::class,'getAllInsurance']);
+        Route::put("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'updateInsurance']);
+        Route::patch("/{id}/change-status",[\App\Http\Controllers\InsuranceCompanyController::class,'changeStatus']);
+    });
 });

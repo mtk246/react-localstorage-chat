@@ -15,7 +15,12 @@ class InsuranceCompanyRepository
      * @return mixed
      */
     public function searchByName(string $name){
-        return InsuranceCompany::where("name","ILIKE","%${name}%")->get();
+        return InsuranceCompany::where("name","ILIKE","%${name}%")
+            ->with([
+                "address",
+                "contact"
+            ])
+            ->get();
     }
 
     /**

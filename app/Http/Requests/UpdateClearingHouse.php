@@ -25,8 +25,16 @@ class UpdateClearingHouse extends FormRequest
     {
         return [
             "clearing-house" => "sometimes|array",
+            "clearing-house.name" => "sometimes|unique:clearing_houses,name",
             "address" => "sometimes|array",
-            "contact" => "sometimes|array"
+            'address.address' => "sometimes|string",
+            'address.city' => "sometimes|string",
+            'address.state' => "sometimes|string",
+            'address.zip' => "sometimes|numeric",
+            "contact" => "sometimes|array",
+            "contact.phone" => "sometimes|string",
+            "contact.fax" => "sometimes|string",
+            "contact.email" => "sometimes|email:rfc",
         ];
     }
 }

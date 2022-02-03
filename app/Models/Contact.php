@@ -57,6 +57,7 @@ class Contact extends Model
         "company_id",
         "facility_id",
         "clearing_house_id",
+        "insurance_company_id",
     ];
 
     /**

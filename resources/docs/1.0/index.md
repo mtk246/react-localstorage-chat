@@ -21,3 +21,6 @@
 
 - ## Company
     - [Company](/{{route}}/{{version}}/company)
+
+- ## Insurance-Company
+    - [Insurance-Company](/{{route}}/{{version}}/insurance-company)
