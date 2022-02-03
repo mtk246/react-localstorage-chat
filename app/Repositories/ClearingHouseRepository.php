@@ -56,15 +56,30 @@ class ClearingHouseRepository
     public function updateClearingHouse(array $data,int $id){
 
         if(isset($data['clearing-house'])){
-            ClearingHouse::whereId($id)->update($data['clearing-house']);
+            ClearingHouse::updateOrCreate(["id" => $id],$data['clearing-house']);
         }
 
         if(isset($data['address'])){
-            Address::whereClearingHouseId($id)->update($data['address']);
+            $address = Address::whereClearingHouseId($id)->first();
+
+            if( is_null($address) ){
+                $data["address"]["clearing_house_id"] = $id;
+                Address::create($data["address"]);
+            }else{
+                Address::whereClearingHouseId($id)->update($data["address"]);
+            }
+
         }
 
         if(isset($data['contact'])){
-            Contact::whereClearingHouseId($id)->update($data['contact']);
+            $contact = Contact::whereClearingHouseId($id)->first();
+
+            if( is_null($contact) ){
+                $data["address"]["clearing_house_id"] = $id;
+                Contact::create($data["address"]);
+            }else{
+                Contact::whereClearingHouseId($id)->update($data["contact"]);
+            }
         }
 
         return ClearingHouse::whereId($id)->with([
@@ -77,7 +92,7 @@ class ClearingHouseRepository
         return ClearingHouse::with([
             "address",
             "contact"
-        ])->where("name","ILIKE","%${name}")->get();
+        ])->where("name","ILIKE","%${name}%")->get();
     }
 
     public function changeStatus($status,int $id){

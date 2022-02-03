@@ -360,8 +360,7 @@
 {
     "clearing-house":{
         "code":"someCode",
-        "name": "someName",
-        "status": "some integer status"
+        "name": "someName"
     },
     "address":{
         "address":"dfsdf",

@@ -71,7 +71,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->getOneByName($name);
 
-        return $rs ? response()->json([],204) : response()->json("Error updating clearing not found",404);
+        return count($rs) > 0 ? response()->json($rs) : response()->json("Error updating clearing not found",404);
     }
 
     /**
