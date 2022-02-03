@@ -21,10 +21,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $clearing_house_id
  * @property int|null $facility_id
  * @property int|null $company_id
+ * @property int|null $insurance_company_id
  * @property-read \App\Models\BillingCompany|null $billingCompany
  * @property-read \App\Models\ClearingHouse|null $clearingHouse
  * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\Facility|null $facility
+ * @property-read \App\Models\InsuranceCompany|null $insuranceCompany
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Address newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address newQuery()
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereFacilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUserId($value)
@@ -98,5 +101,13 @@ class Address extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function insuranceCompany(): BelongsTo
+    {
+        return $this->belongsTo(InsuranceCompany::class);
     }
 }

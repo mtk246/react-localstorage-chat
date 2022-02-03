@@ -394,7 +394,7 @@ class UserController extends Controller
     public function recoveryUser(RecoveryUserRequest $request){
         $rs = $this->userRepository->recoveryUser($request->input("email"));
 
-        return $rs ? response()->send([],204) : response()->json("Error user not found",404);
+        return $rs ? response()->json([],204) : response()->json("Error user not found",404);
     }
 
     /**

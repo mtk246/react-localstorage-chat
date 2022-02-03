@@ -61,12 +61,27 @@ class FacilityRepository
             Facility::whereId($id)->update($data['company']);
         }
 
-        if(isset($data["address"])){
-            Facility::whereId($id)->update($data['address']);
+        if(isset($data['address'])){
+            $address = Address::whereClearingHouseId($id)->first();
+
+            if( is_null($address) ){
+                $data["address"]["clearing_house_id"] = $id;
+                Address::create($data["address"]);
+            }else{
+                Address::whereClearingHouseId($id)->update($data["address"]);
+            }
+
         }
 
-        if(isset($data["contact"])){
-            Facility::whereId($id)->update($data['contact']);
+        if(isset($data['contact'])){
+            $contact = Contact::whereClearingHouseId($id)->first();
+
+            if( is_null($contact) ){
+                $data["address"]["clearing_house_id"] = $id;
+                Contact::create($data["address"]);
+            }else{
+                Contact::whereClearingHouseId($id)->update($data["contact"]);
+            }
         }
 
         return Facility::whereId($id)->with([

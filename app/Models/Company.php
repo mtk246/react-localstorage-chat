@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $email
+ * @property int $tax_id
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereTaxId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
  * @mixin \Eloquent
