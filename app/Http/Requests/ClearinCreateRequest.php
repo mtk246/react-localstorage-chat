@@ -25,7 +25,7 @@ class ClearinCreateRequest extends FormRequest
     {
         return [
             "code" => "required|string",
-            "name" => "required|string",
+            "name" => "required|string|unique:clearing_houses,name",
             "address" => "required|array",
             'address.address' => "required|string",
             'address.city' => "required|string",

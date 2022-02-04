@@ -314,7 +314,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxNDA1Mjg2LCJleHAiOjE2NDE0MDg4ODYsIm5iZiI6MTY0MTQwNTI4NiwianRpIjoiaDh0c2FRMlRsM2UzUXpPRCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.zgZyxsp0eSsC4mIOvSiwtPdQYGIKXZ_jC1qiWI5t4rY",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzMzE0MTA3LCJleHAiOjE2NDMzMTc3MDcsIm5iZiI6MTY0MzMxNDEwNywianRpIjoiYUsxSm92eGlFUnRoMU9MOSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.Cy1OyQLDIbSKC7EChSBRAPXHRhAacIavJrzyuiQtmEs",
 									"type": "string"
 								}
 							]
@@ -352,7 +352,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxMjQ2MDI1LCJleHAiOjE2NDEyNDk2MjUsIm5iZiI6MTY0MTI0NjAyNSwianRpIjoiaks4M2R5SlhDa2xpbTdRciIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.L-6phssu8EBSjrB9-WDOaJVupnxXoTmJLPle2hjRc_Y",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzMzE0MTA3LCJleHAiOjE2NDMzMTc3MDcsIm5iZiI6MTY0MzMxNDEwNywianRpIjoiYUsxSm92eGlFUnRoMU9MOSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.Cy1OyQLDIbSKC7EChSBRAPXHRhAacIavJrzyuiQtmEs",
 									"type": "string"
 								}
 							]
@@ -452,6 +452,38 @@
 							],
 							"path": [
 								"img-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SEND EMAIL RESCUE USER",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"cccc@gmail.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}user/send-email-rescue-user",
+							"host": [
+								"{{base_url}}user"
+							],
+							"path": [
+								"send-email-rescue-user"
 							]
 						}
 					},
@@ -1079,7 +1111,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODgwMjM3LCJleHAiOjE2NDI4ODM4MzcsIm5iZiI6MTY0Mjg4MDIzNywianRpIjoiemdST042dldsaVdyVTRjVyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.1HFObQnfXrzt1Cc1b77kdv8mrH2B6FyS-g9FPdMzwbA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODIzNjUwLCJleHAiOjE2NDM4MjcyNTAsIm5iZiI6MTY0MzgyMzY1MCwianRpIjoiRnVUU3pSS29wU2VQME5oZCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.s4wTEPsbXSHaROeAYCPJx-c6qxVcbkQpwHOYuoUtQ8M",
 									"type": "string"
 								}
 							]
@@ -1099,7 +1131,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"code\":\"someCode\",\r\n    \"name\":\"someName\",\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"code\":\"someCodeereee44g\",\r\n    \"name\":\"someNameereee44g\",\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1123,7 +1155,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODgwMjM3LCJleHAiOjE2NDI4ODM4MzcsIm5iZiI6MTY0Mjg4MDIzNywianRpIjoiemdST042dldsaVdyVTRjVyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.1HFObQnfXrzt1Cc1b77kdv8mrH2B6FyS-g9FPdMzwbA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODQ2MzUzLCJleHAiOjE2NDM4NDk5NTMsIm5iZiI6MTY0Mzg0NjM1MywianRpIjoiOEF5b2JGN0xrWVZSNnJReiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ysZHoLKFRYzGaH6E1OPqPb3cFxoz2XTjdRBrqvUlK0A",
 									"type": "string"
 								}
 							]
@@ -1158,7 +1190,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODgwMjM3LCJleHAiOjE2NDI4ODM4MzcsIm5iZiI6MTY0Mjg4MDIzNywianRpIjoiemdST042dldsaVdyVTRjVyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.1HFObQnfXrzt1Cc1b77kdv8mrH2B6FyS-g9FPdMzwbA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODQ2MzUzLCJleHAiOjE2NDM4NDk5NTMsIm5iZiI6MTY0Mzg0NjM1MywianRpIjoiOEF5b2JGN0xrWVZSNnJReiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ysZHoLKFRYzGaH6E1OPqPb3cFxoz2XTjdRBrqvUlK0A",
 									"type": "string"
 								}
 							]
@@ -1176,6 +1208,92 @@
 								"type": "default"
 							}
 						],
+						"url": {
+							"raw": "{{base_url}}clearing-house/9",
+							"host": [
+								"{{base_url}}clearing-house"
+							],
+							"path": [
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY NAME",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODQ2MzUzLCJleHAiOjE2NDM4NDk5NTMsIm5iZiI6MTY0Mzg0NjM1MywianRpIjoiOEF5b2JGN0xrWVZSNnJReiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.ysZHoLKFRYzGaH6E1OPqPb3cFxoz2XTjdRBrqvUlK0A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}clearing-house/get-by-name/some",
+							"host": [
+								"{{base_url}}clearing-house"
+							],
+							"path": [
+								"get-by-name",
+								"some"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CLEARING-HOUSE",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODkzMTcyLCJleHAiOjE2NDM4OTY3NzIsIm5iZiI6MTY0Mzg5MzE3MiwianRpIjoiVE1VcDQ0SkhNVGJKdG1HQiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.BsEIWN4Ku3dPSIhOVTk2V2x3iBfEo91ArFHY3fHkj8c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clearing-house\":{\r\n        \"code\":\"someCode1122334455667711333\",\r\n        \"name\": \"someName1122334455667711333\"\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf1122334455667711333\",\r\n        \"city\":\"sdfsdf1122334455667711333\",\r\n        \"state\":\"dsfsdf1122334455667711333\",\r\n        \"zip\":\"2341122334455667711333\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"343242341122334455667711333\",\r\n        \"fax\":\"5676745764571122334455667711333\",\r\n        \"email\":\"3331177665544331122fg@gh.com\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{base_url}}clearing-house/1",
 							"host": [
@@ -1201,7 +1319,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODg3MDM2LCJleHAiOjE2NDI4OTA2MzYsIm5iZiI6MTY0Mjg4NzAzNiwianRpIjoiaTcybnVFQlpWVHZmVXJHSiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XgUkSnc7yI8ktFodosxiXr5Ewz9eCYmzrw-xVdlTV8c",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODI5OTk3LCJleHAiOjE2NDM4MzM1OTcsIm5iZiI6MTY0MzgyOTk5NywianRpIjoiRzZxdzN0VWdnSDhDZ0F2aiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.p2he3v2SuW1Lvm89lssnoV66R9aEeWyAQPyjPEk3yYY",
 									"type": "string"
 								}
 							]
@@ -1221,7 +1339,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"facility\":{\r\n        \"type\":1,\r\n        \"name\":\"somenamefff\",\r\n        \"company_name\":\"sonameCompany\",\r\n        \"npi\":\"somenpi\",\r\n        \"taxonomy\":\"dsfdsf\",\r\n        \"billing_company_id\":2\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}"
+							"raw": "{\r\n    \"facility\":{\r\n        \"type\":1,\r\n        \"name\":\"somenamessfff\",\r\n        \"company_name\":\"sonameCssompany\",\r\n        \"npi\":\"somenpi\",\r\n        \"taxonomy\":\"dsfdsf\",\r\n        \"billing_company_id\":2\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}facility",
@@ -1240,7 +1358,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODg3MDM2LCJleHAiOjE2NDI4OTA2MzYsIm5iZiI6MTY0Mjg4NzAzNiwianRpIjoiaTcybnVFQlpWVHZmVXJHSiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XgUkSnc7yI8ktFodosxiXr5Ewz9eCYmzrw-xVdlTV8c",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODI5OTk3LCJleHAiOjE2NDM4MzM1OTcsIm5iZiI6MTY0MzgyOTk5NywianRpIjoiRzZxdzN0VWdnSDhDZ0F2aiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.p2he3v2SuW1Lvm89lssnoV66R9aEeWyAQPyjPEk3yYY",
 									"type": "string"
 								}
 							]
@@ -1275,7 +1393,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyODg3MDM2LCJleHAiOjE2NDI4OTA2MzYsIm5iZiI6MTY0Mjg4NzAzNiwianRpIjoiaTcybnVFQlpWVHZmVXJHSiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XgUkSnc7yI8ktFodosxiXr5Ewz9eCYmzrw-xVdlTV8c",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODI5OTk3LCJleHAiOjE2NDM4MzM1OTcsIm5iZiI6MTY0MzgyOTk5NywianRpIjoiRzZxdzN0VWdnSDhDZ0F2aiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.p2he3v2SuW1Lvm89lssnoV66R9aEeWyAQPyjPEk3yYY",
 									"type": "string"
 								}
 							]
@@ -1318,7 +1436,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyOTY5MzY4LCJleHAiOjE2NDI5NzI5NjgsIm5iZiI6MTY0Mjk2OTM2OCwianRpIjoiRFVrc3NGbnFHa1gxa3ZsYiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.6146JNBBd2H0NBf6NKETsKadlKooHgfrbntrmmZrWAA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODI1NDk5LCJleHAiOjE2NDM4MjkwOTksIm5iZiI6MTY0MzgyNTQ5OSwianRpIjoiWWgwU2tGZjVUaEpqSTdEayIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.xC94hYr7ENtUVKM_Oa5iog0pEsUbX-dAWLA6nY5mRyU",
 									"type": "string"
 								}
 							]
@@ -1338,7 +1456,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"company\":{\r\n        \"code\":\"somecode\",\r\n        \"name\":\"someName0101\",\r\n        \"taxonomy\":\"45345345\",\r\n        \"npi\":\"323efsd\"\r\n    },\"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}"
+							"raw": "{\r\n    \"company\":{\r\n        \"code\":\"somecode22\",\r\n        \"name\":\"someName010122\",\r\n        \"taxonomy\":\"45345345\",\r\n        \"npi\":\"323efsd\"\r\n    },\"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}company",
@@ -1357,7 +1475,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQyOTY5MzY4LCJleHAiOjE2NDI5NzI5NjgsIm5iZiI6MTY0Mjk2OTM2OCwianRpIjoiRFVrc3NGbnFHa1gxa3ZsYiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.6146JNBBd2H0NBf6NKETsKadlKooHgfrbntrmmZrWAA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODI1NDk5LCJleHAiOjE2NDM4MjkwOTksIm5iZiI6MTY0MzgyNTQ5OSwianRpIjoiWWgwU2tGZjVUaEpqSTdEayIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.xC94hYr7ENtUVKM_Oa5iog0pEsUbX-dAWLA6nY5mRyU",
 									"type": "string"
 								}
 							]
@@ -1417,6 +1535,505 @@
 							],
 							"path": [
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INSURANCE-COMPANY",
+			"item": [
+				{
+					"name": "CREATE-ENSURANCE",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTIzODE4LCJleHAiOjE2NDM5Mjc0MTgsIm5iZiI6MTY0MzkyMzgxOCwianRpIjoieUlzTnJyVE83VzZpcjNqdyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.wmHBCbgxKXpWt4wRbynyNc30DKTmYscnfgjjQKERd8k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"insurance\":{\r\n        \"name\":\"dsfsdfsfffeddsddfg\",\r\n        \"naic\":\"someNffaic\",\r\n        \"file_method\":\"soffmeFileNaic\"\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"cdfsf\",\r\n        \"state\":\"sdsfsd\",\r\n        \"zip\":\"3234\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"55433\",\r\n        \"fax\":\"fsdfs\",\r\n        \"email\":\"dsfsd@gdrfg.com\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}insurance-company",
+							"host": [
+								"{{base_url}}insurance-company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY NAME",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTE5MDE5LCJleHAiOjE2NDM5MjI2MTksIm5iZiI6MTY0MzkxOTAxOSwianRpIjoic1piTlduVWxYVG5Qck1hYiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.3wW3BtVzv6pJ1FmsXt0Q4ZOe6M7N_hmDaUHC0NcPyCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-company/dsfsdfsfeddsddfg/get-by-name",
+							"host": [
+								"{{base_url}}insurance-company"
+							],
+							"path": [
+								"dsfsdfsfeddsddfg",
+								"get-by-name"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONE INSURANCE",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTE5MDE5LCJleHAiOjE2NDM5MjI2MTksIm5iZiI6MTY0MzkxOTAxOSwianRpIjoic1piTlduVWxYVG5Qck1hYiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.3wW3BtVzv6pJ1FmsXt0Q4ZOe6M7N_hmDaUHC0NcPyCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-company/2",
+							"host": [
+								"{{base_url}}insurance-company"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL ENSURANCE",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-company/",
+							"host": [
+								"{{base_url}}insurance-company"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INSURANCE PLAN",
+			"item": [
+				{
+					"name": "CREATE INSURANCE PLAN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"ins_type\":\"some ins_type\",\r\n        \"name\":\"someName33\",\r\n        \"note\":\"someNote\",\r\n        \"plan_type\":\"somePlanType\",\r\n        \"cap_group\":\"someCapGroup\",\r\n        \"accept_assign\":true,\r\n        \"pre_authorization\":true,\r\n        \"file_zero\":true,\r\n        \"referral_required\":true,\r\n        \"accrue_patient_resp\":true,\r\n        \"require_abn\":true,\r\n        \"pqrs_eligible\":true,\r\n        \"allow_attached_files\":true,\r\n        \"eff_date\":\"2022-01-23\",\r\n        \"charge_using\":\"someCharge\",\r\n        \"format\":\"y-m-d\",\r\n        \"method\":\"someMethod\",\r\n        \"naic\":\"someNaic\",\r\n        \"insurance_company_id\":1\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}insurance-plan",
+							"host": [
+								"{{base_url}}insurance-plan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL INSURANCE PLAN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-plan",
+							"host": [
+								"{{base_url}}insurance-plan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONE INSURANCE PLAN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-plan/1",
+							"host": [
+								"{{base_url}}insurance-plan"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY NAME",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-plan/someName/get-by-name",
+							"host": [
+								"{{base_url}}insurance-plan"
+							],
+							"path": [
+								"someName",
+								"get-by-name"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY COMPANY",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTQ0NTExLCJleHAiOjE2NDM5NDgxMTEsIm5iZiI6MTY0Mzk0NDUxMSwianRpIjoiS2Z5QmRBbkJDbzhEWWdxTiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.O-mkRGClXl2eLVmIZZuKOaQehmH-6oAYijyAJqX4qjM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}insurance-plan/dsfsdfsfesddfg/get-by-company",
+							"host": [
+								"{{base_url}}insurance-plan"
+							],
+							"path": [
+								"dsfsdfsfesddfg",
+								"get-by-company"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DOCTOR",
+			"item": [
+				{
+					"name": "CREATE DOCTOR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTc3MjkzLCJleHAiOjE2NDM5ODA4OTMsIm5iZiI6MTY0Mzk3NzI5MywianRpIjoiVjVnU3NOc0VWSXFoTHZnQyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XUyvNqOHmlg4EggAja03BJtOvN9yMlr0OEihS0QJJ_I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"npi\":\"43453433\",\r\n    \"speciality\":\"someSpeciality3\",\r\n    \"taxonomia\":\"someToxonomia3\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}doctor",
+							"host": [
+								"{{base_url}}doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL DOCTOR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTc3MjkzLCJleHAiOjE2NDM5ODA4OTMsIm5iZiI6MTY0Mzk3NzI5MywianRpIjoiVjVnU3NOc0VWSXFoTHZnQyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XUyvNqOHmlg4EggAja03BJtOvN9yMlr0OEihS0QJJ_I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}doctor",
+							"host": [
+								"{{base_url}}doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONE DOCTOR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTc3MjkzLCJleHAiOjE2NDM5ODA4OTMsIm5iZiI6MTY0Mzk3NzI5MywianRpIjoiVjVnU3NOc0VWSXFoTHZnQyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XUyvNqOHmlg4EggAja03BJtOvN9yMlr0OEihS0QJJ_I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}doctor/1",
+							"host": [
+								"{{base_url}}doctor"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONE BY NPI",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTc3MjkzLCJleHAiOjE2NDM5ODA4OTMsIm5iZiI6MTY0Mzk3NzI5MywianRpIjoiVjVnU3NOc0VWSXFoTHZnQyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XUyvNqOHmlg4EggAja03BJtOvN9yMlr0OEihS0QJJ_I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}doctor/434534/get-by-npi",
+							"host": [
+								"{{base_url}}doctor"
+							],
+							"path": [
+								"434534",
+								"get-by-npi"
 							]
 						}
 					},
