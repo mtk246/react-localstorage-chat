@@ -163,4 +163,18 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'updateInsurance']);
         Route::patch("/{id}/change-status",[\App\Http\Controllers\InsuranceCompanyController::class,'changeStatus']);
     });
+
+    Route::prefix("insurance-plan")->middleware([
+        "auth:api",
+        'role:SUPER_USER',
+        'role:BILLER',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\InsurancePlanController::class,'createInsurancePlan']);
+        Route::put("/{id}",[\App\Http\Controllers\InsurancePlanController::class,'updateInsurancePlan']);
+        Route::get("/",[\App\Http\Controllers\InsurancePlanController::class,'getAllInsurancePlans']);
+        Route::get("/{id}",[\App\Http\Controllers\InsurancePlanController::class,'getOneInsurancePlan']);
+        Route::patch("/{id}/change-status",[\App\Http\Controllers\InsurancePlanController::class,'changeStatus']);
+        Route::get("/{companyName}/get-by-company",[\App\Http\Controllers\InsurancePlanController::class,'getByCompany']);
+        Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsurancePlanController::class,'getByName']);
+    });
 });

@@ -24,3 +24,6 @@
 
 - ## Insurance-Company
     - [Insurance-Company](/{{route}}/{{version}}/insurance-company)
+
+- ## Insurance-plan
+    - [Insurance-Plan](/{{route}}/{{version}}/insurance-plan)

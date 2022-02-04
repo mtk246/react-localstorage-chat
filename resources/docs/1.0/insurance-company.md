@@ -11,11 +11,12 @@
 | # | METHOD   | Name             | URL                     | Token required|Description|
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create Insurance Company`                    | `/insurance-company/`               |yes             |Create Insurance Company|         
-| 2 |GET | `Get all Insurance Company`                   | `/insurance-company/`        |yes            |Get all Clearing House|
+| 2 |GET | `Get all Insurance Company`                   | `/insurance-company/`        |yes            |Get all Insurance Company|
 | 3 |GET | `Get one Insurance Company`                   | `/insurance-company/{id}`|yes|Get one Insurance Company|
 | 4 |PUT | `Update Insurance Company`                | `/insurance-company/{id}`|yes|Update Insurance Company|
 | 5 |GET | `Get one Insurance Company by name`           | `/insurance-company/{name}/get-by-name`|yes|Get one Insurance Company by name|
-| 6 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
+| 6 |GET | `Get one Insurance Company by company`           | `/insurance-company/{companyName}/get-by-company`|yes|Get one Insurance Company by name|
+| 7 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
 
 
 
