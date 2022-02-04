@@ -177,4 +177,15 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{companyName}/get-by-company",[\App\Http\Controllers\InsurancePlanController::class,'getByCompany']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsurancePlanController::class,'getByName']);
     });
+
+    Route::prefix("doctor")->middleware([
+        "auth:api",
+        'role:SUPER_USER',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
+        Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
+        Route::get("/{id}",[\App\Http\Controllers\DoctorController::class,'getOneDoctor']);
+        Route::get("/",[\App\Http\Controllers\DoctorController::class,'getAllDoctors']);
+        Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getByNpi']);
+    });
 });
