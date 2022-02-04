@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany as BelongsToManyAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
+use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -187,5 +188,13 @@ class User extends Authenticatable implements JWTSubject
     public function devices(): HasManyAlias
     {
         return $this->hasMany(Device::class);
+    }
+
+    /**
+     * @return HasOneAlias
+     */
+    public function doctor(): HasOneAlias
+    {
+        return $this->hasOne(Doctor::class);
     }
 }

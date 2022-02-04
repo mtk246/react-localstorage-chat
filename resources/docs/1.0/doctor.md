@@ -37,7 +37,8 @@
 {
     "npi":"43453433",
     "speciality":"someSpeciality3",
-    "taxonomia":"someToxonomia3"
+    "taxonomy":"someToxonomia3",
+    "user_id": 4
 }
 ```
 
@@ -62,7 +63,7 @@
 {
     "npi": "43453433",
     "speciality": "someSpeciality3",
-    "taxonomia": "someToxonomia3",
+    "taxonomy": "someToxonomia3",
     "updated_at": "2022-02-04T12:28:34.000000Z",
     "created_at": "2022-02-04T12:28:34.000000Z",
     "id": 3
@@ -85,7 +86,8 @@
 {
     "npi":"43453433",
     "speciality":"someSpeciality3",
-    "taxonomia":"someToxonomia3"
+    "taxonomy":"someToxonomia3",
+    "user_id": 4
 }
 ```
 
@@ -110,7 +112,7 @@
 {
     "npi": "43453433",
     "speciality": "someSpeciality3",
-    "taxonomia": "someToxonomia3",
+    "taxonomy": "someToxonomia3",
     "updated_at": "2022-02-04T12:28:34.000000Z",
     "created_at": "2022-02-04T12:28:34.000000Z",
     "id": 3
@@ -151,7 +153,7 @@
 {
     "npi": "43453433",
     "speciality": "someSpeciality3",
-    "taxonomia": "someToxonomia3",
+    "taxonomy": "someToxonomia3",
     "updated_at": "2022-02-04T12:28:34.000000Z",
     "created_at": "2022-02-04T12:28:34.000000Z",
     "id": 3
@@ -187,7 +189,7 @@
     {
         "id": 1,
         "npi": "434534",
-        "taxonomia": "someToxonomia",
+        "taxonomy": "someToxonomia",
         "speciality": "someSpeciality",
         "created_at": "2022-02-04T12:28:07.000000Z",
         "updated_at": "2022-02-04T12:28:07.000000Z"
@@ -195,7 +197,7 @@
     {
         "id": 2,
         "npi": "4345343",
-        "taxonomia": "someToxonomia2",
+        "taxonomy": "someToxonomia2",
         "speciality": "someSpeciality1",
         "created_at": "2022-02-04T12:28:22.000000Z",
         "updated_at": "2022-02-04T12:28:22.000000Z"
@@ -203,7 +205,7 @@
     {
         "id": 3,
         "npi": "43453433",
-        "taxonomia": "someToxonomia3",
+        "taxonomy": "someToxonomia3",
         "speciality": "someSpeciality3",
         "created_at": "2022-02-04T12:28:34.000000Z",
         "updated_at": "2022-02-04T12:28:34.000000Z"
@@ -244,7 +246,7 @@
 {
     "npi": "43453433",
     "speciality": "someSpeciality3",
-    "taxonomia": "someToxonomia3",
+    "taxonomy": "someToxonomia3",
     "updated_at": "2022-02-04T12:28:34.000000Z",
     "created_at": "2022-02-04T12:28:34.000000Z",
     "id": 3

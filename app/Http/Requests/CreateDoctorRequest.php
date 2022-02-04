@@ -26,7 +26,8 @@ class CreateDoctorRequest extends FormRequest
         return [
             "npi" => "required|string|unique:doctors,npi",
             "speciality" => "required|string",
-            "taxonomia"  => "required|string",
+            "taxonomy"  => "required|string",
+            "user_id"   => "required|integer"
         ];
     }
 }

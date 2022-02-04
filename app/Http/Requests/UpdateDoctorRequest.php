@@ -26,7 +26,8 @@ class UpdateDoctorRequest extends FormRequest
         return [
             "npi" => "sometimes|string|unique:doctors,npi",
             "speciality" => "sometimes|string",
-            "taxonomia"  => "sometimes|string",
+            "taxonomy"   => "sometimes|string",
+            "user_id"    => "sometimes|integer"
         ];
     }
 }
