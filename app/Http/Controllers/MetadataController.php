@@ -19,8 +19,10 @@ class MetadataController extends Controller
         if(!is_null($user_id)) $user = User::whereId($user_id)->first();
         else $user = User::whereEmail($emailUser)->first();
 
-        $data['user_id'] = $user->id;
+        if($user){
+            $data['user_id'] = $user->id;
 
-        Metadata::create($data);
+            Metadata::create($data);
+        }
     }
 }
