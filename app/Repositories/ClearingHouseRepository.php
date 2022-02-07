@@ -54,9 +54,14 @@ class ClearingHouseRepository
     }
 
     public function updateClearingHouse(array $data,int $id){
+        $clearing = ClearingHouse::whereId($id)->first();
+
+        $clearings = ClearingHouse::where("name",$data["clearing-house"]["name"])->get();
 
         if(isset($data['clearing-house'])){
-            ClearingHouse::updateOrCreate(["id" => $id],$data['clearing-house']);
+            if(count($clearings) == 0 && ($clearing->name != $data['clearing-house']['name'])){
+                ClearingHouse::updateOrCreate(["id" => $id],$data['clearing-house']);
+            }
         }
 
         if(isset($data['address'])){

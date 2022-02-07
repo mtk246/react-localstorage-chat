@@ -25,7 +25,7 @@ class UpdateClearingHouse extends FormRequest
     {
         return [
             "clearing-house" => "sometimes|array",
-            "clearing-house.name" => "sometimes|unique:clearing_houses,name",
+            "clearing-house.name" => "sometimes|string",
             "address" => "sometimes|array",
             'address.address' => "sometimes|string",
             'address.city' => "sometimes|string",
