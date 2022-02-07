@@ -58,7 +58,12 @@ class DoctorRepository
      */
     public function updateDoc(array $data,int $id){
         if(isset($data['user'])){
-            User::whereId(["id" => $id])->update($data['user']);
+            $user = User::find($id);
+
+            if($user->email == $data['user']['email'])
+                unset($data['user']['email']);
+
+            User::whereId($id)->update($data['user']);
         }
 
         if(isset($data['address'])){

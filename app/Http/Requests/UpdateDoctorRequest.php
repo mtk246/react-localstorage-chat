@@ -26,7 +26,7 @@ class UpdateDoctorRequest extends FormRequest
         return [
             "user"            => "sometimes|array",
             "user.username"   => "sometimes|string|unique:users,username",
-            "user.email"      => "sometimes|email:rfc|unique:users,email",
+            "user.email"      => "sometimes|email:rfc",
             "user.sex"        => "sometimes|string|max:1",
             "user.firstName"  => "sometimes|string|max:20",
             "user.lastName"   => "sometimes|string|max:20",
