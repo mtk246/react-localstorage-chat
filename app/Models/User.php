@@ -43,6 +43,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $contact_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Device[] $devices
  * @property-read int|null $devices_count
+ * @property-read \App\Models\Doctor|null $doctor
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Metadata[] $metadata
  * @property-read int|null $metadata_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications

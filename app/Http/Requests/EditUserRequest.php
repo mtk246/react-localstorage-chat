@@ -25,7 +25,7 @@ class EditUserRequest extends FormRequest
     {
         return [
             'username'       => "sometimes|string|max:20",
-            'email'      => "sometimes|string|email:rfc",
+            'email'      => "sometimes|email:rfc",
             //'password' => "required|string|min:8",
             //'DOB'        => "sometimes|date",
             'sex'        => "sometimes|string|max:1",

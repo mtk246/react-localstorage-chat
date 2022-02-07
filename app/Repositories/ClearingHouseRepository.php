@@ -75,8 +75,8 @@ class ClearingHouseRepository
             $contact = Contact::whereClearingHouseId($id)->first();
 
             if( is_null($contact) ){
-                $data["address"]["clearing_house_id"] = $id;
-                Contact::create($data["address"]);
+                $data["contact"]["clearing_house_id"] = $id;
+                Contact::create($data["contact"]);
             }else{
                 Contact::whereClearingHouseId($id)->update($data["contact"]);
             }

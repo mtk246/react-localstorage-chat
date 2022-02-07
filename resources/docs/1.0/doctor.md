@@ -35,10 +35,32 @@
 
 ```json
 {
-    "npi":"43453433",
-    "speciality":"someSpeciality3",
-    "taxonomy":"someToxonomia3",
-    "user_id": 4
+    "user":{
+        "username":"ccfrrfcceeeefdfrrvv",
+        "email":"ccfffrrdfdeeeecvvrrrc@gmail.com",
+        "sex":"m",
+        "firstName":"test",
+        "lastName":"test",
+        "middleName":"testing",
+        "ssn":"345345",
+        "dateOfBirth":"1990-11-11"
+    },
+    "contact":{
+        "phone":"34324234",
+        "fax":"567674576457",
+        "email":"fg@gh.com"
+    },
+    "address":{
+        "address":"dfsdf",
+        "city":"sdfsdf",
+        "state":"dsfsdf",
+        "zip":"234"
+    },
+    "doctor":{
+        "npi":"4345leeorrlo3ee45533",
+        "speciality":"soeeerremeSpeciality3",
+        "taxonomy":"someeeerreToxonomia3rr"
+    }
 }
 ```
 
@@ -61,12 +83,41 @@
 
 ```json
 {
-    "npi": "43453433",
-    "speciality": "someSpeciality3",
-    "taxonomy": "someToxonomia3",
-    "updated_at": "2022-02-04T12:28:34.000000Z",
-    "created_at": "2022-02-04T12:28:34.000000Z",
-    "id": 3
+    "username": "ccfrrfcceeeefdfrrvv",
+    "email": "ccfffrrdfdeeeecvvrrrc@gmail.com",
+    "sex": "m",
+    "firstName": "test",
+    "lastName": "test",
+    "middleName": "testing",
+    "ssn": "345345",
+    "dateOfBirth": "1990-11-11",
+    "updated_at": "2022-02-07T13:46:19.000000Z",
+    "created_at": "2022-02-07T13:46:19.000000Z",
+    "id": 45,
+    "token": "eyJpdiI6Ik5lQnJVZlBPT3c5d0hBT1Z0MVRxNmc9PSIsInZhbHVlIjoiQm1GWTlOc05WMnBXWXdhMnRxN2RSeHkvbWdvRVNRT1Rtd1FCcE16SW1iNGV5cjZQakxHa0lWbzVMaEpXclg0ciIsIm1hYyI6ImZhYjQ4MmM5NzI5NmJhMDk3MDZhMjI5N2FhMDk0NTc4ZGUzOWQzMGFkZjgxMjM4ZTY3ZGYzZDNmZWJmY2NmMmQiLCJ0YWciOiIifQ==",
+    "roles": [
+        {
+            "id": 12,
+            "name": "DOCTOR",
+            "guard_name": "api",
+            "created_at": "2022-02-07T13:26:16.000000Z",
+            "updated_at": "2022-02-07T13:26:16.000000Z",
+            "pivot": {
+                "model_id": 45,
+                "role_id": 12,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ],
+    "doctor": {
+        "id": 19,
+        "npi": "4345leeorrlo3ee45533",
+        "taxonomy": "someeeerreToxonomia3rr",
+        "speciality": "soeeerremeSpeciality3",
+        "created_at": "2022-02-07T13:46:19.000000Z",
+        "updated_at": "2022-02-07T13:46:19.000000Z",
+        "user_id": 45
+    }
 }
 ```
 
@@ -84,10 +135,32 @@
 
 ```json
 {
-    "npi":"43453433",
-    "speciality":"someSpeciality3",
-    "taxonomy":"someToxonomia3",
-    "user_id": 4
+    "user":{
+        "username":"ccfrrfcceeeefdfrrvv",
+        "email":"ccfffrrdfdeeeecvvrrrc@gmail.com",
+        "sex":"m",
+        "firstName":"test",
+        "lastName":"test",
+        "middleName":"testing",
+        "ssn":"345345",
+        "dateOfBirth":"1990-11-11"
+    },
+    "contact":{
+        "phone":"34324234",
+        "fax":"567674576457",
+        "email":"fg@gh.com"
+    },
+    "address":{
+        "address":"dfsdf",
+        "city":"sdfsdf",
+        "state":"dsfsdf",
+        "zip":"234"
+    },
+    "doctor":{
+        "npi":"4345leeorrlo3ee45533",
+        "speciality":"soeeerremeSpeciality3",
+        "taxonomy":"someeeerreToxonomia3rr"
+    }
 }
 ```
 
@@ -110,12 +183,41 @@
 
 ```json
 {
-    "npi": "43453433",
-    "speciality": "someSpeciality3",
-    "taxonomy": "someToxonomia3",
-    "updated_at": "2022-02-04T12:28:34.000000Z",
-    "created_at": "2022-02-04T12:28:34.000000Z",
-    "id": 3
+    "username": "ccfrrfcceeeefdfrrvv",
+    "email": "ccfffrrdfdeeeecvvrrrc@gmail.com",
+    "sex": "m",
+    "firstName": "test",
+    "lastName": "test",
+    "middleName": "testing",
+    "ssn": "345345",
+    "dateOfBirth": "1990-11-11",
+    "updated_at": "2022-02-07T13:46:19.000000Z",
+    "created_at": "2022-02-07T13:46:19.000000Z",
+    "id": 45,
+    "token": "eyJpdiI6Ik5lQnJVZlBPT3c5d0hBT1Z0MVRxNmc9PSIsInZhbHVlIjoiQm1GWTlOc05WMnBXWXdhMnRxN2RSeHkvbWdvRVNRT1Rtd1FCcE16SW1iNGV5cjZQakxHa0lWbzVMaEpXclg0ciIsIm1hYyI6ImZhYjQ4MmM5NzI5NmJhMDk3MDZhMjI5N2FhMDk0NTc4ZGUzOWQzMGFkZjgxMjM4ZTY3ZGYzZDNmZWJmY2NmMmQiLCJ0YWciOiIifQ==",
+    "roles": [
+        {
+            "id": 12,
+            "name": "DOCTOR",
+            "guard_name": "api",
+            "created_at": "2022-02-07T13:26:16.000000Z",
+            "updated_at": "2022-02-07T13:26:16.000000Z",
+            "pivot": {
+                "model_id": 45,
+                "role_id": 12,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ],
+    "doctor": {
+        "id": 19,
+        "npi": "4345leeorrlo3ee45533",
+        "taxonomy": "someeeerreToxonomia3rr",
+        "speciality": "soeeerremeSpeciality3",
+        "created_at": "2022-02-07T13:46:19.000000Z",
+        "updated_at": "2022-02-07T13:46:19.000000Z",
+        "user_id": 45
+    }
 }
 ```
 

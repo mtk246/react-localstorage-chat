@@ -153,7 +153,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("insurance-company")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER',
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);
@@ -165,7 +165,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("insurance-plan")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER',
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\InsurancePlanController::class,'createInsurancePlan']);
         Route::put("/{id}",[\App\Http\Controllers\InsurancePlanController::class,'updateInsurancePlan']);

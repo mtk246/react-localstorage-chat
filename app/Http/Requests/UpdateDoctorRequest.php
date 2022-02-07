@@ -24,10 +24,29 @@ class UpdateDoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            "npi" => "sometimes|string|unique:doctors,npi",
-            "speciality" => "sometimes|string",
-            "taxonomy"   => "sometimes|string",
-            "user_id"    => "sometimes|integer"
+            "user"            => "sometimes|array",
+            "user.username"   => "sometimes|string|unique:users,username",
+            "user.email"      => "sometimes|email:rfc|unique:users,email",
+            "user.sex"        => "sometimes|string|max:1",
+            "user.firstName"  => "sometimes|string|max:20",
+            "user.lastName"   => "sometimes|string|max:20",
+            "user.middleName" => "sometimes|string|max:20",
+            "user.ssn"        => "sometimes|string",
+            "user.dateOfBirth" => "sometimes|date",
+            "doctor"     => "sometimes|array",
+            "doctor.npi" => "sometimes|string|unique:doctors,npi",
+            "doctor.speciality" => "sometimes|string",
+            "doctor.taxonomy"   => "sometimes|string",
+            "address"           => "sometimes|array",
+            'address.address'   => "sometimes|string",
+            'address.city'  => "sometimes|string",
+            'address.state' => "sometimes|string",
+            'address.zip'   => "sometimes|numeric",
+            "contact"       => "sometimes|array",
+            "contact.phone" => "sometimes|string",
+            "contact.fax"   => "sometimes|string",
+            "contact.email" => "sometimes|email:rfc",
+            //"user_id"   => "required|integer"
         ];
     }
 }
