@@ -66,6 +66,9 @@ class DoctorRepository
             if($user->username == $data['user']['username'])
                 unset($data['user']['username']);
 
+            if($user->ssn == $data['user']['ssn'])
+                unset($data['user']['username']);
+
             User::whereId($id)->update($data['user']);
         }
 
@@ -88,6 +91,12 @@ class DoctorRepository
                 $data["doctor"]["user_id"] = $id;
                 Doctor::create($data["doctor"]);
             }else{
+                $doctor = Doctor::whereId($id)->first();
+                 
+                if($doctor->npi == $data['doctor']['npi']){
+                    unset($data['doctor']['npi']);
+                }
+
                 Doctor::whereId($id)->update($data["doctor"]);
             }
         }

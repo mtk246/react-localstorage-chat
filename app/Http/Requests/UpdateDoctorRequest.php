@@ -34,7 +34,7 @@ class UpdateDoctorRequest extends FormRequest
             "user.ssn"        => "sometimes|string",
             "user.dateOfBirth" => "sometimes|date",
             "doctor"     => "sometimes|array",
-            "doctor.npi" => "sometimes|string|unique:doctors,npi",
+            "doctor.npi" => "sometimes|string",
             "doctor.speciality" => "sometimes|string",
             "doctor.taxonomy"   => "sometimes|string",
             "address"           => "sometimes|array",

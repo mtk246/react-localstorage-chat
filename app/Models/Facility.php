@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\BillingCompany|null $billingCompany
- * @property-read \App\Models\Contact $contact
+ * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility query()

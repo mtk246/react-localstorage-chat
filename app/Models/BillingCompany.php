@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $status
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
- * @property-read \App\Models\Facility $facility
+ * @property-read \App\Models\Facility|null $facility
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newModelQuery()

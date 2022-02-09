@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\InsuranceCompany $insuranceCompany
+ * @property-read \App\Models\InsuranceCompany|null $insuranceCompany
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan query()
