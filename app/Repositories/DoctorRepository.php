@@ -63,6 +63,9 @@ class DoctorRepository
             if($user->email == $data['user']['email'])
                 unset($data['user']['email']);
 
+            if($user->username == $data['user']['username'])
+                unset($data['user']['username']);
+
             User::whereId($id)->update($data['user']);
         }
 

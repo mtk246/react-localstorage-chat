@@ -6,6 +6,8 @@ use App\Http\Requests\DeviceAllowRequest;
 use App\Mail\LogNewDevice;
 use App\Models\Device;
 use App\Repositories\DeviceRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -31,7 +33,7 @@ class DeviceController extends Controller
 
     /**
      * @param string $ip
-     * @return Device|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @return Device|Builder|Model|object|null
      */
     public static function searchDeviceByIp(string $ip){
         return Device::whereIp($ip)->first();

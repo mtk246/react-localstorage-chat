@@ -37,6 +37,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
         Route::post("img-profile",[\App\Http\Controllers\UserController::class,'updateImgProfile'])->middleware(['auth:api']);
         Route::patch("update-password",[\App\Http\Controllers\UserController::class,'changePasswordForm'])->middleware(['auth:api']);
+        Route::get("/{ssn}/get-by-ssn",[\App\Http\Controllers\UserController::class,'searchBySsn']);
     });
 
     Route::prefix("permission")->middleware("auth:api")->group(function(){
@@ -85,15 +86,12 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\ClearingHouseController::class,'getOneClearingHouse'])->middleware([
             "auth:api",
         ]);
-
         Route::put("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"updateClearingHouse"])->middleware([
             "auth:api",
         ]);
-
         Route::get("/get-by-name/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getOneByName"])->middleware([
             "auth:api",
         ]);
-
         Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"])->middleware([
             "auth:api",
         ]);
@@ -109,15 +107,12 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\FacilityController::class,'getOneFacility'])->middleware([
             "auth:api",
         ]);
-
         Route::put("/{id}",[\App\Http\Controllers\FacilityController::class,'updateFacility'])->middleware([
             "auth:api",
         ]);
-
         Route::patch("/{id}/change-status",[\App\Http\Controllers\FacilityController::class,'changeStatus'])->middleware([
             "auth:api",
         ]);
-
         Route::get("/{id}/get-by-name",[\App\Http\Controllers\FacilityController::class,'getByName'])->middleware([
             "auth:api",
         ]);
@@ -185,5 +180,15 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\DoctorController::class,'getOneDoctor']);
         Route::get("/",[\App\Http\Controllers\DoctorController::class,'getAllDoctors']);
         Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getByNpi']);
+    });
+
+    Route::prefix("patient")->middleware([
+        "auth:api",
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
+        Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
+        Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
+        Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
     });
 });

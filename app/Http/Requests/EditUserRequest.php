@@ -24,7 +24,7 @@ class EditUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'       => "sometimes|string|max:20",
+            'username'   => "sometimes|string|max:20",
             'email'      => "sometimes|email:rfc",
             //'password' => "required|string|min:8",
             //'DOB'        => "sometimes|date",

@@ -177,7 +177,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzMjg3NDI5LCJleHAiOjE2NDMyOTEwMjksIm5iZiI6MTY0MzI4NzQyOSwianRpIjoicFlsNHo0bFd2VjdlMEtINyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.N6iATBHmKmlK3mP2VMV6sJhOmp6Xl3dWELhrDac0yNM",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0MzQyODgzLCJleHAiOjE2NDQzNDY0ODMsIm5iZiI6MTY0NDM0Mjg4MywianRpIjoiTkFlWTM1T3JmZzBQWlZOWSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.T5LiimEnuCjQ_Y52cbVrPoJiKdzDF-TGMrVhBGHDklU",
 									"type": "string"
 								}
 							]
@@ -197,7 +197,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"ccffccvv\",\r\n    \"email\":\"ccfffcvvc@gmail.com\",\r\n    \"DOB\":\"2021-12-26\",\r\n    \"sex\":\"m\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"middleName\":\"testing\",\r\n    \"roles\":[\"ACCOUNT_MANAGER\"],\r\n    \"ssn\":\"345345\",\r\n    \"dateOfBirth\":\"1990-11-11\",\r\n    \"company-billing\":35\r\n}",
+							"raw": "{\r\n    \"username\":\"ccffcfgdfcvv\",\r\n    \"email\":\"ccffffdfdfcvvc@gmail.com\",\r\n    \"sex\":\"m\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"middleName\":\"testing\",\r\n    \"roles\":[\"ACCOUNT_MANAGER\"],\r\n    \"ssn\":\"345345\",\r\n    \"dateOfBirth\":\"1990-11-11\",\r\n    \"company-billing\":35\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -502,7 +502,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzMDM3MzIzLCJleHAiOjE2NDMwNDA5MjMsIm5iZiI6MTY0MzAzNzMyMywianRpIjoiWWRyd3VjVWJ3ZDJIcm51TiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.GEb18D3NhzXTip8QAu5zlpOVmv1bgDJb-FiW7h5npHI",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbWNjLmNpcGgzci5jbzo4MVwvYXBpXC92MVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDQwOTkxNDAsImV4cCI6MTY0NDEwMjc0MCwibmJmIjoxNjQ0MDk5MTQwLCJqdGkiOiJqclF5ZFptODgxVHBqMVVSIiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ygXHbWZEnjRQNG-vbtTkb5CswwBOmgjvOvptxUz1rEQ",
 									"type": "string"
 								}
 							]
@@ -940,7 +940,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxMjY0NTg1LCJleHAiOjE2NDEyNjgxODUsIm5iZiI6MTY0MTI2NDU4NSwianRpIjoicUY1YWZqN0hKb3A0R2ZvWSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.SdqTu_lEmJhRKLp5QhulU_7MAyKxV4jCLsqW_v9PydU",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0MTAwMTgwLCJleHAiOjE2NDQxMDM3ODAsIm5iZiI6MTY0NDEwMDE4MCwianRpIjoidzU1N0UwWTQwTHZ1cnJDOCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.SUKMlQQbb50WJ1xS2IWadsaqwfoI5Oa8jkuBQ4EAtsw",
 									"type": "string"
 								}
 							]
@@ -1267,7 +1267,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzODkzMTcyLCJleHAiOjE2NDM4OTY3NzIsIm5iZiI6MTY0Mzg5MzE3MiwianRpIjoiVE1VcDQ0SkhNVGJKdG1HQiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.BsEIWN4Ku3dPSIhOVTk2V2x3iBfEo91ArFHY3fHkj8c",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0MTkyNjgzLCJleHAiOjE2NDQxOTYyODMsIm5iZiI6MTY0NDE5MjY4MywianRpIjoibGFldGF2ZFRRcUJNSmFQSyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.QywSc4I_BRqtB6-cuRP82q1V-rtgQx1advVD7_g6cDY",
 									"type": "string"
 								}
 							]
@@ -1287,7 +1287,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"clearing-house\":{\r\n        \"code\":\"someCode1122334455667711333\",\r\n        \"name\": \"someName1122334455667711333\"\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf1122334455667711333\",\r\n        \"city\":\"sdfsdf1122334455667711333\",\r\n        \"state\":\"dsfsdf1122334455667711333\",\r\n        \"zip\":\"2341122334455667711333\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"343242341122334455667711333\",\r\n        \"fax\":\"5676745764571122334455667711333\",\r\n        \"email\":\"3331177665544331122fg@gh.com\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"clearing-house\":{\r\n        \"name\": \"999999\"\r\n    },\r\n    \"address\":{\r\n        \"address\":\"99999\",\r\n        \"city\":\"9999999\",\r\n        \"state\":\"999999\",\r\n        \"zip\":\"99999\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"99999\",\r\n        \"fax\":\"999999\",\r\n        \"email\":\"999@gh.com\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1553,7 +1553,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTIzODE4LCJleHAiOjE2NDM5Mjc0MTgsIm5iZiI6MTY0MzkyMzgxOCwianRpIjoieUlzTnJyVE83VzZpcjNqdyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.wmHBCbgxKXpWt4wRbynyNc30DKTmYscnfgjjQKERd8k",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0MTAwMzcxLCJleHAiOjE2NDQxMDM5NzEsIm5iZiI6MTY0NDEwMDM3MSwianRpIjoidktqbmg3ZHRmaWVUc0FuaCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.iHUtPRIqQeCoG5jgSd_fA49IcozTwZZukh92lxjuFY0",
 									"type": "string"
 								}
 							]
@@ -1907,7 +1907,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQzOTc3MjkzLCJleHAiOjE2NDM5ODA4OTMsIm5iZiI6MTY0Mzk3NzI5MywianRpIjoiVjVnU3NOc0VWSXFoTHZnQyIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.XUyvNqOHmlg4EggAja03BJtOvN9yMlr0OEihS0QJJ_I",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0MjYxOTcxLCJleHAiOjE2NDQyNjU1NzEsIm5iZiI6MTY0NDI2MTk3MSwianRpIjoibHgxb3dOc3llYmpIZlFwRiIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.en8YtFkHGDGgWCle_53x68gsa4Q4cd2yXh84g2H3ziY",
 									"type": "string"
 								}
 							]
@@ -1927,7 +1927,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"npi\":\"43453433\",\r\n    \"speciality\":\"someSpeciality3\",\r\n    \"taxonomia\":\"someToxonomia3\"\r\n}"
+							"raw": "{\r\n    \"user\":{\r\n        \"username\":\"ccfrrfcceeeefdddfrrvv\",\r\n        \"email\":\"ccfffrrdfdeeeecvddvrrrc@gmail.com\",\r\n        \"sex\":\"m\",\r\n        \"firstName\":\"test\",\r\n        \"lastName\":\"test\",\r\n        \"middleName\":\"testing\",\r\n        \"ssn\":\"345345\",\r\n        \"dateOfBirth\":\"1990-11-11\"\r\n    },\r\n    \"contact\":{\r\n        \"phone\":\"34324234\",\r\n        \"fax\":\"567674576457\",\r\n        \"email\":\"fg@gh.com\"\r\n    },\r\n    \"address\":{\r\n        \"address\":\"dfsdf\",\r\n        \"city\":\"sdfsdf\",\r\n        \"state\":\"dsfsdf\",\r\n        \"zip\":\"234\"\r\n    },\r\n    \"doctor\":{\r\n        \"npi\":\"4345leeorrlo3edde45533\",\r\n        \"speciality\":\"soeeerremeSpeciality3\",\r\n        \"taxonomy\":\"someeeerreToxonomia3rr\"\r\n    }\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}doctor",
@@ -2034,6 +2034,170 @@
 							"path": [
 								"434534",
 								"get-by-npi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATIENT",
+			"item": [
+				{
+					"name": "CREATE PATIENT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0Mzk2NDc1LCJleHAiOjE2NDQ0MDAwNzUsIm5iZiI6MTY0NDM5NjQ3NSwianRpIjoiNnpNTmlEaVoxSkV1azhiTCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.M0lO9heAIbEc3LDn1oOBovkye0ewZ1yDraqxrSpDNms",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\":{\r\n        \"username\":\"dff\",\r\n        \"email\":\"dffg@gmail.com\",\r\n        \"sex\":\"m\",\r\n        \"firstName\":\"test\",\r\n        \"lastName\":\"test\",\r\n        \"middleName\":\"testing\",\r\n        \"ssn\":\"345345\",\r\n        \"dateOfBirth\":\"1990-11-11\"\r\n    },\r\n    \"patient\":{\r\n        \"marital_status\":\"dsf\",\r\n        \"driver_licence\":\"sdfsdf\",\r\n        \"dependent\":true,\r\n        \"guardian_name\":\"dsfsdf\",\r\n        \"guardian_phone\":\"Dsfsdf\",\r\n        \"spuse_name\":\"dfgfd\",\r\n        \"employer\":\"DFgddf\",\r\n        \"employer_address\":\"dfg\",\r\n        \"position\":\"Dsgsdf\",\r\n        \"phone_employer\":\"Dsfgds\",\r\n        \"spuse_employer\":\"Sdfgdsfg\",\r\n        \"spuse_work_phone\":\"DSfgds\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}patient",
+							"host": [
+								"{{base_url}}patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL PATIENTS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0Mzk2NDc1LCJleHAiOjE2NDQ0MDAwNzUsIm5iZiI6MTY0NDM5NjQ3NSwianRpIjoiNnpNTmlEaVoxSkV1azhiTCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.M0lO9heAIbEc3LDn1oOBovkye0ewZ1yDraqxrSpDNms",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}patient",
+							"host": [
+								"{{base_url}}patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ONE PATIENT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0Mzk2NDc1LCJleHAiOjE2NDQ0MDAwNzUsIm5iZiI6MTY0NDM5NjQ3NSwianRpIjoiNnpNTmlEaVoxSkV1azhiTCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.M0lO9heAIbEc3LDn1oOBovkye0ewZ1yDraqxrSpDNms",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}patient/1",
+							"host": [
+								"{{base_url}}patient"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PATIENT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQ0Mzk2NDc1LCJleHAiOjE2NDQ0MDAwNzUsIm5iZiI6MTY0NDM5NjQ3NSwianRpIjoiNnpNTmlEaVoxSkV1azhiTCIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.M0lO9heAIbEc3LDn1oOBovkye0ewZ1yDraqxrSpDNms",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\":{\r\n        \"username\":\"jjjjjj\",\r\n        \"email\":\"jjjjjjj@gmail.com\",\r\n        \"sex\":\"m\",\r\n        \"firstName\":\"jjjj\",\r\n        \"lastName\":\"jjjj\",\r\n        \"middleName\":\"jjjj\",\r\n        \"ssn\":\"66666\",\r\n        \"dateOfBirth\":\"1990-11-11\"\r\n    },\r\n    \"patient\":{\r\n        \"marital_status\":\"jjjj\",\r\n        \"driver_licence\":\"jjj\",\r\n        \"dependent\":false,\r\n        \"guardian_name\":\"jjj\",\r\n        \"guardian_phone\":\"jjj\",\r\n        \"spuse_name\":\"jjj\",\r\n        \"employer\":\"jjj\",\r\n        \"employer_address\":\"jjjj\",\r\n        \"position\":\"jjj\",\r\n        \"phone_employer\":\"jjjj\",\r\n        \"spuse_employer\":\"jjjjj\",\r\n        \"spuse_work_phone\":\"jjjj\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}patient/1",
+							"host": [
+								"{{base_url}}patient"
+							],
+							"path": [
+								"1"
 							]
 						}
 					},

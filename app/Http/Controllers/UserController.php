@@ -412,4 +412,15 @@ class UserController extends Controller
 
         return $rs ? response()->json([],204) : response()->json("Error updating password",400);
     }
+
+    /**
+     * @param string $ssn
+     * @return JsonResponse
+     */
+    public function searchBySsn(string $ssn): JsonResponse
+    {
+        $rs = $this->userRepository->searchBySsn($ssn);
+
+        return $rs ? response()->json($ssn) : response()->json("user not found",404);
+    }
 }

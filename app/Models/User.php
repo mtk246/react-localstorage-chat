@@ -48,6 +48,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read int|null $metadata_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\Models\Patient|null $patient
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
@@ -197,5 +198,13 @@ class User extends Authenticatable implements JWTSubject
     public function doctor(): HasOneAlias
     {
         return $this->hasOne(Doctor::class);
+    }
+
+    /**
+     * @return HasOneAlias
+     */
+    public function patient(): HasOneAlias
+    {
+        return $this->hasOne(Patient::class);
     }
 }

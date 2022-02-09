@@ -141,6 +141,13 @@ class UserRepository{
      */
     public function editUser(EditUserRequest $request,int $id){
         $data = $request->validated();
+
+        $user = User::find($id);
+
+        if($user->email == $data['email']){
+            unset($data['email']);
+        }
+
         return User::whereId($id)->update($data);
     }
 
@@ -211,5 +218,13 @@ class UserRepository{
 
     public function changePasswordForm(string $password){
         return User::whereId(auth()->id())->update(["password" => bcrypt($password)]);
+    }
+
+    /**
+     * @param string $ssn
+     * @return User|Builder|Model|object|null
+     */
+    public function searchBySsn(string $ssn){
+        return User::whereSsn($ssn)->first();
     }
 }

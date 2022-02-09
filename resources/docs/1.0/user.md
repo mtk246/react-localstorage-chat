@@ -20,6 +20,7 @@
 | 8 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 9 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
 | 10|PATCH | `update password`   | `/user/update-password` |yes|update password|
+| 11|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -417,3 +418,28 @@
 
 
 >{warning} 404 user not found, 500 some exception
+
+
+#
+
+
+
+#-Search By Ssn
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`ssn required string`
+
+>{success} 200 request made successfully
+
+#
+
+>{warning} response 404 when user not found
