@@ -92,7 +92,7 @@ class DoctorRepository
                 Doctor::create($data["doctor"]);
             }else{
                 $doctor = Doctor::whereId($id)->first();
-                 
+
                 if($doctor->npi == $data['doctor']['npi']){
                     unset($data['doctor']['npi']);
                 }
