@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Taxonomy
  *
  * @property int $id
- * @property bool $isBoolean
+ * @property bool $isPrimary
  * @property string $name
  * @property int|null $user_id
  * @property int|null $company_id
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereIsBoolean($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereIsPrimary($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUserId($value)

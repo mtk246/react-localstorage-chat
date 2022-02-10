@@ -191,4 +191,16 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
     });
+
+    Route::prefix("taxonomy")->middleware([
+        "auth:api",
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\TaxonomyController::class,'createTaxonomy']);
+        Route::put("/{id}",[\App\Http\Controllers\TaxonomyController::class,'updateTaxonomy']);
+        Route::patch("/{id}/change-primary",[\App\Http\Controllers\TaxonomyController::class,'changePrimary']);
+        Route::delete("/{id}",[\App\Http\Controllers\TaxonomyController::class,'removeTaxonomy']);
+        Route::get("/{type}/{id}",[\App\Http\Controllers\TaxonomyController::class,'getAllTaxonomies']);
+        Route::get("/{id}",[\App\Http\Controllers\TaxonomyController::class,'getOneTaxonomy']);
+    });
 });

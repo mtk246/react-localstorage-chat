@@ -15,7 +15,7 @@ class CreateTaxonomiesTable extends Migration
     {
         Schema::create('taxonomies', function (Blueprint $table) {
             $table->id();
-            $table->boolean("isBoolean")->default("false");
+            $table->boolean("isPrimary")->default("false");
             $table->string("name");
             $table->foreignIdFor(\App\Models\User::class)->nullable();
             $table->foreignIdFor(\App\Models\Company::class)->nullable();

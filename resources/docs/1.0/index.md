@@ -33,3 +33,6 @@
 
 - ## Patient
     - [Patient](/{{route}}/{{version}}/patient)
+
+- ## Taxonomy
+    - [Taxonomy](/{{route}}/{{version}}/taxonomy)
