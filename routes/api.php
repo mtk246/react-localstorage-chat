@@ -191,4 +191,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
     });
+
+    Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
+    Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });
