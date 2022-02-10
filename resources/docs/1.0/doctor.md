@@ -15,6 +15,7 @@
 | 3 |GET | `Get one Doctor`                   | `/doctor/{id}`|yes|Get one Doctor|
 | 4 |PUT | `Update Doctor`                | `/doctor/{id}`|yes|Update Doctor|
 | 5 |GET | `Get one Doctor by npi`           | `/doctor/{npi}/get-by-npi`|yes|Get one Doctor by npi|
+| 6 |PATCH | `change status Doctor`           | `/doctor/{id}/change-status`|yes|change status doctor Doctor|
 
 
 
@@ -355,6 +356,32 @@
 }
 ```
 
+
+
+#
+
+#-Change status Doctor
+
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 204 Status changed
 
 
 #

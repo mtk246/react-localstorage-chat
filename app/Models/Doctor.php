@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $user_id
+ * @property bool $status
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newQuery()
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereSpeciality($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereUserId($value)
@@ -39,7 +41,8 @@ class Doctor extends Model
         "npi",
         "taxonomy",
         "speciality",
-        "user_id"
+        "user_id",
+        "status",
     ];
 
     /**

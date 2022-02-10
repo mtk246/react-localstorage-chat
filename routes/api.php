@@ -180,6 +180,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\DoctorController::class,'getOneDoctor']);
         Route::get("/",[\App\Http\Controllers\DoctorController::class,'getAllDoctors']);
         Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getByNpi']);
+        Route::patch("/{id}/change-status",[\App\Http\Controllers\DoctorController::class,'changeStatus']);
     });
 
     Route::prefix("patient")->middleware([

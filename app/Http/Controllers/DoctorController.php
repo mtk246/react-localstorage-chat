@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateDoctorRequest;
+use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Repositories\DoctorRepository;
 use Illuminate\Http\JsonResponse;
@@ -68,5 +69,17 @@ class DoctorController extends Controller
         $rs = $this->doctorRepository->getOneByNpi($npi);
 
         return $rs ? response()->json($rs) : response()->json("doctor not found",404);
+    }
+
+    /**
+     * @param DoctorChangeStatusRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(DoctorChangeStatusRequest $request,int $id): JsonResponse
+    {
+        $rs = $this->doctorRepository->changeStatus($request->input("status"),$id);
+
+        return $rs ? response()->json([],204) : response()->json("Error! Doctor not found",404);
     }
 }

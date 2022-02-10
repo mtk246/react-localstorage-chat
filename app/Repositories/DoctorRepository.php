@@ -146,4 +146,17 @@ class DoctorRepository
 
         return $doc;
     }
+
+    /**
+     * @param bool $status
+     * @param int $id
+     * @return bool|int|null
+     */
+    public function changeStatus(bool $status, int $id){
+        $doctor = Doctor::whereId($id)->first();
+
+        if( is_null($doctor) ) return null;
+
+        return $doctor->update(["status" => $status]);
+    }
 }
