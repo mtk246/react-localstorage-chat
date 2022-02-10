@@ -203,4 +203,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{type}/{id}",[\App\Http\Controllers\TaxonomyController::class,'getAllTaxonomies']);
         Route::get("/{id}",[\App\Http\Controllers\TaxonomyController::class,'getOneTaxonomy']);
     });
+
+    Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
+    Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });
