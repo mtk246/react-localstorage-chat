@@ -113,7 +113,11 @@ class DoctorRepository
             }
         }
 
-        return User::whereId($id)->with("doctor")->first();
+        return User::whereId($id)->with([
+            "doctor",
+            "address",
+            "contact"
+        ])->first();
     }
 
     /**
