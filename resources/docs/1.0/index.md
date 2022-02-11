@@ -4,6 +4,9 @@
 - ## Authentication
     - [Authentication](/{{route}}/{{version}}/auth)
 
+- ## API
+    - [API](/{{route}}/{{version}}/api)
+
 - ## Users
     - [Users](/{{route}}/{{version}}/user)
 
