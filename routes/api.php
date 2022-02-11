@@ -169,6 +169,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/{id}/change-status",[\App\Http\Controllers\InsurancePlanController::class,'changeStatus']);
         Route::get("/{companyName}/get-by-company",[\App\Http\Controllers\InsurancePlanController::class,'getByCompany']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsurancePlanController::class,'getByName']);
+        Route::get("/insurance-company/{id}/get-by-insurance-company",[\App\Http\Controllers\InsurancePlanController::class,'getAllPlanByInsuranceCompany']);
     });
 
     Route::prefix("doctor")->middleware([

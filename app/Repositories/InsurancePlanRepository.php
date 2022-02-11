@@ -68,4 +68,8 @@ class InsurancePlanRepository
             $query->where("name","ILIKE","%${nameCompany}%");
         })->get();
     }
+
+    public function getAllPlanByInsurancePlan(int $id){
+        return InsurancePlan::whereInsuranceCompanyId($id)->get();
+    }
 }

@@ -16,6 +16,7 @@
 | 4 |PUT | `Update Insurance plan`                | `/insurance-plan/{id}`|yes|Update Insurance Plan|
 | 5 |GET | `Get one Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get one Insurance Plan by name|
 | 6 |PATCH | `Change status plan Company`           | `/insurance-plan/{id}/change-status`|yes|Change status Insurance Plan|
+| 7 |GET | `Get all insurance plan by insurance company`           | `/insurance-plan/insurance-company/{id}/get-by-insurance-company`|yes|Get all insurance plan by insurance company|
 
 
 

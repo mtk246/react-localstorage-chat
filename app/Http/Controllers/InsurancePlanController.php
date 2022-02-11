@@ -93,4 +93,15 @@ class InsurancePlanController extends Controller
 
         return $rs ? response()->json($rs) : response()->json("Error, insurance not found",404);
     }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getAllPlanByInsuranceCompany(int $id): JsonResponse
+    {
+        return response()->json(
+            $this->InsurancePlanRepository->getAllPlanByInsurancePlan($id)
+        );
+    }
 }
