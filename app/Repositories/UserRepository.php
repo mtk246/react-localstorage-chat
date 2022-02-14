@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository{
 
@@ -26,7 +27,7 @@ class UserRepository{
      */
     public function create(UserCreateRequest $request){
         try{
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $validated = $request->validated();
 
             $user = User::create($validated);
@@ -42,17 +43,19 @@ class UserRepository{
             $user->token = $token;
             $user->save();
 
-            \Mail::to($user->email)->send(
+            Mail::to($user->email)->send(
                 new GenerateNewPassword(
                     $user->firstName.' '.$user->lastName,
                     $user->email,
                     env('URL_FRONT') . $token
                 )
             );
-            \DB::commit();;
+
+            DB::commit();
             return $user;
+
         }catch (\Exception $e){
-            \DB::rollBack();
+            DB::rollBack();
             return null;
         }
     }

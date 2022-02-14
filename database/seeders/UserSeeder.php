@@ -16,13 +16,15 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = User::create([
-            "username"       => Faker\Provider\en_US\Person::firstNameMale(),
+            "username"   => Faker\Provider\en_US\Person::firstNameMale(),
             "email"      => "admin@billing.com",
-            "password"   => bcrypt('helloworld'),
+            "password"   => Hash::make("helloworld"),
             "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
             "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
             "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
             "sex"        => "M",
+            "created_at" => now(),
+            "updated_at" => now(),
             //"DOB"        => now()->format("Y-m-d"),
         ]);
 

@@ -27,7 +27,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("user")->group(function(){
-        Route::post("/",[\App\Http\Controllers\UserController::class,'createUser'])->middleware(['auth:api','role:SUPER_USER']);
+        Route::post("/",[\App\Http\Controllers\UserController::class,'createUser']);
         Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware(['auth:api','role:SUPER_USER']);
         Route::get("{id}/",[\App\Http\Controllers\UserController::class,'getOneUser'])->middleware(['auth:api','role:SUPER_USER']);
         Route::post("send-email-rescue-pass",[\App\Http\Controllers\UserController::class,'sendEmailRescuePass']);

@@ -91,7 +91,9 @@ class AuthController extends Controller
 
         MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
-        if( !$token = auth()->attempt($dataValidated) ){
+        $token = auth('api')->attempt($dataValidated);
+
+        if( !$token ){
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
