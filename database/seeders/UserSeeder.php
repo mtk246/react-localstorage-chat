@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
             "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
             "sex"        => "M",
-            "DOB"        => now()->format("Y-m-d"),
+            //"DOB"        => now()->format("Y-m-d"),
         ]);
 
         $user->assignRole("SUPER_USER");
