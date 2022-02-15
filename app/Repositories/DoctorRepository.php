@@ -67,7 +67,7 @@ class DoctorRepository
                 unset($data['user']['username']);
 
             if($user->ssn == $data['user']['ssn'])
-                unset($data['user']['username']);
+                unset($data['user']['ssn']);
 
             User::whereId($id)->update($data['user']);
         }
@@ -109,6 +109,9 @@ class DoctorRepository
                 $data["contact"]["user_id"] = $id;
                 Contact::create($data["contact"]);
             }else{
+                if($contact->email == $data["contact"]["email"])
+                    unset($data["contact"]["email"]);
+
                 Contact::whereUserId($id)->update($data["contact"]);
             }
         }
