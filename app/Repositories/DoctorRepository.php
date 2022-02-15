@@ -124,7 +124,7 @@ class DoctorRepository
      * @return Collection|Doctor[]
      */
     public function getAllDoctors(){
-        return Doctor::with(["user","address","contact"])->get();
+        return Doctor::with(["user.address","user.contact"])->get();
     }
 
     /**
@@ -132,7 +132,7 @@ class DoctorRepository
      * @return Doctor|Builder|Model|object|null
      */
     public function getOneDoctor(int $id){
-        $doc = Doctor::whereId($id)->with(["user","address","contact"])->first();
+        $doc = Doctor::whereId($id)->with(["user.address","user.contact"])->first();
 
         if(is_null($doc)) return null;
 
@@ -144,7 +144,7 @@ class DoctorRepository
      * @return Doctor|Builder|Model|object|null
      */
     public function getOneByNpi(string $npi){
-        $doc = Doctor::whereNpi($npi)->with(["user","address","contact"])->first();
+        $doc = Doctor::whereNpi($npi)->with(["user.address","user.contact"])->first();
 
         if(is_null($doc)) return null;
 
