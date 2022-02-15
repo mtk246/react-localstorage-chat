@@ -25,11 +25,19 @@ class BillingCompanyRepository
     }
 
     public function getAllBillingCompanyByUser($user_id){
-        return User::whereId($user_id)->with("billingCompanyUser")->first();
+        return User::whereId($user_id)->with([
+            "billingCompanyUser",
+            "address",
+            "contact"
+        ])->first();
     }
 
     public function getAllBillingCompany(){
-        return BillingCompany::get();
+        return BillingCompany::with([
+            "billingCompanyUser",
+            "address",
+            "contact"
+        ])->get();
     }
 
     public function getByCode($code){
