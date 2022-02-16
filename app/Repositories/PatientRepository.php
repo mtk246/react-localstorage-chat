@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class PatientRepository
 {
+    /**
+     * @param array $data
+     * @return User|Model|null
+     */
     public function createPatient(array $data){
         try{
             DB::beginTransaction();
