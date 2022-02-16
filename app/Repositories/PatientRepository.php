@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Mail\GenerateNewPassword;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,11 +33,21 @@ class PatientRepository
 
         }catch(\Exception $e){
             DB::rollBack();
-            dd($e->getMessage());
             return null;
         }
 
         DB::commit();
+
+        $token = encrypt($user->id."@#@#$".$user->email);
+        $user->token = $token;
+        $user->save();
+
+        \Mail::to($user->email)->send(new GenerateNewPassword(
+            $user->firstName.' '.$user->lastName,
+            $user->email,
+                env('URL_FRONT') . $token
+            )
+        );
         return $user->load("patient");
     }
 

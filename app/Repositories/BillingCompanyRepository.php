@@ -35,8 +35,8 @@ class BillingCompanyRepository
     public function getAllBillingCompany(){
         return BillingCompany::with([
             "user",
-            "user.address",
-            "user.contact"
+            "address",
+            "contact"
         ])->get();
     }
 

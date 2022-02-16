@@ -31,9 +31,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $token
  * @property bool $available
  * @property bool $isLogged
+ * @property string|null $img_profile
  * @property string|null $ssn
  * @property string|null $dateOfBirth
- * @property string|null $img_profile
  * @property bool $isBlocked
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $address
  * @property-read int|null $address_count

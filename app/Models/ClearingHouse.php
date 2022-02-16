@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $id
  * @property string $code
  * @property string $name
+ * @property bool $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $status
  * @property-read \App\Models\Address|null $address
  * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()

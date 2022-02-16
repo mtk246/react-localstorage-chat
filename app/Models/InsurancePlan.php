@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\InsurancePlan
@@ -97,5 +98,18 @@ class InsurancePlan extends Model
     public function insuranceCompany(): BelongsTo
     {
         return $this->belongsTo(InsuranceCompany::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function patients(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Patient::class,
+            "insurance_plan_patient",
+            "insurance_plan_id",
+            "patient_id"
+        );
     }
 }
