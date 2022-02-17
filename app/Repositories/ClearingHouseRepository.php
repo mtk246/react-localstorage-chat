@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Address;
+use App\Models\BillingCompany;
 use App\Models\ClearingHouse;
 use App\Models\Contact;
 use Illuminate\Database\Eloquent\Builder;
@@ -102,5 +103,22 @@ class ClearingHouseRepository
 
     public function changeStatus($status,int $id){
         return ClearingHouse::whereId($id)->update(['status'=>$status]);
+    }
+
+    /**
+     * @param  int $id
+     * @return ClearingHouse|Builder|Model|object|null
+     */
+    public function addToBillingCompany(int $id) {
+        $clearingHouse = ClearingHouse::find($id);
+        if (is_null($clearingHouse)) return null;
+        
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        if (is_null($clearingHouse->billingCompanies()->find($billingCompany->id))) {
+            $clearingHouse->billingCompanies()->attach($billingCompany->id);
+        }
+        return $clearingHouse;
     }
 }
