@@ -8,7 +8,9 @@ use App\Http\Requests\UserCreateRequest;
 use App\Mail\GenerateNewPassword;
 use App\Mail\RecoveryUserMail;
 use App\Mail\SendEmailRecoveryPassword;
+use App\Models\Address;
 use App\Models\BillingCompany;
+use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,6 +40,16 @@ class UserRepository{
 
             if( isset( $validated['roles'] ) )
                 $user->assignRole($validated['roles']);
+
+            if(isset($data['contact'])){
+                $data["contact"]["user_id"] = $user->id;
+                Contact::create($data["contact"]);
+            }
+
+            if(isset($data['address'])){
+                $data["address"]["user_id"] = $user->id;
+                Address::create($data["address"]);
+            }
 
             $token = encrypt($user->id."@#@#$".$user->email);
             $user->token = $token;
@@ -140,7 +152,7 @@ class UserRepository{
     /**
      * @param EditUserRequest $request
      * @param int $id
-     * @return bool|int
+     * @return User|User[]|Collection|Model|null
      */
     public function editUser(EditUserRequest $request,int $id){
         $data = $request->validated();
@@ -151,7 +163,35 @@ class UserRepository{
             unset($data['email']);
         }
 
-        return User::whereId($id)->update($data);
+        if($request->has('contact')){
+            $contact = Contact::whereUserId($id)->first();
+
+            if( is_null($contact) ){
+                $data["contact"]["user_id"] = $id;
+                Contact::create($data["contact"]);
+            }else{
+                if($contact->email == $data["contact"]["email"])
+                    unset($data["contact"]["email"]);
+
+                Contact::whereUserId($id)->update($data["contact"]);
+            }
+        }
+
+        if($request->has('address')){
+            $address = Address::whereUserId($id)->first();
+
+            if( is_null($address) ){
+                $data["address"]["user_id"] = $id;
+                Address::create($data["address"]);
+            }else{
+                Address::whereUserId($id)->update($data["address"]);
+            }
+
+        }
+
+        User::whereId($id)->update($data);
+
+        return $user->refresh()->load("contact")->load("address");
     }
 
     /**

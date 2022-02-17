@@ -36,6 +36,10 @@ class PatientRepository
             return null;
         }
 
+        if(isset($data["insurance_plan"])){
+            $newPatient->insurancePlans()->attach($data['insurance_plan']);
+        }
+
         DB::commit();
 
         $token = encrypt($user->id."@#@#$".$user->email);

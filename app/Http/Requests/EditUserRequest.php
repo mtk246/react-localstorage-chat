@@ -35,6 +35,15 @@ class EditUserRequest extends FormRequest
             'roles'      => "sometimes|array",
             'ssn'        => "sometimes|string",
             'dateOfBirth'=> "sometimes|date",
+            "address"           => "sometimes|array",
+            'address.address'   => "sometimes|string",
+            'address.city'  => "sometimes|string",
+            'address.state' => "sometimes|string",
+            'address.zip'   => "sometimes|numeric",
+            "contact"       => "sometimes|array",
+            "contact.phone" => "sometimes|string",
+            "contact.fax"   => "sometimes|string",
+            "contact.email" => "sometimes|email:rfc",
         ];
     }
 }

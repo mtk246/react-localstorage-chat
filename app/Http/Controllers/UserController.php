@@ -293,6 +293,7 @@ class UserController extends Controller
                 "time"         => now()->toTimeString(),
             ];
 
+
             $rs = $this->userRepository->editUser($request,$id);
 
             MetadataController::saveLogAuditory($data,auth()->user()->id,null);

@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\InsuranceCompany|null $insuranceCompany
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Patient[] $patients
+ * @property-read int|null $patients_count
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan query()
