@@ -2,9 +2,15 @@
 
 ---
 
-- [Company Billing](#section-2)
+- [Basic data](#basic-data)
+- [Create billing company](#create-billing-company)
+- [Get company by user](#get-company-by-user)
+- [Get all companies](#get-all-companies)
+- [Get company by code](#get-company-by-code)
+- [Get company by name](#get-company-by-name)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -20,10 +26,10 @@
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
 
-#-Create Company
+<a name="create-billing-company"></a>
+## Create billing company
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -90,9 +96,10 @@
 >{warning} possible errors: 422 when is missing some data 
 
 
-#-Get companies by User
+<a name="get-company-by-user"></a>
+## Get companies by User
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -120,9 +127,10 @@
 
 #
 
-#-Get All Companies
+<a name="get-all-companies"></a>
+## Get all companies
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -171,9 +179,10 @@
 
 #
 
-#-Get Company by code
+<a name="get-company-by-code"></a>
+## Get company by code
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -213,9 +222,10 @@
 
 #
 
-#-Get Company by name
+<a name="get-company-by-name"></a>
+## Get company by name
 
-## Param in header
+### Param in header
 
 ```json
 {

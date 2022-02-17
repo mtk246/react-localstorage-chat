@@ -2,9 +2,16 @@
 
 ---
 
-- [User](#section-2)
+- [Basic data](#basic-data)
+- [Create clearing house](#create-clearing-house)
+- [Get all clearing house](#get-all-clearing-house)
+- [Get one clearing house](#get-one-clearing-house)
+- [Update one clearing house](#update-one-clearing-house)
+- [Get one Clearing house by name](#get-one-clearing-house-by-name)
+- [Change status Clearing house](#change-status-clearing-house)
+- [Add to billing company](#add-to-billing-company)
 
-<a name="section-2"></a>
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -16,6 +23,7 @@
 | 4 |PUT | `Update one Clearing house`                | `/clearing-house/{id}`|yes|Update one Clearing House|
 | 5 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
 | 6 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
+| 7 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
 
 
 
@@ -24,10 +32,10 @@
 
 # 
 
-#-Create Clearing House
+<a name="create-clearing-house"></a>
+## Create Clearing House
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -75,10 +83,11 @@
 
 # 
 
-#-Get All Clearing House
+<a name="get-all-clearing-house"></a>
+## Get All Clearing House
 
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -283,11 +292,11 @@
 
 
 
+<a name="get-one-clearing-house"></a>
+## Get One Clearing House
 
-#-Get One Clearing House
 
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -351,10 +360,10 @@
 
 # 
 
-#-Update Clearing House
+<a name="update-one-clearing-house"></a>
+## Update One Clearing House
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -432,10 +441,10 @@
 
 # 
 
-#-Get One Clearing House by name
+<a name="get-one-clearing-house-by-name"></a>
+## Get One Clearing House by name
 
-<a name="section-3"></a>
-## Param in Path
+### Param in Path
 
 ```json
 {
@@ -501,9 +510,9 @@
 
 # 
 
-#-Change status Clearing House
+<a name="change-status-clearing-house"></a>
+## Change status Clearing House
 
-<a name="section-3"></a>
 ## Body request example
 
 ```json
@@ -519,3 +528,42 @@
 
 
 #
+
+<a name="add-to-billing-company"></a>
+## Add to billing company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`clearing_house_id required integer`
+
+
+### Body request example
+
+```json
+{
+    "id": 1,
+    "code": "clearing_code",
+    "name": "clearing_name",
+    "status": true,
+    "created_at": null,
+    "updated_at": null
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+
+#
+
+>{warning} 404 error add clearing house to billing company

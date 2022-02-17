@@ -2,9 +2,17 @@
 
 ---
 
-- [User](#section-2)
+- [Basic data](#basic-data)
+- [Create company](#create-company)
+- [Get all company](#get-all-company)
+- [Get one company](#get-one-company)
+- [Get one company by name](#get-one-company-by-name)
+- [Get one company by email](#get-one-company-by-email)
+- [Update company](#update-company)
+- [Change status company](#change-status-company)
+- [Add to billing company](#add-to-billing-company)
 
-<a name="section-2"></a>
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -17,6 +25,7 @@
 | 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
 | 6 |PUT | `Update company`          | `/company/{id}`|yes|update company|
 | 7 |PUT | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 8 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 
 
@@ -25,10 +34,10 @@
 
 # 
 
-#-Create Company
+<a name="create-company"></a>
+## Create Company
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 
 #
@@ -88,10 +97,11 @@
 
 # 
 
-#-Get All Company
+<a name="get-all-company"></a>
+## Get All Company
 
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -209,11 +219,11 @@
 
 
 
+<a name="get-one-company"></a>
+## Get One Company
 
-#-Get One Company
 
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -274,11 +284,11 @@
 
 >{warning} 404 clearing found not found
 
+<a name="update-company"></a>
+## Update Company
 
-#-Update Company
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 
 #
@@ -368,10 +378,11 @@
 #
 
 
-#-Change status Company
+<a name="change-status-company"></a>
+## Change status Company
 
-<a name="section-3"></a>
-## Body request example
+
+### Body request example
 
 ```json
 {
@@ -386,3 +397,47 @@
 
 
 #
+
+
+<a name="add-to-billing-company"></a>
+## Add to billing company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required integer`
+
+
+### Body request example
+
+```json
+{
+    "id": 3,
+    "code": "company_code",
+    "name": "company_name",
+    "status": true,
+    "taxonomy": 1,
+    "npi": "123456",
+    "created_at": null,
+    "updated_at": null,
+    "email": "company@company.com",
+    "tax_id": 0
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+
+#
+
+>{warning} 404 error add company to billing company

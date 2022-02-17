@@ -2,9 +2,13 @@
 
 ---
 
-- [Authentication](#section-2)
+- [Basic data](#basic-data)
+- [Login](#login)
+- [Logout](#logout)
+- [Me](#me)
+- [Refresh token](#refresh-token)
 
-<a name="section-2"></a>
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -17,7 +21,7 @@
 
 
 
-<a name="section-3"></a>
+<a name="login"></a>
 ## Login
 ### Body request example
 ```json
@@ -89,7 +93,7 @@
 > {danger} code is 500 when is throw a exception
 
 
-<a name="section-4"></a>
+<a name="logout"></a>
 ## Logout
 
 ### Params in header
@@ -113,7 +117,7 @@
 
 
 
-<a name="section-5"></a>
+<a name="me"></a>
 ## Me
 
 ### Params in header
@@ -182,7 +186,7 @@
 
 
 
-<a name="section-5"></a>
+<a name="refresh-token"></a>
 ## Refresh-Token
 
 

@@ -4,9 +4,15 @@
 
 ---
 
-- [Patient](#section-2)
+- [Basic data](#basic-data)
+- [Create patient](#create-patient)
+- [Get all patient](#get-all-patient)
+- [Get one patient](#get-one-patient)
+- [Update patient](#Update-patient)
 
-<a name="section-2"></a>
+
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -20,11 +26,10 @@
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
 
+<a name="create-patient"></a>
+## Create Patient
 
-#-Create Patient
-
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -121,179 +126,12 @@
 ```
 
 
-
 #
 
+<a name="get-all-patient"></a>
+## Get All Patient
 
-#-Update Patient
-
-<a name="section-3"></a>
-## Body request example
-
-```json
-{
-    "user":{
-        "username":"jjjjjj",
-        "email":"jjjjjjj@gmail.com",
-        "sex":"m",
-        "firstName":"jjjj",
-        "lastName":"jjjj",
-        "middleName":"jjjj",
-        "ssn":"66666",
-        "dateOfBirth":"1990-11-11"
-    },
-    "patient":{
-        "marital_status":"jjjj",
-        "driver_licence":"jjj",
-        "dependent":false,
-        "guardian_name":"jjj",
-        "guardian_phone":"jjj",
-        "spuse_name":"jjj",
-        "employer":"jjj",
-        "employer_address":"jjjj",
-        "position":"jjj",
-        "phone_employer":"jjjj",
-        "spuse_employer":"jjjjj",
-        "spuse_work_phone":"jjjj"
-    }
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Patient updated
-
-
-#
-
-
-
-```json
-{
-    "id": 1,
-    "marital_status": "jjjj",
-    "driver_licence": "jjj",
-    "dependent": false,
-    "guardian_name": "jjj",
-    "guardian_phone": "jjj",
-    "spuse_name": "jjj",
-    "employer": "jjj",
-    "employer_address": "jjjj",
-    "position": "jjj",
-    "phone_employer": "jjjj",
-    "spuse_employer": "jjjjj",
-    "spuse_work_phone": "jjjj",
-    "user_id": 48,
-    "created_at": "2022-02-09T08:54:13.000000Z",
-    "updated_at": "2022-02-09T09:30:23.000000Z",
-    "user": {
-        "id": 48,
-        "username": "jjjjjj",
-        "email": "jjjjjjj@gmail.com",
-        "email_verified_at": null,
-        "created_at": "2022-02-09T08:54:13.000000Z",
-        "updated_at": "2022-02-09T09:30:23.000000Z",
-        "sex": "m",
-        "lastName": "jjjj",
-        "firstName": "jjjj",
-        "middleName": "jjjj",
-        "token": null,
-        "available": false,
-        "isLogged": false,
-        "ssn": "66666",
-        "dateOfBirth": "1990-11-11",
-        "img_profile": null,
-        "isBlocked": false
-    }
-}
-```
-
-
-
-#
-
-
-#-Get One Patient
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 200 Patient found
-
-#
-
-
-```json
-{
-    "id": 1,
-    "marital_status": "dsf",
-    "driver_licence": "sdfsdf",
-    "dependent": true,
-    "guardian_name": "dsfsdf",
-    "guardian_phone": "Dsfsdf",
-    "spuse_name": "dfgfd",
-    "employer": "DFgddf",
-    "employer_address": "dfg",
-    "position": "Dsgsdf",
-    "phone_employer": "Dsfgds",
-    "spuse_employer": "Sdfgdsfg",
-    "spuse_work_phone": "DSfgds",
-    "user_id": 48,
-    "created_at": "2022-02-09T08:54:13.000000Z",
-    "updated_at": "2022-02-09T08:54:13.000000Z",
-    "user": {
-        "id": 48,
-        "username": "ccffcfgdfcvv",
-        "email": "ccffffffdfdfcvvc@gmail.com",
-        "email_verified_at": null,
-        "created_at": "2022-02-09T08:54:13.000000Z",
-        "updated_at": "2022-02-09T08:54:13.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false,
-        "isLogged": false,
-        "ssn": "345345",
-        "dateOfBirth": "1990-11-11",
-        "img_profile": null,
-        "isBlocked": false
-    }
-}
-```
-
-
-
-#
-
-
-#-Get All Patient
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -387,6 +225,167 @@
 ]
 ```
 
+#
 
+
+<a name="get-one-patient"></a>
+## Get One Patient
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Patient found
+
+#
+
+
+```json
+{
+    "id": 1,
+    "marital_status": "dsf",
+    "driver_licence": "sdfsdf",
+    "dependent": true,
+    "guardian_name": "dsfsdf",
+    "guardian_phone": "Dsfsdf",
+    "spuse_name": "dfgfd",
+    "employer": "DFgddf",
+    "employer_address": "dfg",
+    "position": "Dsgsdf",
+    "phone_employer": "Dsfgds",
+    "spuse_employer": "Sdfgdsfg",
+    "spuse_work_phone": "DSfgds",
+    "user_id": 48,
+    "created_at": "2022-02-09T08:54:13.000000Z",
+    "updated_at": "2022-02-09T08:54:13.000000Z",
+    "user": {
+        "id": 48,
+        "username": "ccffcfgdfcvv",
+        "email": "ccffffffdfdfcvvc@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-02-09T08:54:13.000000Z",
+        "updated_at": "2022-02-09T08:54:13.000000Z",
+        "sex": "m",
+        "lastName": "test",
+        "firstName": "test",
+        "middleName": "testing",
+        "token": null,
+        "available": false,
+        "isLogged": false,
+        "ssn": "345345",
+        "dateOfBirth": "1990-11-11",
+        "img_profile": null,
+        "isBlocked": false
+    }
+}
+```
+
+#
+
+
+<a name="Update-patient"></a>
+## Update Patient
+
+### Body request example
+
+```json
+{
+    "user":{
+        "username":"jjjjjj",
+        "email":"jjjjjjj@gmail.com",
+        "sex":"m",
+        "firstName":"jjjj",
+        "lastName":"jjjj",
+        "middleName":"jjjj",
+        "ssn":"66666",
+        "dateOfBirth":"1990-11-11"
+    },
+    "patient":{
+        "marital_status":"jjjj",
+        "driver_licence":"jjj",
+        "dependent":false,
+        "guardian_name":"jjj",
+        "guardian_phone":"jjj",
+        "spuse_name":"jjj",
+        "employer":"jjj",
+        "employer_address":"jjjj",
+        "position":"jjj",
+        "phone_employer":"jjjj",
+        "spuse_employer":"jjjjj",
+        "spuse_work_phone":"jjjj"
+    }
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Patient updated
+
+
+#
+
+
+
+```json
+{
+    "id": 1,
+    "marital_status": "jjjj",
+    "driver_licence": "jjj",
+    "dependent": false,
+    "guardian_name": "jjj",
+    "guardian_phone": "jjj",
+    "spuse_name": "jjj",
+    "employer": "jjj",
+    "employer_address": "jjjj",
+    "position": "jjj",
+    "phone_employer": "jjjj",
+    "spuse_employer": "jjjjj",
+    "spuse_work_phone": "jjjj",
+    "user_id": 48,
+    "created_at": "2022-02-09T08:54:13.000000Z",
+    "updated_at": "2022-02-09T09:30:23.000000Z",
+    "user": {
+        "id": 48,
+        "username": "jjjjjj",
+        "email": "jjjjjjj@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-02-09T08:54:13.000000Z",
+        "updated_at": "2022-02-09T09:30:23.000000Z",
+        "sex": "m",
+        "lastName": "jjjj",
+        "firstName": "jjjj",
+        "middleName": "jjjj",
+        "token": null,
+        "available": false,
+        "isLogged": false,
+        "ssn": "66666",
+        "dateOfBirth": "1990-11-11",
+        "img_profile": null,
+        "isBlocked": false
+    }
+}
+```
 
 #
