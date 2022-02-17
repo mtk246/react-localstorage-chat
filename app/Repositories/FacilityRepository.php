@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\BillingCompany;
 use App\Models\Address;
 use App\Models\Contact;
 use App\Models\Facility;
@@ -105,5 +106,22 @@ class FacilityRepository
      */
     public function changeStatus(Boolean $status,int $id){
         return Facility::whereId($id)->update(["status"=>$status]);
+    }
+
+    /**
+     * @param  int $id
+     * @return Facility|Builder|Model|object|null
+     */
+    public function addToBillingCompany(int $id) {
+        $facility = Facility::find($id);
+        if (is_null($facility)) return null;
+        
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        if (is_null($facility->billingCompanies()->find($billingCompany->id))) {
+            $facility->billingCompanies()->attach($billingCompany->id);
+        }
+        return $facility;
     }
 }
