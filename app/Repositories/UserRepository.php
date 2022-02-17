@@ -25,14 +25,22 @@ class UserRepository{
     /**
      * @param UserCreateRequest $request
      * @return User|Model|null
-     * @throws Throwable
      */
     public function create(UserCreateRequest $request){
         try{
             DB::beginTransaction();
             $validated = $request->validated();
 
-            $user = User::create($validated);
+            $user = User::create([
+                "username" => $validated['username'],
+                "email" => $validated['email'],
+                "sex" => $validated['sex'],
+                "firstName" => $validated['firstName'],
+                "lastName" => $validated['lastName'],
+                "middleName" => $validated['middleName'],
+                "ssn" => $validated['ssn'],
+                "dateOfBirth" => $validated['dateOfBirth'],
+            ]);
 
             if($request->has("company-billing")){
                 $user->billingCompanyUser()->attach($request->input("company-billing"));
@@ -41,14 +49,14 @@ class UserRepository{
             if( isset( $validated['roles'] ) )
                 $user->assignRole($validated['roles']);
 
-            if(isset($data['contact'])){
-                $data["contact"]["user_id"] = $user->id;
-                Contact::create($data["contact"]);
+            if(isset($validated['contact'])){
+                $validated["contact"]["user_id"] = $user->id;
+                Contact::create($validated["contact"]);
             }
 
-            if(isset($data['address'])){
-                $data["address"]["user_id"] = $user->id;
-                Address::create($data["address"]);
+            if(isset($validated['address'])){
+                $validated["address"]["user_id"] = $user->id;
+                Address::create($validated["address"]);
             }
 
             $token = encrypt($user->id."@#@#$".$user->email);

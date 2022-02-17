@@ -127,12 +127,12 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = auth()
-            ->user()
-            ->load("roles")
-            ->load("permissions")
-            ->load("contact")
-            ->load("address");
+        $user = User::whereId(auth()->id())->with([
+            "roles",
+            "permissions",
+            "contact",
+            "address"
+        ])->first();
 
         $data = [
             "dataset_name" => "Get me",
