@@ -2,9 +2,16 @@
 
 ---
 
-- [Doctor](#section-2)
+- [Basic data](#basic-data)
+- [Create doctor](#create-doctor)
+- [Get all doctor](#get-all-doctor)
+- [Get one doctor](#get-one-doctor)
+- [Update doctor](#update-doctor)
+- [Get one doctor by npi](#get-one-doctor-by-npi)
+- [Change status Doctor](#change-status-doctor)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -28,11 +35,10 @@
 
 
 
+<a name="create-doctor"></a>
+## Create Doctor
 
-#-Create Doctor
-
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -123,16 +129,102 @@
 ```
 
 
+#
+
+<a name="get-all-doctor"></a>
+## Get All Doctors
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+
+## Response
+
+> {success} 200 Doctor found
 
 #
 
 
+```json
+[
+    {
+        "id": 1,
+        "npi": "434534",
+        "taxonomy": "someToxonomia",
+        "speciality": "someSpeciality",
+        "created_at": "2022-02-04T12:28:07.000000Z",
+        "updated_at": "2022-02-04T12:28:07.000000Z"
+    },
+    {
+        "id": 2,
+        "npi": "4345343",
+        "taxonomy": "someToxonomia2",
+        "speciality": "someSpeciality1",
+        "created_at": "2022-02-04T12:28:22.000000Z",
+        "updated_at": "2022-02-04T12:28:22.000000Z"
+    },
+    {
+        "id": 3,
+        "npi": "43453433",
+        "taxonomy": "someToxonomia3",
+        "speciality": "someSpeciality3",
+        "created_at": "2022-02-04T12:28:34.000000Z",
+        "updated_at": "2022-02-04T12:28:34.000000Z"
+    }
+]
+```
+
+#
+
+<a name="get-one-doctor"></a>
+## Get One Doctor
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Doctor found
+
+#
 
 
-#-Update Doctor
+```json
+{
+    "npi": "43453433",
+    "speciality": "someSpeciality3",
+    "taxonomy": "someToxonomia3",
+    "updated_at": "2022-02-04T12:28:34.000000Z",
+    "created_at": "2022-02-04T12:28:34.000000Z",
+    "id": 3
+}
+```
 
-<a name="section-3"></a>
-## Body request example
+#
+
+<a name="update-doctor"></a>
+## Update Doctor
+
+### Body request example
 
 ```json
 {
@@ -222,107 +314,13 @@
 }
 ```
 
-
-
 #
 
-
-#-Get One Doctor
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 200 Doctor found
-
-#
+<a name="get-one-doctor-by-npi"></a>
+##Get One Doctor by NPI
 
 
-```json
-{
-    "npi": "43453433",
-    "speciality": "someSpeciality3",
-    "taxonomy": "someToxonomia3",
-    "updated_at": "2022-02-04T12:28:34.000000Z",
-    "created_at": "2022-02-04T12:28:34.000000Z",
-    "id": 3
-}
-```
-
-
-
-#
-
-
-#-Get All Doctors
-
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-
-## Response
-
-> {success} 200 Doctor found
-
-#
-
-
-```json
-[
-    {
-        "id": 1,
-        "npi": "434534",
-        "taxonomy": "someToxonomia",
-        "speciality": "someSpeciality",
-        "created_at": "2022-02-04T12:28:07.000000Z",
-        "updated_at": "2022-02-04T12:28:07.000000Z"
-    },
-    {
-        "id": 2,
-        "npi": "4345343",
-        "taxonomy": "someToxonomia2",
-        "speciality": "someSpeciality1",
-        "created_at": "2022-02-04T12:28:22.000000Z",
-        "updated_at": "2022-02-04T12:28:22.000000Z"
-    },
-    {
-        "id": 3,
-        "npi": "43453433",
-        "taxonomy": "someToxonomia3",
-        "speciality": "someSpeciality3",
-        "created_at": "2022-02-04T12:28:34.000000Z",
-        "updated_at": "2022-02-04T12:28:34.000000Z"
-    }
-]
-```
-
-#
-
-
-#-Get One Doctor by NPI
-
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -360,10 +358,11 @@
 
 #
 
-#-Change status Doctor
+<a name="change-status-doctor"></a>
+## Change status Doctor
 
 
-## Param in header
+### Param in header
 
 ```json
 {

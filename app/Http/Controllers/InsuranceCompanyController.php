@@ -84,4 +84,14 @@ class InsuranceCompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json("Error! updating insurance",400);
     }
 
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToBillingCompany(int $id): JsonResponse
+    {
+        $rs = $this->InsuranceRepository->addToBillingCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json("error add insurance company to billing company", 404);
+    }
 }

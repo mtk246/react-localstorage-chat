@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -71,5 +72,15 @@ class InsuranceCompany extends Model
     public function insurancePlan(): HasMany
     {
         return $this->hasMany(InsurancePlan::class);
+    }
+
+    /**
+     * The billingCompanies that belong to the company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function billingCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
     }
 }

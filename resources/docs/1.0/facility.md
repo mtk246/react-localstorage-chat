@@ -2,9 +2,17 @@
 
 ---
 
-- [User](#section-2)
+- [Basic data](#basic-data)
+- [Create facility](#create-facility)
+- [Get all facility](#get-all-facility)
+- [Get one Facility](#get-one-facility)
+- [Update facility](#update-facility)
+- [Change status facility](#change-status-facility)
+- [Get facility by name](#get-facility-by-name)
+- [Add to billing company](#add-to-billing-company)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -16,6 +24,7 @@
 | 4 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
 | 5 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
 | 6 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
+| 7 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
 
 
 
@@ -24,10 +33,10 @@
 
 # 
 
-#-Create Facility
+<a name="create-facility"></a>
+## Create Facility
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 >{primary} The key Type allow these values
 1 - Clinics
@@ -103,10 +112,11 @@
 
 # 
 
-#-Get All Facilities
+<a name="get-all-facility"></a>
+## Get All Facilities
 
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -210,10 +220,11 @@
 
 
 
-#-Get One Facility
+<a name="get-one-facility"></a>
+## Get One Facility
 
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -266,10 +277,10 @@
 
 # 
 
-#-Update Facility
+<a name="update-facility"></a>
+## Update Facility
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 >{primary} The key Type allow these values
 1 - Clinics
@@ -361,12 +372,11 @@
 #
 
 
+<a name="change-status-facility"></a>
+## Change status Facility
 
 
-#-Change status Facility
-
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -392,3 +402,45 @@
 
 
 #
+
+<a name="add-to-billing-company"></a>
+## Add to billing company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`facility_id required integer`
+
+
+### Body request example
+
+```json
+{
+    "id": 1,
+    "type": 1,
+    "name": "facility_name",
+    "company_name": "company_name",
+    "npi": "123456",
+    "taxonomy": "taxonomy",
+    "billing_company_id": 1,
+    "created_at": null,
+    "updated_at": null
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+
+#
+
+>{warning} 404 error add facility to billing company

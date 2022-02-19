@@ -1,10 +1,10 @@
 # API Docs
-
 ---
+- [Basic data](#basic-data)
+- [Get NPI](#get-npi)
+- [Get zip code](#get-zip-code)
 
-- [AP1](#section-2)
-
-<a name="section-2"></a>
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -13,12 +13,10 @@
 | 1 |GET   | `get npi`      | `/npi/{npi}` | no             | Get the information associated with the NPI record |
 | 2 |POST  | `get zip code` | `/usps`      | no             | Get the zipcode associated with the address registered with the USPS |
 
-#
+<a name="get-npi"></a>
+## Get NPI
 
-
-#-Get Npi
-
-## Param in path
+### Param in path
 
 ```json
 {
@@ -68,10 +66,10 @@
 }
 ```
 
-#-get zip code
+<a name="get-zip-code"></a>
+## Get zip code
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {

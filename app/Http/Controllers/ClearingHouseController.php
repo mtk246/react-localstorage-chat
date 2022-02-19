@@ -85,4 +85,15 @@ class ClearingHouseController extends Controller
 
         return $rs ? response()->json($rs) : response()->json("Error updating status",400);
     }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToBillingCompany(int $id): JsonResponse
+    {
+        $rs = $this->clearingRepository->addToBillingCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json("error add clearing house to billing company", 404);
+    }
 }

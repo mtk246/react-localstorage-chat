@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\Address;
 use App\Models\Contact;
@@ -120,5 +121,22 @@ class CompanyRepository
      */
     public function changeStatus(int $status,int $id){
         return Company::whereId($id)->update(["status"=>$status]);
+    }
+
+    /**
+     * @param  int $id
+     * @return Company|Builder|Model|object|null
+     */
+    public function addToBillingCompany(int $id) {
+        $company = Company::find($id);
+        if (is_null($company)) return null;
+        
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        if (is_null($company->billingCompanies()->find($billingCompany->id))) {
+            $company->billingCompanies()->attach($billingCompany->id);
+        }
+        return $company;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Address;
+use App\Models\BillingCompany;
 use App\Models\Contact;
 use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Builder;
@@ -92,5 +93,22 @@ class InsuranceCompanyRepository
             "address",
             "contact"
         ])->first();
+    }
+
+    /**
+     * @param  int $id
+     * @return InsuranceCompany|Builder|Model|object|null
+     */
+    public function addToBillingCompany(int $id) {
+        $insuranceCompany = InsuranceCompany::find($id);
+        if (is_null($insuranceCompany)) return null;
+        
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
+            $insuranceCompany->billingCompanies()->attach($billingCompany->id);
+        }
+        return $insuranceCompany;
     }
 }

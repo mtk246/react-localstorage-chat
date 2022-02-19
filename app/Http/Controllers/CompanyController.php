@@ -97,4 +97,15 @@ class CompanyController extends Controller
 
         return $rs ? response()->json([],204) : response()->json("error updating status",400);
     }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToBillingCompany(int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->addToBillingCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json("error add company to billing company", 404);
+    }
 }

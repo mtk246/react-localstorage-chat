@@ -85,4 +85,15 @@ class FacilityController extends Controller
 
         return $rs ? response()->json([],204) : response()->json("Error, facility not found",404);
     }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToBillingCompany(int $id): JsonResponse
+    {
+        $rs = $this->facilityRepository->addToBillingCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json("error add facility to billing company", 404);
+    }
 }

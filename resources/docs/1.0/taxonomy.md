@@ -4,9 +4,16 @@
 
 ---
 
-- [Taxonomy](#section-2)
+- [Basic data](#basic-data)
+- [Create taxonomy](#create-taxonomy)
+- [Get all taxonomy](#get-all-taxonomy)
+- [Get one taxonomy](#get-one-taxonomy)
+- [Update taxonomy](#update-taxonomy)
+- [Change primary taxonomy](#change-primary-taxonomy)
+- [Delete taxonomy](#delete-taxonomy)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -28,10 +35,10 @@
 
 >{warning} You cant send at the same time user_id and company_id
 
-#-Create Taxonomy
+<a name="create-taxonomy"></a>
+## Create Taxonomy
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -73,135 +80,11 @@
 
 #
 
+<a name="get-all-taxonomy"></a>
+## Get All Taxonomy
 
 
-#-Update Taxonomy
-
-<a name="section-3"></a>
-## Body request example
-
-```json
-{
-    "name":"holaMundo"
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in Path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 204 Patient updated
-
-
-#
-
-
-
-```json
-{
-    "id": 7,
-    "isPrimary": true,
-    "name": "holaMundo",
-    "user_id": 3,
-    "company_id": null,
-    "created_at": "2022-02-09T22:15:22.000000Z",
-    "updated_at": "2022-02-09T23:33:56.000000Z"
-}
-```
-
-
-#
-
-
-
-#-Change primary Taxonomy
-
-<a name="section-3"></a>
-## Body request example
-
-#
->{warning} You cant send at the same time user_id and company_id
-#
-
-```json
-{
-    "primary":true,
-    "user_id":3
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in Path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 204 Taxonomy updated
-
-
-#
-
-
-
-#-Delete Taxonomy
-
-<a name="section-3"></a>
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in Path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 204 Taxonomy Deleted
-
-
-#
-
-
-#-Get All Taxonomy
-
-<a name="section-3"></a>
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -257,11 +140,10 @@
 ```
 
 
-#-Get One Taxonomy
+<a name="get-one-taxonomy"></a>
+## Get One Taxonomy
 
-<a name="section-3"></a>
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -294,3 +176,124 @@
         "updated_at": "2022-02-09T22:17:12.000000Z"
     }
 ```
+
+
+<a name="update-taxonomy"></a>
+## Update Taxonomy
+
+### Body request example
+
+```json
+{
+    "name":"holaMundo"
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in Path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 204 Patient updated
+
+
+#
+
+
+
+```json
+{
+    "id": 7,
+    "isPrimary": true,
+    "name": "holaMundo",
+    "user_id": 3,
+    "company_id": null,
+    "created_at": "2022-02-09T22:15:22.000000Z",
+    "updated_at": "2022-02-09T23:33:56.000000Z"
+}
+```
+
+
+#
+
+
+<a name="change-primary-taxonomy"></a>
+## Change primary Taxonomy
+
+### Body request example
+
+#
+>{warning} You cant send at the same time user_id and company_id
+#
+
+```json
+{
+    "primary":true,
+    "user_id":3
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in Path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 204 Taxonomy updated
+
+
+#
+
+
+<a name="delete-taxonomy"></a>
+## Delete Taxonomy
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in Path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 204 Taxonomy Deleted
+
+
+#
+

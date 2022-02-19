@@ -95,6 +95,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"])->middleware([
             "auth:api",
         ]);
+        Route::patch("/add-to-billing-company/{clearing_house_id}",[\App\Http\Controllers\ClearingHouseController::class,'addToBillingCompany'])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("facility")->group(function(){
@@ -114,6 +117,9 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
         Route::get("/{id}/get-by-name",[\App\Http\Controllers\FacilityController::class,'getByName'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\FacilityController::class,'addToBillingCompany'])->middleware([
             "auth:api",
         ]);
     });
@@ -140,6 +146,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/change-status/{id}",[\App\Http\Controllers\CompanyController::class,'changeStatus'])->middleware([
             "auth:api",
         ]);
+        Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\CompanyController::class,'addToBillingCompany'])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("device")->group(function(){
@@ -156,6 +165,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\InsuranceCompanyController::class,'getAllInsurance']);
         Route::put("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'updateInsurance']);
         Route::patch("/{id}/change-status",[\App\Http\Controllers\InsuranceCompanyController::class,'changeStatus']);
+        Route::patch("/add-to-billing-company/{insurance_company_id}",[\App\Http\Controllers\InsuranceCompanyController::class,'addToBillingCompany']);
     });
 
     Route::prefix("insurance-plan")->middleware([

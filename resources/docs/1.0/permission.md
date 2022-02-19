@@ -2,9 +2,22 @@
 
 ---
 
-- [Permissions](#section-2)
+- [Basic data](#basic-data)
+- [Get all roles](#get-all-roles)
+- [Get all permissions](#get-all-permissions)
+- [Get one role](#get-one-role)
+- [Get one permission](#get-one-permission)
+- [Create role](#create-role)
+- [Create permission](#create-permission)
+- [Assign permission role](#assign-permission-role)
+- [Assign permission user](#assign-permission-user)
+- [Assign role user](#assign-role-user)
+- [Revoke permission user](#revoke-permission-user)
+- [Revoke permission role](#revoke-permission-role)
+- [Revoke role user](#revoke-role-user)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 | # | METHOD | Name                       | URL                     | Token required|Description|
@@ -22,10 +35,10 @@
 | 11|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
 | 12|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
 
-<a name="section-3"></a>
+<a name="get-all-roles"></a>
 ## Get all roles
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -35,7 +48,7 @@
 
 >{success} 200 ok
 
-##Response
+## Response
 ```json
 [
     {
@@ -113,10 +126,10 @@
 
 
 
-<a name="section-4"></a>
+<a name="get-all-permissions"></a>
 ## Get all permissions
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -154,10 +167,10 @@
 ]
 ```
 
-<a name="section-4"></a>
+<a name="get-one-role"></a>
 ## Get one Role
 
-## Param in path
+### Param in path
 
 `role_id integer`
 
@@ -182,10 +195,10 @@
 }
 ```
 
-<a name="section-4"></a>
+<a name="get-one-permission"></a>
 ## Get one Permission
 
-## Param in path
+### Param in path
 
 `role_id integer`
 
@@ -212,10 +225,10 @@
 
 
 
-<a name="section-5"></a>
+<a name="create-role"></a>
 ## Create one Role
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -255,10 +268,10 @@
 
 
 
-<a name="section-6"></a>
-## Create one Permission
+<a name="create-permission"></a>
+## Create Permission
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -294,12 +307,10 @@
 
 
 
-
-
-<a name="section-6"></a>
+<a name="assign-permission-role"></a>
 ## Assign Permission Role
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -341,80 +352,10 @@
 
 
 
-
-
-<a name="section-7"></a>
-## Assign Role User
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`user_id integer & role_id integer`
-
-## Response
-
-```json
-{
-    "id": 1,
-    "name": "hola",
-    "email": "admin@billing.com",
-    "email_verified_at": null,
-    "created_at": "2021-12-23T18:08:35.000000Z",
-    "updated_at": "2022-01-05T18:02:27.000000Z",
-    "DOB": "2021-12-26",
-    "sex": "m",
-    "lastName": "test",
-    "firstName": "test",
-    "middleName": "testing",
-    "token": null,
-    "available": true,
-    "roles": [
-        {
-            "id": 1,
-            "name": "SUPER_USER",
-            "guard_name": "api",
-            "created_at": "2021-12-23T18:08:35.000000Z",
-            "updated_at": "2021-12-23T18:08:35.000000Z",
-            "pivot": {
-                "model_id": 1,
-                "role_id": 1,
-                "model_type": "App\\Models\\User"
-            }
-        },
-        {
-            "id": 3,
-            "name": "BILLER",
-            "guard_name": "api",
-            "created_at": "2021-12-23T18:08:35.000000Z",
-            "updated_at": "2021-12-23T18:08:35.000000Z",
-            "pivot": {
-                "model_id": 1,
-                "role_id": 3,
-                "model_type": "App\\Models\\User"
-            }
-        }
-    ]
-}
-```
-
->{success} 200 assign successfully
-
-
-
-
-
-
-<a name="section-7"></a>
+<a name="assign-permission-user"></a>
 ## Assign Permission User
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -464,61 +405,10 @@
 
 
 
+<a name="assign-role-user"></a>
+## Assign Role User
 
-
-
-
-<a name="section-6"></a>
-## Revoke Permission Role
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`role_id integer & permission_id integer`
-
-## Response
-
-```json
-{
-    "id": 1,
-    "name": "SUPER_USER",
-    "guard_name": "api",
-    "created_at": "2021-12-23T18:08:35.000000Z",
-    "updated_at": "2021-12-23T18:08:35.000000Z",
-    "permissions": [
-        {
-            "id": 3,
-            "name": "edit permissions",
-            "guard_name": "api",
-            "created_at": "2022-01-04T01:48:33.000000Z",
-            "updated_at": "2022-01-04T01:48:33.000000Z",
-            "pivot": {
-                "role_id": 1,
-                "permission_id": 3
-            }
-        }
-    ]
-}
-```
-
->{success} 200 assign successfully
-
-
-
-
-
-
-<a name="section-7"></a>
-## Revoke Role User
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -580,13 +470,10 @@
 
 
 
-
-
-
-<a name="section-7"></a>
+<a name="revoke-permission-user"></a>
 ## Revoke Permission User
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -633,3 +520,111 @@
 ```
 
 >{success} 200 assign successfully
+
+
+<a name="revoke-permission-role"></a>
+## Revoke Permission Role
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`role_id integer & permission_id integer`
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "SUPER_USER",
+    "guard_name": "api",
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2021-12-23T18:08:35.000000Z",
+    "permissions": [
+        {
+            "id": 3,
+            "name": "edit permissions",
+            "guard_name": "api",
+            "created_at": "2022-01-04T01:48:33.000000Z",
+            "updated_at": "2022-01-04T01:48:33.000000Z",
+            "pivot": {
+                "role_id": 1,
+                "permission_id": 3
+            }
+        }
+    ]
+}
+```
+
+>{success} 200 assign successfully
+
+
+<a name="revoke-role-user"></a>
+## Revoke Role User
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`user_id integer & role_id integer`
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "hola",
+    "email": "admin@billing.com",
+    "email_verified_at": null,
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2022-01-05T18:02:27.000000Z",
+    "DOB": "2021-12-26",
+    "sex": "m",
+    "lastName": "test",
+    "firstName": "test",
+    "middleName": "testing",
+    "token": null,
+    "available": true,
+    "roles": [
+        {
+            "id": 1,
+            "name": "SUPER_USER",
+            "guard_name": "api",
+            "created_at": "2021-12-23T18:08:35.000000Z",
+            "updated_at": "2021-12-23T18:08:35.000000Z",
+            "pivot": {
+                "model_id": 1,
+                "role_id": 1,
+                "model_type": "App\\Models\\User"
+            }
+        },
+        {
+            "id": 3,
+            "name": "BILLER",
+            "guard_name": "api",
+            "created_at": "2021-12-23T18:08:35.000000Z",
+            "updated_at": "2021-12-23T18:08:35.000000Z",
+            "pivot": {
+                "model_id": 1,
+                "role_id": 3,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ]
+}
+```
+
+>{success} 200 assign successfully
+

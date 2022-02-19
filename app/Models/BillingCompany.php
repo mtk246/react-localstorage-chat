@@ -81,4 +81,44 @@ class BillingCompany extends Model
     {
         return $this->belongsTo(Facility::class);
     }
+
+    /**
+     * The companies that belong to the billingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * The facilities that belong to the billingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function facilities(): BelongsToMany
+    {
+        return $this->belongsToMany(Facility::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * The clearingHouses that belong to the billingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function clearingHouses(): BelongsToMany
+    {
+        return $this->belongsToMany(ClearingHouse::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * The insuranceCompany that belong to the billingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function insuranceCompany(): BelongsToMany
+    {
+        return $this->belongsToMany(InsuranceCompany::class)->withPivot('status')->withTimestamps();
+    }
 }

@@ -2,9 +2,21 @@
 
 ---
 
-- [User](#section-2)
+- [Basic data](#basic-data)
+- [Create users](#create-users)
+- [Change status user](#change-status-user)
+- [Edit users](#edit-users)
+- [Get all users](#get-all-users)
+- [Get one user](#get-one-user)
+- [Send email to recovery password](#send-email-to-recovery-password)
+- [Send email to recovery user](#send-email-to-recovery-user)
+- [Change password](#change-password)
+- [Update image user](#update-image-user)
+- [Update password](#update-password)
+- [Search by ssn](#search-by-ssn)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -27,11 +39,10 @@
 
 
 
+<a name="create-users"></a>
+## Create User
 
-#-Create User
-
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -103,10 +114,11 @@
 
 
 
-#-Change Status
+<a name="change-status-user"></a>
+## Change Status
 
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -126,7 +138,8 @@
 
 
 
-#-Update User
+<a name="edit-users"></a>
+## Update User
 
 ## Param in header
 
@@ -164,9 +177,10 @@
 
 
 
-#-Get all users
+<a name="get-all-users"></a>
+## Get all users
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -331,9 +345,10 @@
 
 
 
-#-Get one user
+<a name="get-one-user"></a>
+## Get one user
 
-## Param in header
+### Param in header
 
 ```json
 {
@@ -355,11 +370,11 @@
 
 
 
+<a name="send-email-to-recovery-password"></a>
+## Send email to recovery password
 
-#-Send email to recovery password
 
-
-## Body request example
+### Body request example
 
 ```json
 {
@@ -375,10 +390,10 @@
 
 
 
+<a name="change-password"></a>
+##Change Password
 
-
-#-Change Password
-## Param in path
+### Param in path
 `token string`
 ## Body request example
 
@@ -397,8 +412,9 @@
 
 #
 
-#-Change image user
-## Body request example
+<a name="update-image-user"></a>
+## Change image user
+### Body request example
 
 ```json
 {
@@ -423,10 +439,10 @@
 #
 
 
+<a name="search-by-ssn"></a>
+## Search By Ssn
 
-#-Search By Ssn
-
-## Param in header
+### Param in header
 
 ```json
 {

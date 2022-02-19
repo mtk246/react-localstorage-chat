@@ -2,9 +2,17 @@
 
 ---
 
-- [Insurance Plan](#section-2)
+- [Basic data](#basic-data)
+- [Create insurance plan](#create-insurance-plan)
+- [Get all insurance plan](#get-all-insurance-plan)
+- [Get one insurance plan](#get-one-insurance-plan)
+- [Update insurance plan](#update-insurance-plan)
+- [Get one insurance plan by name](#get-one-insurance-plan-by-name)
+- [Change status plan company](#change-status-plan-company)
+- [Get all insurance plan by insurance company](#get-all-insurance-plan-by-insurance-company)
 
-<a name="section-2"></a>
+
+<a name="basic-data"></a>
 ## Basic data to make request
 
 
@@ -29,10 +37,10 @@
 #
 
 
-#-Create Insurance Plan
+<a name="create-insurance-plan"></a>
+## Create Insurance Plan
 
-<a name="section-3"></a>
-## Body request example
+### Body request example
 
 ```json
 {
@@ -104,153 +112,13 @@
 ```
 
 
-
 #
 
+<a name="get-all-insurance-plan"></a>
+## Get All Insurance plan
 
 
-
-#-Update Insurance plan
-
-<a name="section-3"></a>
-## Body request example
-
-```json
-{
-    "ins_type":"some ins_type",
-    "note":"someNote",
-    "plan_type":"somePlanType",
-    "cap_group":"someCapGroup",
-    "accept_assign":true,
-    "pre_authorization":true,
-    "file_zero":true,
-    "referral_required":true,
-    "accrue_patient_resp":true,
-    "require_abn":true,
-    "pqrs_eligible":true,
-    "allow_attached_files":true,
-    "eff_date":"2022-01-23",
-    "charge_using":"someCharge",
-    "format":"y-m-d",
-    "method":"someMethod",
-    "naic":"someNaic",
-    "insurance_company_id":1
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Insurance company updated
-
-
-#
-
-
-
-```json
-{
-    "ins_type": "some ins_type",
-    "name": "someName33",
-    "note": "someNote",
-    "plan_type": "somePlanType",
-    "cap_group": "someCapGroup",
-    "accept_assign": true,
-    "pre_authorization": true,
-    "file_zero": true,
-    "referral_required": true,
-    "accrue_patient_resp": true,
-    "require_abn": true,
-    "pqrs_eligible": true,
-    "allow_attached_files": true,
-    "eff_date": "2022-01-23",
-    "charge_using": "someCharge",
-    "format": "y-m-d",
-    "method": "someMethod",
-    "naic": "someNaic",
-    "insurance_company_id": 1,
-    "code": "981793",
-    "updated_at": "2022-02-04T03:47:27.000000Z",
-    "created_at": "2022-02-04T03:47:27.000000Z",
-    "id": 4
-}
-```
-
-
-
-#
-
-
-#-Get One Insurance Plan
-
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 200 Insurance found
-
-#
-
-
-```json
-{
-    "ins_type": "some ins_type",
-    "name": "someName33",
-    "note": "someNote",
-    "plan_type": "somePlanType",
-    "cap_group": "someCapGroup",
-    "accept_assign": true,
-    "pre_authorization": true,
-    "file_zero": true,
-    "referral_required": true,
-    "accrue_patient_resp": true,
-    "require_abn": true,
-    "pqrs_eligible": true,
-    "allow_attached_files": true,
-    "eff_date": "2022-01-23",
-    "charge_using": "someCharge",
-    "format": "y-m-d",
-    "method": "someMethod",
-    "naic": "someNaic",
-    "insurance_company_id": 1,
-    "code": "981793",
-    "updated_at": "2022-02-04T03:47:27.000000Z",
-    "created_at": "2022-02-04T03:47:27.000000Z",
-    "id": 4
-}
-```
-
-
-
-#
-
-
-#-Get All Insurance company
-
-
-## Param in header
+### Param in header
 
 ```json
 {
@@ -349,13 +217,147 @@
 ]
 ```
 
+
+#
+
+<a name="get-one-insurance-plan"></a>
+## Get One Insurance Plan
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Insurance found
+
 #
 
 
-#-Get One Insurance Plan by name
+```json
+{
+    "ins_type": "some ins_type",
+    "name": "someName33",
+    "note": "someNote",
+    "plan_type": "somePlanType",
+    "cap_group": "someCapGroup",
+    "accept_assign": true,
+    "pre_authorization": true,
+    "file_zero": true,
+    "referral_required": true,
+    "accrue_patient_resp": true,
+    "require_abn": true,
+    "pqrs_eligible": true,
+    "allow_attached_files": true,
+    "eff_date": "2022-01-23",
+    "charge_using": "someCharge",
+    "format": "y-m-d",
+    "method": "someMethod",
+    "naic": "someNaic",
+    "insurance_company_id": 1,
+    "code": "981793",
+    "updated_at": "2022-02-04T03:47:27.000000Z",
+    "created_at": "2022-02-04T03:47:27.000000Z",
+    "id": 4
+}
+```
 
+
+#
+
+<a name="update-insurance-plan"></a>
+## Update Insurance plan
+
+### Body request example
+
+```json
+{
+    "ins_type":"some ins_type",
+    "note":"someNote",
+    "plan_type":"somePlanType",
+    "cap_group":"someCapGroup",
+    "accept_assign":true,
+    "pre_authorization":true,
+    "file_zero":true,
+    "referral_required":true,
+    "accrue_patient_resp":true,
+    "require_abn":true,
+    "pqrs_eligible":true,
+    "allow_attached_files":true,
+    "eff_date":"2022-01-23",
+    "charge_using":"someCharge",
+    "format":"y-m-d",
+    "method":"someMethod",
+    "naic":"someNaic",
+    "insurance_company_id":1
+}
+```
 
 ## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance company updated
+
+
+#
+
+
+
+```json
+{
+    "ins_type": "some ins_type",
+    "name": "someName33",
+    "note": "someNote",
+    "plan_type": "somePlanType",
+    "cap_group": "someCapGroup",
+    "accept_assign": true,
+    "pre_authorization": true,
+    "file_zero": true,
+    "referral_required": true,
+    "accrue_patient_resp": true,
+    "require_abn": true,
+    "pqrs_eligible": true,
+    "allow_attached_files": true,
+    "eff_date": "2022-01-23",
+    "charge_using": "someCharge",
+    "format": "y-m-d",
+    "method": "someMethod",
+    "naic": "someNaic",
+    "insurance_company_id": 1,
+    "code": "981793",
+    "updated_at": "2022-02-04T03:47:27.000000Z",
+    "created_at": "2022-02-04T03:47:27.000000Z",
+    "id": 4
+}
+```
+
+#
+
+<a name="get-one-insurance-plan-by-name"></a>
+## Get One Insurance Plan by name
+
+
+### Param in header
 
 ```json
 {
@@ -413,8 +415,8 @@
 
 
 
-
-#-Change Status
+<a name="change-status-plan-company"></a>
+## Change Status
 
 
 ## Param in header
