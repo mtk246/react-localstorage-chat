@@ -31,27 +31,27 @@ class PatientRepository
                 return null;
             }
 
+            if(isset($data["insurance_policy"])){
+                $newPatient->insurancePlans()->attach($data['insurance_policy']);
+            }
+
+            $token = encrypt($user->id."@#@#$".$user->email);
+            $user->token = $token;
+            $user->save();
+
+            \Mail::to($user->email)->send(new GenerateNewPassword(
+                    $user->firstName.' '.$user->lastName,
+                    $user->email,
+                    env('URL_FRONT') . $token
+                )
+            );
+
+            DB::commit();
         }catch(\Exception $e){
             DB::rollBack();
             return null;
         }
 
-        if(isset($data["insurance_plan"])){
-            $newPatient->insurancePlans()->attach($data['insurance_plan']);
-        }
-
-        DB::commit();
-
-        $token = encrypt($user->id."@#@#$".$user->email);
-        $user->token = $token;
-        $user->save();
-
-        \Mail::to($user->email)->send(new GenerateNewPassword(
-            $user->firstName.' '.$user->lastName,
-            $user->email,
-                env('URL_FRONT') . $token
-            )
-        );
         return $user->load("patient");
     }
 

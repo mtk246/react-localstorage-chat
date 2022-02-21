@@ -46,6 +46,7 @@ class PatientCreateRequest extends FormRequest
             "user.middleName"  => "required|string|max:20",
             "user.ssn"         => "required|string",
             "user.dateOfBirth" => "required|date",
+            "insurance_policy" => "required|array"
         ];
     }
 }

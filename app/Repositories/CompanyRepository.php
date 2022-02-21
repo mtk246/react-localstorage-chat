@@ -34,7 +34,8 @@ class CompanyRepository
     public function getAllCompanies(){
         return Company::with([
             "address",
-            "contact"
+            "contact",
+            "facilities",
         ])->get();
     }
 
@@ -45,7 +46,8 @@ class CompanyRepository
     public function getOneCompany(int $id){
         $company = Company::whereId($id)->with([
             "address",
-            "contact"
+            "contact",
+            "facilities"
         ])->first();
 
         if(is_null($company)) return null;
@@ -130,10 +132,10 @@ class CompanyRepository
     public function addToBillingCompany(int $id) {
         $company = Company::find($id);
         if (is_null($company)) return null;
-        
+
         $billingCompany = auth()->user()->billingCompanyUser->first();
         if (is_null($billingCompany)) return null;
-        
+
         if (is_null($company->billingCompanies()->find($billingCompany->id))) {
             $company->billingCompanies()->attach($billingCompany->id);
         }

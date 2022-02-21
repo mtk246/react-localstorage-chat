@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -71,10 +72,18 @@ class Company extends Model
     /**
      * The billingCompanies that belong to the company.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function facilities(): HasMany
+    {
+        return $this->hasMany(Facility::class);
     }
 }

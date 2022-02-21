@@ -51,6 +51,7 @@ class Facility extends Model
         "npi",
         "taxonomy",
         "billing_company_id",
+        "company_id",
     ];
 
     /**
@@ -85,5 +86,13 @@ class Facility extends Model
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 }
