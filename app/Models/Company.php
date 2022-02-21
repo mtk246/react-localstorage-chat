@@ -46,12 +46,18 @@ class Company extends Model
     protected $fillable = [
         "code",
         "name",
-        "status",
         "taxonomy",
         "npi",
         "email",
         "tax_id",
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['status'];
 
     /**
      * @return HasOne
@@ -85,5 +91,18 @@ class Company extends Model
     public function facilities(): HasMany
     {
         return $this->hasMany(Facility::class);
+    }
+
+    /*
+     * Get the company's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return false;
+        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 }

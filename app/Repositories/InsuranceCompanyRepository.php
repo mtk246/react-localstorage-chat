@@ -15,7 +15,7 @@ class InsuranceCompanyRepository
      * @param string $name
      * @return mixed
      */
-    public function searchByName(string $name){
+    public function searchByName(string $name) {
         return InsuranceCompany::where("name","ILIKE","%${name}%")
             ->with([
                 "address",
@@ -28,17 +28,18 @@ class InsuranceCompanyRepository
      * @param array $data
      * @return null
      */
-    public function createInsurance(array $data){
-        try{
+    public function createInsurance(array $data) {
+        try {
             $data["insurance"]["code"] = randomNumber(6);
             $insurance = InsuranceCompany::create($data["insurance"]);
+            $this->changeStatus(true, $insurance->id);
 
-            if(isset($data["address"])){
+            if (isset($data["address"])) {
                 $data['address']['insurance_company_id'] = $insurance->id;
                 Address::create($data["address"]);
             }
 
-            if(isset($data["address"])){
+            if (isset($data["address"])) {
                 $data['contact']['insurance_company_id'] = $insurance->id;
                 Contact::create($data['contact']);
             }
@@ -52,14 +53,14 @@ class InsuranceCompanyRepository
     /**
      * @return Builder[]|Collection
      */
-    public function getAllInsurance(){
+    public function getAllInsurance() {
         return InsuranceCompany::with([
             "address",
             "contact"
         ])->get();
     }
 
-    public function getOneInsurance(int $id){
+    public function getOneInsurance(int $id) {
         $insurance = InsuranceCompany::with([
             "address",
             "contact"
@@ -70,22 +71,32 @@ class InsuranceCompanyRepository
         return $insurance;
     }
 
-    public function changeStatus(bool $status,int $id){
-        return InsuranceCompany::whereId($id)->update([
-            "status" => $status
-        ]);
+    public function changeStatus(bool $status, int $id) {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        $insuranceCompany = InsuranceCompany::find($id);
+        if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
+            return $insuranceCompany->billingCompanies()->attach($billingCompany->id);
+        } else {
+            return $insuranceCompany->billingCompanies()->updateExistingPivot($billingCompany->id, [
+                'status' => $status,
+            ]);
+        }
     }
 
-    public function updateInsurance(array $data,int $id){
-        if(isset($data['insurance'])){
-            InsuranceCompany::whereId($id)->update($data["insurance"]);
+    public function updateInsurance(array $data, int $id) {
+        if (isset($data['insurance'])) {
+            $insurance = InsuranceCompany::find($id);
+            $insurance->update($data["insurance"]);
+            $this->changeStatus($data["insurance"]["status"] ?? true, $insurance->id);
         }
 
-        if(isset($data['address'])){
+        if (isset($data['address'])) {
             Address::whereInsuranceCompanyId($id)->update($data['address']);
         }
 
-        if(isset($data["contact"])){
+        if (isset($data["contact"])) {
             Contact::whereInsuranceCompanyId($id)->update($data['contact']);
         }
 

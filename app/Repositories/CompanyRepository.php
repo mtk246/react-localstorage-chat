@@ -16,8 +16,9 @@ class CompanyRepository
      * @param array $data
      * @return Company|Model
      */
-    public function createCompany(array $data){
+    public function createCompany(array $data) {
         $company = Company::create($data["company"]);
+        $this->changeStatus(true, $company->id);
 
         $data["contact"]["company_id"] = $company->id;
         $data["address"]["company_id"] = $company->id;
@@ -31,7 +32,7 @@ class CompanyRepository
     /**
      * @return Company[]|Collection
      */
-    public function getAllCompanies(){
+    public function getAllCompanies() {
         return Company::with([
             "address",
             "contact",
@@ -43,14 +44,14 @@ class CompanyRepository
      * @param int $id
      * @return Company|Builder|Model|object|null
      */
-    public function getOneCompany(int $id){
+    public function getOneCompany(int $id) {
         $company = Company::whereId($id)->with([
             "address",
             "contact",
             "facilities"
         ])->first();
 
-        if(is_null($company)) return null;
+        if (is_null($company)) return null;
 
         return $company;
     }
@@ -60,30 +61,32 @@ class CompanyRepository
      * @param int $id
      * @return Company|Builder|Model|object|null
      */
-    public function updateCompany(array $data,int $id){
-        if(isset($data["company"])){
-            Company::whereId($id)->update($data['company']);
+    public function updateCompany(array $data, int $id) {
+        if (isset($data["company"])) {
+            $company = Company::whereId($id)->first();
+            $company->update($data['company']);
+            $this->changeStatus($data['company']["status"] ?? true, $company->id);
         }
 
-        if(isset($data['address'])){
+        if (isset($data['address'])) {
             $address = Address::whereClearingHouseId($id)->first();
 
-            if( is_null($address) ){
+            if (is_null($address)) {
                 $data["address"]["clearing_house_id"] = $id;
                 Address::create($data["address"]);
-            }else{
+            } else {
                 Address::whereClearingHouseId($id)->update($data["address"]);
             }
 
         }
 
-        if(isset($data['contact'])){
+        if (isset($data['contact'])) {
             $contact = Contact::whereClearingHouseId($id)->first();
 
-            if( is_null($contact) ){
+            if (is_null($contact)) {
                 $data["address"]["clearing_house_id"] = $id;
                 Contact::create($data["address"]);
-            }else{
+            } else {
                 Contact::whereClearingHouseId($id)->update($data["contact"]);
             }
         }
@@ -98,7 +101,7 @@ class CompanyRepository
      * @param string $email
      * @return Company|Builder|Model|object|null
      */
-    public function getOneByEmail(string $email){
+    public function getOneByEmail(string $email) {
         return Company::where("email",$email)->with([
             "address",
             "contact"
@@ -109,7 +112,7 @@ class CompanyRepository
      * @param string $name
      * @return Company[]|Builder[]|Collection
      */
-    public function getByName(string $name){
+    public function getByName(string $name) {
         return Company::where("name","ILIKE","%${name}%")->with([
             "address",
             "contact"
@@ -121,8 +124,18 @@ class CompanyRepository
      * @param int $id
      * @return bool|int
      */
-    public function changeStatus(int $status,int $id){
-        return Company::whereId($id)->update(["status"=>$status]);
+    public function changeStatus(bool $status, int $id) {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        $company = Company::find($id);
+        if (is_null($company->billingCompanies()->find($billingCompany->id))) {
+            return $company->billingCompanies()->attach($billingCompany->id);
+        } else {
+            return $company->billingCompanies()->updateExistingPivot($billingCompany->id, [
+                'status' => $status,
+            ]);
+        }
     }
 
     /**

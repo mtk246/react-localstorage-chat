@@ -17,8 +17,9 @@ class FacilityRepository
      * @param array $data
      * @return Facility|Model
      */
-    public function create(array $data){
+    public function create(array $data) {
         $facility = Facility::create($data["facility"]);
+        $this->changeStatus(true, $facility->id);
 
         $data["contact"]["facility_id"] = $facility->id;
         $data["address"]["facility_id"] = $facility->id;
@@ -32,7 +33,7 @@ class FacilityRepository
     /**
      * @return Facility[]|Collection
      */
-    public function getAllFacilities(){
+    public function getAllFacilities() {
         return Facility::with([
             "address",
             "contact"
@@ -43,7 +44,7 @@ class FacilityRepository
      * @param int $id
      * @return Facility|Builder|Model|object|null
      */
-    public function getOneFacility(int $id){
+    public function getOneFacility(int $id) {
         $facility = Facility::whereId($id)->with([
             "address",
             "contact"
@@ -57,30 +58,32 @@ class FacilityRepository
      * @param int $id
      * @return Facility|Builder|Model|object|null
      */
-    public function updateCompany(array $data,int $id){
-        if(isset($data["facility"])){
-            Facility::whereId($id)->update($data['company']);
+    public function updateFacility(array $data, int $id) {
+        if (isset($data["facility"])) {
+            $facility = Facility::whereId($id)->first();
+            $facility->update($data['facility']);
+            $this->changeStatus($data['facility']["status"] ?? true, $facility->id);
         }
 
-        if(isset($data['address'])){
+        if (isset($data['address'])) {
             $address = Address::whereClearingHouseId($id)->first();
 
-            if( is_null($address) ){
+            if (is_null($address)) {
                 $data["address"]["clearing_house_id"] = $id;
                 Address::create($data["address"]);
-            }else{
+            } else {
                 Address::whereClearingHouseId($id)->update($data["address"]);
             }
 
         }
 
-        if(isset($data['contact'])){
+        if (isset($data['contact'])) {
             $contact = Contact::whereClearingHouseId($id)->first();
 
-            if( is_null($contact) ){
+            if (is_null($contact)) {
                 $data["address"]["clearing_house_id"] = $id;
                 Contact::create($data["address"]);
-            }else{
+            } else {
                 Contact::whereClearingHouseId($id)->update($data["contact"]);
             }
         }
@@ -95,7 +98,7 @@ class FacilityRepository
      * @param string $name
      * @return Facility[]|Builder[]|Collection
      */
-    public function getByName(string $name){
+    public function getByName(string $name) {
         return Facility::where("name","ilike","%${name}%")->get();
     }
 
@@ -104,8 +107,18 @@ class FacilityRepository
      * @param int $id
      * @return bool|int
      */
-    public function changeStatus(Boolean $status,int $id){
-        return Facility::whereId($id)->update(["status"=>$status]);
+    public function changeStatus(Boolean $status, int $id) {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return null;
+        
+        $facility = Facility::find($id);
+        if (is_null($facility->billingCompanies()->find($billingCompany->id))) {
+            return $facility->billingCompanies()->attach($billingCompany->id);
+        } else {
+            return $facility->billingCompanies()->updateExistingPivot($billingCompany->id, [
+                'status' => $status,
+            ]);
+        }
     }
 
     /**

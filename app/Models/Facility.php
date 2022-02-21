@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Address|null $address
- * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\Contact|null $contact
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
@@ -50,17 +50,8 @@ class Facility extends Model
         "company_name",
         "npi",
         "taxonomy",
-        "billing_company_id",
         "company_id",
     ];
-
-    /**
-     * @return HasOneAlias
-     */
-    public function billingCompany(): HasOneAlias
-    {
-        return $this->hasOne(BillingCompany::class);
-    }
 
     /**
      * @return HasOne
@@ -94,5 +85,18 @@ class Facility extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+     /*
+     * Get the insuranceCompany's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return false;
+        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 }

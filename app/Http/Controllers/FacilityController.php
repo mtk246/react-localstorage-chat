@@ -58,7 +58,7 @@ class FacilityController extends Controller
      */
     public function updateFacility(UpdateFacilityRequest $request,int $id): JsonResponse
     {
-        $rs = $this->facilityRepository->updateCompany($request->validated(),$id);
+        $rs = $this->facilityRepository->updateFacility($request->validated(),$id);
 
         return $rs ? response()->json($rs) : response()->json("Error updating facility",400);
     }

@@ -46,9 +46,15 @@ class InsuranceCompany extends Model
         "code",
         "name",
         "naic",
-        "file_method",
-        "status"
+        "file_method"
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['status'];
 
     /**
      * @return HasOne
@@ -82,5 +88,18 @@ class InsuranceCompany extends Model
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * Get the insuranceCompany's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        if (is_null($billingCompany)) return false;
+        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 }

@@ -75,14 +75,6 @@ class BillingCompany extends Model
     }
 
     /**
-     * @return BelongsTo
-     */
-    public function facility(): BelongsTo
-    {
-        return $this->belongsTo(Facility::class);
-    }
-
-    /**
      * The companies that belong to the billingCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
