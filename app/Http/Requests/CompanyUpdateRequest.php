@@ -13,7 +13,7 @@ class CompanyUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class CompanyUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "company" => "required|array",
+            "address" => "required|array",
+            "contact" => "required|array",
         ];
     }
 }
