@@ -4,10 +4,12 @@
 
 - [Basic data](#basic-data)
 - [Create billing company](#create-billing-company)
-- [Get company by user](#get-company-by-user)
-- [Get all companies](#get-all-companies)
-- [Get company by code](#get-company-by-code)
-- [Get company by name](#get-company-by-name)
+- [Update billing company](#update-billing-company)
+- [Get billing company](#get-billing-company)
+- [Get all billing companies](#get-all-billing-companies)
+- [Get billing company by code](#get-billing-company-by-code)
+- [Get billing company by name](#get-billing-company-by-name)
+- [Change status billing company](#change-status-billing-company)
 
 
 <a name="basic-data"></a>
@@ -16,11 +18,13 @@
 
 | # | METHOD   | Name             | URL                     | Token required|Description|
 | : ||   :-                 |  :                      |               |                    |  
-| 1 |POST| `Create Billing Company`          | `/billing-company/create`               |yes             |Create Companies  |         
-| 2 |GET | `Get company by user`| `/billing-company/user/{user_id}`        |yes            |Get Companies By Users|
-| 3 |GET | `Get all Companies`          | `/billing-company`|yes|Get All Companies|
-| 4 |GET | `Get Company by code`          | `/billing-company/get-by-code/{code}`|yes|Get Company by code|
-| 5 |GET | `Get Company by name`          | `/billing-company/get-by-name/{name}`|yes|Get Company by name|
+| 1 |POST| `Create billing company`          | `/billing-company/create`               |yes             |Create Billing Company  |         
+| 2 |PUT| `Update billing company`          | `/billing-company/{billing_company_id}`               |yes             |Update Billing Company  |         
+| 3 |GET | `Get billing company`| `/billing-company/{billing_company_id}`        |yes            |Get one billing company|
+| 4 |GET | `Get all billing ompanies`          | `/billing-company`|yes|Get All Companies|
+| 5 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
+| 6 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
+| 7 |PATCH | `Change status billing company`           | `/billing-company/{id}`|yes|Change status billing company|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -33,18 +37,18 @@
 
 ```json
 {
-    "name":"fdgf",
-    "code":"someCode",
+    "name":"NameBillingCompany",
+    "code":"CodeBillingCompany",
     "address":{
-        "address":"dfsdf",
-        "city":"cdfsf",
-        "state":"sdsfsd",
-        "zip":"3234"
+        "address":"AddressBillingCompany",
+        "city":"CityBillingCompany",
+        "state":"StateBillingCompany",
+        "zip":"12345678"
     },
     "contact":{
-        "phone":"55433",
-        "fax":"fsdfs",
-        "email":"dsfsd@.com"
+        "phone":"5335427",
+        "fax":"5335427",
+        "email":"billing-company@email.com"
     }
 }
 ```
@@ -59,44 +63,129 @@
 
 ## Response
 
-> {success} 201 user created
+> {success} 200 billing company created
 
 #
 ```json
 {
-    "id": 13,
-    "name": "test",
-    "email": "testffddsdf@test.com",
-    "email_verified_at": null,
-    "created_at": "2022-01-13T19:05:45.000000Z",
-    "updated_at": "2022-01-13T19:05:45.000000Z",
-    "DOB": "2021-12-26",
-    "sex": "m",
-    "lastName": "test",
-    "firstName": "test",
-    "middleName": "testing",
-    "token": null,
-    "available": false,
-    "billing_company_user": [
-        {
-            "id": 4,
-            "name": "HolaMundo",
-            "created_at": "2022-01-13T19:05:45.000000Z",
-            "updated_at": "2022-01-13T19:05:45.000000Z",
-            "pivot": {
-                "user_id": 13,
-                "billing_company_id": 4
-            }
-        }
-    ]
+    "id": 1,
+    "name":"NameBillingCompany",
+    "code":"CodeBillingCompany",
+    "status": false,
+    "address": {
+        "id": 17,
+        "address":"AddressBillingCompany",
+        "city":"CityBillingCompany",
+        "state":"StateBillingCompany",
+        "zip":"12345678",
+        "user_id": null,
+        "billing_company_id": 1,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": null
+    },
+    "contact": {
+        "id": 15,
+        "phone":"5335427",
+        "fax":"5335427",
+        "email":"billing-company@email.com",
+        "user_id": null,
+        "billing_company_id": 1,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": null
+    }
 }
 ```
 
 
 >{warning} possible errors: 422 when is missing some data 
 
+<a name="update-billing-company"></a>
+## Update Billing Company
 
-<a name="get-company-by-user"></a>
+
+### Body request example
+
+
+#
+
+```json
+{
+    "name":"NameBillingCompany",
+    "code":"CodeBillingCompany",
+    "address":{
+        "address":"AddressBillingCompany",
+        "city":"CityBillingCompany",
+        "state":"StateBillingCompany",
+        "zip":"12345678"
+    },
+    "contact":{
+        "phone":"5335427",
+        "fax":"5335427",
+        "email":"billing-company@email.com"
+    }
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 clearing house created
+
+
+#
+
+```json
+{
+    "id": 1,
+    "name":"NameBillingCompany",
+    "code":"CodeBillingCompany",
+    "status": false,
+    "address": {
+        "id": 17,
+        "address":"AddressBillingCompany",
+        "city":"CityBillingCompany",
+        "state":"StateBillingCompany",
+        "zip":"12345678",
+        "user_id": null,
+        "billing_company_id": 1,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": null
+    },
+    "contact": {
+        "id": 15,
+        "phone":"5335427",
+        "fax":"5335427",
+        "email":"billing-company@email.com",
+        "user_id": null,
+        "billing_company_id": 1,
+        "created_at": "2022-02-02T18:15:53.000000Z",
+        "updated_at": "2022-02-02T18:15:53.000000Z",
+        "clearing_house_id": null,
+        "facility_id": null,
+        "company_id": null
+    }
+}
+```
+
+
+
+<a name="get-billing-company"></a>
 ## Get companies by User
 
 ### Param in header
@@ -127,8 +216,8 @@
 
 #
 
-<a name="get-all-companies"></a>
-## Get all companies
+<a name="get-all-billing-companies"></a>
+## Get all billing companies
 
 ### Param in header
 
@@ -147,40 +236,34 @@
 [
     {
         "id": 1,
-        "name": "someCompany",
+        "name": "someBillingCompany",
         "created_at": "2022-01-13T18:59:15.000000Z",
         "updated_at": "2022-01-13T18:59:15.000000Z"
     },
     {
         "id": 2,
-        "name": "otherCompany",
+        "name": "otherBillingCompany",
         "created_at": "2022-01-13T18:59:32.000000Z",
         "updated_at": "2022-01-13T18:59:32.000000Z"
     },
     {
         "id": 3,
-        "name": "GreatotherCompany",
+        "name": "GreatotherBillingCompany",
         "created_at": "2022-01-13T18:59:46.000000Z",
         "updated_at": "2022-01-13T18:59:46.000000Z"
-    },
-    {
-        "id": 4,
-        "name": "HolaMundo",
-        "created_at": "2022-01-13T19:05:45.000000Z",
-        "updated_at": "2022-01-13T19:05:45.000000Z"
     }
 ]
 ```
 
 
->{warning} possible errors: 404 when user not found 
+>{warning} possible errors: 404 when billing companies not found 
 
 
 
 #
 
-<a name="get-company-by-code"></a>
-## Get company by code
+<a name="get-billing-company-by-code"></a>
+## Get billing company by code
 
 ### Param in header
 
@@ -207,7 +290,7 @@
 
     {
         "id": 1,
-        "name": "someCompany",
+        "name": "someBillingCompany",
         "created_at": "2022-01-13T18:59:15.000000Z",
         "updated_at": "2022-01-13T18:59:15.000000Z"
     }
@@ -215,15 +298,15 @@
 ```
 
 
->{warning} possible errors: 404 when user not found 
+>{warning} possible errors: 404 when billing company not found 
 
 
 
 
 #
 
-<a name="get-company-by-name"></a>
-## Get company by name
+<a name="get-billing-company-by-name"></a>
+## Get billing company by name
 
 ### Param in header
 
@@ -250,7 +333,7 @@
 
     {
         "id": 1,
-        "name": "someCompany",
+        "name": "someBillingCompany",
         "created_at": "2022-01-13T18:59:15.000000Z",
         "updated_at": "2022-01-13T18:59:15.000000Z"
     }
@@ -258,5 +341,24 @@
 ```
 
 
->{warning} possible errors: 404 when user not found 
+>{warning} possible errors: 404 when billing company not found 
 
+<a name="change-status-billing-company"></a>
+## Change status billing company
+
+
+### Body request example
+
+```json
+{
+    "status":"boolean"
+}
+```
+
+
+## Response
+
+> {success} 204 Good response
+
+
+#
