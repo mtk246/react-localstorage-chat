@@ -62,7 +62,10 @@ Route::prefix("v1")/*->middleware('audit')*/
             [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);
-        Route::get("/user/{user_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompanyByUser'])->middleware([
+        Route::put("/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,'update'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompany'])->middleware([
             "auth:api",
         ]);
         Route::get("/",[\App\Http\Controllers\BillingCompanyController::class,'getAllBillingCompany'])->middleware([
@@ -72,6 +75,9 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
         Route::get("get-by-name/{name}",[\App\Http\Controllers\BillingCompanyController::class,'getByName'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/change-status/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,"changeStatus"])->middleware([
             "auth:api",
         ]);
     });

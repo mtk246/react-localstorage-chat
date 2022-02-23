@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCompanyBilling;
+use App\Http\Requests\BillingCompany\UpdateBillingCompanyRequest;
 use App\Repositories\BillingCompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,10 +29,44 @@ class BillingCompanyController extends Controller
     }
 
     /**
+     * @param  BillingCompanyUpdateRequest $request
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function update(UpdateBillingCompanyRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->update($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json("Error updating billing company", 400);
+    }
+
+    /**
+     * @param ChangeStatusCompanyRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(Request $request, int $id): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->changeStatus($request->input("status"), $id);
+
+        return $rs ? response()->json([],204) : response()->json("error updating status",400);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getBillingCompany(int $id): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->getBillingCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json("Billing company not found", 404);
+    }
+
+    /**
      * @param mixed $user_id
      * @return JsonResponse
      */
-    public function getBillingCompanyByUser($user_id): JsonResponse
+    public function getAllBillingCompanyByUser($user_id): JsonResponse
     {
         $rs = $this->billingCompanyRepository->getAllBillingCompanyByUser($user_id);
 
