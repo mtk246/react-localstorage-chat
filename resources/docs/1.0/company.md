@@ -24,7 +24,7 @@
 | 4 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
 | 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
 | 6 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 7 |PUT | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 7 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 8 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 

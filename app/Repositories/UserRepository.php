@@ -102,7 +102,12 @@ class UserRepository{
      * @return Builder[]|Collection
      */
     public function getAllUsers(){
-        return User::with("roles")->get();
+        return User::with([
+            "roles",
+            "address",
+            "contact",
+            "billingCompanyUser"
+        ])->get();
     }
 
     /**
@@ -126,7 +131,7 @@ class UserRepository{
 
             \Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName,$url));
         }catch (\Exception $e){
-            dd($e);
+            return null;
         }
 
         return true;
@@ -216,7 +221,12 @@ class UserRepository{
      * @return User|Builder|Model|object|null
      */
     public function getOneUser(int $id){
-        $user = User::whereId($id)->with("roles")->first();
+        $user = User::whereId($id)->with([
+            "roles",
+            "address",
+            "contact",
+            "billingCompanyUser"
+        ])->first();
 
         return is_null($user) ? null : $user;
     }

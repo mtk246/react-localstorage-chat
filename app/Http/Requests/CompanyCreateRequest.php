@@ -25,8 +25,19 @@ class CompanyCreateRequest extends FormRequest
     {
         return [
             "company" => "required|array",
+            "company.code"     => "required|string|unique:companies,code",
+            "company.name"     => "required|string|unique:companies,name",
+            "company.taxonomy" => "required|string",
+            "company.npi"      => "required|string|unique:companies,npi",
             "address" => "required|array",
+            'address.address' => "required|string",
+            'address.city' => "required|string",
+            'address.state' => "required|string",
+            'address.zip' => "required|numeric",
             "contact" => "required|array",
+            "contact.phone" => "required|string",
+            "contact.fax" => "required|string",
+            "contact.email" => "required|email:rfc",
         ];
     }
 }
