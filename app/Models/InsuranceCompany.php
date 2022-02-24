@@ -18,9 +18,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $naic
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property bool $status
  * @property-read \App\Models\Address|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property-read int|null $billing_companies_count
  * @property-read \App\Models\Contact|null $contact
+ * @property-read string $status
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlan
  * @property-read int|null $insurance_plan_count
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newModelQuery()
@@ -32,7 +34,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereNaic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereUpdatedAt($value)
  * @mixin \Eloquent
  */

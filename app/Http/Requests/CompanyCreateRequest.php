@@ -27,7 +27,6 @@ class CompanyCreateRequest extends FormRequest
             "company" => "required|array",
             "company.code"     => "required|string|unique:companies,code",
             "company.name"     => "required|string|unique:companies,name",
-            "company.taxonomy" => "required|string",
             "company.npi"      => "required|string|unique:companies,npi",
             "address" => "required|array",
             'address.address' => "required|string",

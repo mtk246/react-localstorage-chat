@@ -27,7 +27,6 @@ class CompanyUpdateRequest extends FormRequest
             "company" => "required|array",
             "company.code"     => "sometimes|string",
             "company.name"     => "sometimes|string",
-            "company.taxonomy" => "sometimes|string",
             "company.npi"      => "sometimes|string",
             "address" => "required|array",
             'address.address' => "sometimes|string",

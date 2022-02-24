@@ -18,16 +18,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @property string $company_name
  * @property string $npi
  * @property string $taxonomy
- * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $company_id
  * @property-read \App\Models\Address|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property-read int|null $billing_companies_count
  * @property-read \App\Models\Company|null $company
  * @property-read \App\Models\Contact|null $contact
+ * @property-read mixed $status
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCompanyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereId($value)

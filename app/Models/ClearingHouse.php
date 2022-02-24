@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property bool $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Address|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property-read int|null $billing_companies_count
  * @property-read \App\Models\Contact|null $contact
+ * @property-read string $status
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse query()
@@ -25,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
