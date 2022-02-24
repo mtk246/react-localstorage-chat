@@ -312,7 +312,7 @@ class UserController extends Controller
     public function changeStatus(ChangeStatusRequest $request,$id=null): JsonResponse
     {
         try{
-            if(!is_null($id)) $id = auth()->id();
+            if(is_null($id)) $id = auth()->id();
 
             $data = [
                 "dataset_name" => "change status",
