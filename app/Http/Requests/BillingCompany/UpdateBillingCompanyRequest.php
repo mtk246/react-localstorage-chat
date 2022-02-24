@@ -27,11 +27,11 @@ class UpdateBillingCompanyRequest extends FormRequest
         return [
             'name'    => [
                 'required', 'string', 'max:50',
-                Rule::unique('billing_companies', 'name')->ignore($this->billing_company)
+                Rule::unique('billing_companies', 'name')->ignore($this->billing_company_id)
             ],
             'code'    => [
                 'required', 'string',
-                Rule::unique('billing_companies', 'code')->ignore($this->billing_company)
+                Rule::unique('billing_companies', 'code')->ignore($this->billing_company_id)
             ],
             'address' => ['required', 'array'],
             'contact' => ['required', 'array']
