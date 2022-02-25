@@ -15,15 +15,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property bool $status
- * @property int $taxonomy
  * @property string $npi
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $email
  * @property int $tax_id
  * @property-read \App\Models\Address|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property-read int|null $billing_companies_count
  * @property-read \App\Models\Contact|null $contact
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
+ * @property-read int|null $facilities_count
+ * @property-read mixed $status
  * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Company newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Company query()
@@ -33,9 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereTaxId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
  * @mixin \Eloquent
  */
@@ -46,7 +47,6 @@ class Company extends Model
     protected $fillable = [
         "code",
         "name",
-        "taxonomy",
         "npi",
         "email",
         "tax_id",

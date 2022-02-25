@@ -18,8 +18,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $code
  * @property bool $status
  * @property-read \App\Models\Address|null $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ClearingHouse[] $clearingHouses
+ * @property-read int|null $clearing_houses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
+ * @property-read int|null $companies_count
  * @property-read \App\Models\Contact|null $contact
- * @property-read \App\Models\Facility|null $facility
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
+ * @property-read int|null $facilities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\InsuranceCompany[] $insuranceCompany
+ * @property-read int|null $insurance_company_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newModelQuery()
