@@ -128,6 +128,13 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['billing_company_id'];
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -206,5 +213,17 @@ class User extends Authenticatable implements JWTSubject
     public function patient(): HasOneAlias
     {
         return $this->hasOne(Patient::class);
+    }
+
+    /*
+     * Get the company's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getBillingCompanyIdAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanyUser->first();
+        return $billingCompany->id ?? null;
     }
 }
