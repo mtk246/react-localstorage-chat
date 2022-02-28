@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusCompanyRequest;
-use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Repositories\CompanyRepository;
-use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 #use Illuminate\Http\Request;
 
