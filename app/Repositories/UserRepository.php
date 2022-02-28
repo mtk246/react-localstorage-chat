@@ -178,7 +178,7 @@ class UserRepository{
             }
         }
 
-        if($request->has('contact')){
+        if( $request->has('contact') ){
             $contact = Contact::whereUserId($id)->first();
 
             if( is_null($contact) ){
