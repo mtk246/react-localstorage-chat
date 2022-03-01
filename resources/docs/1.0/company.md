@@ -47,7 +47,6 @@
     "company":{
         "code":"somecode",
         "name":"someName0101",
-        "taxonomy":"45345345",
         "npi":"323efsd",
         "email": "some@email.com",
         "tax_id": 343
@@ -84,7 +83,6 @@
 {
     "code": "somecode",
     "name": "someName0101",
-    "taxonomy": "45345345",
     "npi": "323efsd",
     "email": "some@email.com",
     "tax_id": 343,
@@ -298,7 +296,6 @@
     "company":{
         "code":"somecode",
         "name":"someName0101",
-        "taxonomy":"45345345",
         "npi":"323efsd",
         "email": "some@email.com",
         "tax_id": 343
@@ -337,7 +334,6 @@
     "code": "somecode22",
     "name": "someName010122",
     "status": false,
-    "taxonomy": 45345345,
     "npi": "323efsd",
     "created_at": "2022-02-02T18:15:53.000000Z",
     "updated_at": "2022-02-02T18:15:53.000000Z",

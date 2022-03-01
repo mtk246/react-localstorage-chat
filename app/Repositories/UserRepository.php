@@ -172,11 +172,13 @@ class UserRepository{
 
         $user = User::find($id);
 
-        if($user->email == $data['email']){
-            unset($data['email']);
+        if( isset($data['email']) ){
+            if($user->email == $data['email']){
+                unset($data['email']);
+            }
         }
 
-        if($request->has('contact')){
+        if( $request->has('contact') ){
             $contact = Contact::whereUserId($id)->first();
 
             if( is_null($contact) ){
