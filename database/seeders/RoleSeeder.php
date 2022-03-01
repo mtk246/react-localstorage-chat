@@ -14,44 +14,24 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
-            "name" => "SUPER_USER"
-        ]);
+        $roles = [
+            ["name" => "SUPER_USER"],
+            ["name" => "BILLING_MANAGER"],
+            ["name" => "BILLER"],
+            ["name" => "COLLECTOR"],
+            ["name" => "PAYMENT_PROCESSOR"],
+            ["name" => "ACCOUNT_MANAGER"],
+            ["name" => "DEVELOPMENT_SUPPORT"],
+            ["name" => "DOCTOR"],
+            ["name" => "PATIENT"],
+            ["name" => "CLIENT"],
 
-        Role::create([
-            "name" => "BILLING_MANAGER"
-        ]);
-
-        Role::create([
-            "name" => "BILLER"
-        ]);
-
-        Role::create([
-            "name" => "COLLECTOR"
-        ]);
-
-        Role::create([
-            "name" => "PAYMENT_PROCESSOR"
-        ]);
-
-        Role::create([
-            "name" => "ACCOUNT_MANAGER"
-        ]);
-
-        Role::create([
-            "name" => "DEVELOPMENT_SUPPORT"
-        ]);
-
-        Role::create([
-            "name" => "DOCTOR"
-        ]);
-
-        Role::create([
-            "name" => "PATIENT"
-        ]);
-
-        Role::create([
-            "name" => "CLIENT"
-        ]);
+        ];
+        foreach ($roles as $role) {
+            Role::updateOrCreate(
+                ['name' => $role['name']],
+                ['name' => $role['name']],
+            );
+        }
     }
 }

@@ -14,144 +14,49 @@ class  PermissionSeeder extends Seeder
      */
     public function run()
     {
-        Permission::create([
-            "name" => "Manage permissions for each role"
-        ]);
+        $permissions = [
+            ["name" => "Manage permissions for each role"],
+            ["name" => "Create Billing Company"],
+            ["name" => "View Billing Companies"],
+            ["name" => "View Billing Company"],
+            ["name" => "Create User"],
+            ["name" => "View User"],
+            ["name" => "Create Company"],
+            ["name" => "View Companies"],
+            ["name" => "Create Facility"],
+            ["name" => "View Facilities"],
+            ["name" => "Create Clearinghouse"],
+            ["name" => "View Clearinghouse"],
+            ["name" => "Create Insurance Company"],
+            ["name" => "View Insurance Company"],
+            ["name" => "Create Insurance"],
+            ["name" => "View Insurance"],
+            ["name" => "Create Doctor or Physician"],
+            ["name" => "View Doctor or Physician"],
+            ["name" => "Register a Patient"],
+            ["name" => "Update or verify personal information"],
+            ["name" => "Update or verify insurance policy information"],
+            ["name" => "Create Claim"],
+            ["name" => "Verification and debuggin claim /Send claim"],
+            ["name" => "Correct and re-submit claim"],
+            ["name" => "Generate Appeal"],
+            ["name" => "View Claims"],
+            ["name" => "Manage users responsible for a claims"],
+            ["name" => "Register Payment"],
+            ["name" => "Generate patient accounts statements"],
+            ["name" => "Send co-pays and co-insurance"],
+            ["name" => "Generate Reports"],
+            ["name" => "View Reports"],
+            ["name" => "Generate error report"],
+            ["name" => "Manage responses in the FAQ forum"],
+            ["name" => "View Profile"],
+        ];
 
-        Permission::create([
-            "name" => "Create Billing Company"
-        ]);
-
-        Permission::create([
-            "name" => "View Billing Companies"
-        ]);
-
-        Permission::create([
-            "name" => "View Billing Company"
-        ]);
-
-        Permission::create([
-            "name" => "Create User"
-        ]);
-
-        Permission::create([
-            "name" => "View User"
-        ]);
-
-        Permission::create([
-            "name" => "Create Company"
-        ]);
-
-        Permission::create([
-            "name" => "View Companies"
-        ]);
-
-        Permission::create([
-            "name" => "Create Facility"
-        ]);
-
-        Permission::create([
-            "name" => "View Facilities"
-        ]);
-
-        Permission::create([
-            "name" => "Create Clearinghouse"
-        ]);
-
-        Permission::create([
-            "name" => "View Clearinghouse"
-        ]);
-
-        Permission::create([
-            "name" => "Create Insurance Company"
-        ]);
-
-        Permission::create([
-            "name" => "View Insurance Company"
-        ]);
-
-        Permission::create([
-            "name" => "Create Insurance"
-        ]);
-
-        Permission::create([
-            "name" => "View Insurance"
-        ]);
-
-        Permission::create([
-            "name" => "Create Doctor or Physician"
-        ]);
-
-        Permission::create([
-            "name" => "View Doctor or Physician"
-        ]);
-
-        Permission::create([
-            "name" => "Register a Patient"
-        ]);
-
-        Permission::create([
-            "name" => "Update or verify personal information"
-        ]);
-
-        Permission::create([
-            "name" => "Update or verify insurance policy information"
-        ]);
-
-        Permission::create([
-            "name" => "Create Claim"
-        ]);
-
-        Permission::create([
-            "name" => "Verification and debuggin claim /Send claim"
-        ]);
-
-        Permission::create([
-            "name" => "Correct and re-submit claim"
-        ]);
-
-        Permission::create([
-            "name" => "Generate Appeal"
-        ]);
-
-        Permission::create([
-            "name" => "View Claims"
-        ]);
-
-        Permission::create([
-            "name" => "Manage users responsible for a claims"
-        ]);
-
-        Permission::create([
-            "name" => "Register Payment"
-        ]);
-
-        Permission::create([
-            "name" => "Generate patient accounts statements"
-        ]);
-
-        Permission::create([
-            "name" => "Send co-pays and co-insurance"
-        ]);
-
-        Permission::create([
-            "name" => "Generate Reports"
-        ]);
-
-        Permission::create([
-            "name" => "View Reports"
-        ]);
-
-        Permission::create([
-            "name" => "Generate error report"
-        ]);
-
-        Permission::create([
-            "name" => "Manage responses in the FAQ forum"
-        ]);
-
-        Permission::create([
-            "name" => "View Profile"
-        ]);
+        foreach ($permissions as $perm) {
+            Permission::updateOrCreate(
+                ['name' => $perm['name']],
+                ['name' => $perm['name']],
+            );
+        }
     }
 }

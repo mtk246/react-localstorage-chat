@@ -15,19 +15,74 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
-            "username"   => Faker\Provider\en_US\Person::firstNameMale(),
-            "email"      => "admin@billing.com",
-            "password"   => Hash::make("helloworld"),
-            "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
-            "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
-            "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
-            "sex"        => "M",
-            "created_at" => now(),
-            "updated_at" => now(),
-            //"DOB"        => now()->format("Y-m-d"),
-        ]);
+        $users = [
+            [
+                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "email"      => "admin@billing.com",
+                "password"   => Hash::make("helloworld"),
+                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
+                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
+                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "sex"        => "M",
+                "created_at" => now(),
+                "updated_at" => now(),
+                "role"       => "SUPER_USER"
+            ],
+            [
+                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "email"      => "billingmanager@billing.com",
+                "password"   => Hash::make("helloworld"),
+                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
+                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
+                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "sex"        => "M",
+                "created_at" => now(),
+                "updated_at" => now(),
+                "role"       => "BILLING_MANAGER"
+            ],
+            [
+                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "email"      => "doctor@billing.com",
+                "password"   => Hash::make("helloworld"),
+                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
+                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
+                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "sex"        => "M",
+                "created_at" => now(),
+                "updated_at" => now(),
+                "role"       => "DOCTOR"
+            ],
+            [
+                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "email"      => "patient@billing.com",
+                "password"   => Hash::make("helloworld"),
+                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
+                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
+                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
+                "sex"        => "M",
+                "created_at" => now(),
+                "updated_at" => now(),
+                "role"       => "PATIENT"
+            ],
+        ];
 
-        $user->assignRole("SUPER_USER");
+        foreach ($users as $user) {
+
+            $usr = User::updateOrCreate(
+                ['email' => $user['email']],
+                [
+                    "username"   => $user["username"],
+                    "email"      => $user["email"],
+                    "password"   => $user["password"],
+                    "firstName"  => $user["firstName"],
+                    "middleName" => $user["middleName"],
+                    "lastName"   => $user["lastName"],
+                    "sex"        => $user["sex"],
+                    "created_at" => $user["created_at"],
+                    "updated_at" => $user["updated_at"],
+                ]
+            );
+            $usr->syncRoles($user["role"]);
+        }
     }
 }
