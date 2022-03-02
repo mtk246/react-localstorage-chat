@@ -303,6 +303,7 @@
 ```json
 {
     "facility":{
+        "id":1,
         "type":1,
         "name":"somename",
         "company_name":"sonameCompany",

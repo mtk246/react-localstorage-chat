@@ -27,8 +27,8 @@ class UpdateFacilityRequest extends FormRequest
         return [
             "facility"              => ["sometimes", "array"],
             "facility.type"         => ["sometimes", "integer"],
-            "facility.name"         => ["sometimes", "string", Rule::unique('facilities', 'name')->ignore($this->facility_id)],
-            "facility.company_name" => ["sometimes", "string", Rule::unique('facilities', 'company_name')->ignore($this->facility_id)],
+            "facility.name"         => ["sometimes", "string", Rule::unique('facilities', 'name')->ignore($this->facility["id]")],
+            "facility.company_name" => ["sometimes", "string", Rule::unique('facilities', 'company_name')->ignore($this->facility["id"])],
             "facility.npi"          => ["sometimes", "string"],
             "facility.taxonomy"     => ["sometimes", "string"],
             "facility.company_id"   => ["sometimes", "integer"],
