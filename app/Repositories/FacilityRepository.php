@@ -9,7 +9,6 @@ use App\Models\Facility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class FacilityRepository
 {
@@ -47,7 +46,8 @@ class FacilityRepository
     public function getOneFacility(int $id) {
         $facility = Facility::whereId($id)->with([
             "address",
-            "contact"
+            "contact",
+            "company"
         ])->first();
 
         return !is_null($facility) ? $facility : null;
@@ -62,29 +62,17 @@ class FacilityRepository
         if (isset($data["facility"])) {
             $facility = Facility::whereId($id)->first();
             $facility->update($data['facility']);
-            $this->changeStatus($data['facility']["status"] ?? true, $facility->id);
-        }
 
-        if (isset($data['address'])) {
-            $address = Address::whereClearingHouseId($id)->first();
-
-            if (is_null($address)) {
-                $data["address"]["clearing_house_id"] = $id;
-                Address::create($data["address"]);
-            } else {
-                Address::whereClearingHouseId($id)->update($data["address"]);
+            if (isset($data['address'])) {
+                $address = Address::updateOrCreate([
+                    'facility_id' => $facility->id
+                ], $data["address"]);
             }
 
-        }
-
-        if (isset($data['contact'])) {
-            $contact = Contact::whereClearingHouseId($id)->first();
-
-            if (is_null($contact)) {
-                $data["address"]["clearing_house_id"] = $id;
-                Contact::create($data["address"]);
-            } else {
-                Contact::whereClearingHouseId($id)->update($data["contact"]);
+            if (isset($data['contact'])) {
+                $contact = Contact::updateOrCreate([
+                    'facility_id' => $facility->id
+                ], $data["contact"]);
             }
         }
 
@@ -103,11 +91,11 @@ class FacilityRepository
     }
 
     /**
-     * @param boolean $status
+     * @param bool $status
      * @param int $id
      * @return bool|int
      */
-    public function changeStatus(Boolean $status, int $id) {
+    public function changeStatus(bool $status, int $id) {
         $billingCompany = auth()->user()->billingCompanyUser->first();
         if (is_null($billingCompany)) return null;
         
