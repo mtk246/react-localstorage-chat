@@ -57,6 +57,13 @@ class Facility extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['status'];
+
+    /**
      * @return HasOne
      */
     public function address(): HasOne
@@ -67,9 +74,9 @@ class Facility extends Model
     /**
      * @return BelongsTo
      */
-    public function contact(): BelongsTo
+    public function contact(): HasOne
     {
-        return $this->belongsTo(Contact::class);
+        return $this->hasOne(Contact::class);
     }
 
     /**
