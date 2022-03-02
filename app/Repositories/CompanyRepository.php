@@ -65,30 +65,18 @@ class CompanyRepository
         if (isset($data["company"])) {
             $company = Company::whereId($id)->first();
             $company->update($data['company']);
-            $this->changeStatus($data['company']["status"] ?? true, $company->id);
         }
 
         if (isset($data['address'])) {
-            $address = Address::whereClearingHouseId($id)->first();
-
-            if (is_null($address)) {
-                $data["address"]["clearing_house_id"] = $id;
-                Address::create($data["address"]);
-            } else {
-                Address::whereClearingHouseId($id)->update($data["address"]);
-            }
-
+            $address = Address::updateOrCreate([
+                'company_id' => $company->id
+            ], $data["address"]);
         }
 
         if (isset($data['contact'])) {
-            $contact = Contact::whereClearingHouseId($id)->first();
-
-            if (is_null($contact)) {
-                $data["address"]["clearing_house_id"] = $id;
-                Contact::create($data["address"]);
-            } else {
-                Contact::whereClearingHouseId($id)->update($data["contact"]);
-            }
+            $contact = Contact::updateOrCreate([
+                'company_id' => $company->id
+            ], $data["contact"]);
         }
 
         return Company::whereId($id)->with([

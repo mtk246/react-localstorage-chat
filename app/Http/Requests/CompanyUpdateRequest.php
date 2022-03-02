@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Company;
 
 class CompanyUpdateRequest extends FormRequest
 {
@@ -25,9 +27,9 @@ class CompanyUpdateRequest extends FormRequest
     {
         return [
             "company" => "required|array",
-            "company.code"     => "sometimes|string",
-            "company.name"     => "sometimes|string",
-            "company.npi"      => "sometimes|string",
+            "company.code"     => ["sometimes", "string", Rule::unique('companies', 'code')->ignore($this->company["id"])],
+            "company.name"     => ["sometimes", "string", Rule::unique('companies', 'name')->ignore($this->company["id"])],
+            "company.npi"      => ["sometimes", "string", Rule::unique('companies', 'npi')->ignore($this->company["id"])],
             "address" => "required|array",
             'address.address' => "sometimes|string",
             'address.city'    => "sometimes|string",

@@ -127,7 +127,8 @@
         "email": null,
         "tax_id": 0,
         "address": null,
-        "contact": null
+        "contact": null,
+        "facilities": null
     },
     {
         "id": 2,
@@ -141,7 +142,8 @@
         "email": null,
         "tax_id": 0,
         "address": null,
-        "contact": null
+        "contact": null,
+        "facilities": null
     },
     {
         "id": 3,
@@ -166,7 +168,8 @@
             "updated_at": "2022-02-02T18:14:23.000000Z",
             "clearing_house_id": null,
             "facility_id": null,
-            "company_id": 3
+            "company_id": 3,
+            "facilities": null
         }
     },
     {
@@ -206,7 +209,33 @@
             "clearing_house_id": null,
             "facility_id": null,
             "company_id": 4
-        }
+        },
+        "facilities": [
+            {
+                "company_id": 1,
+                "company_name": "Roob and Sons",
+                "created_at": "2022-03-02T22:58:00.000000Z",
+                "id": 1,
+                "name": "Mr. Rogers Crooks",
+                "npi": "716391434057459",
+                "status": false,
+                "taxonomy": "Police and Sheriffs Patrol Officer",
+                "type": 2,
+                "updated_at": "2022-03-02T22:58:00.000000Z",
+            },
+            {
+               "company_id": 1,
+                "company_name": "Zulauf, Ziemann and Haley",
+                "created_at": "2022-03-02T22:58:00.000000Z",
+                "id": 2,
+                "name": "Rahul McDermott III",
+                "npi": "572402301841835",
+                "status": false,
+                "taxonomy": "Computer Scientist",
+                "type": 2,
+                "updated_at": "2022-03-02T22:58:00.000000Z"
+            }
+        ]
     }
 ]
 ```
@@ -273,7 +302,33 @@
         "clearing_house_id": null,
         "facility_id": null,
         "company_id": 4
-    }
+    },
+    "facilities": [
+        {
+            "company_id": 1,
+            "company_name": "Roob and Sons",
+            "created_at": "2022-03-02T22:58:00.000000Z",
+            "id": 1,
+            "name": "Mr. Rogers Crooks",
+            "npi": "716391434057459",
+            "status": false,
+            "taxonomy": "Police and Sheriffs Patrol Officer",
+            "type": 2,
+            "updated_at": "2022-03-02T22:58:00.000000Z",
+        },
+        {
+           "company_id": 1,
+            "company_name": "Zulauf, Ziemann and Haley",
+            "created_at": "2022-03-02T22:58:00.000000Z",
+            "id": 2,
+            "name": "Rahul McDermott III",
+            "npi": "572402301841835",
+            "status": false,
+            "taxonomy": "Computer Scientist",
+            "type": 2,
+            "updated_at": "2022-03-02T22:58:00.000000Z"
+        }
+    ]
 }
 ```
 
@@ -294,6 +349,7 @@
 ```json
 {
     "company":{
+        "id":4,
         "code":"somecode",
         "name":"someName0101",
         "npi":"323efsd",
