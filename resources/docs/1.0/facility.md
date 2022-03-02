@@ -64,7 +64,7 @@
         "company_name":"sonameCompany",
         "npi":"somenpi",
         "taxonomy":"dsfdsf",
-        "billing_company_id":1
+        "company_id":1
     },
     "address":{
         "address":"dfsdf",
@@ -102,7 +102,7 @@
     "company_name": "sonameCssompany",
     "npi": "somenpi",
     "taxonomy": "dsfdsf",
-    "billing_company_id": 2,
+    "company_id": 2,
     "updated_at": "2022-02-02T19:46:39.000000Z",
     "created_at": "2022-02-02T19:46:39.000000Z",
     "id": 3
@@ -139,7 +139,7 @@
         "company_name": "sonameCompany",
         "npi": "somenpi",
         "taxonomy": "dsfdsf",
-        "billing_company_id": 1,
+        "company_id": 1,
         "created_at": "2022-01-22T21:30:58.000000Z",
         "updated_at": "2022-01-22T21:30:58.000000Z",
         "address": {
@@ -165,7 +165,7 @@
         "company_name": "sonameCompany",
         "npi": "somenpi",
         "taxonomy": "dsfdsf",
-        "billing_company_id": 2,
+        "company_id": 2,
         "created_at": "2022-01-22T21:41:38.000000Z",
         "updated_at": "2022-01-22T21:41:38.000000Z",
         "address": {
@@ -191,7 +191,7 @@
         "company_name": "sonameCssompany",
         "npi": "somenpi",
         "taxonomy": "dsfdsf",
-        "billing_company_id": 2,
+        "company_id": 2,
         "created_at": "2022-02-02T19:46:39.000000Z",
         "updated_at": "2022-02-02T19:46:39.000000Z",
         "address": {
@@ -246,7 +246,7 @@
     "company_name": "sonameCompany",
     "npi": "somenpi",
     "taxonomy": "dsfdsf",
-    "billing_company_id": 1,
+    "company_id": 1,
     "created_at": "2022-01-22T21:30:58.000000Z",
     "updated_at": "2022-01-22T21:30:58.000000Z",
     "address": {
@@ -308,7 +308,7 @@
         "company_name":"sonameCompany",
         "npi":"somenpi",
         "taxonomy":"dsfdsf",
-        "billing_company_id":1
+        "company_id":1
     },
     "address":{
         "address":"dfsdf",
@@ -348,7 +348,7 @@
     "company_name": "sonameCompany",
     "npi": "somenpi",
     "taxonomy": "dsfdsf",
-    "billing_company_id": 1,
+    "company_id": 1,
     "created_at": "2022-01-22T21:30:58.000000Z",
     "updated_at": "2022-01-22T21:30:58.000000Z",
     "address": {
@@ -429,7 +429,7 @@
     "company_name": "company_name",
     "npi": "123456",
     "taxonomy": "taxonomy",
-    "billing_company_id": 1,
+    "company_id": 1,
     "created_at": null,
     "updated_at": null
 }

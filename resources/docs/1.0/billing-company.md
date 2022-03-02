@@ -24,7 +24,7 @@
 | 4 |GET | `Get all billing ompanies`          | `/billing-company`|yes|Get All Companies|
 | 5 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
 | 6 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
-| 7 |PATCH | `Change status billing company`           | `/billing-company/{id}`|yes|Change status billing company|
+| 7 |PATCH | `Change status billing company`           | `/billing-company/change-status/{id}`|yes|Change status billing company|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
