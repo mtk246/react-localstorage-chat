@@ -82,7 +82,7 @@ class UserSeeder extends Seeder
                     "updated_at" => $user["updated_at"],
                 ]
             );
-            $usr->password="$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q";
+            $usr->password='$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
             $usr->save();
             $usr->syncRoles($user["role"]);
         }
