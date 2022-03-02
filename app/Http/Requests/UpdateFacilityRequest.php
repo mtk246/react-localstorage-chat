@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateFacilityRequest extends FormRequest
 {
@@ -24,22 +25,22 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            "facility" => "sometimes|array",
-            "facility.type" => "sometimes|integer",
-            "facility.name" => "sometimes|string|unique:facilities,name",
-            "facility.company_name" => "sometimes|string|unique:facilities,name",
-            "facility.npi" => "sometimes|string",
-            "facility.taxonomy" => "sometimes|string",
-            "facility.billing_company_id" => "sometimes|integer",
-            "address" => "sometimes|array",
-            'address.address' => "sometimes|string",
-            'address.city' => "sometimes|string",
-            'address.state' => "sometimes|string",
-            'address.zip' => "sometimes|numeric",
-            "contact" => "sometimes|array",
-            "contact.phone" => "sometimes|string",
-            "contact.fax" => "sometimes|string",
-            "contact.email" => "sometimes|email:rfc",
+            "facility"              => ["sometimes", "array"],
+            "facility.type"         => ["sometimes", "integer"],
+            "facility.name"         => ["sometimes", "string", Rule::unique('facilities', 'name')->ignore($this->facility_id)],
+            "facility.company_name" => ["sometimes", "string", Rule::unique('facilities', 'company_name')->ignore($this->facility_id)],
+            "facility.npi"          => ["sometimes", "string"],
+            "facility.taxonomy"     => ["sometimes", "string"],
+            "facility.company_id"   => ["sometimes", "integer"],
+            "address"               => ["sometimes", "array"],
+            'address.address'       => ["sometimes", "string"],
+            'address.city'          => ["sometimes", "string"],
+            'address.state'         => ["sometimes", "string"],
+            'address.zip'           => ["sometimes", "numeric"],
+            "contact"               => ["sometimes", "array"],
+            "contact.phone"         => ["sometimes", "string"],
+            "contact.fax"           => ["sometimes", "string"],
+            "contact.email"         => ["sometimes", "email:rfc"],
         ];
     }
 }
