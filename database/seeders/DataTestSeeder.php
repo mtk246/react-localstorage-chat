@@ -35,7 +35,7 @@ class DataTestSeeder extends Seeder
         $billingCompanies = [
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix,
+                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
                 "address" => $faker->address,
                 "city"    => $faker->city,
                 "state"   => $faker->streetName,
@@ -47,7 +47,7 @@ class DataTestSeeder extends Seeder
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix,
+                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
                 "address" => $faker->address,
                 "city"    => $faker->city,
                 "state"   => $faker->streetName,
@@ -59,7 +59,7 @@ class DataTestSeeder extends Seeder
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix,
+                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
                 "address" => $faker->address,
                 "city"    => $faker->city,
                 "state"   => $faker->streetName,
@@ -71,7 +71,7 @@ class DataTestSeeder extends Seeder
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix,
+                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
                 "address" => $faker->address,
                 "city"    => $faker->city,
                 "state"   => $faker->streetName,
@@ -115,34 +115,69 @@ class DataTestSeeder extends Seeder
         /** Crear Company */
         $companies = [
             [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
-                "npi"    => $faker->imei,
-                "email"  => $faker->companyEmail,
+                "name"       => $faker->company,
+                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
+                "npi"        => $faker->imei,
+                "email"      => $faker->companyEmail,
+                "facilities" => [
+                    [
+                        "type"         => 2,
+                        "name"         => $faker->name,
+                        "company_name" => $faker->company,
+                        "npi"          => $faker->imei,
+                        "taxonomy"     => $faker->jobTitle,
+                    ],
+                    [
+                        "type"         => 2,
+                        "name"         => $faker->name,
+                        "company_name" => $faker->company,
+                        "npi"          => $faker->imei,
+                        "taxonomy"     => $faker->jobTitle,
+                    ]
+                ]
             ],
             [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
-                "npi"    => $faker->imei,
-                "email"  => $faker->companyEmail,
+                "name"       => $faker->company,
+                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
+                "npi"        => $faker->imei,
+                "email"      => $faker->companyEmail,
+                "facilities" => [
+                    [
+                        "type"         => 2,
+                        "name"         => $faker->name,
+                        "company_name" => $faker->company,
+                        "npi"          => $faker->imei,
+                        "taxonomy"     => $faker->jobTitle,
+                    ]
+                ]
             ],
             [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
-                "npi"    => $faker->imei,
-                "email"  => $faker->companyEmail,
+                "name"       => $faker->company,
+                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
+                "npi"        => $faker->imei,
+                "email"      => $faker->companyEmail,
+                "facilities" => [
+                    [
+                        "type"         => 2,
+                        "name"         => $faker->name,
+                        "company_name" => $faker->company,
+                        "npi"          => $faker->imei,
+                        "taxonomy"     => $faker->jobTitle,
+                    ]
+                ]
             ],
             [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
-                "npi"    => $faker->imei,
-                "email"  => $faker->companyEmail,
+                "name"       => $faker->company,
+                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
+                "npi"        => $faker->imei,
+                "email"      => $faker->companyEmail,
+                "facilities" => []
             ],
         ];
 
         foreach ($companies as $company) {
 
-            Company::updateOrCreate(
+            $comp  = Company::updateOrCreate(
                 ["name" => $company["name"]],
                 [
                     "name" => $company["name"],
@@ -151,24 +186,41 @@ class DataTestSeeder extends Seeder
                     "email"  => $company["email"],
                 ]
             );
+            if (isset($company["facilities"])) {
+                foreach ($company["facilities"] as $facility) {
+                    Facility::updateOrCreate(
+                        ["name" => $facility["name"]],
+                        [
+                            "type"         => $facility["type"],
+                            "name"         => $facility["name"],
+                            "company_name" => $facility["company_name"],
+                            "npi"          => $facility["npi"],
+                            "taxonomy"     => $facility["taxonomy"],
+                            "company_id"   => $comp->id,
+                        ]
+                    );
+                    
+                }
+            }
+
         }
         /** Create clearinghouse */
         $clearinghouses = [
             [
                 "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
+                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
             ],
             [
                 "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
+                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
             ],
             [
                 "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
+                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
             ],
             [
                 "name"   => $faker->company,
-                "code"   => $faker->companySuffix,
+                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
             ],
         ];
         foreach ($clearinghouses as $clearinghouse) {
