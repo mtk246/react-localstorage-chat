@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "admin@billing.com",
-                "password"   => Hash::make("helloworld"),
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
                 "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "billingmanager@billing.com",
-                "password"   => Hash::make("helloworld"),
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
                 "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "doctor@billing.com",
-                "password"   => Hash::make("helloworld"),
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
                 "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
@@ -55,7 +55,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "patient@billing.com",
-                "password"   => Hash::make("helloworld"),
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
                 "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
@@ -82,6 +82,8 @@ class UserSeeder extends Seeder
                     "updated_at" => $user["updated_at"],
                 ]
             );
+            $usr->password="$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q";
+            $usr->save();
             $usr->syncRoles($user["role"]);
         }
     }
