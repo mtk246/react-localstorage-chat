@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 /**
  * App\Models\InsurancePlan
  *
@@ -66,9 +67,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class InsurancePlan extends Model
+class InsurancePlan extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, AuditableTrait;
     protected $table = "insurance_plans";
     protected $fillable = [
         "code",

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
 /**
  * App\Models\Contact
@@ -44,9 +46,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
  * @mixin \Eloquent
  */
-class Contact extends Model
+class Contact extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, AuditableTrait;
     protected $table = "contacts";
     protected $fillable = [
         "phone",
