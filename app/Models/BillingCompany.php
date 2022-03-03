@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
 /**
  * App\Models\BillingCompany
@@ -40,9 +42,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class BillingCompany extends Model
+class BillingCompany extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, AuditableTrait;
 
     protected $fillable = [
         "name",

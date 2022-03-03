@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
 /**
  * App\Models\Facility
@@ -41,9 +43,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Facility extends Model
+class Facility extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, AuditableTrait;
 
     protected $table = "facilities";
 
