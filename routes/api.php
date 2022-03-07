@@ -31,7 +31,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware(['auth:api','role:SUPER_USER']);
         Route::get("{id}/",[\App\Http\Controllers\UserController::class,'getOneUser'])->middleware(['auth:api','role:SUPER_USER']);
         Route::post("send-email-rescue-pass",[\App\Http\Controllers\UserController::class,'sendEmailRescuePass']);
-        Route::post("send-email-rescue-user",[\App\Http\Controllers\UserController::class,'recoveryUser']);
+        Route::post("recovery-user",[\App\Http\Controllers\UserController::class,'recoveryUser']);
         Route::post("change-password/{token}",[\App\Http\Controllers\UserController::class,'changePassword']);
         Route::patch("{id?}/change-status",[\App\Http\Controllers\UserController::class,'changeStatus'])->middleware('auth:api');
         Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');

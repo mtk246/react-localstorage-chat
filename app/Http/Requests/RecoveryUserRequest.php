@@ -24,7 +24,8 @@ class RecoveryUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "email" => "required|string|email:rfc"
+            'ssn'         => ["required", "string"],
+            'dateOfBirth' => ["required", "date"]
         ];
     }
 }
