@@ -9,7 +9,7 @@
 - [Get all users](#get-all-users)
 - [Get one user](#get-one-user)
 - [Send email to recovery password](#send-email-to-recovery-password)
-- [Send email to recovery user](#send-email-to-recovery-user)
+- [Recovery user](#recovery-user)
 - [Change password](#change-password)
 - [Update image user](#update-image-user)
 - [Update password](#update-password)
@@ -28,7 +28,7 @@
 | 4 |GET | `get all users`   | `/user/` |yes            |get all users|
 | 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
-| 7 |POST | `send email to recovery user`   | `/user/send-email-rescue-user` |no|send email to recovery user|
+| 7 |POST | `recovery user`   | `/user/rescovery-user` |no|recovery user|
 | 8 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 9 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
 | 10|PATCH | `update password`   | `/user/update-password` |yes|update password|
@@ -383,6 +383,31 @@
 ```
 
 >{success} 204 response empty, email sent
+
+#
+
+>{warning} 404 user not found, 500 some exception
+
+<a name="recovery-user"></a>
+## Recovery user
+
+
+### Body request example
+
+```json
+{
+    "ssn": "5345",
+    "dateOfBirth": "1990-11-11",
+}
+```
+
+>{success} 200 response
+
+```json
+{
+    "email":"admin@admin.com"
+}
+```
 
 #
 
