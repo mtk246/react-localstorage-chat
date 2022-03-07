@@ -244,27 +244,15 @@ class UserRepository{
     }
 
     /**
-     * @param string $email
-     * @return bool|null
+     * @param request $request
+     * @return string|null
      */
-    public function recoveryUser(string $email)
+    public function recoveryUser(Request $request)
     {
-        $user = User::whereEmail($email)->first();
-
-        if(is_null($user)) return null;
-
-        $token = encrypt($user->id."@#@#$".$user->email);
-
-        $user->token = $token;
-        $user->save();
-
-        Mail::to($user->email)->send(
-            new RecoveryUserMail(
-            $user->firstName.' '.$user->lastName,
-            $user->email,
-            env('URL_FRONT') . $token)
-        );
-        return true;
+        $ssn = $request->ssn;
+        $user = User::where("ssn", "ilike", "%${ssn}")
+                    ->whereDateOfBirth($request->dateOfBirth)->first();
+        return (!is_null($user)) ? $user->email : null;
     }
 
     public function changePasswordForm(string $password) {
