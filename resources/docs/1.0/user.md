@@ -10,6 +10,7 @@
 - [Get one user](#get-one-user)
 - [Send email to recovery password](#send-email-to-recovery-password)
 - [Recovery user](#recovery-user)
+- [Unlock user](#unlock-user)
 - [Change password](#change-password)
 - [Update image user](#update-image-user)
 - [Update password](#update-password)
@@ -29,10 +30,11 @@
 | 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
 | 7 |POST | `recovery user`   | `/user/rescovery-user` |no|recovery user|
-| 8 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
-| 9 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
-| 10|PATCH | `update password`   | `/user/update-password` |yes|update password|
-| 11|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
+| 8 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
+| 9 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
+| 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
+| 11|PATCH | `update password`   | `/user/update-password` |yes|update password|
+| 12|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -412,6 +414,77 @@
 #
 
 >{warning} 404 user not found, 500 some exception
+
+<a name="unlock-user"></a>
+## Unlock user
+
+
+### Body request example
+
+```json
+{
+    "email": "admin@billing.com",
+    "usercode": "622635b68acb54.47488178",
+}
+```
+
+>{success} 200 response
+
+```json
+{
+    "user": {
+        "id": 1,
+        "username": "admin",
+        "usercode": "eyJpdiI6IllUQ1pLYld4azErYmgxdEZvM05Bamc9PSIsInZhbHVlIjoiUlhLYnhLeXpaTFBtOU9lOXB3djVVdVRvTEVIMXY1bmlHRWlrMHhSTUNncz0iLCJtYWMiOiI2ZThkOTQxYWNiMjM3MjkwMjMwZGRmMWY1MDk0MWEzNTViOTUzYTY3Njc2NmJjODIwZGRiYWUzMDlhYTk5MzkyIiwidGFnIjoiIn0=",
+        "email": "admin@billing.com",
+        "email_verified_at": null,
+        "created_at": "2021-12-23T18:08:35.000000Z",
+        "updated_at": "2022-01-03T21:42:56.000000Z",
+        "DOB": "2021-12-26",
+        "sex": "m",
+        "lastName": "test",
+        "firstName": "test",
+        "middleName": "testing",
+        "token": null,
+        "available": true,
+        "permissions": [
+            {
+                "id": 1,
+                "name": "edit articles",
+                "guard_name": "api",
+                "created_at": "2022-01-04T01:45:08.000000Z",
+                "updated_at": "2022-01-04T01:45:08.000000Z",
+                "pivot": {
+                    "model_id": 1,
+                    "permission_id": 1,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "roles": [
+            {
+                "id": 1,
+                "name": "SUPER_USER",
+                "guard_name": "api",
+                "created_at": "2021-12-23T18:08:35.000000Z",
+                "updated_at": "2021-12-23T18:08:35.000000Z",
+                "pivot": {
+                    "model_id": 1,
+                    "role_id": 1,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ]
+    },
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxMzk5NDU1LCJleHAiOjE2NDE0MDMwNTUsIm5iZiI6MTY0MTM5OTQ1NSwianRpIjoiMjJFTmh5U2hIOHhVNnE0NSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.73g-sUA9Mm86Z5qRsZjtDd-1mEwajPjT5neccmxHaUg",
+    "token_type": "bearer",
+    "expires_in": 3600
+}
+```
+
+#
+
+>{warning} 404 Error wrong otp code
 
 
 

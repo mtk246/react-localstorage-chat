@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 /**
  * @OA\Info(title="Api Medical billing",version="1.0")
@@ -21,8 +22,18 @@ use Illuminate\Support\Str;
  *     description="API Endpoints of Authentication",
  * )
  */
+
 class AuthController extends Controller
 {
+    use AuthenticatesUsers;
+
+    /**
+     * Maximum number of failed attempts when trying to authenticate to the application
+     *
+     * @var    integer
+     */
+    protected $maxAttempts = 3;
+
     /**
      * Create a new AuthController instance.
      *
@@ -91,13 +102,30 @@ class AuthController extends Controller
 
         MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
+        $user = User::where('email', $dataValidated["email"])->firstOrFail();
+        if ($user !== null && ($user->isBlocked == true)) {
+            return response()->json(['error' => 'Your account is blocked. Please contact support for help.'], 401);
+        }
+
+        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
+            /** elimina la cantidad de intentos fallidos del usuario y se procede al bloqueo del mismo */
+            $this->clearLoginAttempts($request);
+
+            $this->fireLockoutEvent($request);
+            $user->isBlocked = true;
+            $user->save();
+
+            return $this->sendLockoutResponse($request);
+        }
+
         $token = auth('api')->attempt($dataValidated);
 
-        if( !$token ){
+        if (!$token) {
+            $this->incrementLoginAttempts($request);
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
-        return $this->respondWithToken($token,$request->ip(),$request->userAgent());
+        return $this->respondWithToken($token, $request->ip(), $request->userAgent());
     }
 
     public function checkIsLogged($email){
