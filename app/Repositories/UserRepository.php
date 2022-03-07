@@ -26,35 +26,36 @@ class UserRepository{
      * @param UserCreateRequest $request
      * @return User|Model|null
      */
-    public function create(UserCreateRequest $request){
-        try{
+    public function create(UserCreateRequest $request) {
+        try {
             DB::beginTransaction();
             $validated = $request->validated();
 
             $user = User::create([
-                "username" => $validated['username'],
-                "email" => $validated['email'],
-                "sex" => $validated['sex'],
-                "firstName" => $validated['firstName'],
-                "lastName" => $validated['lastName'],
-                "middleName" => $validated['middleName'],
-                "ssn" => $validated['ssn'],
+                "username"    => $validated['username'],
+                "email"       => $validated['email'],
+                "sex"         => $validated['sex'],
+                "firstName"   => $validated['firstName'],
+                "lastName"    => $validated['lastName'],
+                "middleName"  => $validated['middleName'],
+                "ssn"         => $validated['ssn'],
                 "dateOfBirth" => $validated['dateOfBirth'],
+                "usercode"    => encrypt(uniqid("", true))
             ]);
 
-            if($request->has("company-billing")){
+            if ($request->has("company-billing")) {
                 $user->billingCompanyUser()->attach($request->input("company-billing"));
             }
 
-            if( isset( $validated['roles'] ) )
+            if (isset($validated['roles']))
                 $user->assignRole($validated['roles']);
 
-            if(isset($validated['contact'])){
+            if (isset($validated['contact'])) {
                 $validated["contact"]["user_id"] = $user->id;
                 Contact::create($validated["contact"]);
             }
 
-            if(isset($validated['address'])){
+            if (isset($validated['address'])) {
                 $validated["address"]["user_id"] = $user->id;
                 Address::create($validated["address"]);
             }
@@ -67,14 +68,15 @@ class UserRepository{
                 new GenerateNewPassword(
                     $user->firstName.' '.$user->lastName,
                     $user->email,
-                    env('URL_FRONT') . $token
+                    \Crypt::decrypt($user->usercode),
+                    env('URL_FRONT') . '/password/' . $token
                 )
             );
 
             DB::commit();
             return $user;
 
-        }catch (\Exception $e){
+        }catch (\Exception $e) {
             DB::rollBack();
             return null;
         }
@@ -84,7 +86,7 @@ class UserRepository{
      * @param int $company_id
      * @return BillingCompany|Builder|Model|object|null
      */
-    public function checkCompanyBilling(int $company_id){
+    public function checkCompanyBilling(int $company_id) {
         return BillingCompany::whereId($company_id)->first();
     }
 
@@ -92,8 +94,8 @@ class UserRepository{
      * @param string $email
      * @return User|Builder|Model|object|null
      */
-    public function findUserByEmail(string $email){
-        if( !$email ) return null;
+    public function findUserByEmail(string $email) {
+        if (!$email) return null;
 
         return User::whereEmail($email)->first();
     }
@@ -101,7 +103,7 @@ class UserRepository{
     /**
      * @return Builder[]|Collection
      */
-    public function getAllUsers(){
+    public function getAllUsers() {
         return User::with([
             "roles",
             "address",
@@ -114,23 +116,23 @@ class UserRepository{
      * @param string $email
      * @return bool|null
      */
-    public function sendEmailToRescuePassword(string $email): ?bool
+    public function sendEmailToRescuePassword(string $email)
     {
-        try{
+        try {
             $user = $this->findUserByEmail($email);
 
-            if( is_null($user) ) return null;
+            if (is_null($user)) return null;
 
             $token = encrypt($user->id."@#@#$".$user->email);
 
             $user->token = $token;
             $user->save();
 
-            $url = env("URL_FRONTEND") . $token;
-            $fullName = $user->firstName ." ".$user->lastName;
+            $url = env("URL_FRONT") . '/password/reset/' . $token;
+            $fullName = $user->firstName . " " . $user->lastName;
 
-            \Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName,$url));
-        }catch (\Exception $e){
+            Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));
+        } catch (\Exception $e) {
             return null;
         }
 
@@ -142,20 +144,20 @@ class UserRepository{
      * @param string $token
      * @return bool|null
      */
-    public function changePassword(Request $request,string $token): ?bool
+    public function changePassword(Request $request, string $token)
     {
         try {
             $strData = \Crypt::decrypt($token);
             $dataSplit = explode("@#@#$",$strData);
 
-            $user = User::where("token",$token)->where("email",$dataSplit[1])->first();
+            $user = User::where("token", $token)->where("email", $dataSplit[1])->first();
 
-            if(is_null($user)) return null;
+            if (is_null($user)) return null;
 
             $user->token = null;
             $user->password = bcrypt($request->input("password"));
             $user->save();
-        }catch (\Exception $exception){
+        }catch (\Exception $exception) {
             return false;
         }
 
@@ -167,41 +169,27 @@ class UserRepository{
      * @param int $id
      * @return User|User[]|Collection|Model|null
      */
-    public function editUser(EditUserRequest $request,int $id){
+    public function editUser(EditUserRequest $request, int $id) {
         $data = $request->validated();
 
         $user = User::find($id);
 
-        if( isset($data['email']) ){
-            if($user->email == $data['email']){
+        if (isset($data['email'])) {
+            if ($user->email == $data['email']) {
                 unset($data['email']);
             }
         }
 
-        if( $request->has('contact') ){
-            $contact = Contact::whereUserId($id)->first();
-
-            if( is_null($contact) ){
-                $data["contact"]["user_id"] = $id;
-                Contact::create($data["contact"]);
-            }else{
-                if($contact->email == $data["contact"]["email"])
-                    unset($data["contact"]["email"]);
-
-                Contact::whereUserId($id)->update($data["contact"]);
-            }
+        if ($request->has('contact')) {
+            Contact::updateOrCreate([
+                "user_id" => $user->id
+            ], $data['contact']);
         }
 
-        if($request->has('address')){
-            $address = Address::whereUserId($id)->first();
-
-            if( is_null($address) ){
-                $data["address"]["user_id"] = $id;
-                Address::create($data["address"]);
-            }else{
-                Address::whereUserId($id)->update($data["address"]);
-            }
-
+        if ($request->has('address')) {
+            Address::updateOrCreate([
+                "user_id" => $user->id
+            ], $data["address"]);
         }
 
         User::whereId($id)->update($data);
@@ -214,7 +202,7 @@ class UserRepository{
      * @param int $id
      * @return bool|int
      */
-    public function changeStatus(bool $status,int $id){
+    public function changeStatus(bool $status, int $id) {
         return User::whereId($id)->update(['available' => $status]);
     }
 
@@ -222,7 +210,7 @@ class UserRepository{
      * @param int $id
      * @return User|Builder|Model|object|null
      */
-    public function getOneUser(int $id){
+    public function getOneUser(int $id) {
         $user = User::whereId($id)->with([
             "roles",
             "address",
@@ -259,7 +247,7 @@ class UserRepository{
      * @param string $email
      * @return bool|null
      */
-    public function recoveryUser(string $email): ?bool
+    public function recoveryUser(string $email)
     {
         $user = User::whereEmail($email)->first();
 
@@ -279,7 +267,7 @@ class UserRepository{
         return true;
     }
 
-    public function changePasswordForm(string $password){
+    public function changePasswordForm(string $password) {
         return User::whereId(auth()->id())->update(["password" => bcrypt($password)]);
     }
 
@@ -287,7 +275,7 @@ class UserRepository{
      * @param string $ssn
      * @return User|Builder|Model|object|null
      */
-    public function searchBySsn(string $ssn){
+    public function searchBySsn(string $ssn) {
         return User::whereSsn($ssn)->first();
     }
 }

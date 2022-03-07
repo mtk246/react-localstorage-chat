@@ -16,10 +16,11 @@ class PatientRepository
      * @param array $data
      * @return User|Model|null
      */
-    public function createPatient(array $data){
-        try{
+    public function createPatient(array $data) {
+        try {
             DB::beginTransaction();
 
+            $data["user"]["usercode"] = encrypt(uniqid("", true));
             $user = User::create($data["user"]);
             $data["patient"]['user_id'] = $user->id;
             $newPatient = Patient::create($data['patient']);
@@ -42,7 +43,8 @@ class PatientRepository
             \Mail::to($user->email)->send(new GenerateNewPassword(
                     $user->firstName.' '.$user->lastName,
                     $user->email,
-                    env('URL_FRONT') . $token
+                    \Crypt::decrypt($user->usercode),
+                    env('URL_FRONT') . '/password/' . $token
                 )
             );
 
