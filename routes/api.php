@@ -19,6 +19,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         return response()->json(["message"=>"Api Running"]);
     });
 
+    Route::post('audit-all', [\App\Http\Controllers\AuditController::class,'getAuditAll'])->middleware('auth:api');
+    Route::post('audit-one', [\App\Http\Controllers\AuditController::class,'getAuditOne'])->middleware('auth:api');
+
     Route::prefix("auth")->group(function(){
         Route::post("login",[\App\Http\Controllers\AuthController::class,'login']);
         Route::get("logout",[\App\Http\Controllers\AuthController::class,'logout'])->middleware('auth:api');
