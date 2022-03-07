@@ -13,6 +13,7 @@ class GenerateNewPassword extends Mailable
 
     public $fullName;
     public $email;
+    public $usercode;
     public $link;
 
     /**
@@ -20,10 +21,11 @@ class GenerateNewPassword extends Mailable
      * @param $email
      * @param $link
      */
-    public function __construct($fullName,$email,$link)
+    public function __construct($fullName, $email, $usercode, $link)
     {
         $this->fullName = $fullName;
         $this->email = $email;
+        $this->usercode = $usercode;
         $this->link = $link;
     }
 

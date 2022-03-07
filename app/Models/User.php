@@ -107,7 +107,8 @@ class User extends Authenticatable implements JWTSubject, Auditable
         'img_profile',
         'ssn',
         'dateOfBirth',
-        'isBlocked'
+        'isBlocked',
+        'usercode'
     ];
 
     /**

@@ -17,6 +17,7 @@ class DoctorRepository
     {
         try{
             \DB::beginTransaction();
+            $data["user"]["usercode"] = encrypt(uniqid("", true));
             $user = User::create($data['user']);
             $data["address"]['user_id'] = $user->id;
             Address::create($data["address"]);
@@ -35,7 +36,8 @@ class DoctorRepository
                 \Mail::to($user->email)->send(new GenerateNewPassword(
                     $user->firstName." ".$user->lastName,
                     $user->email,
-                        env('URL_FRONT') . $token
+                    \Crypt::decrypt($user->usercode),
+                    env('URL_FRONT') . '/password/' . $token
                     )
                 );
             }else{

@@ -122,7 +122,7 @@ class UserController extends Controller
             $user = $this->userRepository->create($request);
             //MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
-            return response()->json($user->load("roles"),201);
+            return response()->json($user,201);
         }catch (\Exception $e){
             return response()->json($e->getMessage(),500);
         } catch (\Throwable $e) {
