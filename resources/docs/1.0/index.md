@@ -6,6 +6,8 @@
 
 - ## API
     - [API](/{{route}}/{{version}}/api)
+- ## Audit
+    - [Audit](/{{route}}/{{version}}/audit)
 
 - ## Users
     - [Users](/{{route}}/{{version}}/user)
