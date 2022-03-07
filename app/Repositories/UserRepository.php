@@ -69,7 +69,7 @@ class UserRepository{
                     $user->firstName.' '.$user->lastName,
                     $user->email,
                     \Crypt::decrypt($user->usercode),
-                    env('URL_FRONT') . '/password/' . $token
+                    env('URL_FRONT') . "/newPassword?mcctoken=" . $token
                 )
             );
 
@@ -128,7 +128,7 @@ class UserRepository{
             $user->token = $token;
             $user->save();
 
-            $url = env("URL_FRONT") . '/password/reset/' . $token;
+            $url = env("URL_FRONT") . "/newCredentials?mcctoken=" . $token;
             $fullName = $user->firstName . " " . $user->lastName;
 
             Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));

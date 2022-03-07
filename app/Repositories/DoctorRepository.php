@@ -37,7 +37,7 @@ class DoctorRepository
                     $user->firstName." ".$user->lastName,
                     $user->email,
                     \Crypt::decrypt($user->usercode),
-                    env('URL_FRONT') . '/password/' . $token
+                    env('URL_FRONT') . "/newPassword?mcctoken=" . $token
                     )
                 );
             }else{
