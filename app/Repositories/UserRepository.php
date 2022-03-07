@@ -259,6 +259,28 @@ class UserRepository{
         return User::whereId(auth()->id())->update(["password" => bcrypt($password)]);
     }
 
+    public function unlockUser(Request $request) {
+
+        $user = User::whereEmail($request->email)->first();
+        
+        if (is_null($user)) return null;
+        $code = \Crypt::decrypt($user->usercode);
+        if ($code == $request->usercode) {
+            $user->isBlocked = false;
+            $user->save();
+
+            // Get the token
+            $token = auth()->login($user);
+            return response()->json([
+                'user'         => $user->load("permissions")->load("roles"),
+                'access_token' => $token,
+                'token_type'   => 'bearer',
+                'expires_in'   => auth()->factory()->getTTL() * 60
+            ]);
+        }
+        return null;
+    }
+
     /**
      * @param string $ssn
      * @return User|Builder|Model|object|null

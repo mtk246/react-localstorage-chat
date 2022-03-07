@@ -7,6 +7,7 @@ use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\RecoveryUserRequest;
+use App\Http\Requests\UnlockUserRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Mail\RecoveryUserMail;
@@ -412,6 +413,17 @@ class UserController extends Controller
         $rs = $this->userRepository->changePasswordForm($request->input("password"));
 
         return $rs ? response()->json([],204) : response()->json("Error updating password",400);
+    }
+
+    /**
+     * @param string $usercode
+     * @return JsonResponse
+     */
+    public function unlockUser(UnlockUserRequest $request): JsonResponse
+    {
+        $rs = $this->userRepository->unlockUser($request);
+
+        return $rs ? response()->json($rs) : response()->json("Error wrong otp code", 404);
     }
 
     /**
