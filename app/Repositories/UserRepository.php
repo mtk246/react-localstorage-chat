@@ -173,14 +173,26 @@ class UserRepository{
         $data = $request->validated();
 
         $user = User::find($id);
-
-        if (isset($data['email'])) {
-            if ($user->email == $data['email']) {
-                unset($data['email']);
-            }
+        $user->update([
+            "username"    => $data['username'],
+            "email"       => $data['email'],
+            "sex"         => $data['sex'],
+            "firstName"   => $data['firstName'],
+            "lastName"    => $data['lastName'],
+            "middleName"  => $data['middleName'],
+            "ssn"         => $data['ssn'],
+            "dateOfBirth" => $data['dateOfBirth'],
+        ]);
+        
+        if ($request->has("company-billing")) {
+            $user->billingCompanyUser()->sync($data["company-billing"]);
         }
 
+        if (isset($data['roles']))
+            $user->syncRoles($data['roles']);
+
         if ($request->has('contact')) {
+            $data["contact"]["email"] = $data['email'];
             Contact::updateOrCreate([
                 "user_id" => $user->id
             ], $data['contact']);
@@ -191,9 +203,6 @@ class UserRepository{
                 "user_id" => $user->id
             ], $data["address"]);
         }
-
-        User::whereId($id)->update($data);
-
         return $user->refresh()->load("contact")->load("address");
     }
 

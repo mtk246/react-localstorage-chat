@@ -156,23 +156,106 @@
 
 ```json
 {
-    "username":"eedddfdfdf",
-    "email":"eeeddd@test.com",
-    "sex":"m",
-    "firstName":"test",
-    "lastName":"test",
-    "middleName":"testing",
-    "ssn":"345345",
-    "dateOfBirth":"1990-11-11"
+    "id": 2,
+    "username": "Cletus",
+    "email": "billingmanager@billing.com",
+    "sex": "M",
+    "lastName": "Kyleigh",
+    "firstName": "Garfield",
+    "middleName": "Hank",
+    "ssn": "23789183",
+    "dateOfBirth": "1995-04-28",
+    "company-billing": 1,
+    "roles": ["BILLING_MANAGER"],
+    "address": {
+        "address":"mexico guadalar",
+        "city":"ciudad de mexico",
+        "state":"dsfsdf",
+        "zip":"234"
+    },
+    "contact": {
+        "phone":"111-111-1111",
+        "fax":"+9999999"
+    }
 }
 ```
 
 >{success} 200 user update successfully 
 
+```json
+{
+    "id": 2,
+    "username": "Cletus",
+    "email": "billingmanager@billing.com",
+    "email_verified_at": null,
+    "created_at": "2022-03-03T10:34:43.000000Z",
+    "updated_at": "2022-03-08T20:31:04.000000Z",
+    "sex": "M",
+    "lastName": "Kyleigh",
+    "firstName": "Garfield",
+    "middleName": "Hank",
+    "token": null,
+    "available": false,
+    "isLogged": false,
+    "img_profile": null,
+    "ssn": "23789183",
+    "dateOfBirth": "1995-04-28",
+    "isBlocked": false,
+    "usercode": null,
+    "billing_company_id": null,
+    "roles": [
+        {
+            "id": 2,
+            "name": "BILLING_MANAGER",
+            "guard_name": "api",
+            "created_at": "2022-03-03T10:34:42.000000Z",
+            "updated_at": "2022-03-03T10:34:42.000000Z",
+            "pivot": {
+                "model_id": 2,
+                "role_id": 2,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ],
+    "contact": [
+        {
+            "id": 51,
+            "phone": "111-111-1111",
+            "fax": "+9999999",
+            "email": "billingmanager@billing.com",
+            "user_id": 2,
+            "billing_company_id": null,
+            "created_at": "2022-03-08T20:23:33.000000Z",
+            "updated_at": "2022-03-08T20:31:04.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": null,
+            "insurance_company_id": null
+        }
+    ],
+    "address": [
+        {
+            "id": 51,
+            "address": "mexico guadalar",
+            "city": "ciudad de mexico",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": 2,
+            "billing_company_id": null,
+            "created_at": "2022-03-08T20:23:33.000000Z",
+            "updated_at": "2022-03-08T20:30:25.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": null,
+            "insurance_company_id": null
+        }
+    ]
+}
+```
+
 #
 
 >{warning} 404 user not found, 422 something is missing in the body, 500 some excepcion
-
 
 
 

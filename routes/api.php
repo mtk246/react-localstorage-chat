@@ -38,7 +38,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::post("unlock-user",[\App\Http\Controllers\UserController::class,'unlockUser']);
         Route::post("change-password/{token}",[\App\Http\Controllers\UserController::class,'changePassword']);
         Route::patch("{id?}/change-status",[\App\Http\Controllers\UserController::class,'changeStatus'])->middleware('auth:api');
-        Route::put("{id?}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
+        Route::put("{id}",[\App\Http\Controllers\UserController::class,'editUser'])->middleware('auth:api');
         Route::post("img-profile",[\App\Http\Controllers\UserController::class,'updateImgProfile'])->middleware(['auth:api']);
         Route::patch("update-password",[\App\Http\Controllers\UserController::class,'changePasswordForm'])->middleware(['auth:api']);
         Route::get("/{ssn}/get-by-ssn",[\App\Http\Controllers\UserController::class,'searchBySsn']);

@@ -279,30 +279,10 @@ class UserController extends Controller
      * @param null $id
      * @return JsonResponse
      */
-    public function editUser(EditUserRequest $request,$id=null): JsonResponse
+    public function editUser(EditUserRequest $request, $id): JsonResponse
     {
-        try{
-            if(is_null($id)) $id = auth()->id();
-
-            $data = [
-                "dataset_name" => "edit user",
-                "description"  => "updating info user",
-                "machine_used" => $request->ip(),
-                "start_date"   => now(),
-                "end_date"     => now(),
-                "location"     => $request->ip(),
-                "time"         => now()->toTimeString(),
-            ];
-
-
-            $rs = $this->userRepository->editUser($request,$id);
-
-            MetadataController::saveLogAuditory($data,auth()->user()->id,null);
-
-            return $rs ? response()->json($rs) : response()->json("error updating user",400);
-        }catch (\Exception $exception){
-            return response()->json($exception->getMessage(),500);
-        }
+        $rs = $this->userRepository->editUser($request, $id);
+        return $rs ? response()->json($rs) : response()->json("Error updating user", 400);
     }
 
     /**
