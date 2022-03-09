@@ -228,31 +228,33 @@
 
 ```json
 {
-    "user":{
-        "username":"ccfrrfcceeeefdfrrvv",
-        "email":"ccfffrrdfdeeeecvvrrrc@gmail.com",
-        "sex":"m",
-        "firstName":"test",
-        "lastName":"test",
-        "middleName":"testing",
-        "ssn":"345345",
-        "dateOfBirth":"1990-11-11"
+    "doctor": {
+        "id": 1,
+        "npi": "50004500433228",
+        "taxonomy": "User Experience Manager",
+        "speciality": "Paste-Up Worker",
     },
-    "contact":{
-        "phone":"34324234",
-        "fax":"567674576457",
-        "email":"fg@gh.com"
+    "user": {
+        "id":3,
+        "username":"Rickey",
+        "email":"doctor@billing.com",
+        "sex":"M",
+        "lastName":"Tate",
+        "firstName":"Erwin",
+        "middleName":"Loyal",
+        "ssn":"123-321-1212",
+        "dateOfBirth":"1995-01-01"
     },
-    "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
+    "address": {
+        "address":"mexico guadalar",
+        "city":"ciudad de mexico",
         "state":"dsfsdf",
         "zip":"234"
     },
-    "doctor":{
-        "npi":"4345leeorrlo3ee45533",
-        "speciality":"soeeerremeSpeciality3",
-        "taxonomy":"someeeerreToxonomia3rr"
+    "contact": {
+        "phone":"111-111-1111",
+        "fax":"+9999999",
+        "email": "doctor@billing.com"
     }
 }
 ```
@@ -276,17 +278,17 @@
 
 ```json
 {
-    "username": "ccfrrfcceeeefdfrrvv",
-    "email": "ccfffrrdfdeeeecvvrrrc@gmail.com",
-    "sex": "m",
-    "firstName": "test",
-    "lastName": "test",
-    "middleName": "testing",
-    "ssn": "345345",
-    "dateOfBirth": "1990-11-11",
+    "id":3,
+    "username":"Rickey",
+    "email":"doctor@billing.com",
+    "sex":"M",
+    "lastName":"Tate",
+    "firstName":"Erwin",
+    "middleName":"Loyal",
+    "ssn":"123-321-1212",
+    "dateOfBirth":"1995-01-01",
     "updated_at": "2022-02-07T13:46:19.000000Z",
     "created_at": "2022-02-07T13:46:19.000000Z",
-    "id": 45,
     "token": "eyJpdiI6Ik5lQnJVZlBPT3c5d0hBT1Z0MVRxNmc9PSIsInZhbHVlIjoiQm1GWTlOc05WMnBXWXdhMnRxN2RSeHkvbWdvRVNRT1Rtd1FCcE16SW1iNGV5cjZQakxHa0lWbzVMaEpXclg0ciIsIm1hYyI6ImZhYjQ4MmM5NzI5NmJhMDk3MDZhMjI5N2FhMDk0NTc4ZGUzOWQzMGFkZjgxMjM4ZTY3ZGYzZDNmZWJmY2NmMmQiLCJ0YWciOiIifQ==",
     "roles": [
         {
@@ -296,21 +298,54 @@
             "created_at": "2022-02-07T13:26:16.000000Z",
             "updated_at": "2022-02-07T13:26:16.000000Z",
             "pivot": {
-                "model_id": 45,
+                "model_id": 3,
                 "role_id": 12,
                 "model_type": "App\\Models\\User"
             }
         }
     ],
     "doctor": {
-        "id": 19,
-        "npi": "4345leeorrlo3ee45533",
-        "taxonomy": "someeeerreToxonomia3rr",
-        "speciality": "soeeerremeSpeciality3",
+        "id": 1,
+        "npi": "50004500433228",
+        "taxonomy": "User Experience Manager",
+        "speciality": "Paste-Up Worker",
         "created_at": "2022-02-07T13:46:19.000000Z",
         "updated_at": "2022-02-07T13:46:19.000000Z",
-        "user_id": 45
-    }
+        "user_id": 3
+    },
+    "contact": [
+        {
+            "id": 51,
+            "phone": "111-111-1111",
+            "fax": "+9999999",
+            "email":"doctor@billing.com",
+            "user_id": 3,
+            "billing_company_id": null,
+            "created_at": "2022-03-08T20:23:33.000000Z",
+            "updated_at": "2022-03-08T20:31:04.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": null,
+            "insurance_company_id": null
+        }
+    ],
+    "address": [
+        {
+            "id": 51,
+            "address": "mexico guadalar",
+            "city": "ciudad de mexico",
+            "state": "dsfsdf",
+            "zip": "234",
+            "user_id": 3,
+            "billing_company_id": null,
+            "created_at": "2022-03-08T20:23:33.000000Z",
+            "updated_at": "2022-03-08T20:30:25.000000Z",
+            "clearing_house_id": null,
+            "facility_id": null,
+            "company_id": null,
+            "insurance_company_id": null
+        }
+    ]
 }
 ```
 

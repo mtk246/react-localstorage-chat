@@ -24,29 +24,31 @@ class CreateDoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            "user"            => "required|array",
-            "user.username"   => "required|string|unique:users,username",
-            "user.email"      => "required|email:rfc|unique:users,email",
-            "user.sex"        => "required|string|max:1",
-            "user.firstName"   => "required|string|max:20",
-            "user.lastName"   => "required|string|max:20",
-            "user.middleName"   => "required|string|max:20",
-            "user.ssn"   => "required|string",
-            "user.dateOfBirth"   => "required|date",
-            "doctor" => "required|array",
-            "doctor.npi" => "required|string|unique:doctors,npi",
-            "doctor.speciality" => "required|string",
-            "doctor.taxonomy"  => "required|string",
-            "address" => "required|array",
-            'address.address' => "required|string",
-            'address.city' => "required|string",
-            'address.state' => "required|string",
-            'address.zip' => "required|numeric",
-            "contact" => "required|array",
-            "contact.phone" => "required|string",
-            "contact.fax" => "required|string",
-            "contact.email" => "required|email:rfc",
-            //"user_id"   => "required|integer"
+            'user'              => ['required', 'array'],
+            'user.username'     => ['required', 'string', Rule::unique('users', 'username')],
+            'user.email'        => ['required', 'email:rfc', Rule::unique('users', 'email')],
+            'user.sex'          => ['required', 'string', 'max:1'],
+            'user.firstName'    => ['required', 'string', 'max:20'],
+            'user.lastName'     => ['required', 'string', 'max:20'],
+            'user.middleName'   => ['required', 'string', 'max:20'],
+            'user.ssn'          => ['required', 'string', Rule::unique('users', 'ssn')],
+            'user.dateOfBirth'  => ['required', 'date'],
+
+            'doctor'            => ['required', 'array'],
+            'doctor.npi'        => ['required', 'string', Rule::unique('doctors', 'npi')],
+            'doctor.speciality' => ['required', 'string'],
+            'doctor.taxonomy'   => ['required', 'string'],
+
+            'address'           => ['required', 'array'],
+            'address.address'   => ['required', 'string'],
+            'address.city'      => ['required', 'string'],
+            'address.state'     => ['required', 'string'],
+            'address.zip'       => ['required', 'numeric'],
+
+            'contact'           => ['required', 'array'],
+            'contact.phone'     => ['required', 'string'],
+            'contact.fax'       => ['required', 'string'],
+            'contact.email'     => ['required', 'email:rfc'],
         ];
     }
 }

@@ -58,71 +58,29 @@ class DoctorRepository
      * @param int $id
      * @return Builder|Model|object|User|null
      */
-    public function updateDoc(array $data,int $id){
-        if(isset($data['user'])){
-            $user = User::find($id);
+    public function updateDoc(array $data, int $id)
+    {
+        $doctor = Doctor::find($id);
+        $doctor->update($data['doctor']);
 
-            if($user->email == $data['user']['email'])
-                unset($data['user']['email']);
+        $user = $doctor->user;
+        $user->update($data['user']);
 
-            if($user->username == $data['user']['username'])
-                unset($data['user']['username']);
-
-            if($user->ssn == $data['user']['ssn'])
-                unset($data['user']['ssn']);
-
-            User::whereId($id)->update($data['user']);
+        
+        if (isset($data['address'])) {
+            Address::updateOrCreate([
+                'user_id' => $user->id
+            ], $data['address']);
         }
 
-        if(isset($data['address'])){
-            $address = Address::whereUserId($id)->first();
-
-            if( is_null($address) ){
-                $data["address"]["user_id"] = $id;
-                Address::create($data["address"]);
-            }else{
-                Address::whereUserId($id)->update($data["address"]);
-            }
-
+        if (isset($data['contact'])) {
+            $data['contact']['email'] = $data['email'];
+            Contact::updateOrCreate([
+                'user_id' => $user->id
+            ], $data['contact']);
         }
 
-        if(isset($data['doctor'])){
-            $doctor = Doctor::whereUserId($id)->first();
-
-            if( is_null($doctor) ){
-                $data["doctor"]["user_id"] = $id;
-                Doctor::create($data["doctor"]);
-            }else{
-                $doctor = Doctor::whereId($id)->first();
-
-                if($doctor->npi == $data['doctor']['npi']){
-                    unset($data['doctor']['npi']);
-                }
-
-                Doctor::whereId($id)->update($data["doctor"]);
-            }
-        }
-
-
-        if(isset($data['contact'])){
-            $contact = Contact::whereUserId($id)->first();
-
-            if( is_null($contact) ){
-                $data["contact"]["user_id"] = $id;
-                Contact::create($data["contact"]);
-            }else{
-                if($contact->email == $data["contact"]["email"])
-                    unset($data["contact"]["email"]);
-
-                Contact::whereUserId($id)->update($data["contact"]);
-            }
-        }
-
-        return User::whereId($id)->with([
-            "doctor",
-            "address",
-            "contact"
-        ])->first();
+        return $user->refresh()->load('contact', 'address', 'doctor');
     }
 
     /**
