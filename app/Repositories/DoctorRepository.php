@@ -74,7 +74,6 @@ class DoctorRepository
         }
 
         if (isset($data['contact'])) {
-            $data['contact']['email'] = $data['email'];
             Contact::updateOrCreate([
                 'user_id' => $user->id
             ], $data['contact']);
