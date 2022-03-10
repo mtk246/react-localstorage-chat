@@ -112,6 +112,10 @@ class DataTestSeeder extends Seeder
                 ]
             );
         }
+        /** Billing Manager */
+        $user_bc = User::whereEmail('billingmanager@billing.com')->first();
+        $bCompany = BillingCompany::first();
+        $user_bc->billingCompanyUser()->attach($bCompany->id);
         /** Crear Company */
         $companies = [
             [
