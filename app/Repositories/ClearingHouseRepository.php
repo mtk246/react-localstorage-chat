@@ -63,7 +63,6 @@ class ClearingHouseRepository
         if (isset($data['clearing-house'])) {
             if(count($clearings) == 0 && ($clearing->name != $data['clearing-house']['name'])){
                 ClearingHouse::updateOrCreate(["id" => $id], $data['clearing-house']);
-                $this->changeStatus($data['clearing-house']["status"] ?? true, $clearing->id);
             }
         }
 
@@ -109,7 +108,8 @@ class ClearingHouseRepository
         
         $clearingHouse = ClearingHouse::find($id);
         if (is_null($clearingHouse->billingCompanies()->find($billingCompany->id))) {
-            return $clearingHouse->billingCompanies()->attach($billingCompany->id);
+            $clearingHouse->billingCompanies()->attach($billingCompany->id);
+            return $clearingHouse;
         } else {
             return $clearingHouse->billingCompanies()->updateExistingPivot($billingCompany->id, [
                 'status' => $status,

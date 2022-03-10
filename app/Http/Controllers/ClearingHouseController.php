@@ -83,7 +83,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->changeStatus($request->input("status"),$clearing_id);
 
-        return $rs ? response()->json($rs) : response()->json("Error updating status",400);
+        return $rs ? response()->json([], 204) : response()->json("Error updating status",400);
     }
 
     /**
