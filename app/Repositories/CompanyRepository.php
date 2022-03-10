@@ -118,7 +118,8 @@ class CompanyRepository
         
         $company = Company::find($id);
         if (is_null($company->billingCompanies()->find($billingCompany->id))) {
-            return $company->billingCompanies()->attach($billingCompany->id);
+            $company->billingCompanies()->attach($billingCompany->id);
+            return $company;
         } else {
             return $company->billingCompanies()->updateExistingPivot($billingCompany->id, [
                 'status' => $status,

@@ -69,7 +69,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json($rs) : response()->json("Error, insurance not found",404);
+        return $rs ? response()->json([], 204) : response()->json("Error, insurance not found", 404);
     }
 
     /**

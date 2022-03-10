@@ -77,7 +77,8 @@ class InsuranceCompanyRepository
         
         $insuranceCompany = InsuranceCompany::find($id);
         if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
-            return $insuranceCompany->billingCompanies()->attach($billingCompany->id);
+            $insuranceCompany->billingCompanies()->attach($billingCompany->id);
+            return $insuranceCompany;
         } else {
             return $insuranceCompany->billingCompanies()->updateExistingPivot($billingCompany->id, [
                 'status' => $status,
@@ -89,7 +90,6 @@ class InsuranceCompanyRepository
         if (isset($data['insurance'])) {
             $insurance = InsuranceCompany::find($id);
             $insurance->update($data["insurance"]);
-            $this->changeStatus($data["insurance"]["status"] ?? true, $insurance->id);
         }
 
         if (isset($data['address'])) {

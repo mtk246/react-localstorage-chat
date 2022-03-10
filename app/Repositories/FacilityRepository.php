@@ -101,7 +101,8 @@ class FacilityRepository
         
         $facility = Facility::find($id);
         if (is_null($facility->billingCompanies()->find($billingCompany->id))) {
-            return $facility->billingCompanies()->attach($billingCompany->id);
+            $facility->billingCompanies()->attach($billingCompany->id);
+            return $facility;
         } else {
             return $facility->billingCompanies()->updateExistingPivot($billingCompany->id, [
                 'status' => $status,
