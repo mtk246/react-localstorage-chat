@@ -226,7 +226,9 @@ class User extends Authenticatable implements JWTSubject, Auditable
      */
     public function getBillingCompanyIdAttribute()
     {
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $user = auth()->user();
+        if (is_null($user)) return null;
+        $billingCompany = $user->billingCompanyUser->first();
         return $billingCompany->id ?? null;
     }
 }
