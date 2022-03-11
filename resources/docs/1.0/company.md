@@ -467,7 +467,9 @@
 `company_id required integer`
 
 
-### Body request example
+## Response
+
+> {success} 200 Good response
 
 ```json
 {
@@ -483,12 +485,6 @@
     "tax_id": 0
 }
 ```
-
-
-## Response
-
-> {success} 200 Good response
-
 
 #
 

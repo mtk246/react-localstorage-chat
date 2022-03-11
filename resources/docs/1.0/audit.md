@@ -13,7 +13,7 @@
 | 1 |POST   | `get audit all` | `/audit-all` | yes   | Get all records audited |
 | 2 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
 
-<a name="get-npi"></a>
+<a name="get-audit-all"></a>
 ## Get audit all
 
 ### Params in header
@@ -33,28 +33,74 @@
 ```json
 [
     {
-        "id": "eyJpdiI6IjhGM1VBMU5ZL1B5enliNStnd3N5c0E9PSIsInZhbHVlIjoicjVsNzlSdUx4U2NQV1FQeTNDeTVqQT09IiwibWFjIjoiY2M1MDk4ZmUzMDhiMThiODk5YWI0ZGYxYWU2NDIzOTA2NTI5OGIzMTc0Zjg3ZDA5NDNmNmUxYWViNDJlYWNmMiIsInRhZyI6IiJ9",
-        "status": "updated",
-        "date": "07-03-2022 04:41:26 PM",
-        "ip": "127.0.0.1",
+        "id": "eyJpdiI6IjZzdklSc016OW4wSzZEUjdNYzNiNmc9PSIsInZhbHVlIjoiWkU0YVJTdjFRMUNZUUFBOGJZSnlKdz09IiwibWFjIjoiNTczYjQxZjM2ZDU2OWEzM2RjMjk2Y2RlOGYyYzhjNGM1MmQ3M2M1NGI0Y2QyZTJmNmEyYjQ0MWJjNTZmYjc1YyIsInRhZyI6IiJ9",
+        "event": "updated",
+        "date": "11-03-2022 01:00:42 PM",
+        "ip_address": "127.0.0.1",
         "module": "App\\Models\\User",
-        "users": "<b>Nombre:</b> Efrain Edward<br><b>Email:</b> admin@billing.com"
+        "user": {
+            "id": 1,
+            "username": "Nikolas",
+            "email": "admin@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-11T03:49:54.000000Z",
+            "updated_at": "2022-03-11T03:49:54.000000Z",
+            "sex": "M",
+            "lastName": "Arjun",
+            "firstName": "Christophe",
+            "middleName": "Lewis",
+            "token": null,
+            "available": false,
+            "isLogged": false,
+            "img_profile": null,
+            "ssn": null,
+            "dateOfBirth": null,
+            "isBlocked": false,
+            "usercode": null,
+            "billing_company_id": null
+        },
+        "url": "http://127.0.0.1:8000/api/v1/user",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
     },
-    {
-        "id": "eyJpdiI6ImxTakNJQzZDYm9aMlJMNU9DTSt6Z2c9PSIsInZhbHVlIjoiczkwNzFwMldwWW9LcGlPUEx1Z3lKQT09IiwibWFjIjoiNjAyNTkxMTE4YTFjNTAxNWQ5NTQ4NjhkZTA2NTJkZTI5YmI0MTlhZmI0NjFiMzdhZTM2YzEwOTg1OWZhM2M2MiIsInRhZyI6IiJ9",
-        "status": "created",
-        "date": "07-03-2022 04:41:26 PM",
-        "ip": "127.0.0.1",
+        {
+        "id": "eyJpdiI6IkNFNHBYQ0VRWHBUN25jY3BjU3lvTXc9PSIsInZhbHVlIjoiamFWaEp2RHowdFlENzg5czV5Zmd2QT09IiwibWFjIjoiNjU3YmU5NTI0ZDZjZjYzZjljMjk2MTM0ZjhjMTA4Mzg0YTA0MTM5NDMxNjg4MTE1YzM2YjQ3MmQzMDFhZWM0YiIsInRhZyI6IiJ9",
+        "event": "created",
+        "date": "11-03-2022 01:00:42 PM",
+        "ip_address": "127.0.0.1",
         "module": "App\\Models\\Address",
-        "users": "<b>Nombre:</b> Efrain Edward<br><b>Email:</b> admin@billing.com"
+        "user": {
+            "id": 1,
+            "username": "Nikolas",
+            "email": "admin@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-11T03:49:54.000000Z",
+            "updated_at": "2022-03-11T03:49:54.000000Z",
+            "sex": "M",
+            "lastName": "Arjun",
+            "firstName": "Christophe",
+            "middleName": "Lewis",
+            "token": null,
+            "available": false,
+            "isLogged": false,
+            "img_profile": null,
+            "ssn": null,
+            "dateOfBirth": null,
+            "isBlocked": false,
+            "usercode": null,
+            "billing_company_id": null
+        },
+        "url": "http://127.0.0.1:8000/api/v1/user",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
     },
     {
-        "id": "eyJpdiI6IlZkZCtlaldqQzlsK1BhY1VlNUo5T0E9PSIsInZhbHVlIjoiNlJDVWo0QllQNENJWjVic1B6ZUVKZz09IiwibWFjIjoiYjYwODI0ODU3ZmM5N2ZlNjhkNzAyN2M1ZDU1ZTlmZjYyZGI3Njg3YWFlNWE4YjE4MTU4MmNkMzc4Mjk3ZDRiZiIsInRhZyI6IiJ9",
-        "status": "created",
-        "date": "07-03-2022 04:41:26 PM",
-        "ip": "127.0.0.1",
-        "module": "App\\Models\\Contact",
-        "users": "<b>Nombre:</b> Efrain Edward<br><b>Email:</b> admin@billing.com"
+        "id": "eyJpdiI6ImpsbzNUektxLzBReDcvN2llSmRmNVE9PSIsInZhbHVlIjoiT1RmeFlqcFVGdVlRbHMvcDRLQWUzdz09IiwibWFjIjoiZGFmYTAyZDBiNDA5MGRkMjA5NjhiM2M2MzMxZTEwZDA4ODE3NDNmZWYxNzJkZWIxODYyM2M0NDg3ZDdmYjAxNSIsInRhZyI6IiJ9",
+        "event": "created",
+        "date": "11-03-2022 03:49:54 AM",
+        "ip_address": "127.0.0.1",
+        "module": "App\\Models\\User",
+        "user": null,
+        "url": "console",
+        "user_agent": "Symfony"
     }
 ]
 ```
@@ -87,23 +133,49 @@
 
 ```json
 {
-    "id": 120,
+    "id": 45,
     "user_type": "App\\Models\\User",
     "user_id": 1,
-    "event": "updated",
-    "auditable_type": "App\\Models\\User",
-    "auditable_id": 46,
-    "old_values": {
-        "token": null
-    },
+    "event": "created",
+    "auditable_type": "App\\Models\\Address",
+    "auditable_id": 5,
+    "old_values": [],
     "new_values": {
-        "token": "eyJpdiI6ImhqTC9QSkVGWVlxUEh5OUJmT0tQaEE9PSIsInZhbHVlIjoiMW1ub0xxVFMxTlpRellxTVkxWGtZalBtNVpLWG9mSlVTRldTSGZMMDhqYnFJOE5XTWxRcjcvZDBXSFh0ZUpxdyIsIm1hYyI6IjY2NGNlYjUzNGI3Y2FmY2I3MmQ2NDNkMDkyMmMwYTg4ZGY0ZWNiNGEyODQ2NzAxNGFiMmYyODdhMzlmNmRkYzUiLCJ0YWciOiIifQ=="
+        "address": "Santa juana",
+        "city": "Merida",
+        "state": "state",
+        "zip": "51010",
+        "user_id": 5,
+        "updated_at": "2022-03-11 13:00:42",
+        "created_at": "2022-03-11 13:00:42",
+        "id": 5
     },
     "url": "http://127.0.0.1:8000/api/v1/user",
     "ip_address": "127.0.0.1",
     "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
     "tags": null,
-    "created_at": "2022-03-07T16:41:26.000000Z",
-    "updated_at": "2022-03-07T16:41:26.000000Z"
+    "created_at": "2022-03-11T13:00:42.000000Z",
+    "updated_at": "2022-03-11T13:00:42.000000Z",
+    "user": {
+        "id": 1,
+        "username": "Nikolas",
+        "email": "admin@billing.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-11T03:49:54.000000Z",
+        "updated_at": "2022-03-11T03:49:54.000000Z",
+        "sex": "M",
+        "lastName": "Arjun",
+        "firstName": "Christophe",
+        "middleName": "Lewis",
+        "token": null,
+        "available": false,
+        "isLogged": false,
+        "img_profile": null,
+        "ssn": null,
+        "dateOfBirth": null,
+        "isBlocked": false,
+        "usercode": null,
+        "billing_company_id": null
+    }
 }
 ```

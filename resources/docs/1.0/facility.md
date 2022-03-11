@@ -420,7 +420,9 @@
 `facility_id required integer`
 
 
-### Body request example
+## Response
+
+> {success} 200 Good response
 
 ```json
 {
@@ -435,12 +437,6 @@
     "updated_at": null
 }
 ```
-
-
-## Response
-
-> {success} 200 Good response
-
 
 #
 

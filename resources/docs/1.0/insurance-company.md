@@ -531,7 +531,9 @@
 `insurance_company_id required integer`
 
 
-### Body request example
+## Response
+
+> {success} 200 Good response
 
 ```json
 {
@@ -545,11 +547,6 @@
     "status": false
 }
 ```
-
-
-## Response
-
-> {success} 200 Good response
 
 
 #
