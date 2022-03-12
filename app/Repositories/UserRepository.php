@@ -263,7 +263,11 @@ class UserRepository{
         $user = User::where("ssn", "ilike", "%${ssn}")
                     ->orWhere("ssn", "ilike", "%${ssnFormated}")
                     ->where('dateOfBirth', $request->dateOfBirth)->first();
-        return (!is_null($user)) ? $user->email : null;
+
+        if (is_null($user)) return null;
+        
+        $emailFormated = explode("@", $user->email);
+        return middleRedactor($emailFormated[0], '*') . "@" . middleRedactor($emailFormated[1], '*');
     }
 
     public function changePasswordForm(string $password) {

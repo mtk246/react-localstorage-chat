@@ -102,17 +102,7 @@ class UserController extends Controller
      */
     public function createUser(UserCreateRequest $request): JsonResponse
     {
-        try{
-            $data = [
-                "dataset_name" => "Create user",
-                "description"  => "creation a new user",
-                "machine_used" => $request->ip(),
-                "start_date"   => now(),
-                "end_date"     => now(),
-                "location"     => $request->ip(),
-                "time"         => now()->toTimeString(),
-            ];
-
+        try {
             if( $request->has('company-billing') ){
                 if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ){
                     return response()->json("Error company billing dont existent",403);
@@ -121,8 +111,6 @@ class UserController extends Controller
 
             /** @var  $user User*/
             $user = $this->userRepository->create($request);
-            //MetadataController::saveLogAuditory($data,auth()->user()->id,null);
-
             return response()->json($user,201);
         }catch (\Exception $e){
             return response()->json($e->getMessage(),500);
@@ -169,19 +157,9 @@ class UserController extends Controller
      */
     public function sendEmailRescuePass(SendRescuePassRequest $request): JsonResponse
     {
-        try{
-            $data = [
-                "dataset_name" => "send email recover password",
-                "description"  => "solicitude email to recover password",
-                "machine_used" => $request->ip(),
-                "start_date"   => now(),
-                "end_date"     => now(),
-                "location"     => $request->ip(),
-                "time"         => now()->toTimeString(),
-            ];
+        try {
 
             $rs = $this->userRepository->sendEmailToRescuePassword($request->input("email"));
-            MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
             if(is_null($rs)) return response()->json("User not found",403);
 
@@ -235,26 +213,14 @@ class UserController extends Controller
      */
     public function changePassword(ChangePasswordRequest $request,$token): JsonResponse
     {
-        try{
+        try {
             $user = $this->getInfoToken($token);
 
-            if(!$user){
+            if(!$user) {
                 return response()->json("token expired",403);
             }
 
-            $data = [
-                "dataset_name" => "change password",
-                "description"  => "user change password",
-                "machine_used" => $request->ip(),
-                "start_date"   => now(),
-                "end_date"     => now(),
-                "location"     => $request->ip(),
-                "time"         => now()->toTimeString(),
-            ];
-
             $rs = $this->userRepository->changePassword($request,$token);
-
-            MetadataController::saveLogAuditory($data,$user->id,null);
 
             if(is_null($rs)) return response()->json("Error, token not exist",403);
 
@@ -292,22 +258,10 @@ class UserController extends Controller
      */
     public function changeStatus(ChangeStatusRequest $request,$id=null): JsonResponse
     {
-        try{
+        try {
             if(is_null($id)) $id = auth()->id();
 
-            $data = [
-                "dataset_name" => "change status",
-                "description"  => "change status users",
-                "machine_used" => $request->ip(),
-                "start_date"   => now(),
-                "end_date"     => now(),
-                "location"     => $request->ip(),
-                "time"         => now()->toTimeString(),
-            ];
-
             $rs = $this->userRepository->changeStatus($request->input("available"),$id);
-
-            MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
             return $rs ? response()->json([],204) : response()->json("error changing status",400);
         }catch (\Exception $exception){
@@ -322,19 +276,7 @@ class UserController extends Controller
      */
     public function getAllUsers(Request $request): JsonResponse
     {
-        $data = [
-            "dataset_name" => "get all users",
-            "description"  => "get all users",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
         $rs = $this->userRepository->getAllUsers();
-
-        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         return response()->json($rs);
     }
 
@@ -345,19 +287,7 @@ class UserController extends Controller
      */
     public function getOneUser(Request $request,int $id): JsonResponse
     {
-        $data = [
-            "dataset_name" => "get all users",
-            "description"  => "get all users",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
         $rs = $this->userRepository->getOneUser($id);
-
-        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
 
         return $rs ? response()->json($rs) : response()->json("user not found",404);
     }

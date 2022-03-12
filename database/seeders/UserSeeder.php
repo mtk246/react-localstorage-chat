@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "admin@billing.com",
+                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "billingmanager@billing.com",
+                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "doctor@billing.com",
+                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
@@ -55,6 +58,7 @@ class UserSeeder extends Seeder
             [
                 "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "patient@billing.com",
+                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
                 "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
@@ -73,6 +77,7 @@ class UserSeeder extends Seeder
                 [
                     "username"   => $user["username"],
                     "email"      => $user["email"],
+                    "ssn"        => $user["ssn"],
                     "password"   => $user["password"],
                     "firstName"  => $user["firstName"],
                     "middleName" => $user["middleName"],

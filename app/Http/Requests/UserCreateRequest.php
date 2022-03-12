@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserCreateRequest extends FormRequest
 {
@@ -23,27 +24,32 @@ class UserCreateRequest extends FormRequest
      */
     public function rules()
     {
+        $roles = $this->roles;
+        $invalidRoles = ['SUPER_USER', 'DEVELOPMENT_SUPPORT'];
         return [
-            'username'  => "required|unique:users,username|string|max:20",
-            'email' => "required|string|unique:users,email|email:rfc",
-            'sex' => "required|string|max:1",
-            'firstName'  => "required|string|max:20",
-            'lastName'   => "required|string|max:20",
-            'middleName' => "required|string|max:20",
-            'ssn'        => "required|string",
-            'dateOfBirth'=> "required|date",
-            'roles'      => "sometimes|array",
-            'company-billing' => "sometimes|integer",
+            'username'        => ['required', Rule::unique('users', 'username'), 'string', 'max:20'],
+            'email'           => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'sex'             => ['required', 'string', 'max:1'],
+            'firstName'       => ['required', 'string', 'max:20'],
+            'lastName'        => ['required', 'string', 'max:20'],
+            'middleName'      => ['required', 'string', 'max:20'],
+            'ssn'             => ['required', 'string'],
+            'dateOfBirth'     => ['required', 'date'],
+            'roles'           => ['required', 'array'],
+            'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
+                return (!in_array_any($invalidRoles, $roles));
+            }), 'integer'],
 
-            "address"           => "required|array",
-            'address.address'   => "required|string",
-            'address.city'  => "required|string",
-            'address.state' => "required|string",
-            'address.zip'   => "required|numeric",
-            "contact"       => "required|array",
-            "contact.phone" => "required|string",
-            "contact.fax"   => "required|string",
-            "contact.email" => "required|email:rfc",
+            'address'         => ['required', 'array'],
+            'address.address' => ['required', 'string'],
+            'address.city'    => ['required', 'string'],
+            'address.state'   => ['required', 'string'],
+            'address.zip'     => ['required', 'numeric'],
+            
+            'contact'         => ['required', 'array'],
+            'contact.phone'   => ['required', 'string'],
+            'contact.fax'     => ['required', 'string'],
+            'contact.email'   => ['required', 'string']
         ];
     }
 }
