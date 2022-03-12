@@ -29,7 +29,7 @@
 | 4 |GET | `get all users`   | `/user/` |yes            |get all users|
 | 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
-| 7 |POST | `recovery user`   | `/user/rescovery-user` |no|recovery user|
+| 7 |POST | `recovery user`   | `/user/recovery-user` |no|recovery user|
 | 8 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
 | 9 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|

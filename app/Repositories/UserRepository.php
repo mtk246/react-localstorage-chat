@@ -259,8 +259,10 @@ class UserRepository{
     public function recoveryUser(Request $request)
     {
         $ssn = $request->ssn;
+        $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
         $user = User::where("ssn", "ilike", "%${ssn}")
-                    ->whereDateOfBirth($request->dateOfBirth)->first();
+                    ->orWhere("ssn", "ilike", "%${ssnFormated}")
+                    ->where('dateOfBirth', $request->dateOfBirth)->first();
         return (!is_null($user)) ? $user->email : null;
     }
 

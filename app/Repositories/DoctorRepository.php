@@ -46,7 +46,7 @@ class DoctorRepository
             }
 
             \DB::commit();
-            return $user->load("doctor");
+            return $user->load("doctor", "address", "contact");
         }catch (\Exception $e){
             \DB::rollBack();
             dd($e->getMessage());
