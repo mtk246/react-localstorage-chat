@@ -39,7 +39,7 @@ class ClearingHouseRepository
         return ClearingHouse::with([
             "address",
             "contact"
-        ])->get();
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**

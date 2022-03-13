@@ -109,7 +109,7 @@ class UserRepository{
             "address",
             "contact",
             "billingCompanyUser"
-        ])->get();
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**

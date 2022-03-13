@@ -52,7 +52,7 @@ class InsurancePlanRepository
      * @return InsurancePlan[]|Collection
      */
     public function getAllInsurancePlan(){
-        return InsurancePlan::get();
+        return InsurancePlan::orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     public function changeStatus(bool $status,int $id){

@@ -86,7 +86,7 @@ class DoctorRepository
      * @return Collection|Doctor[]
      */
     public function getAllDoctors(){
-        return Doctor::with(["user.address","user.contact"])->get();
+        return Doctor::with(["user.address","user.contact"])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**

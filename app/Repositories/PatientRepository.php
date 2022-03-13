@@ -73,7 +73,7 @@ class PatientRepository
      * @return Builder[]|Collection
      */
     public function getAllPatient(){
-        return Patient::with("user")->get();
+        return Patient::with("user")->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**

@@ -57,7 +57,7 @@ class InsuranceCompanyRepository
         return InsuranceCompany::with([
             "address",
             "contact"
-        ])->get();
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     public function getOneInsurance(int $id) {

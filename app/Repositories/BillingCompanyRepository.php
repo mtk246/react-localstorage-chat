@@ -75,7 +75,7 @@ class BillingCompanyRepository
             "users",
             "address",
             "contact"
-        ])->get();
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     public function getByCode($code){

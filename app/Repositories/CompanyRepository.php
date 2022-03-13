@@ -37,7 +37,7 @@ class CompanyRepository
             "address",
             "contact",
             "facilities",
-        ])->get();
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**
