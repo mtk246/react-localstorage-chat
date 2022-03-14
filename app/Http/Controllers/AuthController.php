@@ -86,21 +86,9 @@ class AuthController extends Controller
     {
         $dataValidated = $request->validated();
 
-        $data = [
-            "dataset_name" => "LOGIN",
-            "description"  => "making login",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
 //        if( $this->checkIsLogged($request->input("email")) ){
 //            return response()->json("this user has a session active in other device",401);
 //        }
-
-        MetadataController::saveLogAuditory($data,null,$request->input("email"));
 
         $user = User::where('email', $dataValidated["email"])->firstOrFail();
         if ($user !== null && ($user->isBlocked == true)) {
@@ -157,22 +145,8 @@ class AuthController extends Controller
     {
         $user = User::whereId(auth()->id())->with([
             "roles",
-            "permissions",
-            "contact",
-            "address"
+            "permissions"
         ])->first();
-
-        $data = [
-            "dataset_name" => "Get me",
-            "description"  => "Get information user authenticated",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
-        MetadataController::saveLogAuditory($data,$user->id,null);
 
         return response()->json($user);
     }
@@ -199,17 +173,6 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $data = [
-            "dataset_name" => "Logout",
-            "description"  => "exit from app",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
-        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         User::whereId(auth()->id())->update(["isLogged" => false]);
         auth()->logout();
 
@@ -238,17 +201,6 @@ class AuthController extends Controller
      */
     public function refresh(Request $request): JsonResponse
     {
-        $data = [
-            "dataset_name" => "Refresh Token",
-            "description"  => "Refresh token authentication",
-            "machine_used" => $request->ip(),
-            "start_date"   => now(),
-            "end_date"     => now(),
-            "location"     => $request->ip(),
-            "time"         => now()->toTimeString(),
-        ];
-
-        MetadataController::saveLogAuditory($data,auth()->user()->id,null);
         return response()->json(auth()->refresh());
     }
 
@@ -265,7 +217,7 @@ class AuthController extends Controller
          */
         $user = auth()->user();
         //User::whereId($user->id)->update(["isLogged" => true]);
-        $device = DeviceController::searchDeviceByIp($ip);
+        //$device = DeviceController::searchDeviceByIp($ip);
 
 //        if( !$device ){
 //            DeviceController::logNewDevice([
