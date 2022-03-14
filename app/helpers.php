@@ -27,3 +27,22 @@ function middleRedactor($string, $char)
 
     return substr($string, 0, 1) . str_pad(substr($substring, $length), $total, $char, STR_PAD_LEFT);
 }
+
+if (!function_exists('generateNewCode')) {
+    function generateNewCode($prefix, $code_length, $year, $model, $field)
+    {
+        $newCode = 1;
+
+        $targetModel = $model::select($field)->where($field, 'like', "{$prefix}-%-{$year}")
+            ->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+        
+        $newCode += ($targetModel) ? (int)explode('-', $targetModel->$field)[1] : 0;
+
+        if (strlen((string)$newCode) > $code_length) {
+            return ["error" => "The new code exceeds the allowed length"];
+        }
+        $newCode = str_pad($newCode, $code_length, "0", STR_PAD_LEFT);
+        
+        return "{$prefix}-{$newCode}-{$year}";
+    }
+}

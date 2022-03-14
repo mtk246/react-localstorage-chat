@@ -14,14 +14,21 @@ class BillingCompanyRepository
     public function createBillingCompany(array $data){
         $company = BillingCompany::create([
             "name" => $data["name"],
-            "code" => $data["code"],
+            "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code")
         ]);
 
-        $data["address"]["billing_company_id"] = $company->id;
-        $data["contact"]["billing_company_id"] = $company->id;
-
-        Address::create($data["address"]);
-        Contact::create($data["contact"]);
+        if (isset($data['address'])) {
+            $data["address"]["billing_company_id"] = $company->id;
+            $data["address"]["addressable_id"] = $company->id;
+            $data["address"]["addressable_type"] = BillingCompany::class;
+            Address::create($data["address"]);
+        }
+        if (isset($data["contact"])) {
+            $data["contact"]["billing_company_id"] = $company->id;
+            $data["contact"]["contactable_id"] = $company->id;
+            $data["contact"]["contactable_type"] = BillingCompany::class;
+            Contact::create($data["contact"]);
+        }
 
         return $company;
     }
