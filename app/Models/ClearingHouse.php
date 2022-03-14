@@ -36,10 +36,11 @@ class ClearingHouse extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "clearing_houses";
     protected $fillable = [
         "code",
-        "name"
+        "name",
+        "ack_required",
+        "org_type"
     ];
 
     /**
@@ -50,29 +51,33 @@ class ClearingHouse extends Model implements Auditable
     protected $appends = ['status'];
 
     /**
-     * @return HasOne
-     */
-    public function address(): HasOne
-    {
-        return $this->hasOne(Address::class);
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function contact(): HasOne
-    {
-        return $this->hasOne(Contact::class);
-    }
-
-    /**
-     * The billingCompanies that belong to the company.
+     * The billingCompanies that belong to the ClearingHouse.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * ClearingHouse morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * ClearingHouse morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
     }
 
     /**

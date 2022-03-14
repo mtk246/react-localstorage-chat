@@ -45,13 +45,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 class Company extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
-    protected $table = "companies";
+    
     protected $fillable = [
         "code",
         "name",
-        "npi",
-        "email",
-        "tax_id",
+        "npi"
     ];
 
     /**
@@ -60,22 +58,6 @@ class Company extends Model implements Auditable
      * @var array
      */
     protected $appends = ['status'];
-
-    /**
-     * @return HasOne
-     */
-    public function address(): HasOne
-    {
-        return $this->hasOne(Address::class);
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function contact(): HasOne
-    {
-        return $this->hasOne(Contact::class);
-    }
 
     /**
      * The billingCompanies that belong to the company.
@@ -88,11 +70,63 @@ class Company extends Model implements Auditable
     }
 
     /**
-     * @return HasMany
+     * The healthProfessionals that belong to the company.
+     *
+     * @return BelongsToMany
+     */
+    public function healthProfessionals(): BelongsToMany
+    {
+        return $this->belongsToMany(HealthProfessional::class)->withTimestamps();
+    }
+
+    /**
+     * The services that belong to the company.
+     *
+     * @return BelongsToMany
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class)->withPivot('status', 'std_price')->withTimestamps();
+    }
+
+    /**
+     * The taxonomies that belong to the company.
+     *
+     * @return BelongsToMany
+     */
+    public function taxonomies(): BelongsToMany
+    {
+        return $this->belongsToMany(Taxonomy::class)->withTimestamps();
+    }
+
+    /**
+     * Company has many facilities.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function facilities(): HasMany
     {
         return $this->hasMany(Facility::class);
+    }
+
+    /**
+     * Company morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * Company morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
     }
 
     /*

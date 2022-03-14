@@ -43,8 +43,6 @@ class InsuranceCompany extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "insurance_companies";
-
     protected $fillable = [
         "code",
         "name",
@@ -59,26 +57,13 @@ class InsuranceCompany extends Model implements Auditable
      */
     protected $appends = ['status'];
 
-    /**
-     * @return HasOne
-     */
-    public function address(): HasOne
-    {
-        return $this->hasOne(Address::class);
-    }
 
     /**
-     * @return HasOne
+     * InsuranceCompany has many InsurancePlans.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function contact(): HasOne
-    {
-        return $this->hasOne(Contact::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function insurancePlan(): HasMany
+    public function insurancePlans(): HasMany
     {
         return $this->hasMany(InsurancePlan::class);
     }
@@ -91,6 +76,46 @@ class InsuranceCompany extends Model implements Auditable
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * InsuranceCompany morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
+    /**
+     * InsuranceCompany morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * InsuranceCompany morphs many PublicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function publicNotes()
+    {
+        return $this->morphMany(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * InsuranceCompany morphs many privateNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function privateNotes()
+    {
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 
     /**

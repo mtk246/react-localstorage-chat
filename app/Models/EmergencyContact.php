@@ -33,16 +33,17 @@ class EmergencyContact extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "emergency_contacts";
     protected $fillable = [
-        "patient_id",
         "name",
         "cellphone",
         "relationship",
+        "patient_id"
     ];
 
     /**
-     * @return BelongsTo
+     * EmergencyContact belongs to patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function patient(): BelongsTo
     {

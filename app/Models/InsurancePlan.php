@@ -70,18 +70,15 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 class InsurancePlan extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
-    protected $table = "insurance_plans";
+
     protected $fillable = [
         "code",
-        "status",
-        "ins_type",
         "name",
-        "note",
-        "plan_type",
+        "ins_type",
         "cap_group",
         "accept_assign",
         "pre_authorization",
-        "file_zero",
+        "file_zero_changes",
         "referral_required",
         "accrue_patient_resp",
         "require_abn",
@@ -96,7 +93,9 @@ class InsurancePlan extends Model implements Auditable
     ];
 
     /**
-     * @return BelongsTo
+     * InsurancePlan belongs to InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function insuranceCompany(): BelongsTo
     {
@@ -104,15 +103,52 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
-     * @return BelongsToMany
+     * InsurancePlan belongs to Patients.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function patients(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Patient::class,
-            "insurance_plan_patient",
-            "insurance_plan_id",
-            "patient_id"
-        );
+        return $this->belongsToMany(Patient::class)->withPivot('status', 'own_insurance')->withTimestamps();
+    }
+
+    /**
+     * InsurancePlan belongs to Services.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class)->withPivot('price', 'aliance')->withTimestamps();
+    }
+
+    /**
+     * InsurancePlan belongs to Suscribers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function suscribers(): BelongsToMany
+    {
+        return $this->belongsToMany(Suscriber::class)->withTimestamps();
+    }
+
+    /**
+     * InsurancePlan morphs many PublicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function publicNotes()
+    {
+        return $this->morphMany(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * InsurancePlan morphs many privateNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function privateNotes()
+    {
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 }

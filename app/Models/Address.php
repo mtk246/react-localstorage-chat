@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -52,30 +53,20 @@ class Address extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "addresses";
     protected $fillable = [
         "address",
         "city",
         "state",
         "zip",
-        "user_id",
         "billing_company_id",
-        "clearing_house_id",
-        "facility_id",
-        "company_id",
-        "insurance_company_id"
+        "addressable_type",
+        "addressable_id"
     ];
 
     /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo
+     * Address belongs to BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billingCompany(): BelongsTo
     {
@@ -83,34 +74,12 @@ class Address extends Model implements Auditable
     }
 
     /**
-     * @return BelongsTo
+     * Address morphs to models in addressable_type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function clearingHouse(): BelongsTo
+    public function addressable(): MorphTo
     {
-        return $this->belongsTo(ClearingHouse::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function facility(): BelongsTo
-    {
-        return $this->belongsTo(Facility::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function insuranceCompany(): BelongsTo
-    {
-        return $this->belongsTo(InsuranceCompany::class);
+        return $this->morphTo();
     }
 }

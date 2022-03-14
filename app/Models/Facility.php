@@ -50,11 +50,10 @@ class Facility extends Model implements Auditable
     protected $table = "facilities";
 
     protected $fillable = [
+        "code",
         "type",
         "name",
-        "company_name",
         "npi",
-        "taxonomy",
         "company_id",
     ];
 
@@ -66,19 +65,13 @@ class Facility extends Model implements Auditable
     protected $appends = ['status'];
 
     /**
-     * @return HasOne
+     * Facility belongs to Company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function address(): HasOne
+    public function company(): BelongsTo
     {
-        return $this->hasOne(Address::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function contact(): HasOne
-    {
-        return $this->hasOne(Contact::class);
+        return $this->belongsTo(Company::class);
     }
 
     /**
@@ -92,11 +85,43 @@ class Facility extends Model implements Auditable
     }
 
     /**
-     * @return BelongsTo
+     * The healthProfessionals that belong to the Facility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function company(): BelongsTo
+    public function healthProfessionals(): BelongsToMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(HealthProfessional::class)->withTimestamps();
+    }
+
+    /**
+     * The taxonomies that belong to the Facility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function taxonomies(): BelongsToMany
+    {
+        return $this->belongsToMany(Taxonomy::class)->withTimestamps();
+    }
+
+    /**
+     * Facility morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * Facility morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
     }
 
      /*

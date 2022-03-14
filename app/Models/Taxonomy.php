@@ -33,11 +33,39 @@ class Taxonomy extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "taxonomies";
     protected $fillable = [
+        "code",
         "name",
-        "isPrimary",
-        "user_id",
-        "company_id"
+        "primary"
     ];
+
+    /**
+     * The companies that belong to the Taxonomy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)->withTimestamps();
+    }
+
+    /**
+     * The healthProfessionals that belong to the Taxonomy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function healthProfessionals(): BelongsToMany
+    {
+        return $this->belongsToMany(HealthProfessional::class)->withTimestamps();
+    }
+
+    /**
+     * The facilities that belong to the Taxonomy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function facilities(): BelongsToMany
+    {
+        return $this->belongsToMany(Facility::class)->withTimestamps();
+    }
 }

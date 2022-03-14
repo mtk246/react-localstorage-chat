@@ -94,21 +94,16 @@ class User extends Authenticatable implements JWTSubject, Auditable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'usercode',
+        'userkey',
         'email',
         'password',
-        'sex',
-        'firstName',
-        'lastName',
-        'middleName',
         'token',
-        'available',
+        'status',
+        'last_login',
         'isLogged',
-        'img_profile',
-        'ssn',
-        'dateOfBirth',
         'isBlocked',
-        'usercode'
+        'profile_id'
     ];
 
     /**
@@ -152,70 +147,79 @@ class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @return array
      */
-    public function getJWTCustomClaims(): array
+    public function getJWTCustomClaims()
     {
         return [];
     }
 
     /**
-     * @return BelongsToManyAlias
+     * User belongs to BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function billingCompanyUser(): BelongsToManyAlias
+    public function billingCompany()
     {
-        return $this->belongsToMany(
-            BillingCompany::class,
-            "billing_company_users",
-            "user_id",
-            "billing_company_id"
-        );
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**
-     * @return HasManyAlias
+     * User belongs to Profile.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function metadata(): HasManyAlias
+    public function profile()
     {
-        return $this->hasMany(Metadata::class);
+        return $this->belongsTo(Profile::class);
     }
 
     /**
-     * @return HasManyAlias
+     * User has one HealthProfessional.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function contact(): HasManyAlias
+    public function healthProfessional()
     {
-        return $this->hasMany(Contact::class);
+        return $this->hasOne(healthProfessional::class);
     }
 
     /**
-     * @return HasManyAlias
+     * User has one HealthProfessional.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function address(): HasManyAlias
-    {
-        return $this->hasMany(Address::class);
-    }
-
-    /**
-     * @return HasManyAlias
-     */
-    public function devices(): HasManyAlias
-    {
-        return $this->hasMany(Device::class);
-    }
-
-    /**
-     * @return HasOneAlias
-     */
-    public function doctor(): HasOneAlias
-    {
-        return $this->hasOne(Doctor::class);
-    }
-
-    /**
-     * @return HasOneAlias
-     */
-    public function patient(): HasOneAlias
+    public function patient()
     {
         return $this->hasOne(Patient::class);
+    }
+
+    /**
+     * The billingCompanies that belong to the User.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function billingCompanies()
+    {
+        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * User morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
+    /**
+     * User morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
     }
 
     /*
@@ -228,7 +232,7 @@ class User extends Authenticatable implements JWTSubject, Auditable
     {
         $user = auth()->user();
         if (is_null($user)) return null;
-        $billingCompany = $user->billingCompanyUser->first();
+        $billingCompany = $user->billingCompanies->first();
         return $billingCompany->id ?? null;
     }
 }

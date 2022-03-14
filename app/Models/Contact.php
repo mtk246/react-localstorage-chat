@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -49,29 +50,21 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 class Contact extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
-    protected $table = "contacts";
+    
     protected $fillable = [
         "phone",
         "fax",
         "email",
-        "user_id",
+        "mobile",
         "billing_company_id",
-        "company_id",
-        "facility_id",
-        "clearing_house_id",
-        "insurance_company_id",
+        "contactable_type",
+        "contactable_id"
     ];
 
     /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo
+     * Contact belongs to BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billingCompany(): BelongsTo
     {
@@ -79,34 +72,12 @@ class Contact extends Model implements Auditable
     }
 
     /**
-     * @return BelongsTo
+     * Contact morphs to models in contactable_type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function clearingHouse(): BelongsTo
+    public function contactable(): MorphTo
     {
-        return $this->belongsTo(ClearingHouse::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function facility(): BelongsTo
-    {
-        return $this->belongsTo(Facility::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function insuranceCompany(): BelongsTo
-    {
-        return $this->belongsTo(InsuranceCompany::class);
+        return $this->morphTo();
     }
 }
