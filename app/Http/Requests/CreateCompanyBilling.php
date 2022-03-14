@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateCompanyBilling extends FormRequest
 {
@@ -24,10 +25,10 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string|unique:billing_companies,name|max:50",
-            "code" => "required|unique:billing_companies,code|string",
-            "address" => "required|array",
-            "contact" => "required|array"
+            'name'          => ['required', 'string', 'max:50', Rule::unique('billing_companies', 'name')],
+            'address'       => ['sometimes', 'array'],
+            'contact'       => ['required', 'array'],
+            'contact.email' => ['required', 'email:rfc'],
         ];
     }
 }
