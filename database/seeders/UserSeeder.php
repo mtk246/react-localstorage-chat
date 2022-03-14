@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Faker;
-use Hash;
 class UserSeeder extends Seeder
 {
     /**
@@ -17,74 +17,71 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "admin@billing.com",
-                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
-                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
-                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
-                "sex"        => "M",
-                "created_at" => now(),
-                "updated_at" => now(),
-                "role"       => "SUPER_USER"
+                "role"       => "SUPER_USER",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
             ],
             [
-                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "billingmanager@billing.com",
-                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
-                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
-                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
-                "sex"        => "M",
-                "created_at" => now(),
-                "updated_at" => now(),
-                "role"       => "BILLING_MANAGER"
+                "role"       => "BILLING_MANAGER",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+
             ],
             [
-                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "doctor@billing.com",
-                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
-                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
-                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
-                "sex"        => "M",
-                "created_at" => now(),
-                "updated_at" => now(),
-                "role"       => "DOCTOR"
+                "role"       => "DOCTOR",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
             ],
             [
-                "username"   => Faker\Provider\en_US\Person::firstNameMale(),
                 "email"      => "patient@billing.com",
-                "ssn"        => randomNumber(9),
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "firstName"  => Faker\Provider\en_US\Person::firstNameMale(),
-                "middleName" => Faker\Provider\en_US\Person::firstNameMale(),
-                "lastName"   => Faker\Provider\en_US\Person::firstNameMale(),
-                "sex"        => "M",
-                "created_at" => now(),
-                "updated_at" => now(),
-                "role"       => "PATIENT"
+                "role"       => "PATIENT",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
             ],
         ];
 
         foreach ($users as $user) {
 
+            $profile = Profile::updateOrCreate(["ssn" => $user["profile"]["ssn"]], $user["profile"]);
+
             $usr = User::updateOrCreate(
                 ['email' => $user['email']],
                 [
-                    "username"   => $user["username"],
-                    "email"      => $user["email"],
-                    "ssn"        => $user["ssn"],
-                    "password"   => $user["password"],
-                    "firstName"  => $user["firstName"],
-                    "middleName" => $user["middleName"],
-                    "lastName"   => $user["lastName"],
-                    "sex"        => $user["sex"],
-                    "created_at" => $user["created_at"],
-                    "updated_at" => $user["updated_at"],
+                    "usercode" => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
+                    "email"    => $user["email"],
+                    "password" => $user["password"],
+                    "profile_id" => $profile->id
                 ]
             );
             $usr->password='$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';

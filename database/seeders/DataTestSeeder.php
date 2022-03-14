@@ -35,52 +35,64 @@ class DataTestSeeder extends Seeder
         $billingCompanies = [
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
-                "address" => $faker->address,
-                "city"    => $faker->city,
-                "state"   => $faker->streetName,
-                "zip"     => $faker->imei,
-
-                "phone" => $faker->phoneNumber,
-                "fax"   => $faker->phoneNumber,
-                "email" => $faker->companyEmail,
+                "address" => [
+                    "address" => "Singleton Rd",
+                    "city"    => "Calimesa",
+                    "state"   => "California",
+                    "zip"     => "923202207"
+                ],
+                "contact" => [
+                    "mobile" => $faker->phoneNumber,
+                    "phone"  => $faker->phoneNumber,
+                    "fax"    => $faker->phoneNumber,
+                    "email"  => $faker->companyEmail
+                ]
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
-                "address" => $faker->address,
-                "city"    => $faker->city,
-                "state"   => $faker->streetName,
-                "zip"     => $faker->imei,
-
-                "phone" => $faker->phoneNumber,
-                "fax"   => $faker->phoneNumber,
-                "email" => $faker->companyEmail,
+                "address" => [
+                    "address" => "Rodeo Dr",
+                    "city"    => "Beverly Hills",
+                    "state"   => "California",
+                    "zip"     => "902122403"
+                ],
+                "contact" => [
+                    "mobile" => $faker->phoneNumber,
+                    "phone"  => $faker->phoneNumber,
+                    "fax"    => $faker->phoneNumber,
+                    "email"  => $faker->companyEmail
+                ]
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
-                "address" => $faker->address,
-                "city"    => $faker->city,
-                "state"   => $faker->streetName,
-                "zip"     => $faker->imei,
-
-                "phone" => $faker->phoneNumber,
-                "fax"   => $faker->phoneNumber,
-                "email" => $faker->companyEmail,
+                "address" => [
+                    "address" => "Zoo Dr",
+                    "city"    => "Los Angeles",
+                    "state"   => "California",
+                    "zip"     => "900271422"
+                ],
+                "contact" => [
+                    "mobile" => $faker->phoneNumber,
+                    "phone"  => $faker->phoneNumber,
+                    "fax"    => $faker->phoneNumber,
+                    "email"  => $faker->companyEmail
+                ]
             ],
             [
                 "name"    => $faker->company,
-                "code"    => $faker->companySuffix . ' ' . randomNumber(4),
-                "address" => $faker->address,
-                "city"    => $faker->city,
-                "state"   => $faker->streetName,
-                "zip"     => $faker->imei,
-
-                "phone" => $faker->phoneNumber,
-                "fax"   => $faker->phoneNumber,
-                "email" => $faker->companyEmail,
-            ]
+                "address" => [
+                    "address" => "",
+                    "city"    => "",
+                    "state"   => "",
+                    "zip"     => ""
+                ],
+                "contact" => [
+                    "mobile" => "",
+                    "phone"  => "",
+                    "fax"    => "",
+                    "email"  => $faker->companyEmail
+                ]
+            ],
         ];
 
         foreach ($billingCompanies as $bcompany) {
@@ -89,272 +101,43 @@ class DataTestSeeder extends Seeder
                 ["name" => $bcompany["name"]],
                 [
                     "name" => $bcompany["name"],
-                    "code" => $bcompany["code"],
+                    "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code")
                 ]
             );
-            Address::updateOrCreate(
-                ["billing_company_id" => $bc->id],
-                [
-                    "address"            => $bcompany["address"],
-                    "city"               => $bcompany["city"],
-                    "state"              => $bcompany["state"],
-                    "zip"                => $bcompany["zip"],
-                    "billing_company_id" => $bc->id
-                ]
-            );
-            Contact::updateOrCreate(
-                ["billing_company_id" => $bc->id],
-                [
-                    "phone"              => $bcompany["phone"],
-                    "fax"                => $bcompany["fax"],
-                    "email"              => $bcompany["email"],
-                    "billing_company_id" => $bc->id
-                ]
-            );
+            if ($bcompany["address"]["address"] != "") {
+                Address::updateOrCreate(
+                    ["billing_company_id" => $bc->id],
+                    [
+                        "address"            => $bcompany["address"]["address"],
+                        "city"               => $bcompany["address"]["city"],
+                        "state"              => $bcompany["address"]["state"],
+                        "zip"                => $bcompany["address"]["zip"],
+                        "billing_company_id" => $bc->id,
+                        "addressable_type"   => BillingCompany::class,
+                        "addressable_id"     => $bc->id
+                    ]
+                );
+            }
+            if ($bcompany["contact"]["email"] != "") {
+                Contact::updateOrCreate(
+                    ["billing_company_id" => $bc->id],
+                    [
+                        "mobile"             => $bcompany["contact"]["mobile"],
+                        "phone"              => $bcompany["contact"]["phone"],
+                        "fax"                => $bcompany["contact"]["fax"],
+                        "email"              => $bcompany["contact"]["email"],
+                        "billing_company_id" => $bc->id,
+                        "contactable_type"   => BillingCompany::class,
+                        "contactable_id"     => $bc->id
+                    ]
+                );
+            }
         }
+
         /** Billing Manager */
         $user_bc = User::whereEmail('billingmanager@billing.com')->first();
         $bCompany = BillingCompany::first();
-        $user_bc->billingCompanyUser()->attach($bCompany->id);
-        /** Crear Company */
-        $companies = [
-            [
-                "name"       => $faker->company,
-                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
-                "npi"        => $faker->imei,
-                "email"      => $faker->companyEmail,
-                "facilities" => [
-                    [
-                        "type"         => 2,
-                        "name"         => $faker->name,
-                        "company_name" => $faker->company,
-                        "npi"          => $faker->imei,
-                        "taxonomy"     => $faker->jobTitle,
-                    ],
-                    [
-                        "type"         => 2,
-                        "name"         => $faker->name,
-                        "company_name" => $faker->company,
-                        "npi"          => $faker->imei,
-                        "taxonomy"     => $faker->jobTitle,
-                    ]
-                ]
-            ],
-            [
-                "name"       => $faker->company,
-                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
-                "npi"        => $faker->imei,
-                "email"      => $faker->companyEmail,
-                "facilities" => [
-                    [
-                        "type"         => 2,
-                        "name"         => $faker->name,
-                        "company_name" => $faker->company,
-                        "npi"          => $faker->imei,
-                        "taxonomy"     => $faker->jobTitle,
-                    ]
-                ]
-            ],
-            [
-                "name"       => $faker->company,
-                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
-                "npi"        => $faker->imei,
-                "email"      => $faker->companyEmail,
-                "facilities" => [
-                    [
-                        "type"         => 2,
-                        "name"         => $faker->name,
-                        "company_name" => $faker->company,
-                        "npi"          => $faker->imei,
-                        "taxonomy"     => $faker->jobTitle,
-                    ]
-                ]
-            ],
-            [
-                "name"       => $faker->company,
-                "code"       => $faker->companySuffix . ' ' . randomNumber(4),
-                "npi"        => $faker->imei,
-                "email"      => $faker->companyEmail,
-                "facilities" => []
-            ],
-        ];
-
-        foreach ($companies as $company) {
-
-            $comp  = Company::updateOrCreate(
-                ["name" => $company["name"]],
-                [
-                    "name" => $company["name"],
-                    "code" => $company["code"],
-                    "npi"    => $company["npi"],
-                    "email"  => $company["email"],
-                ]
-            );
-            if (isset($company["facilities"])) {
-                foreach ($company["facilities"] as $facility) {
-                    Facility::updateOrCreate(
-                        ["name" => $facility["name"]],
-                        [
-                            "type"         => $facility["type"],
-                            "name"         => $facility["name"],
-                            "company_name" => $facility["company_name"],
-                            "npi"          => $facility["npi"],
-                            "taxonomy"     => $facility["taxonomy"],
-                            "company_id"   => $comp->id,
-                        ]
-                    );
-                    
-                }
-            }
-
-        }
-        /** Create clearinghouse */
-        $clearinghouses = [
-            [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
-            ],
-            [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
-            ],
-            [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
-            ],
-            [
-                "name"   => $faker->company,
-                "code"   => $faker->companySuffix . ' ' . randomNumber(4),
-            ],
-        ];
-        foreach ($clearinghouses as $clearinghouse) {
-
-            ClearingHouse::updateOrCreate(
-                ["name" => $clearinghouse["name"]],
-                [
-                    "name" => $clearinghouse["name"],
-                    "code" => $clearinghouse["code"],
-                ]
-            );
-        }
-        /** Create doctor */
-        $usr_doc = User::whereEmail("doctor@billing.com")->first();
-        if (!is_null($usr_doc)) {
-            Doctor::updateOrCreate(
-                ["user_id" => $usr_doc->id],
-                [
-                    "npi"        => $faker->imei,
-                    "taxonomy"   => $faker->jobTitle,
-                    "speciality" => $faker->jobTitle,
-                    "user_id"    => $usr_doc->id
-                ]
-            );
-        }
-        /** Create facility */
-        $facilities = [
-            [
-                "type"         => 1,
-                "name"         => $faker->name,
-                "company_name" => $faker->company,
-                "npi"          => $faker->imei,
-                "taxonomy"     => $faker->jobTitle,
-            ],
-            [
-                "type"         => 1,
-                "name"         => $faker->name,
-                "company_name" => $faker->company,
-                "npi"          => $faker->imei,
-                "taxonomy"     => $faker->jobTitle,
-            ],
-            [
-                "type"         => 1,
-                "name"         => $faker->name,
-                "company_name" => $faker->company,
-                "npi"          => $faker->imei,
-                "taxonomy"     => $faker->jobTitle,
-            ],
-            [
-                "type"         => 1,
-                "name"         => $faker->name,
-                "company_name" => $faker->company,
-                "npi"          => $faker->imei,
-                "taxonomy"     => $faker->jobTitle,
-            ],
-        ];
-
-        foreach ($facilities as $facility) {
-
-            Facility::updateOrCreate(
-                ["name" => $facility["name"]],
-                [
-                    "type"         => $facility["type"],
-                    "name"         => $facility["name"],
-                    "company_name" => $facility["company_name"],
-                    "npi"          => $facility["npi"],
-                    "taxonomy"     => $facility["taxonomy"],
-                ]
-            );
-        }
-        /** Create insurance company */
-        $insuranceCompanies = [
-            [
-                "code"        => randomNumber(6),
-                "name"        => $faker->company,
-                "naic"        => $faker->jobTitle,
-                "file_method" => "method 1"
-            ],
-            [
-                "code"        => randomNumber(6),
-                "name"        => $faker->company,
-                "naic"        => $faker->jobTitle,
-                "file_method" => "method 1"
-            ],
-            [
-                "code"        => randomNumber(6),
-                "name"        => $faker->company,
-                "naic"        => $faker->jobTitle,
-                "file_method" => "method 1"
-            ],
-            [
-                "code"        => randomNumber(6),
-                "name"        => $faker->company,
-                "naic"        => $faker->jobTitle,
-                "file_method" => "method 1"
-            ],
-        ];
-
-        foreach ($insuranceCompanies as $iCompany) {
-
-            InsuranceCompany::updateOrCreate(
-                ["code" => $iCompany["code"]],
-                [
-                    "code"        => $iCompany["code"],
-                    "name"        => $iCompany["name"],
-                    "naic"        => $iCompany["naic"],
-                    "file_method" => $iCompany["file_method"]
-                ]
-            );
-        }
-        /** Create patient */
-        $usr_pat = User::whereEmail("patient@billing.com")->first();
-        if (!is_null($usr_doc)) {
-            Patient::updateOrCreate(
-                ["user_id" => $usr_doc->id],
-                [
-                    "marital_status"   => "married",
-                    "driver_licence"   => randomNumber(6),
-                    "guardian_name"    => $faker->name,
-                    "guardian_phone"   => $faker->phoneNumber,
-                    "spuse_name"       => $faker->name,
-                    "employer"         => $faker->name,
-                    "employer_address" => $faker->address,
-                    "position"         => $faker->jobTitle,
-                    "phone_employer"   => $faker->phoneNumber,
-                    "spuse_employer"   => $faker->name,
-                    "spuse_work_phone" => $faker->phoneNumber,
-                    "user_id"          => $usr_doc->id
-                ]
-            );
-        }
+        $user_bc->billingCompanies()->attach($bCompany->id);
     }
 }
+        
