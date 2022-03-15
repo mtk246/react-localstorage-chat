@@ -47,12 +47,16 @@ class BillingCompanyRepository
 
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $id;
+                $data["address"]["addressable_id"] = $billingCompany->id;
+                $data["address"]["addressable_type"] = BillingCompany::class;
                 $address = Address::updateOrCreate([
                     "billing_company_id" => $billingCompany->id
                 ], $data["address"]);
             }
             if (isset($data["contact"]["email"])) {
                 $data["contact"]["billing_company_id"] = $id;
+                $data["contact"]["contactable_id"] = $billingCompany->id;
+                $data["contact"]["contactable_type"] = BillingCompany::class;
                 $contact = Contact::updateOrCreate([
                     "billing_company_id" => $billingCompany->id
                 ], $data["contact"]);
