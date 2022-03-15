@@ -261,7 +261,7 @@ class UserController extends Controller
         try {
             if(is_null($id)) $id = auth()->id();
 
-            $rs = $this->userRepository->changeStatus($request->input("available"),$id);
+            $rs = $this->userRepository->changeStatus($request->input("status"),$id);
 
             return $rs ? response()->json([],204) : response()->json("error changing status",400);
         }catch (\Exception $exception){

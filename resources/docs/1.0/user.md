@@ -149,7 +149,7 @@
 
 ```json
 {
-    "available":true
+    "status":true
 }
 ```
 
@@ -628,7 +628,7 @@
 ```json
 {
     "email": "admin@billing.com",
-    "usercode": "622635b68acb54.47488178",
+    "userkey": "622635b68acb54.47488178",
 }
 ```
 

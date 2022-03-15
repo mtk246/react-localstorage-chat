@@ -24,8 +24,8 @@ class UnlockUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "usercode" => ["required"],
-            "email"    => ["required", "email:rfc"]
+            "userkey" => ["required"],
+            "email"   => ["required", "email:rfc"]
         ];
     }
 }

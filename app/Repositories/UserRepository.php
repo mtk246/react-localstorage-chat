@@ -329,8 +329,8 @@ class UserRepository{
 
         $pathNameFile = asset("/img-profile/" . $fullNameFile);
 
-        User::whereId(auth()->id())->update([
-            'img_profile' => $pathNameFile,
+        User::whereId(auth()->id())->profile->update([
+            'avatar' => $pathNameFile,
         ]);
 
         return $pathNameFile;
@@ -344,13 +344,16 @@ class UserRepository{
     {
         $ssn = $request->ssn;
         $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
-        $user = User::where("ssn", "ilike", "%${ssn}")
-                    ->orWhere("ssn", "ilike", "%${ssnFormated}")
-                    ->where('dateOfBirth', $request->dateOfBirth)->first();
+        $profile = Profile::where("ssn", "ilike", "%${ssn}")
+                          ->orWhere("ssn", "ilike", "%${ssnFormated}")
+                          ->whereDateOfBirth($request->dateOfBirth)->first();
+
+        $user = User::where('profile_id', $profile->id)->first();
 
         if (is_null($user)) return null;
         
         $emailFormated = explode("@", $user->email);
+        $this->sendEmailToRescuePassword($user->email);
         return middleRedactor($emailFormated[0], '*') . "@" . middleRedactor($emailFormated[1], '*');
     }
 
@@ -385,6 +388,8 @@ class UserRepository{
      * @return User|Builder|Model|object|null
      */
     public function searchBySsn(string $ssn) {
-        return User::whereSsn($ssn)->first();
+        $profile = Profile::where("ssn", $ssn)->first();
+        $user = User::where('profile_id', $profile->id)->first();
+        return $user;
     }
 }
