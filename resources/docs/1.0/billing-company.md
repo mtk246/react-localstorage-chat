@@ -37,18 +37,18 @@
 
 ```json
 {
-    "name":"NameBillingCompany",
-    "code":"CodeBillingCompany",
+    "name": "Medhurst-Schmidt",
     "address":{
-        "address":"AddressBillingCompany",
-        "city":"CityBillingCompany",
-        "state":"StateBillingCompany",
-        "zip":"12345678"
+        "address": "Singleton Rd",
+        "city": "Calimesa",
+        "state": "California",
+        "zip": "923202207",
     },
     "contact":{
-        "phone":"5335427",
-        "fax":"5335427",
-        "email":"billing-company@email.com"
+        "phone": "+1-830-587-6085",
+        "fax": "737-883-3672",
+        "email": "corine07@dooley.info",
+        "mobile": "930.984.6441",
     }
 }
 ```
@@ -69,35 +69,34 @@
 ```json
 {
     "id": 1,
-    "name":"NameBillingCompany",
-    "code":"CodeBillingCompany",
+    "name": "Medhurst-Schmidt",
+    "created_at": "2022-03-15T11:15:43.000000Z",
+    "updated_at": "2022-03-15T11:15:43.000000Z",
+    "code": "BC-00001-2022",
     "status": false,
     "address": {
-        "id": 17,
-        "address":"AddressBillingCompany",
-        "city":"CityBillingCompany",
-        "state":"StateBillingCompany",
-        "zip":"12345678",
-        "user_id": null,
+        "id": 1,
+        "address": "Singleton Rd",
+        "city": "Calimesa",
+        "state": "California",
+        "zip": "923202207",
         "billing_company_id": 1,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "addressable_type": "App\\Models\\BillingCompany",
+        "addressable_id": 1
     },
     "contact": {
-        "id": 15,
-        "phone":"5335427",
-        "fax":"5335427",
-        "email":"billing-company@email.com",
-        "user_id": null,
+        "id": 1,
+        "phone": "+1-830-587-6085",
+        "fax": "737-883-3672",
+        "email": "corine07@dooley.info",
         "billing_company_id": 1,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "mobile": "930.984.6441",
+        "contactable_type": "App\\Models\\BillingCompany",
+        "contactable_id": 1
     }
 }
 ```
@@ -116,18 +115,18 @@
 
 ```json
 {
-    "name":"NameBillingCompany",
-    "code":"CodeBillingCompany",
+    "name": "Medhurst-Schmidt",
     "address":{
-        "address":"AddressBillingCompany",
-        "city":"CityBillingCompany",
-        "state":"StateBillingCompany",
-        "zip":"12345678"
+        "address": "Singleton Rd",
+        "city": "Calimesa",
+        "state": "California",
+        "zip": "923202207",
     },
     "contact":{
-        "phone":"5335427",
-        "fax":"5335427",
-        "email":"billing-company@email.com"
+        "phone": "+1-830-587-6085",
+        "fax": "737-883-3672",
+        "email": "corine07@dooley.info",
+        "mobile": "930.984.6441",
     }
 }
 ```
@@ -150,35 +149,34 @@
 ```json
 {
     "id": 1,
-    "name":"NameBillingCompany",
-    "code":"CodeBillingCompany",
+    "name": "Medhurst-Schmidt",
+    "created_at": "2022-03-15T11:15:43.000000Z",
+    "updated_at": "2022-03-15T11:15:43.000000Z",
+    "code": "BC-00001-2022",
     "status": false,
     "address": {
-        "id": 17,
-        "address":"AddressBillingCompany",
-        "city":"CityBillingCompany",
-        "state":"StateBillingCompany",
-        "zip":"12345678",
-        "user_id": null,
+        "id": 1,
+        "address": "Singleton Rd",
+        "city": "Calimesa",
+        "state": "California",
+        "zip": "923202207",
         "billing_company_id": 1,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "addressable_type": "App\\Models\\BillingCompany",
+        "addressable_id": 1
     },
     "contact": {
-        "id": 15,
-        "phone":"5335427",
-        "fax":"5335427",
-        "email":"billing-company@email.com",
-        "user_id": null,
+        "id": 1,
+        "phone": "+1-830-587-6085",
+        "fax": "737-883-3672",
+        "email": "corine07@dooley.info",
         "billing_company_id": 1,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "mobile": "930.984.6441",
+        "contactable_type": "App\\Models\\BillingCompany",
+        "contactable_id": 1
     }
 }
 ```
@@ -235,22 +233,149 @@
 ```json
 [
     {
-        "id": 1,
-        "name": "someBillingCompany",
-        "created_at": "2022-01-13T18:59:15.000000Z",
-        "updated_at": "2022-01-13T18:59:15.000000Z"
-    },
-    {
         "id": 2,
-        "name": "otherBillingCompany",
-        "created_at": "2022-01-13T18:59:32.000000Z",
-        "updated_at": "2022-01-13T18:59:32.000000Z"
+        "name": "Renner Group",
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "code": "BC-00002-2022",
+        "status": false,
+        "users": [],
+        "address": {
+            "id": 2,
+            "address": "Rodeo Dr",
+            "city": "Beverly Hills",
+            "state": "California",
+            "zip": "902122403",
+            "billing_company_id": 2,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "addressable_type": "App\\Models\\BillingCompany",
+            "addressable_id": 2
+        },
+        "contact": {
+            "id": 2,
+            "phone": "+1 (734) 216-3450",
+            "fax": "+1 (419) 672-0690",
+            "email": "rosie47@klein.com",
+            "billing_company_id": 2,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "(212) 690-2226",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 2
+        }
     },
     {
         "id": 3,
-        "name": "GreatotherBillingCompany",
-        "created_at": "2022-01-13T18:59:46.000000Z",
-        "updated_at": "2022-01-13T18:59:46.000000Z"
+        "name": "Dibbert, Pollich and Graham",
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "code": "BC-00003-2022",
+        "status": false,
+        "users": [],
+        "address": {
+            "id": 3,
+            "address": "Zoo Dr",
+            "city": "Los Angeles",
+            "state": "California",
+            "zip": "900271422",
+            "billing_company_id": 3,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "addressable_type": "App\\Models\\BillingCompany",
+            "addressable_id": 3
+        },
+        "contact": {
+            "id": 3,
+            "phone": "+1.925.386.8001",
+            "fax": "(636) 904-4998",
+            "email": "caden.witting@skiles.com",
+            "billing_company_id": 3,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "667-366-9674",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 3
+        }
+    },
+    {
+        "id": 4,
+        "name": "Bartell-Hansen",
+        "created_at": "2022-03-15T11:15:44.000000Z",
+        "updated_at": "2022-03-15T11:15:44.000000Z",
+        "code": "BC-00004-2022",
+        "status": false,
+        "users": [],
+        "address": null,
+        "contact": {
+            "id": 4,
+            "phone": "",
+            "fax": "",
+            "email": "elwyn47@bergnaum.com",
+            "billing_company_id": 4,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 4
+        }
+    },
+    {
+        "id": 1,
+        "name": "Medhurst-Schmidt",
+        "created_at": "2022-03-15T11:15:43.000000Z",
+        "updated_at": "2022-03-15T11:15:43.000000Z",
+        "code": "BC-00001-2022",
+        "status": false,
+        "users": [
+            {
+                "id": 2,
+                "email": "billingmanager@billing.com",
+                "email_verified_at": null,
+                "created_at": "2022-03-15T11:15:42.000000Z",
+                "updated_at": "2022-03-15T11:15:42.000000Z",
+                "token": null,
+                "isLogged": false,
+                "isBlocked": false,
+                "usercode": "US-00002-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": null,
+                "profile_id": 2,
+                "billing_company_id": null,
+                "pivot": {
+                    "billing_company_id": 1,
+                    "user_id": 2,
+                    "status": true,
+                    "created_at": "2022-03-15T11:15:44.000000Z",
+                    "updated_at": "2022-03-15T11:15:44.000000Z"
+                }
+            }
+        ],
+        "address": {
+            "id": 1,
+            "address": "Singleton Rd",
+            "city": "Calimesa",
+            "state": "California",
+            "zip": "923202207",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "addressable_type": "App\\Models\\BillingCompany",
+            "addressable_id": 1
+        },
+        "contact": {
+            "id": 1,
+            "phone": "+1-830-587-6085",
+            "fax": "737-883-3672",
+            "email": "corine07@dooley.info",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "930.984.6441",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 1
+        }
     }
 ]
 ```
@@ -290,9 +415,35 @@
 
     {
         "id": 1,
-        "name": "someBillingCompany",
-        "created_at": "2022-01-13T18:59:15.000000Z",
-        "updated_at": "2022-01-13T18:59:15.000000Z"
+        "name": "Medhurst-Schmidt",
+        "created_at": "2022-03-15T11:15:43.000000Z",
+        "updated_at": "2022-03-15T11:15:43.000000Z",
+        "code": "BC-00001-2022",
+        "status": false,
+        "address": {
+            "id": 1,
+            "address": "Singleton Rd",
+            "city": "Calimesa",
+            "state": "California",
+            "zip": "923202207",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "addressable_type": "App\\Models\\BillingCompany",
+            "addressable_id": 1
+        },
+        "contact": {
+            "id": 1,
+            "phone": "+1-830-587-6085",
+            "fax": "737-883-3672",
+            "email": "corine07@dooley.info",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "930.984.6441",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 1
+        }
     }
 
 ```
@@ -333,9 +484,35 @@
 
     {
         "id": 1,
-        "name": "someBillingCompany",
-        "created_at": "2022-01-13T18:59:15.000000Z",
-        "updated_at": "2022-01-13T18:59:15.000000Z"
+        "name": "Medhurst-Schmidt",
+        "created_at": "2022-03-15T11:15:43.000000Z",
+        "updated_at": "2022-03-15T11:15:43.000000Z",
+        "code": "BC-00001-2022",
+        "status": false,
+        "address": {
+            "id": 1,
+            "address": "Singleton Rd",
+            "city": "Calimesa",
+            "state": "California",
+            "zip": "923202207",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "addressable_type": "App\\Models\\BillingCompany",
+            "addressable_id": 1
+        },
+        "contact": {
+            "id": 1,
+            "phone": "+1-830-587-6085",
+            "fax": "737-883-3672",
+            "email": "corine07@dooley.info",
+            "billing_company_id": 1,
+            "created_at": "2022-03-15T11:15:44.000000Z",
+            "updated_at": "2022-03-15T11:15:44.000000Z",
+            "mobile": "930.984.6441",
+            "contactable_type": "App\\Models\\BillingCompany",
+            "contactable_id": 1
+        }
     }
 
 ```

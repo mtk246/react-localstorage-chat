@@ -17,13 +17,13 @@ class BillingCompanyRepository
             "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code")
         ]);
 
-        if (isset($data['address'])) {
+        if (isset($data['address']['address'])) {
             $data["address"]["billing_company_id"] = $company->id;
             $data["address"]["addressable_id"] = $company->id;
             $data["address"]["addressable_type"] = BillingCompany::class;
             Address::create($data["address"]);
         }
-        if (isset($data["contact"])) {
+        if (isset($data["contact"]["email"])) {
             $data["contact"]["billing_company_id"] = $company->id;
             $data["contact"]["contactable_id"] = $company->id;
             $data["contact"]["contactable_type"] = BillingCompany::class;
@@ -43,16 +43,15 @@ class BillingCompanyRepository
         if (isset($billingCompany)) {
             $billingCompany->update([
                 "name" => $data["name"],
-                "code" => $data["code"],
             ]);
 
-            if (isset($data['address'])) {
+            if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $id;
                 $address = Address::updateOrCreate([
                     "billing_company_id" => $billingCompany->id
                 ], $data["address"]);
             }
-            if (isset($data["contact"])) {
+            if (isset($data["contact"]["email"])) {
                 $data["contact"]["billing_company_id"] = $id;
                 $contact = Contact::updateOrCreate([
                     "billing_company_id" => $billingCompany->id
@@ -69,9 +68,9 @@ class BillingCompanyRepository
         ])->find($id);
     }
 
-    public function getAllBillingCompanyByUser($user_id){
+    public function getAllBillingCompanyByUser($user_id) {
         return User::whereId($user_id)->with([
-            "billingCompanyUser",
+            "billingCompanies",
             "address",
             "contact"
         ])->first();
