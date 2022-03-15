@@ -290,12 +290,26 @@ class UserRepository{
      * @return User|Builder|Model|object|null
      */
     public function getOneUser(int $id) {
-        $user = User::whereId($id)->with([
-            "roles",
-            "addresses",
-            "contacts",
-            "billingCompanies"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $user = User::whereId($id)->with([
+                "roles",
+                "addresses",
+                "contacts",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $user = User::whereId($id)->with([
+                "roles",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies"
+            ])->first();
+        }
 
         return is_null($user) ? null : $user;
     }
