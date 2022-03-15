@@ -58,18 +58,18 @@
 
 ```json
 {
-    "facility":{
-        "type":1,
-        "name":"somename",
-        "company_name":"sonameCompany",
-        "npi":"somenpi",
-        "taxonomy":"dsfdsf",
-        "company_id":1
+    "name":"facilityName",
+    "type": 1,
+    "company_id": 1,
+    "taxonomy": {
+        "tax_id": "TAX01213",
+        "name": "NameTaxonomy"
     },
+    "npi":"facilityNPI",
     "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
+        "address":"address Facility",
+        "city":"city Facility",
+        "state":"state Facility",
         "zip":"234"
     },
     "contact":{
@@ -302,19 +302,18 @@
 
 ```json
 {
-    "facility":{
-        "id":1,
-        "type":1,
-        "name":"somename",
-        "company_name":"sonameCompany",
-        "npi":"somenpi",
-        "taxonomy":"dsfdsf",
-        "company_id":1
+    "name":"facilityName",
+    "type": 1,
+    "company_id": 1,
+    "taxonomy": {
+        "tax_id": "TAX01213",
+        "name": "NameTaxonomy"
     },
+    "npi":"facilityNPI",
     "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
+        "address":"address Facility",
+        "city":"city Facility",
+        "state":"state Facility",
         "zip":"234"
     },
     "contact":{
