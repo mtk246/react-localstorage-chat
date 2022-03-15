@@ -418,73 +418,8 @@
         ],
         "billing_companies": []
     },
-    {
-        "id": 2,
-        "email": "billingmanager@billing.com",
-        "email_verified_at": null,
-        "created_at": "2022-03-14T20:49:19.000000Z",
-        "updated_at": "2022-03-14T20:49:20.000000Z",
-        "token": null,
-        "isLogged": false,
-        "isBlocked": false,
-        "usercode": "US-00002-2022",
-        "userkey": null,
-        "status": false,
-        "last_login": null,
-        "profile_id": 2,
-        "billing_company_id": null,
-        "profile": {
-            "id": 2,
-            "ssn": "214572367",
-            "first_name": "Rosario",
-            "middle_name": "Gaylord",
-            "last_name": "Don",
-            "sex": "M",
-            "date_of_birth": "1990-04-01",
-            "avatar": null,
-            "credit_score": false,
-            "created_at": "2022-03-14T20:49:19.000000Z",
-            "updated_at": "2022-03-14T20:49:19.000000Z"
-        },
-        "roles": [
-            {
-                "id": 2,
-                "name": "BILLING_MANAGER",
-                "guard_name": "api",
-                "created_at": "2022-03-14T20:49:19.000000Z",
-                "updated_at": "2022-03-14T20:49:19.000000Z",
-                "pivot": {
-                    "model_id": 2,
-                    "role_id": 2,
-                    "model_type": "App\\Models\\User"
-                }
-            }
-        ],
-        "billing_companies": [
-            {
-                "id": 1,
-                "name": "Barrows Ltd",
-                "created_at": "2022-03-14T20:49:20.000000Z",
-                "updated_at": "2022-03-14T20:49:20.000000Z",
-                "code": "BC-00001-2022",
-                "status": false,
-                "pivot": {
-                    "user_id": 2,
-                    "billing_company_id": 1,
-                    "status": true,
-                    "created_at": "2022-03-14T20:49:21.000000Z",
-                    "updated_at": "2022-03-14T20:49:21.000000Z"
-                }
-            }
-        ]
-    }
 ]
 ```
-
-
-
-
-
 
 <a name="get-one-user"></a>
 ## Get one user
