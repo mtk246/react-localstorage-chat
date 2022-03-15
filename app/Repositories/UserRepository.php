@@ -200,6 +200,32 @@ class UserRepository{
         return true;
     }
 
+    public function newToken(string $token)
+    {
+        try {
+
+            $strData = \Crypt::decrypt($token);
+            $dataSplit = explode("@#@#$",$strData);
+            $user = User::where("email", $dataSplit[1])->first();
+
+            if (is_null($user)) return null;
+
+            $token = encrypt($user->id."@#@#$".$user->email);
+            $user->token = $token;
+            $user->save();
+            $profile = $user->profile;
+
+            $url = env("URL_FRONT") . "/newCredentials?mcctoken=" . $token;
+            $fullName = $profile->first_name . " " . $profile->last_name;
+
+            Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));
+        } catch (\Exception $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @param EditUserRequest $request
      * @param int $id

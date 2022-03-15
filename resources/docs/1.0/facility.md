@@ -61,10 +61,23 @@
     "name":"facilityName",
     "type": 1,
     "company_id": 1,
-    "taxonomy": {
-        "tax_id": "TAX01213",
-        "name": "NameTaxonomy"
-    },
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": true
+        },
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": false
+        },
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": false
+        }
+    ],
     "npi":"facilityNPI",
     "address":{
         "address":"address Facility",

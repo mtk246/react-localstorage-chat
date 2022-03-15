@@ -230,6 +230,16 @@ class UserController extends Controller
         }
     }
 
+    public function newToken(Request $request): JsonResponse
+    {
+        try {
+            $rs = $this->userRepository->newToken($request->token_old);
+            return ($rs) ? response()->json([], 204) : response()->json("Error, a error have occurred",403);
+        }catch (\Exception $exception){
+            return response()->json($exception->getMessage(),500);
+        }
+    }
+
     public function getInfoToken(string $token){
         try{
             $strData = \Crypt::decrypt($token);

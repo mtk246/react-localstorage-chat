@@ -15,6 +15,7 @@
 - [Update image user](#update-image-user)
 - [Update password](#update-password)
 - [Search by ssn](#search-by-ssn)
+- [New token](#new-token)
 
 
 <a name="basic-data"></a>
@@ -35,7 +36,7 @@
 | 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
 | 11|PATCH | `update password`   | `/user/update-password` |yes|update password|
 | 12|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
-
+| 13 |POST | `new token`   | `/user/new-token` |no|generate new token user|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -697,3 +698,23 @@
 #
 
 >{warning} response 404 when user not found
+
+<a name="new-token"></a>
+##Generate new token user
+
+## Body request example
+
+```json
+{
+    "token_old": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxMzk5NDU1LCJleHAiOjE2NDE0MDMwNTUsIm5iZiI6MTY0MTM5OTQ1NSwianRpIjoiMjJFTmh5U2hIOHhVNnE0NSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.73g-sUA9Mm86Z5qRsZjtDd-1mEwajPjT5neccmxHaUg"
+}
+```
+
+>{success} 204 response empty, token generate
+
+#
+
+>{warning} 404 user not found, 500 some exception
+
+
+#
