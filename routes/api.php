@@ -29,10 +29,12 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("me",[\App\Http\Controllers\AuthController::class,'me'])->middleware('auth:api');
     });
 
-    Route::prefix("user")->group(function(){
+    Route::prefix("user")->middleware(
+        'role:SUPER_USER|BILLING_MANAGER'
+    )->group(function(){
         Route::post("/",[\App\Http\Controllers\UserController::class,'createUser']);
-        Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware(['auth:api','role:SUPER_USER']);
-        Route::get("{id}/",[\App\Http\Controllers\UserController::class,'getOneUser'])->middleware(['auth:api','role:SUPER_USER']);
+        Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware('auth:api');
+        Route::get("{id}/",[\App\Http\Controllers\UserController::class,'getOneUser'])->middleware('auth:api');
         Route::post("send-email-rescue-pass",[\App\Http\Controllers\UserController::class,'sendEmailRescuePass']);
         Route::post("recovery-user",[\App\Http\Controllers\UserController::class,'recoveryUser']);
         Route::post("unlock-user",[\App\Http\Controllers\UserController::class,'unlockUser']);
@@ -194,7 +196,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("doctor")->middleware([
         "auth:api",
-        'role:SUPER_USER',
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
