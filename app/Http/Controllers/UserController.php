@@ -103,19 +103,19 @@ class UserController extends Controller
     public function createUser(UserCreateRequest $request): JsonResponse
     {
         try {
-            if( $request->has('company-billing') ){
-                if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ){
-                    return response()->json("Error company billing dont existent",403);
+            if( $request->has('company-billing') ) {
+                if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ) {
+                    return response()->json("Error company billing dont existent", 403);
                 }
             }
 
             /** @var  $user User*/
-            $user = $this->userRepository->create($request);
-            return response()->json($user,201);
-        }catch (\Exception $e){
-            return response()->json($e->getMessage(),500);
+            $user = $this->userRepository->create($request->validated());
+            return response()->json($user, 201);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
         } catch (\Throwable $e) {
-            return response()->json($e->getMessage(),500);
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -247,7 +247,7 @@ class UserController extends Controller
      */
     public function editUser(EditUserRequest $request, $id): JsonResponse
     {
-        $rs = $this->userRepository->editUser($request, $id);
+        $rs = $this->userRepository->editUser($request->validated(), $id);
         return $rs ? response()->json($rs) : response()->json("Error updating user", 400);
     }
 

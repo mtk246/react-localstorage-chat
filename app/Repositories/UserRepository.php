@@ -12,6 +12,8 @@ use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
 use App\Models\User;
+use App\Models\Profile;
+use App\Models\SocialMedia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -26,38 +28,74 @@ class UserRepository{
      * @param UserCreateRequest $request
      * @return User|Model|null
      */
-    public function create(UserCreateRequest $request) {
+    public function create(array $data) {
         try {
             DB::beginTransaction();
-            $validated = $request->validated();
 
-            $user = User::create([
-                "username"    => $validated['username'],
-                "email"       => $validated['email'],
-                "sex"         => $validated['sex'],
-                "firstName"   => $validated['firstName'],
-                "lastName"    => $validated['lastName'],
-                "middleName"  => $validated['middleName'],
-                "ssn"         => $validated['ssn'],
-                "dateOfBirth" => $validated['dateOfBirth'],
-                "usercode"    => encrypt(uniqid("", true))
+            /** Create Profile */
+            $profile = Profile::updateOrCreate([
+                "ssn" => $data["profile"]["ssn"]
+            ], [
+                "ssn"           => $data["profile"]["ssn"],
+                "first_name"    => $data["profile"]["first_name"],
+                "middle_name"   => $data["profile"]["middle_name"],
+                "last_name"     => $data["profile"]["last_name"],
+                "sex"           => $data["profile"]["sex"],
+                "date_of_birth" => $data["profile"]["date_of_birth"]
             ]);
 
-            if ($request->has("company-billing")) {
-                $user->billingCompanyUser()->attach($request->input("company-billing"));
+            $socialMedias = $profile->socialMedias;
+            /** Delete socialMedia */
+            foreach ($socialMedias as $socialMedia) {
+                $validated = false;
+                foreach ($data["profile"]["social_medias"] as $socialM) {
+                    if ($socialM['name'] == $socialMedia->name) {
+                        $validated = true;
+                        break;
+                    }
+                }
+                if (!$validated) $socialMedia->delete();
             }
 
-            if (isset($validated['roles']))
-                $user->assignRole($validated['roles']);
+            /** update or create new social medias */
+            foreach ($data["profile"]["social_medias"] as $socialMedia) {
+                SocialMedia::updateOrCreate([
+                    "name" => $socialMedia["name"]
+                ], [
+                    "name" => $socialMedia["name"],
+                    "link" => $socialMedia["link"],
+                    "profile_id" => $profile->id
+                ]);
+            }
+            /** Create User */
+            $user = User::create([
+                "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
+                "email"      => $data['email'],
+                "userkey"    => encrypt(uniqid("", true)),
+                "profile_id" => $profile->id
+            ]);
 
-            if (isset($validated['contact'])) {
-                $validated["contact"]["user_id"] = $user->id;
-                Contact::create($validated["contact"]);
+            /** Attach billing company */
+            if (isset($data['company-billing'])) {
+                $user->billingCompanies()->attach($data["company-billing"]);
             }
 
-            if (isset($validated['address'])) {
-                $validated["address"]["user_id"] = $user->id;
-                Address::create($validated["address"]);
+            /** Attach billing company */
+            if (isset($data['roles']))
+                $user->assignRole($data['roles']);
+
+            if (isset($data['contact'])) {
+                $data["contact"]["contactable_id"]     = $user->id;
+                $data["contact"]["contactable_type"]   = User::class;
+                $data["contact"]["billing_company_id"] = $data["company-billing"] ?? '';
+                Contact::create($data["contact"]);
+            }
+
+            if (isset($data['address'])) {
+                $data["address"]["addressable_id"]     = $user->id;
+                $data["address"]["addressable_type"]   = Address::class;
+                $data["address"]["billing_company_id"] = $data["company-billing"] ?? '';
+                Address::create($data["address"]);
             }
 
             $token = encrypt($user->id."@#@#$".$user->email);
@@ -66,16 +104,15 @@ class UserRepository{
 
             Mail::to($user->email)->send(
                 new GenerateNewPassword(
-                    $user->firstName.' '.$user->lastName,
+                    $profile->first_name . ' ' . $profile->last_name,
                     $user->email,
-                    \Crypt::decrypt($user->usercode),
+                    \Crypt::decrypt($user->userkey),
                     env('URL_FRONT') . "/newPassword?mcctoken=" . $token
                 )
             );
 
             DB::commit();
             return $user;
-
         }catch (\Exception $e) {
             DB::rollBack();
             return null;
@@ -105,10 +142,9 @@ class UserRepository{
      */
     public function getAllUsers() {
         return User::with([
+            "profile",
             "roles",
-            "address",
-            "contact",
-            "billingCompanyUser"
+            "billingCompanies"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
@@ -129,7 +165,7 @@ class UserRepository{
             $user->save();
 
             $url = env("URL_FRONT") . "/newCredentials?mcctoken=" . $token;
-            $fullName = $user->firstName . " " . $user->lastName;
+            $fullName = $user->profile->first_name . " " . $user->profile->last_name;
 
             Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));
         } catch (\Exception $e) {
@@ -169,41 +205,75 @@ class UserRepository{
      * @param int $id
      * @return User|User[]|Collection|Model|null
      */
-    public function editUser(EditUserRequest $request, int $id) {
-        $data = $request->validated();
-
+    public function editUser(array $data, int $id) {
         $user = User::find($id);
-        $user->update([
-            "username"    => $data['username'],
-            "email"       => $data['email'],
-            "sex"         => $data['sex'],
-            "firstName"   => $data['firstName'],
-            "lastName"    => $data['lastName'],
-            "middleName"  => $data['middleName'],
-            "ssn"         => $data['ssn'],
-            "dateOfBirth" => $data['dateOfBirth'],
+        $profile = $user->profile;
+        /** Create Profile */
+        $profile->update([
+            "ssn"           => $data["profile"]["ssn"],
+            "first_name"    => $data["profile"]["first_name"],
+            "middle_name"   => $data["profile"]["middle_name"],
+            "last_name"     => $data["profile"]["last_name"],
+            "sex"           => $data["profile"]["sex"],
+            "date_of_birth" => $data["profile"]["date_of_birth"]
         ]);
-        
-        if ($request->has("company-billing")) {
-            $user->billingCompanyUser()->sync($data["company-billing"]);
+
+        $socialMedias = $profile->socialMedias;
+        /** Delete socialMedia */
+        foreach ($socialMedias as $socialMedia) {
+            $validated = false;
+            foreach ($data["profile"]["social_medias"] as $socialM) {
+                if ($socialM['name'] == $socialMedia->name) {
+                    $validated = true;
+                    break;
+                }
+            }
+            if (!$validated) $socialMedia->delete();
         }
 
+        /** update or create new social medias */
+        foreach ($data["profile"]["social_medias"] as $socialMedia) {
+            SocialMedia::updateOrCreate([
+                "name" => $socialMedia["name"]
+            ], [
+                "name" => $socialMedia["name"],
+                "link" => $socialMedia["link"],
+                "profile_id" => $profile->id
+            ]);
+        }
+
+        /** Update User */
+        $user->update([
+            "email" => $data['email'],
+        ]);
+
+        /** Attach billing company */
+        if (isset($data['company-billing'])) {
+            $user->billingCompanies()->sync($data["company-billing"]);
+        }
+
+        /** Attach billing company */
         if (isset($data['roles']))
             $user->syncRoles($data['roles']);
 
-        if ($request->has('contact')) {
+        if (isset($data['contact'])) {
             $data["contact"]["email"] = $data['email'];
+            $data["contact"]["billing_company_id"] =  $data["company-billing"] ?? '';
             Contact::updateOrCreate([
-                "user_id" => $user->id
+                "contactable_id"     => $user->id,
+                "contactable_type"   => User::class
             ], $data['contact']);
         }
 
-        if ($request->has('address')) {
+        if (isset($data['address'])) {
+            $data["address"]["billing_company_id"] = $data["company-billing"] ?? '';
             Address::updateOrCreate([
-                "user_id" => $user->id
+                "addressable_id"     => $user->id,
+                "addressable_type"   => User::class
             ], $data["address"]);
         }
-        return $user->refresh()->load("contact")->load("address");
+
+        return $user->refresh()->load("profile");
     }
 
     /**
@@ -212,7 +282,7 @@ class UserRepository{
      * @return bool|int
      */
     public function changeStatus(bool $status, int $id) {
-        return User::whereId($id)->update(['available' => $status]);
+        return User::whereId($id)->update(['status' => $status]);
     }
 
     /**
@@ -222,9 +292,9 @@ class UserRepository{
     public function getOneUser(int $id) {
         $user = User::whereId($id)->with([
             "roles",
-            "address",
-            "contact",
-            "billingCompanyUser"
+            "addresses",
+            "contacts",
+            "billingCompanies"
         ])->first();
 
         return is_null($user) ? null : $user;

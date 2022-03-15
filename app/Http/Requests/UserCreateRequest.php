@@ -27,29 +27,35 @@ class UserCreateRequest extends FormRequest
         $roles = $this->roles;
         $invalidRoles = ['SUPER_USER', 'DEVELOPMENT_SUPPORT'];
         return [
-            'username'        => ['required', Rule::unique('users', 'username'), 'string', 'max:20'],
-            'email'           => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
-            'sex'             => ['required', 'string', 'max:1'],
-            'firstName'       => ['required', 'string', 'max:20'],
-            'lastName'        => ['required', 'string', 'max:20'],
-            'middleName'      => ['required', 'string', 'max:20'],
-            'ssn'             => ['required', 'string'],
-            'dateOfBirth'     => ['required', 'date'],
-            'roles'           => ['required', 'array'],
-            'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
+            'profile'               => ['required', 'array'],
+            'profile.sex'           => ['required', 'string', 'max:1'],
+            'profile.first_name'    => ['required', 'string', 'max:20'],
+            'profile.last_name'     => ['required', 'string', 'max:20'],
+            'profile.middle_name'   => ['nullable', 'string', 'max:20'],
+            'profile.ssn'           => ['required', 'string'],
+            'profile.date_of_birth' => ['required', 'date'],
+
+            'profile.social_medias' => ['required', 'array'],
+            'profile.social_medias.*.name' => ['sometimes', 'string'],
+            'profile.social_medias.*.link' => ['sometimes', 'string'],
+
+            'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'roles'                 => ['required', 'array'],
+            'company-billing'       => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
                 return (!in_array_any($invalidRoles, $roles));
             }), 'integer'],
 
-            'address'         => ['required', 'array'],
-            'address.address' => ['required', 'string'],
-            'address.city'    => ['required', 'string'],
-            'address.state'   => ['required', 'string'],
-            'address.zip'     => ['required', 'numeric'],
+            'address'               => ['required', 'array'],
+            'address.address'       => ['required', 'string'],
+            'address.city'          => ['required', 'string'],
+            'address.state'         => ['required', 'string'],
+            'address.zip'           => ['required', 'numeric'],
             
-            'contact'         => ['required', 'array'],
-            'contact.phone'   => ['required', 'string'],
-            'contact.fax'     => ['required', 'string'],
-            'contact.email'   => ['required', 'string']
+            'contact'               => ['required', 'array'],
+            'contact.mobile'        => ['nullable', 'string'],
+            'contact.phone'         => ['nullable', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
+            'contact.email'         => ['required', 'string']
         ];
     }
 }

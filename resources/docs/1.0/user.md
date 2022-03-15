@@ -48,16 +48,39 @@
 
 ```json
 {
-    "username":"eedddfdfdf",
-    "email":"eeeddd@test.com",
-    "sex":"m",
-    "firstName":"test",
-    "lastName":"test",
-    "middleName":"testing",
-    "roles":["ACCOUNT_MANAGER"],
-    "ssn":"345345",
-    "dateOfBirth":"1990-11-11",
-    "company-billing":1
+    "profile": {
+        "ssn":"237891836",
+        "first_name":"Fisrt Name",
+        "last_name":"Last Name",
+        "middle_name":"Middle Name",
+        "sex":"m",
+        "date_of_birth":"1990-11-11",
+        "social_medias": [
+            {
+                "name": "nameSocialMedia1",
+                "link": "URLSocialMedia1"
+            },
+            {
+                "name": "nameSocialMedia2",
+                "link": "URLSocialMedia2"
+            }
+        ]
+    },
+    "email":"user@gmail.com",
+    "company-billing": 1,
+    "roles":[
+        "BILLING_MANAGER"
+    ],"address": {
+        "address": "Direction address",
+        "city": "city address",
+        "state": "state address",
+        "zip": "123456789"
+    },"contact": {
+        "phone": "",
+        "fax": "",
+        "mobile": "",
+        "email": "user@gmail.com"
+    }
 }
 ```
 
@@ -74,33 +97,27 @@
 > {success} 201 user created
 
 
-
-
-
 ```json
 {
-    "username": "eedddfdfdf",
-    "email": "eeeddd@test.com",
-    "sex": "m",
-    "firstName": "test",
-    "lastName": "test",
-    "middleName": "testing",
-    "ssn": "345345",
-    "dateOfBirth": "1990-11-11",
-    "updated_at": "2022-01-25T13:49:58.000000Z",
-    "created_at": "2022-01-25T13:49:58.000000Z",
-    "id": 22,
-    "token": "eyJpdiI6ImFNZmJNZjRyUnFaRzh5b2RuWlUwTEE9PSIsInZhbHVlIjoiK0NtSTRiS3JHWjFicU5ZZGhsZjNrR2xHMGU2M3RWNFVBdk9USzFlMDV3cz0iLCJtYWMiOiJkZTVhNmFkYTQzYzQyYTFhMjVmNTEzNzNmY2Q2ZDhkNjEwNmM0MmE4ZDQxMjcyMmU4YzVkMDgyZGVkMzhmNjJkIiwidGFnIjoiIn0=",
+    "usercode": "US-00005-2022",
+    "email": "user@gmail.com",
+    "userkey": "eyJpdiI6IjlUdUVSYUhBdUpIYTNDZm43QUJQZVE9PSIsInZhbHVlIjoiclBTY010UjNteGY0NHhEMzNJeDhoalNFSldrZ2RQQVBYRUhaTXNCc3VSZz0iLCJtYWMiOiIwYTE0ZmJkNzVjODg0NzFmMDk3Y2VhODY5YzQ5MTA3NmY3ZjQ3NzQ4MTMxMzU0ODFmOWE4NzgzNjg2NDkzNTJmIiwidGFnIjoiIn0=",
+    "profile_id": 5,
+    "updated_at": "2022-03-15T09:06:25.000000Z",
+    "created_at": "2022-03-15T09:06:25.000000Z",
+    "id": 5,
+    "token": "eyJpdiI6ImxBaC9wbURHOW0rZ2RuVENEOEljb3c9PSIsInZhbHVlIjoibWV3K211L1JJeUFhZElFTVR6aTVJTGlxTjZPQnRLbXF2dUZWTU14eDhTTT0iLCJtYWMiOiI4MDRjYjg3NzMxZjExMGU0NTE5MzdiYjAxNmYwZGQ4NTQ2YjQzYWRkMDJkYTYyMWY2ODZiNWFlNDI4YmMzNmZiIiwidGFnIjoiIn0=",
+    "billing_company_id": null,
     "roles": [
         {
-            "id": 6,
-            "name": "ACCOUNT_MANAGER",
+            "id": 2,
+            "name": "BILLING_MANAGER",
             "guard_name": "api",
-            "created_at": "2021-12-23T18:08:35.000000Z",
-            "updated_at": "2021-12-23T18:08:35.000000Z",
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z",
             "pivot": {
-                "model_id": 22,
-                "role_id": 6,
+                "model_id": 5,
+                "role_id": 2,
                 "model_type": "App\\Models\\User"
             }
         }
@@ -156,26 +173,38 @@
 
 ```json
 {
-    "id": 2,
-    "username": "Cletus",
-    "email": "billingmanager@billing.com",
-    "sex": "M",
-    "lastName": "Kyleigh",
-    "firstName": "Garfield",
-    "middleName": "Hank",
-    "ssn": "23789183",
-    "dateOfBirth": "1995-04-28",
-    "company-billing": 1,
-    "roles": ["BILLING_MANAGER"],
-    "address": {
-        "address":"mexico guadalar",
-        "city":"ciudad de mexico",
-        "state":"dsfsdf",
-        "zip":"234"
+    "profile": {
+        "ssn":"237891836",
+        "first_name":"Fisrt Name",
+        "last_name":"Last Name",
+        "middle_name":"Middle Name",
+        "sex":"m",
+        "date_of_birth":"1990-11-11",
+        "social_medias": [
+            {
+                "name": "nameSocialMedia1",
+                "link": "URLSocialMedia1"
+            },
+            {
+                "name": "nameSocialMedia2",
+                "link": "URLSocialMedia2"
+            }
+        ]
     },
-    "contact": {
-        "phone":"111-111-1111",
-        "fax":"+9999999"
+    "email":"user@gmail.com",
+    "company-billing": 1,
+    "roles":[
+        "BILLING_MANAGER"
+    ],"address": {
+        "address": "Direction address",
+        "city": "city address",
+        "state": "state address",
+        "zip": "123456789"
+    },"contact": {
+        "phone": "",
+        "fax": "",
+        "mobile": "",
+        "email": "user@gmail.com"
     }
 }
 ```
@@ -184,70 +213,45 @@
 
 ```json
 {
-    "id": 2,
-    "username": "Cletus",
-    "email": "billingmanager@billing.com",
+    "id": 5,
+    "email": "user@gmail.com",
     "email_verified_at": null,
-    "created_at": "2022-03-03T10:34:43.000000Z",
-    "updated_at": "2022-03-08T20:31:04.000000Z",
-    "sex": "M",
-    "lastName": "Kyleigh",
-    "firstName": "Garfield",
-    "middleName": "Hank",
-    "token": null,
-    "available": false,
+    "created_at": "2022-03-15T09:06:25.000000Z",
+    "updated_at": "2022-03-15T09:06:25.000000Z",
+    "token": "eyJpdiI6ImxBaC9wbURHOW0rZ2RuVENEOEljb3c9PSIsInZhbHVlIjoibWV3K211L1JJeUFhZElFTVR6aTVJTGlxTjZPQnRLbXF2dUZWTU14eDhTTT0iLCJtYWMiOiI4MDRjYjg3NzMxZjExMGU0NTE5MzdiYjAxNmYwZGQ4NTQ2YjQzYWRkMDJkYTYyMWY2ODZiNWFlNDI4YmMzNmZiIiwidGFnIjoiIn0=",
     "isLogged": false,
-    "img_profile": null,
-    "ssn": "23789183",
-    "dateOfBirth": "1995-04-28",
     "isBlocked": false,
-    "usercode": null,
+    "usercode": "US-00005-2022",
+    "userkey": "eyJpdiI6IjlUdUVSYUhBdUpIYTNDZm43QUJQZVE9PSIsInZhbHVlIjoiclBTY010UjNteGY0NHhEMzNJeDhoalNFSldrZ2RQQVBYRUhaTXNCc3VSZz0iLCJtYWMiOiIwYTE0ZmJkNzVjODg0NzFmMDk3Y2VhODY5YzQ5MTA3NmY3ZjQ3NzQ4MTMxMzU0ODFmOWE4NzgzNjg2NDkzNTJmIiwidGFnIjoiIn0=",
+    "status": false,
+    "last_login": null,
+    "profile_id": 5,
     "billing_company_id": null,
+    "profile": {
+        "id": 5,
+        "ssn": "237891836",
+        "first_name": "Fisrt Name",
+        "middle_name": "Middle Name",
+        "last_name": "Last Name",
+        "sex": "m",
+        "date_of_birth": "1990-11-11",
+        "avatar": null,
+        "credit_score": false,
+        "created_at": "2022-03-15T09:06:25.000000Z",
+        "updated_at": "2022-03-15T09:06:25.000000Z"
+    },
     "roles": [
         {
             "id": 2,
             "name": "BILLING_MANAGER",
             "guard_name": "api",
-            "created_at": "2022-03-03T10:34:42.000000Z",
-            "updated_at": "2022-03-03T10:34:42.000000Z",
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z",
             "pivot": {
-                "model_id": 2,
+                "model_id": 5,
                 "role_id": 2,
                 "model_type": "App\\Models\\User"
             }
-        }
-    ],
-    "contact": [
-        {
-            "id": 51,
-            "phone": "111-111-1111",
-            "fax": "+9999999",
-            "email": "billingmanager@billing.com",
-            "user_id": 2,
-            "billing_company_id": null,
-            "created_at": "2022-03-08T20:23:33.000000Z",
-            "updated_at": "2022-03-08T20:31:04.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": null,
-            "insurance_company_id": null
-        }
-    ],
-    "address": [
-        {
-            "id": 51,
-            "address": "mexico guadalar",
-            "city": "ciudad de mexico",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": 2,
-            "billing_company_id": null,
-            "created_at": "2022-03-08T20:23:33.000000Z",
-            "updated_at": "2022-03-08T20:30:25.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": null,
-            "insurance_company_id": null
         }
     ]
 }
@@ -283,144 +287,196 @@
 ```json
 [
     {
-        "id": 2,
-        "username": "usertes",
-        "email": "usertest@test.com",
+        "id": 3,
+        "email": "doctor@billing.com",
         "email_verified_at": null,
-        "created_at": "2021-12-27T07:02:27.000000Z",
-        "updated_at": "2021-12-27T07:02:27.000000Z",
-        "sex": "m",
-        "lastName": "testest",
-        "firstName": "usertest",
-        "middleName": "testing",
+        "created_at": "2022-03-14T20:49:20.000000Z",
+        "updated_at": "2022-03-14T20:49:20.000000Z",
         "token": null,
-        "available": false
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00003-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": null,
+        "profile_id": 3,
+        "billing_company_id": null,
+        "profile": {
+            "id": 3,
+            "ssn": "587997674",
+            "first_name": "Ned",
+            "middle_name": "Dell",
+            "last_name": "Isaiah",
+            "sex": "M",
+            "date_of_birth": "1990-04-01",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z"
+        },
+        "roles": [
+            {
+                "id": 8,
+                "name": "DOCTOR",
+                "guard_name": "api",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
+                "pivot": {
+                    "model_id": 3,
+                    "role_id": 8,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "billing_companies": []
     },
     {
         "id": 4,
-        "username": "test",
-        "email": "test1@test.com",
+        "email": "patient@billing.com",
         "email_verified_at": null,
-        "created_at": "2021-12-27T07:07:58.000000Z",
-        "updated_at": "2021-12-27T07:07:58.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
+        "created_at": "2022-03-14T20:49:20.000000Z",
+        "updated_at": "2022-03-14T20:49:20.000000Z",
         "token": null,
-        "available": false
-    },
-    {
-        "id": 5,
-        "username": "test",
-        "email": "test2@test.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-27T07:14:29.000000Z",
-        "updated_at": "2021-12-27T07:14:29.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
-    },
-    {
-        "id": 6,
-        "username": "test",
-        "email": "test2ee@test.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-27T07:52:28.000000Z",
-        "updated_at": "2021-12-27T07:52:28.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
-    },
-    {
-        "id": 7,
-        "username": "test",
-        "email": "test244ee@test.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-27T08:01:07.000000Z",
-        "updated_at": "2021-12-27T08:01:07.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
-    },
-    {
-        "id": 8,
-        "username": "test",
-        "email": "test565@test.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-27T08:19:42.000000Z",
-        "updated_at": "2021-12-27T08:19:42.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
-    },
-    {
-        "id": 10,
-        "username": "test",
-        "email": "testfff@test.com",
-        "email_verified_at": null,
-        "created_at": "2022-01-03T15:05:57.000000Z",
-        "updated_at": "2022-01-03T15:05:57.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
-    },
-    {
-        "id": 3,
-        "username": "test",
-        "email": "test@test.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-27T07:03:51.000000Z",
-        "updated_at": "2022-01-04T12:07:10.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": "eyJpdiI6ImVQWTJtWHdPbGNhWVpuVVBHWjAyMEE9PSIsInZhbHVlIjoiRy93d1d1cGFmQWdLeGI1TURzaDJJa0tocHVJRU0xVE9oMTl6aXJRb2dRTT0iLCJtYWMiOiIwZDU0NWU4YWE3ODJkYmRiMmNiMWNmZWNjYTUxZDlmNzAzNDAxMmQ0NzMyYTgyYzA5M2FlMTc5NjM4NjU0ZDkzIiwidGFnIjoiIn0=",
-        "available": false
-    },
-    {
-        "id": 12,
-        "username": "test",
-        "email": "testffddf@test.com",
-        "email_verified_at": null,
-        "created_at": "2022-01-05T17:55:17.000000Z",
-        "updated_at": "2022-01-05T17:55:17.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": false
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00004-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": null,
+        "profile_id": 4,
+        "billing_company_id": null,
+        "profile": {
+            "id": 4,
+            "ssn": "128285957",
+            "first_name": "Geovanny",
+            "middle_name": "Janick",
+            "last_name": "Jeramy",
+            "sex": "M",
+            "date_of_birth": "1990-04-01",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z"
+        },
+        "roles": [
+            {
+                "id": 9,
+                "name": "PATIENT",
+                "guard_name": "api",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
+                "pivot": {
+                    "model_id": 4,
+                    "role_id": 9,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "billing_companies": []
     },
     {
         "id": 1,
-        "username": "hola",
         "email": "admin@billing.com",
         "email_verified_at": null,
-        "created_at": "2021-12-23T18:08:35.000000Z",
-        "updated_at": "2022-01-05T18:02:27.000000Z",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
+        "created_at": "2022-03-14T20:49:19.000000Z",
+        "updated_at": "2022-03-15T08:59:12.000000Z",
         "token": null,
-        "available": true
+        "isLogged": true,
+        "isBlocked": false,
+        "usercode": "US-00001-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": "2022-03-15 08:59:12",
+        "profile_id": 1,
+        "billing_company_id": null,
+        "profile": {
+            "id": 1,
+            "ssn": "905620308",
+            "first_name": "Cornelius",
+            "middle_name": "Darius",
+            "last_name": "Earl",
+            "sex": "M",
+            "date_of_birth": "1990-04-01",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z"
+        },
+        "roles": [
+            {
+                "id": 1,
+                "name": "SUPER_USER",
+                "guard_name": "api",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
+                "pivot": {
+                    "model_id": 1,
+                    "role_id": 1,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "billing_companies": []
+    },
+    {
+        "id": 2,
+        "email": "billingmanager@billing.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-14T20:49:19.000000Z",
+        "updated_at": "2022-03-14T20:49:20.000000Z",
+        "token": null,
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00002-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": null,
+        "profile_id": 2,
+        "billing_company_id": null,
+        "profile": {
+            "id": 2,
+            "ssn": "214572367",
+            "first_name": "Rosario",
+            "middle_name": "Gaylord",
+            "last_name": "Don",
+            "sex": "M",
+            "date_of_birth": "1990-04-01",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z"
+        },
+        "roles": [
+            {
+                "id": 2,
+                "name": "BILLING_MANAGER",
+                "guard_name": "api",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
+                "pivot": {
+                    "model_id": 2,
+                    "role_id": 2,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "billing_companies": [
+            {
+                "id": 1,
+                "name": "Barrows Ltd",
+                "created_at": "2022-03-14T20:49:20.000000Z",
+                "updated_at": "2022-03-14T20:49:20.000000Z",
+                "code": "BC-00001-2022",
+                "status": false,
+                "pivot": {
+                    "user_id": 2,
+                    "billing_company_id": 1,
+                    "status": true,
+                    "created_at": "2022-03-14T20:49:21.000000Z",
+                    "updated_at": "2022-03-14T20:49:21.000000Z"
+                }
+            }
+        ]
     }
 ]
 ```
@@ -445,7 +501,72 @@
 
 `user_id required integer`
 
+## Response
+
+
 >{success} 200 request made successfully
+
+```json
+{
+    "id": 1,
+    "email": "admin@billing.com",
+    "email_verified_at": null,
+    "created_at": "2022-03-14T20:49:19.000000Z",
+    "updated_at": "2022-03-15T08:59:12.000000Z",
+    "token": null,
+    "isLogged": true,
+    "isBlocked": false,
+    "usercode": "US-00001-2022",
+    "userkey": null,
+    "status": false,
+    "last_login": "2022-03-15 08:59:12",
+    "profile_id": 1,
+    "billing_company_id": null,
+    "roles": [
+        {
+            "id": 1,
+            "name": "SUPER_USER",
+            "guard_name": "api",
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z",
+            "pivot": {
+                "model_id": 1,
+                "role_id": 1,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "id": 1,
+            "address": "Singleton Rd",
+            "city": "Calimesa",
+            "state": "California",
+            "zip": "923202207",
+            "billing_company_id": null,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z",
+            "addressable_type": "App\\Models\\User",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 1,
+            "phone": "(740) 208-8506",
+            "fax": "(918) 534-7718",
+            "email": "dach.leopold@nikolaus.com",
+            "billing_company_id": null,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z",
+            "mobile": "218-885-3211",
+            "contactable_type": "App\\Models\\User",
+            "contactable_id": 1
+        }
+    ],
+    "billing_companies": []
+}
+```
 
 #
 
@@ -604,7 +725,8 @@
 ```
 
 >{success} 200 Response 
-> ```json
+
+```json
 {
     "path":"somepath"
 }

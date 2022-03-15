@@ -36,51 +36,40 @@
 
 ### Response
 ```json
-    {
+{
     "user": {
         "id": 1,
-        "username": "hola",
         "email": "admin@billing.com",
         "email_verified_at": null,
-        "created_at": "2021-12-23T18:08:35.000000Z",
-        "updated_at": "2022-01-03T21:42:56.000000Z",
-        "DOB": "2021-12-26",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
+        "created_at": "2022-03-14T20:49:19.000000Z",
+        "updated_at": "2022-03-14T23:42:30.000000Z",
         "token": null,
-        "available": true,
-        "permissions": [
-            {
-                "id": 1,
-                "name": "edit articles",
-                "guard_name": "api",
-                "created_at": "2022-01-04T01:45:08.000000Z",
-                "updated_at": "2022-01-04T01:45:08.000000Z",
-                "pivot": {
-                    "model_id": 1,
-                    "permission_id": 1,
-                    "model_type": "App\\Models\\User"
-                }
-            }
-        ],
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00001-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": null,
+        "profile_id": 1,
+        "billing_company_id": null,
+        "permissions": [],
         "roles": [
             {
                 "id": 1,
                 "name": "SUPER_USER",
                 "guard_name": "api",
-                "created_at": "2021-12-23T18:08:35.000000Z",
-                "updated_at": "2021-12-23T18:08:35.000000Z",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
                 "pivot": {
                     "model_id": 1,
                     "role_id": 1,
                     "model_type": "App\\Models\\User"
                 }
             }
-        ]
+        ],
+        "billing_companies": []
     },
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjQxMzk5NDU1LCJleHAiOjE2NDE0MDMwNTUsIm5iZiI6MTY0MTM5OTQ1NSwianRpIjoiMjJFTmh5U2hIOHhVNnE0NSIsInN1YiI6MSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.73g-sUA9Mm86Z5qRsZjtDd-1mEwajPjT5neccmxHaUg",
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC92MVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDczMDE1MDQsImV4cCI6MTY0NzMwNTEwNCwibmJmIjoxNjQ3MzAxNTA0LCJqdGkiOiJsWEhyUUJZZHNGRWI0bFZPIiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.WYDpxMS9r3X0eU44k7jsAKjjnGw9kNIwIMOvsNHddSI",
     "token_type": "bearer",
     "expires_in": 3600
 }
@@ -88,10 +77,12 @@
 
 > {warning} code is 401 when the credencials are wrong
 
-#
-
-> {danger} code is 500 when is throw a exception
-
+### Response
+```json
+{
+    "error": "Bad Credencials"
+}
+```
 
 <a name="logout"></a>
 ## Logout
@@ -105,8 +96,6 @@
 
 ### Response
 > {success} Code 200
-
-
 
 ```json
 {
@@ -135,25 +124,26 @@
 ```json
 {
     "id": 1,
-    "username": "hola",
     "email": "admin@billing.com",
     "email_verified_at": null,
-    "created_at": "2021-12-23T18:08:35.000000Z",
-    "updated_at": "2022-01-03T21:42:56.000000Z",
-    "DOB": "2021-12-26",
-    "sex": "m",
-    "lastName": "test",
-    "firstName": "test",
-    "middleName": "testing",
+    "created_at": "2022-03-14T20:49:19.000000Z",
+    "updated_at": "2022-03-14T23:42:30.000000Z",
     "token": null,
-    "available": true,
+    "isLogged": true,
+    "isBlocked": false,
+    "usercode": "US-00001-2022",
+    "userkey": null,
+    "status": false,
+    "last_login": null,
+    "profile_id": 1,
+    "billing_company_id": null,
     "roles": [
         {
             "id": 1,
             "name": "SUPER_USER",
             "guard_name": "api",
-            "created_at": "2021-12-23T18:08:35.000000Z",
-            "updated_at": "2021-12-23T18:08:35.000000Z",
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z",
             "pivot": {
                 "model_id": 1,
                 "role_id": 1,
@@ -161,20 +151,21 @@
             }
         }
     ],
-    "permissions": [
-        {
-            "id": 1,
-            "name": "edit articles",
-            "guard_name": "api",
-            "created_at": "2022-01-04T01:45:08.000000Z",
-            "updated_at": "2022-01-04T01:45:08.000000Z",
-            "pivot": {
-                "model_id": 1,
-                "permission_id": 1,
-                "model_type": "App\\Models\\User"
-            }
-        }
-    ]
+    "permissions": [],
+    "profile": {
+        "id": 1,
+        "ssn": "905620308",
+        "first_name": "Cornelius",
+        "middle_name": "Darius",
+        "last_name": "Earl",
+        "sex": "M",
+        "date_of_birth": "1990-04-01",
+        "avatar": null,
+        "credit_score": false,
+        "created_at": "2022-03-14T20:49:19.000000Z",
+        "updated_at": "2022-03-14T20:49:19.000000Z",
+        "social_medias": []
+    }
 }
 ```
 
@@ -204,52 +195,5 @@
 
 
 ```json
-{
-    "user": {
-        "id": 1,
-        "username": "hola",
-        "email": "admin@billing.com",
-        "email_verified_at": null,
-        "created_at": "2021-12-23T18:08:35.000000Z",
-        "updated_at": "2022-01-03T21:42:56.000000Z",
-        "DOB": "2021-12-26",
-        "sex": "m",
-        "lastName": "test",
-        "firstName": "test",
-        "middleName": "testing",
-        "token": null,
-        "available": true,
-        "permissions": [
-            {
-                "id": 1,
-                "name": "edit articles",
-                "guard_name": "api",
-                "created_at": "2022-01-04T01:45:08.000000Z",
-                "updated_at": "2022-01-04T01:45:08.000000Z",
-                "pivot": {
-                    "model_id": 1,
-                    "permission_id": 1,
-                    "model_type": "App\\Models\\User"
-                }
-            }
-        ],
-        "roles": [
-            {
-                "id": 1,
-                "name": "SUPER_USER",
-                "guard_name": "api",
-                "created_at": "2021-12-23T18:08:35.000000Z",
-                "updated_at": "2021-12-23T18:08:35.000000Z",
-                "pivot": {
-                    "model_id": 1,
-                    "role_id": 1,
-                    "model_type": "App\\Models\\User"
-                }
-            }
-        ]
-    },
-    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvdjFcL2F1dGhcL3JlZnJlc2gtdG9rZW4iLCJpYXQiOjE2NDE0MDAyODcsImV4cCI6MTY0MTQwNDExNywibmJmIjoxNjQxNDAwNTE3LCJqdGkiOiJxTHdXaDRuUE1lYXB1RkFiIiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.SsLPU-EkXh1I-B4OhNLnS_dZrzjtoaSrLOsbOMYJCpY",
-    "token_type": "bearer",
-    "expires_in": 3600
-}
+"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC92MVwvYXV0aFwvcmVmcmVzaC10b2tlbiIsImlhdCI6MTY0NzMxNDE0NSwiZXhwIjoxNjQ3MzE3Nzc5LCJuYmYiOjE2NDczMTQxNzksImp0aSI6IkFJMEtRM243cWxmVlNIWjEiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NKYOANWqHT42mEviQgQMgZXi1RkZ3bbN1rFdBupvzLI"
 ```

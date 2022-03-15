@@ -86,9 +86,9 @@ class AuthController extends Controller
     {
         $dataValidated = $request->validated();
 
-//        if( $this->checkIsLogged($request->input("email")) ){
-//            return response()->json("this user has a session active in other device",401);
-//        }
+        //if( $this->checkIsLogged($request->input("email")) ) {
+            //return response()->json("this user has a session active in other device", 401);
+        //}
 
         $user = User::where('email', $dataValidated["email"])->firstOrFail();
         if ($user !== null && ($user->isBlocked == true)) {
@@ -113,10 +113,14 @@ class AuthController extends Controller
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
 
+        $user->last_login = date('Y-m-d H:i:s');
+        $user->isLogged = true;
+        $user->save();
+
         return $this->respondWithToken($token, $request->ip(), $request->userAgent());
     }
 
-    public function checkIsLogged($email){
+    public function checkIsLogged($email) {
         $user = User::whereEmail($email)->first();
 
         return $user->isLogged;
@@ -145,7 +149,10 @@ class AuthController extends Controller
     {
         $user = User::whereId(auth()->id())->with([
             "roles",
-            "permissions"
+            "permissions",
+            "profile" => function ($query) {
+                $query->with('socialMedias');
+            }
         ])->first();
 
         return response()->json($user);
