@@ -43,7 +43,7 @@ class UserCreateRequest extends FormRequest
             'roles'                 => ['required', 'array'],
             'company-billing'       => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
                 return (!in_array_any($invalidRoles, $roles));
-            }), 'integer'],
+            }), 'integer', 'nullable'],
 
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],

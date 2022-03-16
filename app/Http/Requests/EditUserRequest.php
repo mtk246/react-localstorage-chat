@@ -45,7 +45,7 @@ class EditUserRequest extends FormRequest
 
             'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
                 return (!in_array_any($invalidRoles, $roles ?? $invalidRoles));
-            }), 'integer'],
+            }), 'integer', 'nullable'],
 
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],
