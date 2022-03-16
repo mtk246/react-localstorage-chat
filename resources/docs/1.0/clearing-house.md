@@ -42,17 +42,7 @@
     "name":"clearing first",
     "org_type":"222CH123",
     "ack_required":true,
-    "taxonomies": [
-        {
-            "tax_id": "TAX01244",
-            "name": "NameTaxonomy Clearing",
-            "primary": true
-        },{
-            "tax_id": "TAX0145",
-            "name": "NameTaxonomy 2 Clearing",
-            "primary": false
-        }
-    ],"address": {
+    "address": {
         "address":"address Clearing",
         "city":"city Clearing",
         "state":"state Clearing",
@@ -351,17 +341,7 @@
     "name":"clearing first edited",
     "org_type":"222CH124",
     "ack_required":true,
-    "taxonomies": [
-        {
-            "tax_id": "TAX01244",
-            "name": "NameTaxonomy Clearing",
-            "primary": true
-        },{
-            "tax_id": "TAX0145",
-            "name": "NameTaxonomy 2 Clearing",
-            "primary": false
-        }
-    ],"address": {
+    "address": {
         "address":"address Clearing",
         "city":"city Clearing",
         "state":"state Clearing",
