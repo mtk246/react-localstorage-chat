@@ -18,7 +18,7 @@ class UpdateFieldsToTaxonomiesTable extends Migration
             $table->dropColumn('company_id');
             $table->dropColumn('isPrimary');
             
-            $table->string('code');
+            $table->string('tax_id');
             $table->boolean('primary')->defautl('false');
         });
     }

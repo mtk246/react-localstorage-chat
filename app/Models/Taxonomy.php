@@ -34,7 +34,7 @@ class Taxonomy extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "code",
+        "tax_id",
         "name",
         "primary"
     ];
