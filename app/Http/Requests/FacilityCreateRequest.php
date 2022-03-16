@@ -25,22 +25,26 @@ class FacilityCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "facility" => ["required", "array"],
-            "facility.type" => ["required", "integer"],
-            "facility.name"         => ["required", "string", Rule::unique('facilities', 'name')],
-            "facility.company_name" => ["required", "string", Rule::unique('facilities', 'company_name')],
-            "facility.npi"          => ["required", "string"],
-            "facility.taxonomy"     => ["required", "string"],
-            "facility.company_id"   => ["required", "integer"],
-            "address"               => ["required", "array"],
-            'address.address'       => ["required", "string"],
-            'address.city'          => ["required", "string"],
-            'address.state'         => ["required", "string"],
-            'address.zip'           => ["required", "numeric"],
-            "contact"               => ["required", "array"],
-            "contact.phone"         => ["required", "string"],
-            "contact.fax"           => ["required", "string"],
-            "contact.email"         => ["required", "email:rfc"],
+            'name'            => ['required', 'string', Rule::unique('facilities', 'name')],
+            'npi'             => ['required', 'string'],
+            'type'            => ['required', 'integer'],
+            'company_id'      => ['required', 'integer'],
+
+            'taxonomies'           => ['required', 'array'],
+            'taxonomies.*.tax_id'  => ['required', 'string'],
+            'taxonomies.*.name'    => ['required', 'string'],
+            'taxonomies.*.primary' => ['required', 'boolean'],
+
+            'address'               => ['required', 'array'],
+            'address.address'       => ['required', 'string'],
+            'address.city'          => ['required', 'string'],
+            'address.state'         => ['required', 'string'],
+            'address.zip'           => ['required', 'numeric'],
+            
+            'contact'               => ['required', 'array'],
+            'contact.phone'         => ['required', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
+            'contact.email'         => ['required', 'email:rfc'],
         ];
     }
 }

@@ -5,10 +5,12 @@ namespace App\Repositories;
 use App\Models\BillingCompany;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Models\Taxonomy;
 use App\Models\Facility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class FacilityRepository
 {
@@ -17,16 +19,47 @@ class FacilityRepository
      * @return Facility|Model
      */
     public function create(array $data) {
-        $facility = Facility::create($data["facility"]);
-        $this->changeStatus(true, $facility->id);
+        try {
+            DB::beginTransaction();
+            $facility = Facility::create([
+                "code"       => generateNewCode("FA", 5, date("Y"), Facility::class, "code"),
+                "name"       => $data["name"],
+                "npi"        => $data["npi"],
+                "type"       => $data["type"],
+                "company_id" => $data["company_id"],
+            ]);
 
-        $data["contact"]["facility_id"] = $facility->id;
-        $data["address"]["facility_id"] = $facility->id;
 
-        Address::create($data["address"]);
-        Contact::create($data["contact"]);
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(["tax_id" => $taxonomy["tax_id"]], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $facility->taxonomies()->sync($tax_array);
+            }
+            $this->changeStatus(true, $facility->id);
+            $billingCompany = auth()->user()->billingCompanies->first();
 
-        return $facility;
+            if (isset($data['address']['address'])) {
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["addressable_id"]     = $facility->id;
+                $data["address"]["addressable_type"]   = Facility::class;
+                Address::create($data["address"]);
+            }
+            if (isset($data["contact"]["email"])) {
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["contactable_id"]     = $facility->id;
+                $data["contact"]["contactable_type"]   = Facility::class;
+                Contact::create($data["contact"]);
+            }
+
+            DB::commit();
+            return $facility;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -34,9 +67,9 @@ class FacilityRepository
      */
     public function getAllFacilities() {
         return Facility::with([
-            "address",
-            "contact"
-        ])->get();
+            "addresses",
+            "contacts"
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**
@@ -44,11 +77,28 @@ class FacilityRepository
      * @return Facility|Builder|Model|object|null
      */
     public function getOneFacility(int $id) {
-        $facility = Facility::whereId($id)->with([
-            "address",
-            "contact",
-            "company"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $facility = Facility::whereId($id)->with([
+                "taxonomies",
+                "addresses",
+                "contacts",
+                "company",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $facility = Facility::whereId($id)->with([
+                "taxonomies",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "company",
+                "billingCompanies"
+            ])->first();
+        }
 
         return !is_null($facility) ? $facility : null;
     }
@@ -59,27 +109,52 @@ class FacilityRepository
      * @return Facility|Builder|Model|object|null
      */
     public function updateFacility(array $data, int $id) {
-        if (isset($data["facility"])) {
-            $facility = Facility::whereId($id)->first();
-            $facility->update($data['facility']);
+        try {
+            DB::beginTransaction();
+            $facility = Facility::find($id);
+
+            $facility->update([
+                "name"       => $data["name"],
+                "npi"        => $data["npi"],
+                "type"       => $data["type"],
+                "company_id" => $data["company_id"]
+            ]);
+
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate([
+                        "tax_id" => $taxonomy["tax_id"]
+                    ], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $facility->taxonomies()->sync($tax_array);
+            }
+
+            $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['contact'])) {
+                Contact::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? '',
+                    "contactable_id"     => $facility->id,
+                    "contactable_type"   => Facility::class
+                ], $data['contact']);
+            }
 
             if (isset($data['address'])) {
-                $address = Address::updateOrCreate([
-                    'facility_id' => $facility->id
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? '',
+                    "addressable_id"     => $facility->id,
+                    "addressable_type"   => Facility::class
                 ], $data["address"]);
             }
 
-            if (isset($data['contact'])) {
-                $contact = Contact::updateOrCreate([
-                    'facility_id' => $facility->id
-                ], $data["contact"]);
-            }
+            DB::commit();
+            return Facility::whereId($id)->first();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
         }
-
-        return Facility::whereId($id)->with([
-            "address",
-            "contact"
-        ])->first();
     }
 
     /**
@@ -96,7 +171,7 @@ class FacilityRepository
      * @return bool|int
      */
     public function changeStatus(bool $status, int $id) {
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
         $facility = Facility::find($id);
@@ -118,7 +193,7 @@ class FacilityRepository
         $facility = Facility::find($id);
         if (is_null($facility)) return null;
         
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
         if (is_null($facility->billingCompanies()->find($billingCompany->id))) {

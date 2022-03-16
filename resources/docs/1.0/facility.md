@@ -78,17 +78,17 @@
             "primary": false
         }
     ],
-    "npi":"facilityNPI",
+    "npi":"123fac321",
     "address":{
         "address":"address Facility",
         "city":"city Facility",
         "state":"state Facility",
-        "zip":"234"
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"facility@facility.com"
     }
 }
 ```
@@ -110,15 +110,15 @@
 
 ```json
 {
+    "code": "FA-00001-2022",
+    "name": "facilityName",
+    "npi": "123fac321",
     "type": 1,
-    "name": "somenamessfff",
-    "company_name": "sonameCssompany",
-    "npi": "somenpi",
-    "taxonomy": "dsfdsf",
-    "company_id": 2,
-    "updated_at": "2022-02-02T19:46:39.000000Z",
-    "created_at": "2022-02-02T19:46:39.000000Z",
-    "id": 3
+    "company_id": 1,
+    "updated_at": "2022-03-16T10:03:40.000000Z",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "id": 1,
+    "status": false
 }
 ```
 
@@ -148,80 +148,42 @@
     {
         "id": 1,
         "type": 1,
-        "name": "somename",
-        "company_name": "sonameCompany",
-        "npi": "somenpi",
-        "taxonomy": "dsfdsf",
+        "name": "facilityName",
+        "npi": "123fac321",
+        "created_at": "2022-03-16T10:03:40.000000Z",
+        "updated_at": "2022-03-16T10:03:40.000000Z",
         "company_id": 1,
-        "created_at": "2022-01-22T21:30:58.000000Z",
-        "updated_at": "2022-01-22T21:30:58.000000Z",
-        "address": {
-            "id": 5,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-01-22T21:30:59.000000Z",
-            "updated_at": "2022-01-22T21:30:59.000000Z",
-            "clearing_house_id": null,
-            "facility_id": 1,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 2,
-        "type": 1,
-        "name": "somenamefff",
-        "company_name": "sonameCompany",
-        "npi": "somenpi",
-        "taxonomy": "dsfdsf",
-        "company_id": 2,
-        "created_at": "2022-01-22T21:41:38.000000Z",
-        "updated_at": "2022-01-22T21:41:38.000000Z",
-        "address": {
-            "id": 6,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-01-22T21:41:38.000000Z",
-            "updated_at": "2022-01-22T21:41:38.000000Z",
-            "clearing_house_id": null,
-            "facility_id": 2,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 3,
-        "type": 1,
-        "name": "somenamessfff",
-        "company_name": "sonameCssompany",
-        "npi": "somenpi",
-        "taxonomy": "dsfdsf",
-        "company_id": 2,
-        "created_at": "2022-02-02T19:46:39.000000Z",
-        "updated_at": "2022-02-02T19:46:39.000000Z",
-        "address": {
-            "id": 18,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T19:46:39.000000Z",
-            "updated_at": "2022-02-02T19:46:39.000000Z",
-            "clearing_house_id": null,
-            "facility_id": 3,
-            "company_id": null
-        },
-        "contact": null
+        "code": "FA-00001-2022",
+        "status": false,
+        "addresses": [
+            {
+                "id": 4,
+                "address": "address Facility",
+                "city": "city Facility",
+                "state": "state Facility",
+                "zip": "234",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T10:03:41.000000Z",
+                "updated_at": "2022-03-16T10:03:41.000000Z",
+                "addressable_type": "App\\Models\\Facility",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
+            {
+                "id": 5,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "facility@facility.com",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T10:03:41.000000Z",
+                "updated_at": "2022-03-16T10:03:41.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Facility",
+                "contactable_id": 1
+            }
+        ],
+        "billing_companies": []
     }
 ]
 ```
@@ -252,31 +214,71 @@
 #
 
 ```json
-    {
+{
     "id": 1,
     "type": 1,
-    "name": "somename",
-    "company_name": "sonameCompany",
-    "npi": "somenpi",
-    "taxonomy": "dsfdsf",
+    "name": "facilityName",
+    "npi": "123fac321",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "updated_at": "2022-03-16T10:03:40.000000Z",
     "company_id": 1,
-    "created_at": "2022-01-22T21:30:58.000000Z",
-    "updated_at": "2022-01-22T21:30:58.000000Z",
-    "address": {
-        "id": 5,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-01-22T21:30:59.000000Z",
-        "updated_at": "2022-01-22T21:30:59.000000Z",
-        "clearing_house_id": null,
-        "facility_id": 1,
-        "company_id": null
+    "code": "FA-00001-2022",
+    "status": false,
+    "taxonomies": [
+        {
+            "id": 1,
+            "name": "NameTaxonomy Company",
+            "created_at": "2022-03-16T10:03:40.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "tax_id": "TAX01213",
+            "primary": true,
+            "pivot": {
+                "facility_id": 1,
+                "taxonomy_id": 1,
+                "created_at": "2022-03-16T10:03:41.000000Z",
+                "updated_at": "2022-03-16T10:03:41.000000Z"
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "id": 4,
+            "address": "address Facility",
+            "city": "city Facility",
+            "state": "state Facility",
+            "zip": "234",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T10:03:41.000000Z",
+            "updated_at": "2022-03-16T10:03:41.000000Z",
+            "addressable_type": "App\\Models\\Facility",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 5,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "facility@facility.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T10:03:41.000000Z",
+            "updated_at": "2022-03-16T10:03:41.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Facility",
+            "contactable_id": 1
+        }
+    ],
+    "company": {
+        "id": 1,
+        "code": "CO-00001-2022",
+        "name": "company first",
+        "npi": "222CF123",
+        "created_at": "2022-03-16T10:06:31.000000Z",
+        "updated_at": "2022-03-16T10:06:31.000000Z",
+        "status": false,
+        "billing_companies": []
     },
-    "contact": null
+    "billing_companies": []
 }
 ```
 
@@ -318,21 +320,34 @@
     "name":"facilityName",
     "type": 1,
     "company_id": 1,
-    "taxonomy": {
-        "tax_id": "TAX01213",
-        "name": "NameTaxonomy"
-    },
-    "npi":"facilityNPI",
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": true
+        },
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": false
+        },
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy",
+            "primary": false
+        }
+    ],
+    "npi":"123fac321",
     "address":{
         "address":"address Facility",
         "city":"city Facility",
         "state":"state Facility",
-        "zip":"234"
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"facility@facility.com"
     }
 }
 ```
@@ -355,30 +370,15 @@
 
 ```json
 {
-    "id": 1,
+    "code": "FA-00001-2022",
+    "name": "facilityName",
+    "npi": "123fac321",
     "type": 1,
-    "name": "somename",
-    "company_name": "sonameCompany",
-    "npi": "somenpi",
-    "taxonomy": "dsfdsf",
     "company_id": 1,
-    "created_at": "2022-01-22T21:30:58.000000Z",
-    "updated_at": "2022-01-22T21:30:58.000000Z",
-    "address": {
-        "id": 5,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-01-22T21:30:59.000000Z",
-        "updated_at": "2022-01-22T21:30:59.000000Z",
-        "clearing_house_id": null,
-        "facility_id": 1,
-        "company_id": null
-    },
-    "contact": null
+    "updated_at": "2022-03-16T10:03:40.000000Z",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "id": 1,
+    "status": false
 }
 ```
 
@@ -438,15 +438,15 @@
 
 ```json
 {
-    "id": 1,
+    "code": "FA-00001-2022",
+    "name": "facilityName",
+    "npi": "123fac321",
     "type": 1,
-    "name": "facility_name",
-    "company_name": "company_name",
-    "npi": "123456",
-    "taxonomy": "taxonomy",
     "company_id": 1,
-    "created_at": null,
-    "updated_at": null
+    "updated_at": "2022-03-16T10:03:40.000000Z",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "id": 1,
+    "status": true
 }
 ```
 
