@@ -11,7 +11,9 @@ class AuditController extends Controller
 {
     public function getAuditAll(Request $request)
     {
-        $auditables = Audit::with('user');
+        $auditables = Audit::with(['user' => function ($query) {
+            $query->with("profile");
+        }]);
         $records = [];
         
         foreach ($auditables->get() as $audit) {
@@ -33,7 +35,9 @@ class AuditController extends Controller
     {
         try {
             $id = \Crypt::decrypt($request->id);
-            $audit = Audit::with('user')->find($id);
+            $audit = Audit::with(['user' => function ($query) {
+                $query->with("profile");
+            }])->find($id);
             return ($audit) ? response()->json($audit, 200) : response()->json('Error audit not found', 404);
         } catch (\Exception $e) {
             return response()->json('Error wrong id', 404);
