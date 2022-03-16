@@ -135,7 +135,7 @@ class FacilityRepository
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? '',
+                    "billing_company_id" => $billingCompany->id ?? null,
                     "contactable_id"     => $facility->id,
                     "contactable_type"   => Facility::class
                 ], $data['contact']);
@@ -143,7 +143,7 @@ class FacilityRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? '',
+                    "billing_company_id" => $billingCompany->id ?? null,
                     "addressable_id"     => $facility->id,
                     "addressable_type"   => Facility::class
                 ], $data["address"]);
