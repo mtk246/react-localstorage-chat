@@ -87,14 +87,14 @@ class UserRepository{
             if (isset($data['contact'])) {
                 $data["contact"]["contactable_id"]     = $user->id;
                 $data["contact"]["contactable_type"]   = User::class;
-                $data["contact"]["billing_company_id"] = $data["company-billing"] ?? '';
+                $data["contact"]["billing_company_id"] = $data["company-billing"] ?? null;
                 Contact::create($data["contact"]);
             }
 
             if (isset($data['address'])) {
                 $data["address"]["addressable_id"]     = $user->id;
                 $data["address"]["addressable_type"]   = Address::class;
-                $data["address"]["billing_company_id"] = $data["company-billing"] ?? '';
+                $data["address"]["billing_company_id"] = $data["company-billing"] ?? null;
                 Address::create($data["address"]);
             }
 
@@ -284,7 +284,7 @@ class UserRepository{
 
         if (isset($data['contact'])) {
             $data["contact"]["email"] = $data['email'];
-            $data["contact"]["billing_company_id"] =  $data["company-billing"] ?? '';
+            $data["contact"]["billing_company_id"] =  $data["company-billing"] ?? null;
             Contact::updateOrCreate([
                 "contactable_id"     => $user->id,
                 "contactable_type"   => User::class
@@ -292,7 +292,7 @@ class UserRepository{
         }
 
         if (isset($data['address'])) {
-            $data["address"]["billing_company_id"] = $data["company-billing"] ?? '';
+            $data["address"]["billing_company_id"] = $data["company-billing"] ?? null;
             Address::updateOrCreate([
                 "addressable_id"     => $user->id,
                 "addressable_type"   => User::class

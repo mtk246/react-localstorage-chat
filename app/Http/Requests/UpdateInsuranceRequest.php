@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateInsuranceRequest extends FormRequest
 {
@@ -24,19 +25,21 @@ class UpdateInsuranceRequest extends FormRequest
     public function rules()
     {
         return [
-            "insurance" => "sometimes|array",
-            'insurance.name' => "sometimes|string",
-            'insurance.naic' => "sometimes|string",
-            'insurance.file_method' => "sometimes|string",
-            "address" => "sometimes|array",
-            'address.address' => "sometimes|string",
-            'address.city' => "sometimes|string",
-            'address.state' => "sometimes|string",
-            'address.zip' => "sometimes|numeric",
-            "contact" => "sometimes|array",
-            "contact.phone" => "sometimes|string",
-            "contact.fax" => "sometimes|string",
-            "contact.email" => "sometimes|email:rfc",
+            'insurance'             => ['required', 'array'],
+            'insurance.name'        => ['required', 'string', Rule::unique('insurance_companies', 'name')->ignore($this->id)],
+            'insurance.naic'        => ['required', 'string'],
+            'insurance.file_method' => ['required', 'string'],
+            
+            'address'               => ['required', 'array'],
+            'address.address'       => ['required', 'string'],
+            'address.city'          => ['required', 'string'],
+            'address.state'         => ['required', 'string'],
+            'address.zip'           => ['required', 'numeric'],
+            
+            'contact'               => ['required', 'array'],
+            'contact.phone'         => ['required', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
+            'contact.email'         => ['required', 'email:rfc'],
         ];
     }
 }
