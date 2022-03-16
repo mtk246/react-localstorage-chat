@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClearinCreateRequest extends FormRequest
 {
@@ -24,17 +25,20 @@ class ClearinCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "code" => "required|string",
-            "name" => "required|string|unique:clearing_houses,name",
-            "address" => "required|array",
-            'address.address' => "required|string",
-            'address.city' => "required|string",
-            'address.state' => "required|string",
-            'address.zip' => "required|numeric",
-            "contact" => "required|array",
-            "contact.phone" => "required|string",
-            "contact.fax" => "required|string",
-            "contact.email" => "required|email:rfc",
+            'name'            => ['required', 'string', Rule::unique('clearing_houses', 'name')],
+            'org_type'        => ['required', 'string'],
+            'ack_required'    => ['required', 'boolean'],
+            
+            'address'         => ['required', 'array'],
+            'address.address' => ['required', 'string'],
+            'address.city'    => ['required', 'string'],
+            'address.state'   => ['required', 'string'],
+            'address.zip'     => ['required', 'numeric'],
+            
+            'contact'         => ['required', 'array'],
+            'contact.phone'   => ['required', 'string'],
+            'contact.fax'     => ['nullable', 'string'],
+            'contact.email'   => ['required', 'email:rfc'],
         ];
     }
 }

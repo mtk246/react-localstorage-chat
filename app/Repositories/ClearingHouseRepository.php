@@ -9,6 +9,7 @@ use App\Models\Contact;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ClearingHouseRepository
 {
@@ -17,19 +18,36 @@ class ClearingHouseRepository
      * @return ClearingHouse|Model
      */
     public function create(array $data) {
-        $clearing = ClearingHouse::create([
-            "code" => $data["code"],
-            "name" => $data["name"],
-        ]);
-        $this->changeStatus(true, $clearing->id);
+        try {
+            DB::beginTransaction();
+            $clearing = ClearingHouse::create([
+                "code"         => generateNewCode("CH", 5, date("Y"), ClearingHouse::class, "code"),
+                "name"         => $data["name"],
+                "org_type"     => $data["org_type"],
+                "ack_required" => $data["ack_required"]
+            ]);
+            
+            $this->changeStatus(true, $clearing->id);
+            $billingCompany = auth()->user()->billingCompanies->first();
 
-        $data["address"]["clearing_house_id"] = $clearing->id;
-        $data["contact"]["clearing_house_id"] = $clearing->id;
-
-        Address::create($data["address"]);
-        Contact::create($data["contact"]);
-
-        return $clearing;
+            if (isset($data['address']['address'])) {
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["addressable_id"]     = $clearing->id;
+                $data["address"]["addressable_type"]   = ClearingHouse::class;
+                Address::create($data["address"]);
+            }
+            if (isset($data["contact"]["email"])) {
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["contactable_id"]     = $clearing->id;
+                $data["contact"]["contactable_type"]   = ClearingHouse::class;
+                Contact::create($data["contact"]);
+            }
+            DB::commit();
+            return $clearing;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -37,73 +55,98 @@ class ClearingHouseRepository
      */
     public function getAllClearingHouse() {
         return ClearingHouse::with([
-            "address",
-            "contact"
+            "addresses",
+            "contacts"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**
-     * @param int $clearing_id
+     * @param int $id
      * @return ClearingHouse|Builder|Model|object|null
      */
-    public function getOneClearingHouse(int $clearing_id) {
-        $clearing = ClearingHouse::whereId($clearing_id)->with([
-            "address",
-            "contact"
-        ])->first();
+    public function getOneClearingHouse(int $id) {
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $clearing = ClearingHouse::whereId($id)->with([
+                "addresses",
+                "contacts",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $clearing = ClearingHouse::whereId($id)->with([
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies"
+            ])->first();
+        }
 
         return !is_null($clearing) ? $clearing : null;
     }
 
     public function updateClearingHouse(array $data, int $id) {
-        $clearing = ClearingHouse::whereId($id)->first();
+        try {
+            DB::beginTransaction();
 
-        $clearings = ClearingHouse::where("name",$data["clearing-house"]["name"])->get();
+            $clearing = ClearingHouse::find($id)->first();
+            $clearing->update([
+                "name"         => $data["name"],
+                "org_type"     => $data["org_type"],
+                "ack_required" => $data["ack_required"]
+            ]);
 
-        if (isset($data['clearing-house'])) {
-            if(count($clearings) == 0 && ($clearing->name != $data['clearing-house']['name'])){
-                ClearingHouse::updateOrCreate(["id" => $id], $data['clearing-house']);
+            $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['contact'])) {
+                Contact::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "contactable_id"     => $clearing->id,
+                    "contactable_type"   => ClearingHouse::class
+                ], $data['contact']);
             }
-        }
 
-        if (isset($data['address'])) {
-            $address = Address::whereClearingHouseId($id)->first();
-
-            if (is_null($address)) {
-                $data["address"]["clearing_house_id"] = $id;
-                Address::create($data["address"]);
-            } else {
-                Address::whereClearingHouseId($id)->update($data["address"]);
+            if (isset($data['address'])) {
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "addressable_id"     => $clearing->id,
+                    "addressable_type"   => ClearingHouse::class
+                ], $data["address"]);
             }
-
+            DB::commit();
+            return ClearingHouse::whereId($id)->first();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
         }
-
-        if (isset($data['contact'])) {
-            $contact = Contact::whereClearingHouseId($id)->first();
-
-            if (is_null($contact)) {
-                $data["contact"]["clearing_house_id"] = $id;
-                Contact::create($data["contact"]);
-            } else {
-                Contact::whereClearingHouseId($id)->update($data["contact"]);
-            }
-        }
-
-        return ClearingHouse::whereId($id)->with([
-            "address",
-            "contact"
-        ])->first();
     }
 
     public function getOneByName(string $name) {
-        return ClearingHouse::with([
-            "address",
-            "contact"
-        ])->where("name","ILIKE","%${name}%")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
+                "addresses",
+                "contacts",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies"
+            ])->first();
+        }
+        return !is_null($clearing) ? $clearing : null;
     }
 
     public function changeStatus(bool $status, int $id) {
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
         $clearingHouse = ClearingHouse::find($id);
@@ -125,7 +168,7 @@ class ClearingHouseRepository
         $clearingHouse = ClearingHouse::find($id);
         if (is_null($clearingHouse)) return null;
         
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
         if (is_null($clearingHouse->billingCompanies()->find($billingCompany->id))) {

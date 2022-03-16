@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateClearingHouse extends FormRequest
 {
@@ -24,17 +25,20 @@ class UpdateClearingHouse extends FormRequest
     public function rules()
     {
         return [
-            "clearing-house" => "sometimes|array",
-            "clearing-house.name" => "sometimes|string",
-            "address" => "sometimes|array",
-            'address.address' => "sometimes|string",
-            'address.city' => "sometimes|string",
-            'address.state' => "sometimes|string",
-            'address.zip' => "sometimes|numeric",
-            "contact" => "sometimes|array",
-            "contact.phone" => "sometimes|string",
-            "contact.fax" => "sometimes|string",
-            "contact.email" => "sometimes|email:rfc",
+            'name'            => ['required', 'string', Rule::unique('clearing_houses', 'name')->ignore($this->clearing_id)],
+            'org_type'        => ['required', 'string'],
+            'ack_required'    => ['required', 'boolean'],
+            
+            'address'         => ['required', 'array'],
+            'address.address' => ['required', 'string'],
+            'address.city'    => ['required', 'string'],
+            'address.state'   => ['required', 'string'],
+            'address.zip'     => ['required', 'numeric'],
+            
+            'contact'         => ['required', 'array'],
+            'contact.phone'   => ['required', 'string'],
+            'contact.fax'     => ['nullable', 'string'],
+            'contact.email'   => ['required', 'email:rfc'],
         ];
     }
 }

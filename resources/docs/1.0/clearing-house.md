@@ -39,18 +39,29 @@
 
 ```json
 {
-    "code":"someCode",
-    "name":"someName",
-    "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
-        "zip":"234"
+    "name":"clearing first",
+    "org_type":"222CH123",
+    "ack_required":true,
+    "taxonomies": [
+        {
+            "tax_id": "TAX01244",
+            "name": "NameTaxonomy Clearing",
+            "primary": true
+        },{
+            "tax_id": "TAX0145",
+            "name": "NameTaxonomy 2 Clearing",
+            "primary": false
+        }
+    ],"address": {
+        "address":"address Clearing",
+        "city":"city Clearing",
+        "state":"state Clearing",
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"clearing@cclearing.com"
     }
 }
 ```
@@ -72,11 +83,31 @@
 
 ```json
 {
-    "code": "someCode",
-    "name": "someName",
-    "updated_at": "2022-01-22T19:47:10.000000Z",
-    "created_at": "2022-01-22T19:47:10.000000Z",
-    "id": 4
+    "code": "CH-00001-2022",
+    "name": "clearing first",
+    "org_type": "222CH123",
+    "ack_required": true,
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "created_at": "2022-03-16T11:00:09.000000Z",
+    "id": 1,
+    "status": true,
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Hammes and Sons",
+            "created_at": "2022-03-16T10:02:29.000000Z",
+            "updated_at": "2022-03-16T10:02:29.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "clearing_house_id": 1,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-16T11:00:09.000000Z",
+                "updated_at": "2022-03-16T11:00:09.000000Z"
+            }
+        }
+    ]
 }
 ```
 
@@ -104,184 +135,114 @@
 ```json
 [
     {
-        "id": 1,
-        "code": "someCode",
-        "name": "someName",
-        "created_at": "2022-01-22T19:44:24.000000Z",
-        "updated_at": "2022-01-22T19:44:24.000000Z",
-        "status": 0,
-        "address": {
-            "id": 2,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-01-22T19:44:24.000000Z",
-            "updated_at": "2022-01-22T19:44:24.000000Z",
-            "clearing_house_id": 1,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
         "id": 2,
-        "code": "someCode",
-        "name": "someName",
-        "created_at": "2022-01-22T19:46:01.000000Z",
-        "updated_at": "2022-01-22T19:46:01.000000Z",
-        "status": 0,
-        "address": null,
-        "contact": null
+        "code": "CH-00002-2022",
+        "name": "clearing second",
+        "created_at": "2022-03-16T11:02:28.000000Z",
+        "updated_at": "2022-03-16T11:02:28.000000Z",
+        "org_type": "222CH123",
+        "ack_required": true,
+        "status": true,
+        "addresses": [
+            {
+                "id": 7,
+                "address": "address Clearing 2",
+                "city": "city Clearing 2",
+                "state": "state Clearing 2",
+                "zip": "234",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T11:02:28.000000Z",
+                "updated_at": "2022-03-16T11:02:28.000000Z",
+                "addressable_type": "App\\Models\\ClearingHouse",
+                "addressable_id": 2
+            }
+        ],
+        "contacts": [
+            {
+                "id": 8,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "clearing2@cclearing.com",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T11:02:28.000000Z",
+                "updated_at": "2022-03-16T11:02:28.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\ClearingHouse",
+                "contactable_id": 2
+            }
+        ],
+        "billing_companies": [
+            {
+                "id": 1,
+                "name": "Hammes and Sons",
+                "created_at": "2022-03-16T10:02:29.000000Z",
+                "updated_at": "2022-03-16T10:02:29.000000Z",
+                "code": "BC-00001-2022",
+                "status": false,
+                "pivot": {
+                    "clearing_house_id": 2,
+                    "billing_company_id": 1,
+                    "status": true,
+                    "created_at": "2022-03-16T11:02:28.000000Z",
+                    "updated_at": "2022-03-16T11:02:28.000000Z"
+                }
+            }
+        ]
     },
     {
-        "id": 3,
-        "code": "someCode",
-        "name": "someName",
-        "created_at": "2022-01-22T19:46:40.000000Z",
-        "updated_at": "2022-01-22T19:46:40.000000Z",
-        "status": 0,
-        "address": null,
-        "contact": null
-    },
-    {
-        "id": 4,
-        "code": "someCode",
-        "name": "someName",
-        "created_at": "2022-01-22T19:47:10.000000Z",
-        "updated_at": "2022-01-22T19:47:10.000000Z",
-        "status": 0,
-        "address": {
-            "id": 4,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-01-22T19:47:10.000000Z",
-            "updated_at": "2022-01-22T19:47:10.000000Z",
-            "clearing_house_id": 4,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 5,
-        "code": "someCodeere",
-        "name": "someNameere",
-        "created_at": "2022-02-02T17:49:35.000000Z",
-        "updated_at": "2022-02-02T17:49:35.000000Z",
-        "status": 0,
-        "address": {
-            "id": 12,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T17:49:35.000000Z",
-            "updated_at": "2022-02-02T17:49:35.000000Z",
-            "clearing_house_id": 5,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 6,
-        "code": "someCodeereee",
-        "name": "someNameereee",
-        "created_at": "2022-02-02T17:51:14.000000Z",
-        "updated_at": "2022-02-02T17:51:14.000000Z",
-        "status": 0,
-        "address": {
-            "id": 13,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T17:51:14.000000Z",
-            "updated_at": "2022-02-02T17:51:14.000000Z",
-            "clearing_house_id": 6,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 7,
-        "code": "someCodeereee",
-        "name": "someNameereee",
-        "created_at": "2022-02-02T17:52:11.000000Z",
-        "updated_at": "2022-02-02T17:52:11.000000Z",
-        "status": 0,
-        "address": null,
-        "contact": null
-    },
-    {
-        "id": 8,
-        "code": "someCodeereee44",
-        "name": "someNameereee44",
-        "created_at": "2022-02-02T17:53:44.000000Z",
-        "updated_at": "2022-02-02T17:53:44.000000Z",
-        "status": 0,
-        "address": {
-            "id": 14,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T17:53:44.000000Z",
-            "updated_at": "2022-02-02T17:53:44.000000Z",
-            "clearing_house_id": 8,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": null
-    },
-    {
-        "id": 9,
-        "code": "someCodeereee44g",
-        "name": "someNameereee44g",
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "status": 0,
-        "address": {
-            "id": 15,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T17:56:41.000000Z",
-            "updated_at": "2022-02-02T17:56:41.000000Z",
-            "clearing_house_id": 9,
-            "facility_id": null,
-            "company_id": null
-        },
-        "contact": {
-            "id": 13,
-            "phone": "34324234",
-            "fax": "567674576457",
-            "email": "fg@gh.com",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T17:56:41.000000Z",
-            "updated_at": "2022-02-02T17:56:41.000000Z",
-            "clearing_house_id": 9,
-            "facility_id": null,
-            "company_id": null
-        }
+        "id": 1,
+        "code": "CH-00001-2022",
+        "name": "clearing first",
+        "created_at": "2022-03-16T11:00:09.000000Z",
+        "updated_at": "2022-03-16T11:00:09.000000Z",
+        "org_type": "222CH123",
+        "ack_required": true,
+        "status": true,
+        "addresses": [
+            {
+                "id": 6,
+                "address": "address Clearing",
+                "city": "city Clearing",
+                "state": "state Clearing",
+                "zip": "234",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T11:00:09.000000Z",
+                "updated_at": "2022-03-16T11:00:09.000000Z",
+                "addressable_type": "App\\Models\\ClearingHouse",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
+            {
+                "id": 7,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "clearing@cclearing.com",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T11:00:09.000000Z",
+                "updated_at": "2022-03-16T11:00:09.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\ClearingHouse",
+                "contactable_id": 1
+            }
+        ],
+        "billing_companies": [
+            {
+                "id": 1,
+                "name": "Hammes and Sons",
+                "created_at": "2022-03-16T10:02:29.000000Z",
+                "updated_at": "2022-03-16T10:02:29.000000Z",
+                "code": "BC-00001-2022",
+                "status": false,
+                "pivot": {
+                    "clearing_house_id": 1,
+                    "billing_company_id": 1,
+                    "status": true,
+                    "created_at": "2022-03-16T11:00:09.000000Z",
+                    "updated_at": "2022-03-16T11:00:09.000000Z"
+                }
+            }
+        ]
     }
 ]
 ```
@@ -311,40 +272,60 @@
 #
 
 ```json
-    {
-    "id": 9,
-    "code": "someCodeereee44g",
-    "name": "someNameereee44g",
-    "created_at": "2022-02-02T17:56:41.000000Z",
-    "updated_at": "2022-02-02T17:56:41.000000Z",
-    "status": 0,
-    "address": {
-        "id": 15,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    },
-    "contact": {
-        "id": 13,
-        "phone": "34324234",
-        "fax": "567674576457",
-        "email": "fg@gh.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    }
+{
+    "id": 1,
+    "code": "CH-00001-2022",
+    "name": "clearing first",
+    "created_at": "2022-03-16T11:00:09.000000Z",
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "org_type": "222CH123",
+    "ack_required": true,
+    "status": true,
+    "addresses": [
+        {
+            "id": 6,
+            "address": "address Clearing",
+            "city": "city Clearing",
+            "state": "state Clearing",
+            "zip": "234",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T11:00:09.000000Z",
+            "updated_at": "2022-03-16T11:00:09.000000Z",
+            "addressable_type": "App\\Models\\ClearingHouse",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 7,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "clearing@cclearing.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T11:00:09.000000Z",
+            "updated_at": "2022-03-16T11:00:09.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\ClearingHouse",
+            "contactable_id": 1
+        }
+    ],
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Hammes and Sons",
+            "created_at": "2022-03-16T10:02:29.000000Z",
+            "updated_at": "2022-03-16T10:02:29.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "clearing_house_id": 1,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-16T11:00:09.000000Z",
+                "updated_at": "2022-03-16T11:00:09.000000Z"
+            }
+        }
+    ]
 }
 ```
 
@@ -367,20 +348,29 @@
 
 ```json
 {
-    "clearing-house":{
-        "code":"someCode",
-        "name": "someName"
-    },
-    "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
-        "zip":"234"
+    "name":"clearing first edited",
+    "org_type":"222CH124",
+    "ack_required":true,
+    "taxonomies": [
+        {
+            "tax_id": "TAX01244",
+            "name": "NameTaxonomy Clearing",
+            "primary": true
+        },{
+            "tax_id": "TAX0145",
+            "name": "NameTaxonomy 2 Clearing",
+            "primary": false
+        }
+    ],"address": {
+        "address":"address Clearing",
+        "city":"city Clearing",
+        "state":"state Clearing",
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"clearing@cclearing.com"
     }
 }
 ```
@@ -402,39 +392,31 @@
 
 ```json
 {
-    "id": 9,
-    "code": "someCodeereee44g",
-    "name": "someNameereee44g",
-    "created_at": "2022-02-02T17:56:41.000000Z",
-    "updated_at": "2022-02-02T17:56:41.000000Z",
-    "status": 0,
-    "address": {
-        "id": 15,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    },
-    "contact": {
-        "id": 13,
-        "phone": "34324234",
-        "fax": "567674576457",
-        "email": "fg@gh.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    }
+    "code": "CH-00001-2022",
+    "name": "clearing first edited",
+    "org_type": "222CH124",
+    "ack_required": true,
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "created_at": "2022-03-16T11:00:09.000000Z",
+    "id": 1,
+    "status": true,
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Hammes and Sons",
+            "created_at": "2022-03-16T10:02:29.000000Z",
+            "updated_at": "2022-03-16T10:02:29.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "clearing_house_id": 1,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-16T11:00:09.000000Z",
+                "updated_at": "2022-03-16T11:00:09.000000Z"
+            }
+        }
+    ]
 }
 ```
 
@@ -469,39 +451,14 @@
 
 ```json
 {
-    "id": 9,
-    "code": "someCodeereee44g",
-    "name": "someNameereee44g",
-    "created_at": "2022-02-02T17:56:41.000000Z",
-    "updated_at": "2022-02-02T17:56:41.000000Z",
-    "status": 0,
-    "address": {
-        "id": 15,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    },
-    "contact": {
-        "id": 13,
-        "phone": "34324234",
-        "fax": "567674576457",
-        "email": "fg@gh.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T17:56:41.000000Z",
-        "updated_at": "2022-02-02T17:56:41.000000Z",
-        "clearing_house_id": 9,
-        "facility_id": null,
-        "company_id": null
-    }
+    "code": "CH-00001-2022",
+    "name": "clearing first",
+    "org_type": "222CH123",
+    "ack_required": true,
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "created_at": "2022-03-16T11:00:09.000000Z",
+    "id": 1,
+    "status": true,
 }
 ```
 
@@ -551,12 +508,14 @@
 
 ```json
 {
+    "code": "CH-00001-2022",
+    "name": "clearing first",
+    "org_type": "222CH123",
+    "ack_required": true,
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "created_at": "2022-03-16T11:00:09.000000Z",
     "id": 1,
-    "code": "clearing_code",
-    "name": "clearing_name",
-    "status": true,
-    "created_at": null,
-    "updated_at": null
+    "status": true
 }
 ```
 
