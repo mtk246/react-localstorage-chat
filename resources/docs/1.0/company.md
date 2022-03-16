@@ -44,22 +44,28 @@
 
 ```json
 {
-    "company":{
-        "code":"somecode",
-        "name":"someName0101",
-        "npi":"323efsd",
-        "email": "some@email.com",
-        "tax_id": 343
-    },"address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
-        "zip":"234"
+    "name":"company first",
+    "npi":"222CF123",
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },{
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],"address": {
+        "address":"address Company",
+        "city":"city Company",
+        "state":"state Company",
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"company@company.com"
     }
 }
 ```
@@ -74,21 +80,20 @@
 
 ## Response
 
-> {success} 201 clearing house created
+> {success} 201 company created
 
 
 #
 
 ```json
 {
-    "code": "somecode",
-    "name": "someName0101",
-    "npi": "323efsd",
-    "email": "some@email.com",
-    "tax_id": 343,
-    "updated_at": "2022-01-23T20:27:53.000000Z",
-    "created_at": "2022-01-23T20:27:53.000000Z",
-    "id": 2
+    "code": "CO-00001-2022",
+    "name": "company first",
+    "npi": "222CF123",
+    "updated_at": "2022-03-16T09:44:57.000000Z",
+    "created_at": "2022-03-16T09:44:57.000000Z",
+    "id": 1,
+    "status": false
 }
 ```
 
@@ -109,131 +114,83 @@
 
 ## Response
 
-> {success} 200 Clearing houses found
+> {success} 200 company found
 
 #
 
 ```json
 [
     {
-        "id": 1,
-        "code": "somecode",
-        "name": "someName",
-        "status": false,
-        "taxonomy": 45345345,
-        "npi": "323efsd",
-        "created_at": "2022-01-23T20:27:45.000000Z",
-        "updated_at": "2022-01-23T20:27:45.000000Z",
-        "email": null,
-        "tax_id": 0,
-        "address": null,
-        "contact": null,
-        "facilities": null
-    },
-    {
         "id": 2,
-        "code": "somecode",
-        "name": "someName0101",
+        "code": "CO-00002-2022",
+        "name": "company second",
+        "npi": "222CF1222",
+        "created_at": "2022-03-16T09:49:06.000000Z",
+        "updated_at": "2022-03-16T09:49:06.000000Z",
         "status": false,
-        "taxonomy": 45345345,
-        "npi": "323efsd",
-        "created_at": "2022-01-23T20:27:53.000000Z",
-        "updated_at": "2022-01-23T20:27:53.000000Z",
-        "email": null,
-        "tax_id": 0,
-        "address": null,
-        "contact": null,
-        "facilities": null
+        "addresses": [
+            {
+                "id": 5,
+                "address": "address Company2",
+                "city": "city Company2",
+                "state": "state Company2",
+                "zip": "234",
+                "billing_company_id": null,
+                "created_at": "2022-03-16T09:49:06.000000Z",
+                "updated_at": "2022-03-16T09:49:06.000000Z",
+                "addressable_type": "App\\Models\\Company",
+                "addressable_id": 2
+            }
+        ],
+        "contacts": [
+            {
+                "id": 6,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "company2@company.com",
+                "billing_company_id": null,
+                "created_at": "2022-03-16T09:49:06.000000Z",
+                "updated_at": "2022-03-16T09:49:06.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Company",
+                "contactable_id": 2
+            }
+        ]
     },
     {
-        "id": 3,
-        "code": "somecode2",
-        "name": "someName01012",
+        "id": 1,
+        "code": "CO-00001-2022",
+        "name": "company first",
+        "npi": "222CF123",
+        "created_at": "2022-03-16T09:44:57.000000Z",
+        "updated_at": "2022-03-16T09:44:57.000000Z",
         "status": false,
-        "taxonomy": 45345345,
-        "npi": "323efsd",
-        "created_at": "2022-02-02T18:14:23.000000Z",
-        "updated_at": "2022-02-02T18:14:23.000000Z",
-        "email": null,
-        "tax_id": 0,
-        "address": null,
-        "contact": {
-            "id": 14,
-            "phone": "34324234",
-            "fax": "567674576457",
-            "email": "fg@gh.com",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T18:14:23.000000Z",
-            "updated_at": "2022-02-02T18:14:23.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": 3,
-            "facilities": null
-        }
-    },
-    {
-        "id": 4,
-        "code": "somecode22",
-        "name": "someName010122",
-        "status": false,
-        "taxonomy": 45345345,
-        "npi": "323efsd",
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "email": null,
-        "tax_id": 0,
-        "address": {
-            "id": 17,
-            "address": "dfsdf",
-            "city": "sdfsdf",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T18:15:53.000000Z",
-            "updated_at": "2022-02-02T18:15:53.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": 4
-        },
-        "contact": {
-            "id": 15,
-            "phone": "34324234",
-            "fax": "567674576457",
-            "email": "fg@gh.com",
-            "user_id": null,
-            "billing_company_id": null,
-            "created_at": "2022-02-02T18:15:53.000000Z",
-            "updated_at": "2022-02-02T18:15:53.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": 4
-        },
-        "facilities": [
+        "addresses": [
             {
-                "company_id": 1,
-                "company_name": "Roob and Sons",
-                "created_at": "2022-03-02T22:58:00.000000Z",
-                "id": 1,
-                "name": "Mr. Rogers Crooks",
-                "npi": "716391434057459",
-                "status": false,
-                "taxonomy": "Police and Sheriffs Patrol Officer",
-                "type": 2,
-                "updated_at": "2022-03-02T22:58:00.000000Z",
-            },
+                "id": 4,
+                "address": "address Company",
+                "city": "city Company",
+                "state": "state Company",
+                "zip": "234",
+                "billing_company_id": null,
+                "created_at": "2022-03-16T09:44:57.000000Z",
+                "updated_at": "2022-03-16T09:44:57.000000Z",
+                "addressable_type": "App\\Models\\Company",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
             {
-               "company_id": 1,
-                "company_name": "Zulauf, Ziemann and Haley",
-                "created_at": "2022-03-02T22:58:00.000000Z",
-                "id": 2,
-                "name": "Rahul McDermott III",
-                "npi": "572402301841835",
-                "status": false,
-                "taxonomy": "Computer Scientist",
-                "type": 2,
-                "updated_at": "2022-03-02T22:58:00.000000Z"
+                "id": 5,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "company@company.com",
+                "billing_company_id": null,
+                "created_at": "2022-03-16T09:44:57.000000Z",
+                "updated_at": "2022-03-16T09:44:57.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Company",
+                "contactable_id": 1
             }
         ]
     }
@@ -260,82 +217,99 @@
 
 ## Response
 
-> {success} 200 Clearing house found
+> {success} 200 company house found
 
 #
 
 ```json
-    {
-    "id": 4,
-    "code": "somecode22",
-    "name": "someName010122",
+{
+    "id": 1,
+    "code": "CO-00001-2022",
+    "name": "company first",
+    "npi": "222CF123",
+    "created_at": "2022-03-16T10:06:31.000000Z",
+    "updated_at": "2022-03-16T10:06:31.000000Z",
     "status": false,
-    "taxonomy": 45345345,
-    "npi": "323efsd",
-    "created_at": "2022-02-02T18:15:53.000000Z",
-    "updated_at": "2022-02-02T18:15:53.000000Z",
-    "email": null,
-    "tax_id": 0,
-    "address": {
-        "id": 17,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": 4
-    },
-    "contact": {
-        "id": 15,
-        "phone": "34324234",
-        "fax": "567674576457",
-        "email": "fg@gh.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": 4
-    },
-    "facilities": [
+    "taxonomies": [
         {
-            "company_id": 1,
-            "company_name": "Roob and Sons",
-            "created_at": "2022-03-02T22:58:00.000000Z",
             "id": 1,
-            "name": "Mr. Rogers Crooks",
-            "npi": "716391434057459",
-            "status": false,
-            "taxonomy": "Police and Sheriffs Patrol Officer",
-            "type": 2,
-            "updated_at": "2022-03-02T22:58:00.000000Z",
+            "name": "NameTaxonomy Company",
+            "created_at": "2022-03-16T10:03:40.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "tax_id": "TAX01213",
+            "primary": true,
+            "pivot": {
+                "company_id": 1,
+                "taxonomy_id": 1,
+                "created_at": "2022-03-16T10:06:31.000000Z",
+                "updated_at": "2022-03-16T10:06:31.000000Z"
+            }
         },
         {
-           "company_id": 1,
-            "company_name": "Zulauf, Ziemann and Haley",
-            "created_at": "2022-03-02T22:58:00.000000Z",
             "id": 2,
-            "name": "Rahul McDermott III",
-            "npi": "572402301841835",
-            "status": false,
-            "taxonomy": "Computer Scientist",
-            "type": 2,
-            "updated_at": "2022-03-02T22:58:00.000000Z"
+            "name": "NameTaxonomy 2 Company",
+            "created_at": "2022-03-16T10:06:31.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "tax_id": "TAX01222",
+            "primary": false,
+            "pivot": {
+                "company_id": 1,
+                "taxonomy_id": 2,
+                "created_at": "2022-03-16T10:06:31.000000Z",
+                "updated_at": "2022-03-16T10:06:31.000000Z"
+            }
         }
-    ]
+    ],
+    "addresses": [
+        {
+            "id": 5,
+            "address": "address Company",
+            "city": "city Company",
+            "state": "state Company",
+            "zip": "234",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T10:06:31.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "addressable_type": "App\\Models\\Company",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 6,
+            "phone": "34324234",
+            "fax": "567674576457",
+            "email": "company@company.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-16T10:06:31.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Company",
+            "contactable_id": 1
+        }
+    ],
+    "facilities": [
+        {
+            "id": 1,
+            "type": 1,
+            "name": "facilityName",
+            "npi": "123fac321",
+            "created_at": "2022-03-16T10:03:40.000000Z",
+            "updated_at": "2022-03-16T10:03:40.000000Z",
+            "company_id": 1,
+            "code": "FA-00001-2022",
+            "status": false,
+            "billing_companies": []
+        }
+    ],
+    "billing_companies": []
 }
 ```
 
 
 #
 
->{warning} 404 clearing found not found
+>{warning} 404 company found not found
 
 <a name="update-company"></a>
 ## Update Company
@@ -348,23 +322,28 @@
 
 ```json
 {
-    "company":{
-        "id":4,
-        "code":"somecode",
-        "name":"someName0101",
-        "npi":"323efsd",
-        "email": "some@email.com",
-        "tax_id": 343
-    },"address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
-        "zip":"234"
+    "name":"company first",
+    "npi":"222CF123",
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },{
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],"address": {
+        "address":"address Company",
+        "city":"city Company",
+        "state":"state Company",
+        "zip":234
     },
     "contact":{
         "phone":"34324234",
         "fax":"567674576457",
-        "email":"fg@gh.com"
+        "email":"company@company.com"
     }
 }
 ```
@@ -379,49 +358,20 @@
 
 ## Response
 
-> {success} 200 clearing house created
+> {success} 200 company created
 
 
 #
 
 ```json
-    {
-    "id": 4,
-    "code": "somecode22",
-    "name": "someName010122",
-    "status": false,
-    "npi": "323efsd",
-    "created_at": "2022-02-02T18:15:53.000000Z",
-    "updated_at": "2022-02-02T18:15:53.000000Z",
-    "email": null,
-    "tax_id": 0,
-    "address": {
-        "id": 17,
-        "address": "dfsdf",
-        "city": "sdfsdf",
-        "state": "dsfsdf",
-        "zip": "234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": 4
-    },
-    "contact": {
-        "id": 15,
-        "phone": "34324234",
-        "fax": "567674576457",
-        "email": "fg@gh.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-02T18:15:53.000000Z",
-        "updated_at": "2022-02-02T18:15:53.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": 4
-    }
+{
+    "code": "CO-00001-2022",
+    "name": "company first",
+    "npi": "222CF123",
+    "updated_at": "2022-03-16T09:44:57.000000Z",
+    "created_at": "2022-03-16T09:44:57.000000Z",
+    "id": 1,
+    "status": false
 }
 ```
 
@@ -473,16 +423,13 @@
 
 ```json
 {
-    "id": 3,
-    "code": "company_code",
-    "name": "company_name",
-    "status": true,
-    "taxonomy": 1,
-    "npi": "123456",
-    "created_at": null,
-    "updated_at": null,
-    "email": "company@company.com",
-    "tax_id": 0
+    "code": "CO-00001-2022",
+    "name": "company first",
+    "npi": "222CF123",
+    "updated_at": "2022-03-16T09:44:57.000000Z",
+    "created_at": "2022-03-16T09:44:57.000000Z",
+    "id": 1,
+    "status": true
 }
 ```
 

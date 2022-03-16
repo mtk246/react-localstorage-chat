@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CompanyCreateRequest extends FormRequest
 {
@@ -24,19 +25,24 @@ class CompanyCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "company" => "required|array",
-            "company.code"     => "required|string|unique:companies,code",
-            "company.name"     => "required|string|unique:companies,name",
-            "company.npi"      => "required|string|unique:companies,npi",
-            "address" => "required|array",
-            'address.address' => "required|string",
-            'address.city' => "required|string",
-            'address.state' => "required|string",
-            'address.zip' => "required|numeric",
-            "contact" => "required|array",
-            "contact.phone" => "required|string",
-            "contact.fax" => "required|string",
-            "contact.email" => "required|email:rfc",
+            'name'                 => ['required', 'string', Rule::unique('companies', 'name')],
+            'npi'                  => ['required', 'string'],
+            
+            'taxonomies'           => ['required', 'array'],
+            'taxonomies.*.tax_id'  => ['required', 'string'],
+            'taxonomies.*.name'    => ['required', 'string'],
+            'taxonomies.*.primary' => ['required', 'boolean'],
+
+            'address'              => ['required', 'array'],
+            'address.address'      => ['required', 'string'],
+            'address.city'         => ['required', 'string'],
+            'address.state'        => ['required', 'string'],
+            'address.zip'          => ['required', 'numeric'],
+            
+            'contact'              => ['required', 'array'],
+            'contact.phone'        => ['required', 'string'],
+            'contact.fax'          => ['nullable', 'string'],
+            'contact.email'        => ['required', 'email:rfc'],
         ];
     }
 }

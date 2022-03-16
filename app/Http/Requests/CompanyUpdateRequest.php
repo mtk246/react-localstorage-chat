@@ -26,19 +26,24 @@ class CompanyUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "company" => "required|array",
-            "company.code"     => ["sometimes", "string", Rule::unique('companies', 'code')->ignore($this->company["id"])],
-            "company.name"     => ["sometimes", "string", Rule::unique('companies', 'name')->ignore($this->company["id"])],
-            "company.npi"      => ["sometimes", "string", Rule::unique('companies', 'npi')->ignore($this->company["id"])],
-            "address" => "required|array",
-            'address.address' => "sometimes|string",
-            'address.city'    => "sometimes|string",
-            'address.state'   => "sometimes|string",
-            'address.zip'     => "sometimes|numeric",
-            "contact"         => "sometimes|array",
-            "contact.phone"   => "sometimes|string",
-            "contact.fax"     => "sometimes|string",
-            "contact.email"   => "sometimes|email:rfc",
+            'name'                 => ['required', 'string', Rule::unique('companies', 'name')->ignore($this->id)],
+            'npi'                  => ['required', 'string'],
+
+            'taxonomies'           => ['required', 'array'],
+            'taxonomies.*.tax_id'  => ['required', 'string'],
+            'taxonomies.*.name'    => ['required', 'string'],
+            'taxonomies.*.primary' => ['required', 'boolean'],
+
+            'address'               => ['required', 'array'],
+            'address.address'       => ['required', 'string'],
+            'address.city'          => ['required', 'string'],
+            'address.state'         => ['required', 'string'],
+            'address.zip'           => ['required', 'numeric'],
+            
+            'contact'               => ['required', 'array'],
+            'contact.phone'         => ['required', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
+            'contact.email'         => ['required', 'email:rfc']
         ];
     }
 }

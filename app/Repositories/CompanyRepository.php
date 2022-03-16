@@ -6,9 +6,11 @@ use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Models\Taxonomy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CompanyRepository
 {
@@ -17,16 +19,44 @@ class CompanyRepository
      * @return Company|Model
      */
     public function createCompany(array $data) {
-        $company = Company::create($data["company"]);
-        $this->changeStatus(true, $company->id);
+        try {
+            DB::beginTransaction();
+            $company = Company::create([
+                "code" => generateNewCode("CO", 5, date("Y"), Company::class, "code"),
+                "name" => $data["name"],
+                "npi"  => $data["npi"],
+            ]);
+            
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(["tax_id" => $taxonomy["tax_id"]], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $company->taxonomies()->sync($tax_array);
+            }
+            $this->changeStatus(true, $company->id);
+            $billingCompany = auth()->user()->billingCompanies->first();
 
-        $data["contact"]["company_id"] = $company->id;
-        $data["address"]["company_id"] = $company->id;
+            if (isset($data['address']['address'])) {
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["addressable_id"]     = $company->id;
+                $data["address"]["addressable_type"]   = Company::class;
+                Address::create($data["address"]);
+            }
+            if (isset($data["contact"]["email"])) {
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["contactable_id"]     = $company->id;
+                $data["contact"]["contactable_type"]   = Company::class;
+                Contact::create($data["contact"]);
+            }
 
-        Address::create($data["address"]);
-        Contact::create($data["contact"]);
-
-        return $company;
+            DB::commit();
+            return $company;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -34,9 +64,8 @@ class CompanyRepository
      */
     public function getAllCompanies() {
         return Company::with([
-            "address",
-            "contact",
-            "facilities",
+            "addresses",
+            "contacts"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
@@ -45,15 +74,30 @@ class CompanyRepository
      * @return Company|Builder|Model|object|null
      */
     public function getOneCompany(int $id) {
-        $company = Company::whereId($id)->with([
-            "address",
-            "contact",
-            "facilities"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $company = Company::whereId($id)->with([
+                "taxonomies",
+                "addresses",
+                "contacts",
+                "facilities",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $company = Company::whereId($id)->with([
+                "taxonomies",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "facilities",
+                "billingCompanies"
+            ])->first();
+        }
 
-        if (is_null($company)) return null;
-
-        return $company;
+        return !is_null($company) ? $company : null;
     }
 
     /**
@@ -62,27 +106,49 @@ class CompanyRepository
      * @return Company|Builder|Model|object|null
      */
     public function updateCompany(array $data, int $id) {
-        if (isset($data["company"])) {
-            $company = Company::whereId($id)->first();
-            $company->update($data['company']);
-        }
+        try {
+            DB::beginTransaction();
+            $company = Company::find($id);
 
-        if (isset($data['address'])) {
-            $address = Address::updateOrCreate([
-                'company_id' => $company->id
-            ], $data["address"]);
-        }
+            $company->update([
+                "name"       => $data["name"],
+                "npi"        => $data["npi"]
+            ]);
 
-        if (isset($data['contact'])) {
-            $contact = Contact::updateOrCreate([
-                'company_id' => $company->id
-            ], $data["contact"]);
-        }
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate([
+                        "tax_id" => $taxonomy["tax_id"]
+                    ], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $company->taxonomies()->sync($tax_array);
+            }
+            $billingCompany = auth()->user()->billingCompanies->first();
 
-        return Company::whereId($id)->with([
-            "address",
-            "contact"
-        ])->first();
+            if (isset($data['contact'])) {
+                Contact::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "contactable_id"     => $company->id,
+                    "contactable_type"   => Company::class
+                ], $data['contact']);
+            }
+
+            if (isset($data['address'])) {
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "addressable_id"     => $company->id,
+                    "addressable_type"   => Company::class
+                ], $data["address"]);
+            }
+
+            DB::commit();
+            return Company::whereId($id)->first();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -90,10 +156,29 @@ class CompanyRepository
      * @return Company|Builder|Model|object|null
      */
     public function getOneByEmail(string $email) {
-        return Company::where("email",$email)->with([
-            "address",
-            "contact"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $company = Company::whereEmail($email)->with([
+                "taxonomies",
+                "addresses",
+                "contacts",
+                "facilities",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $company = Company::whereEmail($email)->with([
+                "taxonomies",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "facilities",
+                "billingCompanies"
+            ])->first();
+        }
+        return !is_null($company) ? $company : null;
     }
 
     /**
@@ -101,10 +186,29 @@ class CompanyRepository
      * @return Company[]|Builder[]|Collection
      */
     public function getByName(string $name) {
-        return Company::where("name","ILIKE","%${name}%")->with([
-            "address",
-            "contact"
-        ])->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $company = Company::whereEmail($email)->with([
+                "taxonomies",
+                "addresses",
+                "contacts",
+                "facilities",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $company = Company::where("name", "ILIKE", "%${name}%")->with([
+                "taxonomies",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "facilities",
+                "billingCompanies"
+            ])->get();
+        }
+        return $companies;
     }
 
     /**
@@ -113,7 +217,7 @@ class CompanyRepository
      * @return bool|int
      */
     public function changeStatus(bool $status, int $id) {
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
         $company = Company::find($id);
