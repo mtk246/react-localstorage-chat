@@ -50,7 +50,8 @@
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
             "primary": true
-        },{
+        },
+        {
             "tax_id": "TAX01222",
             "name": "NameTaxonomy 2 Company",
             "primary": false
@@ -240,86 +241,6 @@
             }
         ]
     },
-    {
-        "id": 2,
-        "npi": "123456789",
-        "dea": "123DEA",
-        "user_id": 8,
-        "created_at": "2022-03-17T08:47:13.000000Z",
-        "updated_at": "2022-03-17T08:47:13.000000Z",
-        "user": {
-            "id": 8,
-            "email": "user2@gmail.com",
-            "email_verified_at": null,
-            "created_at": "2022-03-17T08:47:13.000000Z",
-            "updated_at": "2022-03-17T08:47:13.000000Z",
-            "token": "eyJpdiI6IkhsRmRia1FrSStYQm5CNVVQWVBvQ2c9PSIsInZhbHVlIjoidktsV2pUbW1ZTXJZYmpnS2FyZFFnSWhpcEo5VkszZko0UmhZTFJMVG1jdz0iLCJtYWMiOiIzNzAxNjlhNDQ1NWQwMzk2YTRjMjBiNWRiMDE1NjM0MWQ1ZmIyOTQwODA4MTUxMWE5ZmM4OGM0Zjk5MjIwZTUzIiwidGFnIjoiIn0=",
-            "isLogged": false,
-            "isBlocked": false,
-            "usercode": "US-00007-2022",
-            "userkey": "eyJpdiI6InNlWkNKUlpYdmNJc1AyZHlITUdzUVE9PSIsInZhbHVlIjoiNEZEUG5JUmVYVUdmeUJXV1hENm1lektJVGhmcUZwWVY5elhlQjNOcGZHST0iLCJtYWMiOiJlMjgzMGU0M2VjN2RlNzhjMWIzMGFmYzQ0M2U0NDNmMGU5ZGIyZjVhNWEwZWZlM2ZiZGNiM2MyYTY2MGI1ZjcxIiwidGFnIjoiIn0=",
-            "status": false,
-            "last_login": null,
-            "profile_id": 8,
-            "billing_company_id": null,
-            "profile": {
-                "id": 8,
-                "ssn": "237891832",
-                "first_name": "Fisrt Name",
-                "middle_name": "Middle Name",
-                "last_name": "Last Name",
-                "sex": "m",
-                "date_of_birth": "1990-11-11",
-                "avatar": null,
-                "credit_score": false,
-                "created_at": "2022-03-17T08:47:12.000000Z",
-                "updated_at": "2022-03-17T08:47:12.000000Z"
-            },
-            "roles": [
-                {
-                    "id": 8,
-                    "name": "DOCTOR",
-                    "guard_name": "api",
-                    "created_at": "2022-03-16T23:18:56.000000Z",
-                    "updated_at": "2022-03-16T23:18:56.000000Z",
-                    "pivot": {
-                        "model_id": 8,
-                        "role_id": 8,
-                        "model_type": "App\\Models\\User"
-                    }
-                }
-            ],
-            "addresses": [
-                {
-                    "id": 11,
-                    "address": "Direction address",
-                    "city": "city address",
-                    "state": "state address",
-                    "zip": "123456789",
-                    "billing_company_id": null,
-                    "created_at": "2022-03-17T08:47:13.000000Z",
-                    "updated_at": "2022-03-17T08:47:13.000000Z",
-                    "addressable_type": "App\\Models\\User",
-                    "addressable_id": 8
-                }
-            ],
-            "contacts": [
-                {
-                    "id": 12,
-                    "phone": "4245675712",
-                    "fax": "userHealthP",
-                    "email": "user@gmail.com",
-                    "billing_company_id": null,
-                    "created_at": "2022-03-17T08:47:13.000000Z",
-                    "updated_at": "2022-03-17T08:47:13.000000Z",
-                    "mobile": null,
-                    "contactable_type": "App\\Models\\User",
-                    "contactable_id": 8
-                }
-            ]
-        },
-        "taxonomies": []
-    }
 ]
 ```
 
