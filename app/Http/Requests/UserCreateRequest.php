@@ -35,7 +35,7 @@ class UserCreateRequest extends FormRequest
             'profile.ssn'           => ['required', 'string'],
             'profile.date_of_birth' => ['required', 'date'],
 
-            'profile.social_medias' => ['required', 'array'],
+            'profile.social_medias' => ['sometimes', 'array'],
             'profile.social_medias.*.name' => ['sometimes', 'string'],
             'profile.social_medias.*.link' => ['sometimes', 'string'],
 
