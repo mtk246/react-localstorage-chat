@@ -131,4 +131,14 @@ class BillingCompany extends Model implements Auditable
     {
         return $this->belongsToMany(InsuranceCompany::class)->withPivot('status')->withTimestamps();
     }
+
+    /**
+     * The insurancePlan that belong to the BillingCompany.
+     *
+     * @return BelongsToMany
+     */
+    public function insurancePlans(): BelongsToMany
+    {
+        return $this->belongsToMany(InsurancePlan::class)->withPivot('status')->withTimestamps();
+    }
 }

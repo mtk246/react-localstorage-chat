@@ -133,6 +133,16 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * The billingCompanies that belong to the insurancePlan.
+     *
+     * @return BelongsToMany
+     */
+    public function billingCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
      * InsurancePlan morphs many PublicNote.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
