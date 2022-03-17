@@ -319,7 +319,9 @@ class UserRepository{
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $user = User::whereId($id)->with([
-                "profile",
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
                 "roles",
                 "addresses",
                 "contacts",
@@ -327,7 +329,9 @@ class UserRepository{
             ])->first();
         } else {
             $user = User::whereId($id)->with([
-                "profile",
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
                 "roles",
                 "addresses" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
