@@ -93,7 +93,7 @@ class UserRepository{
 
             if (isset($data['address'])) {
                 $data["address"]["addressable_id"]     = $user->id;
-                $data["address"]["addressable_type"]   = Address::class;
+                $data["address"]["addressable_type"]   = User::class;
                 $data["address"]["billing_company_id"] = $data["company-billing"] ?? null;
                 Address::create($data["address"]);
             }

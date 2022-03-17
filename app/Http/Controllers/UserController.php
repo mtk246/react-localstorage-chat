@@ -103,11 +103,11 @@ class UserController extends Controller
     public function createUser(UserCreateRequest $request): JsonResponse
     {
         try {
-            if( $request->has('company-billing') ) {
-                if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ) {
-                    return response()->json("Error company billing dont existent", 403);
-                }
-            }
+            //if( $request->has('company-billing') ) {
+                //if( !$this->userRepository->checkCompanyBilling($request->input('company-billing')) ) {
+                    //return response()->json("Error company billing dont existent", 403);
+                //}
+            //}
 
             /** @var  $user User*/
             $user = $this->userRepository->create($request->validated());
