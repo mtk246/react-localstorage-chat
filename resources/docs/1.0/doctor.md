@@ -42,31 +42,38 @@
 
 ```json
 {
-    "user":{
-        "username":"ccfrrfcceeeefdfrrvv",
-        "email":"ccfffrrdfdeeeecvvrrrc@gmail.com",
+    "email":"user1@gmail.com",
+    "npi":"123456719",
+    "dea":"1234DEA",
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },{
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],
+    "profile": {
+        "ssn":"237891812",
+        "first_name":"Fisrt Name",
+        "last_name":"Last Name",
+        "middle_name":"Middle Name",
         "sex":"m",
-        "firstName":"test",
-        "lastName":"test",
-        "middleName":"testing",
-        "ssn":"345345",
-        "dateOfBirth":"1990-11-11"
+        "date_of_birth":"1990-11-11"
     },
-    "contact":{
-        "phone":"34324234",
-        "fax":"567674576457",
-        "email":"fg@gh.com"
+    "address": {
+        "address": "Direction address",
+        "city": "city address",
+        "state": "state address",
+        "zip": "123456789"
     },
-    "address":{
-        "address":"dfsdf",
-        "city":"sdfsdf",
-        "state":"dsfsdf",
-        "zip":"234"
-    },
-    "doctor":{
-        "npi":"4345leeorrlo3ee45533",
-        "speciality":"soeeerremeSpeciality3",
-        "taxonomy":"someeeerreToxonomia3rr"
+    "contact": {
+        "phone": "4245675712",
+        "fax": "userHealthP",
+        "email": "user@gmail.com"
     }
 }
 ```
@@ -90,41 +97,12 @@
 
 ```json
 {
-    "username": "ccfrrfcceeeefdfrrvv",
-    "email": "ccfffrrdfdeeeecvvrrrc@gmail.com",
-    "sex": "m",
-    "firstName": "test",
-    "lastName": "test",
-    "middleName": "testing",
-    "ssn": "345345",
-    "dateOfBirth": "1990-11-11",
-    "updated_at": "2022-02-07T13:46:19.000000Z",
-    "created_at": "2022-02-07T13:46:19.000000Z",
-    "id": 45,
-    "token": "eyJpdiI6Ik5lQnJVZlBPT3c5d0hBT1Z0MVRxNmc9PSIsInZhbHVlIjoiQm1GWTlOc05WMnBXWXdhMnRxN2RSeHkvbWdvRVNRT1Rtd1FCcE16SW1iNGV5cjZQakxHa0lWbzVMaEpXclg0ciIsIm1hYyI6ImZhYjQ4MmM5NzI5NmJhMDk3MDZhMjI5N2FhMDk0NTc4ZGUzOWQzMGFkZjgxMjM4ZTY3ZGYzZDNmZWJmY2NmMmQiLCJ0YWciOiIifQ==",
-    "roles": [
-        {
-            "id": 12,
-            "name": "DOCTOR",
-            "guard_name": "api",
-            "created_at": "2022-02-07T13:26:16.000000Z",
-            "updated_at": "2022-02-07T13:26:16.000000Z",
-            "pivot": {
-                "model_id": 45,
-                "role_id": 12,
-                "model_type": "App\\Models\\User"
-            }
-        }
-    ],
-    "doctor": {
-        "id": 19,
-        "npi": "4345leeorrlo3ee45533",
-        "taxonomy": "someeeerreToxonomia3rr",
-        "speciality": "soeeerremeSpeciality3",
-        "created_at": "2022-02-07T13:46:19.000000Z",
-        "updated_at": "2022-02-07T13:46:19.000000Z",
-        "user_id": 45
-    }
+    "npi": "123456789",
+    "dea": "123DEA",
+    "user_id": 8,
+    "updated_at": "2022-03-17T08:47:13.000000Z",
+    "created_at": "2022-03-17T08:47:13.000000Z",
+    "id": 2
 }
 ```
 
@@ -154,28 +132,193 @@
 ```json
 [
     {
-        "id": 1,
-        "npi": "434534",
-        "taxonomy": "someToxonomia",
-        "speciality": "someSpeciality",
-        "created_at": "2022-02-04T12:28:07.000000Z",
-        "updated_at": "2022-02-04T12:28:07.000000Z"
+        "id": 3,
+        "npi": "123456719",
+        "dea": "1234DEA",
+        "user_id": 9,
+        "created_at": "2022-03-17T08:58:40.000000Z",
+        "updated_at": "2022-03-17T08:58:40.000000Z",
+        "user": {
+            "id": 9,
+            "email": "user1@gmail.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-17T08:58:40.000000Z",
+            "updated_at": "2022-03-17T08:58:40.000000Z",
+            "token": "eyJpdiI6Impxa3V4RkV0MGN6REVkZitqT2dZb0E9PSIsInZhbHVlIjoiUHBac1ZxOW1kTWc0dElJVkJLcWxZRVgrdnk0SXJ3MmhkcFNWMnVBS1VNST0iLCJtYWMiOiI4NjZiZGY0MzMzY2VhODUxMTI1MzQ4ZWRhNDlkY2RlYzgzZjliOWQxZmU1M2YyMDhjYWJjYTk2MjIzN2UxMzUxIiwidGFnIjoiIn0=",
+            "isLogged": false,
+            "isBlocked": false,
+            "usercode": "US-00008-2022",
+            "userkey": "eyJpdiI6ImRvR0VHQjQvcCs2RmhCUnVYRlRGWFE9PSIsInZhbHVlIjoibk5FVTArb25iT2tjeWdwcmQraDVORllMQSt6d0p2SEVLK01mYStPekFFOD0iLCJtYWMiOiJjNGRiNTk0ZGUzOWMwYzVjN2Y1MzA2N2RhMThiNDYzNGMxZTcxZDA2MDBjMjg0ODExZWE3ZjVkOTlkMTU2OTU4IiwidGFnIjoiIn0=",
+            "status": false,
+            "last_login": null,
+            "profile_id": 9,
+            "billing_company_id": null,
+            "profile": {
+                "id": 9,
+                "ssn": "237891812",
+                "first_name": "Fisrt Name",
+                "middle_name": "Middle Name",
+                "last_name": "Last Name",
+                "sex": "m",
+                "date_of_birth": "1990-11-11",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-03-17T08:58:39.000000Z",
+                "updated_at": "2022-03-17T08:58:39.000000Z"
+            },
+            "roles": [
+                {
+                    "id": 8,
+                    "name": "DOCTOR",
+                    "guard_name": "api",
+                    "created_at": "2022-03-16T23:18:56.000000Z",
+                    "updated_at": "2022-03-16T23:18:56.000000Z",
+                    "pivot": {
+                        "model_id": 9,
+                        "role_id": 8,
+                        "model_type": "App\\Models\\User"
+                    }
+                }
+            ],
+            "addresses": [
+                {
+                    "id": 12,
+                    "address": "Direction address",
+                    "city": "city address",
+                    "state": "state address",
+                    "zip": "123456789",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-17T08:58:40.000000Z",
+                    "updated_at": "2022-03-17T08:58:40.000000Z",
+                    "addressable_type": "App\\Models\\User",
+                    "addressable_id": 9
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 13,
+                    "phone": "4245675712",
+                    "fax": "userHealthP",
+                    "email": "user@gmail.com",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-17T08:58:40.000000Z",
+                    "updated_at": "2022-03-17T08:58:40.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\User",
+                    "contactable_id": 9
+                }
+            ]
+        },
+        "taxonomies": [
+            {
+                "id": 1,
+                "name": "NameTaxonomy Company",
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "tax_id": "TAX01213",
+                "primary": true,
+                "pivot": {
+                    "health_professional_id": 3,
+                    "taxonomy_id": 1,
+                    "created_at": "2022-03-17T08:58:40.000000Z",
+                    "updated_at": "2022-03-17T08:58:40.000000Z"
+                }
+            },
+            {
+                "id": 2,
+                "name": "NameTaxonomy 2 Company",
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "tax_id": "TAX01222",
+                "primary": false,
+                "pivot": {
+                    "health_professional_id": 3,
+                    "taxonomy_id": 2,
+                    "created_at": "2022-03-17T08:58:40.000000Z",
+                    "updated_at": "2022-03-17T08:58:40.000000Z"
+                }
+            }
+        ]
     },
     {
         "id": 2,
-        "npi": "4345343",
-        "taxonomy": "someToxonomia2",
-        "speciality": "someSpeciality1",
-        "created_at": "2022-02-04T12:28:22.000000Z",
-        "updated_at": "2022-02-04T12:28:22.000000Z"
-    },
-    {
-        "id": 3,
-        "npi": "43453433",
-        "taxonomy": "someToxonomia3",
-        "speciality": "someSpeciality3",
-        "created_at": "2022-02-04T12:28:34.000000Z",
-        "updated_at": "2022-02-04T12:28:34.000000Z"
+        "npi": "123456789",
+        "dea": "123DEA",
+        "user_id": 8,
+        "created_at": "2022-03-17T08:47:13.000000Z",
+        "updated_at": "2022-03-17T08:47:13.000000Z",
+        "user": {
+            "id": 8,
+            "email": "user2@gmail.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-17T08:47:13.000000Z",
+            "updated_at": "2022-03-17T08:47:13.000000Z",
+            "token": "eyJpdiI6IkhsRmRia1FrSStYQm5CNVVQWVBvQ2c9PSIsInZhbHVlIjoidktsV2pUbW1ZTXJZYmpnS2FyZFFnSWhpcEo5VkszZko0UmhZTFJMVG1jdz0iLCJtYWMiOiIzNzAxNjlhNDQ1NWQwMzk2YTRjMjBiNWRiMDE1NjM0MWQ1ZmIyOTQwODA4MTUxMWE5ZmM4OGM0Zjk5MjIwZTUzIiwidGFnIjoiIn0=",
+            "isLogged": false,
+            "isBlocked": false,
+            "usercode": "US-00007-2022",
+            "userkey": "eyJpdiI6InNlWkNKUlpYdmNJc1AyZHlITUdzUVE9PSIsInZhbHVlIjoiNEZEUG5JUmVYVUdmeUJXV1hENm1lektJVGhmcUZwWVY5elhlQjNOcGZHST0iLCJtYWMiOiJlMjgzMGU0M2VjN2RlNzhjMWIzMGFmYzQ0M2U0NDNmMGU5ZGIyZjVhNWEwZWZlM2ZiZGNiM2MyYTY2MGI1ZjcxIiwidGFnIjoiIn0=",
+            "status": false,
+            "last_login": null,
+            "profile_id": 8,
+            "billing_company_id": null,
+            "profile": {
+                "id": 8,
+                "ssn": "237891832",
+                "first_name": "Fisrt Name",
+                "middle_name": "Middle Name",
+                "last_name": "Last Name",
+                "sex": "m",
+                "date_of_birth": "1990-11-11",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-03-17T08:47:12.000000Z",
+                "updated_at": "2022-03-17T08:47:12.000000Z"
+            },
+            "roles": [
+                {
+                    "id": 8,
+                    "name": "DOCTOR",
+                    "guard_name": "api",
+                    "created_at": "2022-03-16T23:18:56.000000Z",
+                    "updated_at": "2022-03-16T23:18:56.000000Z",
+                    "pivot": {
+                        "model_id": 8,
+                        "role_id": 8,
+                        "model_type": "App\\Models\\User"
+                    }
+                }
+            ],
+            "addresses": [
+                {
+                    "id": 11,
+                    "address": "Direction address",
+                    "city": "city address",
+                    "state": "state address",
+                    "zip": "123456789",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-17T08:47:13.000000Z",
+                    "updated_at": "2022-03-17T08:47:13.000000Z",
+                    "addressable_type": "App\\Models\\User",
+                    "addressable_id": 8
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 12,
+                    "phone": "4245675712",
+                    "fax": "userHealthP",
+                    "email": "user@gmail.com",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-17T08:47:13.000000Z",
+                    "updated_at": "2022-03-17T08:47:13.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\User",
+                    "contactable_id": 8
+                }
+            ]
+        },
+        "taxonomies": []
     }
 ]
 ```
@@ -210,12 +353,113 @@
 
 ```json
 {
-    "npi": "43453433",
-    "speciality": "someSpeciality3",
-    "taxonomy": "someToxonomia3",
-    "updated_at": "2022-02-04T12:28:34.000000Z",
-    "created_at": "2022-02-04T12:28:34.000000Z",
-    "id": 3
+    "id": 3,
+    "npi": "123456719",
+    "dea": "1234DEA",
+    "user_id": 9,
+    "created_at": "2022-03-17T08:58:40.000000Z",
+    "updated_at": "2022-03-17T08:58:40.000000Z",
+    "user": {
+        "id": 9,
+        "email": "user1@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-17T08:58:40.000000Z",
+        "updated_at": "2022-03-17T08:58:40.000000Z",
+        "token": "eyJpdiI6Impxa3V4RkV0MGN6REVkZitqT2dZb0E9PSIsInZhbHVlIjoiUHBac1ZxOW1kTWc0dElJVkJLcWxZRVgrdnk0SXJ3MmhkcFNWMnVBS1VNST0iLCJtYWMiOiI4NjZiZGY0MzMzY2VhODUxMTI1MzQ4ZWRhNDlkY2RlYzgzZjliOWQxZmU1M2YyMDhjYWJjYTk2MjIzN2UxMzUxIiwidGFnIjoiIn0=",
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00008-2022",
+        "userkey": "eyJpdiI6ImRvR0VHQjQvcCs2RmhCUnVYRlRGWFE9PSIsInZhbHVlIjoibk5FVTArb25iT2tjeWdwcmQraDVORllMQSt6d0p2SEVLK01mYStPekFFOD0iLCJtYWMiOiJjNGRiNTk0ZGUzOWMwYzVjN2Y1MzA2N2RhMThiNDYzNGMxZTcxZDA2MDBjMjg0ODExZWE3ZjVkOTlkMTU2OTU4IiwidGFnIjoiIn0=",
+        "status": false,
+        "last_login": null,
+        "profile_id": 9,
+        "billing_company_id": null,
+        "profile": {
+            "id": 9,
+            "ssn": "237891812",
+            "first_name": "Fisrt Name",
+            "middle_name": "Middle Name",
+            "last_name": "Last Name",
+            "sex": "m",
+            "date_of_birth": "1990-11-11",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-17T08:58:39.000000Z",
+            "updated_at": "2022-03-17T08:58:39.000000Z"
+        },
+        "roles": [
+            {
+                "id": 8,
+                "name": "DOCTOR",
+                "guard_name": "api",
+                "created_at": "2022-03-16T23:18:56.000000Z",
+                "updated_at": "2022-03-16T23:18:56.000000Z",
+                "pivot": {
+                    "model_id": 9,
+                    "role_id": 8,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "addresses": [
+            {
+                "id": 12,
+                "address": "Direction address",
+                "city": "city address",
+                "state": "state address",
+                "zip": "123456789",
+                "billing_company_id": null,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "addressable_type": "App\\Models\\User",
+                "addressable_id": 9
+            }
+        ],
+        "contacts": [
+            {
+                "id": 13,
+                "phone": "4245675712",
+                "fax": "userHealthP",
+                "email": "user@gmail.com",
+                "billing_company_id": null,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\User",
+                "contactable_id": 9
+            }
+        ]
+    },
+    "taxonomies": [
+        {
+            "id": 1,
+            "name": "NameTaxonomy Company",
+            "created_at": "2022-03-17T08:58:40.000000Z",
+            "updated_at": "2022-03-17T08:58:40.000000Z",
+            "tax_id": "TAX01213",
+            "primary": true,
+            "pivot": {
+                "health_professional_id": 3,
+                "taxonomy_id": 1,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z"
+            }
+        },
+        {
+            "id": 2,
+            "name": "NameTaxonomy 2 Company",
+            "created_at": "2022-03-17T08:58:40.000000Z",
+            "updated_at": "2022-03-17T08:58:40.000000Z",
+            "tax_id": "TAX01222",
+            "primary": false,
+            "pivot": {
+                "health_professional_id": 3,
+                "taxonomy_id": 2,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z"
+            }
+        }
+    ]
 }
 ```
 
@@ -228,33 +472,38 @@
 
 ```json
 {
-    "doctor": {
-        "id": 1,
-        "npi": "50004500433228",
-        "taxonomy": "User Experience Manager",
-        "speciality": "Paste-Up Worker",
-    },
-    "user": {
-        "id":3,
-        "username":"Rickey",
-        "email":"doctor@billing.com",
-        "sex":"M",
-        "lastName":"Tate",
-        "firstName":"Erwin",
-        "middleName":"Loyal",
-        "ssn":"123-321-1212",
-        "dateOfBirth":"1995-01-01"
+    "email":"user1edit@gmail.com",
+    "npi":"123456719",
+    "dea":"1234DEA",
+    "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },{
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],
+    "profile": {
+        "ssn":"237891812",
+        "first_name":"Fisrt Name Edit",
+        "last_name":"Last Name",
+        "middle_name":"Middle Name",
+        "sex":"m",
+        "date_of_birth":"1990-11-11"
     },
     "address": {
-        "address":"mexico guadalar",
-        "city":"ciudad de mexico",
-        "state":"dsfsdf",
-        "zip":"234"
+        "address": "Direction address",
+        "city": "city address",
+        "state": "state address",
+        "zip": "123456789"
     },
     "contact": {
-        "phone":"111-111-1111",
-        "fax":"+9999999",
-        "email": "doctor@billing.com"
+        "phone": "4245675712",
+        "fax": "userHealthP",
+        "email": "user@gmail.com"
     }
 }
 ```
@@ -278,74 +527,41 @@
 
 ```json
 {
-    "id":3,
-    "username":"Rickey",
-    "email":"doctor@billing.com",
-    "sex":"M",
-    "lastName":"Tate",
-    "firstName":"Erwin",
-    "middleName":"Loyal",
-    "ssn":"123-321-1212",
-    "dateOfBirth":"1995-01-01",
-    "updated_at": "2022-02-07T13:46:19.000000Z",
-    "created_at": "2022-02-07T13:46:19.000000Z",
-    "token": "eyJpdiI6Ik5lQnJVZlBPT3c5d0hBT1Z0MVRxNmc9PSIsInZhbHVlIjoiQm1GWTlOc05WMnBXWXdhMnRxN2RSeHkvbWdvRVNRT1Rtd1FCcE16SW1iNGV5cjZQakxHa0lWbzVMaEpXclg0ciIsIm1hYyI6ImZhYjQ4MmM5NzI5NmJhMDk3MDZhMjI5N2FhMDk0NTc4ZGUzOWQzMGFkZjgxMjM4ZTY3ZGYzZDNmZWJmY2NmMmQiLCJ0YWciOiIifQ==",
-    "roles": [
-        {
-            "id": 12,
-            "name": "DOCTOR",
-            "guard_name": "api",
-            "created_at": "2022-02-07T13:26:16.000000Z",
-            "updated_at": "2022-02-07T13:26:16.000000Z",
-            "pivot": {
-                "model_id": 3,
-                "role_id": 12,
-                "model_type": "App\\Models\\User"
-            }
+    "id": 3,
+    "npi": "123456719",
+    "dea": "1234DEA",
+    "user_id": 9,
+    "created_at": "2022-03-17T08:58:40.000000Z",
+    "updated_at": "2022-03-17T08:58:40.000000Z",
+    "user": {
+        "id": 9,
+        "email": "user1edit@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-17T08:58:40.000000Z",
+        "updated_at": "2022-03-17T09:04:29.000000Z",
+        "token": "eyJpdiI6Impxa3V4RkV0MGN6REVkZitqT2dZb0E9PSIsInZhbHVlIjoiUHBac1ZxOW1kTWc0dElJVkJLcWxZRVgrdnk0SXJ3MmhkcFNWMnVBS1VNST0iLCJtYWMiOiI4NjZiZGY0MzMzY2VhODUxMTI1MzQ4ZWRhNDlkY2RlYzgzZjliOWQxZmU1M2YyMDhjYWJjYTk2MjIzN2UxMzUxIiwidGFnIjoiIn0=",
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00008-2022",
+        "userkey": "eyJpdiI6ImRvR0VHQjQvcCs2RmhCUnVYRlRGWFE9PSIsInZhbHVlIjoibk5FVTArb25iT2tjeWdwcmQraDVORllMQSt6d0p2SEVLK01mYStPekFFOD0iLCJtYWMiOiJjNGRiNTk0ZGUzOWMwYzVjN2Y1MzA2N2RhMThiNDYzNGMxZTcxZDA2MDBjMjg0ODExZWE3ZjVkOTlkMTU2OTU4IiwidGFnIjoiIn0=",
+        "status": false,
+        "last_login": null,
+        "profile_id": 9,
+        "billing_company_id": null,
+        "profile": {
+            "id": 9,
+            "ssn": "237891812",
+            "first_name": "Fisrt Name Edit",
+            "middle_name": "Middle Name",
+            "last_name": "Last Name",
+            "sex": "m",
+            "date_of_birth": "1990-11-11",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-17T08:58:39.000000Z",
+            "updated_at": "2022-03-17T09:04:29.000000Z"
         }
-    ],
-    "doctor": {
-        "id": 1,
-        "npi": "50004500433228",
-        "taxonomy": "User Experience Manager",
-        "speciality": "Paste-Up Worker",
-        "created_at": "2022-02-07T13:46:19.000000Z",
-        "updated_at": "2022-02-07T13:46:19.000000Z",
-        "user_id": 3
-    },
-    "contact": [
-        {
-            "id": 51,
-            "phone": "111-111-1111",
-            "fax": "+9999999",
-            "email":"doctor@billing.com",
-            "user_id": 3,
-            "billing_company_id": null,
-            "created_at": "2022-03-08T20:23:33.000000Z",
-            "updated_at": "2022-03-08T20:31:04.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": null,
-            "insurance_company_id": null
-        }
-    ],
-    "address": [
-        {
-            "id": 51,
-            "address": "mexico guadalar",
-            "city": "ciudad de mexico",
-            "state": "dsfsdf",
-            "zip": "234",
-            "user_id": 3,
-            "billing_company_id": null,
-            "created_at": "2022-03-08T20:23:33.000000Z",
-            "updated_at": "2022-03-08T20:30:25.000000Z",
-            "clearing_house_id": null,
-            "facility_id": null,
-            "company_id": null,
-            "insurance_company_id": null
-        }
-    ]
+    }
 }
 ```
 
@@ -380,12 +596,113 @@
 
 ```json
 {
-    "npi": "43453433",
-    "speciality": "someSpeciality3",
-    "taxonomy": "someToxonomia3",
-    "updated_at": "2022-02-04T12:28:34.000000Z",
-    "created_at": "2022-02-04T12:28:34.000000Z",
-    "id": 3
+    "id": 3,
+    "npi": "123456719",
+    "dea": "1234DEA",
+    "user_id": 9,
+    "created_at": "2022-03-17T08:58:40.000000Z",
+    "updated_at": "2022-03-17T08:58:40.000000Z",
+    "user": {
+        "id": 9,
+        "email": "user1@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-17T08:58:40.000000Z",
+        "updated_at": "2022-03-17T08:58:40.000000Z",
+        "token": "eyJpdiI6Impxa3V4RkV0MGN6REVkZitqT2dZb0E9PSIsInZhbHVlIjoiUHBac1ZxOW1kTWc0dElJVkJLcWxZRVgrdnk0SXJ3MmhkcFNWMnVBS1VNST0iLCJtYWMiOiI4NjZiZGY0MzMzY2VhODUxMTI1MzQ4ZWRhNDlkY2RlYzgzZjliOWQxZmU1M2YyMDhjYWJjYTk2MjIzN2UxMzUxIiwidGFnIjoiIn0=",
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00008-2022",
+        "userkey": "eyJpdiI6ImRvR0VHQjQvcCs2RmhCUnVYRlRGWFE9PSIsInZhbHVlIjoibk5FVTArb25iT2tjeWdwcmQraDVORllMQSt6d0p2SEVLK01mYStPekFFOD0iLCJtYWMiOiJjNGRiNTk0ZGUzOWMwYzVjN2Y1MzA2N2RhMThiNDYzNGMxZTcxZDA2MDBjMjg0ODExZWE3ZjVkOTlkMTU2OTU4IiwidGFnIjoiIn0=",
+        "status": false,
+        "last_login": null,
+        "profile_id": 9,
+        "billing_company_id": null,
+        "profile": {
+            "id": 9,
+            "ssn": "237891812",
+            "first_name": "Fisrt Name",
+            "middle_name": "Middle Name",
+            "last_name": "Last Name",
+            "sex": "m",
+            "date_of_birth": "1990-11-11",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-17T08:58:39.000000Z",
+            "updated_at": "2022-03-17T08:58:39.000000Z"
+        },
+        "roles": [
+            {
+                "id": 8,
+                "name": "DOCTOR",
+                "guard_name": "api",
+                "created_at": "2022-03-16T23:18:56.000000Z",
+                "updated_at": "2022-03-16T23:18:56.000000Z",
+                "pivot": {
+                    "model_id": 9,
+                    "role_id": 8,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "addresses": [
+            {
+                "id": 12,
+                "address": "Direction address",
+                "city": "city address",
+                "state": "state address",
+                "zip": "123456789",
+                "billing_company_id": null,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "addressable_type": "App\\Models\\User",
+                "addressable_id": 9
+            }
+        ],
+        "contacts": [
+            {
+                "id": 13,
+                "phone": "4245675712",
+                "fax": "userHealthP",
+                "email": "user@gmail.com",
+                "billing_company_id": null,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\User",
+                "contactable_id": 9
+            }
+        ]
+    },
+    "taxonomies": [
+        {
+            "id": 1,
+            "name": "NameTaxonomy Company",
+            "created_at": "2022-03-17T08:58:40.000000Z",
+            "updated_at": "2022-03-17T08:58:40.000000Z",
+            "tax_id": "TAX01213",
+            "primary": true,
+            "pivot": {
+                "health_professional_id": 3,
+                "taxonomy_id": 1,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z"
+            }
+        },
+        {
+            "id": 2,
+            "name": "NameTaxonomy 2 Company",
+            "created_at": "2022-03-17T08:58:40.000000Z",
+            "updated_at": "2022-03-17T08:58:40.000000Z",
+            "tax_id": "TAX01222",
+            "primary": false,
+            "pivot": {
+                "health_professional_id": 3,
+                "taxonomy_id": 2,
+                "created_at": "2022-03-17T08:58:40.000000Z",
+                "updated_at": "2022-03-17T08:58:40.000000Z"
+            }
+        }
+    ]
 }
 ```
 

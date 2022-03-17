@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\HealthProfessional;
 
 class UpdateDoctorRequest extends FormRequest
 {
@@ -24,32 +25,35 @@ class UpdateDoctorRequest extends FormRequest
      */
     public function rules()
     {
+        $doctor = HealthProfessional::find($this->id);
         return [
-            'user'              => ['required', 'array'],
-            'user.username'     => ['required', 'string', Rule::unique('users', 'username')->ignore($this->user['id'])],
-            'user.email'        => ['required', 'email:rfc', Rule::unique('users', 'email')->ignore($this->user['id'])],
-            'user.sex'          => ['required', 'string', 'max:1'],
-            'user.firstName'    => ['required', 'string', 'max:20'],
-            'user.lastName'     => ['required', 'string', 'max:20'],
-            'user.middleName'   => ['required', 'string', 'max:20'],
-            'user.ssn'          => ['required', 'string', Rule::unique('users', 'ssn')->ignore($this->user['id'])],
-            'user.dateOfBirth'  => ['required', 'date'],
+            'npi'                   => ['required', 'string', Rule::unique('health_professionals', 'npi')->ignore($doctor->id)],
+            'dea'                   => ['required', 'string'],
+            'email'                 => ['required', Rule::unique('users', 'email')->ignore($this->id), 'string', 'email:rfc'],
 
-            'doctor'            => ['required', 'array'],
-            'doctor.npi'        => ['required', 'string', Rule::unique('doctors', 'npi')->ignore($this->doctor['id'])],
-            'doctor.speciality' => ['required', 'string'],
-            'doctor.taxonomy'   => ['required', 'string'],
+            'taxonomies'           => ['required', 'array'],
+            'taxonomies.*.tax_id'  => ['required', 'string'],
+            'taxonomies.*.name'    => ['required', 'string'],
+            'taxonomies.*.primary' => ['required', 'boolean'],
 
-            'address'           => ['required', 'array'],
-            'address.address'   => ['required', 'string'],
-            'address.city'      => ['required', 'string'],
-            'address.state'     => ['required', 'string'],
-            'address.zip'       => ['required', 'numeric'],
+            'profile'               => ['required', 'array'],
+            'profile.sex'           => ['required', 'string', 'max:1'],
+            'profile.first_name'    => ['required', 'string', 'max:20'],
+            'profile.last_name'     => ['required', 'string', 'max:20'],
+            'profile.middle_name'   => ['nullable', 'string', 'max:20'],
+            'profile.ssn'           => ['required', 'string'],
+            'profile.date_of_birth' => ['required', 'date'],
 
-            'contact'           => ['required', 'array'],
-            'contact.phone'     => ['required', 'string'],
-            'contact.fax'       => ['required', 'string'],
-            'contact.email'     => ['required', 'email:rfc'],
+            'address'               => ['required', 'array'],
+            'address.address'       => ['required', 'string'],
+            'address.city'          => ['required', 'string'],
+            'address.state'         => ['required', 'string'],
+            'address.zip'           => ['required', 'numeric'],
+
+            'contact'               => ['required', 'array'],
+            'contact.phone'         => ['required', 'string'],
+            'contact.fax'           => ['required', 'string'],
+            'contact.email'         => ['required', 'email:rfc'],
         ];
     }
 }

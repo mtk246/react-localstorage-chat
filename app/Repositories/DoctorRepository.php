@@ -5,48 +5,119 @@ namespace App\Repositories;
 use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\Contact;
-use App\Models\Doctor;
+use App\Models\HealthProfessional;
 use App\Models\User;
+use App\Models\Profile;
+use App\Models\Taxonomy;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class DoctorRepository
 {
     public function createDoctor(array $data)
     {
-        try{
+        try {
             \DB::beginTransaction();
-            $data["user"]["usercode"] = encrypt(uniqid("", true));
-            $user = User::create($data['user']);
-            $data["address"]['user_id'] = $user->id;
-            Address::create($data["address"]);
-            $data["contact"]['user_id'] = $user->id;
-            Contact::create($data['contact']);
-            $data['doctor']['user_id']  = $user->id;
-            $doc = Doctor::create($data["doctor"]);
+            /** Create Profile */
+            $profile = Profile::updateOrCreate([
+                "ssn" => $data["profile"]["ssn"]
+            ], [
+                "ssn"           => $data["profile"]["ssn"],
+                "first_name"    => $data["profile"]["first_name"],
+                "middle_name"   => $data["profile"]["middle_name"],
+                "last_name"     => $data["profile"]["last_name"],
+                "sex"           => $data["profile"]["sex"],
+                "date_of_birth" => $data["profile"]["date_of_birth"]
+            ]);
 
-            if(!is_null($doc) && !is_null($user)){
+            if (isset($data["profile"]["social_medias"])) {
+                $socialMedias = $profile->socialMedias;
+                /** Delete socialMedia */
+                foreach ($socialMedias as $socialMedia) {
+                    $validated = false;
+                    foreach ($data["profile"]["social_medias"] as $socialM) {
+                        if ($socialM['name'] == $socialMedia->name) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                    if (!$validated) $socialMedia->delete();
+                }
+
+                /** update or create new social medias */
+                foreach ($data["profile"]["social_medias"] as $socialMedia) {
+                    SocialMedia::updateOrCreate([
+                        "name" => $socialMedia["name"]
+                    ], [
+                        "name" => $socialMedia["name"],
+                        "link" => $socialMedia["link"],
+                        "profile_id" => $profile->id
+                    ]);
+                }
+            }
+            /** Create User */
+            $user = User::create([
+                "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
+                "email"      => $data['email'],
+                "userkey"    => encrypt(uniqid("", true)),
+                "profile_id" => $profile->id
+            ]);
+
+            $billingCompany = auth()->user()->billingCompanies->first();
+            
+            if (isset($data['contact'])) {
+                $data["contact"]["contactable_id"]     = $user->id;
+                $data["contact"]["contactable_type"]   = User::class;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                Contact::create($data["contact"]);
+            }
+
+            if (isset($data['address'])) {
+                $data["address"]["addressable_id"]     = $user->id;
+                $data["address"]["addressable_type"]   = User::class;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                Address::create($data["address"]);
+            }
+            $healthP = HealthProfessional::create([
+                "npi"     => $data["npi"],
+                "dea"     => $data["dea"],
+                "user_id" => $user->id
+            ]);
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(["tax_id" => $taxonomy["tax_id"]], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $healthP->taxonomies()->sync($tax_array);
+            }
+            $this->changeStatus(true, $healthP->id);
+
+            if(!is_null($healthP) && !is_null($user)){
                 $user->assignRole("DOCTOR");
 
                 $token = encrypt($user->id."@#@#$".$user->email);
                 $user->token = $token;
                 $user->save();
 
-                \Mail::to($user->email)->send(new GenerateNewPassword(
-                    $user->firstName." ".$user->lastName,
+                Mail::to($user->email)->send(
+                new GenerateNewPassword(
+                    $profile->first_name . ' ' . $profile->last_name,
                     $user->email,
-                    \Crypt::decrypt($user->usercode),
+                    \Crypt::decrypt($user->userkey),
                     env('URL_FRONT') . "/newPassword?mcctoken=" . $token
-                    )
-                );
-            }else{
+                )
+            );
+            } else {
                 \DB::rollBack();
                 return null;
             }
 
             \DB::commit();
-            return $user->load("doctor", "address", "contact");
+            return $healthP;
         }catch (\Exception $e){
             \DB::rollBack();
             dd($e->getMessage());
@@ -60,45 +131,144 @@ class DoctorRepository
      */
     public function updateDoc(array $data, int $id)
     {
-        $doctor = Doctor::find($id);
-        $doctor->update($data['doctor']);
+        try {
+            \DB::beginTransaction();
+            
+            $healthP = HealthProfessional::find($id);
+            $healthP->update([
+                "npi"     => $data["npi"],
+                "dea"     => $data["dea"]
+            ]);
 
-        $user = $doctor->user;
-        $user->update($data['user']);
+            if (isset($data['taxonomies'])) {
+                $tax_array = [];
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate([
+                        "tax_id" => $taxonomy["tax_id"]
+                    ], $taxonomy);
+                    array_push($tax_array, $tax->id);
+                }
+                $healthP->taxonomies()->sync($tax_array);
+            }
 
-        
-        if (isset($data['address'])) {
-            Address::updateOrCreate([
-                'user_id' => $user->id
-            ], $data['address']);
+            /** Edit User */
+            $user = $healthP->user;
+            $user->update([
+                "email" => $data['email'],
+            ]);
+            
+            /** Edit Profile */
+            $profile = $user->profile;
+
+            $profile->update([
+                "ssn"           => $data["profile"]["ssn"],
+                "first_name"    => $data["profile"]["first_name"],
+                "middle_name"   => $data["profile"]["middle_name"],
+                "last_name"     => $data["profile"]["last_name"],
+                "sex"           => $data["profile"]["sex"],
+                "date_of_birth" => $data["profile"]["date_of_birth"]
+            ]);
+
+            if (isset($data["profile"]["social_medias"])) {
+                $socialMedias = $profile->socialMedias;
+                /** Delete socialMedia */
+                foreach ($socialMedias as $socialMedia) {
+                    $validated = false;
+                    foreach ($data["profile"]["social_medias"] as $socialM) {
+                        if ($socialM['name'] == $socialMedia->name) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                    if (!$validated) $socialMedia->delete();
+                }
+
+                /** update or create new social medias */
+                foreach ($data["profile"]["social_medias"] as $socialMedia) {
+                    SocialMedia::updateOrCreate([
+                        "name" => $socialMedia["name"]
+                    ], [
+                        "name" => $socialMedia["name"],
+                        "link" => $socialMedia["link"],
+                        "profile_id" => $profile->id
+                    ]);
+                }
+            }
+            
+            $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['contact'])) {
+                Contact::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "contactable_id"     => $user->id,
+                    "contactable_type"   => User::class
+                ], $data['contact']);
+            }
+
+            if (isset($data['address'])) {
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "addressable_id"     => $user->id,
+                    "addressable_type"   => User::class
+                ], $data["address"]);
+            }
+
+            \DB::commit();
+            return $healthP;
+        }catch (\Exception $e){
+            \DB::rollBack();
+            dd($e->getMessage());
         }
-
-        if (isset($data['contact'])) {
-            Contact::updateOrCreate([
-                'user_id' => $user->id
-            ], $data['contact']);
-        }
-
-        return $user->refresh()->load('contact', 'address', 'doctor');
     }
 
     /**
      * @return Collection|Doctor[]
      */
     public function getAllDoctors(){
-        return Doctor::with(["user.address","user.contact"])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        return HealthProfessional::with([
+            "user" => function ($query) {
+                $query->with("profile", "roles", "addresses", "contacts");
+            },
+            "taxonomies"
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**
      * @param int $id
      * @return Doctor|Builder|Model|object|null
      */
-    public function getOneDoctor(int $id){
-        $doc = Doctor::whereId($id)->with(["user.address","user.contact"])->first();
-
-        if(is_null($doc)) return null;
-
-        return $doc;
+    public function getOneDoctor(int $id) {
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $healthP = HealthProfessional::whereId($id)->with([
+                "user" => function ($query) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses",
+                        "contacts"
+                    ]);
+                },
+                "taxonomies"
+            ])->first();
+        } else {
+            $healthP = HealthProfessional::whereId($id)->with([
+                "user" => function ($query) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        "contacts" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
+                "taxonomies"
+            ])->first();
+        }
+        return !is_null($healthP) ? $healthP : null;
     }
 
     /**
@@ -106,11 +276,37 @@ class DoctorRepository
      * @return Doctor|Builder|Model|object|null
      */
     public function getOneByNpi(string $npi){
-        $doc = Doctor::whereNpi($npi)->with(["user.address","user.contact"])->first();
-
-        if(is_null($doc)) return null;
-
-        return $doc;
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $healthP = HealthProfessional::whereNpi($npi)->with([
+                "user" => function ($query) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses",
+                        "contacts"
+                    ]);
+                },
+                "taxonomies"
+            ])->first();
+        } else {
+            $healthP = HealthProfessional::whereNpi($npi)->with([
+                "user" => function ($query) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        "contacts" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
+                "taxonomies"
+            ])->first();
+        }
+        return !is_null($healthP) ? $healthP : null;
     }
 
     /**
@@ -118,11 +314,35 @@ class DoctorRepository
      * @param int $id
      * @return bool|int|null
      */
-    public function changeStatus(bool $status, int $id){
-        $doctor = Doctor::whereId($id)->first();
+    public function changeStatus(bool $status, int $id) {
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (is_null($billingCompany)) return null;
+        
+        $healthP = HealthProfessional::find($id);
+        if (is_null($healthP->billingCompanies()->find($billingCompany->id))) {
+            $healthP->billingCompanies()->attach($billingCompany->id);
+            return $healthP;
+        } else {
+            return $healthP->billingCompanies()->updateExistingPivot($billingCompany->id, [
+                'status' => $status,
+            ]);
+        }
+    }
 
-        if( is_null($doctor) ) return null;
+    /**
+     * @param  int $id
+     * @return Company|Builder|Model|object|null
+     */
+    public function addToBillingCompany(int $id) {
+        $healthP = HealthProfessional::find($id);
+        if (is_null($healthP)) return null;
 
-        return $doctor->update(["status" => $status]);
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (is_null($billingCompany)) return null;
+
+        if (is_null($healthP->billingCompanies()->find($billingCompany->id))) {
+            $healthP->billingCompanies()->attach($billingCompany->id);
+        }
+        return $healthP;
     }
 }

@@ -239,7 +239,7 @@ class CompanyRepository
         $company = Company::find($id);
         if (is_null($company)) return null;
 
-        $billingCompany = auth()->user()->billingCompanyUser->first();
+        $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
 
         if (is_null($company->billingCompanies()->find($billingCompany->id))) {
