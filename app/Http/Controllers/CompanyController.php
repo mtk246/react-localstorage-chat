@@ -85,6 +85,17 @@ class CompanyController extends Controller
     }
 
     /**
+     * @param string $npi
+     * @return JsonResponse
+     */
+    public function getOneByNpi(string $npi): JsonResponse
+    {
+        $rs = $this->companyRepository->getOneByNpi($npi);
+
+        return $rs ? response()->json($rs) : response()->json("company not found", 404);
+    }
+
+    /**
      * @param ChangeStatusCompanyRequest $request
      * @param int $id
      * @return JsonResponse

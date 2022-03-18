@@ -9,6 +9,7 @@
 - [Update facility](#update-facility)
 - [Change status facility](#change-status-facility)
 - [Get facility by name](#get-facility-by-name)
+- [Get one facility by npi](#get-one-facility-by-npi)
 - [Add to billing company](#add-to-billing-company)
 
 
@@ -24,7 +25,8 @@
 | 4 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
 | 5 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
 | 6 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
-| 7 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
+| 7 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
+| 8 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
 
 
 
@@ -415,6 +417,96 @@
 
 
 #
+
+<a name="get-one-facility-by-npi"></a>
+## Get One Facility by npi
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "npi": <string>
+}
+```
+
+## Response
+
+> {success} 200 Facility founded
+
+#
+
+```json
+{
+    "id": 1,
+    "type": 2,
+    "name": "MIGUEL REBOLLAR P.A.",
+    "npi": "1598094005",
+    "created_at": "2022-03-17T23:36:20.000000Z",
+    "updated_at": "2022-03-17T23:36:20.000000Z",
+    "company_id": 1,
+    "code": "FA-00001-2022",
+    "status": true,
+    "addresses": [
+        {
+            "id": 15,
+            "address": "780 NW 42nd Ave",
+            "city": "Miami",
+            "state": "Florida",
+            "zip": "331265540",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:36:20.000000Z",
+            "updated_at": "2022-03-17T23:36:20.000000Z",
+            "addressable_type": "App\\Models\\Facility",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 16,
+            "phone": "305-828-4155",
+            "fax": "testingfax",
+            "email": "nw@gmil.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:36:20.000000Z",
+            "updated_at": "2022-03-17T23:36:20.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Facility",
+            "contactable_id": 1
+        }
+    ],
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Block-Walsh",
+            "created_at": "2022-03-16T23:18:59.000000Z",
+            "updated_at": "2022-03-16T23:18:59.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "facility_id": 1,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-17T23:36:20.000000Z",
+                "updated_at": "2022-03-17T23:36:20.000000Z"
+            }
+        }
+    ]
+}
+```
+
+
+#
+
+>{warning} 404 Facility not founded
 
 <a name="add-to-billing-company"></a>
 ## Add to billing company

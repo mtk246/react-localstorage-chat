@@ -8,6 +8,7 @@
 - [Get one company](#get-one-company)
 - [Get one company by name](#get-one-company-by-name)
 - [Get one company by email](#get-one-company-by-email)
+- [Get one company by npi](#get-one-company-by-npi)
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
@@ -23,9 +24,10 @@
 | 3 |GET | `Get one company`          | `/company/{id}`|yes|Get one company|
 | 4 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
 | 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
-| 6 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 7 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
-| 8 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 6 |GET | `Get one company by npi`          | `/company/get-by-npi/{npi}`|yes|Get company by npi|
+| 7 |PUT | `Update company`          | `/company/{id}`|yes|update company|
+| 8 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 9 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 
 
@@ -305,8 +307,316 @@
     "billing_companies": []
 }
 ```
+#
+
+>{warning} 404 company found not found
+
+<a name="get-one-company-by-name"></a>
+## Get One Company by name
 
 
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "name": <string>
+}
+```
+
+## Response
+
+> {success} 200 company house found
+
+#
+
+```json
+{
+    "id": 2,
+    "code": "CO-00002-2022",
+    "name": "PANAMERICAN INTERNAL MEDICINE INC",
+    "npi": "1396903308",
+    "created_at": "2022-03-17T23:00:59.000000Z",
+    "updated_at": "2022-03-17T23:00:59.000000Z",
+    "status": true,
+    "taxonomies": [
+        {
+            "id": 4,
+            "name": "Health Maintenance Organization",
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "tax_id": "302R00000X",
+            "primary": true,
+            "pivot": {
+                "company_id": 2,
+                "taxonomy_id": 4,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "id": 14,
+            "address": "Avenue of the Giants",
+            "city": "Merida",
+            "state": "California",
+            "zip": "123456789",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "addressable_type": "App\\Models\\Company",
+            "addressable_id": 2
+        }
+    ],
+    "contacts": [
+        {
+            "id": 15,
+            "phone": "239-410-2887",
+            "fax": "+9999999",
+            "email": "titu@gmai.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Company",
+            "contactable_id": 2
+        }
+    ],
+    "facilities": [],
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Block-Walsh",
+            "created_at": "2022-03-16T23:18:59.000000Z",
+            "updated_at": "2022-03-16T23:18:59.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "company_id": 2,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ]
+}
+```
+
+#
+
+>{warning} 404 company found not found
+
+<a name="get-one-company-by-email"></a>
+## Get One Company by email
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "email": <string>
+}
+```
+
+## Response
+
+> {success} 200 company house found
+
+#
+
+```json
+{
+    "id": 2,
+    "code": "CO-00002-2022",
+    "name": "PANAMERICAN INTERNAL MEDICINE INC",
+    "npi": "1396903308",
+    "created_at": "2022-03-17T23:00:59.000000Z",
+    "updated_at": "2022-03-17T23:00:59.000000Z",
+    "status": true,
+    "taxonomies": [
+        {
+            "id": 4,
+            "name": "Health Maintenance Organization",
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "tax_id": "302R00000X",
+            "primary": true,
+            "pivot": {
+                "company_id": 2,
+                "taxonomy_id": 4,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "id": 14,
+            "address": "Avenue of the Giants",
+            "city": "Merida",
+            "state": "California",
+            "zip": "123456789",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "addressable_type": "App\\Models\\Company",
+            "addressable_id": 2
+        }
+    ],
+    "contacts": [
+        {
+            "id": 15,
+            "phone": "239-410-2887",
+            "fax": "+9999999",
+            "email": "titu@gmai.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Company",
+            "contactable_id": 2
+        }
+    ],
+    "facilities": [],
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Block-Walsh",
+            "created_at": "2022-03-16T23:18:59.000000Z",
+            "updated_at": "2022-03-16T23:18:59.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "company_id": 2,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ]
+}
+```
+#
+
+>{warning} 404 company found not found
+
+<a name="get-one-company-by-npi"></a>
+## Get One Company by npi
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "npi": <string>
+}
+```
+
+## Response
+
+> {success} 200 company house found
+
+#
+
+```json
+{
+    "id": 2,
+    "code": "CO-00002-2022",
+    "name": "PANAMERICAN INTERNAL MEDICINE INC",
+    "npi": "1396903308",
+    "created_at": "2022-03-17T23:00:59.000000Z",
+    "updated_at": "2022-03-17T23:00:59.000000Z",
+    "status": true,
+    "taxonomies": [
+        {
+            "id": 4,
+            "name": "Health Maintenance Organization",
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "tax_id": "302R00000X",
+            "primary": true,
+            "pivot": {
+                "company_id": 2,
+                "taxonomy_id": 4,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "id": 14,
+            "address": "Avenue of the Giants",
+            "city": "Merida",
+            "state": "California",
+            "zip": "123456789",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "addressable_type": "App\\Models\\Company",
+            "addressable_id": 2
+        }
+    ],
+    "contacts": [
+        {
+            "id": 15,
+            "phone": "239-410-2887",
+            "fax": "+9999999",
+            "email": "titu@gmai.com",
+            "billing_company_id": 1,
+            "created_at": "2022-03-17T23:00:59.000000Z",
+            "updated_at": "2022-03-17T23:00:59.000000Z",
+            "mobile": null,
+            "contactable_type": "App\\Models\\Company",
+            "contactable_id": 2
+        }
+    ],
+    "facilities": [],
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Block-Walsh",
+            "created_at": "2022-03-16T23:18:59.000000Z",
+            "updated_at": "2022-03-16T23:18:59.000000Z",
+            "code": "BC-00001-2022",
+            "status": false,
+            "pivot": {
+                "company_id": 2,
+                "billing_company_id": 1,
+                "status": true,
+                "created_at": "2022-03-17T23:00:59.000000Z",
+                "updated_at": "2022-03-17T23:00:59.000000Z"
+            }
+        }
+    ]
+}
+```
 #
 
 >{warning} 404 company found not found

@@ -206,9 +206,24 @@ class CompanyRepository
                 },
                 "facilities",
                 "billingCompanies"
-            ])->get();
+            ])->first();
         }
-        return $companies;
+        return !is_null($company) ? $company : null;
+    }
+
+    /**
+     * @param string $npi
+     * @return Company|Builder|Collection
+     */
+    public function getOneByNpi(string $npi) {
+        $company = Company::whereNpi($npi)->with([
+            "taxonomies",
+            "addresses",
+            "contacts",
+            "facilities",
+            "billingCompanies"
+        ])->first();
+        return !is_null($company) ? $company : null;
     }
 
     /**

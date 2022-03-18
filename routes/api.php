@@ -130,12 +130,15 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}/get-by-name",[\App\Http\Controllers\FacilityController::class,'getByName'])->middleware([
             "auth:api",
         ]);
+        Route::get("/get-by-npi/{npi}",[\App\Http\Controllers\FacilityController::class,'getOneByNpi'])->middleware([
+            "auth:api",
+        ]);
         Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\FacilityController::class,'addToBillingCompany'])->middleware([
             "auth:api",
         ]);
     });
 
-    Route::prefix("company")->group(function(){
+    Route::prefix("company")->group(function() {
         Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);
@@ -149,6 +152,9 @@ Route::prefix("v1")/*->middleware('audit')*/
             "auth:api",
         ]);
         Route::get("/get-by-email/{email}",[\App\Http\Controllers\CompanyController::class,'getOneByEmail'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/get-by-npi/{npi}",[\App\Http\Controllers\CompanyController::class,'getOneByNpi'])->middleware([
             "auth:api",
         ]);
         Route::put("/{id}",[\App\Http\Controllers\CompanyController::class,'updateCompany'])->middleware([

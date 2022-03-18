@@ -166,6 +166,18 @@ class FacilityRepository
     }
 
     /**
+     * @param string $npi
+     * @return Company|Builder|Collection
+     */
+    public function getOneByNpi(string $npi) {
+        $facility = Facility::whereNpi($npi)->with([
+            "addresses", "contacts", "billingCompanies"
+        ])->first();
+
+        return !is_null($facility) ? $facility : null;
+    }
+
+    /**
      * @param bool $status
      * @param int $id
      * @return bool|int

@@ -75,6 +75,17 @@ class FacilityController extends Controller
     }
 
     /**
+     * @param string $npi
+     * @return JsonResponse
+     */
+    public function getOneByNpi(string $npi): JsonResponse
+    {
+        $rs = $this->facilityRepository->getOneByNpi($npi);
+
+        return $rs ? response()->json($rs) : response()->json("facility not found",404);
+    }
+
+    /**
      * @param ChangeStatusFacilityRequest $request
      * @param int $id
      * @return JsonResponse
