@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateInsurancePlanRequest extends FormRequest
 {
@@ -24,24 +25,25 @@ class UpdateInsurancePlanRequest extends FormRequest
     public function rules()
     {
         return [
-            "ins_type" => "sometimes|string",
-            "note" => "sometimes|string",
-            "plan_type" => "sometimes|string",
-            "cap_group" => "sometimes|string",
-            "accept_assign" => "sometimes|boolean",
-            "pre_authorization" => "sometimes|boolean",
-            "file_zero_changes" => "sometimes|boolean",
-            "referral_required" => "sometimes|boolean",
-            "accrue_patient_resp" => "sometimes|boolean",
-            "require_abn" => "sometimes|boolean",
-            "pqrs_eligible" => "sometimes|boolean",
-            "allow_attached_files" => "sometimes|boolean",
-            "eff_date" => "sometimes|date",
-            "charge_using" => "sometimes|string",
-            "format" => "sometimes|string",
-            "method" => "sometimes|string",
-            "naic" => "sometimes|string",
-            "insurance_company_id" => "sometimes|integer",
+            'name'                 => ['required', 'string', Rule::unique('insurance_plans', 'name')->ignore($this->id)],
+            'ins_type'             => ['required', 'string'],
+            'cap_group'            => ['required', 'string'],
+            'accept_assign'        => ['required', 'boolean'],
+            'pre_authorization'    => ['required', 'boolean'],
+            'file_zero_changes'    => ['required', 'boolean'],
+            'referral_required'    => ['required', 'boolean'],
+            'accrue_patient_resp'  => ['required', 'boolean'],
+            'require_abn'          => ['required', 'boolean'],
+            'pqrs_eligible'        => ['required', 'boolean'],
+            'allow_attached_files' => ['required', 'boolean'],
+            'eff_date'             => ['required', 'date'],
+            'charge_using'         => ['required', 'string'],
+            'format'               => ['required', 'string'],
+            'method'               => ['required', 'string'],
+            'naic'                 => ['required', 'string'],
+            'insurance_company_id' => ['required', 'integer'],
+
+            'note'                 => ['nullable', 'string'],
         ];
     }
 }

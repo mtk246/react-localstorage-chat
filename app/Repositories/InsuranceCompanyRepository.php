@@ -126,16 +126,19 @@ class InsuranceCompanyRepository
             $billingCompany = auth()->user()->billingCompanies->first();
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
-                $data["address"]["addressable_id"]     = $insurance->id;
-                $data["address"]["addressable_type"]   = InsuranceCompany::class;
-                Address::create($data["address"]);
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "addressable_id"     => $insurance->id,
+                    "addressable_type"   => InsuranceCompany::class,
+                ],
+                $data["address"]);
             }
             if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
-                $data["contact"]["contactable_id"]     = $insurance->id;
-                $data["contact"]["contactable_type"]   = InsuranceCompany::class;
-                Contact::create($data["contact"]);
+                Contact::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? null,
+                    "addressable_id"     => $insurance->id,
+                    "addressable_type"   => InsuranceCompany::class,
+                ], $data["contact"]);
             }
             DB::commit();
             return $insurance;

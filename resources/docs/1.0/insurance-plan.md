@@ -22,7 +22,7 @@
 | 2 |GET | `Get all Insurance plan`                   | `/insurance-plan/`        |yes            |Get all Insurance Plan|
 | 3 |GET | `Get one Insurance plan`                   | `/insurance-plan/{id}`|yes|Get one Insurance Plan|
 | 4 |PUT | `Update Insurance plan`                | `/insurance-plan/{id}`|yes|Update Insurance Plan|
-| 5 |GET | `Get one Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get one Insurance Plan by name|
+| 5 |GET | `Get Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get all Insurance Plan by name|
 | 6 |PATCH | `Change status plan Company`           | `/insurance-plan/{id}/change-status`|yes|Change status Insurance Plan|
 | 7 |GET | `Get all insurance plan by insurance company`           | `/insurance-plan/insurance-company/{id}/get-by-insurance-company`|yes|Get all insurance plan by insurance company|
 
@@ -45,13 +45,12 @@
 ```json
 {
     "ins_type":"some ins_type",
-    "name":"someName3",
+    "name":"someName",
     "note":"someNote",
-    "plan_type":"somePlanType",
     "cap_group":"someCapGroup",
     "accept_assign":true,
     "pre_authorization":true,
-    "file_zero":true,
+    "file_zero_changes":true,
     "referral_required":true,
     "accrue_patient_resp":true,
     "require_abn":true,
@@ -76,7 +75,7 @@
 
 ## Response
 
-> {success} 201 Insurance Company created
+> {success} 201 Insurance plan created
 
 
 #
@@ -85,14 +84,13 @@
 
 ```json
 {
+    "code": "IP-00001-2022",
+    "name": "someName",
     "ins_type": "some ins_type",
-    "name": "someName33",
-    "note": "someNote",
-    "plan_type": "somePlanType",
     "cap_group": "someCapGroup",
     "accept_assign": true,
     "pre_authorization": true,
-    "file_zero": true,
+    "file_zero_changes": true,
     "referral_required": true,
     "accrue_patient_resp": true,
     "require_abn": true,
@@ -104,9 +102,8 @@
     "method": "someMethod",
     "naic": "someNaic",
     "insurance_company_id": 1,
-    "code": "981793",
-    "updated_at": "2022-02-04T03:47:27.000000Z",
-    "created_at": "2022-02-04T03:47:27.000000Z",
+    "updated_at": "2022-03-18T15:26:42.000000Z",
+    "created_at": "2022-03-18T15:26:42.000000Z",
     "id": 4
 }
 ```
@@ -137,17 +134,37 @@
 ```json
 [
     {
-        "id": 1,
-        "code": "668953",
+        "id": 5,
+        "code": "IP-00002-2022",
+        "name": "Name 2",
+        "ins_type": "ins_type 2",
+        "cap_group": "CapGroup 2",
+        "accept_assign": true,
+        "pre_authorization": true,
+        "file_zero_changes": true,
+        "referral_required": true,
+        "accrue_patient_resp": true,
+        "require_abn": true,
+        "pqrs_eligible": true,
+        "allow_attached_files": true,
+        "eff_date": "2022-01-23",
+        "charge_using": "Charge 2",
+        "format": "y-m-d",
+        "method": "Method 2",
+        "naic": "Naic 2",
+        "insurance_company_id": 1,
+        "created_at": "2022-03-18T15:28:30.000000Z",
+        "updated_at": "2022-03-18T15:28:30.000000Z"
+    },
+    {
+        "id": 4,
+        "code": "IP-00001-2022",
         "name": "someName",
-        "status": false,
-        "note": "someNote",
         "ins_type": "some ins_type",
-        "plan_type": "somePlanType",
         "cap_group": "someCapGroup",
         "accept_assign": true,
         "pre_authorization": true,
-        "file_zero": true,
+        "file_zero_changes": true,
         "referral_required": true,
         "accrue_patient_resp": true,
         "require_abn": true,
@@ -159,60 +176,8 @@
         "method": "someMethod",
         "naic": "someNaic",
         "insurance_company_id": 1,
-        "created_at": "2022-02-04T03:21:07.000000Z",
-        "updated_at": "2022-02-04T03:21:07.000000Z"
-    },
-    {
-        "id": 2,
-        "code": "039902",
-        "name": "someName1",
-        "status": false,
-        "note": "someNote",
-        "ins_type": "some ins_type",
-        "plan_type": "somePlanType",
-        "cap_group": "someCapGroup",
-        "accept_assign": true,
-        "pre_authorization": true,
-        "file_zero": true,
-        "referral_required": true,
-        "accrue_patient_resp": true,
-        "require_abn": true,
-        "pqrs_eligible": true,
-        "allow_attached_files": true,
-        "eff_date": "2022-01-23",
-        "charge_using": "someCharge",
-        "format": "y-m-d",
-        "method": "someMethod",
-        "naic": "someNaic",
-        "insurance_company_id": 1,
-        "created_at": "2022-02-04T03:23:03.000000Z",
-        "updated_at": "2022-02-04T03:23:03.000000Z"
-    },
-    {
-        "id": 3,
-        "code": "805671",
-        "name": "someName3",
-        "status": false,
-        "note": "someNote",
-        "ins_type": "some ins_type",
-        "plan_type": "somePlanType",
-        "cap_group": "someCapGroup",
-        "accept_assign": true,
-        "pre_authorization": true,
-        "file_zero": true,
-        "referral_required": true,
-        "accrue_patient_resp": true,
-        "require_abn": true,
-        "pqrs_eligible": true,
-        "allow_attached_files": true,
-        "eff_date": "2022-01-23",
-        "charge_using": "someCharge",
-        "format": "y-m-d",
-        "method": "someMethod",
-        "naic": "someNaic",
-        "insurance_company_id": 1,
-        "created_at": "2022-02-04T03:26:53.000000Z",
-        "updated_at": "2022-02-04T03:26:53.000000Z"
+        "created_at": "2022-03-18T15:26:42.000000Z",
+        "updated_at": "2022-03-18T15:26:42.000000Z"
     }
 ]
 ```
@@ -249,29 +214,48 @@
 
 ```json
 {
-    "ins_type": "some ins_type",
-    "name": "someName33",
-    "note": "someNote",
-    "plan_type": "somePlanType",
-    "cap_group": "someCapGroup",
+    "id": 5,
+    "code": "IP-00002-2022",
+    "name": "Name 2",
+    "ins_type": "ins_type 2",
+    "cap_group": "CapGroup 2",
     "accept_assign": true,
     "pre_authorization": true,
-    "file_zero": true,
+    "file_zero_changes": true,
     "referral_required": true,
     "accrue_patient_resp": true,
     "require_abn": true,
     "pqrs_eligible": true,
     "allow_attached_files": true,
     "eff_date": "2022-01-23",
-    "charge_using": "someCharge",
+    "charge_using": "Charge 2",
     "format": "y-m-d",
-    "method": "someMethod",
-    "naic": "someNaic",
+    "method": "Method 2",
+    "naic": "Naic 2",
     "insurance_company_id": 1,
-    "code": "981793",
-    "updated_at": "2022-02-04T03:47:27.000000Z",
-    "created_at": "2022-02-04T03:47:27.000000Z",
-    "id": 4
+    "created_at": "2022-03-18T15:28:30.000000Z",
+    "updated_at": "2022-03-18T15:28:30.000000Z",
+    "public_notes": [
+        {
+            "id": 2,
+            "note": "Note 2",
+            "publishable_type": "App\\Models\\InsurancePlan",
+            "publishable_id": 5,
+            "created_at": "2022-03-18T15:28:30.000000Z",
+            "updated_at": "2022-03-18T15:28:30.000000Z"
+        }
+    ],
+    "insurance_company": {
+        "id": 1,
+        "code": "IC-00001-2022",
+        "name": "Insurance",
+        "file_method": "second",
+        "naic": "AX2131",
+        "created_at": "2022-03-16T23:28:29.000000Z",
+        "updated_at": "2022-03-16T23:28:29.000000Z",
+        "status": false
+    },
+    "billing_companies": []
 }
 ```
 
@@ -285,13 +269,13 @@
 
 ```json
 {
-    "ins_type":"some ins_type",
+    "ins_type":"some ins_type edited",
+    "name":"someName",
     "note":"someNote",
-    "plan_type":"somePlanType",
     "cap_group":"someCapGroup",
     "accept_assign":true,
     "pre_authorization":true,
-    "file_zero":true,
+    "file_zero_changes":true,
     "referral_required":true,
     "accrue_patient_resp":true,
     "require_abn":true,
@@ -325,14 +309,14 @@
 
 ```json
 {
-    "ins_type": "some ins_type",
-    "name": "someName33",
-    "note": "someNote",
-    "plan_type": "somePlanType",
+    "id": 4,
+    "code": "IP-00001-2022",
+    "name": "someName",
+    "ins_type": "some ins_type edited",
     "cap_group": "someCapGroup",
     "accept_assign": true,
     "pre_authorization": true,
-    "file_zero": true,
+    "file_zero_changes": true,
     "referral_required": true,
     "accrue_patient_resp": true,
     "require_abn": true,
@@ -344,10 +328,8 @@
     "method": "someMethod",
     "naic": "someNaic",
     "insurance_company_id": 1,
-    "code": "981793",
-    "updated_at": "2022-02-04T03:47:27.000000Z",
-    "created_at": "2022-02-04T03:47:27.000000Z",
-    "id": 4
+    "created_at": "2022-03-18T15:26:42.000000Z",
+    "updated_at": "2022-03-18T15:38:58.000000Z"
 }
 ```
 
@@ -381,32 +363,54 @@
 
 
 ```json
-{
-    "id": 1,
-    "code": "668953",
-    "name": "someName",
-    "status": false,
-    "note": "someNote",
-    "ins_type": "some ins_type",
-    "plan_type": "somePlanType",
-    "cap_group": "someCapGroup",
-    "accept_assign": true,
-    "pre_authorization": true,
-    "file_zero": true,
-    "referral_required": true,
-    "accrue_patient_resp": true,
-    "require_abn": true,
-    "pqrs_eligible": true,
-    "allow_attached_files": true,
-    "eff_date": "2022-01-23",
-    "charge_using": "someCharge",
-    "format": "y-m-d",
-    "method": "someMethod",
-    "naic": "someNaic",
-    "insurance_company_id": 1,
-    "created_at": "2022-02-04T03:21:07.000000Z",
-    "updated_at": "2022-02-04T03:21:07.000000Z"
-}
+[
+    {
+        "id": 5,
+        "code": "IP-00002-2022",
+        "name": "Name 2",
+        "ins_type": "ins_type 2",
+        "cap_group": "CapGroup 2",
+        "accept_assign": true,
+        "pre_authorization": true,
+        "file_zero_changes": true,
+        "referral_required": true,
+        "accrue_patient_resp": true,
+        "require_abn": true,
+        "pqrs_eligible": true,
+        "allow_attached_files": true,
+        "eff_date": "2022-01-23",
+        "charge_using": "Charge 2",
+        "format": "y-m-d",
+        "method": "Method 2",
+        "naic": "Naic 2",
+        "insurance_company_id": 1,
+        "created_at": "2022-03-18T15:28:30.000000Z",
+        "updated_at": "2022-03-18T15:28:30.000000Z"
+    },
+    {
+        "id": 4,
+        "code": "IP-00001-2022",
+        "name": "someName",
+        "ins_type": "some ins_type edite",
+        "cap_group": "someCapGroup",
+        "accept_assign": true,
+        "pre_authorization": true,
+        "file_zero_changes": true,
+        "referral_required": true,
+        "accrue_patient_resp": true,
+        "require_abn": true,
+        "pqrs_eligible": true,
+        "allow_attached_files": true,
+        "eff_date": "2022-01-23",
+        "charge_using": "someCharge",
+        "format": "y-m-d",
+        "method": "someMethod",
+        "naic": "someNaic",
+        "insurance_company_id": 1,
+        "created_at": "2022-03-18T15:26:42.000000Z",
+        "updated_at": "2022-03-18T15:38:58.000000Z"
+    }
+]
 ```
 
 
