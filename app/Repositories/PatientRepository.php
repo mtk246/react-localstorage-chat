@@ -109,7 +109,7 @@ class PatientRepository
             /** Create PatienPrivate */
             if (isset($data['patient_private'])) {
                 $data["patient_private"]["patient_id"] = $patient->id;
-                $data["patient_private"]["billing_company_id"] = $billingCompany->id ?? 1;
+                $data["patient_private"]["billing_company_id"] = $billingCompany->id;
                 $patient_private = PatientPrivate::create($data["patient_private"]);
             }
 
