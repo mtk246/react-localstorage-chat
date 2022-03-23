@@ -26,7 +26,7 @@ class DoctorController extends Controller
     {
         $rs = $this->doctorRepository->createDoctor($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("Error creating doctor",400);
+        return $rs ? response()->json($rs,201) : response()->json("Error creating health professional", 400);
     }
 
     /**
@@ -38,7 +38,7 @@ class DoctorController extends Controller
     {
         $rs = $this->doctorRepository->updateDoc($request->validated(),$id);
 
-        return $rs ? response()->json($rs) : response()->json("Doctor not found",404);
+        return $rs ? response()->json($rs) : response()->json("Health professional not found", 404);
     }
 
     /**
@@ -57,18 +57,18 @@ class DoctorController extends Controller
     {
         $rs = $this->doctorRepository->getOneDoctor($id);
 
-        return $rs ? response()->json($rs) : response()->json("doctor not found",404);
+        return $rs ? response()->json($rs) : response()->json("Health professional not found", 404);
     }
 
     /**
      * @param string $npi
      * @return JsonResponse
      */
-    public function getByNpi(string $npi): JsonResponse
+    public function getOneByNpi(string $npi): JsonResponse
     {
         $rs = $this->doctorRepository->getOneByNpi($npi);
 
-        return $rs ? response()->json($rs) : response()->json("doctor not found",404);
+        return $rs ? response()->json($rs) : response()->json("Health professional not found", 404);
     }
 
     /**
@@ -80,6 +80,6 @@ class DoctorController extends Controller
     {
         $rs = $this->doctorRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json([],204) : response()->json("Error! Doctor not found",404);
+        return $rs ? response()->json([],204) : response()->json("Error! Health professional not found", 404);
     }
 }

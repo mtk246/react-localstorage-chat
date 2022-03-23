@@ -104,13 +104,13 @@ class DoctorRepository
                 $user->save();
 
                 Mail::to($user->email)->send(
-                new GenerateNewPassword(
-                    $profile->first_name . ' ' . $profile->last_name,
-                    $user->email,
-                    \Crypt::decrypt($user->userkey),
-                    env('URL_FRONT') . "/newPassword?mcctoken=" . $token
-                )
-            );
+                    new GenerateNewPassword(
+                        $profile->first_name . ' ' . $profile->last_name,
+                        $user->email,
+                        \Crypt::decrypt($user->userkey),
+                        env('URL_FRONT') . "/newPassword?mcctoken=" . $token
+                    )
+                );
             } else {
                 \DB::rollBack();
                 return null;
@@ -186,7 +186,8 @@ class DoctorRepository
                 /** update or create new social medias */
                 foreach ($data["profile"]["social_medias"] as $socialMedia) {
                     SocialMedia::updateOrCreate([
-                        "name" => $socialMedia["name"]
+                        "name"       => $socialMedia["name"],
+                        "profile_id" => $profile->id
                     ], [
                         "name" => $socialMedia["name"],
                         "link" => $socialMedia["link"],
