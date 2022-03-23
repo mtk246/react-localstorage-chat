@@ -13,11 +13,8 @@ class Suscriber extends Model implements Auditable
 
     protected $fillable = [
         "ssn",
-        "email",
         "first_name",
         "last_name",
-        "address",
-        "phone",
         "billing_company_id"
     ];
 
