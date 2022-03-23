@@ -91,7 +91,7 @@ class ClearingHouseRepository
         try {
             DB::beginTransaction();
 
-            $clearing = ClearingHouse::find($id)->first();
+            $clearing = ClearingHouse::find($id);
             $clearing->update([
                 "name"         => $data["name"],
                 "org_type"     => $data["org_type"],

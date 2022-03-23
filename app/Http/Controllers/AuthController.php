@@ -86,9 +86,9 @@ class AuthController extends Controller
     {
         $dataValidated = $request->validated();
 
-        if ($this->checkIsLogged($request->input("email"))) {
-            return response()->json("this user has a session active in other device", 401);
-        }
+        //if ($this->checkIsLogged($request->input("email"))) {
+            //return response()->json("this user has a session active in other device", 401);
+        //}
 
         $user = User::where('email', $dataValidated["email"])->first();
         if ($user !== null && ($user->isBlocked == true)) {
