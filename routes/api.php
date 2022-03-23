@@ -100,7 +100,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"updateClearingHouse"])->middleware([
             "auth:api",
         ]);
-        Route::get("/get-by-name/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getOneByName"])->middleware([
+        Route::get("/get-by-name/{name}",[\App\Http\Controllers\ClearingHouseController::class,"getByName"])->middleware([
             "auth:api",
         ]);
         Route::patch("/{clearing_id}",[\App\Http\Controllers\ClearingHouseController::class,"changeStatus"])->middleware([

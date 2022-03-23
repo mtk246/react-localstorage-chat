@@ -123,14 +123,14 @@ class ClearingHouseRepository
         }
     }
 
-    public function getOneByName(string $name) {
+    public function getByName(string $name) {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
                 "addresses",
                 "contacts",
                 "billingCompanies"
-            ])->first();
+            ])->get();
         } else {
             $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
                 "addresses" => function ($query) use ($bC) {
@@ -140,7 +140,7 @@ class ClearingHouseRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "billingCompanies"
-            ])->first();
+            ])->get();
         }
         return !is_null($clearing) ? $clearing : null;
     }
