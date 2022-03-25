@@ -199,6 +199,19 @@ class UserSeeder extends Seeder
                                     "date_of_birth" => "1990-04-01",
                                 ],
             ],
+            [
+                "email"      => "admin@sam.com",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "SUPER_USER",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => "Sam",
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => "Begento",
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+            ],
         ];
 
         foreach ($users as $user) {
