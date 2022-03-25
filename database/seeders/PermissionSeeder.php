@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class  PermissionSeeder extends Seeder
 {
@@ -14,6 +15,7 @@ class  PermissionSeeder extends Seeder
      */
     public function run()
     {
+        $adminRole = Role::where('name', 'SUPER_USER')->first();
         $permissions = [
             ["name" => "Manage permissions for each role"],
             ["name" => "Create Billing Company"],
@@ -53,10 +55,14 @@ class  PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $perm) {
-            Permission::updateOrCreate(
+            $per = Permission::updateOrCreate(
                 ['name' => $perm['name']],
                 ['name' => $perm['name']],
             );
+
+            if ($adminRole) {
+                $adminRole->givePermissionTo($per->name);
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ class RolePermissionRepository
      * @return Collection|Permission[]
      */
     public function getAllPermission(){
-        return Permission::all();
+        return Permission::with('roles')->get();
     }
 
     /**
