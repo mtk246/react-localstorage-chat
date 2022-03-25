@@ -205,9 +205,9 @@ class UserSeeder extends Seeder
                 "role"       => "SUPER_USER",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
-                                    "first_name"    => "Sam",
+                                    "first_name"    => "Sr.",
                                     "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
-                                    "last_name"     => "Begento",
+                                    "last_name"     => "Sam",
                                     "sex"           => "M",
                                     "date_of_birth" => "1990-04-01",
                                 ],
