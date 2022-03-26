@@ -26,10 +26,11 @@ class UpdateDoctorRequest extends FormRequest
     public function rules()
     {
         $doctor = HealthProfessional::find($this->id);
+        $user = $doctor->user;
         return [
             'npi'                   => ['required', 'string', Rule::unique('health_professionals', 'npi')->ignore($doctor->id)],
             'dea'                   => ['required', 'string'],
-            'email'                 => ['required', Rule::unique('users', 'email')->ignore($this->id), 'string', 'email:rfc'],
+            'email'                 => ['required', Rule::unique('users', 'email')->ignore($user->id), 'string', 'email:rfc'],
 
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
