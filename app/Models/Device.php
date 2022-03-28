@@ -37,10 +37,9 @@ class Device extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $table = "devices";
     protected $fillable = [
-        "os",
-        "ip",
+        "user_agent",
+        "ip_address",
         "user_id",
         "status",
         "code_temp",

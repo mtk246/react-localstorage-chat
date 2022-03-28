@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Mail\LogNewDevice;
 use App\Models\User;
+use App\Models\Device;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -85,6 +87,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $dataValidated = $request->validated();
+        $dataValidated = $request->safe()->only(['email', 'password']);
 
         //if ($this->checkIsLogged($request->input("email"))) {
             //return response()->json("this user has a session active in other device", 401);
@@ -111,6 +114,22 @@ class AuthController extends Controller
         if (!$token) {
             $this->incrementLoginAttempts($request);
             return response()->json(['error' => 'Bad Credencials'], 401);
+        }
+        if (($dataValidated["email"] === 'admin@henry.com') || ($dataValidated["email"] === 'admin@alejandro.com')) {
+            if (isset($request->code)) {
+                $device = Device::where([
+                    'user_id'    => $user->id,
+                    'ip_address' => $request->ip(),
+                    'status'     => false
+                ])->first();
+                if ($request->code == $device->code_temp) {
+                    $device->status = true;
+                    $device->save();
+                }
+            }
+            if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent())) {
+                return $this->loginNewDevice($user->id, $request->ip(), $request->userAgent());
+            }
         }
 
         $user->last_login = date('Y-m-d H:i:s');
@@ -265,5 +284,41 @@ class AuthController extends Controller
             'token_type'   => 'bearer',
             'expires_in'   => auth()->factory()->getTTL() * 60
         ]);
+    }
+    protected function checkNewDevice(int $user_id, string $ip_address, string $user_agent)
+    {
+        $device = Device::where([
+            'user_id'    => $user_id,
+            'ip_address' => $ip_address,
+            'status'     => true
+        ])->first();
+        return (isset($device)) ? false : true;
+    }
+
+    protected function loginNewDevice(int $user_id, string $ip_address, string $user_agent)
+    {
+        $user = User::find($user_id);
+
+        $code = Str::random(6);
+        Device::updateOrCreate([
+            'user_id'    => $user->id,
+            'ip_address' => $ip_address,
+            'status'     => false
+        ], [
+            'user_id'    => $user->id,
+            'ip_address' => $ip_address,
+            'user_agent' => $user_agent,
+            'code_temp'  => $code,
+        ]);
+
+        \Mail::to($user->email)->send(
+            new LogNewDevice(
+                $user->first_name,
+                $ip_address,
+                $code,
+                $user_agent
+            )
+        );
+        return response()->json(['error' => 'You are trying to access from a new device. Enter the code sent to your email.'], 403);
     }
 }

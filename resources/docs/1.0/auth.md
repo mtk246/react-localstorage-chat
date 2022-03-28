@@ -27,7 +27,8 @@
 ```json
 {
     "email":"admin@billing.com",
-    "password":"helloworld"
+    "password":"helloworld",
+    "code":"xxxxxx"
 }
 ```
 > {success} code is 200 when is success the request to make login
@@ -81,6 +82,15 @@
 ```json
 {
     "error": "Bad Credencials"
+}
+```
+
+> {warning} code is 403 when the login new device
+
+### Response
+```json
+{
+    "error": "You are trying to access from a new device. Enter the code sent to your email."
 }
 ```
 

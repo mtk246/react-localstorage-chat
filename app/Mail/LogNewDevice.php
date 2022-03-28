@@ -11,15 +11,17 @@ class LogNewDevice extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $fullName;
     public $ip;
     public $code;
     public $os;
 
-    public function __construct($ip,$code,$os)
+    public function __construct($fullName, $ip, $code, $os)
     {
-        $this->ip = $ip;
-        $this->code = $code;
-        $this->os = $os;
+        $this->fullName = $fullName;
+        $this->ip       = $ip;
+        $this->code     = $code;
+        $this->os       = $os;
     }
 
     /**
