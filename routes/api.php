@@ -201,7 +201,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("doctor")->middleware([
         "auth:api",
-        'role:SUPER_USER',
+        'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
