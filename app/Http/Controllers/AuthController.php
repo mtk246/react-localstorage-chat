@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use JWTAuth;
 
 /**
  * @OA\Info(title="Api Medical billing",version="1.0")
@@ -43,7 +44,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'checkToken']]);
     }
 
     /**
@@ -320,5 +321,23 @@ class AuthController extends Controller
             )
         );
         return response()->json(['error' => 'You are trying to access from a new device. Enter the code sent to your email.'], 403);
+    }
+
+    public function checkToken()
+    {
+        try {
+           $user = JWTAuth::parseToken()->authenticate();
+        } catch (\Exception $e) {
+          if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+            return response()->json(['status' => 'Token is Invalid'], 403);
+          } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+            return response()->json(['status' => 'Token is Expired'], 401);
+          } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
+            return response()->json(['status' => 'Token is Blacklisted'], 400);
+          } else {
+                return response()->json(['status' => 'Authorization Token not found'], 404);
+          }
+        }
+        return response()->json(['status' => 'Token is valid'], 200);
     }
 }

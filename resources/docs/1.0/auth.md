@@ -7,6 +7,7 @@
 - [Logout](#logout)
 - [Me](#me)
 - [Refresh token](#refresh-token)
+- [Check token](#check-token)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -16,8 +17,9 @@
 | : ||   :-      |  :                    |               |                    |  
 | 1 |POST| `login`   | `/auth/login`         |no             |to make login  |         
 | 2 |GET| `logout`  | `/auth/logout`        |yes            |to logout from app|
-| 2 |GET| `me`      | `/auth/me`            |yes            |get info from user authenticate|
-| 2 |GET| `refresh-token`  | `/auth/refresh-token` |yes            |to refresh token auth|
+| 3 |GET| `me`      | `/auth/me`            |yes            |get info from user authenticate|
+| 4 |GET| `refresh-token`  | `/auth/refresh-token` |yes            |to refresh token auth|
+| 5 |GET| `check-token`  | `/auth/check-token?token={token}` |yes            |to refresh token auth|
 
 
 
@@ -206,4 +208,53 @@
 
 ```json
 "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC92MVwvYXV0aFwvcmVmcmVzaC10b2tlbiIsImlhdCI6MTY0NzMxNDE0NSwiZXhwIjoxNjQ3MzE3Nzc5LCJuYmYiOjE2NDczMTQxNzksImp0aSI6IkFJMEtRM243cWxmVlNIWjEiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NKYOANWqHT42mEviQgQMgZXi1RkZ3bbN1rFdBupvzLI"
+```
+
+
+<a name="check-token"></a>
+## Check token
+
+### Param in path
+
+```json
+{
+    "token": <string>
+}
+```
+> {success} code is 200 when is success the token valid
+
+
+
+### Response
+```json
+{
+    "status": "Token is valid"
+}
+```
+
+> {warning} code is 400 when the token is blacklisted
+
+### Response
+```json
+{
+    "status": "Token is Blancklisted"
+}
+```
+
+> {warning} code is 401 when the token is expired
+
+### Response
+```json
+{
+    "status": "Token is Expired"
+}
+```
+
+> {warning} code is 403 when the token is invalid
+
+### Response
+```json
+{
+    "status": "Token is Invalid"
+}
 ```
