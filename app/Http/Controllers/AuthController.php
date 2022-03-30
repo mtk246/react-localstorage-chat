@@ -116,7 +116,7 @@ class AuthController extends Controller
             $this->incrementLoginAttempts($request);
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
-        if (($dataValidated["email"] === 'admin@henry.com') || ($dataValidated["email"] === 'admin@alejandro.com')) {
+        if ($dataValidated["email"] === 'admin@alejandro.com') {
             if (isset($request->code)) {
                 $device = Device::where([
                     'user_id'    => $user->id,

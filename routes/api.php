@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix("v1")/*->middleware('audit')*/
-/*->middleware('checkAvailable')*/->group(function(){
+->middleware('restrictIpAddress')->group(function() {
 
     Route::get("/",function(){
         return response()->json(["message"=>"Api Running"]);
@@ -61,6 +61,17 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("remove-permission-user/{user_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionUser']);
         Route::patch("remove-permission-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionRole']);
         Route::patch("remove-role-user/{user_id}/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'revokeRoleUser']);
+    });
+
+    Route::prefix("setting")->middleware("auth:api")->group(function() {
+        Route::prefix("ip-restriction")->group(function() {
+            Route::post("/", [\App\Http\Controllers\IpRestrictionController::class,'store']);
+            Route::get("/", [\App\Http\Controllers\IpRestrictionController::class,'getAllRestrictions']);
+            Route::get("{id}", [\App\Http\Controllers\IpRestrictionController::class,'getOneRestriction']);
+            Route::put("{id}", [\App\Http\Controllers\IpRestrictionController::class,'update']);
+            Route::patch("change-status/{id}", [\App\Http\Controllers\IpRestrictionController::class,'changeStatus']);
+        });
+
     });
 
     Route::prefix("billing-company")->group(function(){

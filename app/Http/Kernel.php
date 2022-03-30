@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'audit' => AuditoryMiddleware::class,
         'checkAvailable' => CheckAvailableUser::class,
+        'restrictIpAddress' => \App\Http\Middleware\RestrictIpAddress::class,
     ];
 }
