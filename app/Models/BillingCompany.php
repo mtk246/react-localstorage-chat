@@ -73,6 +73,16 @@ class BillingCompany extends Model implements Auditable
     }
 
     /**
+     * BillingCompany has many IpRestrictions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ipRestrictions()
+    {
+        return $this->hasMany(IpRestriction::class);
+    }
+
+    /**
      * The users that belong to the BillingCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -222,6 +222,16 @@ class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphMany(Address::class, 'addressable');
     }
 
+    /**
+     * User morphs many ipRestrictions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function ipRestrictions()
+    {
+        return $this->morphMany(IpRestriction::class, 'restrictable');
+    }
+
     /*
      * Get the company's status.
      *
