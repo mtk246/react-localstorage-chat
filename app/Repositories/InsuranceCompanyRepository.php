@@ -136,8 +136,8 @@ class InsuranceCompanyRepository
             if (isset($data["contact"]["email"])) {
                 Contact::updateOrCreate([
                     "billing_company_id" => $billingCompany->id ?? null,
-                    "addressable_id"     => $insurance->id,
-                    "addressable_type"   => InsuranceCompany::class,
+                    "contactable_id"     => $insurance->id,
+                    "contactable_type"   => InsuranceCompany::class,
                 ], $data["contact"]);
             }
             DB::commit();
