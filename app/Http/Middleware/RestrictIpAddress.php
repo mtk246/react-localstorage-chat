@@ -19,7 +19,9 @@ class RestrictIpAddress
     {
         if (isset($request->email)) {
             if (($request->email == 'admin@henry.com') && ($request->ip() != '127.0.0.1')) {
-                return response()->json('Access to the application has been restricted. contact support.', 403);
+                return response()->json([
+                    'error' => 'Access to the application has been restricted. contact support.',
+                    'ip_restriction' => true], 403);
             }
         }
         return $next($request);
