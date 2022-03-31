@@ -172,7 +172,9 @@ class AuthController extends Controller
             "permissions",
             "profile" => function ($query) {
                 $query->with('socialMedias');
-            }
+            },
+            "addresses",
+            "contacts"
         ])->first();
 
         return response()->json($user);

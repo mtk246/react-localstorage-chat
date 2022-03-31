@@ -254,7 +254,7 @@ class DoctorRepository
             ])->first();
         } else {
             $healthP = HealthProfessional::whereId($id)->with([
-                "user" => function ($query) {
+                "user" => function ($query) use ($bC) {
                     $query->with([
                         "profile",
                         "roles",
