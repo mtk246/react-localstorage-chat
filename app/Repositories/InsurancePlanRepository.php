@@ -144,7 +144,7 @@ class InsurancePlanRepository
         if (is_null($billingCompany)) return null;
         
         $insurancePlan = InsurancePlan::find($id);
-        if (is_null($insurancePlan->billingCompanies()->find($billingPlan->id))) {
+        if (is_null($insurancePlan->billingCompanies()->find($billingCompany->id))) {
             $insurancePlan->billingCompanies()->attach($billingCompany->id);
             return $insurancePlan;
         } else {
