@@ -361,7 +361,8 @@ class UserRepository{
 
         $pathNameFile = asset("/img-profile/" . $fullNameFile);
 
-        User::whereId(auth()->id())->profile->update([
+        $user = User::whereId(auth()->id())->first();
+        $user->profile->update([
             'avatar' => $pathNameFile,
         ]);
 
