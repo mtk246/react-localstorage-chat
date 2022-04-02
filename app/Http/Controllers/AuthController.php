@@ -116,21 +116,20 @@ class AuthController extends Controller
             $this->incrementLoginAttempts($request);
             return response()->json(['error' => 'Bad Credencials'], 401);
         }
-        if ($dataValidated["email"] === 'admin@alejandro.com') {
-            if (isset($request->code)) {
-                $device = Device::where([
-                    'user_id'    => $user->id,
-                    'ip_address' => $request->ip(),
-                    'status'     => false
-                ])->first();
-                if ($request->code == $device->code_temp) {
-                    $device->status = true;
-                    $device->save();
-                }
+        if (isset($request->code)) {
+            $device = Device::where([
+                'user_id'    => $user->id,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'status'     => false
+            ])->first();
+            if ($request->code == $device->code_temp) {
+                $device->status = true;
+                $device->save();
             }
-            if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent())) {
-                return $this->loginNewDevice($user->id, $request->ip(), $request->userAgent());
-            }
+        }
+        if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent())) {
+            return $this->loginNewDevice($user->id, $request->ip(), $request->userAgent());
         }
 
         $user->last_login = date('Y-m-d H:i:s');
@@ -293,6 +292,7 @@ class AuthController extends Controller
         $device = Device::where([
             'user_id'    => $user_id,
             'ip_address' => $ip_address,
+            'user_agent' => $user_agent,
             'status'     => true
         ])->first();
         return (isset($device)) ? false : true;
@@ -306,6 +306,7 @@ class AuthController extends Controller
         Device::updateOrCreate([
             'user_id'    => $user->id,
             'ip_address' => $ip_address,
+            'user_agent' => $user_agent,
             'status'     => false
         ], [
             'user_id'    => $user->id,
