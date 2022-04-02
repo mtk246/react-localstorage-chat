@@ -2,6 +2,7 @@
 ---
 - [Basic data](#basic-data)
 - [Get audit all](#get-audit-all)
+- [Get audit all by user](#get-audit-all-by-user)
 - [Get audit one](#get-audit-one)
 
 <a name="basic-data"></a>
@@ -11,7 +12,8 @@
 | # |METHOD| Name           | URL          | Token required | Description|
 | : |      |   :-           |  :           |                | |
 | 1 |POST   | `get audit all` | `/audit-all` | yes   | Get all records audited |
-| 2 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
+| 2 |POST   | `get audit all by user` | `/audit-all-by-user` | yes   | Get all records audited by user|
+| 3 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
 
 <a name="get-audit-all"></a>
 ## Get audit all
@@ -127,6 +129,150 @@
         "user": null,
         "url": "console",
         "user_agent": "Symfony"
+    }
+]
+```
+
+<a name="get-audit-all-by-user"></a>
+## Get audit all by user
+
+### Body request example
+
+```json
+{
+    "user_id":2,
+}
+```
+
+### Params in header
+```json
+{
+    "Authorization:": Bearer "<Token Bearer>"
+}
+```
+
+## Response
+
+> {success} 200
+
+#
+
+
+```json
+[
+    {
+        "id": "eyJpdiI6IlQxMFZMN0F4bnFTdlFsS3lML2lUZlE9PSIsInZhbHVlIjoiMHEyc0RMNkp3em9ocU5rR3BnRDJFUT09IiwibWFjIjoiNzdmMzdlMTEyNGVmNDk4M2ViY2E1YmJlN2U5N2Q5ZDhiYmU3OGIzNDYyMzE2Y2VjMWExYTViNjY0Y2JjN2I0NSIsInRhZyI6IiJ9",
+        "event": "created",
+        "date": "02-04-2022 02:01:39 AM",
+        "ip_address": "127.0.0.1",
+        "module": "App\\Models\\Taxonomy",
+        "user": {
+            "id": 2,
+            "email": "billingmanager@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-25T11:11:50.000000Z",
+            "updated_at": "2022-04-02T01:59:47.000000Z",
+            "token": null,
+            "isLogged": true,
+            "isBlocked": false,
+            "usercode": "US-00017-2022",
+            "userkey": null,
+            "status": false,
+            "last_login": "2022-04-02 01:59:47",
+            "profile_id": 31,
+            "billing_company_id": null,
+            "profile": {
+                "id": 31,
+                "ssn": "206166101",
+                "first_name": "Gay",
+                "middle_name": "Caleb",
+                "last_name": "Alejandrin",
+                "sex": "M",
+                "date_of_birth": "1990-04-01",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-03-25T17:01:01.000000Z",
+                "updated_at": "2022-03-25T17:01:01.000000Z"
+            }
+        },
+        "url": "http://127.0.0.1:8000/api/v1/company",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
+    },
+    {
+        "id": "eyJpdiI6InZEdmU3NWttRm9VaFFPVnVNSWl2R0E9PSIsInZhbHVlIjoieHVWVGpNSjRvcXRibWxzZnVreG9wQT09IiwibWFjIjoiOTEzNDgzNGQ2OTQyYjM1YmE5NGI0MTU5YjA2NTI5NGIxMjgzMDU4ZjNiNzA5OWI3M2I2ODM5NWE0YzUyOTdiNiIsInRhZyI6IiJ9",
+        "event": "created",
+        "date": "02-04-2022 02:01:39 AM",
+        "ip_address": "127.0.0.1",
+        "module": "App\\Models\\Address",
+        "user": {
+            "id": 2,
+            "email": "billingmanager@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-25T11:11:50.000000Z",
+            "updated_at": "2022-04-02T01:59:47.000000Z",
+            "token": null,
+            "isLogged": true,
+            "isBlocked": false,
+            "usercode": "US-00017-2022",
+            "userkey": null,
+            "status": false,
+            "last_login": "2022-04-02 01:59:47",
+            "profile_id": 31,
+            "billing_company_id": null,
+            "profile": {
+                "id": 31,
+                "ssn": "206166101",
+                "first_name": "Gay",
+                "middle_name": "Caleb",
+                "last_name": "Alejandrin",
+                "sex": "M",
+                "date_of_birth": "1990-04-01",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-03-25T17:01:01.000000Z",
+                "updated_at": "2022-03-25T17:01:01.000000Z"
+            }
+        },
+        "url": "http://127.0.0.1:8000/api/v1/company",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
+    },
+    {
+        "id": "eyJpdiI6Inp2YXZVMkppZUV3U3BtNFI5SzdIcmc9PSIsInZhbHVlIjoiOXoydmRxdExHWEZxUEhTRS9FU0JGUT09IiwibWFjIjoiYzI3MTIwODYxYzEyZTJkYjYwZWM2OGY1NDhmMGE1Y2NlNDk4MjczNTgxZjFhMjYxNDJmMmMyM2Y4OTc3YzAwMyIsInRhZyI6IiJ9",
+        "event": "created",
+        "date": "02-04-2022 02:01:39 AM",
+        "ip_address": "127.0.0.1",
+        "module": "App\\Models\\Contact",
+        "user": {
+            "id": 2,
+            "email": "billingmanager@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-25T11:11:50.000000Z",
+            "updated_at": "2022-04-02T01:59:47.000000Z",
+            "token": null,
+            "isLogged": true,
+            "isBlocked": false,
+            "usercode": "US-00017-2022",
+            "userkey": null,
+            "status": false,
+            "last_login": "2022-04-02 01:59:47",
+            "profile_id": 31,
+            "billing_company_id": null,
+            "profile": {
+                "id": 31,
+                "ssn": "206166101",
+                "first_name": "Gay",
+                "middle_name": "Caleb",
+                "last_name": "Alejandrin",
+                "sex": "M",
+                "date_of_birth": "1990-04-01",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-03-25T17:01:01.000000Z",
+                "updated_at": "2022-03-25T17:01:01.000000Z"
+            }
+        },
+        "url": "http://127.0.0.1:8000/api/v1/company",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
     }
 ]
 ```
