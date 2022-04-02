@@ -123,11 +123,20 @@ class InsurancePlanRepository
      * @return InsurancePlan|Builder|Model|object|null
      */
     public function getOneInsurancePlan(int $id) {
-        $insurance = InsurancePlan::whereId($id)->with([
-            "publicNotes",
-            "insuranceCompany",
-            "billingCompanies"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $insurance = InsurancePlan::whereId($id)->with([
+                "publicNotes",
+                "insuranceCompany",
+                "billingCompanies"
+            ])->first();
+        } else {
+            $insurance = InsurancePlan::whereId($id)->with([
+                "publicNotes",
+                "insuranceCompany",
+                "billingCompanies"
+            ])->first();
+        }
 
         return !is_null($insurance) ? $insurance : null;
     }
@@ -136,7 +145,22 @@ class InsurancePlanRepository
      * @return InsurancePlan[]|Collection
      */
     public function getAllInsurancePlan() {
-        return InsurancePlan::orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $insurance = InsurancePlan::with([
+                "publicNotes",
+                "insuranceCompany"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $insurance = InsurancePlan::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "publicNotes",
+                    "insuranceCompany"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+
+        return !is_null($insurance) ? $insurance : null;
     }
 
     public function changeStatus(bool $status,int $id) {

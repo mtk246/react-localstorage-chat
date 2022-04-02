@@ -54,10 +54,26 @@ class ClearingHouseRepository
      * @return ClearingHouse[]|Collection
      */
     public function getAllClearingHouse() {
-        return ClearingHouse::with([
-            "addresses",
-            "contacts"
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $clearings = ClearingHouse::with([
+                "addresses",
+                "contacts"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $clearings = ClearingHouse::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "addresses" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    }
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+
+        return !is_null($clearings) ? $clearings : null;
     }
 
     /**

@@ -141,11 +141,22 @@ class UserRepository{
      * @return Builder[]|Collection
      */
     public function getAllUsers() {
-        return User::with([
-            "profile",
-            "roles",
-            "billingCompanies"
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $users = User::with([
+                "profile",
+                "roles"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $users = User::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "profile",
+                    "roles"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+
+        return is_null($users) ? null : $users;
     }
 
     /**

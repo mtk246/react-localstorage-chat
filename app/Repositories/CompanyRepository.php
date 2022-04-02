@@ -63,6 +63,25 @@ class CompanyRepository
      * @return Company[]|Collection
      */
     public function getAllCompanies() {
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $companies = Company::with([
+                "addresses",
+                "contacts"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $companies = Company::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                "addresses",
+                "contacts"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+        
+        return is_null($companies) ? null : $companies;
+
+
+
         return Company::with([
             "addresses",
             "contacts"

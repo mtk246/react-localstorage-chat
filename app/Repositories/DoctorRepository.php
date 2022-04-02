@@ -225,13 +225,40 @@ class DoctorRepository
     /**
      * @return Collection|Doctor[]
      */
-    public function getAllDoctors(){
-        return HealthProfessional::with([
-            "user" => function ($query) {
-                $query->with("profile", "roles", "addresses", "contacts");
-            },
-            "taxonomies"
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+    public function getAllDoctors() {
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $healthProfessionals = HealthProfessional::with([
+                "user" => function ($query) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses",
+                        "contacts"
+                    ]);
+                },
+                "taxonomies"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $healthProfessionals = HealthProfessional::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                "user" => function ($query) use ($bC) {
+                    $query->with([
+                        "profile",
+                        "roles",
+                        "addresses" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        "contacts" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
+                "taxonomies"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+        return !is_null($healthProfessionals) ? $healthProfessionals : null;
     }
 
     /**
