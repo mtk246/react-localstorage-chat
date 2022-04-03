@@ -97,7 +97,7 @@ class ApiController extends Controller
         if ($data->resultStatus == 'SUCCESS') {
             return response()->json([
                 'status'  => $data->resultStatus,
-                'zipCode' => $data->addressList[0]->zip5 . $data->addressList[0]->zip4
+                'zipCode' => $data->addressList[0]->zip5 . '-' . $data->addressList[0]->zip4
             ]);
         }
         return response()->json(['status' => $data->resultStatus], 404);

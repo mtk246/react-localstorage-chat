@@ -49,7 +49,7 @@ class UserCreateRequest extends FormRequest
             'address.address'       => ['required', 'string'],
             'address.city'          => ['required', 'string'],
             'address.state'         => ['required', 'string'],
-            'address.zip'           => ['required', 'numeric'],
+            'address.zip'           => ['required', 'string'],
             
             'contact'               => ['required', 'array'],
             'contact.mobile'        => ['nullable', 'string'],

@@ -90,6 +90,6 @@
 ```json
 {
     "status": "SUCCESS",
-    "zipCode": "331402948"
+    "zipCode": "33140-2948"
 }
 ```
