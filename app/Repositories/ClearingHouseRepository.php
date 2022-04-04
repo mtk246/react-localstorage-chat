@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\ClearingHouse;
 use App\Models\Contact;
+use App\Models\EntityNickname;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,15 @@ class ClearingHouseRepository
             
             $this->changeStatus(true, $clearing->id);
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::create([
+                    'nickname'           => $data['nickname'],
+                    'nicknamable_id'     => $clearing->id,
+                    'nicknamable_type'   => ClearingHouse::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ]);
+            }
 
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
@@ -58,7 +68,8 @@ class ClearingHouseRepository
         if (!$bC) {
             $clearings = ClearingHouse::with([
                 "addresses",
-                "contacts"
+                "contacts",
+                "nicknames"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $clearings = ClearingHouse::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -68,6 +79,9 @@ class ClearingHouseRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "nicknames" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -86,7 +100,8 @@ class ClearingHouseRepository
             $clearing = ClearingHouse::whereId($id)->with([
                 "addresses",
                 "contacts",
-                "billingCompanies"
+                "billingCompanies",
+                "nicknames"
             ])->first();
         } else {
             $clearing = ClearingHouse::whereId($id)->with([
@@ -94,6 +109,9 @@ class ClearingHouseRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "billingCompanies"
@@ -115,6 +133,16 @@ class ClearingHouseRepository
             ]);
 
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::updateOrCreate([
+                    'nicknamable_id'     => $clearing->id,
+                    'nicknamable_type'   => ClearingHouse::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ], [
+                    'nickname'           => $data['nickname'],
+                ]);
+            }
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([

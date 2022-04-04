@@ -29,6 +29,7 @@ class FacilityCreateRequest extends FormRequest
             'npi'             => ['required', 'string'],
             'type'            => ['required', 'integer'],
             'company_id'      => ['required', 'integer'],
+            'nickname'        => ['sometimes', 'string'],
 
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],

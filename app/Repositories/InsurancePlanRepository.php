@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\InsurancePlan;
 use App\Models\PublicNote;
+use App\Models\EntityNickname;
 
 class InsurancePlanRepository
 {
@@ -41,6 +42,16 @@ class InsurancePlanRepository
             ]);
 
             $this->changeStatus(true, $insurancePlan->id);
+            $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::create([
+                    'nickname'           => $data['nickname'],
+                    'nicknamable_id'     => $insurancePlan->id,
+                    'nicknamable_type'   => InsurancePlan::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ]);
+            }
 
             $note = PublicNote::create([
                 'note' => $data['note'],
@@ -87,6 +98,17 @@ class InsurancePlanRepository
             ]);
 
             $this->changeStatus(true, $insurancePlan->id);
+            $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::updateOrCreate([
+                    'nicknamable_id'     => $insurancePlan->id,
+                    'nicknamable_type'   => InsurancePlan::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ], [
+                    'nickname'           => $data['nickname'],
+                ]);
+            }
 
             PublicNote::updateOrCreate([
                 'publishable_id'   => $insurancePlan->id,
@@ -126,12 +148,16 @@ class InsurancePlanRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $insurance = InsurancePlan::whereId($id)->with([
+                "nicknames",
                 "publicNotes",
                 "insuranceCompany",
                 "billingCompanies"
             ])->first();
         } else {
             $insurance = InsurancePlan::whereId($id)->with([
+                "nicknames" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 "publicNotes",
                 "insuranceCompany",
                 "billingCompanies"
@@ -148,6 +174,7 @@ class InsurancePlanRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $insurance = InsurancePlan::with([
+                "nicknames",
                 "publicNotes",
                 "insuranceCompany"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -155,6 +182,9 @@ class InsurancePlanRepository
             $insurance = InsurancePlan::whereHas("billingCompanies", function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 })->with([
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
                     "publicNotes",
                     "insuranceCompany"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();

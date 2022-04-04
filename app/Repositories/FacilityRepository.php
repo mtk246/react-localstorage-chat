@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Contact;
 use App\Models\Taxonomy;
 use App\Models\Facility;
+use App\Models\EntityNickname;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,15 @@ class FacilityRepository
             $this->changeStatus(true, $facility->id);
             $billingCompany = auth()->user()->billingCompanies->first();
 
+            if (isset($data['nickname'])) {
+                EntityNickname::create([
+                    'nickname'           => $data['nickname'],
+                    'nicknamable_id'     => $facility->id,
+                    'nicknamable_type'   => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ]);
+            }
+
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
                 $data["address"]["addressable_id"]     = $facility->id;
@@ -71,6 +81,7 @@ class FacilityRepository
             $facilities = Facility::with([
                 "addresses",
                 "contacts",
+                "nicknames"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $facilities = Facility::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -80,6 +91,9 @@ class FacilityRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "nicknames" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -100,7 +114,8 @@ class FacilityRepository
                 "addresses",
                 "contacts",
                 "company",
-                "billingCompanies"
+                "billingCompanies",
+                "nicknames"
             ])->first();
         } else {
             $facility = Facility::whereId($id)->with([
@@ -109,6 +124,9 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "company",
@@ -148,6 +166,16 @@ class FacilityRepository
             }
 
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::updateOrCreate([
+                    'nicknamable_id'     => $facility->id,
+                    'nicknamable_type'   => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ], [
+                    'nickname'           => $data['nickname'],
+                ]);
+            }
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([

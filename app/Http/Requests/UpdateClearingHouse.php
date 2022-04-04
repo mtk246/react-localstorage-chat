@@ -28,6 +28,7 @@ class UpdateClearingHouse extends FormRequest
             'name'            => ['required', 'string', Rule::unique('clearing_houses', 'name')->ignore($this->clearing_id)],
             'org_type'        => ['required', 'string'],
             'ack_required'    => ['required', 'boolean'],
+            'nickname'        => ['sometimes', 'string'],
             
             'address'         => ['required', 'array'],
             'address.address' => ['required', 'string'],

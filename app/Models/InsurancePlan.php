@@ -161,4 +161,14 @@ class InsurancePlan extends Model implements Auditable
     {
         return $this->morphMany(PrivateNote::class, 'publishable');
     }
+
+    /**
+     * InsurancePlan morphs many EntityNicknames.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function nicknames()
+    {
+        return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
 }

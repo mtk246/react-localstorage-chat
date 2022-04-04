@@ -29,6 +29,7 @@ class CreateInsuranceRequest extends FormRequest
             'insurance.name'        => ['required', 'string', Rule::unique('insurance_companies', 'name')],
             'insurance.naic'        => ['required', 'string'],
             'insurance.file_method' => ['required', 'string'],
+            'insurance.nickname'    => ['sometimes', 'string'],
             
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],

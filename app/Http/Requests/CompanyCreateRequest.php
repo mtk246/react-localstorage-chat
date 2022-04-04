@@ -27,6 +27,7 @@ class CompanyCreateRequest extends FormRequest
         return [
             'name'                 => ['required', 'string', Rule::unique('companies', 'name')],
             'npi'                  => ['required', 'string'],
+            'nickname'             => ['sometimes', 'string'],
             
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],

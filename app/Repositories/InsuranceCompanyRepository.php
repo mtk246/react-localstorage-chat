@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
+use App\Models\EntityNickname;
 use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,6 +29,15 @@ class InsuranceCompanyRepository
             $this->changeStatus(true, $insurance->id);
 
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['insurance']['nickname'])) {
+                EntityNickname::create([
+                    'nickname'           => $data['insurance']['nickname'],
+                    'nicknamable_id'     => $insurance->id,
+                    'nicknamable_type'   => InsuranceCompany::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ]);
+            }
 
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
@@ -57,7 +67,8 @@ class InsuranceCompanyRepository
         if (!$bC) {
             $insuranceCompanies = InsuranceCompany::with([
                 "addresses",
-                "contacts"
+                "contacts",
+                "nicknames"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $insuranceCompanies = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -67,6 +78,9 @@ class InsuranceCompanyRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "nicknames" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -81,6 +95,7 @@ class InsuranceCompanyRepository
             $insurance = InsuranceCompany::whereId($id)->with([
                 "addresses",
                 "contacts",
+                "nicknames",
                 "billingCompanies"
             ])->first();
         } else {
@@ -89,6 +104,9 @@ class InsuranceCompanyRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "billingCompanies"
@@ -140,6 +158,16 @@ class InsuranceCompanyRepository
             $this->changeStatus(true, $insurance->id);
 
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['insurance']['nickname'])) {
+                EntityNickname::updateOrCreate([
+                    'nicknamable_id'     => $insurance->id,
+                    'nicknamable_type'   => InsuranceCompany::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ], [
+                    'nickname'           => $data['insurance']['nickname'],
+                ]);
+            }
 
             if (isset($data['address']['address'])) {
                 Address::updateOrCreate([

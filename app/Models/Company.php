@@ -129,6 +129,16 @@ class Company extends Model implements Auditable
         return $this->morphMany(Contact::class, 'contactable');
     }
 
+    /**
+     * Company morphs many EntityNicknames.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function nicknames()
+    {
+        return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
     /*
      * Get the company's status.
      *

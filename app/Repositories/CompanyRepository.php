@@ -6,6 +6,7 @@ use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Models\EntityNickname;
 use App\Models\Taxonomy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,6 +39,15 @@ class CompanyRepository
             $this->changeStatus(true, $company->id);
             $billingCompany = auth()->user()->billingCompanies->first();
 
+            if (isset($data['nickname'])) {
+                EntityNickname::create([
+                    'nickname'           => $data['nickname'],
+                    'nicknamable_id'     => $company->id,
+                    'nicknamable_type'   => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ]);
+            }
+
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
                 $data["address"]["addressable_id"]     = $company->id;
@@ -67,25 +77,26 @@ class CompanyRepository
         if (!$bC) {
             $companies = Company::with([
                 "addresses",
-                "contacts"
+                "contacts",
+                "nicknames"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $companies = Company::whereHas("billingCompanies", function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 })->with([
-                "addresses",
-                "contacts"
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "nicknames" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
         
         return is_null($companies) ? null : $companies;
-
-
-
-        return Company::with([
-            "addresses",
-            "contacts"
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
     /**
@@ -99,6 +110,7 @@ class CompanyRepository
                 "taxonomies",
                 "addresses",
                 "contacts",
+                "nicknames",
                 "facilities",
                 "billingCompanies"
             ])->first();
@@ -109,6 +121,9 @@ class CompanyRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "facilities",
@@ -145,6 +160,16 @@ class CompanyRepository
                 $company->taxonomies()->sync($tax_array);
             }
             $billingCompany = auth()->user()->billingCompanies->first();
+
+            if (isset($data['nickname'])) {
+                EntityNickname::updateOrCreate([
+                    'nicknamable_id'     => $company->id,
+                    'nicknamable_type'   => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? null,
+                ], [
+                    'nickname'           => $data['nickname'],
+                ]);
+            }
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([

@@ -42,6 +42,7 @@ class CreateInsurancePlanRequest extends FormRequest
             'method'               => ['required', 'string'],
             'naic'                 => ['required', 'string'],
             'insurance_company_id' => ['required', 'integer'],
+            'nickname'             => ['sometimes', 'string'],
 
             'note'                 => ['nullable', 'string'],
         ];

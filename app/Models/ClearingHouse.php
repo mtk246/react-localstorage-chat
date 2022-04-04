@@ -81,6 +81,16 @@ class ClearingHouse extends Model implements Auditable
     }
 
     /**
+     * ClearingHouse morphs many EntityNicknames.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function nicknames()
+    {
+        return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
+    /**
      * Get the insuranceCompany's status.
      *
      * @param  string  $value

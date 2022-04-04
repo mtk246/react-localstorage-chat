@@ -124,6 +124,16 @@ class Facility extends Model implements Auditable
         return $this->morphMany(Contact::class, 'contactable');
     }
 
+    /**
+     * Facility morphs many EntityNicknames.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function nicknames()
+    {
+        return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
      /*
      * Get the insuranceCompany's status.
      *
