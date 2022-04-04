@@ -63,6 +63,7 @@
     "name":"facilityName",
     "type": 1,
     "company_id": 1,
+    "nickname":"alias facilityName",
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -185,6 +186,17 @@
                 "contactable_id": 1
             }
         ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias facilityName",
+                "nicknamable_type": "App\\Models\\Facility",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
         "billing_companies": []
     }
 ]
@@ -270,6 +282,17 @@
             "contactable_id": 1
         }
     ],
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias facilityName",
+            "nicknamable_type": "App\\Models\\Facility",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
+        }
+    ],
     "company": {
         "id": 1,
         "code": "CO-00001-2022",
@@ -322,6 +345,7 @@
     "name":"facilityName",
     "type": 1,
     "company_id": 1,
+    "nickname":"alias facilityName",
     "taxonomies": [
         {
             "tax_id": "TAX01213",

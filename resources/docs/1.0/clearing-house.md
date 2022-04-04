@@ -42,6 +42,7 @@
     "name":"clearing first",
     "org_type":"222CH123",
     "ack_required":true,
+    "nickname":"alias clearingName",
     "address": {
         "address":"address Clearing",
         "city":"city Clearing",
@@ -161,6 +162,17 @@
                 "contactable_id": 2
             }
         ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias clearingName second",
+                "nicknamable_type": "App\\Models\\ClearingHouse",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
         "billing_companies": [
             {
                 "id": 1,
@@ -214,6 +226,17 @@
                 "mobile": null,
                 "contactable_type": "App\\Models\\ClearingHouse",
                 "contactable_id": 1
+            }
+        ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias clearingName first",
+                "nicknamable_type": "App\\Models\\ClearingHouse",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
             }
         ],
         "billing_companies": [
@@ -299,6 +322,17 @@
             "contactable_id": 1
         }
     ],
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias clearingName first",
+            "nicknamable_type": "App\\Models\\ClearingHouse",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
+        }
+    ],
     "billing_companies": [
         {
             "id": 1,
@@ -341,6 +375,7 @@
     "name":"clearing first edited",
     "org_type":"222CH124",
     "ack_required":true,
+    "nickname":"alias clearingName",
     "address": {
         "address":"address Clearing",
         "city":"city Clearing",

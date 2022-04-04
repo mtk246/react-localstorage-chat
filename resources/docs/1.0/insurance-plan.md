@@ -46,6 +46,7 @@
 {
     "ins_type":"some ins_type",
     "name":"someName",
+    "nickname":"nickname plan someName",
     "note":"someNote",
     "cap_group":"someCapGroup",
     "accept_assign":true,
@@ -154,7 +155,18 @@
         "naic": "Naic 2",
         "insurance_company_id": 1,
         "created_at": "2022-03-18T15:28:30.000000Z",
-        "updated_at": "2022-03-18T15:28:30.000000Z"
+        "updated_at": "2022-03-18T15:28:30.000000Z",
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias Name2",
+                "nicknamable_type": "App\\Models\\InsurancePlan",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     },
     {
         "id": 4,
@@ -177,7 +189,18 @@
         "naic": "someNaic",
         "insurance_company_id": 1,
         "created_at": "2022-03-18T15:26:42.000000Z",
-        "updated_at": "2022-03-18T15:26:42.000000Z"
+        "updated_at": "2022-03-18T15:26:42.000000Z",
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias someName",
+                "nicknamable_type": "App\\Models\\InsurancePlan",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     }
 ]
 ```
@@ -245,6 +268,17 @@
             "updated_at": "2022-03-18T15:28:30.000000Z"
         }
     ],
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias Name2",
+            "nicknamable_type": "App\\Models\\InsurancePlan",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
+        }
+    ],
     "insurance_company": {
         "id": 1,
         "code": "IC-00001-2022",
@@ -271,6 +305,7 @@
 {
     "ins_type":"some ins_type edited",
     "name":"someName",
+    "nickname":"nickname plan someName edit",
     "note":"someNote",
     "cap_group":"someCapGroup",
     "accept_assign":true,

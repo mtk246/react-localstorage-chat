@@ -48,6 +48,7 @@
 {
     "insurance":{
         "name":"dsfsdfsfeddsddfg",
+        "nickname":"alias insurance",
         "naic":"someNaic",
         "file_method":"someFileNaic"
     },
@@ -160,7 +161,18 @@
         "updated_at": "2022-02-03T20:13:40.000000Z",
         "status": false,
         "address": null,
-        "contact": null
+        "contact": null,
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias insurance",
+                "nicknamable_type": "App\\Models\\InsuranceCompany",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     },
     {
         "id": 2,
@@ -199,7 +211,18 @@
             "facility_id": null,
             "company_id": null,
             "insurance_company_id": 2
-        }
+        },
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias insurance",
+                "nicknamable_type": "App\\Models\\InsuranceCompany",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     },
     {
         "id": 3,
@@ -238,7 +261,18 @@
             "facility_id": null,
             "company_id": null,
             "insurance_company_id": 3
-        }
+        },
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias insurance",
+                "nicknamable_type": "App\\Models\\InsuranceCompany",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     }
 ]
 ```
@@ -309,7 +343,18 @@
         "facility_id": null,
         "company_id": null,
         "insurance_company_id": 3
-    }
+    },
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias insurance",
+            "nicknamable_type": "App\\Models\\InsuranceCompany",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
+        }
+    ]
 }
 ```
 
@@ -326,6 +371,7 @@
 {
     "insurance":{
         "name":"dsfsdfsfeddsddfg",
+        "nickname":"alias insurance edit",
         "naic":"someNaic",
         "file_method":"someFileNaic"
     },
@@ -397,7 +443,18 @@
         "facility_id": null,
         "company_id": null,
         "insurance_company_id": 3
-    }
+    },
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias insurance edit",
+            "nicknamable_type": "App\\Models\\InsuranceCompany",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
+        }
+    ]
 }
 ```
 

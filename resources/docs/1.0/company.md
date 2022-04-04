@@ -47,6 +47,7 @@
 ```json
 {
     "name":"company first",
+    "nickname":"alias company first",
     "npi":"222CF123",
     "taxonomies": [
         {
@@ -58,7 +59,8 @@
             "name": "NameTaxonomy 2 Company",
             "primary": false
         }
-    ],"address": {
+    ],
+    "address": {
         "address":"address Company",
         "city":"city Company",
         "state":"state Company",
@@ -157,7 +159,18 @@
                 "contactable_type": "App\\Models\\Company",
                 "contactable_id": 2
             }
-        ]
+        ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias company second",
+                "nicknamable_type": "App\\Models\\Company",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     },
     {
         "id": 1,
@@ -194,7 +207,18 @@
                 "contactable_type": "App\\Models\\Company",
                 "contactable_id": 1
             }
-        ]
+        ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias company first",
+                "nicknamable_type": "App\\Models\\Company",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
     }
 ]
 ```
@@ -288,6 +312,17 @@
             "mobile": null,
             "contactable_type": "App\\Models\\Company",
             "contactable_id": 1
+        }
+    ],
+    "nicknames": [
+        {
+            "id": 1,
+            "nickname": "alias company first",
+            "nicknamable_type": "App\\Models\\Company",
+            "nicknamable_id": 6,
+            "billing_company_id": 1,
+            "created_at": "2022-04-04T12:55:15.000000Z",
+            "updated_at": "2022-04-04T12:55:15.000000Z"
         }
     ],
     "facilities": [
@@ -633,6 +668,7 @@
 ```json
 {
     "name":"company first",
+    "nickname":"alias company first",
     "npi":"222CF123",
     "taxonomies": [
         {
