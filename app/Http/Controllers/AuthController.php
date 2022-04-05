@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Mail\LogNewDevice;
 use App\Models\User;
 use App\Models\Device;
+use App\Models\FailedLoginAttempt;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -96,25 +97,25 @@ class AuthController extends Controller
 
         $user = User::where('email', $dataValidated["email"])->first();
         if ($user !== null && ($user->isBlocked == true)) {
-            return response()->json(['error' => 'Your account is blocked. Please contact support for help.'], 401);
-        }
-
-        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
-            /** elimina la cantidad de intentos fallidos del usuario y se procede al bloqueo del mismo */
-            $this->clearLoginAttempts($request);
-
-            $this->fireLockoutEvent($request);
-            $user->isBlocked = true;
-            $user->save();
-
-            return $this->sendLockoutResponse($request);
+            return $this->sendLockoutResponse();
         }
 
         $token = auth('api')->attempt($dataValidated);
 
         if (!$token) {
             $this->incrementLoginAttempts($request);
-            return response()->json(['error' => 'Bad Credencials'], 401);
+            if ($user->failedLoginAttempts()->where('status', true)->count() == $this->maxAttempts) {
+                return response()->json(['error' => 'You have entered bad credentials 3 times. If you enter bad credentials again your user will be blocked for security.'], 429);
+            } elseif ($user->failedLoginAttempts()->where('status', true)->count() > $this->maxAttempts) {
+                /** elimina la cantidad de intentos fallidos del usuario */
+                $this->clearLoginAttempts($request);
+                /** Se procede al bloqueo del usuario */
+                $this->fireLockoutEvent($request);
+                /** Se envia la respuesta de usuario bloqueado */
+                return $this->sendLockoutResponse();
+            } else {
+                return response()->json(['error' => 'Bad Credencials'], 401);
+            }
         }
         if (isset($request->code)) {
             $device = Device::where([
@@ -342,5 +343,31 @@ class AuthController extends Controller
           }
         }
         return response()->json(['status' => 'Token is valid'], 200);
+    }
+
+    protected function incrementLoginAttempts(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        FailedLoginAttempt::create([
+            'user_id' => $user->id
+        ]);
+    }
+
+    protected function clearLoginAttempts(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        $user->failedLoginAttempts()->where(['status' => true])->update(['status' => false]);
+    }
+
+    protected function fireLockoutEvent(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        $user->isBlocked = true;
+        $user->save();
+    }
+
+    protected function sendLockoutResponse()
+    {
+        return response()->json(['error' => 'Your user has been blocked. Enter your user code or try again in 24 hours.'], 401);
     }
 }

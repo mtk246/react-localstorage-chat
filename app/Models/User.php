@@ -232,6 +232,16 @@ class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphMany(IpRestriction::class, 'restrictable');
     }
 
+    /**
+     * User has many FailedLoginAttempts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function failedLoginAttempts()
+    {
+        return $this->hasMany(FailedLoginAttempt::class);
+    }
+
     /*
      * Get the company's status.
      *
