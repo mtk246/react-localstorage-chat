@@ -117,6 +117,7 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Bad Credencials'], 401);
             }
         }
+        $this->clearLoginAttempts($request);
         if (isset($request->code)) {
             $device = Device::where([
                 'user_id'    => $user->id,
