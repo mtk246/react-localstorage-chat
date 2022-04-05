@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Get all roles](#get-all-roles)
 - [Get all permissions](#get-all-permissions)
+- [Get all permissions by role](#get-all-permissions-by-role)
 - [Get one role](#get-one-role)
 - [Get one permission](#get-one-permission)
 - [Create role](#create-role)
@@ -24,16 +25,17 @@
 | : |        |   :-                       |  :                      |               |                    |  
 | 1 |GET     | `Get all roles`            | `/permission/roles`               |yes             |Get all roles  |         
 | 2 |GET     | `Get all permissions`      | `/permission/permissions`        |yes            |Get all permissions|
-| 3 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
-| 4 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
-| 5 |POST    | `Create Role`              | `/permission/create-role` |yes|Create role|
-| 6 |POST    | `Create Permission`        | `/permission/create-permission` |yes|Create Permission|
-| 7 |PATCH   | `assign permission role`   | `/permission/assign-permissions-role/{role_id}/{permission_id}` |yes|assign permission role|
-| 8 |PATCH   | `assign permission user`   | `/permission/assign-permissions-user/{permission_id}/{user_id}` |yes|assign permission user|
-| 9 |PATCH   | `assign role user`         | `/permission/assign-role-user/{user_id}/{role_id}`|yes|assign role user|
-| 10|PATCH   | `revoke permission user`   | `/permission/remove-permission-user/{user_id}/{permission_id}`|yes|revoke permission user|
-| 11|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
-| 12|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
+| 3 |GET     | `Get all permissions by role`      | `/permission/permissions-by-role/{role}`        |yes            |Get all permissions by role|
+| 4 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
+| 5 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
+| 6 |POST    | `Create Role`              | `/permission/create-role` |yes|Create role|
+| 7 |POST    | `Create Permission`        | `/permission/create-permission` |yes|Create Permission|
+| 8 |PATCH   | `assign permission role`   | `/permission/assign-permissions-role/{role_id}/{permission_id}` |yes|assign permission role|
+| 9 |PATCH   | `assign permission user`   | `/permission/assign-permissions-user/{permission_id}/{user_id}` |yes|assign permission user|
+| 10 |PATCH   | `assign role user`         | `/permission/assign-role-user/{user_id}/{role_id}`|yes|assign role user|
+| 11|PATCH   | `revoke permission user`   | `/permission/remove-permission-user/{user_id}/{permission_id}`|yes|revoke permission user|
+| 12|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
+| 13|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
 
 <a name="get-all-roles"></a>
 ## Get all roles
@@ -166,6 +168,54 @@
     }
 ]
 ```
+
+<a name="get-all-permissions-by-role"></a>
+## Get all permissions by role
+
+### Param in path
+
+`role string`
+
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+>{success} 200 ok
+
+
+## Response
+```json
+[
+    {
+        "id": 1,
+        "name": "edit articles",
+        "guard_name": "api",
+        "created_at": "2022-01-04T01:45:08.000000Z",
+        "updated_at": "2022-01-04T01:45:08.000000Z"
+    },
+    {
+        "id": 2,
+        "name": "edit users",
+        "guard_name": "api",
+        "created_at": "2022-01-04T01:48:19.000000Z",
+        "updated_at": "2022-01-04T01:48:19.000000Z"
+    },
+    {
+        "id": 3,
+        "name": "edit permissions",
+        "guard_name": "api",
+        "created_at": "2022-01-04T01:48:33.000000Z",
+        "updated_at": "2022-01-04T01:48:33.000000Z"
+    }
+]
+```
+
 
 <a name="get-one-role"></a>
 ## Get one Role

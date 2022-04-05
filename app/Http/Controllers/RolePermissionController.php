@@ -34,6 +34,16 @@ class RolePermissionController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function getPermissionsByRole(string $role): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->getAllPermissionsByRole($role);
+
+        return $rs ? response()->json($rs) : response()->json("role not found", 404);
+    }
+
+    /**
      * @param int $id
      * @return JsonResponse
      */

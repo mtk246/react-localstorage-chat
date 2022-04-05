@@ -29,6 +29,17 @@ class RolePermissionRepository
     }
 
     /**
+     * @return Collection|Permission[]
+     */
+    public function getAllPermissionsByRole(string $role) {
+        try {
+            return Role::whereName($role)->with('permissions')->first()->permissions;
+        } catch (RoleDoesNotExist | \Exception $e){
+            return null;
+        }
+    }
+
+    /**
      * @param int $id
      * @return \Spatie\Permission\Contracts\Role
      */
