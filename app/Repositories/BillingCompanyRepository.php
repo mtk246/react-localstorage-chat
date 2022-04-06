@@ -81,11 +81,21 @@ class BillingCompanyRepository
     }
 
     public function getAllBillingCompany(){
-        return BillingCompany::with([
-            "users",
-            "address",
-            "contact"
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $billingCompanies = BillingCompany::with([
+                "users",
+                "address",
+                "contact"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $billingCompanies = BillingCompany::whereId($bC)->with([
+                "users",
+                "address",
+                "contact"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+        return !is_null($billingCompanies) ? $billingCompanies : null;
     }
 
     public function getByCode($code){
@@ -105,6 +115,8 @@ class BillingCompanyRepository
         $billingCompany = BillingCompany::find($id);
 
         if (is_null($billingCompany)) return null;
+
+        $billingCompany->users()->update(['status' => $status]);
 
         return $billingCompany->update(["status" => $status]);
     }
