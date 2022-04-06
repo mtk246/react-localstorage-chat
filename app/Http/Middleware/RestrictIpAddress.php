@@ -19,6 +19,7 @@ class RestrictIpAddress
     public function handle(Request $request, Closure $next)
     {
         if (isset($request->email)) {
+            $validate = null;
             $user = User::where('email', $request->email)->first();
             $restrictions = IpRestriction::where([
                 'ip_beginning' => $request->ip(),
