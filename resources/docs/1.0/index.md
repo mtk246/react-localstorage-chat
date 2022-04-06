@@ -4,6 +4,9 @@
 - ## Authentication
     - [Authentication](/{{route}}/{{version}}/auth)
 
+- ## IP Restriction
+    - [IP-Restriction](/{{route}}/{{version}}/ip-restriction)
+
 - ## API
     - [API](/{{route}}/{{version}}/api)
 - ## Audit

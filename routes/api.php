@@ -71,7 +71,7 @@ Route::prefix("v1")/*->middleware('audit')*/
             Route::get("/", [\App\Http\Controllers\IpRestrictionController::class,'getAllRestrictions']);
             Route::get("{id}", [\App\Http\Controllers\IpRestrictionController::class,'getOneRestriction']);
             Route::put("{id}", [\App\Http\Controllers\IpRestrictionController::class,'update']);
-            Route::patch("change-status/{id}", [\App\Http\Controllers\IpRestrictionController::class,'changeStatus']);
+            Route::delete("{id}", [\App\Http\Controllers\IpRestrictionController::class,'destroy']);
         });
 
     });

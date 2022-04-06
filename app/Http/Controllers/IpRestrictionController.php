@@ -23,7 +23,7 @@ class IpRestrictionController extends Controller
      */
     public function store(IpRestrictionRequest $request)
     {
-        $rs = $this->ipRestrictionRepository->create($request->validated(), $id);
+        $rs = $this->ipRestrictionRepository->create($request->validated());
         return $rs ? response()->json($rs) : response()->json("Error creating restriction", 400);
 
     }
@@ -58,14 +58,13 @@ class IpRestrictionController extends Controller
     }
 
     /**
-     * @param DoctorChangeStatusRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function changeStatus(ChangeStatusRequest $request,int $id): JsonResponse
+    public function destroy(int $id)
     {
-        $rs = $this->doctorRepository->changeStatus($request->input("status"),$id);
+        $rs = $this->ipRestrictionRepository->destroy($id);
 
-        return $rs ? response()->json([],204) : response()->json("Error! Health professional not found", 404);
+        return $rs ? response()->json([],204) : response()->json("Error! IP restriction not found", 404);
     }
 }

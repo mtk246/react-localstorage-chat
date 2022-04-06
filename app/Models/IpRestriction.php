@@ -12,7 +12,7 @@ class IpRestriction extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
-    protected $fillable = ['ip_beginning', 'ip_finish', 'rank', 'billing_company_id']
+    protected $fillable = ['ip_beginning', 'ip_finish', 'rank', 'billing_company_id'];
 
     /**
      * The billingCompanies that belong to the ip restriction.
@@ -22,16 +22,6 @@ class IpRestriction extends Model implements Auditable
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class);
-    }
-
-    /**
-     * The users that belong to the ip restriction.
-     *
-     * @return BelongsToMany
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class)->withPivot('rank')->withTimestamps();
     }
 
     /**
