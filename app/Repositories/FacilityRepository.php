@@ -81,7 +81,8 @@ class FacilityRepository
             $facilities = Facility::with([
                 "addresses",
                 "contacts",
-                "nicknames"
+                "nicknames",
+                "company"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $facilities = Facility::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -95,7 +96,8 @@ class FacilityRepository
                     },
                     "nicknames" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
-                    }
+                    },
+                    "company"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
 
