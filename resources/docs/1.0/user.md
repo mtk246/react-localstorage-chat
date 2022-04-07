@@ -13,6 +13,7 @@
 - [Unlock user](#unlock-user)
 - [Change password](#change-password)
 - [Update image user](#update-image-user)
+- [Update social media by user](#update-social-media-by-user)
 - [Update password](#update-password)
 - [Search by ssn](#search-by-ssn)
 - [New token](#new-token)
@@ -34,9 +35,10 @@
 | 8 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
 | 9 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
-| 11|PATCH | `update password`   | `/user/update-password` |yes|update password|
-| 12|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
-| 13 |POST | `new token`   | `/user/new-token` |no|generate new token user|
+| 11 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
+| 12|PATCH | `update password`   | `/user/update-password` |yes|update password|
+| 13|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
+| 14 |POST | `new token`   | `/user/new-token` |no|generate new token user|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -677,6 +679,100 @@
 
 #
 
+<a name="update-social-media-by-user"></a>
+## Update social medias by user
+
+## Param in path
+
+`user_id required <integer>`
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+
+## Body request example
+
+```json
+{
+    "social_medias": [
+        {
+            "name": "nameSocialMedia1",
+            "link": "URLSocialMedia1"
+        },
+        {
+            "name": "nameSocialMedia2",
+            "link": "URLSocialMedia2"
+        }
+    ]
+}
+```
+
+>{success} 200 user update successfully 
+
+```json
+{
+    "id": 5,
+    "email": "user@gmail.com",
+    "email_verified_at": null,
+    "created_at": "2022-03-15T09:06:25.000000Z",
+    "updated_at": "2022-03-15T09:06:25.000000Z",
+    "token": "eyJpdiI6ImxBaC9wbURHOW0rZ2RuVENEOEljb3c9PSIsInZhbHVlIjoibWV3K211L1JJeUFhZElFTVR6aTVJTGlxTjZPQnRLbXF2dUZWTU14eDhTTT0iLCJtYWMiOiI4MDRjYjg3NzMxZjExMGU0NTE5MzdiYjAxNmYwZGQ4NTQ2YjQzYWRkMDJkYTYyMWY2ODZiNWFlNDI4YmMzNmZiIiwidGFnIjoiIn0=",
+    "isLogged": false,
+    "isBlocked": false,
+    "usercode": "US-00005-2022",
+    "userkey": "eyJpdiI6IjlUdUVSYUhBdUpIYTNDZm43QUJQZVE9PSIsInZhbHVlIjoiclBTY010UjNteGY0NHhEMzNJeDhoalNFSldrZ2RQQVBYRUhaTXNCc3VSZz0iLCJtYWMiOiIwYTE0ZmJkNzVjODg0NzFmMDk3Y2VhODY5YzQ5MTA3NmY3ZjQ3NzQ4MTMxMzU0ODFmOWE4NzgzNjg2NDkzNTJmIiwidGFnIjoiIn0=",
+    "status": false,
+    "last_login": null,
+    "profile_id": 5,
+    "billing_company_id": null,
+    "profile": {
+        "id": 5,
+        "ssn": "237891836",
+        "first_name": "Fisrt Name",
+        "middle_name": "Middle Name",
+        "last_name": "Last Name",
+        "sex": "m",
+        "date_of_birth": "1990-11-11",
+        "avatar": null,
+        "credit_score": false,
+        "created_at": "2022-03-15T09:06:25.000000Z",
+        "updated_at": "2022-03-15T09:06:25.000000Z",
+        "social_medias": [
+            {
+                "id": 1,
+                "name": "nameSocialMedia2",
+                "link": "URLSocialMedia2",
+                "profile_id": 1,
+                "created_at": "2022-04-07T11:21:33.000000Z",
+                "updated_at": "2022-04-07T11:21:33.000000Z"
+            }
+        ]
+    },
+    "roles": [
+        {
+            "id": 2,
+            "name": "BILLING_MANAGER",
+            "guard_name": "api",
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-14T20:49:19.000000Z",
+            "pivot": {
+                "model_id": 5,
+                "role_id": 2,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ]
+}
+```
+
+#
+
+>{warning} 404 user not found
 
 <a name="search-by-ssn"></a>
 ## Search By Ssn

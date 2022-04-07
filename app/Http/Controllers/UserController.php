@@ -10,6 +10,7 @@ use App\Http\Requests\RecoveryUserRequest;
 use App\Http\Requests\UnlockUserRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\SocialMediaProfileRequest;
 use App\Mail\RecoveryUserMail;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -311,6 +312,17 @@ class UserController extends Controller
         $rs = $this->userRepository->updateImgProfile($request);
 
         return ($rs) ? response()->json($rs) : response()->json("error updating image profile",400);
+    }
+
+    /**
+     * @param SocialMediaProfileRequest $request
+     * @return JsonResponse
+     */
+    public function updateSocialMediaProfile(SocialMediaProfileRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->userRepository->updateSocialMediaProfile($request->validated(), $id);
+
+        return ($rs) ? response()->json($rs) : response()->json("error updating social media profile", 400);
     }
 
     /**

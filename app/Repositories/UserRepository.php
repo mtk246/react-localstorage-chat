@@ -381,6 +381,42 @@ class UserRepository{
     }
 
     /**
+     * @param EditUserRequest $request
+     * @param int $id
+     * @return User|User[]|Collection|Model|null
+     */
+    public function updateSocialMediaProfile(array $data, int $id) {
+        $user = User::find($id);
+        $profile = $user->profile;
+
+        $socialMedias = $profile->socialMedias;
+        /** Delete socialMedia */
+        foreach ($socialMedias as $socialMedia) {
+            $validated = false;
+            foreach ($data["social_medias"] as $socialM) {
+                if ($socialM['name'] == $socialMedia->name) {
+                    $validated = true;
+                    break;
+                }
+            }
+            if (!$validated) $socialMedia->delete();
+        }
+
+        /** update or create new social medias */
+        foreach ($data["social_medias"] as $socialMedia) {
+            SocialMedia::updateOrCreate([
+                "name" => $socialMedia["name"]
+            ], [
+                "name" => $socialMedia["name"],
+                "link" => $socialMedia["link"],
+                "profile_id" => $profile->id
+            ]);
+        }
+
+        return $user->refresh()->load("profile", "profile.socialMedias");
+    }
+
+    /**
      * @param request $request
      * @return string|null
      */
