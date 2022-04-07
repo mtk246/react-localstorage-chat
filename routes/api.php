@@ -134,6 +134,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\FacilityController::class,'getAllFacilities'])->middleware([
             "auth:api",
         ]);
+        Route::get("/get-facility-types",[\App\Http\Controllers\FacilityController::class,'getAllFacilityTypes'])->middleware([
+            "auth:api",
+        ]);
         Route::get("/{id}",[\App\Http\Controllers\FacilityController::class,'getOneFacility'])->middleware([
             "auth:api",
         ]);

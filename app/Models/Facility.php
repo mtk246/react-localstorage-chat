@@ -51,10 +51,10 @@ class Facility extends Model implements Auditable
 
     protected $fillable = [
         "code",
-        "type",
         "name",
         "npi",
         "company_id",
+        "facility_type_id",
     ];
 
     /**
@@ -72,6 +72,16 @@ class Facility extends Model implements Auditable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Facility belongs to FacilityType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function facilityType(): BelongsTo
+    {
+        return $this->belongsTo(FacilityType::class);
     }
 
     /**

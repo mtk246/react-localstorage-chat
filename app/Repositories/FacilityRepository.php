@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Contact;
 use App\Models\Taxonomy;
 use App\Models\Facility;
+use App\Models\FacilityType;
 use App\Models\EntityNickname;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,11 +24,11 @@ class FacilityRepository
         try {
             DB::beginTransaction();
             $facility = Facility::create([
-                "code"       => generateNewCode("FA", 5, date("Y"), Facility::class, "code"),
-                "name"       => $data["name"],
-                "npi"        => $data["npi"],
-                "type"       => $data["type"],
-                "company_id" => $data["company_id"],
+                "code"             => generateNewCode("FA", 5, date("Y"), Facility::class, "code"),
+                "name"             => $data["name"],
+                "npi"              => $data["npi"],
+                "facility_type_id" => $data["facility_type_id"],
+                "company_id"       => $data["company_id"],
             ]);
 
 
@@ -73,6 +74,20 @@ class FacilityRepository
     }
 
     /**
+     * @return FacilityType[]|Collection
+     */
+    public function getAllFacilityTypes() {
+        $records = FacilityType::all();
+        /** Inicia la opción vacia por defecto */
+        $options = ['' => 'Seleccione...'];
+        foreach ($records as $rec) {
+            $text = $rec->type;
+            $options[$rec->id] = $text;
+        }
+        return $options;
+    }
+
+    /**
      * @return Facility[]|Collection
      */
     public function getAllFacilities() {
@@ -82,7 +97,8 @@ class FacilityRepository
                 "addresses",
                 "contacts",
                 "nicknames",
-                "company"
+                "company",
+                "facilityType"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $facilities = Facility::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -97,7 +113,8 @@ class FacilityRepository
                     "nicknames" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
-                    "company"
+                    "company",
+                    "facilityType"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
 
@@ -117,7 +134,8 @@ class FacilityRepository
                 "contacts",
                 "company",
                 "billingCompanies",
-                "nicknames"
+                "nicknames",
+                "facilityType"
             ])->first();
         } else {
             $facility = Facility::whereId($id)->with([
@@ -132,6 +150,7 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "company",
+                "facilityType",
                 "billingCompanies"
             ])->first();
         }
@@ -150,10 +169,10 @@ class FacilityRepository
             $facility = Facility::find($id);
 
             $facility->update([
-                "name"       => $data["name"],
-                "npi"        => $data["npi"],
-                "type"       => $data["type"],
-                "company_id" => $data["company_id"]
+                "name"             => $data["name"],
+                "npi"              => $data["npi"],
+                "facility_type_id" => $data["facility_type_id"],
+                "company_id"       => $data["company_id"]
             ]);
 
             if (isset($data['taxonomies'])) {

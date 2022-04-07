@@ -11,6 +11,7 @@
 - [Get facility by name](#get-facility-by-name)
 - [Get one facility by npi](#get-one-facility-by-npi)
 - [Add to billing company](#add-to-billing-company)
+- [Get all facility types](#get-all-facility-types)
 
 
 <a name="basic-data"></a>
@@ -27,6 +28,7 @@
 | 6 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
 | 7 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
 | 8 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
+| 9 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
 
 
 
@@ -61,9 +63,15 @@
 ```json
 {
     "name":"facilityName",
-    "type": 1,
+    "facility_type_id": 1,
     "company_id": 1,
     "nickname":"alias facilityName",
+    "facility_type": {
+        "id": 1,
+        "type": "01 - Clinics",
+        "created_at": "2022-04-07T20:50:55.000000Z",
+        "updated_at": "2022-04-07T20:50:55.000000Z"
+    },
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -116,7 +124,7 @@
     "code": "FA-00001-2022",
     "name": "facilityName",
     "npi": "123fac321",
-    "type": 1,
+    "facility_type_id": 1,
     "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -150,7 +158,7 @@
 [
     {
         "id": 1,
-        "type": 1,
+        "facility_type_id": 1,
         "name": "facilityName",
         "npi": "123fac321",
         "created_at": "2022-03-16T10:03:40.000000Z",
@@ -158,6 +166,12 @@
         "company_id": 1,
         "code": "FA-00001-2022",
         "status": false,
+        "facility_type": {
+            "id": 1,
+            "type": "01 - Clinics",
+            "created_at": "2022-04-07T20:50:55.000000Z",
+            "updated_at": "2022-04-07T20:50:55.000000Z"
+        },
         "addresses": [
             {
                 "id": 4,
@@ -230,7 +244,7 @@
 ```json
 {
     "id": 1,
-    "type": 1,
+    "facility_type_id": 1,
     "name": "facilityName",
     "npi": "123fac321",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -238,6 +252,12 @@
     "company_id": 1,
     "code": "FA-00001-2022",
     "status": false,
+    "facility_type": {
+        "id": 1,
+        "type": "01 - Clinics",
+        "created_at": "2022-04-07T20:50:55.000000Z",
+        "updated_at": "2022-04-07T20:50:55.000000Z"
+    },
     "taxonomies": [
         {
             "id": 1,
@@ -343,9 +363,15 @@
 ```json
 {
     "name":"facilityName",
-    "type": 1,
+    "facility_type_id": 1,
     "company_id": 1,
     "nickname":"alias facilityName",
+    "facility_type": {
+        "id": 1,
+        "type": "01 - Clinics",
+        "created_at": "2022-04-07T20:50:55.000000Z",
+        "updated_at": "2022-04-07T20:50:55.000000Z"
+    },
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -399,7 +425,7 @@
     "code": "FA-00001-2022",
     "name": "facilityName",
     "npi": "123fac321",
-    "type": 1,
+    "facility_type_id": 1,
     "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -471,7 +497,7 @@
 ```json
 {
     "id": 1,
-    "type": 2,
+    "facility_type_id": 2,
     "name": "MIGUEL REBOLLAR P.A.",
     "npi": "1598094005",
     "created_at": "2022-03-17T23:36:20.000000Z",
@@ -479,6 +505,12 @@
     "company_id": 1,
     "code": "FA-00001-2022",
     "status": true,
+    "facility_type": {
+        "id": 2,
+        "type": "02 - Hospitals",
+        "created_at": "2022-04-07T20:50:55.000000Z",
+        "updated_at": "2022-04-07T20:50:55.000000Z"
+    },
     "addresses": [
         {
             "id": 15,
@@ -557,7 +589,7 @@
     "code": "FA-00001-2022",
     "name": "facilityName",
     "npi": "123fac321",
-    "type": 1,
+    "facility_type_id": 1,
     "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -569,3 +601,38 @@
 #
 
 >{warning} 404 error add facility to billing company
+
+<a name="get-all-facility-types"></a>
+## Get All Facility Types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Facility Types found
+
+#
+
+```json
+{
+    "": "Seleccione...",
+    "1": "01 - Clinics",
+    "2": "02 - Hospitals",
+    "3": "03 - Labs",
+    "4": "75X - Comprehensive Outpa...",
+    "5": "86X - Specialty Facility Res...",
+    "6": "AL - Assisted Living Facility",
+    "7": "ASC - Ambulatory Surgery Center",
+    "8": "LAB - Free Standing Lab Facility",
+    "9": "OT - Special Facility - Other",
+    "10": "RRH - Rural Health Clinic",
+    "11": "SN - Skilled Nursing Facility"
+}
+```

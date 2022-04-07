@@ -25,11 +25,11 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'            => ['required', 'string', Rule::unique('facilities', 'name')->ignore($this->id)],
-            'npi'             => ['required', 'string'],
-            'type'            => ['required', 'integer'],
-            'company_id'      => ['required', 'integer'],
-            'nickname'        => ['sometimes', 'string'],
+            'name'             => ['required', 'string', Rule::unique('facilities', 'name')->ignore($this->id)],
+            'npi'              => ['required', 'string'],
+            'facility_type_id' => ['required', 'integer'],
+            'company_id'       => ['required', 'integer'],
+            'nickname'         => ['sometimes', 'string'],
 
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
