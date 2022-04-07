@@ -66,7 +66,17 @@ class FacilityRepository
             }
 
             DB::commit();
-            return $facility;
+            $bC = auth()->user()->billing_company_id ?? null;
+            if (!$bC) {
+                return $facility->refresh()->load("nicknames", "company");
+            } else {
+                return $facility->refresh()->load([
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "company"
+                ]);
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return null;
@@ -215,7 +225,17 @@ class FacilityRepository
             }
 
             DB::commit();
-            return Facility::whereId($id)->first();
+            $bC = auth()->user()->billing_company_id ?? null;
+            if (!$bC) {
+                return Facility::whereId($id)->with(["nicknames", "company"])->first();
+            } else {
+                return Facility::whereId($id)->with([
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "company"
+                ])->first();
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return null;
