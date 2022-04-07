@@ -621,18 +621,50 @@
 #
 
 ```json
-{
-    "": "Seleccione...",
-    "1": "01 - Clinics",
-    "2": "02 - Hospitals",
-    "3": "03 - Labs",
-    "4": "75X - Comprehensive Outpa...",
-    "5": "86X - Specialty Facility Res...",
-    "6": "AL - Assisted Living Facility",
-    "7": "ASC - Ambulatory Surgery Center",
-    "8": "LAB - Free Standing Lab Facility",
-    "9": "OT - Special Facility - Other",
-    "10": "RRH - Rural Health Clinic",
-    "11": "SN - Skilled Nursing Facility"
-}
+[
+    {
+        "id": 1,
+        "name": "01 - Clinics"
+    },
+    {
+        "id": 2,
+        "name": "02 - Hospitals"
+    },
+    {
+        "id": 3,
+        "name": "03 - Labs"
+    },
+    {
+        "id": 4,
+        "name": "75X - Comprehensive Outpa..."
+    },
+    {
+        "id": 5,
+        "name": "86X - Specialty Facility Res..."
+    },
+    {
+        "id": 6,
+        "name": "AL - Assisted Living Facility"
+    },
+    {
+        "id": 7,
+        "name": "ASC - Ambulatory Surgery Center"
+    },
+    {
+        "id": 8,
+        "name": "LAB - Free Standing Lab Facility"
+    },
+    {
+        "id": 9,
+        "name": "OT - Special Facility - Other"
+    },
+    {
+        "id": 10,
+        "name": "RRH - Rural Health Clinic"
+    },
+    {
+        "id": 11,
+        "name": "SN - Skilled Nursing Facility"
+    }
+]
 ```

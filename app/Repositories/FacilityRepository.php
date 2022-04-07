@@ -79,10 +79,10 @@ class FacilityRepository
     public function getAllFacilityTypes() {
         $records = FacilityType::all();
         /** Inicia la opción vacia por defecto */
-        $options = ['' => 'Seleccione...'];
+        $options = [];
         foreach ($records as $rec) {
             $text = $rec->type;
-            $options[$rec->id] = $text;
+            array_push($options, ['id' => $rec->id, 'name' => $text]);
         }
         return $options;
     }
