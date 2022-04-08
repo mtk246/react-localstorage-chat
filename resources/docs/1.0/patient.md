@@ -9,6 +9,7 @@
 - [Get all patient](#get-all-patient)
 - [Get one patient](#get-one-patient)
 - [Update patient](#Update-patient)
+- [Get all patient suscribers](#get-all-patient-suscribers)
 
 
 
@@ -22,6 +23,7 @@
 | 2 |GET | `Get all Patient`                   | `/patient/`        |yes            |Get all Patient|
 | 3 |GET | `Get one Patient`                   | `/patient/{id}`|yes|Get one Patient|
 | 4 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
+| 9 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -622,4 +624,70 @@
     "created_at": "2022-03-17T20:45:39.000000Z",
     "updated_at": "2022-03-17T20:45:39.000000Z"
 }
+```
+
+<a name="get-all-patient-suscribers"></a>
+## Get All Patient Suscribers
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Patient Suscribers found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "ssn": "ssn suscriber",
+        "first_name": "firstName suscriber",
+        "last_name": "lastName suscriber",
+        "billing_company_id": 1,
+        "created_at": "2022-04-08T16:03:46.000000Z",
+        "updated_at": "2022-04-08T16:03:46.000000Z",
+        "pivot": {
+            "patient_id": 3,
+            "suscriber_id": 1,
+            "created_at": "2022-04-08T16:49:25.000000Z",
+            "updated_at": "2022-04-08T16:49:25.000000Z"
+        },
+        "addresses": [
+            {
+                "id": 11,
+                "address": "Direction address suscriber",
+                "city": "city address suscriber",
+                "state": "state address suscriber",
+                "zip": "123456789",
+                "billing_company_id": 1,
+                "created_at": "2022-04-08T16:49:25.000000Z",
+                "updated_at": "2022-04-08T16:49:25.000000Z",
+                "addressable_type": "App\\Models\\Suscriber",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
+            {
+                "id": 12,
+                "phone": "04241234321",
+                "fax": null,
+                "email": "suscriber11@gmail.com",
+                "billing_company_id": 1,
+                "created_at": "2022-04-08T16:49:25.000000Z",
+                "updated_at": "2022-04-08T16:49:25.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Suscriber",
+                "contactable_id": 1
+            }
+        ]
+    }
+]
 ```

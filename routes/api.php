@@ -238,6 +238,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
         Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
+
+        Route::get("/get-suscribers/{ssn_patient}",[\App\Http\Controllers\PatientController::class,"getAllSuscribers"]);
     });
 
     Route::prefix("taxonomy")->middleware([

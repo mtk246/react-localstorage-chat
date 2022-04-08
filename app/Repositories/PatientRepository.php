@@ -202,6 +202,21 @@ class PatientRepository
                         ]);
 
                         if (isset($suscriber)) {
+                            /** Create Contact */
+                            if (isset($insurancePolicy["suscriber"]['contact'])) {
+                                $insurancePolicy["suscriber"]["contact"]["contactable_id"]     = $suscriber->id;
+                                $insurancePolicy["suscriber"]["contact"]["contactable_type"]   = Suscriber::class;
+                                $insurancePolicy["suscriber"]["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                                Contact::create($insurancePolicy["suscriber"]["contact"]);
+                            }
+
+                            /** Create Address */
+                            if (isset($insurancePolicy["suscriber"]['address'])) {
+                                $insurancePolicy["suscriber"]["address"]["addressable_id"]     = $suscriber->id;
+                                $insurancePolicy["suscriber"]["address"]["addressable_type"]   = Suscriber::class;
+                                $insurancePolicy["suscriber"]["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                                Address::create($insurancePolicy["suscriber"]["address"]);
+                            }
                             /** Attached patient to suscriber */
                             if (is_null($patient->suscribers()->find($suscriber->id))) {
                                 $patient->suscribers()->attach($suscriber->id);
@@ -461,6 +476,22 @@ class PatientRepository
                         ]);
 
                         if (isset($suscriber)) {
+                            /** Create Contact */
+                            if (isset($insurancePolicy["suscriber"]['contact'])) {
+                                Contact::updateOrCreate([
+                                    "billing_company_id" => $billingCompany->id ?? null,
+                                    "contactable_id"     => $suscriber->id,
+                                    "contactable_type"   => Suscriber::class
+                                ], $insurancePolicy["suscriber"]['contact']);
+                            }
+
+                            if (isset($insurancePolicy["suscriber"]['address'])) {
+                                Address::updateOrCreate([
+                                    "billing_company_id" => $billingCompany->id ?? null,
+                                    "addressable_id"     => $suscriber->id,
+                                    "addressable_type"   => User::class
+                                ], $insurancePolicy["suscriber"]["address"]);
+                            }
                             /** Attached patient to suscriber */
                             if (is_null($patient->suscribers()->find($suscriber->id))) {
                                 $patient->suscribers()->attach($suscriber->id);
@@ -482,5 +513,20 @@ class PatientRepository
             DB::rollBack();
             return null;
         }
+    }
+
+    /**
+     * @return Builder[]|Collection
+     */
+    public function getAllSuscribers(string $ssn) {
+        $patient = Patient::whereHas('user', function ($query) use ($ssn) {
+            $query->whereHas('profile', function ($q) use ($ssn) {
+                $q->where('ssn', $ssn);
+            });
+        })->with(['suscribers' => function ($query) {
+            $query->with('addresses', 'contacts');
+        }])->first();
+
+        return $patient->suscribers ?? [];
     }
 }

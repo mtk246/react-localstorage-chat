@@ -60,4 +60,14 @@ class PatientController extends Controller
 
         return $rs ? response()->json($rs) : response()->json("error updating user",400);
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getAllSuscribers(string $ssn)
+    {
+        return response()->json(
+            $this->patientRepository->getAllSuscribers($ssn)
+        );
+    }
 }

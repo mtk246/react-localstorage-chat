@@ -37,4 +37,24 @@ class Suscriber extends Model implements Auditable
     {
         return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
     }
+
+    /**
+     * User morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
+    /**
+     * User morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
 }
