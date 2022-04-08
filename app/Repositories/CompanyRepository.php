@@ -148,6 +148,7 @@ class CompanyRepository
                 "name"       => $data["name"],
                 "npi"        => $data["npi"]
             ]);
+            $this->changeStatus(true, $company->id);
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];

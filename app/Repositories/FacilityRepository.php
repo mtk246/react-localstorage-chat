@@ -184,6 +184,7 @@ class FacilityRepository
                 "facility_type_id" => $data["facility_type_id"],
                 "company_id"       => $data["company_id"]
             ]);
+            $this->changeStatus(true, $facility->id);
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
