@@ -94,4 +94,10 @@ class InsuranceCompanyController extends Controller
 
         return $rs ? response()->json($rs) : response()->json("error add insurance company to billing company", 404);
     }
+
+    public function getList() {
+        $rs = $this->InsuranceRepository->getList();
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
 }

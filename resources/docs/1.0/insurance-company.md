@@ -11,6 +11,7 @@
 - [Get one Insurance Company by company](#get-one-insurance-company-by-company)
 - [Change status insurance company](#change-status-insurance-company)
 - [Add to billing company](#add-to-billing-company)
+- [Get list insurance companies](#get-list-insurance-companies)
 
 
 <a name="basic-data"></a>
@@ -27,6 +28,7 @@
 | 6 |GET | `Get one Insurance Company by company`           | `/insurance-company/{companyName}/get-by-company`|yes|Get one Insurance Company by name|
 | 7 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
 | 8 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
+| 9 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
 
 
 
@@ -609,3 +611,38 @@
 #
 
 >{warning} 404 error add insurance company to billing company
+
+<a name="get-list-insurance-companies"></a>
+## Get list insurance companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    }
+]
+```

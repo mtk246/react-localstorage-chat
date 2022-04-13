@@ -46,3 +46,40 @@ if (!function_exists('generateNewCode')) {
         return "{$prefix}-{$newCode}-{$year}";
     }
 }
+
+if (!function_exists('getList')) {
+    function getList($model, $fields = 'name', $filters = [], $except_id = null)
+    {
+        $records = (is_object($model)) ? $model : $model::all();
+        if ($filters) {
+            if (!isset($filters['relationship'])) {
+                $records = $model::where($filters)->get();
+            } else {
+                /** Filtra la información a obtener mediante relaciones */
+                $relationship = $filters['relationship'];
+                $records = $model::whereHas($relationship, function ($q) use ($filters) {
+                    $q->where($filters['where']);
+                })->get();
+            }
+        }
+        $options = [];
+
+        foreach ($records as $rec) {
+            if (is_array($fields)) {
+                $text = '';
+                foreach ($fields as $field) {
+                    $text .= ($field !== "-" && $field !== " ")
+                        ? $rec->$field
+                        : (($field === " ") ? $field : " {$field} ");
+                }
+            } else {
+                $text = $rec->$fields;
+            }
+
+            if (is_null($except_id) || $except_id !== $rec->id) {
+                array_push($options, ['id' => $rec->id, 'name' => $text]);
+            }
+        }
+        return $options;
+    }
+}

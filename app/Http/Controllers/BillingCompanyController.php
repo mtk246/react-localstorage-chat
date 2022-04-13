@@ -104,4 +104,10 @@ class BillingCompanyController extends Controller
 
         return !is_null($rs) ? response()->json($rs) : response()->json([],404);
     }
+
+    public function getList() {
+        $rs = $this->billingCompanyRepository->getList();
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
 }

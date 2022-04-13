@@ -10,6 +10,7 @@
 - [Get billing company by code](#get-billing-company-by-code)
 - [Get billing company by name](#get-billing-company-by-name)
 - [Change status billing company](#change-status-billing-company)
+- [Get list billing companies](#get-list-billing-companies)
 
 
 <a name="basic-data"></a>
@@ -25,6 +26,7 @@
 | 5 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
 | 6 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
 | 7 |PATCH | `Change status billing company`           | `/billing-company/change-status/{id}`|yes|Change status billing company|
+| 8 |GET | `Get list billing companies`| `/billing-company/get-list`        |yes            |Get list billing companies|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -539,3 +541,42 @@
 
 
 #
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```

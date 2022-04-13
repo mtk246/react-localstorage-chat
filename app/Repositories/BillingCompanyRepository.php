@@ -105,6 +105,10 @@ class BillingCompanyRepository
     public function getByName($name){
         return BillingCompany::where("name","ilike","%${name}%")->get();
     }
+    public function getList() {
+        return getList(BillingCompany::class);
+    }
+
 
     /**
      * @param bool $status

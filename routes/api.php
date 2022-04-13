@@ -86,6 +86,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,'update'])->middleware([
             "auth:api",
         ]);
+        Route::get("/get-list",[\App\Http\Controllers\BillingCompanyController::class,'getList'])->middleware([
+            "auth:api",
+        ]);
         Route::get("/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,'getBillingCompany'])->middleware([
             "auth:api",
         ]);
@@ -195,6 +198,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
+        Route::get("/get-list",[\App\Http\Controllers\InsuranceCompanyController::class,'getList']);
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);
         Route::post("/",[\App\Http\Controllers\InsuranceCompanyController::class,'createInsurance']);
@@ -208,6 +212,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:SUPER_USER|BILLER|BILLING_MANAGER',
     ])->group(function(){
+        Route::get("/get-list",[\App\Http\Controllers\InsurancePlanController::class,'getList']);
+        Route::get("/get-list-by-company/{company}",[\App\Http\Controllers\InsurancePlanController::class,'getListByCompany']);
         Route::post("/",[\App\Http\Controllers\InsurancePlanController::class,'createInsurancePlan']);
         Route::put("/{id}",[\App\Http\Controllers\InsurancePlanController::class,'updateInsurancePlan']);
         Route::get("/",[\App\Http\Controllers\InsurancePlanController::class,'getAllInsurancePlans']);

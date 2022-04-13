@@ -221,4 +221,12 @@ class InsurancePlanRepository
     public function getAllPlanByInsurancePlan(int $id){
         return InsurancePlan::whereInsuranceCompanyId($id)->get();
     }
+
+    public function getList() {
+        return getList(InsurancePlan::class);
+    }
+
+    public function getListByCompany($id) {
+        return getList(InsurancePlan::class, ['name'], ['insurance_company_id' => $id]);
+    }
 }

@@ -10,6 +10,8 @@
 - [Get one insurance plan by name](#get-one-insurance-plan-by-name)
 - [Change status plan company](#change-status-plan-company)
 - [Get all insurance plan by insurance company](#get-all-insurance-plan-by-insurance-company)
+- [Get list insurance plans](#get-list-insurance-plans)
+- [Get list insurance plans by insurance company](#get-list-insurance-plans-by-insurance-company)
 
 
 <a name="basic-data"></a>
@@ -25,6 +27,8 @@
 | 5 |GET | `Get Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get all Insurance Plan by name|
 | 6 |PATCH | `Change status plan Company`           | `/insurance-plan/{id}/change-status`|yes|Change status Insurance Plan|
 | 7 |GET | `Get all insurance plan by insurance company`           | `/insurance-plan/insurance-company/{id}/get-by-insurance-company`|yes|Get all insurance plan by insurance company|
+| 8 |GET | `Get list insurance plans`| `/insurance-plan/get-list`        |yes            |Get list insurance plans|
+| 9 |GET | `Get list insurance plans by insurance company`| `/insurance-plan/get-list-by-company/{insurance_company}`        |yes            |Get list insurance plans by insurance company|
 
 
 
@@ -488,4 +492,78 @@
 
 #
 
+<a name="get-list-insurance-plans"></a>
+## Get list insurance plans
 
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance Plans found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    }
+]
+```
+
+<a name="get-list-insurance-plans-by-insurance-company"></a>
+## Get list insurance plans by insurance company
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "insurance_company_id": required <integer>
+}
+```
+
+## Response
+
+> {success} 200 Insurance Plans found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    }
+]
+```

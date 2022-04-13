@@ -104,4 +104,16 @@ class InsurancePlanController extends Controller
             $this->InsurancePlanRepository->getAllPlanByInsurancePlan($id)
         );
     }
+
+    public function getList() {
+        $rs = $this->InsurancePlanRepository->getList();
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
+
+    public function getListByCompany(int $id) {
+        $rs = $this->InsurancePlanRepository->getListByCompany($id);
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
 }

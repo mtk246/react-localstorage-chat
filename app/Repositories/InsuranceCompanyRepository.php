@@ -116,6 +116,10 @@ class InsuranceCompanyRepository
         return !is_null($insurance) ? $insurance : null;
     }
 
+    public function getList() {
+        return getList(InsuranceCompany::class);
+    }
+
     /**
      * @param string $name
      * @return mixed
