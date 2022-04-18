@@ -24,8 +24,20 @@ class RestrictIpAddress
             $restrictions = IpRestriction::where([
                 'ip_beginning' => $request->ip(),
                 'rank'         => false
+            ])->orWhere([
+                ['ip_beginning', '<=', $request->ip()],
+                ['ip_finish',    '>=', $request->ip()],
+                ['rank',         '=',  true]
             ])->get();
             foreach ($restrictions as $restriction) {
+                $users = $restriction->users;
+                /** Restriction by billing company */
+                $validate = $restriction->billingCompanies->where('id', $user->billingCompany->id ?? null)->first();
+                if (isset($validate)) break;
+
+                /** Restriction by roles */
+
+                /** Restriction by user */
                 $validate = $restriction->users->where('id', $user->id)->first();
                 if (isset($validate)) break;
             }

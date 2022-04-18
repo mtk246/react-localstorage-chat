@@ -33,4 +33,14 @@ class IpRestriction extends Model implements Auditable
     {
         return $this->morphedByMany(User::class, 'restrictable');
     }
+
+    /**
+     * IpRestriction is morphed by many BillingCompanies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphedByMany
+     */
+    public function billingCompanies()
+    {
+        return $this->morphedByMany(BillingCompany::class, 'restrictable');
+    }
 }
