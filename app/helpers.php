@@ -83,3 +83,9 @@ if (!function_exists('getList')) {
         return $options;
     }
 }
+
+if (!function_exists('toModel')) {
+    function toModel($entity, $namespace = '\App\Models') {
+        return $namespace . '\\' . implode('', array_map('ucfirst', explode('-', $entity)));
+    }
+}
