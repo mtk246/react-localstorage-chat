@@ -315,6 +315,7 @@ class AuthController extends Controller
             'ip_address' => $ip_address,
             'user_agent' => $user_agent,
             'code_temp'  => $code,
+            'status'     => false
         ]);
 
         \Mail::to($user->email)->send(
