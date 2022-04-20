@@ -37,6 +37,8 @@
 {
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
+    "public_note": "Some note publics",
+    "private_note": "Some note privates",
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",
@@ -284,8 +286,27 @@
                 "updated_at": "2022-03-17T20:45:39.000000Z"
             }
         ],
-        "public_notes": [],
-        "private_notes": [],
+        "public_notes": [
+            {
+                "id": 2,
+                "note": "Note public",
+                "publishable_type": "App\\Models\\Patient",
+                "publishable_id": 1,
+                "created_at": "2022-04-20T21:53:26.000000Z",
+                "updated_at": "2022-04-20T21:53:26.000000Z"
+            }
+        ],
+        "private_notes": [
+            {
+                "id": 1,
+                "note": "Note private",
+                "billing_company_id": 1,
+                "publishable_type": "App\\Models\\Patient",
+                "publishable_id": 1,
+                "created_at": "2022-04-20T21:53:26.000000Z",
+                "updated_at": "2022-04-20T21:53:26.000000Z"
+            }
+        ],
         "insurance_plans": [
             {
                 "id": 1,
@@ -454,8 +475,27 @@
             "updated_at": "2022-03-17T20:45:39.000000Z"
         }
     ],
-    "public_notes": [],
-    "private_notes": [],
+    "public_notes": [
+        {
+            "id": 2,
+            "note": "Note public",
+            "publishable_type": "App\\Models\\Patient",
+            "publishable_id": 1,
+            "created_at": "2022-04-20T21:53:26.000000Z",
+            "updated_at": "2022-04-20T21:53:26.000000Z"
+        }
+    ],
+    "private_notes": [
+        {
+            "id": 1,
+            "note": "Note private",
+            "billing_company_id": 1,
+            "publishable_type": "App\\Models\\Patient",
+            "publishable_id": 1,
+            "created_at": "2022-04-20T21:53:26.000000Z",
+            "updated_at": "2022-04-20T21:53:26.000000Z"
+        }
+    ],
     "insurance_plans": [
         {
             "id": 1,
@@ -503,6 +543,8 @@
 {
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
+    "public_note": "Note public",
+    "private_note": "Note private",
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",

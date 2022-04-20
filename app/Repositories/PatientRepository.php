@@ -23,6 +23,7 @@ use App\Models\Employment;
 use App\Models\EmergencyContact;
 use App\Models\Suscriber;
 use App\Models\User;
+use App\Roles\Models\Role;
 
 class PatientRepository
 {
@@ -105,6 +106,25 @@ class PatientRepository
                 "credit_score"   => $data["credit_score"],
                 "user_id"        => $user->id
             ]);
+
+            if (isset($data['public_note'])) {
+                /** PublicNote */
+                PublicNote::create([
+                    'publishable_type' => Patient::class,
+                    'publishable_id'   => $patient->id,
+                    'note'             => $data['public_note'],
+                ]);
+            }
+
+            if (isset($data['private_note'])) {
+                /** PrivateNote */
+                PrivateNote::create([
+                    'publishable_type'   => Patient::class,
+                    'publishable_id'     => $patient->id,
+                    'billing_company_id' => $billingCompany->id,
+                    'note'               => $data['private_note'],
+                ]);
+            }
 
             /** Create PatienPrivate */
             if (isset($data['patient_private'])) {
@@ -232,7 +252,8 @@ class PatientRepository
 
             }
             if ($user && $patient) {
-                $user->assignRole("PATIENT");
+                $rolePatient = Role::where('slug', 'patient')->first();
+                $user->attachRole($rolePatient);
                 
                 $token = encrypt($user->id . "@#@#$" . $user->email);
                 $user->token = $token;
@@ -293,7 +314,7 @@ class PatientRepository
         return Patient::with([
             "user" => function ($query) {
                 $query->with("profile", "roles", "addresses", "contacts");
-            }
+            }, "publicNotes", "privateNotes"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
@@ -314,6 +335,27 @@ class PatientRepository
                 "credit_score"   => $data["credit_score"],
                 "user_id"        => $user->id
             ]);
+
+            if (isset($data['public_note'])) {
+                /** PublicNote */
+                PublicNote::updateOrCreate([
+                    'publishable_type' => Patient::class,
+                    'publishable_id'   => $patient->id,
+                ], [
+                    'note'             => $data['public_note'],
+                ]);
+            }
+
+            if (isset($data['private_note'])) {
+                /** PrivateNote */
+                PrivateNote::updateOrCreate([
+                    'publishable_type'   => Patient::class,
+                    'publishable_id'     => $patient->id,
+                    'billing_company_id' => $billingCompany->id,
+                ], [
+                    'note'               => $data['private_note'],
+                ]);
+            }
 
             /** Update PatienPrivate */
             if (isset($data['patient_private'])) {

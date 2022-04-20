@@ -197,7 +197,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("insurance-company")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+        'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::get("/get-list",[\App\Http\Controllers\InsuranceCompanyController::class,'getList']);
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
@@ -211,7 +211,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("insurance-plan")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+        'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::get("/get-list",[\App\Http\Controllers\InsurancePlanController::class,'getList']);
         Route::get("/get-list-by-company/{company}",[\App\Http\Controllers\InsurancePlanController::class,'getListByCompany']);
@@ -227,7 +227,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("doctor")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+        'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
@@ -239,7 +239,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("patient")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+        'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
@@ -251,7 +251,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("taxonomy")->middleware([
         "auth:api",
-        'role:SUPER_USER|BILLER|BILLING_MANAGER',
+        'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\TaxonomyController::class,'createTaxonomy']);
         Route::put("/{id}",[\App\Http\Controllers\TaxonomyController::class,'updateTaxonomy']);
