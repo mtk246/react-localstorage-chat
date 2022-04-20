@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use App\Roles\Traits\HasRoleAndPermission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -86,7 +86,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  */
 class User extends Authenticatable implements JWTSubject, Auditable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, AuditableTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasRoleAndPermission, AuditableTrait;
 
     /**
      * The attributes that are mass assignable.

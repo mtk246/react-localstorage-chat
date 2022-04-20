@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Profile;
+use App\Roles\Models\Role;
+use App\Roles\Models\Permission;
 use Illuminate\Database\Seeder;
 use Faker;
 class UserSeeder extends Seeder
@@ -19,7 +21,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@billing.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
@@ -32,7 +34,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "billingmanager@billing.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "BILLING_MANAGER",
+                "role"       => "billingmanager",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
@@ -44,9 +46,9 @@ class UserSeeder extends Seeder
 
             ],
             [
-                "email"      => "doctor@billing.com",
+                "email"      => "healthprofessional@billing.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "DOCTOR",
+                "role"       => "healthprofessional",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
@@ -59,7 +61,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "patient@billing.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "PATIENT",
+                "role"       => "patient",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
@@ -72,7 +74,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@kevin.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Kevin",
@@ -85,7 +87,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@rosana.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Rosana",
@@ -98,7 +100,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@alfredo.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Alfredo",
@@ -111,7 +113,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@alejandro.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Alejandro",
@@ -124,7 +126,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@andrea.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Andrea",
@@ -137,7 +139,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@edgar.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Edgar",
@@ -150,7 +152,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@jesus.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Jesus",
@@ -163,7 +165,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@juan.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Juan",
@@ -176,7 +178,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@moises.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Moises",
@@ -189,7 +191,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@henry.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Henry",
@@ -202,7 +204,7 @@ class UserSeeder extends Seeder
             [
                 "email"      => "admin@sam.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "SUPER_USER",
+                "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Sr.",
@@ -229,7 +231,20 @@ class UserSeeder extends Seeder
             );
             $usr->password='$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
             $usr->save();
-            $usr->syncRoles($user["role"]);
+            //$usr->syncRoles($user["role"]);
+            
+            //$usr->detachAllPermissions();
+            $usr->detachAllRoles();
+
+            $role = Role::where('slug', $user['role'])->first();
+            $usr->attachRole($role);
+
+            /*$permissions = Permission::whereHas('roles', function ($query) use ($role) {
+                $query->where('role_id', $role->id);
+            })->get();
+            foreach ($permissions as $permission) {
+                $usr->attachPermission($permission->id);
+            }*/
         }
     }
 }

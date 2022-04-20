@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Roles\Models\Permission;
+use App\Roles\Models\Role;
 
 class RolePermissionRepository
 {
