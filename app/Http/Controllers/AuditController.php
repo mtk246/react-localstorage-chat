@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use OwenIt\Auditing\Models\Audit;
+use App\Models\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 
@@ -40,6 +40,66 @@ class AuditController extends Controller
             ]);
         }
         return response()->json($records, 200);
+    }
+
+    public function getAudit(Request $request)
+    {
+        $sortBy = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = Audit::select([
+                'id',
+                'event',
+                'created_at as date',
+                'ip_address',
+                'auditable_type as module',
+                'auditable_id as module_id',
+                'user_id',
+                'user_type',
+                'url',
+                'user_agent'
+            ])->with([
+                'user' => function ($query) {
+                    $query->with('profile');
+                }
+            ])->searchAudit($search)->sortAudit($sortBy, $sortDesc)->paginate($itemsPerPage);
+        } else {
+            $records = Audit::whereHas('user', function ($query) use ($bC) {
+                $query->whereHas('billingCompanies', function ($q) use ($bC) {
+                    $q->where('billing_company_id', $bC);
+                });
+            })->select([
+                'id',
+                'event',
+                'created_at as date',
+                'ip_address',
+                'auditable_type as module',
+                'auditable_id as module_id',
+                'user_id',
+                'user_type',
+                'url',
+                'user_agent'
+            ])->with([
+                'user' => function ($query) {
+                    $query->with('profile');
+                }
+            ])->searchAudit($search)->sortAudit($sortBy, $sortDesc)->paginate($itemsPerPage);
+        }
+
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     public function getAuditAllByUser(Request $request)
