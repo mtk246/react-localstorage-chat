@@ -2,6 +2,7 @@
 ---
 - [Basic data](#basic-data)
 - [Get audit all](#get-audit-all)
+- [Get audit all server](#get-audit-all-server)
 - [Get audit all by user](#get-audit-all-by-user)
 - [Get audit all by billing company](#get-audit-all-by-billing-company)
 - [Get audit one](#get-audit-one)
@@ -13,9 +14,10 @@
 | # |METHOD| Name           | URL          | Token required | Description|
 | : |      |   :-           |  :           |                | |
 | 1 |POST   | `get audit all` | `/audit-all` | yes   | Get all records audited |
-| 2 |POST   | `get audit all by user` | `/audit-all-by-user` | yes   | Get all records audited by user|
-| 3 |POST   | `get audit all by billing company` | `/audit-all-by--billing-company` | yes   | Get all records audited by billing company|
-| 4 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
+| 2 |GET   | `get audit all server` | `/audit-all` | yes   | Get all records audited |
+| 3 |POST   | `get audit all by user` | `/audit-all-by-user` | yes   | Get all records audited by user|
+| 4 |POST   | `get audit all by billing company` | `/audit-all-by--billing-company` | yes   | Get all records audited by billing company|
+| 5 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
 
 <a name="get-audit-all"></a>
 ## Get audit all
@@ -133,6 +135,178 @@
         "user_agent": "Symfony"
     }
 ]
+```
+
+<a name="get-audit-all-server"></a>
+## Get audit all server
+
+### Params in header
+```json
+{
+    "Authorization:": Bearer "<Token Bearer>"
+}
+```
+
+### Param in path
+
+```json
+{
+    "search":       <string>
+    "page":         <integer>
+    "itemsPerPage": <string>
+    "sortBy":       <string>
+    "sortDesc":     <boolean>
+}
+```
+
+## Response
+
+> {success} 200
+
+#
+
+
+```json
+{
+    "pagination": {
+        "total": 137,
+        "currentPage": 1,
+        "perPage": "10",
+        "lastPage": 14
+    },
+    "items": [
+        {
+            "id": 1,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 1,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 2,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 2,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 3,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 3,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 4,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 4,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 5,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 5,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 6,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 6,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 7,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 7,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 8,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 8,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 9,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 9,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        },
+        {
+            "id": 10,
+            "event": "created",
+            "date": "2022-04-20 21:52:51",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Roles\\Models\\Role",
+            "module_id": 10,
+            "user_id": null,
+            "user_type": null,
+            "url": "console",
+            "user_agent": "Symfony",
+            "user": null
+        }
+    ]
+}
 ```
 
 <a name="get-audit-all-by-user"></a>
