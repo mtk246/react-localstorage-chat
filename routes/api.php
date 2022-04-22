@@ -53,6 +53,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("permission")->middleware("auth:api")->group(function(){
         Route::get("roles",[\App\Http\Controllers\RolePermissionController::class,'getRoles']);
+        Route::get("roles-permissions",[\App\Http\Controllers\RolePermissionController::class,'getRolesWithPermissions']);
         Route::get("permissions",[\App\Http\Controllers\RolePermissionController::class,'getPermissions']);
         Route::get("permissions-by-role/{role}",[\App\Http\Controllers\RolePermissionController::class,'getPermissionsByRole']);
         Route::get("role/{id}",[\App\Http\Controllers\RolePermissionController::class,'getOneRole']);

@@ -4,6 +4,7 @@
 
 - [Basic data](#basic-data)
 - [Get all roles](#get-all-roles)
+- [Get all roles with permissions](#get-all-roles-permissions)
 - [Get all permissions](#get-all-permissions)
 - [Get all permissions by role](#get-all-permissions-by-role)
 - [Get one role](#get-one-role)
@@ -24,18 +25,19 @@
 | # | METHOD | Name                       | URL                     | Token required|Description|
 | : |        |   :-                       |  :                      |               |                    |  
 | 1 |GET     | `Get all roles`            | `/permission/roles`               |yes             |Get all roles  |         
-| 2 |GET     | `Get all permissions`      | `/permission/permissions`        |yes            |Get all permissions|
-| 3 |GET     | `Get all permissions by role`      | `/permission/permissions-by-role/{role}`        |yes            |Get all permissions by role|
-| 4 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
-| 5 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
-| 6 |POST    | `Create Role`              | `/permission/create-role` |yes|Create role|
-| 7 |POST    | `Create Permission`        | `/permission/create-permission` |yes|Create Permission|
-| 8 |PATCH   | `assign permission role`   | `/permission/assign-permissions-role/{role_id}/{permission_id}` |yes|assign permission role|
-| 9 |PATCH   | `assign permission user`   | `/permission/assign-permissions-user/{permission_id}/{user_id}` |yes|assign permission user|
-| 10 |PATCH   | `assign role user`         | `/permission/assign-role-user/{user_id}/{role_id}`|yes|assign role user|
-| 11|PATCH   | `revoke permission user`   | `/permission/remove-permission-user/{user_id}/{permission_id}`|yes|revoke permission user|
-| 12|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
-| 13|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
+| 2 |GET     | `Get all roles with permissions`            | `/permission/roles-permissions`               |yes             |Get all roles with permissions |
+| 3 |GET     | `Get all permissions`      | `/permission/permissions`        |yes            |Get all permissions|
+| 4 |GET     | `Get all permissions by role`      | `/permission/permissions-by-role/{role}`        |yes            |Get all permissions by role|
+| 5 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
+| 6 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
+| 7 |POST    | `Create Role`              | `/permission/create-role` |yes|Create role|
+| 8 |POST    | `Create Permission`        | `/permission/create-permission` |yes|Create Permission|
+| 9 |PATCH   | `assign permission role`   | `/permission/assign-permissions-role/{role_id}/{permission_id}` |yes|assign permission role|
+| 10 |PATCH   | `assign permission user`   | `/permission/assign-permissions-user/{permission_id}/{user_id}` |yes|assign permission user|
+| 11 |PATCH   | `assign role user`         | `/permission/assign-role-user/{user_id}/{role_id}`|yes|assign role user|
+| 12|PATCH   | `revoke permission user`   | `/permission/remove-permission-user/{user_id}/{permission_id}`|yes|revoke permission user|
+| 13|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
+| 14|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
 
 <a name="get-all-roles"></a>
 ## Get all roles
@@ -125,7 +127,151 @@
     }
 ]
 ```
+<a name="get-all-roles-permissions"></a>
+## Get all roles with permissions
 
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+>{success} 200 ok
+
+## Response
+```json
+[
+    {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2022-04-20T21:52:51.000000Z",
+        "updated_at": "2022-04-20T21:52:51.000000Z",
+        "permissions": [
+            {
+                "id": 1,
+                "name": "Manage permissions for each role",
+                "slug": "rolepermission.manage",
+                "description": "Manage permissions for each role",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 1,
+                    "permission_id": 1,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            },
+            {
+                "id": 2,
+                "name": "Create Billing Company",
+                "slug": "billingcompany.create",
+                "description": "Create Billing Company",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 1,
+                    "permission_id": 2,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            },
+            {
+                "id": 36,
+                "name": "View Audit",
+                "slug": "audit.show",
+                "description": "View Audit",
+                "model": null,
+                "created_at": "2022-04-20T21:52:52.000000Z",
+                "updated_at": "2022-04-20T21:52:52.000000Z",
+                "pivot": {
+                    "role_id": 1,
+                    "permission_id": 36,
+                    "created_at": "2022-04-20T21:52:52.000000Z",
+                    "updated_at": "2022-04-20T21:52:52.000000Z"
+                }
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Billing Manager",
+        "slug": "billingmanager",
+        "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
+        "level": 2,
+        "created_at": "2022-04-20T21:52:51.000000Z",
+        "updated_at": "2022-04-20T21:52:51.000000Z",
+        "permissions": [
+            {
+                "id": 4,
+                "name": "View Billing Company",
+                "slug": "billingcompany.showme",
+                "description": "View Billing Company",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 2,
+                    "permission_id": 4,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            },
+            {
+                "id": 5,
+                "name": "Create User",
+                "slug": "user.create",
+                "description": "Create User",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 2,
+                    "permission_id": 5,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            },
+            {
+                "id": 6,
+                "name": "View Users",
+                "slug": "user.show",
+                "description": "View Users",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 2,
+                    "permission_id": 6,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            },
+            {
+                "id": 7,
+                "name": "Create Company",
+                "slug": "company.create",
+                "description": "Create Company",
+                "model": null,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "role_id": 2,
+                    "permission_id": 7,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z"
+                }
+            }
+        ]
+    }
+]
+```
 
 
 <a name="get-all-permissions"></a>
