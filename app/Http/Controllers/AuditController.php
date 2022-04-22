@@ -157,22 +157,25 @@ class AuditController extends Controller
         $model = toModel($entity);
         $record = $model::find($id);
         
-        $auditables = Audit::where('url', 'like', '%/' . $entity . '/' . $id)
-                           ->orWhere('url', 'like', '%/' . $entity)
-                           ->where('created_at', $record->created_at)->get([
-            'id',
-            'event',
-            'created_at as date',
-            'ip_address',
-            'auditable_type as module',
-            'auditable_id as module_id',
-            'user_id',
-            'user_type',
-            'url',
-            'user_agent'
-        ])->load(['user' => function ($query) {
-            $query->with('profile');
-        }]);
+        if (isset($record)) {
+            $auditables = Audit::where('url', 'like', '%/' . $entity . '/' . $id)
+                               ->orWhere('url', 'like', '%/' . $entity)
+                               ->where('created_at', $record->created_at)->get([
+                'id',
+                'event',
+                'created_at as date',
+                'ip_address',
+                'auditable_type as module',
+                'auditable_id as module_id',
+                'user_id',
+                'user_type',
+                'url',
+                'user_agent'
+            ])->load(['user' => function ($query) {
+                $query->with('profile');
+            }]);
+        }
+        return response()->json($auditables ?? null, 200);
 
         /*$records = [];
         
@@ -188,7 +191,6 @@ class AuditController extends Controller
                 'user_agent'  => $audit->user_agent,
             ]);
         }*/
-        return response()->json($auditables, 200);
     }
 
     public function getAuditOne(Request $request)
