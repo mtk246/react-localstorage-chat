@@ -33,23 +33,43 @@ class  PermissionSeeder extends Seeder
         $permissions = [
             [
                 'name' => 'Manage permissions for each role',
-                'slug' => 'rolePermission.manage',
+                'slug' => 'permission.manage.role',
                 'description' => 'Manage permissions for each role'
             ],
             [
-                'name' => 'Create Billing Company',
-                'slug' => 'billingCompany.create',
-                'description' => 'Create Billing Company'
+                'name' => 'Manage permissions for each user',
+                'slug' => 'permission.manage.user',
+                'description' => 'Manage permissions for each role'
             ],
             [
-                'name' => 'View Billing Companies',
-                'slug' => 'billingCompany.show',
-                'description' => 'View Billing Companies'
+                'name' => 'View Restrictions',
+                'slug' => 'setting.restriction.view',
+                'description' => 'View Restrictions'
             ],
             [
-                'name' => 'View Billing Company',
-                'slug' => 'billingCompany.showme',
-                'description' => 'View Billing Company'
+                'name' => 'Create Restriction',
+                'slug' => 'setting.restriction.create',
+                'description' => 'Create Restrictions'
+            ],
+            [
+                'name' => 'Show Restriction',
+                'slug' => 'setting.restriction.show',
+                'description' => 'Show Restrictions'
+            ],
+            [
+                'name' => 'Edit Restriction',
+                'slug' => 'setting.restriction.edit',
+                'description' => 'Edit Restrictions'
+            ],
+            [
+                'name' => 'Remove Restriction',
+                'slug' => 'setting.restriction.remove',
+                'description' => 'Remove Restrictions'
+            ],
+            [
+                'name' => 'View Users',
+                'slug' => 'user.view',
+                'description' => 'View Users'
             ],
             [
                 'name' => 'Create User',
@@ -57,9 +77,74 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create User'
             ],
             [
-                'name' => 'View Users',
+                'name' => 'Show User',
                 'slug' => 'user.show',
-                'description' => 'View Users'
+                'description' => 'Show User'
+            ],
+            [
+                'name' => 'Edit User',
+                'slug' => 'user.edit',
+                'description' => 'Edit User'
+            ],
+            [
+                'name' => 'Disable User',
+                'slug' => 'user.disable',
+                'description' => 'Disable User'
+            ],
+            [
+                'name' => 'View a User Change History',
+                'slug' => 'user.history',
+                'description' => 'View a User Change History'
+            ],
+            [
+                'name' => 'Unlock Users',
+                'slug' => 'user.unlock',
+                'description' => 'Unlock Users'
+            ],
+            [
+                'name' => 'Show Profile',
+                'slug' => 'setting.profile.show',
+                'description' => 'Show Profile'
+            ],
+            [
+                'name' => 'Edit Profile',
+                'slug' => 'setting.profile.edit',
+                'description' => 'Edit Profile'
+            ],
+            [
+                'name' => 'View Billing Companies',
+                'slug' => 'billingCompany.view',
+                'description' => 'View Billing Companies'
+            ],
+            [
+                'name' => 'Create Billing Company',
+                'slug' => 'billingCompany.create',
+                'description' => 'Create Billing Company'
+            ],
+            [
+                'name' => 'Show Billing Company',
+                'slug' => 'billingCompany.show',
+                'description' => 'Show Billing Company'
+            ],
+            [
+                'name' => 'Edit Billing Company',
+                'slug' => 'billingCompany.edit',
+                'description' => 'Edit Billing Company'
+            ],
+            [
+                'name' => 'Disable Billing Company',
+                'slug' => 'billingCompany.disable',
+                'description' => 'Disable Billing Company'
+            ],
+            [
+                'name' => 'View a Billing Company Change History',
+                'slug' => 'billingCompany.history',
+                'description' => 'View a Billing Company Change History'
+            ],
+            [
+                'name' => 'View Companies',
+                'slug' => 'company.view',
+                'description' => 'View Companies'
             ],
             [
                 'name' => 'Create Company',
@@ -67,9 +152,34 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Company'
             ],
             [
-                'name' => 'View Companies',
+                'name' => 'Show Company',
                 'slug' => 'company.show',
-                'description' => 'View Companies'
+                'description' => 'Show Company'
+            ],
+            [
+                'name' => 'Edit Company',
+                'slug' => 'company.edit',
+                'description' => 'Edit Company'
+            ],
+            [
+                'name' => 'Disable Company',
+                'slug' => 'company.disable',
+                'description' => 'Disable Company'
+            ],
+            [
+                'name' => 'Assign Company',
+                'slug' => 'company.assign',
+                'description' => 'Assign Company'
+            ],
+            [
+                'name' => 'View a Company Change History',
+                'slug' => 'company.history',
+                'description' => 'View a Company Change History'
+            ],
+            [
+                'name' => 'View Facilities',
+                'slug' => 'facility.view',
+                'description' => 'View Facilities'
             ],
             [
                 'name' => 'Create Facility',
@@ -77,9 +187,29 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Facility'
             ],
             [
-                'name' => 'View Facilities',
+                'name' => 'Show Facility',
                 'slug' => 'facility.show',
-                'description' => 'View Facilities'
+                'description' => 'Show Facility'
+            ],
+            [
+                'name' => 'Edit Facility',
+                'slug' => 'facility.edit',
+                'description' => 'Edit Facility'
+            ],
+            [
+                'name' => 'Disable Facility',
+                'slug' => 'facility.disable',
+                'description' => 'Disable Facility'
+            ],
+            [
+                'name' => 'View a Facility Change History',
+                'slug' => 'facility.history',
+                'description' => 'View a Facility Change History'
+            ],
+            [
+                'name' => 'View Clearing Houses',
+                'slug' => 'clearingHouse.view',
+                'description' => 'View Clearing Houses'
             ],
             [
                 'name' => 'Create Clearing House',
@@ -87,9 +217,29 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Clearing House'
             ],
             [
-                'name' => 'View Clearing Houses',
+                'name' => 'Show Clearing House',
                 'slug' => 'clearingHouse.show',
-                'description' => 'View Clearing Houses'
+                'description' => 'Show Clearing House'
+            ],
+            [
+                'name' => 'Edit Clearing House',
+                'slug' => 'clearingHouse.edit',
+                'description' => 'Edit Clearing House'
+            ],
+            [
+                'name' => 'Disable Clearing House',
+                'slug' => 'clearingHouse.disable',
+                'description' => 'Disable Clearing House'
+            ],
+            [
+                'name' => 'View a Clearing House Change History',
+                'slug' => 'clearingHouse.history',
+                'description' => 'View a Clearing House Change History'
+            ],
+            [
+                'name' => 'View Insurance Companies',
+                'slug' => 'insuranceCompany.view',
+                'description' => 'View Insurance Companies'
             ],
             [
                 'name' => 'Create Insurance Company',
@@ -97,19 +247,59 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Insurance Company'
             ],
             [
-                'name' => 'View Insurance Company',
+                'name' => 'Show Insurance Company',
                 'slug' => 'insuranceCompany.show',
-                'description' => 'View Insurance Company'
+                'description' => 'Show Insurance Company'
             ],
             [
-                'name' => 'Create Insurance',
-                'slug' => 'insurance.create',
-                'description' => 'Create Insurance'
+                'name' => 'Edit Insurance Company',
+                'slug' => 'insuranceCompany.edit',
+                'description' => 'Edit Insurance Company'
             ],
             [
-                'name' => 'View Insurance',
-                'slug' => 'insurance.show',
-                'description' => 'View Insurance'
+                'name' => 'Disable Insurance Company',
+                'slug' => 'insuranceCompany.disable',
+                'description' => 'Disable Insurance Company'
+            ],
+            [
+                'name' => 'View a Insurance Company Change History',
+                'slug' => 'insuranceCompany.history',
+                'description' => 'View a Insurance Company Change History'
+            ],
+            [
+                'name' => 'View Insurance Plans',
+                'slug' => 'insuranceCompany.insurancePlan.view',
+                'description' => 'View Insurance Plans'
+            ],
+            [
+                'name' => 'Create Insurance Plan',
+                'slug' => 'insuranceCompany.insurancePlan.create',
+                'description' => 'Create Insurance Plan'
+            ],
+            [
+                'name' => 'Show Insurance Plan',
+                'slug' => 'insuranceCompany.insurancePlan.show',
+                'description' => 'Show Insurance Plan'
+            ],
+            [
+                'name' => 'Edit Insurance Plan',
+                'slug' => 'insuranceCompany.insurancePlan.edit',
+                'description' => 'Edit Insurance Plan'
+            ],
+            [
+                'name' => 'Disable Insurance Plan',
+                'slug' => 'insuranceCompany.insurancePlan.disable',
+                'description' => 'Disable Insurance Plan'
+            ],
+            [
+                'name' => 'View a Insurance Plan Change History',
+                'slug' => 'insuranceCompany.insurancePlan.history',
+                'description' => 'View a Insurance Plan Change History'
+            ],
+            [
+                'name' => 'View Health Professionals',
+                'slug' => 'heatlhProfessional.view',
+                'description' => 'View Health Professionals'
             ],
             [
                 'name' => 'Create Heatlh Professional',
@@ -117,24 +307,104 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Heatlh Professional'
             ],
             [
-                'name' => 'View Heatlh Professional',
+                'name' => 'Show Heatlh Professional',
                 'slug' => 'heatlhProfessional.show',
-                'description' => 'View Heatlh Professional'
+                'description' => 'Show Heatlh Professional'
             ],
             [
-                'name' => 'Register a Patient',
+                'name' => 'Edit Heatlh Professional',
+                'slug' => 'heatlhProfessional.edit',
+                'description' => 'Edit Heatlh Professional'
+            ],
+            [
+                'name' => 'Disable Heatlh Professional',
+                'slug' => 'heatlhProfessional.disable',
+                'description' => 'Disable Heatlh Professional'
+            ],
+            [
+                'name' => 'View a Heatlh Professional Change History',
+                'slug' => 'heatlhProfessional.history',
+                'description' => 'View a Heatlh Professional Change History'
+            ],
+            [
+                'name' => 'View Patients',
+                'slug' => 'patient.view',
+                'description' => 'View Patients'
+            ],
+            [
+                'name' => 'Create Patient',
                 'slug' => 'patient.create',
-                'description' => 'Register a Patient'
+                'description' => 'Create Patient'
             ],
             [
-                'name' => 'Update or verify personal information',
-                'slug' => 'patient.updateverify.personalinfo',
-                'description' => 'Update or verify personal information'
+                'name' => 'Show Patient',
+                'slug' => 'patient.show',
+                'description' => 'Show Patient'
             ],
             [
-                'name' => 'Update or verify insurance policy information',
-                'slug' => 'patient.updateverify.insurancePolicyinfo',
-                'description' => 'Update or verify insurance policy information'
+                'name' => 'Edit Patient',
+                'slug' => 'patient.edit',
+                'description' => 'Edit Patient'
+            ],
+            [
+                'name' => 'Disable Patient',
+                'slug' => 'patient.disable',
+                'description' => 'Disable Patient'
+            ],
+            [
+                'name' => 'View a Patient Change History',
+                'slug' => 'patient.history',
+                'description' => 'View a Patient Change History'
+            ],
+            [
+                'name' => 'View Procedure of Services',
+                'slug' => 'service.view',
+                'description' => 'View Procedure of Services'
+            ],
+            [
+                'name' => 'Create Procedure of Service',
+                'slug' => 'service.create',
+                'description' => 'Create Procedure of Service'
+            ],
+            [
+                'name' => 'Show Procedure of Service',
+                'slug' => 'service.show',
+                'description' => 'Show Procedure of Service'
+            ],
+            [
+                'name' => 'Edit Procedure of Service',
+                'slug' => 'service.edit',
+                'description' => 'Edit Procedure of Service'
+            ],
+            [
+                'name' => 'Disable Procedure of Service',
+                'slug' => 'service.disable',
+                'description' => 'Disable Procedure of Service'
+            ],
+            [
+                'name' => 'View a Procedure of Service Change History',
+                'slug' => 'service.history',
+                'description' => 'View a Procedure of Service Change History'
+            ],
+            [
+                'name' => 'View Audits',
+                'slug' => 'audit.view',
+                'description' => 'View Audits'
+            ],
+            [
+                'name' => 'Show Audit',
+                'slug' => 'audit.show',
+                'description' => 'Show Audit'
+            ],
+            [
+                'name' => 'View Audits for User',
+                'slug' => 'audit.user.view',
+                'description' => 'View Audits for user'
+            ],
+            [
+                'name' => 'View Claims',
+                'slug' => 'claim.view',
+                'description' => 'View Claims'
             ],
             [
                 'name' => 'Create Claim',
@@ -142,9 +412,19 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Create Claim'
             ],
             [
+                'name' => 'Show Claim',
+                'slug' => 'claim.show',
+                'description' => 'Show Claim'
+            ],
+            [
                 'name' => 'Verification and debuggin claim / Send claim',
                 'slug' => 'claim.verifydebug',
                 'description' => 'Verification and debuggin claim / Send claim'
+            ],
+            [
+                'name' => 'Manage users responsible for a claims',
+                'slug' => 'claim.manageusers',
+                'description' => 'Manage users responsible for a claims'
             ],
             [
                 'name' => 'Correct and re-submit claim',
@@ -156,17 +436,6 @@ class  PermissionSeeder extends Seeder
                 'slug' => 'claim.generateappeal',
                 'description' => 'Generate Appeal'
             ],
-            [
-                'name' => 'View Claims',
-                'slug' => 'claim.show',
-                'description' => 'View Claims'
-            ],
-            [
-                'name' => 'Manage users responsible for a claims',
-                'slug' => 'claim.manageusers',
-                'description' => 'Manage users responsible for a claims'
-            ],
-
             [
                 'name' => 'Register Payment',
                 'slug' => 'payment.create',
@@ -183,13 +452,13 @@ class  PermissionSeeder extends Seeder
                 'description' => 'Send co-pays and co-insurance'
             ],
             [
-                'name' => 'Generate Reports',
+                'name' => 'Generate Report',
                 'slug' => 'report.create',
                 'description' => 'Generate Reports'
             ],
             [
                 'name' => 'View Reports',
-                'slug' => 'report.show',
+                'slug' => 'report.view',
                 'description' => 'View Reports'
             ],
             [
@@ -202,132 +471,272 @@ class  PermissionSeeder extends Seeder
                 'slug' => 'setting.responses.manage',
                 'description' => 'Manage responses in the FAQ forum'
             ],
-            [
-                'name' => 'View Profile',
-                'slug' => 'setting.profile.show',
-                'description' => 'View Profile'
-            ],
-            [
-                'name' => 'View Audit',
-                'slug' => 'audit.show',
-                'description' => 'View Audit'
-            ]
         ];
 
         $defaultPermissions = [
             'superuser' => [
-                'rolePermission.manage',
+                'permission.manage.role',
+                'permission.manage.user',
+                'setting.restriction.view',
+                'setting.restriction.create',
+                'setting.restriction.show',
+                'setting.restriction.edit',
+                'setting.restriction.remove',
+                'user.view',
+                'user.create',
+                'user.show',
+                'user.edit',
+                'user.unlock',
+                'user.history',
+                'setting.profile.show',
+                'setting.profile.edit',
+                'billingCompany.view',
                 'billingCompany.create',
                 'billingCompany.show',
-                'billingCompany.showme',
-                'user.create',
-                'user.show',
+                'billingCompany.edit',
+                'billingCompany.disable',
+                'billingCompany.history',
+                'company.view',
                 'company.create',
                 'company.show',
+                'company.edit',
+                'company.assign',
+                'company.history',
+                'facility.view',
                 'facility.create',
                 'facility.show',
+                'facility.edit',
+                'facility.history',
+                'clearingHouse.view',
                 'clearingHouse.create',
                 'clearingHouse.show',
+                'clearingHouse.edit',
+                'clearingHouse.history',
+                'insuranceCompany.view',
                 'insuranceCompany.create',
                 'insuranceCompany.show',
-                'insurance.create',
-                'insurance.show',
+                'insuranceCompany.edit',
+                'insuranceCompany.history',
+                'insuranceCompany.insurancePlan.view',
+                'insuranceCompany.insurancePlan.create',
+                'insuranceCompany.insurancePlan.show',
+                'insuranceCompany.insurancePlan.edit',
+                'insuranceCompany.insurancePlan.history',
+                'heatlhProfessional.view',
                 'heatlhProfessional.create',
                 'heatlhProfessional.show',
+                'heatlhProfessional.edit',
+                'heatlhProfessional.history',
+                'patient.view',
                 'patient.create',
-                'patient.updateverify.personalinfo',
-                'patient.updateverify.insurancePolicyinfo',
+                'patient.show',
+                'patient.edit',
+                'patient.history',
+                'service.view',
+                'service.create',
+                'service.show',
+                'service.edit',
+                'service.history',
+                'audit.view',
+                'audit.show',
+                'audit.user.view',
+                'claim.view',
                 'claim.create',
+                'claim.show',
                 'claim.verifydebug',
+                'claim.manageusers',
                 'claim.correctsubmit',
                 'claim.generateappeal',
-                'claim.show',
-                'claim.manageusers',
                 'payment.create',
                 'payment.generatepatientaccount',
                 'payment.sendcopayscoinsurance',
                 'report.create',
-                'report.show',
-                'setting.errorreport.create',
-                'setting.responses.manage',
-                'setting.profile.show',
-                'audit.show'
+                'report.view',
             ],
             'billingmanager' => [
-                'billingCompany.showme',
+                'permission.manage.user',
+                'setting.restriction.view',
+                'setting.restriction.create',
+                'setting.restriction.show',
+                'setting.restriction.edit',
+                'setting.restriction.remove',
+                'user.view',
                 'user.create',
                 'user.show',
+                'user.edit',
+                'user.unlock',
+                'user.disable',
+                'user.history',
+                'setting.profile.show',
+                'setting.profile.edit',
+                'billingCompany.show',
+                'billingCompany.edit',
+                'billingCompany.history',
+                'company.view',
                 'company.create',
                 'company.show',
+                'company.edit',
+                'company.assign',
+                'company.disable',
+                'company.history',
+                'facility.view',
                 'facility.create',
                 'facility.show',
+                'facility.edit',
+                'facility.disable',
+                'facility.history',
+                'clearingHouse.view',
                 'clearingHouse.create',
                 'clearingHouse.show',
+                'clearingHouse.edit',
+                'clearingHouse.disable',
+                'clearingHouse.history',
+                'insuranceCompany.view',
                 'insuranceCompany.create',
                 'insuranceCompany.show',
-                'insurance.create',
-                'insurance.show',
+                'insuranceCompany.edit',
+                'insuranceCompany.disable',
+                'insuranceCompany.history',
+                'insuranceCompany.insurancePlan.view',
+                'insuranceCompany.insurancePlan.create',
+                'insuranceCompany.insurancePlan.show',
+                'insuranceCompany.insurancePlan.edit',
+                'insuranceCompany.insurancePlan.disable',
+                'insuranceCompany.insurancePlan.history',
+                'heatlhProfessional.view',
                 'heatlhProfessional.create',
                 'heatlhProfessional.show',
+                'heatlhProfessional.edit',
+                'heatlhProfessional.disable',
+                'heatlhProfessional.history',
+                'patient.view',
                 'patient.create',
-                'patient.updateverify.personalinfo',
-                'patient.updateverify.insurancePolicyinfo',
+                'patient.show',
+                'patient.edit',
+                'patient.disable',
+                'patient.history',
+                'service.view',
+                'service.create',
+                'service.show',
+                'service.edit',
+                'service.disable',
+                'service.history',
+                'claim.view',
                 'claim.create',
+                'claim.show',
                 'claim.verifydebug',
+                'claim.manageusers',
                 'claim.correctsubmit',
                 'claim.generateappeal',
-                'claim.show',
-                'claim.manageusers',
                 'payment.create',
                 'payment.generatepatientaccount',
                 'payment.sendcopayscoinsurance',
                 'report.create',
-                'report.show',
-                'setting.errorreport.create',
-                'setting.responses.manage',
-                'setting.profile.show',
-                'audit.show'
+                'report.view',
             ],
             'biller' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'facility.view',
+                'facility.create',
+                'facility.show',
+                'facility.edit',
+                'insuranceCompany.view',
                 'insuranceCompany.create',
                 'insuranceCompany.show',
-                'insurance.create',
-                'insurance.show',
+                'insuranceCompany.edit',
+                'insuranceCompany.insurancePlan.view',
+                'insuranceCompany.insurancePlan.create',
+                'insuranceCompany.insurancePlan.show',
+                'insuranceCompany.insurancePlan.edit',
+                'heatlhProfessional.view',
+                'heatlhProfessional.create',
+                'heatlhProfessional.show',
+                'heatlhProfessional.edit',
+                'heatlhProfessional.history',
+                'patient.view',
                 'patient.create',
-                'patient.updateverify.personalinfo',
-                'patient.updateverify.insurancePolicyinfo',
+                'patient.show',
+                'patient.edit',
+                'patient.history',
+                'service.view',
+                'service.create',
+                'service.show',
+                'service.edit',
+                'service.disable',
+                'service.history',
+                'claim.view',
                 'claim.create',
+                'claim.show',
                 'claim.verifydebug',
                 'claim.correctsubmit',
                 'claim.generateappeal',
-                'claim.show',
-                'setting.profile.show'
+                'report.create',
+                'report.view',
             ],
             'paymentprocessor' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'patient.view',
+                'patient.show',
+                'patient.edit',
+                'claim.view',
+                'claim.show',
                 'payment.create',
                 'payment.generatepatientaccount',
                 'payment.sendcopayscoinsurance',
-                'setting.profile.show'
+                'report.create',
+                'report.view',
             ],
             'collector' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'patient.view',
+                'patient.show',
+                'patient.edit',
+                'service.view',
+                'service.show',
+                'service.edit',
+                'claim.view',
+                'claim.show',
+                'claim.verifydebug',
+                'claim.correctsubmit',
+                'claim.generateappeal',
                 'payment.generatepatientaccount',
-                'setting.profile.show'
+                'report.create',
+                'report.view',
             ],
             'accountmanager' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'claim.view',
+                'claim.show',
                 'report.create',
-                'report.show',
-                'setting.profile.show'
+                'report.view',
+            ],
+            'client' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+            ],
+            'healthprofessional' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+            ],
+            'patient' => [
+                'setting.profile.show',
+                'setting.profile.edit',
             ],
             'auditor' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'audit.view',
                 'audit.show',
-                'setting.profile.show'
             ],
-            'healthprofessional' => [],
-            'patient' => [],
-            'client' => [],
             'developmentsupport' => [
+                'setting.profile.show',
+                'setting.profile.edit',
                 'setting.errorreport.create',
-                'setting.responses.manage'
+                'setting.responses.manage',
             ],
         ];
 
@@ -354,7 +763,7 @@ class  PermissionSeeder extends Seeder
                 $perm->delete();
             }
 
-            /** Assing permissions to role */
+            /** Assign permissions to role */
 
             foreach ($permissions as $permission) {
 
@@ -399,7 +808,7 @@ class  PermissionSeeder extends Seeder
                     $developmentSupportRole->attachPermission($per);
                 }
             }
-            /** Assing permissions to users */
+            /** Assign permissions to users */
             foreach (User::all() as $usr) {
                 $usr->detachAllPermissions();
                 if ($usr->hasRole('superuser')) {
