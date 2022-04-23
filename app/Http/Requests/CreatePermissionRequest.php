@@ -25,6 +25,8 @@ class CreatePermissionRequest extends FormRequest
     {
         return [
             "name" => "required|string",
+            "slug" => "required|string",
+            "description" => "required|string"
         ];
     }
 }

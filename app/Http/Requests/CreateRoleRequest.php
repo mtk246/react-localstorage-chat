@@ -24,7 +24,10 @@ class CreateRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string"
+            "name" => "required|string",
+            "slug" => "required|string",
+            "description" => "required|string",
+            "level" => "required|integer"
         ];
     }
 }

@@ -79,9 +79,7 @@ class RolePermissionController extends Controller
      */
     public function createRole(CreateRoleRequest $request): JsonResponse
     {
-        $data = $request->validated();
-
-        $rs = $this->RolePermissionRepository->createRole($data['name']);
+        $rs = $this->RolePermissionRepository->createRole($request->validated());
 
         return $rs ? response()->json($rs,201) : response()->json("Error creating role",400);
     }
@@ -92,9 +90,7 @@ class RolePermissionController extends Controller
      */
     public function createPermission(CreatePermissionRequest $request): JsonResponse
     {
-        $data = $request->validated();
-
-        $rs = $this->RolePermissionRepository->createPermission($data['name']);
+        $rs = $this->RolePermissionRepository->createPermission($request->validated());
 
         return $rs ? response()->json($rs,201) : response()->json("Error creating permission",400);
     }
