@@ -26,7 +26,6 @@ class PatientCreateRequest extends FormRequest
     {
         return [
             'driver_license'                    => ['required', 'string'],
-            'credit_score'                      => ['nullable', 'string'],
             'public_note'                       => ['sometimes', 'required', 'string'],
             'private_note'                      => ['sometimes', 'required', 'string'],
 

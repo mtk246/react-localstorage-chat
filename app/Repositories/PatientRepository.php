@@ -108,7 +108,6 @@ class PatientRepository
             /** Create Patient */
             $patient = Patient::create([
                 "driver_license" => $data["driver_license"],
-                "credit_score"   => $data["credit_score"],
                 "user_id"        => $user->id
             ]);
 
@@ -291,7 +290,7 @@ class PatientRepository
      * @return Patient|Builder|Model|object|null
      */
     public function getOnePatient(int $id) {
-        $patient = Patient::find($id)->with([
+        $patient = Patient::with([
             "user" => function ($query) {
                 $query->with("profile", "roles", "addresses", "contacts");
             },
@@ -305,7 +304,7 @@ class PatientRepository
             "insurancePlans" => function ($query) {
                 $query->with("suscribers");
             }
-        ]);
+        ])->find($id);
 
         if(is_null($patient)) return null;
 
@@ -343,7 +342,6 @@ class PatientRepository
             /** Update Patient */
             $patient->update([
                 "driver_license" => $data["driver_license"],
-                "credit_score"   => $data["credit_score"],
                 "user_id"        => $user->id
             ]);
 
