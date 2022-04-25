@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
+use App\Models\BillingCompany;
 use App\Models\Patient;
 use App\Models\PatientPrivate;
 use App\Models\PrivateNote;
@@ -82,13 +83,17 @@ class PatientRepository
                 "profile_id" => $profile->id
             ]);
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
             
             /** Create Contact */
             if (isset($data['contact'])) {
                 $data["contact"]["contactable_id"]     = $user->id;
                 $data["contact"]["contactable_type"]   = User::class;
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 Contact::create($data["contact"]);
             }
 
@@ -96,7 +101,7 @@ class PatientRepository
             if (isset($data['address'])) {
                 $data["address"]["addressable_id"]     = $user->id;
                 $data["address"]["addressable_type"]   = User::class;
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 Address::create($data["address"]);
             }
 
@@ -121,7 +126,7 @@ class PatientRepository
                 PrivateNote::create([
                     'publishable_type'   => Patient::class,
                     'publishable_id'     => $patient->id,
-                    'billing_company_id' => $billingCompany->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'note'               => $data['private_note'],
                 ]);
             }
@@ -129,7 +134,7 @@ class PatientRepository
             /** Create PatienPrivate */
             if (isset($data['patient_private'])) {
                 $data["patient_private"]["patient_id"] = $patient->id;
-                $data["patient_private"]["billing_company_id"] = $billingCompany->id;
+                $data["patient_private"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $patient_private = PatientPrivate::create($data["patient_private"]);
             }
 
@@ -215,7 +220,7 @@ class PatientRepository
                         /** The subscriber is searched for each billing company */
                         $suscriber = Suscriber::firstOrCreate([
                             "ssn"                => $insurancePolicy["suscriber"]["ssn"],
-                            "billing_company_id" => $billingCompany->id
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany
                         ], [
                             "first_name" => $insurancePolicy["suscriber"]["first_name"],
                             "last_name" => $insurancePolicy["suscriber"]["last_name"]
@@ -226,7 +231,7 @@ class PatientRepository
                             if (isset($insurancePolicy["suscriber"]['contact'])) {
                                 $insurancePolicy["suscriber"]["contact"]["contactable_id"]     = $suscriber->id;
                                 $insurancePolicy["suscriber"]["contact"]["contactable_type"]   = Suscriber::class;
-                                $insurancePolicy["suscriber"]["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                                $insurancePolicy["suscriber"]["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                                 Contact::create($insurancePolicy["suscriber"]["contact"]);
                             }
 
@@ -234,7 +239,7 @@ class PatientRepository
                             if (isset($insurancePolicy["suscriber"]['address'])) {
                                 $insurancePolicy["suscriber"]["address"]["addressable_id"]     = $suscriber->id;
                                 $insurancePolicy["suscriber"]["address"]["addressable_type"]   = Suscriber::class;
-                                $insurancePolicy["suscriber"]["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                                $insurancePolicy["suscriber"]["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                                 Address::create($insurancePolicy["suscriber"]["address"]);
                             }
                             /** Attached patient to suscriber */
@@ -328,6 +333,12 @@ class PatientRepository
             DB::beginTransaction();
 
             $patient = Patient::find($id);
+            $user = $patient->user;
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             /** Update Patient */
             $patient->update([
@@ -351,7 +362,7 @@ class PatientRepository
                 PrivateNote::updateOrCreate([
                     'publishable_type'   => Patient::class,
                     'publishable_id'     => $patient->id,
-                    'billing_company_id' => $billingCompany->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'note'               => $data['private_note'],
                 ]);
@@ -364,9 +375,8 @@ class PatientRepository
             }
 
             /** Update User */
-            $user = $patient->user;
             $user->update([
-                "email" => $data['email']
+                "email" => $data['contact']['email'],
             ]);
 
             /** Create Profile */
@@ -406,13 +416,11 @@ class PatientRepository
                     ]);
                 }
             }
-
-            $billingCompany = auth()->user()->billingCompanies->first();
             
             /** Create Contact */
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $user->id,
                     "contactable_type"   => User::class
                 ], $data['contact']);
@@ -420,7 +428,7 @@ class PatientRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $user->id,
                     "addressable_type"   => User::class
                 ], $data["address"]);
@@ -511,7 +519,7 @@ class PatientRepository
                         /** The subscriber is searched for each billing company */
                         $suscriber = Suscriber::updateOrCreate([
                             "ssn"                => $insurancePolicy["suscriber"]["ssn"],
-                            "billing_company_id" => $billingCompany->id
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany
                         ], [
                             "first_name" => $insurancePolicy["suscriber"]["first_name"],
                             "last_name" => $insurancePolicy["suscriber"]["last_name"]
@@ -521,7 +529,7 @@ class PatientRepository
                             /** Create Contact */
                             if (isset($insurancePolicy["suscriber"]['contact'])) {
                                 Contact::updateOrCreate([
-                                    "billing_company_id" => $billingCompany->id ?? null,
+                                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                                     "contactable_id"     => $suscriber->id,
                                     "contactable_type"   => Suscriber::class
                                 ], $insurancePolicy["suscriber"]['contact']);
@@ -529,7 +537,7 @@ class PatientRepository
 
                             if (isset($insurancePolicy["suscriber"]['address'])) {
                                 Address::updateOrCreate([
-                                    "billing_company_id" => $billingCompany->id ?? null,
+                                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                                     "addressable_id"     => $suscriber->id,
                                     "addressable_type"   => User::class
                                 ], $insurancePolicy["suscriber"]["address"]);

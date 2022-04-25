@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PatientCreateRequest extends FormRequest
 {
@@ -28,6 +29,8 @@ class PatientCreateRequest extends FormRequest
             'credit_score'                      => ['nullable', 'string'],
             'public_note'                       => ['sometimes', 'required', 'string'],
             'private_note'                      => ['sometimes', 'required', 'string'],
+
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
 
             'patient_private'                   => ['required', 'array'],
             'patient_private.reference_num'     => ['required', 'string'],
@@ -67,11 +70,11 @@ class PatientCreateRequest extends FormRequest
             'guarantor.name'                    => ['sometimes', 'required', 'string'],
             'guarantor.phone'                   => ['sometimes', 'required', 'string'],
 
-            'employment'                        => ['sometimes', 'required', 'array'],
-            'employment.employer_name'          => ['sometimes', 'required', 'string'],
-            'employment.employer_address'       => ['sometimes', 'required', 'string'],
-            'employment.employer_phone'         => ['sometimes', 'required', 'string'],
-            'employment.position'               => ['sometimes', 'required', 'string'],
+            'employment'                          => ['sometimes', 'required', 'array'],
+            'employment.*.employer_name'          => ['sometimes', 'required', 'string'],
+            'employment.*.employer_address'       => ['sometimes', 'required', 'string'],
+            'employment.*.employer_phone'         => ['sometimes', 'required', 'string'],
+            'employment.*.position'               => ['sometimes', 'required', 'string'],
 
             'emergency_contacts'                => ['sometimes', 'required', 'array'],
             'emergency_contacts.*.name'         => ['sometimes', 'required', 'string'],

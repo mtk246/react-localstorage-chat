@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PatientUpdateRequest extends FormRequest
 {
@@ -26,9 +27,10 @@ class PatientUpdateRequest extends FormRequest
         return [
             'driver_license'                    => ['required', 'string'],
             'credit_score'                      => ['nullable', 'string'],
-            'own_insurance'                     => ['required', 'string'],
             'public_note'                       => ['sometimes', 'required', 'string'],
-            'private_note'                      => ['required', 'string'],
+            'private_note'                      => ['sometimes', 'required', 'string'],
+
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
 
             'patient_private'                   => ['required', 'array'],
             'patient_private.reference_num'     => ['required', 'string'],
@@ -79,13 +81,26 @@ class PatientUpdateRequest extends FormRequest
             'emergency_contacts.*.cellphone'    => ['sometimes', 'required', 'string'],
             'emergency_contacts.*.relationship' => ['sometimes', 'required', 'string'],
 
-            'suscriber'                         => ['required', 'array'],
-            'suscriber.ssn'                     => ['required', 'string'],
-            'suscriber.email'                   => ['required', 'string'],
-            'suscriber.first_name'              => ['required', 'string'],
-            'suscriber.last_name'               => ['required', 'string'],
-            'suscriber.address'                 => ['required', 'string'],
-            'suscriber.phone'                   => ['required', 'string'],
+            'insurance_policies'                       => ['required', 'array'],
+            'insurance_policies.*.insurance_company'   => ['required', 'numeric'],
+            'insurance_policies.*.insurance_plan'      => ['required', 'numeric'],
+            'insurance_policies.*.own_insurance'       => ['required', 'boolean'],
+
+            'insurance_policies.*.suscriber'            => ['sometimes', 'required', 'array'],
+            'insurance_policies.*.suscriber.ssn'        => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.first_name' => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.last_name'  => ['sometimes', 'required', 'string'],
+
+            'insurance_policies.*.suscriber.address'         => ['sometimes', 'required', 'array'],
+            'insurance_policies.*.suscriber.address.address' => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.address.city'    => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.address.state'   => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.address.zip'     => ['sometimes', 'required', 'numeric'],
+            
+            'insurance_policies.*.suscriber.contact'         => ['sometimes', 'required', 'array'],
+            'insurance_policies.*.suscriber.contact.phone'   => ['sometimes', 'required', 'string'],
+            'insurance_policies.*.suscriber.contact.fax'     => ['sometimes', 'nullable', 'string'],
+            'insurance_policies.*.suscriber.contact.email'   => ['sometimes', 'required', 'email:rfc'],
         ];
     }
 }

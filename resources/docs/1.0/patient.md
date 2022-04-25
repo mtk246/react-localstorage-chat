@@ -37,6 +37,7 @@
 {
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
+    "billing_company_id": 1, /** Only required by superuser */
     "public_note": "Some note publics",
     "private_note": "Some note privates",
     "patient_private":{
@@ -543,6 +544,7 @@
 {
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
+    "billing_company_id": 1, /** Only required by superuser */
     "public_note": "Note public",
     "private_note": "Note private",
     "patient_private":{
