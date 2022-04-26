@@ -88,6 +88,9 @@ class PatientRepository
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
+
+            /** Attach billing company */
+            $user->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
             
             /** Create Contact */
             if (isset($data['contact'])) {
@@ -294,7 +297,7 @@ class PatientRepository
     public function getOnePatient(int $id) {
         $patient = Patient::with([
             "user" => function ($query) {
-                $query->with("profile", "roles", "addresses", "contacts");
+                $query->with("profile", "roles", "addresses", "contacts", "billingCompanies");
             },
             "marital",
             "guarantor",
@@ -319,7 +322,7 @@ class PatientRepository
     public function getAllPatient() {
         return Patient::with([
             "user" => function ($query) {
-                $query->with("profile", "roles", "addresses", "contacts");
+                $query->with("profile", "roles", "addresses", "contacts", "billingCompanies");
             }, "publicNotes", "privateNotes"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
