@@ -150,9 +150,11 @@ class PatientRepository
             }
 
             /** Create Employment */
-            if (isset($data['employment'])) {
-                $data["employment"]["patient_id"] = $patient->id;
-                $employment = Employment::create($data["employment"]);
+            if (isset($data["employments"])) {
+                foreach ($data["employments"] as $employment) {
+                    $employment["patient_id"] = $patient->id;
+                    Employment::create($employment);
+                }
             }
 
             /** Emergency Contacts */
@@ -296,7 +298,7 @@ class PatientRepository
             },
             "marital",
             "guarantor",
-            "employment",
+            "employments",
             "patientPrivate",
             "emergencyContacts",
             "publicNotes",
@@ -447,10 +449,12 @@ class PatientRepository
             }
 
             /** Create Employment */
-            if (isset($data['employment'])) {
-                Employment::updateOrCreate([
-                    "patient_id" => $patient->id
-                ], $data["employment"]);
+            if (isset($data["employments"])) {
+                $patient->employments->delete();
+                foreach ($data["employments"] as $employment) {
+                    $employment["patient_id"] = $patient->id;
+                    Employment::create($employment);
+                }
             }
 
             /** Emergency Contacts */

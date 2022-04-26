@@ -100,9 +100,9 @@ class Patient extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function employment()
+    public function employments()
     {
-        return $this->hasOne(Employment::class);
+        return $this->hasMany(Employment::class);
     }
 
     /**

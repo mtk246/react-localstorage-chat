@@ -69,11 +69,11 @@ class PatientUpdateRequest extends FormRequest
             'guarantor.name'                    => ['sometimes', 'required', 'string'],
             'guarantor.phone'                   => ['sometimes', 'required', 'string'],
 
-            'employment'                        => ['sometimes', 'required', 'array'],
-            'employment.employer_name'          => ['sometimes', 'required', 'string'],
-            'employment.employer_address'       => ['sometimes', 'required', 'string'],
-            'employment.employer_phone'         => ['sometimes', 'required', 'string'],
-            'employment.position'               => ['sometimes', 'required', 'string'],
+            'employments'                       => ['sometimes', 'required', 'array'],
+            'employments.*.employer_name'       => ['sometimes', 'required', 'string'],
+            'employments.*.employer_address'    => ['sometimes', 'required', 'string'],
+            'employments.*.employer_phone'      => ['sometimes', 'required', 'string'],
+            'employments.*.position'            => ['sometimes', 'required', 'string'],
 
             'emergency_contacts'                => ['sometimes', 'required', 'array'],
             'emergency_contacts.*.name'         => ['sometimes', 'required', 'string'],
@@ -94,7 +94,7 @@ class PatientUpdateRequest extends FormRequest
             'insurance_policies.*.suscriber.address.address' => ['sometimes', 'required', 'string'],
             'insurance_policies.*.suscriber.address.city'    => ['sometimes', 'required', 'string'],
             'insurance_policies.*.suscriber.address.state'   => ['sometimes', 'required', 'string'],
-            'insurance_policies.*.suscriber.address.zip'     => ['sometimes', 'required', 'numeric'],
+            'insurance_policies.*.suscriber.address.zip'     => ['sometimes', 'required', 'string'],
             
             'insurance_policies.*.suscriber.contact'         => ['sometimes', 'required', 'array'],
             'insurance_policies.*.suscriber.contact.phone'   => ['sometimes', 'required', 'string'],
