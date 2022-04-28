@@ -323,7 +323,17 @@ class PatientRepository
         return Patient::with([
             "user" => function ($query) {
                 $query->with("profile", "roles", "addresses", "contacts", "billingCompanies");
-            }, "publicNotes", "privateNotes"
+            },
+            "marital",
+            "guarantor",
+            "employments",
+            "patientPrivate",
+            "emergencyContacts",
+            "publicNotes",
+            "privateNotes",
+            "insurancePlans" => function ($query) {
+                $query->with("suscribers");
+            }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
 
