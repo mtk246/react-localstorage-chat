@@ -218,7 +218,7 @@ trait HasRoleAndPermission
             ->orWhere('roles.level', '<', $this->level())
             ->groupBy([
                 'permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description',
-                'permissions.model', 'permissions.created_at', 'permissions.updated_at',
+                'permissions.module', 'permissions.created_at', 'permissions.updated_at',
                 'permission_role.created_at', 'permission_role.updated_at'
             ]);
     }
@@ -310,48 +310,6 @@ trait HasRoleAndPermission
         return $this->getPermissions()->contains(function ($value) use ($permission) {
             return $permission == $value->id || Str::is($permission, $value->slug);
         });
-    }
-
-    /**
-     * Check if the user is allowed to manipulate with entity.
-     *
-     * @param string $providedPermission
-     * @param Model $entity
-     * @param bool $owner
-     * @param string $ownerColumn
-     * @return bool
-     */
-    public function allowed($providedPermission, Model $entity, $owner = true, $ownerColumn = 'user_id')
-    {
-        if ($this->isPretendEnabled()) {
-            return $this->pretend('allowed');
-        }
-
-        if ($owner === true && $entity->{$ownerColumn} == $this->id) {
-            return true;
-        }
-
-        return $this->isAllowed($providedPermission, $entity);
-    }
-
-    /**
-     * Check if the user is allowed to manipulate with provided entity.
-     *
-     * @param string $providedPermission
-     * @param Model $entity
-     * @return bool
-     */
-    protected function isAllowed($providedPermission, Model $entity)
-    {
-        foreach ($this->getPermissions() as $permission) {
-            if ($permission->model != '' && get_class($entity) == $permission->model
-                && ($permission->id == $providedPermission || $permission->slug === $providedPermission)
-            ) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -455,13 +413,6 @@ trait HasRoleAndPermission
             return $this->hasRole(snake_case(substr($method, 2), config('roles.separator')));
         } elseif (starts_with($method, 'can')) {
             return $this->hasPermission(snake_case(substr($method, 3), config('roles.separator')));
-        } elseif (starts_with($method, 'allowed')) {
-            return $this->allowed(
-                snake_case(substr($method, 7), config('roles.separator')),
-                $parameters[0],
-                (isset($parameters[1])) ? $parameters[1] : true,
-                (isset($parameters[2])) ? $parameters[2] : 'user_id'
-            );
         }
 
         return parent::__call($method, $parameters);

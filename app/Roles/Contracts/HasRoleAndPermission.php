@@ -156,17 +156,6 @@ interface HasRoleAndPermission
     public function checkPermission($permission);
 
     /**
-     * Check if the user is allowed to manipulate with entity.
-     *
-     * @param string $providedPermission
-     * @param Model $entity
-     * @param bool $owner
-     * @param string $ownerColumn
-     * @return bool
-     */
-    public function allowed($providedPermission, Model $entity, $owner = true, $ownerColumn = 'user_id');
-
-    /**
      * Attach permission to a user.
      *
      * @param int|Permission $permission

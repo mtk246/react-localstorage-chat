@@ -34,441 +34,535 @@ class  PermissionSeeder extends Seeder
             [
                 'name' => 'Manage permissions for each role',
                 'slug' => 'permission.manage.role',
+                'module' => 'Permission Management',
                 'description' => 'Manage permissions for each role'
             ],
             [
                 'name' => 'Manage permissions for each user',
                 'slug' => 'permission.manage.user',
+                'module' => 'Permission Management',
                 'description' => 'Manage permissions for each role'
             ],
             [
                 'name' => 'View Restrictions',
                 'slug' => 'setting.restriction.view',
+                'module' => 'User Restriction by IP',
                 'description' => 'View Restrictions'
             ],
             [
                 'name' => 'Create Restriction',
                 'slug' => 'setting.restriction.create',
+                'module' => 'User Restriction by IP',
                 'description' => 'Create Restrictions'
             ],
             [
                 'name' => 'Show Restriction',
                 'slug' => 'setting.restriction.show',
+                'module' => 'User Restriction by IP',
                 'description' => 'Show Restrictions'
             ],
             [
                 'name' => 'Edit Restriction',
                 'slug' => 'setting.restriction.edit',
+                'module' => 'User Restriction by IP',
                 'description' => 'Edit Restrictions'
             ],
             [
                 'name' => 'Remove Restriction',
                 'slug' => 'setting.restriction.remove',
+                'module' => 'User Restriction by IP',
                 'description' => 'Remove Restrictions'
             ],
             [
                 'name' => 'View Users',
                 'slug' => 'user.view',
+                'module' => 'User Management',
                 'description' => 'View Users'
             ],
             [
                 'name' => 'Create User',
                 'slug' => 'user.create',
+                'module' => 'User Management',
                 'description' => 'Create User'
             ],
             [
                 'name' => 'Show User',
                 'slug' => 'user.show',
+                'module' => 'User Management',
                 'description' => 'Show User'
             ],
             [
                 'name' => 'Edit User',
                 'slug' => 'user.edit',
+                'module' => 'User Management',
                 'description' => 'Edit User'
             ],
             [
                 'name' => 'Disable User',
                 'slug' => 'user.disable',
+                'module' => 'User Management',
                 'description' => 'Disable User'
             ],
             [
                 'name' => 'View a User Change History',
                 'slug' => 'user.history',
+                'module' => 'User Management',
                 'description' => 'View a User Change History'
+            ],
+            [
+                'name' => 'View Blocked Users',
+                'slug' => 'user.view.lock',
+                'module' => 'User Management',
+                'description' => 'View Blocked Users'
             ],
             [
                 'name' => 'Unlock Users',
                 'slug' => 'user.unlock',
+                'module' => 'User Management',
                 'description' => 'Unlock Users'
             ],
             [
                 'name' => 'Show Profile',
                 'slug' => 'setting.profile.show',
+                'module' => 'Profile',
                 'description' => 'Show Profile'
             ],
             [
                 'name' => 'Edit Profile',
                 'slug' => 'setting.profile.edit',
+                'module' => 'Profile',
                 'description' => 'Edit Profile'
             ],
             [
                 'name' => 'View Billing Companies',
                 'slug' => 'billingCompany.view',
+                'module' => 'Billing Company Management',
                 'description' => 'View Billing Companies'
             ],
             [
                 'name' => 'Create Billing Company',
                 'slug' => 'billingCompany.create',
+                'module' => 'Billing Company Management',
                 'description' => 'Create Billing Company'
             ],
             [
                 'name' => 'Show Billing Company',
                 'slug' => 'billingCompany.show',
+                'module' => 'Billing Company Management',
                 'description' => 'Show Billing Company'
             ],
             [
                 'name' => 'Edit Billing Company',
                 'slug' => 'billingCompany.edit',
+                'module' => 'Billing Company Management',
                 'description' => 'Edit Billing Company'
             ],
             [
                 'name' => 'Disable Billing Company',
                 'slug' => 'billingCompany.disable',
+                'module' => 'Billing Company Management',
                 'description' => 'Disable Billing Company'
             ],
             [
                 'name' => 'View a Billing Company Change History',
                 'slug' => 'billingCompany.history',
+                'module' => 'Billing Company Management',
                 'description' => 'View a Billing Company Change History'
             ],
             [
                 'name' => 'View Companies',
                 'slug' => 'company.view',
+                'module' => 'Company Management',
                 'description' => 'View Companies'
             ],
             [
                 'name' => 'Create Company',
                 'slug' => 'company.create',
+                'module' => 'Company Management',
                 'description' => 'Create Company'
             ],
             [
                 'name' => 'Show Company',
                 'slug' => 'company.show',
+                'module' => 'Company Management',
                 'description' => 'Show Company'
             ],
             [
                 'name' => 'Edit Company',
                 'slug' => 'company.edit',
+                'module' => 'Company Management',
                 'description' => 'Edit Company'
             ],
             [
                 'name' => 'Disable Company',
                 'slug' => 'company.disable',
+                'module' => 'Company Management',
                 'description' => 'Disable Company'
             ],
             [
                 'name' => 'Assign Company',
                 'slug' => 'company.assign',
-                'description' => 'Assign Company'
+                'module' => 'Company Management',
+                'description' => 'Assign Company to a Worker'
             ],
             [
                 'name' => 'View a Company Change History',
                 'slug' => 'company.history',
+                'module' => 'Company Management',
                 'description' => 'View a Company Change History'
             ],
             [
                 'name' => 'View Facilities',
                 'slug' => 'facility.view',
+                'module' => 'Facility Management',
                 'description' => 'View Facilities'
             ],
             [
                 'name' => 'Create Facility',
                 'slug' => 'facility.create',
+                'module' => 'Facility Management',
                 'description' => 'Create Facility'
             ],
             [
                 'name' => 'Show Facility',
                 'slug' => 'facility.show',
+                'module' => 'Facility Management',
                 'description' => 'Show Facility'
             ],
             [
                 'name' => 'Edit Facility',
                 'slug' => 'facility.edit',
+                'module' => 'Facility Management',
                 'description' => 'Edit Facility'
             ],
             [
                 'name' => 'Disable Facility',
                 'slug' => 'facility.disable',
+                'module' => 'Facility Management',
                 'description' => 'Disable Facility'
             ],
             [
                 'name' => 'View a Facility Change History',
                 'slug' => 'facility.history',
+                'module' => 'Facility Management',
                 'description' => 'View a Facility Change History'
             ],
             [
                 'name' => 'View Clearing Houses',
                 'slug' => 'clearingHouse.view',
+                'module' => 'Clearing House Management',
                 'description' => 'View Clearing Houses'
             ],
             [
                 'name' => 'Create Clearing House',
                 'slug' => 'clearingHouse.create',
+                'module' => 'Clearing House Management',
                 'description' => 'Create Clearing House'
             ],
             [
                 'name' => 'Show Clearing House',
                 'slug' => 'clearingHouse.show',
+                'module' => 'Clearing House Management',
                 'description' => 'Show Clearing House'
             ],
             [
                 'name' => 'Edit Clearing House',
                 'slug' => 'clearingHouse.edit',
+                'module' => 'Clearing House Management',
                 'description' => 'Edit Clearing House'
             ],
             [
                 'name' => 'Disable Clearing House',
                 'slug' => 'clearingHouse.disable',
+                'module' => 'Clearing House Management',
                 'description' => 'Disable Clearing House'
             ],
             [
                 'name' => 'View a Clearing House Change History',
                 'slug' => 'clearingHouse.history',
+                'module' => 'Clearing House Management',
                 'description' => 'View a Clearing House Change History'
             ],
             [
                 'name' => 'View Insurance Companies',
                 'slug' => 'insuranceCompany.view',
+                'module' => 'Insurance Management',
                 'description' => 'View Insurance Companies'
             ],
             [
                 'name' => 'Create Insurance Company',
                 'slug' => 'insuranceCompany.create',
+                'module' => 'Insurance Management',
                 'description' => 'Create Insurance Company'
             ],
             [
                 'name' => 'Show Insurance Company',
                 'slug' => 'insuranceCompany.show',
+                'module' => 'Insurance Management',
                 'description' => 'Show Insurance Company'
             ],
             [
                 'name' => 'Edit Insurance Company',
                 'slug' => 'insuranceCompany.edit',
+                'module' => 'Insurance Management',
                 'description' => 'Edit Insurance Company'
             ],
             [
                 'name' => 'Disable Insurance Company',
                 'slug' => 'insuranceCompany.disable',
+                'module' => 'Insurance Management',
                 'description' => 'Disable Insurance Company'
             ],
             [
                 'name' => 'View a Insurance Company Change History',
                 'slug' => 'insuranceCompany.history',
+                'module' => 'Insurance Management',
                 'description' => 'View a Insurance Company Change History'
             ],
             [
                 'name' => 'View Insurance Plans',
                 'slug' => 'insuranceCompany.insurancePlan.view',
+                'module' => 'Insurance Management',
                 'description' => 'View Insurance Plans'
             ],
             [
                 'name' => 'Create Insurance Plan',
                 'slug' => 'insuranceCompany.insurancePlan.create',
+                'module' => 'Insurance Management',
                 'description' => 'Create Insurance Plan'
             ],
             [
                 'name' => 'Show Insurance Plan',
                 'slug' => 'insuranceCompany.insurancePlan.show',
+                'module' => 'Insurance Management',
                 'description' => 'Show Insurance Plan'
             ],
             [
                 'name' => 'Edit Insurance Plan',
                 'slug' => 'insuranceCompany.insurancePlan.edit',
+                'module' => 'Insurance Management',
                 'description' => 'Edit Insurance Plan'
             ],
             [
                 'name' => 'Disable Insurance Plan',
                 'slug' => 'insuranceCompany.insurancePlan.disable',
+                'module' => 'Insurance Management',
                 'description' => 'Disable Insurance Plan'
             ],
             [
                 'name' => 'View a Insurance Plan Change History',
                 'slug' => 'insuranceCompany.insurancePlan.history',
+                'module' => 'Insurance Management',
                 'description' => 'View a Insurance Plan Change History'
             ],
             [
                 'name' => 'View Health Professionals',
                 'slug' => 'heatlhProfessional.view',
+                'module' => 'Health Professional Management',
                 'description' => 'View Health Professionals'
             ],
             [
                 'name' => 'Create Heatlh Professional',
                 'slug' => 'heatlhProfessional.create',
+                'module' => 'Health Professional Management',
                 'description' => 'Create Heatlh Professional'
             ],
             [
                 'name' => 'Show Heatlh Professional',
                 'slug' => 'heatlhProfessional.show',
+                'module' => 'Health Professional Management',
                 'description' => 'Show Heatlh Professional'
             ],
             [
                 'name' => 'Edit Heatlh Professional',
                 'slug' => 'heatlhProfessional.edit',
+                'module' => 'Health Professional Management',
                 'description' => 'Edit Heatlh Professional'
             ],
             [
                 'name' => 'Disable Heatlh Professional',
                 'slug' => 'heatlhProfessional.disable',
+                'module' => 'Health Professional Management',
                 'description' => 'Disable Heatlh Professional'
             ],
             [
                 'name' => 'View a Heatlh Professional Change History',
                 'slug' => 'heatlhProfessional.history',
+                'module' => 'Health Professional Management',
                 'description' => 'View a Heatlh Professional Change History'
             ],
             [
                 'name' => 'View Patients',
                 'slug' => 'patient.view',
+                'module' => 'Patient Management',
                 'description' => 'View Patients'
             ],
             [
                 'name' => 'Create Patient',
                 'slug' => 'patient.create',
+                'module' => 'Patient Management',
                 'description' => 'Create Patient'
             ],
             [
                 'name' => 'Show Patient',
                 'slug' => 'patient.show',
+                'module' => 'Patient Management',
                 'description' => 'Show Patient'
             ],
             [
                 'name' => 'Edit Patient',
                 'slug' => 'patient.edit',
+                'module' => 'Patient Management',
                 'description' => 'Edit Patient'
             ],
             [
                 'name' => 'Disable Patient',
                 'slug' => 'patient.disable',
+                'module' => 'Patient Management',
                 'description' => 'Disable Patient'
             ],
             [
                 'name' => 'View a Patient Change History',
                 'slug' => 'patient.history',
+                'module' => 'Patient Management',
                 'description' => 'View a Patient Change History'
             ],
             [
                 'name' => 'View Procedure of Services',
                 'slug' => 'service.view',
+                'module' => 'Procedure of Service',
                 'description' => 'View Procedure of Services'
             ],
             [
                 'name' => 'Create Procedure of Service',
                 'slug' => 'service.create',
+                'module' => 'Procedure of Service',
                 'description' => 'Create Procedure of Service'
             ],
             [
                 'name' => 'Show Procedure of Service',
                 'slug' => 'service.show',
+                'module' => 'Procedure of Service',
                 'description' => 'Show Procedure of Service'
             ],
             [
                 'name' => 'Edit Procedure of Service',
                 'slug' => 'service.edit',
+                'module' => 'Procedure of Service',
                 'description' => 'Edit Procedure of Service'
             ],
             [
                 'name' => 'Disable Procedure of Service',
                 'slug' => 'service.disable',
+                'module' => 'Procedure of Service',
                 'description' => 'Disable Procedure of Service'
             ],
             [
                 'name' => 'View a Procedure of Service Change History',
                 'slug' => 'service.history',
+                'module' => 'Procedure of Service',
                 'description' => 'View a Procedure of Service Change History'
             ],
             [
                 'name' => 'View Audits',
                 'slug' => 'audit.view',
+                'module' => 'Audit Management',
                 'description' => 'View Audits'
             ],
             [
                 'name' => 'Show Audit',
                 'slug' => 'audit.show',
+                'module' => 'Audit Management',
                 'description' => 'Show Audit'
             ],
             [
                 'name' => 'View Audits for User',
                 'slug' => 'audit.user.view',
+                'module' => 'Audit Management',
                 'description' => 'View Audits for user'
             ],
             [
                 'name' => 'View Claims',
                 'slug' => 'claim.view',
+                'module' => 'Claims Management',
                 'description' => 'View Claims'
             ],
             [
                 'name' => 'Create Claim',
                 'slug' => 'claim.create',
+                'module' => 'Claims Management',
                 'description' => 'Create Claim'
             ],
             [
                 'name' => 'Show Claim',
                 'slug' => 'claim.show',
+                'module' => 'Claims Management',
                 'description' => 'Show Claim'
             ],
             [
-                'name' => 'Verification and debuggin claim / Send claim',
+                'name' => 'Verification and debuggin claim',
                 'slug' => 'claim.verifydebug',
-                'description' => 'Verification and debuggin claim / Send claim'
+                'module' => 'Claims Management',
+                'description' => 'Verification and debuggin claim'
             ],
             [
                 'name' => 'Manage users responsible for a claims',
                 'slug' => 'claim.manageusers',
+                'module' => 'Claims Management',
                 'description' => 'Manage users responsible for a claims'
             ],
             [
                 'name' => 'Correct and re-submit claim',
                 'slug' => 'claim.correctsubmit',
+                'module' => 'Claims Management',
                 'description' => 'Correct and re-submit claim'
             ],
             [
                 'name' => 'Generate Appeal',
                 'slug' => 'claim.generateappeal',
+                'module' => 'Claims Management',
                 'description' => 'Generate Appeal'
             ],
             [
                 'name' => 'Register Payment',
                 'slug' => 'payment.create',
+                'module' => 'Payments Management',
                 'description' => 'Register Payment'
             ],
             [
                 'name' => 'Generate patient accounts statements',
                 'slug' => 'payment.generatepatientaccount',
+                'module' => 'Payments Management',
                 'description' => 'Generate patient accounts statements'
             ],
             [
                 'name' => 'Send co-pays and co-insurance',
                 'slug' => 'payment.sendcopayscoinsurance',
+                'module' => 'Payments Management',
                 'description' => 'Send co-pays and co-insurance'
             ],
             [
                 'name' => 'Generate Report',
                 'slug' => 'report.create',
+                'module' => 'Reports Management',
                 'description' => 'Generate Reports'
             ],
             [
                 'name' => 'View Reports',
                 'slug' => 'report.view',
+                'module' => 'Reports Management',
                 'description' => 'View Reports'
             ],
             [
                 'name' => 'Generate error report',
                 'slug' => 'setting.errorreport.create',
+                'module' => 'Development Support',
                 'description' => 'Generate error report'
             ],
             [
                 'name' => 'Manage responses in the FAQ forum',
                 'slug' => 'setting.responses.manage',
+                'module' => 'Development Support',
                 'description' => 'Manage responses in the FAQ forum'
             ],
         ];
@@ -771,7 +865,9 @@ class  PermissionSeeder extends Seeder
                     'slug' => $permission['slug']
                     ],
                     [
-                        'name' => $permission['name'], 'description' => $permission['description']
+                        'name' => $permission['name'],
+                        'module' => $permission['module'] ?? '',
+                        'description' => $permission['description']
                     ]
                 );
                 if ($superUserRole) {
