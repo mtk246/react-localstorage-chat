@@ -307,7 +307,7 @@ class PatientRepository
             "publicNotes",
             "privateNotes",
             "insurancePlans" => function ($query) {
-                $query->with("suscribers");
+                $query->with("insuranceCompany", "suscribers");
             }
         ])->find($id);
 
@@ -332,7 +332,7 @@ class PatientRepository
             "publicNotes",
             "privateNotes",
             "insurancePlans" => function ($query) {
-                $query->with("suscribers");
+                $query->with("insuranceCompany", "suscribers");
             }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
