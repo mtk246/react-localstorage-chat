@@ -29,7 +29,7 @@ class AuditController extends Controller
         
         foreach ($auditables->get() as $audit) {
             array_push($records, [
-                'id'          => \Crypt::encrypt($audit->id),
+                'id'          => $audit->id,
                 'event'       => $audit->event,
                 'date'        => $audit->created_at->format('d-m-Y h:i:s A'),
                 'ip_address'  => $audit->ip_address,
@@ -112,7 +112,7 @@ class AuditController extends Controller
         
         foreach ($auditables->get() as $audit) {
             array_push($records, [
-                'id'          => \Crypt::encrypt($audit->id),
+                'id'          => $audit->id,
                 'event'       => $audit->event,
                 'date'        => $audit->created_at->format('d-m-Y h:i:s A'),
                 'ip_address'  => $audit->ip_address,
@@ -139,7 +139,7 @@ class AuditController extends Controller
         
         foreach ($auditables->get() as $audit) {
             array_push($records, [
-                'id'          => \Crypt::encrypt($audit->id),
+                'id'          => $audit->id,
                 'event'       => $audit->event,
                 'date'        => $audit->created_at->format('d-m-Y h:i:s A'),
                 'ip_address'  => $audit->ip_address,
@@ -196,7 +196,7 @@ class AuditController extends Controller
     public function getAuditOne(Request $request)
     {
         try {
-            $id = \Crypt::decrypt($request->id);
+            $id = $request->id;
             $audit = Audit::with(['user' => function ($query) {
                 $query->with('profile');
             }])->find($id);
