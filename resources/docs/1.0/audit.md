@@ -7,6 +7,7 @@
 - [Get audit all by entity](#get-audit-all-by-entity)
 - [Get audit all by billing company](#get-audit-all-by-billing-company)
 - [Get audit one](#get-audit-one)
+- [Rollback audit by entity](#rollback-by-entity)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -20,6 +21,7 @@
 | 4 |POST   | `get audit all by billing company` | `/audit-all-by-billing-company` | yes   | Get all records audited by billing company|
 | 5 |PATCH   | `get audit all by entity` | `/audit-all-by-entity/{entity}/{id}` | yes   | Get all records audited by entity|
 | 6 |POST  | `get audit one`  | `/audit-one` | yes   | Get the information corresponding to an audited record |
+| 7 |PATCH   | `rollback by entity` | `/rollback-audit/{audit_id}/by-entity/{entity}/{id}` | yes   | Restore records from an audit trail|
 
 <a name="get-audit-all"></a>
 ## Get audit all
@@ -793,5 +795,44 @@
             "updated_at": "2022-03-16T10:02:27.000000Z"
         }
     }
+}
+```
+
+<a name="rollback-by-entity"></a>
+## Rollback audit by entity
+
+### Params in path
+
+```json
+{
+    "audit_id": <integer>,
+    "entity":   <string>,
+    "id":       <integer>
+}
+```
+
+### Params in header
+```json
+{
+    "Authorization:": Bearer "<Token Bearer>"
+}
+```
+
+## Response
+
+> {success} 200
+
+#
+
+
+```json
+{
+    "id": 3,
+    "nickname": "alias facility2",
+    "nicknamable_type": "App\\Models\\Facility",
+    "nicknamable_id": 1,
+    "billing_company_id": null,
+    "created_at": "2022-05-02T14:48:40.000000Z",
+    "updated_at": "2022-05-02T14:48:40.000000Z"
 }
 ```

@@ -22,6 +22,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::post('audit-all', [\App\Http\Controllers\AuditController::class,'getAuditAll'])->middleware('auth:api');
     Route::get('audit-all', [\App\Http\Controllers\AuditController::class,'getAudit'])->middleware('auth:api');
     Route::patch('audit-all-by-entity/{entity}/{id}', [\App\Http\Controllers\AuditController::class,'getAuditAllByEntity'])->middleware('auth:api');
+    Route::patch('rollback-audit/{audit}/by-entity/{entity}/{id}', [\App\Http\Controllers\AuditController::class,'rollbackAuditByEntity'])->middleware('auth:api');
     Route::post('audit-all-by-user', [\App\Http\Controllers\AuditController::class,'getAuditAllByUser'])->middleware('auth:api');
     Route::post('audit-all-by-billing-company', [\App\Http\Controllers\AuditController::class,'getAuditAllByBillingCompany'])->middleware('auth:api');
     Route::post('audit-one', [\App\Http\Controllers\AuditController::class,'getAuditOne'])->middleware('auth:api');

@@ -193,6 +193,21 @@ class AuditController extends Controller
         }*/
     }
 
+    public function rollbackAuditByEntity($audit, $entity, $id)
+    {
+        try {
+            $model = Audit::find($audit);
+            if ($model->event == 'created') return response()->json('Error, unable to restore registry', 404);
+            $auditable = $model->auditable;
+            $newAuditable = $auditable->transitionTo($model, true);
+            $newAuditable->save();
+            
+            return ($newAuditable) ? response()->json($newAuditable, 200) : response()->json('Error audit not found', 404);
+        } catch (\Exception $e) {
+            return response()->json('Error wrong id', 404);
+        }
+    }
+
     public function getAuditOne(Request $request)
     {
         try {
