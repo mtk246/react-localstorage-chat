@@ -25,7 +25,8 @@ class RolePermissionRepository
      * @return Collection|Role[]
      */
     public function getAllRolesWithPermissions() {
-        $permissions = Permission::all()->groupBy([
+        return Role::with('permissions')->get();
+        /** $permissions = Permission::all()->groupBy([
                 'module'
             ]);
         $roles = Role::all();
@@ -33,6 +34,7 @@ class RolePermissionRepository
             'roles'=> $roles,
             'permissions'=> $permissions,
         ];
+        */
     }
 
     /**
