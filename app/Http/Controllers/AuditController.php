@@ -213,7 +213,7 @@ class AuditController extends Controller
         try {
             $id = $request->id;
             $audit = Audit::with(['user' => function ($query) {
-                $query->with('profile');
+                $query->with('profile', 'roles');
             }])->find($id);
             return ($audit) ? response()->json($audit, 200) : response()->json('Error audit not found', 404);
         } catch (\Exception $e) {
