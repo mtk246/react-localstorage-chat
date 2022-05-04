@@ -27,7 +27,7 @@ class CompanyUpdateRequest extends FormRequest
     {
         return [
             'name'                 => ['required', 'string', Rule::unique('companies', 'name')->ignore($this->id)],
-            'npi'                  => ['required', 'string'],
+            'npi'                  => ['required', 'integer'],
             'nickname'             => ['sometimes', 'string'],
 
             'taxonomies'           => ['required', 'array'],
