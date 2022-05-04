@@ -297,14 +297,16 @@ class PatientRepository
     public function getOnePatient(int $id) {
         $patient = Patient::with([
             "user" => function ($query) {
-                $query->with("profile", "roles", "addresses", "contacts", "billingCompanies");
+                $query->with(["profile" => function ($q) {
+                    $q->with("socialMedias");
+                }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
             "marital",
             "guarantor",
             "employments",
             "patientPrivate",
             "emergencyContacts",
-            "publicNotes",
+            "publicNote",
             "privateNotes",
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany", "suscribers");
@@ -322,14 +324,16 @@ class PatientRepository
     public function getAllPatient() {
         return Patient::with([
             "user" => function ($query) {
-                $query->with("profile", "roles", "addresses", "contacts", "billingCompanies");
+                $query->with(["profile" => function ($q) {
+                    $q->with("socialMedias");
+                }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
             "marital",
             "guarantor",
             "employments",
             "patientPrivate",
             "emergencyContacts",
-            "publicNotes",
+            "publicNote",
             "privateNotes",
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany", "suscribers");

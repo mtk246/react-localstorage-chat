@@ -131,9 +131,9 @@ class Patient extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function publicNotes()
+    public function publicNote()
     {
-        return $this->morphMany(PublicNote::class, 'publishable');
+        return $this->morphOne(PublicNote::class, 'publishable');
     }
 
     /**
