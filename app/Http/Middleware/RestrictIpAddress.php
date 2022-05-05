@@ -18,6 +18,7 @@ class RestrictIpAddress
      */
     public function handle(Request $request, Closure $next)
     {
+        return $next($request);
         if (isset($request->email)) {
             $validate = null;
             $user = User::where('email', $request->email)->first();

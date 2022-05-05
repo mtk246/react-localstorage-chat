@@ -47,4 +47,14 @@ class Role extends Model implements RoleHasRelationsContract, Auditable
     {
         return $this->belongsToMany(\App\Models\User::class)->withTimestamps();
     }
+
+    /**
+     * Role has many IpRestrictions.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ipRestrictions()
+    {
+        return $this->hasMany(\App\Models\IpRestriction::class);
+    }
 }

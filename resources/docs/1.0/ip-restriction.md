@@ -26,11 +26,22 @@
 
 ```json
 {
-    "ip_beginning":"127.0.0.1",
-    "ip_finish":null,
-    "rank":false,
-    "billing_company_id":null,
-    "users":[2,3]
+    "ip_restriction_mults": [
+        {
+            "ip_beginning":"127.0.0.1",
+            "ip_finish":"127.0.0.5",
+            "rank":true
+        },
+        {
+            "ip_beginning":"127.0.0.6",
+            "ip_finish":"",
+            "rank":false
+        }
+    ],
+    "entity": "billing_company",
+    "billing_company_id":1,
+    "users":[],
+    "roles":[]
 }
 ```
 
@@ -49,13 +60,11 @@
 #
 ```json
 {
-    "ip_beginning": "127.0.0.1",
-    "ip_finish": null,
-    "rank": false,
-    "billing_company_id": null,
-    "updated_at": "2022-04-06T11:45:44.000000Z",
-    "created_at": "2022-04-06T11:45:44.000000Z",
-    "id": 1
+    "entity": "billing_company",
+    "billing_company_id": 1,
+    "updated_at": "2022-05-05T11:01:44.000000Z",
+    "created_at": "2022-05-05T11:01:44.000000Z",
+    "id": 3
 }
 ```
 
@@ -81,24 +90,134 @@
 ```json
 [
     {
-        "id": 1,
-        "ip_beginning": "127.0.0.1",
-        "ip_finish": null,
-        "rank": false,
-        "billing_company_id": null,
-        "created_at": "2022-04-06T11:45:44.000000Z",
-        "updated_at": "2022-04-06T11:45:44.000000Z",
-        "deleted_at": null
+        "id": 2,
+        "billing_company_id": 1,
+        "created_at": "2022-05-05T10:55:42.000000Z",
+        "updated_at": "2022-05-05T10:55:42.000000Z",
+        "deleted_at": null,
+        "entity": "user",
+        "users": [
+            {
+                "id": 2,
+                "email": "billingmanager@billing.com",
+                "email_verified_at": null,
+                "created_at": "2022-04-20T21:52:52.000000Z",
+                "updated_at": "2022-05-04T01:39:37.000000Z",
+                "token": null,
+                "isLogged": false,
+                "isBlocked": false,
+                "usercode": "US-00002-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": "2022-05-04 01:19:16",
+                "profile_id": 2,
+                "billing_company_id": null,
+                "pivot": {
+                    "ip_restriction_id": 2,
+                    "restrictable_id": 2,
+                    "restrictable_type": "App\\Models\\User"
+                }
+            },
+            {
+                "id": 3,
+                "email": "healthprofessional@billing.com",
+                "email_verified_at": null,
+                "created_at": "2022-04-20T21:52:52.000000Z",
+                "updated_at": "2022-04-20T21:52:52.000000Z",
+                "token": null,
+                "isLogged": false,
+                "isBlocked": false,
+                "usercode": "US-00003-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": null,
+                "profile_id": 3,
+                "billing_company_id": null,
+                "pivot": {
+                    "ip_restriction_id": 2,
+                    "restrictable_id": 3,
+                    "restrictable_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "roles": [],
+        "billing_company": {
+            "id": 1,
+            "name": "Zulauf Group",
+            "created_at": "2022-04-20T21:52:55.000000Z",
+            "updated_at": "2022-04-20T21:52:55.000000Z",
+            "code": "BC-00001-2022",
+            "status": false
+        },
+        "ip_restriction_mults": [
+            {
+                "id": 2,
+                "ip_beginning": "127.0.0.1",
+                "ip_finish": "127.0.0.5",
+                "rank": true,
+                "ip_restriction_id": 2,
+                "created_at": "2022-05-05T10:55:42.000000Z",
+                "updated_at": "2022-05-05T10:55:42.000000Z"
+            }
+        ]
     },
     {
-        "id": 2,
-        "ip_beginning": "192.168.0.110",
-        "ip_finish": null,
-        "rank": false,
-        "billing_company_id": null,
-        "created_at": "2022-04-06T11:55:34.000000Z",
-        "updated_at": "2022-04-06T11:55:34.000000Z",
-        "deleted_at": null
+        "id": 1,
+        "billing_company_id": 1,
+        "created_at": "2022-05-05T10:55:04.000000Z",
+        "updated_at": "2022-05-05T10:55:04.000000Z",
+        "deleted_at": null,
+        "entity": "role",
+        "users": [],
+        "roles": [
+            {
+                "id": 2,
+                "name": "Billing Manager",
+                "slug": "billingmanager",
+                "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
+                "level": 2,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "ip_restriction_id": 1,
+                    "restrictable_id": 2,
+                    "restrictable_type": "App\\Roles\\Models\\Role"
+                }
+            },
+            {
+                "id": 3,
+                "name": "Biller",
+                "slug": "biller",
+                "description": "Allows access to system functions for biller management",
+                "level": 3,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "ip_restriction_id": 1,
+                    "restrictable_id": 3,
+                    "restrictable_type": "App\\Roles\\Models\\Role"
+                }
+            }
+        ],
+        "billing_company": {
+            "id": 1,
+            "name": "Zulauf Group",
+            "created_at": "2022-04-20T21:52:55.000000Z",
+            "updated_at": "2022-04-20T21:52:55.000000Z",
+            "code": "BC-00001-2022",
+            "status": false
+        },
+        "ip_restriction_mults": [
+            {
+                "id": 1,
+                "ip_beginning": "127.0.0.1",
+                "ip_finish": "127.0.0.5",
+                "rank": true,
+                "ip_restriction_id": 1,
+                "created_at": "2022-05-05T10:55:04.000000Z",
+                "updated_at": "2022-05-05T10:55:04.000000Z"
+            }
+        ]
     }
 ]
 ```
@@ -131,56 +250,40 @@
 
 ```json
 {
-    "id": 1,
-    "ip_beginning": "127.0.0.1",
-    "ip_finish": null,
-    "rank": false,
-    "billing_company_id": null,
-    "created_at": "2022-04-06T11:45:44.000000Z",
-    "updated_at": "2022-04-06T11:45:44.000000Z",
+    "id": 3,
+    "billing_company_id": 1,
+    "created_at": "2022-05-05T11:01:44.000000Z",
+    "updated_at": "2022-05-05T11:01:44.000000Z",
     "deleted_at": null,
-    "users": [
-        {
-            "id": 2,
-            "email": "billingmanager@billing.com",
-            "email_verified_at": null,
-            "created_at": "2022-04-05T12:13:26.000000Z",
-            "updated_at": "2022-04-06T08:55:41.000000Z",
-            "token": null,
-            "isLogged": true,
-            "isBlocked": false,
-            "usercode": "US-00002-2022",
-            "userkey": null,
-            "status": false,
-            "last_login": "2022-04-06 08:55:41",
-            "profile_id": 2,
-            "billing_company_id": null,
-            "pivot": {
-                "ip_restriction_id": 1,
-                "restrictable_id": 2,
-                "restrictable_type": "App\\Models\\User"
-            }
-        },
+    "entity": "billing_company",
+    "users": [],
+    "roles": [],
+    "billing_company": {
+        "id": 1,
+        "name": "Zulauf Group",
+        "created_at": "2022-04-20T21:52:55.000000Z",
+        "updated_at": "2022-04-20T21:52:55.000000Z",
+        "code": "BC-00001-2022",
+        "status": false
+    },
+    "ip_restriction_mults": [
         {
             "id": 3,
-            "email": "doctor@billing.com",
-            "email_verified_at": null,
-            "created_at": "2022-04-05T12:13:26.000000Z",
-            "updated_at": "2022-04-05T12:13:26.000000Z",
-            "token": null,
-            "isLogged": false,
-            "isBlocked": false,
-            "usercode": "US-00003-2022",
-            "userkey": null,
-            "status": false,
-            "last_login": null,
-            "profile_id": 3,
-            "billing_company_id": null,
-            "pivot": {
-                "ip_restriction_id": 1,
-                "restrictable_id": 3,
-                "restrictable_type": "App\\Models\\User"
-            }
+            "ip_beginning": "127.0.0.1",
+            "ip_finish": "127.0.0.5",
+            "rank": true,
+            "ip_restriction_id": 3,
+            "created_at": "2022-05-05T11:01:44.000000Z",
+            "updated_at": "2022-05-05T11:01:44.000000Z"
+        },
+        {
+            "id": 4,
+            "ip_beginning": "127.0.0.6",
+            "ip_finish": null,
+            "rank": false,
+            "ip_restriction_id": 3,
+            "created_at": "2022-05-05T11:01:44.000000Z",
+            "updated_at": "2022-05-05T11:01:44.000000Z"
         }
     ]
 }
@@ -192,11 +295,22 @@
 
 ```json
 {
-    "ip_beginning":"127.0.0.2",
-    "ip_finish":null,
-    "rank":false,
-    "billing_company_id":null,
-    "users":[3,4]
+    "ip_restriction_mults": [
+        {
+            "ip_beginning":"127.0.0.1",
+            "ip_finish":"127.0.0.5",
+            "rank":true
+        },
+        {
+            "ip_beginning":"127.0.0.6",
+            "ip_finish":"",
+            "rank":false
+        }
+    ],
+    "entity": "user",
+    "billing_company_id":1,
+    "users":[3,4],
+    "roles":[]
 }
 ```
 
@@ -215,13 +329,12 @@
 #
 ```json
 {
-    "ip_beginning": "127.0.0.2",
-    "ip_finish": null,
-    "rank": false,
-    "billing_company_id": null,
-    "updated_at": "2022-04-06T11:45:44.000000Z",
-    "created_at": "2022-04-06T11:45:44.000000Z",
-    "id": 1
+    "id": 3,
+    "billing_company_id": 1,
+    "created_at": "2022-05-05T11:01:44.000000Z",
+    "updated_at": "2022-05-05T11:05:36.000000Z",
+    "deleted_at": null,
+    "entity": "user"
 }
 ```
 
