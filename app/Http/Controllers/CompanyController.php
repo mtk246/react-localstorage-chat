@@ -29,6 +29,17 @@ class CompanyController extends Controller
         return $rs ? response()->json($rs,201) : response()->json("Error creating company",400);
     }
 
+    
+    /**
+     * @return JsonResponse
+     */
+    public function getList($id = null): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListCompanies($id)
+        );
+    }
+
     /**
      * @return JsonResponse
      */

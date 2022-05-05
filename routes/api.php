@@ -165,6 +165,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("company")->group(function() {
+        Route::get("/get-list-by-billing-company/{id?}",[\App\Http\Controllers\CompanyController::class,'getList']);
         Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);

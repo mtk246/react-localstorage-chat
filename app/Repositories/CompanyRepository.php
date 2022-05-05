@@ -69,6 +69,20 @@ class CompanyRepository
         }
     }
 
+    
+    public function getListCompanies($id = null) {
+        try {
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $id;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+            return getList(Company::class, ['name'], ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     /**
      * @return Company[]|Collection
      */

@@ -9,6 +9,7 @@
 - [Get one company by name](#get-one-company-by-name)
 - [Get one company by email](#get-one-company-by-email)
 - [Get one company by npi](#get-one-company-by-npi)
+- [Get list company by billing company](#get-list)
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
@@ -25,9 +26,10 @@
 | 4 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
 | 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
 | 6 |GET | `Get one company by npi`          | `/company/get-by-npi/{npi}`|yes|Get company by npi|
-| 7 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 8 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
-| 9 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 7 |GET | `Get list company by billing company`          | `/company/get-list-by-billing-company/{id?}`|yes|Get all companies by billing company|
+| 8 |PUT | `Update company`          | `/company/{id}`|yes|update company|
+| 9 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 10 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 
 
@@ -656,6 +658,46 @@
 
 >{warning} 404 company found not found
 
+<a name="get-list"></a>
+## Get All Company by billing company
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 companies found
+
+#
+
+```json
+[
+    {
+        "id": 2,
+        "name": "company first11"
+    },
+    {
+        "id": 3,
+        "name": "PANAMERICAN INTERNAL MEDICINE INC"
+    }
+]
+```
+
+#
 <a name="update-company"></a>
 ## Update Company
 
