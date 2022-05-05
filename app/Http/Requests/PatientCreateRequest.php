@@ -58,7 +58,7 @@ class PatientCreateRequest extends FormRequest
             'contact'                           => ['required', 'array'],
             'contact.phone'                     => ['required', 'string'],
             'contact.fax'                       => ['nullable', 'string'],
-            'contact.email'                     => ['required', 'email:rfc'],
+            'contact.email'                     => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
             'marital'                           => ['sometimes', 'required', 'array'],
             'marital.spuse_name'                => ['sometimes', 'required', 'string'],

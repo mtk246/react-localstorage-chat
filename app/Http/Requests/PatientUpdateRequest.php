@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Patient;
 
 class PatientUpdateRequest extends FormRequest
 {
@@ -24,6 +25,8 @@ class PatientUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('id');
+        $patient = Patient::find($id);
         return [
             'driver_license'                    => ['required', 'string'],
             'public_note'                       => ['sometimes', 'required', 'string'],
@@ -58,7 +61,7 @@ class PatientUpdateRequest extends FormRequest
             'contact'                           => ['required', 'array'],
             'contact.phone'                     => ['required', 'string'],
             'contact.fax'                       => ['nullable', 'string'],
-            'contact.email'                     => ['required', 'email:rfc'],
+            'contact.email'                     => ['required', Rule::unique('users', 'email')->ignore($patient->user_id), 'string', 'email:rfc'],
 
             'marital'                           => ['sometimes', 'required', 'array'],
             'marital.spuse_name'                => ['sometimes', 'required', 'string'],
