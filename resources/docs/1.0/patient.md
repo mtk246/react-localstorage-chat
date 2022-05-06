@@ -38,7 +38,7 @@
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
-    "company_id": 2,
+    "companies": [1,3],
     "public_note": "Some note publics",
     "private_note": "Some note privates",
     "patient_private":{
@@ -182,7 +182,7 @@
 
 ## Response
 
-> {success} 200 Doctor found
+> {success} 200 Patient found
 
 #
 
@@ -380,7 +380,7 @@
 #
 
 
-```json
+`````json
 {
     "id": 1,
     "driver_license": "driver license",
@@ -460,6 +460,21 @@
     },
     "companies": [
         {
+            "id": 1,
+            "code": "CO-00001-2022",
+            "name": "company first",
+            "npi": "222CF123",
+            "created_at": "2022-05-02T14:45:27.000000Z",
+            "updated_at": "2022-05-02T14:45:27.000000Z",
+            "status": false,
+            "pivot": {
+                "patient_id": 1,
+                "company_id": 1,
+                "created_at": "2022-05-06T21:21:48.000000Z",
+                "updated_at": "2022-05-06T21:21:48.000000Z"
+            }
+        },
+        {
             "id": 3,
             "code": "CO-00003-2022",
             "name": "PANAMERICAN INTERNAL MEDICINE INC",
@@ -470,8 +485,8 @@
             "pivot": {
                 "patient_id": 1,
                 "company_id": 3,
-                "created_at": "2022-05-06T10:56:35.000000Z",
-                "updated_at": "2022-05-06T10:56:35.000000Z"
+                "created_at": "2022-05-06T21:21:48.000000Z",
+                "updated_at": "2022-05-06T21:21:48.000000Z"
             }
         }
     ],
@@ -490,13 +505,6 @@
             "name": "name emergency contact 1",
             "cellphone": "cellphone emergency contacts 1",
             "relationship": "relationship emergency contacts 1",
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
-        },
-        {
-            "name": "name emergency contact 2",
-            "cellphone": "cellphone emergency contacts 2",
-            "relationship": "relationship emergency contacts 2",
             "created_at": "2022-03-17T20:45:39.000000Z",
             "updated_at": "2022-03-17T20:45:39.000000Z"
         }
@@ -555,7 +563,7 @@
     "created_at": "2022-03-17T20:45:39.000000Z",
     "updated_at": "2022-03-17T20:45:39.000000Z"
 }
-```
+`````
 
 #
 
@@ -570,7 +578,7 @@
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
-    "company_id": 3,
+    "companies": [1,3],
     "public_note": "Note public",
     "private_note": "Note private",
     "patient_private":{

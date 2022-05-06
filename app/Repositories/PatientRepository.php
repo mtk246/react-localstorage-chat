@@ -191,11 +191,14 @@ class PatientRepository
             }
 
             /** Company */
-            if (isset($data["company_id"])) {
-                $company = Company::find($data["company_id"]);
+            if (isset($data["companies"])) {
                 /** Attached patient to company */
-                if (is_null($patient->companies()->find($company->id))) {
-                    $patient->companies()->attach($company->id);
+                foreach ($data["companies"] as $dataCompany) {
+                    $company = Company::find($dataCompany);
+
+                    if (is_null($patient->companies()->find($company->id))) {
+                        $patient->companies()->attach($company->id);
+                    }
                 }
             }
 
@@ -516,7 +519,7 @@ class PatientRepository
             }
 
             /** Company */
-            if (isset($data["company_id"])) {
+            if (isset($data["companies"])) {
                 $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
                     $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
                 })->get();
@@ -524,14 +527,22 @@ class PatientRepository
                 /** Detach Company */
                 foreach ($companies as $company) {
                     $validated = false;
-                    if ($data['company_id'] != $company->id) {
-                        $patient->companies()->detach($company->id);
+                    foreach ($data["companies"] as $dataCompany) {
+                        if ($dataCompany == $company->id) {
+                            $validated = true;
+                            break;
+                        }
                     }
+                    if (!$validated) $patient->companies()->detach($company->id);
                 }
 
                 /** Attached patient to company */
-                if (is_null($patient->companies()->find($data['company_id']))) {
-                    $patient->companies()->attach($data['company_id']);
+                foreach ($data["companies"] as $dataCompany) {
+                    $company = Company::find($dataCompany);
+
+                    if (is_null($patient->companies()->find($company->id))) {
+                        $patient->companies()->attach($company->id);
+                    }
                 }
             }
 
