@@ -38,6 +38,7 @@
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
+    "company_id": 2,
     "public_note": "Some note publics",
     "private_note": "Some note privates",
     "patient_private":{
@@ -85,12 +86,14 @@
         "name": "name",
         "phone": "phone"
     },
-    "employment": {
-        "employer_name": "employer name",
-        "employer_address": "employer address",
-        "employer_phone": "employer phone",
-        "position": "patient position"
-    },
+    "employments": [
+        {
+            "employer_name": "employer name",
+            "employer_address": "employer address",
+            "employer_phone": "employer phone",
+            "position": "patient position"
+        }
+    ],
     "emergency_contacts": [
         {
             "name": "name emergency contact 1",
@@ -263,14 +266,17 @@
             "created_at": "2022-03-17T20:45:39.000000Z",
             "updated_at": "2022-03-17T20:45:39.000000Z"
         },
-        "employment": {
-            "employer_name": "employer name",
-            "employer_address": "employer address",
-            "employer_phone": "employer phone",
-            "position": "patient position",
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
-        },
+        "companies": [],
+        "employments": [
+            {
+                "employer_name": "employer name",
+                "employer_address": "employer address",
+                "employer_phone": "employer phone",
+                "position": "patient position",
+                "created_at": "2022-03-17T20:45:39.000000Z",
+                "updated_at": "2022-03-17T20:45:39.000000Z"
+            }
+        ],
         "emergency_contacts": [
             {
                 "name": "name emergency contact 1",
@@ -452,14 +458,33 @@
         "created_at": "2022-03-17T20:45:39.000000Z",
         "updated_at": "2022-03-17T20:45:39.000000Z"
     },
-    "employment": {
-        "employer_name": "employer name",
-        "employer_address": "employer address",
-        "employer_phone": "employer phone",
-        "position": "patient position",
-        "created_at": "2022-03-17T20:45:39.000000Z",
-        "updated_at": "2022-03-17T20:45:39.000000Z"
-    },
+    "companies": [
+        {
+            "id": 3,
+            "code": "CO-00003-2022",
+            "name": "PANAMERICAN INTERNAL MEDICINE INC",
+            "npi": "1396903308",
+            "created_at": "2022-05-04T01:38:14.000000Z",
+            "updated_at": "2022-05-04T01:38:14.000000Z",
+            "status": false,
+            "pivot": {
+                "patient_id": 1,
+                "company_id": 3,
+                "created_at": "2022-05-06T10:56:35.000000Z",
+                "updated_at": "2022-05-06T10:56:35.000000Z"
+            }
+        }
+    ],
+    "employments": [
+        {
+            "employer_name": "employer name",
+            "employer_address": "employer address",
+            "employer_phone": "employer phone",
+            "position": "patient position",
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        }
+    ],
     "emergency_contacts": [
         {
             "name": "name emergency contact 1",
@@ -545,6 +570,7 @@
     "driver_license": "Driver License",
     "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
+    "company_id": 3,
     "public_note": "Note public",
     "private_note": "Note private",
     "patient_private":{
@@ -592,12 +618,14 @@
         "name": "name",
         "phone": "phone"
     },
-    "employment": {
-        "employer_name": "employer name",
-        "employer_address": "employer address",
-        "employer_phone": "employer phone",
-        "position": "patient position"
-    },
+    "employments": [
+        {
+            "employer_name": "employer name",
+            "employer_address": "employer address",
+            "employer_phone": "employer phone",
+            "position": "patient position"
+        }
+    ],
     "emergency_contacts": [
         {
             "name": "name emergency contact 1",
