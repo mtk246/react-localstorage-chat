@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\IpRestriction;
+use App\Models\IpRestrictionMult;
 use App\Models\User;
 
 class RestrictIpAddress
@@ -18,11 +19,12 @@ class RestrictIpAddress
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
         if (isset($request->email)) {
             $validate = null;
             $user = User::where('email', $request->email)->first();
-            $restrictions = IpRestriction::where([
+            $billingCompany = $user->billingCompanies->first();
+
+            $restrictions = IpRestrictionMult::where([
                 'ip_beginning' => $request->ip(),
                 'rank'         => false
             ])->orWhere([
@@ -30,16 +32,28 @@ class RestrictIpAddress
                 ['ip_finish',    '>=', $request->ip()],
                 ['rank',         '=',  true]
             ])->get();
+
             foreach ($restrictions as $restriction) {
-                $users = $restriction->users;
+                $ipRestriction = $restriction->ipRestriction;
+                if ($ipRestriction->entity == 'user') {
+                    /** Restriction by user */
+                    $validate = $ipRestriction->users->where('id', $user->id)->first();
+                    if (isset($validate)) break;
+
+                }
                 /** Restriction by billing company */
-                $validate = $restriction->billingCompanies->where('id', $user->billingCompany->id ?? null)->first();
-                if (isset($validate)) break;
-
-                /** Restriction by roles */
-
-                /** Restriction by user */
-                $validate = $restriction->users->where('id', $user->id)->first();
+                else if ($ipRestriction->entity == 'role') {
+                    /** Restriction by roles */
+                    $roles = $user->roles;
+                    foreach ($roles as $role) {
+                        $validate = $ipRestriction->roles->where('id', $role->id)->first();
+                        if (isset($validate)) break;
+                    }
+                }
+                else {
+                    $validate = ($ipRestriction->billing_company_id == ($billingCompany->id ?? null)) ? true : null;
+                    if (isset($validate)) break;
+                }
                 if (isset($validate)) break;
             }
             if ($validate) {
