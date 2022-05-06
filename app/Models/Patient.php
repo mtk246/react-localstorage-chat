@@ -157,6 +157,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * The companies that belong to the patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class)->withTimestamps();
+    }
+
+    /**
      * The insurancePlans that belong to the Patient.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

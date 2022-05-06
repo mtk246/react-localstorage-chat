@@ -80,6 +80,16 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * The patients that belong to the company.
+     *
+     * @return BelongsToMany
+     */
+    public function patients(): BelongsToMany
+    {
+        return $this->belongsToMany(Patient::class)->withTimestamps();
+    }
+
+    /**
      * The services that belong to the company.
      *
      * @return BelongsToMany

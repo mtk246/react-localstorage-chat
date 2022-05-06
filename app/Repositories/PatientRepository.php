@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
 use App\Models\BillingCompany;
+use App\Models\Company;
 use App\Models\Patient;
 use App\Models\PatientPrivate;
 use App\Models\PrivateNote;
@@ -189,6 +190,15 @@ class PatientRepository
                 }
             }
 
+            /** Company */
+            if (isset($data["company_id"])) {
+                $company = Company::find($data["company_id"]);
+                /** Attached patient to company */
+                if (is_null($patient->companies()->find($company->id))) {
+                    $patient->companies()->attach($company->id);
+                }
+            }
+
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
                 $insurancePlans = $patient->insurancePlans;
@@ -201,7 +211,7 @@ class PatientRepository
                             break;
                         }
                     }
-                    if (!$validated) $patient->insurancePlan()->detach($insurancePlan->id);
+                    if (!$validated) $patient->insurancePlans()->detach($insurancePlan->id);
                 }
 
                 /** Attach new insurance plan*/
@@ -303,6 +313,7 @@ class PatientRepository
             },
             "marital",
             "guarantor",
+            "companies",
             "employments",
             "patientPrivate",
             "emergencyContacts",
@@ -330,6 +341,7 @@ class PatientRepository
             },
             "marital",
             "guarantor",
+            "companies",
             "employments",
             "patientPrivate",
             "emergencyContacts",
@@ -503,6 +515,26 @@ class PatientRepository
                 }
             }
 
+            /** Company */
+            if (isset($data["company_id"])) {
+                $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+                })->get();
+                
+                /** Detach Company */
+                foreach ($companies as $company) {
+                    $validated = false;
+                    if ($data['company_id'] != $company->id) {
+                        $patient->companies()->detach($company->id);
+                    }
+                }
+
+                /** Attached patient to company */
+                if (is_null($patient->companies()->find($data['company_id']))) {
+                    $patient->companies()->attach($data['company_id']);
+                }
+            }
+
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
                 $insurancePlans = $patient->insurancePlans;
@@ -515,7 +547,7 @@ class PatientRepository
                             break;
                         }
                     }
-                    if (!$validated) $patient->insurancePlan()->detach($insurancePlan->id);
+                    if (!$validated) $patient->insurancePlans()->detach($insurancePlan->id);
                 }
 
                 /** Attach new insurance plan*/
