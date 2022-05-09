@@ -28,7 +28,7 @@ class Permission extends Model implements PermissionHasRelationsContract, Audita
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description', 'module'];
+    protected $fillable = ['name', 'slug', 'description', 'module', 'constraint'];
 
     /**
      * Create a new model instance.
