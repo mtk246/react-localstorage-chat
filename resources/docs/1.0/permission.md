@@ -17,6 +17,10 @@
 - [Revoke permission user](#revoke-permission-user)
 - [Revoke permission role](#revoke-permission-role)
 - [Revoke role user](#revoke-role-user)
+- [Assign permissions role](#assign-permissions-role)
+- [Revoke permissions role](#revoke-permissions-role)
+- [Assign permissions user](#assign-permissions-user)
+- [Revoke permissions user](#revoke-permissions-user)
 
 
 <a name="basic-data"></a>
@@ -38,6 +42,10 @@
 | 12|PATCH   | `revoke permission user`   | `/permission/remove-permission-user/{user_id}/{permission_id}`|yes|revoke permission user|
 | 13|PATCH   | `revoke permission role`   | `/permission/remove-permission-role/{role_id}/{permission_id}`|yes|revoke permission role|
 | 14|PATCH   | `revoke role user`         | `/permission/remove-role-user/{user_id}/{role_id}`|yes|revoke role user|
+| 15 |PATCH   | `assign permissions role`   | `/permission/assign-permissions-role/{role_id}` |yes|assign permissions role|
+| 16 |PATCH   | `assign permissions user`   | `/permission/assign-permissions-user/{user_id}` |yes|assign permissions user|
+| 15 |PATCH   | `revoke permissions role`   | `/permission/remove-permissions-role/{role_id}` |yes|revoke permissions role|
+| 16 |PATCH   | `revoke permissions user`   | `/permission/remove-permissions-user/{user_id}` |yes|revoke permissions user|
 
 <a name="get-all-roles"></a>
 ## Get all roles
@@ -822,5 +830,213 @@
 }
 ```
 
->{success} 200 assign successfully
+<a name="assign-permissions-role"></a>
+## Assign Permissions Role
 
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`role_id integer`
+
+## Body request Example
+
+```json
+{
+    "permissions":[1,2,3]
+}
+```
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "SUPER_USER",
+    "guard_name": "api",
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2021-12-23T18:08:35.000000Z",
+    "permissions": [
+        {
+            "id": 3,
+            "name": "edit permissions",
+            "guard_name": "api",
+            "created_at": "2022-01-04T01:48:33.000000Z",
+            "updated_at": "2022-01-04T01:48:33.000000Z",
+            "pivot": {
+                "role_id": 1,
+                "permission_id": 3
+            }
+        }
+    ]
+}
+```
+
+<a name="assign-permissions-user"></a>
+## Assign Permissions User
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`user_id integer`
+
+## Body request Example
+
+```json
+{
+    "permissions":[1,2,3]
+}
+```
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "hola",
+    "email": "admin@billing.com",
+    "email_verified_at": null,
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2022-01-05T18:02:27.000000Z",
+    "DOB": "2021-12-26",
+    "sex": "m",
+    "lastName": "test",
+    "firstName": "test",
+    "middleName": "testing",
+    "token": null,
+    "available": true,
+    "permissions": [
+        {
+            "id": 1,
+            "name": "edit articles",
+            "guard_name": "api",
+            "created_at": "2022-01-04T01:45:08.000000Z",
+            "updated_at": "2022-01-04T01:45:08.000000Z",
+            "pivot": {
+                "model_id": 1,
+                "permission_id": 1,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ]
+}
+```
+
+<a name="remove-permissions-role"></a>
+## Remove Permissions Role
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`role_id integer`
+
+## Body request Example
+
+```json
+{
+    "permissions":[1,2,3]
+}
+```
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "SUPER_USER",
+    "guard_name": "api",
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2021-12-23T18:08:35.000000Z",
+    "permissions": [
+        {
+            "id": 3,
+            "name": "edit permissions",
+            "guard_name": "api",
+            "created_at": "2022-01-04T01:48:33.000000Z",
+            "updated_at": "2022-01-04T01:48:33.000000Z",
+            "pivot": {
+                "role_id": 1,
+                "permission_id": 3
+            }
+        }
+    ]
+}
+```
+<a name="revoke-permissions-user"></a>
+## Revoke Permissions User
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`user_id integer`
+
+## Body request Example
+
+```json
+{
+    "permissions":[1,2,3]
+}
+```
+
+## Response
+
+```json
+{
+    "id": 1,
+    "name": "hola",
+    "email": "admin@billing.com",
+    "email_verified_at": null,
+    "created_at": "2021-12-23T18:08:35.000000Z",
+    "updated_at": "2022-01-05T18:02:27.000000Z",
+    "DOB": "2021-12-26",
+    "sex": "m",
+    "lastName": "test",
+    "firstName": "test",
+    "middleName": "testing",
+    "token": null,
+    "available": true,
+    "permissions": [
+        {
+            "id": 1,
+            "name": "edit articles",
+            "guard_name": "api",
+            "created_at": "2022-01-04T01:45:08.000000Z",
+            "updated_at": "2022-01-04T01:45:08.000000Z",
+            "pivot": {
+                "model_id": 1,
+                "permission_id": 1,
+                "model_type": "App\\Models\\User"
+            }
+        }
+    ]
+}
+```
+
+>{success} 200 remove permissions successfully

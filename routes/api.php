@@ -62,13 +62,20 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::post("create-role",[\App\Http\Controllers\RolePermissionController::class,'createRole']);
         Route::post("create-permission",[\App\Http\Controllers\RolePermissionController::class,'createPermission']);
 
-        Route::patch("assign-permissions-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionsRole']);
+        Route::patch("assign-permissions-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionRole']);
         Route::patch("assign-permissions-user/{permission_id}/{user_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionUser']);
         Route::patch("assign-role-user/{user_id}/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'assignRoleUser']);
 
         Route::patch("remove-permission-user/{user_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionUser']);
         Route::patch("remove-permission-role/{role_id}/{permission_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionRole']);
         Route::patch("remove-role-user/{user_id}/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'revokeRoleUser']);
+
+
+        Route::patch("assign-permissions-role/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionsRole']);
+        Route::patch("assign-permissions-user/{user_id}",[\App\Http\Controllers\RolePermissionController::class,'assignPermissionsUser']);
+
+        Route::patch("remove-permissions-user/{user_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionsUser']);
+        Route::patch("remove-permissions-role/{role_id}",[\App\Http\Controllers\RolePermissionController::class,'revokePermissionsRole']);
     });
 
     Route::prefix("setting")->middleware("auth:api")->group(function() {

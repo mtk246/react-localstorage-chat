@@ -6,7 +6,7 @@ use App\Http\Requests\CreatePermissionRequest;
 use App\Http\Requests\CreateRoleRequest;
 use App\Repositories\RolePermissionRepository;
 use Illuminate\Http\JsonResponse;
-//use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class RolePermissionController extends Controller
 {
@@ -100,9 +100,21 @@ class RolePermissionController extends Controller
      * @param int $permission_id
      * @return JsonResponse
      */
-    public function assignPermissionsRole(int $role_id,int $permission_id): JsonResponse
+    public function assignPermissionRole(int $role_id, int $permission_id): JsonResponse
     {
         $rs = $this->RolePermissionRepository->assignPermissionRole($role_id,$permission_id);
+
+        return $rs ? response()->json($rs) : response()->json("error assign permissions to role (role or permission not found)",404);
+    }
+
+    /**
+     * @param int $role_id
+     * @param int $permission_id
+     * @return JsonResponse
+     */
+    public function assignPermissionsRole(Request $request, int $role_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->assignPermissionsRole($request, $role_id);
 
         return $rs ? response()->json($rs) : response()->json("error assign permissions to role (role or permission not found)",404);
     }
@@ -133,6 +145,18 @@ class RolePermissionController extends Controller
 
     /**
      * @param int $user_id
+     * @param int $permission_id
+     * @return JsonResponse
+     */
+    public function assignPermissionsUser(Request $request, int $user_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->assignPermissionsUser($request, $user_id);
+
+        return $rs ? response()->json($rs) : response()->json("error assign permission to user (user or permission not found)",404);
+    }
+
+    /**
+     * @param int $user_id
      * @param int $role_id
      * @return JsonResponse
      */
@@ -155,6 +179,13 @@ class RolePermissionController extends Controller
         return $rs ? response()->json($rs) : response()->json("error, revoking permission role (role or permision not found)",404);
     }
 
+    public function revokePermissionsRole(Request $request, int $role_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->revokePermissionsRole($request, $role_id);
+
+        return $rs ? response()->json($rs) : response()->json("error, revoking permission role (role or permision not found)",404);
+    }
+
     /**
      * @param int $user_id
      * @param int $permission_id
@@ -163,6 +194,13 @@ class RolePermissionController extends Controller
     public function revokePermissionUser(int $user_id,int $permission_id): JsonResponse
     {
         $rs = $this->RolePermissionRepository->revokePermissionUser($user_id,$permission_id);
+
+        return $rs ? response()->json($rs) : response()->json("error, revoking permission user (user or permission not found)",404);
+    }
+
+    public function revokePermissionsUser(Request $request, int $user_id): JsonResponse
+    {
+        $rs = $this->RolePermissionRepository->revokePermissionsUser($request, $user_id);
 
         return $rs ? response()->json($rs) : response()->json("error, revoking permission user (user or permission not found)",404);
     }

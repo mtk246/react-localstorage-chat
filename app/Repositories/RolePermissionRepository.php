@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-//use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-//use Spatie\Permission\Exceptions\RoleDoesNotExist;
+use Illuminate\Http\Request;
 use App\Roles\Models\Permission;
 use App\Roles\Models\Role;
 
@@ -161,6 +160,47 @@ class RolePermissionRepository
 
     /**
      * @param int $role_id
+     */
+    public function assignPermissionsRole(Request $request, int $role_id)
+    {
+        try {
+            $permissions = $request->permissions ?? [];
+            $role = Role::find($role_id);
+            foreach ($permissions as $permission_id) {
+                $permission = Permission::find($permission_id);
+
+                $role->attachPermission($permission);
+            }
+            return $role->load('permissions');
+        }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
+            return response()->json($e->getMessage(),500);
+        }
+    }
+
+    /**
+     * @param int $permission_id
+     * @param int $user_id
+     */
+    public function assignPermissionsUser(Request $request, int $user_id)
+    {
+        try {
+            $permissions = $request->permissions ?? [];
+            $user = User::whereId($user_id)->first();
+
+            foreach ($permissions as $permission_id) {
+                $permission = Permission::find($permission_id);
+
+                $user->attachPermission($permission);
+            }
+            return $user->load('permissions');
+        } catch(PermissionDoesNotExist | \Exception $exception){
+            return response()->json($exception->getMessage(),500);
+        }
+    }
+
+
+    /**
+     * @param int $role_id
      * @param int $user_id
      * @return User|Builder|Model|JsonResponse|object|null
      */
@@ -183,8 +223,9 @@ class RolePermissionRepository
      * @param int $permission_id
      * @return User|Builder|Model|JsonResponse|object|null
      */
-    public function revokePermissionUser(int $user_id,int $permission_id){
-        try{
+    public function revokePermissionUser(int $user_id,int $permission_id)
+    {
+        try {
             $permission = Permission::find($permission_id);
             $user = User::whereId($user_id)->first();
 
@@ -192,7 +233,7 @@ class RolePermissionRepository
 
             $user->detachPermission($permission);
             return $user->load('permissions');
-        }catch (PermissionDoesNotExist | \Exception $e){
+        } catch (PermissionDoesNotExist | \Exception $e){
             return response()->json($e->getMessage(),500);
         }
     }
@@ -211,6 +252,48 @@ class RolePermissionRepository
             return $role->load('permissions');
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
             return response()->json($e->getMessage(),500);
+        }
+    }
+
+
+    /**
+     * @param int $user_id
+     * @return User|Builder|Model|JsonResponse|object|null
+     */
+    public function revokePermissionsUser(Request $request, int $user_id)
+    {
+        try {
+            $permissions = $request->permissions ?? [];
+            $user = User::whereId($user_id)->first();
+
+            foreach ($permissions as $permission_id) {
+                $permission = Permission::find($permission_id);
+
+                $user->detachPermission($permission);
+            }
+            return $user->load('permissions');
+        }catch(PermissionDoesNotExist | \Exception $exception){
+            return response()->json($exception->getMessage(),500);
+        }
+    }
+
+    /**
+     * @param int $role_id
+     */
+    public function revokePermissionsRole(Request $request, int $role_id)
+    {
+        try {
+            $permissions = $request->permissions ?? [];
+            $role = Role::whereId($role_id)->first();
+
+            foreach ($permissions as $permission_id) {
+                $permission = Permission::find($permission_id);
+
+                $role->detachPermission($permission);
+            }
+            return $role->load('permissions');
+        } catch(PermissionDoesNotExist | \Exception $exception){
+            return response()->json($exception->getMessage(),500);
         }
     }
 }
