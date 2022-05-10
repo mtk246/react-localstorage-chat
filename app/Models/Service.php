@@ -15,14 +15,14 @@ class Service extends Model implements Auditable
         "code",
         "name",
         "description",
-        "group_1",
-        "group_2",
-        "type",
+        "service_group_1_id",
+        "service_group_2_id",
+        "service_type_id",
         "aplicable_to",
-        "type_of_service",
-        "rev_center",
-        "stmt_description",
-        "special_instruction",
+        "service_type_of_service_id",
+        "service_rev_center_id",
+        "service_stmt_description_id",
+        "service_special_instruction_id",
         "rev_code",
         "use_time_units",
         "ndc_number",
@@ -31,17 +31,111 @@ class Service extends Model implements Auditable
         "units_limit",
         "requires_claim_note",
         "requires_supervisor",
-        "requires_authorization"
+        "requires_authorization",
+        "std_price",
+        "status",
+        "billing_company_id",
+        "company_id"
     ];
 
     /**
-     *  Service belongs to InsurancePlans.
+     * Service belongs to BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingCompany()
+    {
+        return $this->belongsTo(BillingCompany::class);
+    }
+
+    /**
+     * Service belongs to Company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Service belongs to ServiceGroup1.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceGroup1()
+    {
+        return $this->belongsTo(ServiceGroup::class, 'service_group_1_id');
+    }
+
+    /**
+     * Service belongs to ServiceGroup2.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceGroup2()
+    {
+        return $this->belongsTo(ServiceGroup::class, 'service_group_2_id');
+    }
+
+    /**
+     * Service belongs to ServiceType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceType()
+    {
+        return $this->belongsTo(ServiceType::class);
+    }
+
+    /**
+     * Service belongs to ServiceTypeOfService.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceTypeOfService()
+    {
+        return $this->belongsTo(ServiceTypeOfService::class);
+    }
+
+    /**
+     * Service belongs to ServiceRevCenter.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceRevCenter()
+    {
+        return $this->belongsTo(ServiceRevCenter::class);
+    }
+
+    /**
+     * Service belongs to ServiceStmtDescription.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceStmtDescription()
+    {
+        return $this->belongsTo(ServiceStmtDescription::class);
+    }
+
+    /**
+     * Service belongs to ServiceSpecialInstruction.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceSpecialInstruction()
+    {
+        return $this->belongsTo(ServiceSpecialInstruction::class);
+    }
+
+    /**
+     *  Service belongs to InsurancePlanServices.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function insurancePlans(): BelongsToMany
+    public function insurancePlanServices()
     {
-        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
+        return $this->belongsToMany(InsurancePlanService::class)->withTimestamps();
     }
 
     /**
@@ -49,7 +143,7 @@ class Service extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function publicNotes()
+    public function publicNote()
     {
         return $this->morphMany(PublicNote::class, 'publishable');
     }

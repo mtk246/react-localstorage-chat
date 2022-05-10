@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             FacilityTypeSeeder::class,
-            DataTestSeeder::class
+            DataTestSeeder::class,
+            ServiceDataSeeder::class
         ]);
     }
 }

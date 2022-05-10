@@ -272,6 +272,22 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\TaxonomyController::class,'getOneTaxonomy']);
     });
 
+    Route::prefix("service")->middleware([
+        "auth:api",
+        'role:superuser|biller|billingmanager',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\ServiceController::class,'createService']);
+        Route::put("/{id}",[\App\Http\Controllers\ServiceController::class,'updateService']);
+
+        Route::get("/get-list-service-groups",[\App\Http\Controllers\ServiceController::class,'getAllServiceGroups']);
+        Route::get("/get-list-service-types",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypes']);
+        Route::get("/get-list-service-type-of-services",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypeOfServices']);
+        Route::get("/get-list-service-stmt-descriptions",[\App\Http\Controllers\ServiceController::class,'getAllServiceStmtDescriptions']);
+        Route::get("/get-list-service-special-instructions",[\App\Http\Controllers\ServiceController::class,'getAllServiceSpecialInstructions']);
+        Route::get("/",[\App\Http\Controllers\ServiceController::class,'getAllServices']);
+        Route::get("/{id}",[\App\Http\Controllers\ServiceController::class,'getOneService']);
+    });
+
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });

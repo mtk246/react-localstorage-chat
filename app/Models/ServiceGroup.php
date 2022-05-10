@@ -9,5 +9,5 @@ class ServiceGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_type', 'group'];
+    protected $fillable = ['group'];
 }

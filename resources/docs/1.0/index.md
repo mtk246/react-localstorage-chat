@@ -42,5 +42,8 @@
 - ## Patient
     - [Patient](/{{route}}/{{version}}/patient)
 
+- ## Service
+    - [Service](/{{route}}/{{version}}/service)
+
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)
