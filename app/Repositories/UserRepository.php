@@ -472,4 +472,13 @@ class UserRepository{
         $user = User::where('profile_id', $profile->id)->first();
         return $user;
     }
+
+    public function updateLang(string $lang)
+    {
+        $user = User::whereId(auth()->id())->first();
+        $user->update([
+            'language' => $lang,
+        ]);
+        return $user;
+    }
 }

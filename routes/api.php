@@ -86,7 +86,7 @@ Route::prefix("v1")/*->middleware('audit')*/
             Route::put("{id}", [\App\Http\Controllers\IpRestrictionController::class,'update']);
             Route::delete("{id}", [\App\Http\Controllers\IpRestrictionController::class,'destroy']);
         });
-
+        Route::patch("/lang", [\App\Http\Controllers\UserController::class,'updateLang']);
     });
 
     Route::prefix("billing-company")->group(function(){

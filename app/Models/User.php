@@ -103,7 +103,8 @@ class User extends Authenticatable implements JWTSubject, Auditable
         'last_login',
         'isLogged',
         'isBlocked',
-        'profile_id'
+        'profile_id',
+        'language'
     ];
 
     /**

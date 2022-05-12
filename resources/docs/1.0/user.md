@@ -17,6 +17,7 @@
 - [Update password](#update-password)
 - [Search by ssn](#search-by-ssn)
 - [New token](#new-token)
+- [Update language](#update-lang)
 
 
 <a name="basic-data"></a>
@@ -39,6 +40,7 @@
 | 12|PATCH | `update password`   | `/user/update-password` |yes|update password|
 | 13|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
 | 14 |POST | `new token`   | `/user/new-token` |no|generate new token user|
+| 15|PATCH | `update language`   | `/setting/lang` |yes|update language|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -814,3 +816,43 @@
 
 
 #
+
+<a name="update-lang"></a>
+## Upadate language
+
+>{primary} the parameter "language" can have the values "en", "es"
+
+### Body request example
+
+```json
+{
+    "language":"es"
+}
+```
+
+>{success} 200 Response 
+
+```json
+{
+    "id": 1,
+    "email": "admin@billing.com",
+    "email_verified_at": null,
+    "created_at": "2022-04-20T21:52:52.000000Z",
+    "updated_at": "2022-05-12T19:20:07.000000Z",
+    "token": null,
+    "isLogged": true,
+    "isBlocked": false,
+    "usercode": "US-00001-2022",
+    "userkey": null,
+    "status": false,
+    "last_login": "2022-05-12 18:20:58",
+    "profile_id": 1,
+    "language": "es",
+    "billing_company_id": null
+}
+```
+
+
+#
+
+>{warning} 404 user not found, 500 some exception

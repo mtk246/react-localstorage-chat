@@ -368,4 +368,11 @@ class UserController extends Controller
 
         return $rs ? response()->json($ssn) : response()->json("user not found",404);
     }
+
+    public function updateLang(Request $request)
+    {
+        $rs = $this->userRepository->updateLang($request->input("language"));
+
+        return $rs ? response()->json($rs) : response()->json("Error updating language",400);
+    }
 }
