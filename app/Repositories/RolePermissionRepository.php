@@ -228,8 +228,16 @@ class RolePermissionRepository
         try {
             $permission = Permission::find($permission_id);
             $user = User::whereId($user_id)->first();
-
             if( is_null($user) ) return null;
+            
+            $permissionConstraints = Permission::whereConstraint($permission->slug)->get();
+            foreach ($permissionConstraints as $permissionC) {
+                $permissionsC = Permission::whereConstraint($permissionC->slug)->get();
+                foreach ($permissionsC as $permC) {
+                    $user->detachPermission($permC);
+                }
+                $user->detachPermission($permissionC);
+            }
 
             $user->detachPermission($permission);
             return $user->load('permissions');
@@ -247,7 +255,14 @@ class RolePermissionRepository
         try{
             $role = Role::find($role_id);
             $permission = Permission::find($permission_id);
-
+            $permissionConstraints = Permission::whereConstraint($permission->slug)->get();
+            foreach ($permissionConstraints as $permissionC) {
+                $permissionsC = Permission::whereConstraint($permissionC->slug)->get();
+                foreach ($permissionsC as $permC) {
+                    $role->detachPermission($permC);
+                }
+                $role->detachPermission($permissionC);
+            }
             $role->detachPermission($permission);
             return $role->load('permissions');
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
