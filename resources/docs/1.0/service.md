@@ -9,6 +9,7 @@
 - [Get all service](#get-all-service)
 - [Get one service](#get-one-service)
 - [Update service](#Update-service)
+- [Change status service](#change-status-service)
 - [Get all service groups](#get-list-service-groups)
 - [Get all service types](#get-list-service-types)
 - [Get all service type of services](#get-list-service-type-of-services)
@@ -27,11 +28,12 @@
 | 2 |GET     | `Get all Service` | `/service/`     | yes            | Get all Service |
 | 3 |GET     | `Get one Service` | `/service/{id}` | yes            | Get one Service |
 | 4 |PUT     | `Update Service`  | `/service/{id}` | yes            | Update Service  |
-| 5 |GET | `Get all service groups`| `/service/get-list-service-groups`        |yes            |Get all service groups|
-| 6 |GET | `Get all service types`| `/service/get-list-service-types`        |yes            |Get all service types|
-| 7 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
-| 8 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
-| 9 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
+| 5 |PATCH   | `Change status Service`  | `/service/change-status/{id}` | yes            | Change status Service  |
+| 6 |GET | `Get all service groups`| `/service/get-list-service-groups`        |yes            |Get all service groups|
+| 7 |GET | `Get all service types`| `/service/get-list-service-types`        |yes            |Get all service types|
+| 8 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
+| 9 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
+| 10 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
 
 
 <a name="create-service"></a>
@@ -134,6 +136,35 @@
 
 #
 
+<a name="change-status-service"></a>
+## Change status Service
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in body
+
+```json
+{
+    "status": <boolean>
+}
+```
+## Response
+
+> {success} 204 No content
+
+
+#
+
+>{warning} 404 Service not founded
+
+#
 <a name="get-all-service"></a>
 ## Get All Service
 

@@ -302,6 +302,20 @@ class ServiceRepository
         }
     }
 
+    /**
+     * @param bool $status
+     * @param int $id
+     * @return bool|int
+     */
+    public function changeStatus(bool $status, int $id) {
+        try {
+            $service = Service::whereId($id)->update(['status' => $status]);
+            return $service;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function getAllServiceGroups() {
         return getList(ServiceGroup::class, 'group');
     }

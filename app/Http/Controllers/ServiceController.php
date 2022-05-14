@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Service\CreateServiceRequest;
 use App\Http\Requests\Service\UpdateServiceRequest;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ServiceRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -59,6 +60,18 @@ class ServiceController extends Controller
         $rs = $this->serviceRepository->updateService($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json("Error updating service",400);
+    }
+
+    /**
+     * @param ChangeStatus $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusRequest $request, int $id)
+    {
+        $rs = $this->serviceRepository->changeStatus($request->input("status"), $id);
+
+        return $rs ? response()->json([], 204) : response()->json("Error, service not found", 404);
     }
 
     public function getAllServiceGroups()

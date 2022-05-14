@@ -278,6 +278,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\ServiceController::class,'create']);
         Route::put("/{id}",[\App\Http\Controllers\ServiceController::class,'update']);
+        Route::patch("/change-status/{id}",[\App\Http\Controllers\ServiceController::class,"changeStatus"]);
 
         Route::get("/get-list-service-groups",[\App\Http\Controllers\ServiceController::class,'getAllServiceGroups']);
         Route::get("/get-list-service-types",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypes']);
