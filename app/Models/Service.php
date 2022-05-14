@@ -129,13 +129,23 @@ class Service extends Model implements Auditable
     }
 
     /**
+     *  Service belongs to InsurancePlans.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function insurancePlans()
+    {
+        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
+    }
+
+    /**
      *  Service belongs to InsurancePlanServices.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function insurancePlanServices()
     {
-        return $this->belongsToMany(InsurancePlanService::class)->withTimestamps();
+        return $this->hasMany(InsurancePlanService::class);
     }
 
     /**

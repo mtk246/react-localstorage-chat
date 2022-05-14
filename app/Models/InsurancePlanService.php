@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class InsurancePlanService extends Pivot
+class InsurancePlanService extends Model
 {
     use HasFactory;
+
+    protected $table = 'insurance_plan_service';
 
     protected $fillable = [
         "price",
@@ -15,6 +17,8 @@ class InsurancePlanService extends Pivot
         "insurance_plan_id",
         "service_id",
     ];
+
+    protected $with = ['insurancePlanServiceAliance'];
 
     /**
      * InsurancePlanService belongs to InsurancePlan.

@@ -103,6 +103,16 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * InsurancePlan has many InsurePlanServices.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function insurancePlanServices()
+    {
+        return $this->hasMany(InsurancePlanService::class);
+    }
+
+    /**
      * InsurancePlan belongs to Patients.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

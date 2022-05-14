@@ -6,11 +6,14 @@ use App\Models\BillingCompany;
 use App\Models\Service;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePlanService;
+use App\Models\InsurancePlanServiceAliance;
 use App\Models\ServiceGroup;
 use App\Models\ServiceType;
 use App\Models\ServiceTypeOfService;
 use App\Models\ServiceStmtDescription;
 use App\Models\ServiceSpecialInstruction;
+use App\Models\PublicNote;
+use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -63,7 +66,7 @@ class ServiceRepository
                 foreach ($data["insurance_plan_services"] as $insurance_plan_service) {
                     $insurance_plan = InsurancePlan::find($insurance_plan_service["insurance_plan_id"]);
                     /** Attached insurance plan to service */
-                    $insurance_plan_service = InsurancePlanService::create([
+                    $insurancePlanService = InsurancePlanService::create([
                         'insurance_plan_id' => $insurance_plan->id,
                         'service_id'        => $service->id,
                         'price'             => $insurance_plan_service['price'],
@@ -71,13 +74,12 @@ class ServiceRepository
                     ]);
 
                     /** Attached insurance plan service to aliance */
-
-                    if (isset($insurance_plan_service['insurance_plan_service_aliance'])) {
+                    if ($insurance_plan_service['aliance']) {
                         $aliance = $insurance_plan_service['insurance_plan_service_aliance'];
                         InsurancePlanServiceAliance::create([
                             "price"                     => $aliance['price'],
                             "percentage"                => $aliance['percentage'],
-                            "insurance_plan_service_id" => $insurance_plan_service->id
+                            "insurance_plan_service_id" => $insurancePlanService->id
                         ]);
                     }
                 }
@@ -118,7 +120,7 @@ class ServiceRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $services = Service::with([
-                "insurancePlans",
+                "insurancePlanServices",
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -133,7 +135,7 @@ class ServiceRepository
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $services = Service::with([
-                "insurancePlans",
+                "insurancePlanServices",
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -159,7 +161,7 @@ class ServiceRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $service = Service::whereId($id)->with([
-                "insurancePlans",
+                "insurancePlanServices",
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -174,7 +176,7 @@ class ServiceRepository
             ])->first();
         } else {
             $service = Service::whereId($id)->with([
-                "insurancePlans",
+                "insurancePlanServices",
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -243,13 +245,14 @@ class ServiceRepository
                     if ($insAliance) {
                         $insAliance->delete();
                     }
+                    $insurancePlanService->delete();
                 }
 
                 /** Update Insurance Plan Services */
                 foreach ($data["insurance_plan_services"] as $insurance_plan_service) {
                     $insurance_plan = InsurancePlan::find($insurance_plan_service["insurance_plan_id"]);
                     /** Attached insurance plan to service */
-                    $insurance_plan_service = InsurancePlanService::create([
+                    $insurancePlanService = InsurancePlanService::create([
                         'insurance_plan_id' => $insurance_plan->id,
                         'service_id'        => $service->id,
                         'price'             => $insurance_plan_service['price'],
@@ -258,12 +261,12 @@ class ServiceRepository
 
                     /** Attached insurance plan service to aliance */
 
-                    if (isset($insurance_plan_service['insurance_plan_service_aliance'])) {
+                    if ($insurance_plan_service['aliance']) {
                         $aliance = $insurance_plan_service['insurance_plan_service_aliance'];
                         InsurancePlanServiceAliance::create([
                             "price"                     => $aliance['price'],
                             "percentage"                => $aliance['percentage'],
-                            "insurance_plan_service_id" => $insurance_plan_service->id
+                            "insurance_plan_service_id" => $insurancePlanService->id
                         ]);
                     }
                 }

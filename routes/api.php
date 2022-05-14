@@ -276,8 +276,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
-        Route::post("/",[\App\Http\Controllers\ServiceController::class,'createService']);
-        Route::put("/{id}",[\App\Http\Controllers\ServiceController::class,'updateService']);
+        Route::post("/",[\App\Http\Controllers\ServiceController::class,'create']);
+        Route::put("/{id}",[\App\Http\Controllers\ServiceController::class,'update']);
 
         Route::get("/get-list-service-groups",[\App\Http\Controllers\ServiceController::class,'getAllServiceGroups']);
         Route::get("/get-list-service-types",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypes']);

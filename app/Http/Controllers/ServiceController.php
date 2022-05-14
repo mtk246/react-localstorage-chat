@@ -25,7 +25,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->create($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json("Error creating service",400);
+        return $rs ? response()->json($rs) : response()->json("Error creating service", 400);
     }
 
     /**
@@ -54,7 +54,7 @@ class ServiceController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function updateService(UpdateServiceRequest $request, int $id)
+    public function update(UpdateServiceRequest $request, int $id)
     {
         $rs = $this->serviceRepository->updateService($request->validated(), $id);
 

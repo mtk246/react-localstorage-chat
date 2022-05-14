@@ -40,7 +40,49 @@
 ### Body request example
 
 ```json
-
+{
+    "name": "Service1",
+    "description":"Description service 1",
+    "aplicable_to": "Aplicable to service 1",
+    "rev_code": "Rev Code service 1",
+    "use_time_units": "Use time to service 1",
+    "ndc_number": "Number to service 1",
+    "units": "Unit to service 1",
+    "measure": "Mesure to service 1",
+    "units_limit": "limit to service 1",
+    "requires_claim_note": true,
+    "requires_supervisor": true,
+    "requires_authorization": true,
+    "service_group_1_id": 1,
+    "service_group_2_id": 2,
+    "service_type_id": 3,
+    "service_type_of_service_id": 1,
+    "service_rev_center_id": 2,
+    "service_stmt_description_id": 2,
+    "service_special_instruction_id": 1,
+    "std_price": 50.54,
+    "billing_company_id": 1,
+    "company_id": 2,
+    "insurance_plan_services": [
+        {
+            "insurance_plan_id": 1,
+            "price": 24.23,
+            "aliance": true,
+            "insurance_plan_service_aliance": {
+                "price": 20.23,
+                "percentage": true
+            }
+        },
+        {
+            "insurance_plan_id": 2,
+            "price": 24.23,
+            "aliance": false,
+            "insurance_plan_service_aliance": null
+        }
+    ],
+    "public_note": "Public note to service 1",
+    "private_note": "Private note to service 1"
+}
 ```
 
 ## Param in header
@@ -58,10 +100,35 @@
 
 #
 
-
-
 ```json
-
+{
+    "code": "SE-00001-2022",
+    "name": "Service1",
+    "description": "Description service 1",
+    "service_group_1_id": 1,
+    "service_group_2_id": 2,
+    "service_type_id": 3,
+    "aplicable_to": "Aplicable to service 1",
+    "service_type_of_service_id": 1,
+    "service_rev_center_id": 2,
+    "service_stmt_description_id": 2,
+    "service_special_instruction_id": 1,
+    "rev_code": "Rev Code service 1",
+    "use_time_units": "Use time to service 1",
+    "ndc_number": "Number to service 1",
+    "units": "Unit to service 1",
+    "measure": "Mesure to service 1",
+    "units_limit": "limit to service 1",
+    "requires_claim_note": true,
+    "requires_supervisor": true,
+    "requires_authorization": true,
+    "std_price": 50.54,
+    "billing_company_id": 1,
+    "company_id": 2,
+    "updated_at": "2022-05-14T01:36:46.000000Z",
+    "created_at": "2022-05-14T01:36:46.000000Z",
+    "id": 2
+}
 ```
 
 
@@ -86,7 +153,146 @@
 
 
 ```json
-
+[
+    {
+        "id": 9,
+        "code": "SE-00001-2022",
+        "name": "Service1",
+        "description": "Description service 1",
+        "aplicable_to": "Aplicable to service 1",
+        "rev_code": "Rev Code service 1",
+        "use_time_units": "Use time to service 1",
+        "ndc_number": "Number to service 1",
+        "units": "Unit to service 1",
+        "measure": "Mesure to service 1",
+        "units_limit": "limit to service 1",
+        "requires_claim_note": true,
+        "requires_supervisor": true,
+        "requires_authorization": true,
+        "created_at": "2022-05-14T04:08:44.000000Z",
+        "updated_at": "2022-05-14T04:08:44.000000Z",
+        "service_group_1_id": 1,
+        "service_group_2_id": 2,
+        "service_type_id": 3,
+        "service_type_of_service_id": 1,
+        "service_rev_center_id": 2,
+        "service_stmt_description_id": 2,
+        "service_special_instruction_id": 1,
+        "company_id": 2,
+        "billing_company_id": 1,
+        "status": null,
+        "std_price": "50.54",
+        "insurance_plan_services": [
+            {
+                "id": 11,
+                "price": "24.23",
+                "aliance": true,
+                "insurance_plan_id": 1,
+                "service_id": 9,
+                "created_at": "2022-05-14T04:08:44.000000Z",
+                "updated_at": "2022-05-14T04:08:44.000000Z",
+                "insurance_plan_service_aliance": {
+                    "id": 3,
+                    "price": "20.23",
+                    "percentage": true,
+                    "insurance_plan_service_id": 11,
+                    "created_at": "2022-05-14T04:08:44.000000Z",
+                    "updated_at": "2022-05-14T04:08:44.000000Z"
+                }
+            },
+            {
+                "id": 12,
+                "price": "24.23",
+                "aliance": false,
+                "insurance_plan_id": 2,
+                "service_id": 9,
+                "created_at": "2022-05-14T04:08:45.000000Z",
+                "updated_at": "2022-05-14T04:08:45.000000Z",
+                "insurance_plan_service_aliance": null
+            }
+        ],
+        "public_note": [
+            {
+                "id": 8,
+                "note": "Public note to service 1",
+                "publishable_type": "App\\Models\\Service",
+                "publishable_id": 9,
+                "created_at": "2022-05-14T04:08:45.000000Z",
+                "updated_at": "2022-05-14T04:08:45.000000Z"
+            }
+        ],
+        "private_notes": [
+            {
+                "id": 8,
+                "note": "Private note to service 1",
+                "billing_company_id": 1,
+                "publishable_type": "App\\Models\\Service",
+                "publishable_id": 9,
+                "created_at": "2022-05-14T04:08:45.000000Z",
+                "updated_at": "2022-05-14T04:08:45.000000Z"
+            }
+        ],
+        "company": {
+            "id": 2,
+            "code": "CO-00002-2022",
+            "name": "company first11",
+            "npi": "1184006447",
+            "created_at": "2022-05-04T01:27:04.000000Z",
+            "updated_at": "2022-05-04T01:27:04.000000Z",
+            "status": false
+        },
+        "billing_company": {
+            "id": 1,
+            "name": "Zulauf Group",
+            "created_at": "2022-04-20T21:52:55.000000Z",
+            "updated_at": "2022-04-20T21:52:55.000000Z",
+            "code": "BC-00001-2022",
+            "status": false
+        },
+        "service_group1": {
+            "id": 1,
+            "group": "EM - Evaluation & Management",
+            "created_at": "2022-05-09T22:10:21.000000Z",
+            "updated_at": "2022-05-09T22:10:21.000000Z"
+        },
+        "service_group2": {
+            "id": 2,
+            "group": "LB - LAB",
+            "created_at": "2022-05-09T22:10:21.000000Z",
+            "updated_at": "2022-05-09T22:10:21.000000Z"
+        },
+        "service_type": {
+            "id": 3,
+            "type": "V - Vode Codes",
+            "created_at": "2022-05-09T22:10:21.000000Z",
+            "updated_at": "2022-05-09T22:10:21.000000Z"
+        },
+        "service_type_of_service": {
+            "id": 1,
+            "type_of_service": "01 - Medical Care",
+            "created_at": "2022-05-09T22:10:21.000000Z",
+            "updated_at": "2022-05-09T22:10:21.000000Z"
+        },
+        "service_rev_center": {
+            "id": 2,
+            "rev_center": "CO - Consultations",
+            "created_at": "2022-05-09T22:11:14.000000Z",
+            "updated_at": "2022-05-09T22:11:14.000000Z"
+        },
+        "service_stmt_description": {
+            "id": 2,
+            "stmt_description": "IN - Injection",
+            "created_at": "2022-05-09T22:11:14.000000Z",
+            "updated_at": "2022-05-09T22:11:14.000000Z"
+        },
+        "service_special_instruction": {
+            "id": 1,
+            "special_instruction": "BR - Op Report Required",
+            "created_at": "2022-05-09T22:11:28.000000Z",
+            "updated_at": "2022-05-09T22:11:28.000000Z"
+        }
+    }
+]
 ```
 
 #
@@ -119,7 +325,144 @@
 
 
 `````json
-
+{
+    "id": 1,
+    "code": "SE-00001-2022",
+    "name": "Service1",
+    "description": "Description service 1",
+    "aplicable_to": "Aplicable to service 1",
+    "rev_code": "Rev Code service 1",
+    "use_time_units": "Use time to service 1",
+    "ndc_number": "Number to service 1",
+    "units": "Unit to service 1",
+    "measure": "Mesure to service 1",
+    "units_limit": "limit to service 1",
+    "requires_claim_note": true,
+    "requires_supervisor": true,
+    "requires_authorization": true,
+    "created_at": "2022-05-14T04:08:44.000000Z",
+    "updated_at": "2022-05-14T04:08:44.000000Z",
+    "service_group_1_id": 1,
+    "service_group_2_id": 2,
+    "service_type_id": 3,
+    "service_type_of_service_id": 1,
+    "service_rev_center_id": 2,
+    "service_stmt_description_id": 2,
+    "service_special_instruction_id": 1,
+    "company_id": 2,
+    "billing_company_id": 1,
+    "status": null,
+    "std_price": "50.54",
+    "insurance_plan_services": [
+        {
+            "id": 11,
+            "price": "24.23",
+            "aliance": true,
+            "insurance_plan_id": 1,
+            "service_id": 9,
+            "created_at": "2022-05-14T04:08:44.000000Z",
+            "updated_at": "2022-05-14T04:08:44.000000Z",
+            "insurance_plan_service_aliance": {
+                "id": 3,
+                "price": "20.23",
+                "percentage": true,
+                "insurance_plan_service_id": 11,
+                "created_at": "2022-05-14T04:08:44.000000Z",
+                "updated_at": "2022-05-14T04:08:44.000000Z"
+            }
+        },
+        {
+            "id": 12,
+            "price": "24.23",
+            "aliance": false,
+            "insurance_plan_id": 2,
+            "service_id": 9,
+            "created_at": "2022-05-14T04:08:45.000000Z",
+            "updated_at": "2022-05-14T04:08:45.000000Z",
+            "insurance_plan_service_aliance": null
+        }
+    ],
+    "public_note": [
+        {
+            "id": 8,
+            "note": "Public note to service 1",
+            "publishable_type": "App\\Models\\Service",
+            "publishable_id": 9,
+            "created_at": "2022-05-14T04:08:45.000000Z",
+            "updated_at": "2022-05-14T04:08:45.000000Z"
+        }
+    ],
+    "private_notes": [
+        {
+            "id": 8,
+            "note": "Private note to service 1",
+            "billing_company_id": 1,
+            "publishable_type": "App\\Models\\Service",
+            "publishable_id": 9,
+            "created_at": "2022-05-14T04:08:45.000000Z",
+            "updated_at": "2022-05-14T04:08:45.000000Z"
+        }
+    ],
+    "company": {
+        "id": 2,
+        "code": "CO-00002-2022",
+        "name": "company first11",
+        "npi": "1184006447",
+        "created_at": "2022-05-04T01:27:04.000000Z",
+        "updated_at": "2022-05-04T01:27:04.000000Z",
+        "status": false
+    },
+    "billing_company": {
+        "id": 1,
+        "name": "Zulauf Group",
+        "created_at": "2022-04-20T21:52:55.000000Z",
+        "updated_at": "2022-04-20T21:52:55.000000Z",
+        "code": "BC-00001-2022",
+        "status": false
+    },
+    "service_group1": {
+        "id": 1,
+        "group": "EM - Evaluation & Management",
+        "created_at": "2022-05-09T22:10:21.000000Z",
+        "updated_at": "2022-05-09T22:10:21.000000Z"
+    },
+    "service_group2": {
+        "id": 2,
+        "group": "LB - LAB",
+        "created_at": "2022-05-09T22:10:21.000000Z",
+        "updated_at": "2022-05-09T22:10:21.000000Z"
+    },
+    "service_type": {
+        "id": 3,
+        "type": "V - Vode Codes",
+        "created_at": "2022-05-09T22:10:21.000000Z",
+        "updated_at": "2022-05-09T22:10:21.000000Z"
+    },
+    "service_type_of_service": {
+        "id": 1,
+        "type_of_service": "01 - Medical Care",
+        "created_at": "2022-05-09T22:10:21.000000Z",
+        "updated_at": "2022-05-09T22:10:21.000000Z"
+    },
+    "service_rev_center": {
+        "id": 2,
+        "rev_center": "CO - Consultations",
+        "created_at": "2022-05-09T22:11:14.000000Z",
+        "updated_at": "2022-05-09T22:11:14.000000Z"
+    },
+    "service_stmt_description": {
+        "id": 2,
+        "stmt_description": "IN - Injection",
+        "created_at": "2022-05-09T22:11:14.000000Z",
+        "updated_at": "2022-05-09T22:11:14.000000Z"
+    },
+    "service_special_instruction": {
+        "id": 1,
+        "special_instruction": "BR - Op Report Required",
+        "created_at": "2022-05-09T22:11:28.000000Z",
+        "updated_at": "2022-05-09T22:11:28.000000Z"
+    }
+}
 `````
 
 #
@@ -131,7 +474,40 @@
 ### Body request example
 
 ```json
-
+{
+    "name": "Service edited",
+    "description":"Description service 1",
+    "aplicable_to": "Aplicable to service 1",
+    "rev_code": "Rev Code service 1",
+    "use_time_units": "Use time to service 1",
+    "ndc_number": "Number to service 1",
+    "units": "Unit to service 1",
+    "measure": "Mesure to service 1",
+    "units_limit": "limit to service 1",
+    "requires_claim_note": true,
+    "requires_supervisor": true,
+    "requires_authorization": true,
+    "service_group_1_id": 1,
+    "service_group_2_id": 2,
+    "service_type_id": 3,
+    "service_type_of_service_id": 1,
+    "service_rev_center_id": 2,
+    "service_stmt_description_id": 2,
+    "service_special_instruction_id": 1,
+    "std_price": 50.54,
+    "billing_company_id": 1,
+    "company_id": 2,
+    "insurance_plan_services": [
+        {
+            "insurance_plan_id": 2,
+            "price": 24.23,
+            "aliance": false,
+            "insurance_plan_service_aliance": null
+        }
+    ],
+    "public_note": "Public note to service 1",
+    "private_note": "Private note to service 1"
+}
 ```
 
 ## Param in header
@@ -152,7 +528,47 @@
 
 
 ```json
-
+{
+    "id": 9,
+    "code": "SE-00001-2022",
+    "name": "Service edited",
+    "description": "Description service 1",
+    "aplicable_to": "Aplicable to service 1",
+    "rev_code": "Rev Code service 1",
+    "use_time_units": "Use time to service 1",
+    "ndc_number": "Number to service 1",
+    "units": "Unit to service 1",
+    "measure": "Mesure to service 1",
+    "units_limit": "limit to service 1",
+    "requires_claim_note": true,
+    "requires_supervisor": true,
+    "requires_authorization": true,
+    "created_at": "2022-05-14T04:08:44.000000Z",
+    "updated_at": "2022-05-14T04:21:36.000000Z",
+    "service_group_1_id": 1,
+    "service_group_2_id": 2,
+    "service_type_id": 3,
+    "service_type_of_service_id": 1,
+    "service_rev_center_id": 2,
+    "service_stmt_description_id": 2,
+    "service_special_instruction_id": 1,
+    "company_id": 2,
+    "billing_company_id": 1,
+    "status": null,
+    "std_price": 50.54,
+    "insurance_plan_services": [
+        {
+            "id": 16,
+            "price": "24.23",
+            "aliance": false,
+            "insurance_plan_id": 2,
+            "service_id": 9,
+            "created_at": "2022-05-14T04:24:15.000000Z",
+            "updated_at": "2022-05-14T04:24:15.000000Z",
+            "insurance_plan_service_aliance": null
+        }
+    ]
+}
 ```
 
 <a name="get-list-service-groups"></a>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Service;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateServiceRequest extends FormRequest
 {
@@ -51,13 +52,13 @@ class CreateServiceRequest extends FormRequest
             'company_id'                                                          => ['required', 'integer'],
 
             'insurance_plan_services'                                             => ['required', 'array'],
-            'insurance_plan_services.*.insurance_plan_id'                         => ['required', 'array'],
+            'insurance_plan_services.*.insurance_plan_id'                         => ['required', 'integer'],
             'insurance_plan_services.*.price'                                     => ['required', 'numeric'],
             'insurance_plan_services.*.aliance'                                   => ['required', 'boolean'],
             
-            'insurance_plan_services.*.insurance_plan_service_aliance'            => ['required', 'boolean'],
-            'insurance_plan_services.*.insurance_plan_service_aliance.price'      => ['sometimes', 'required', 'number'],
-            'insurance_plan_services.*.insurance_plan_service_aliance.percentage' => ['sometimes', 'required', 'boolean'],
+            'insurance_plan_services.*.insurance_plan_service_aliance'            => ['sometimes', 'nullable', 'array'],
+            'insurance_plan_services.*.insurance_plan_service_aliance.price'      => ['sometimes', 'numeric'],
+            'insurance_plan_services.*.insurance_plan_service_aliance.percentage' => ['sometimes', 'boolean'],
             
             'public_note'                                                         => ['nullable', 'string'],
             'private_note'                                                        => ['nullable', 'string'],
