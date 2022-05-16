@@ -71,6 +71,7 @@
         {
             "insurance_plan_id": 1,
             "price": 24.23,
+            "percentage": true,
             "aliance": true,
             "insurance_plan_service_aliance": {
                 "price": 20.23,
@@ -80,6 +81,7 @@
         {
             "insurance_plan_id": 2,
             "price": 24.23,
+            "percentage": true,
             "aliance": false,
             "insurance_plan_service_aliance": null
         }
@@ -231,17 +233,30 @@
                     "insurance_plan_service_id": 11,
                     "created_at": "2022-05-14T04:08:44.000000Z",
                     "updated_at": "2022-05-14T04:08:44.000000Z"
+                },
+                "insurance_plan": {
+                    "id": 1,
+                    "code": "IP-00001-2022",
+                    "name": "someName 1",
+                    "ins_type": "some ins_type",
+                    "cap_group": "someCapGroup",
+                    "accept_assign": true,
+                    "pre_authorization": true,
+                    "file_zero_changes": true,
+                    "referral_required": true,
+                    "accrue_patient_resp": true,
+                    "require_abn": true,
+                    "pqrs_eligible": true,
+                    "allow_attached_files": true,
+                    "eff_date": "2022-01-23",
+                    "charge_using": "someCharge",
+                    "format": "y-m-d",
+                    "method": "someMethod",
+                    "naic": "someNaic",
+                    "insurance_company_id": 1,
+                    "created_at": "2022-04-20T21:53:18.000000Z",
+                    "updated_at": "2022-04-20T21:53:18.000000Z"
                 }
-            },
-            {
-                "id": 12,
-                "price": "24.23",
-                "aliance": false,
-                "insurance_plan_id": 2,
-                "service_id": 9,
-                "created_at": "2022-05-14T04:08:45.000000Z",
-                "updated_at": "2022-05-14T04:08:45.000000Z",
-                "insurance_plan_service_aliance": null
             }
         ],
         "public_note": [
@@ -402,18 +417,31 @@
                 "insurance_plan_service_id": 11,
                 "created_at": "2022-05-14T04:08:44.000000Z",
                 "updated_at": "2022-05-14T04:08:44.000000Z"
+            },
+            "insurance_plan": {
+                "id": 1,
+                "code": "IP-00001-2022",
+                "name": "someName",
+                "ins_type": "some ins_type",
+                "cap_group": "someCapGroup",
+                "accept_assign": true,
+                "pre_authorization": true,
+                "file_zero_changes": true,
+                "referral_required": true,
+                "accrue_patient_resp": true,
+                "require_abn": true,
+                "pqrs_eligible": true,
+                "allow_attached_files": true,
+                "eff_date": "2022-01-23",
+                "charge_using": "someCharge",
+                "format": "y-m-d",
+                "method": "someMethod",
+                "naic": "someNaic",
+                "insurance_company_id": 1,
+                "created_at": "2022-04-20T21:53:18.000000Z",
+                "updated_at": "2022-04-20T21:53:18.000000Z"
             }
         },
-        {
-            "id": 12,
-            "price": "24.23",
-            "aliance": false,
-            "insurance_plan_id": 2,
-            "service_id": 9,
-            "created_at": "2022-05-14T04:08:45.000000Z",
-            "updated_at": "2022-05-14T04:08:45.000000Z",
-            "insurance_plan_service_aliance": null
-        }
     ],
     "public_note": [
         {
@@ -534,6 +562,7 @@
         {
             "insurance_plan_id": 2,
             "price": 24.23,
+            "percentage": false,
             "aliance": false,
             "insurance_plan_service_aliance": null
         }
@@ -593,6 +622,7 @@
         {
             "id": 16,
             "price": "24.23",
+            "percentage": false,
             "aliance": false,
             "insurance_plan_id": 2,
             "service_id": 9,

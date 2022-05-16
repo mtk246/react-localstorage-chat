@@ -71,6 +71,7 @@ class ServiceRepository
                         'insurance_plan_id' => $insurance_plan->id,
                         'service_id'        => $service->id,
                         'price'             => $insurance_plan_service['price'],
+                        'percentage'        => $insurance_plan_service['percentage'],
                         'aliance'           => $insurance_plan_service['aliance'],
                     ]);
 
@@ -265,6 +266,7 @@ class ServiceRepository
                         'insurance_plan_id' => $insurance_plan->id,
                         'service_id'        => $service->id,
                         'price'             => $insurance_plan_service['price'],
+                        'percentage'        => $insurance_plan_service['percentage'],
                         'aliance'           => $insurance_plan_service['aliance'],
                     ]);
 

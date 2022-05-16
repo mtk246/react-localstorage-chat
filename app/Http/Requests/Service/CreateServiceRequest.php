@@ -54,6 +54,7 @@ class CreateServiceRequest extends FormRequest
             'insurance_plan_services'                                             => ['required', 'array'],
             'insurance_plan_services.*.insurance_plan_id'                         => ['required', 'integer'],
             'insurance_plan_services.*.price'                                     => ['required', 'numeric'],
+            'insurance_plan_services.*.percentage'                                => ['required', 'boolean'],
             'insurance_plan_services.*.aliance'                                   => ['required', 'boolean'],
             
             'insurance_plan_services.*.insurance_plan_service_aliance'            => ['sometimes', 'nullable', 'array'],
