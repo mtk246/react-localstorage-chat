@@ -82,6 +82,14 @@ class ServiceController extends Controller
 
     }
 
+    public function getAllServiceRevCenters()
+    {
+        $rs = $this->serviceRepository->getAllServiceRevCenters();
+
+        return $rs ? response()->json($rs) : response()->json("Error get all service rev centers", 400);
+
+    }
+
     public function getAllServiceTypes()
     {
         $rs = $this->serviceRepository->getAllServiceTypes();

@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePlanService;
 use App\Models\InsurancePlanServiceAliance;
+use App\Models\ServiceRevCenter;
 use App\Models\ServiceGroup;
 use App\Models\ServiceType;
 use App\Models\ServiceTypeOfService;
@@ -318,6 +319,10 @@ class ServiceRepository
 
     public function getAllServiceGroups() {
         return getList(ServiceGroup::class, 'group');
+    }
+
+    public function getAllServiceRevCenters() {
+        return getList(ServiceRevCenter::class, 'rev_center');
     }
 
     public function getAllServiceTypes() {

@@ -12,6 +12,7 @@
 - [Change status service](#change-status-service)
 - [Get all service groups](#get-list-service-groups)
 - [Get all service types](#get-list-service-types)
+- [Get all service rev centers](#get-list-service-rev-centers)
 - [Get all service type of services](#get-list-service-type-of-services)
 - [Get all service stmt descriptions](#get-list-service-stmt-descriptions)
 - [Get all service special instructions](#get-list-service-special-instructions)
@@ -31,9 +32,10 @@
 | 5 |PATCH   | `Change status Service`  | `/service/change-status/{id}` | yes            | Change status Service  |
 | 6 |GET | `Get all service groups`| `/service/get-list-service-groups`        |yes            |Get all service groups|
 | 7 |GET | `Get all service types`| `/service/get-list-service-types`        |yes            |Get all service types|
-| 8 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
-| 9 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
-| 10 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
+| 8 |GET | `Get all service rev centers`| `/service/get-list-service-rev-centers`        |yes            |Get all service rev centers|
+| 9 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
+| 10 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
+| 11 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
 
 
 <a name="create-service"></a>
@@ -697,6 +699,85 @@
     {
         "id": 7,
         "name": "E - Expl"
+    }
+]
+```
+
+<a name="get-list-service-rev-centers"></a>
+## Get All Service Rev. Centers
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Service Rev. Centers found
+
+#
+
+```json
+[
+    {
+        "id":1,
+        "name":"AD - Administrative Charge"
+    },
+    {
+        "id":2,
+        "name":"CO - Consultations"
+    },
+    {
+        "id":3,
+        "name":"DM - DME Charge"
+    },
+    {
+        "id":4,
+        "name":"EP - Established Patient Visit"
+    },
+    {
+        "id":5,
+        "name":"HV - Hospital Visits"
+    },
+    {
+        "id":6,
+        "name":"IN - Injections"
+    },
+    {
+        "id":7,
+        "name":"LB - Lab"
+    },
+    {
+        "id":8,
+        "name":"ME - Medications"
+    },
+    {
+        "id":9,
+        "name":"MI - Miscellaneous"
+    },
+    {
+        "id":10,
+        "name":"NP - New Patient Visit"
+    },
+    {
+        "id":11,
+        "name":"PR - Procedures"
+    },
+    {
+        "id":12,
+        "name":"RA - Radiology"
+    },
+    {
+        "id":13,
+        "name":"SP - Supplies"
+    },
+    {
+        "id":14,
+        "name":"SU - Surgery"
     }
 ]
 ```
