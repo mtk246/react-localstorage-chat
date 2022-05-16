@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\ServiceApplicableTo;
 use App\Models\ServiceGroup;
 use App\Models\ServiceType;
 use App\Models\ServiceTypeOfService;
@@ -19,6 +20,17 @@ class ServiceDataSeeder extends Seeder
      */
     public function run()
     {
+        $serviceApplicableTo = [
+            ['applicable_to' => 'Male'],
+            ['applicable_to' => 'Female'],
+            ['applicable_to' => 'Both']
+        ];
+
+        foreach ($serviceApplicableTo as $applicableTo) {
+
+            ServiceApplicableTo::updateOrCreate($applicableTo, $applicableTo);
+        }
+
         $serviceGroups = [
             ['group' => 'EM - Evaluation & Management'],
             ['group' => 'LB - LAB'],
