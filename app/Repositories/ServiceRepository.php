@@ -121,7 +121,9 @@ class ServiceRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $services = Service::with([
-                "insurancePlanServices",
+                "insurancePlanServices" => function ($query) {
+                    $query->with("insurancePlan");
+                },
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -136,7 +138,9 @@ class ServiceRepository
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $services = Service::with([
-                "insurancePlanServices",
+                "insurancePlanServices" => function ($query) {
+                    $query->with("insurancePlan");
+                },
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -162,7 +166,9 @@ class ServiceRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $service = Service::whereId($id)->with([
-                "insurancePlanServices",
+                "insurancePlanServices" => function ($query) {
+                    $query->with("insurancePlan");
+                },
                 "publicNote",
                 "privateNotes",
                 "company",
@@ -177,7 +183,9 @@ class ServiceRepository
             ])->first();
         } else {
             $service = Service::whereId($id)->with([
-                "insurancePlanServices",
+                "insurancePlanServices" => function ($query) {
+                    $query->with("insurancePlan");
+                },
                 "publicNote",
                 "privateNotes",
                 "company",
