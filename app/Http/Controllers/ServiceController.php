@@ -74,6 +74,14 @@ class ServiceController extends Controller
         return $rs ? response()->json([], 204) : response()->json("Error, service not found", 404);
     }
 
+    public function getAllServiceApplicableTo()
+    {
+        $rs = $this->serviceRepository->getAllServiceApplicableTo();
+
+        return $rs ? response()->json($rs) : response()->json("Error get all service applicable to", 400);
+
+    }
+
     public function getAllServiceGroups()
     {
         $rs = $this->serviceRepository->getAllServiceGroups();

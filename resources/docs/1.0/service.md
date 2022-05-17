@@ -10,6 +10,7 @@
 - [Get one service](#get-one-service)
 - [Update service](#Update-service)
 - [Change status service](#change-status-service)
+- [Get all service applicable to](#get-list-service-applicable-to)
 - [Get all service groups](#get-list-service-groups)
 - [Get all service types](#get-list-service-types)
 - [Get all service rev centers](#get-list-service-rev-centers)
@@ -30,12 +31,13 @@
 | 3 |GET     | `Get one Service` | `/service/{id}` | yes            | Get one Service |
 | 4 |PUT     | `Update Service`  | `/service/{id}` | yes            | Update Service  |
 | 5 |PATCH   | `Change status Service`  | `/service/change-status/{id}` | yes            | Change status Service  |
-| 6 |GET | `Get all service groups`| `/service/get-list-service-groups`        |yes            |Get all service groups|
-| 7 |GET | `Get all service types`| `/service/get-list-service-types`        |yes            |Get all service types|
-| 8 |GET | `Get all service rev centers`| `/service/get-list-service-rev-centers`        |yes            |Get all service rev centers|
-| 9 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
-| 10 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
-| 11 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
+| 6 |GET | `Get all service applicable to`| `/service/get-list-service-applicable-to`        |yes            |Get all service applicable to|
+| 7 |GET | `Get all service groups`| `/service/get-list-service-groups`        |yes            |Get all service groups|
+| 8 |GET | `Get all service types`| `/service/get-list-service-types`        |yes            |Get all service types|
+| 9 |GET | `Get all service rev centers`| `/service/get-list-service-rev-centers`        |yes            |Get all service rev centers|
+| 10 |GET | `Get all service type of services`| `/service/get-list-service-type-of-services`        |yes            |Get all service type of services|
+| 11 |GET | `Get all service stmt descriptions`| `/service/get-list-service-stmt-descriptions`        |yes            |Get all service stmt descriptions |
+| 12 |GET | `Get all service special instructions`| `/service/get-list-service-special-instructions`        |yes            |Get all service special instructions |
 
 
 <a name="create-service"></a>
@@ -47,7 +49,6 @@
 {
     "name": "Service1",
     "description":"Description service 1",
-    "aplicable_to": "Aplicable to service 1",
     "rev_code": "Rev Code service 1",
     "use_time_units": "Use time to service 1",
     "ndc_number": "Number to service 1",
@@ -57,6 +58,7 @@
     "requires_claim_note": true,
     "requires_supervisor": true,
     "requires_authorization": true,
+    "service_applicable_to_id": 1,
     "service_group_1_id": 1,
     "service_group_2_id": 2,
     "service_type_id": 3,
@@ -114,7 +116,7 @@
     "service_group_1_id": 1,
     "service_group_2_id": 2,
     "service_type_id": 3,
-    "aplicable_to": "Aplicable to service 1",
+    "service_applicable_to_id": 1,
     "service_type_of_service_id": 1,
     "service_rev_center_id": 2,
     "service_stmt_description_id": 2,
@@ -194,7 +196,6 @@
         "code": "SE-00001-2022",
         "name": "Service1",
         "description": "Description service 1",
-        "aplicable_to": "Aplicable to service 1",
         "rev_code": "Rev Code service 1",
         "use_time_units": "Use time to service 1",
         "ndc_number": "Number to service 1",
@@ -206,6 +207,7 @@
         "requires_authorization": true,
         "created_at": "2022-05-14T04:08:44.000000Z",
         "updated_at": "2022-05-14T04:08:44.000000Z",
+        "service_applicable_to_id": 1,
         "service_group_1_id": 1,
         "service_group_2_id": 2,
         "service_type_id": 3,
@@ -338,6 +340,12 @@
             "special_instruction": "BR - Op Report Required",
             "created_at": "2022-05-09T22:11:28.000000Z",
             "updated_at": "2022-05-09T22:11:28.000000Z"
+        },
+        "service_applicable_to": {
+            "id": 1,
+            "applicable_to": "Male",
+            "created_at": "2022-05-16T23:44:01.000000Z",
+            "updated_at": "2022-05-16T23:44:01.000000Z"
         }
     }
 ]
@@ -378,7 +386,6 @@
     "code": "SE-00001-2022",
     "name": "Service1",
     "description": "Description service 1",
-    "aplicable_to": "Aplicable to service 1",
     "rev_code": "Rev Code service 1",
     "use_time_units": "Use time to service 1",
     "ndc_number": "Number to service 1",
@@ -390,6 +397,7 @@
     "requires_authorization": true,
     "created_at": "2022-05-14T04:08:44.000000Z",
     "updated_at": "2022-05-14T04:08:44.000000Z",
+    "service_applicable_to_id": 1,
     "service_group_1_id": 1,
     "service_group_2_id": 2,
     "service_type_id": 3,
@@ -522,6 +530,12 @@
         "special_instruction": "BR - Op Report Required",
         "created_at": "2022-05-09T22:11:28.000000Z",
         "updated_at": "2022-05-09T22:11:28.000000Z"
+    },
+    "service_applicable_to": {
+        "id": 1,
+        "applicable_to": "Male",
+        "created_at": "2022-05-16T23:44:01.000000Z",
+        "updated_at": "2022-05-16T23:44:01.000000Z"
     }
 }
 `````
@@ -538,7 +552,6 @@
 {
     "name": "Service edited",
     "description":"Description service 1",
-    "aplicable_to": "Aplicable to service 1",
     "rev_code": "Rev Code service 1",
     "use_time_units": "Use time to service 1",
     "ndc_number": "Number to service 1",
@@ -548,6 +561,7 @@
     "requires_claim_note": true,
     "requires_supervisor": true,
     "requires_authorization": true,
+    "service_applicable_to_id": 1,
     "service_group_1_id": 1,
     "service_group_2_id": 2,
     "service_type_id": 3,
@@ -595,7 +609,6 @@
     "code": "SE-00001-2022",
     "name": "Service edited",
     "description": "Description service 1",
-    "aplicable_to": "Aplicable to service 1",
     "rev_code": "Rev Code service 1",
     "use_time_units": "Use time to service 1",
     "ndc_number": "Number to service 1",
@@ -607,6 +620,7 @@
     "requires_authorization": true,
     "created_at": "2022-05-14T04:08:44.000000Z",
     "updated_at": "2022-05-14T04:21:36.000000Z",
+    "service_applicable_to_id": 1,
     "service_group_1_id": 1,
     "service_group_2_id": 2,
     "service_type_id": 3,
@@ -634,6 +648,40 @@
 }
 ```
 
+<a name="get-list-service-applicable-to"></a>
+## Get All Service Applicable To
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Service Applicable To found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Male"
+    },
+    {
+        "id": 2,
+        "name": "Female"
+    },
+    {
+        "id": 3,
+        "name": "Both"
+    }
+]
+```
 <a name="get-list-service-groups"></a>
 ## Get All Service Groups
 

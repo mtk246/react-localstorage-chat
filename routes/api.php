@@ -281,6 +281,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ServiceController::class,"changeStatus"]);
 
         Route::get("/get-list-service-rev-centers",[\App\Http\Controllers\ServiceController::class,'getAllServiceRevCenters']);
+        Route::get("/get-list-service-applicable-to",[\App\Http\Controllers\ServiceController::class,'getAllServiceApplicableTo']);
         Route::get("/get-list-service-groups",[\App\Http\Controllers\ServiceController::class,'getAllServiceGroups']);
         Route::get("/get-list-service-types",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypes']);
         Route::get("/get-list-service-type-of-services",[\App\Http\Controllers\ServiceController::class,'getAllServiceTypeOfServices']);

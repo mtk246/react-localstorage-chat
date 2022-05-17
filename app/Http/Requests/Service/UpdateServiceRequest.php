@@ -27,7 +27,6 @@ class UpdateServiceRequest extends FormRequest
         return [
             'name'                                                                => ['required', 'string', 'max:50'],
             'description'                                                         => ['required', 'string', 'nullable'],
-            'aplicable_to'                                                        => ['required', 'string', 'max:50'],
             'rev_code'                                                            => ['required', 'string', 'max:50', 'nullable'],
             'use_time_units'                                                      => ['required', 'string', 'max:50', 'nullable'],
             'ndc_number'                                                          => ['required', 'string', 'max:50', 'nullable'],
@@ -39,6 +38,7 @@ class UpdateServiceRequest extends FormRequest
             'requires_supervisor'                                                 => ['required', 'boolean', 'nullable'],
             'requires_authorization'                                              => ['required', 'boolean', 'nullable'],
             
+            'service_applicable_to_id'                                            => ['required', 'integer'],
             'service_group_1_id'                                                  => ['required', 'integer'],
             'service_group_2_id'                                                  => ['required', 'integer'],
             'service_type_id'                                                     => ['required', 'integer'],

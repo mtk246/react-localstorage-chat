@@ -14,6 +14,7 @@ class InsurancePlanService extends Model
     protected $fillable = [
         "price",
         "aliance",
+        "percentage",
         "insurance_plan_id",
         "service_id",
     ];

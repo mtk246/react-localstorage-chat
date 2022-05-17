@@ -18,7 +18,7 @@ class Service extends Model implements Auditable
         "service_group_1_id",
         "service_group_2_id",
         "service_type_id",
-        "aplicable_to",
+        "service_applicable_to_id",
         "service_type_of_service_id",
         "service_rev_center_id",
         "service_stmt_description_id",
@@ -56,6 +56,16 @@ class Service extends Model implements Auditable
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Service belongs to serviceApplicableTo.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceApplicableTo()
+    {
+        return $this->belongsTo(ServiceApplicableTo::class);
     }
 
     /**

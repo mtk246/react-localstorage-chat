@@ -8,6 +8,7 @@ use App\Models\InsurancePlan;
 use App\Models\InsurancePlanService;
 use App\Models\InsurancePlanServiceAliance;
 use App\Models\ServiceRevCenter;
+use App\Models\ServiceApplicableTo;
 use App\Models\ServiceGroup;
 use App\Models\ServiceType;
 use App\Models\ServiceTypeOfService;
@@ -43,7 +44,7 @@ class ServiceRepository
                 "service_group_1_id"             => $data['service_group_1_id'],
                 "service_group_2_id"             => $data['service_group_2_id'],
                 "service_type_id"                => $data['service_type_id'],
-                "aplicable_to"                   => $data['aplicable_to'],
+                "service_applicable_to_id"       => $data['service_applicable_to_id'],
                 "service_type_of_service_id"     => $data['service_type_of_service_id'],
                 "service_rev_center_id"          => $data['service_rev_center_id'],
                 "service_stmt_description_id"    => $data['service_stmt_description_id'],
@@ -129,6 +130,7 @@ class ServiceRepository
                 "privateNotes",
                 "company",
                 "billingCompany",
+                "serviceApplicableTo",
                 "serviceGroup1",
                 "serviceGroup2",
                 "serviceType",
@@ -146,6 +148,7 @@ class ServiceRepository
                 "privateNotes",
                 "company",
                 "billingCompany",
+                "serviceApplicableTo",
                 "serviceGroup1",
                 "serviceGroup2",
                 "serviceType",
@@ -174,6 +177,7 @@ class ServiceRepository
                 "privateNotes",
                 "company",
                 "billingCompany",
+                "serviceApplicableTo",
                 "serviceGroup1",
                 "serviceGroup2",
                 "serviceType",
@@ -191,6 +195,7 @@ class ServiceRepository
                 "privateNotes",
                 "company",
                 "billingCompany",
+                "serviceApplicableTo",
                 "serviceGroup1",
                 "serviceGroup2",
                 "serviceType",
@@ -227,7 +232,7 @@ class ServiceRepository
                 "service_group_1_id"             => $data['service_group_1_id'],
                 "service_group_2_id"             => $data['service_group_2_id'],
                 "service_type_id"                => $data['service_type_id'],
-                "aplicable_to"                   => $data['aplicable_to'],
+                "service_applicable_to_id"       => $data['service_applicable_to_id'],
                 "service_type_of_service_id"     => $data['service_type_of_service_id'],
                 "service_rev_center_id"          => $data['service_rev_center_id'],
                 "service_stmt_description_id"    => $data['service_stmt_description_id'],
@@ -325,6 +330,10 @@ class ServiceRepository
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    public function getAllServiceApplicableTo() {
+        return getList(ServiceApplicableTo::class, 'applicable_to');
     }
 
     public function getAllServiceGroups() {
