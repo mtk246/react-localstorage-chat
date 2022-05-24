@@ -24,7 +24,7 @@ class IpRestrictionController extends Controller
     public function store(IpRestrictionRequest $request)
     {
         $rs = $this->ipRestrictionRepository->create($request->validated());
-        return $rs ? response()->json($rs) : response()->json("Error creating restriction", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error creating restriction"), 400);
 
     }
 
@@ -36,7 +36,7 @@ class IpRestrictionController extends Controller
     public function update(IpRestrictionRequest $request, $id)
     {
         $rs = $this->ipRestrictionRepository->update($request->validated(), $id);
-        return $rs ? response()->json($rs) : response()->json("Error updating restriction", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating restriction"), 400);
     }
 
     /**
@@ -54,7 +54,7 @@ class IpRestrictionController extends Controller
     public function getOneRestriction(int $id)
     {
         $rs = $this->ipRestrictionRepository->getOneRestriction($id);
-        return $rs ? response()->json($rs) : response()->json("Restriction not found", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, restriction not found"), 404);
     }
 
     /**
@@ -65,6 +65,6 @@ class IpRestrictionController extends Controller
     {
         $rs = $this->ipRestrictionRepository->destroy($id);
 
-        return $rs ? response()->json([],204) : response()->json("Error! IP restriction not found", 404);
+        return $rs ? response()->json([],204) : response()->json(__("Error, restriction not found"), 404);
     }
 }

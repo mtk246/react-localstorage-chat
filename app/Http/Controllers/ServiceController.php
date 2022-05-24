@@ -26,7 +26,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->create($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json("Error creating service", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error creating service"), 400);
     }
 
     /**
@@ -47,7 +47,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getOneService($id);
 
-        return $rs ? response()->json($rs) : response()->json("service not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, service not found"), 404);
     }
 
     /**
@@ -59,7 +59,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->updateService($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json("Error updating service",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating service"), 400);
     }
 
     /**
@@ -71,14 +71,14 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->changeStatus($request->input("status"), $id);
 
-        return $rs ? response()->json([], 204) : response()->json("Error, service not found", 404);
+        return $rs ? response()->json([], 204) : response()->json(__("Error updating status"), 404);
     }
 
     public function getAllServiceApplicableTo()
     {
         $rs = $this->serviceRepository->getAllServiceApplicableTo();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service applicable to", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service applicable to"), 400);
 
     }
 
@@ -86,7 +86,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceGroups();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service groups", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service groups"), 400);
 
     }
 
@@ -94,7 +94,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceRevCenters();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service rev centers", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service rev centers"), 400);
 
     }
 
@@ -102,7 +102,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceTypes();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service types", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service types"), 400);
 
     }
 
@@ -110,7 +110,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceTypeOfServices();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service type of service", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service type of service"), 400);
 
     }
 
@@ -118,7 +118,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceStmtDescriptions();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service stmt descriptions", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service stmt descriptions"), 400);
 
     }
 
@@ -126,7 +126,7 @@ class ServiceController extends Controller
     {
         $rs = $this->serviceRepository->getAllServiceSpecialInstructions();
 
-        return $rs ? response()->json($rs) : response()->json("Error get all service special instruction", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error get all service special instruction"), 400);
 
     }
 

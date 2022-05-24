@@ -26,7 +26,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->createInsurancePlan($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("Error creating insurance plan",400);
+        return $rs ? response()->json($rs,201) : response()->json(__("Error creating insurance plan"), 400);
     }
 
     /**
@@ -38,7 +38,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->updateInsurancePlan($request->validated(),$id);
 
-        return $rs ? response()->json($rs) : response()->json("Error update insurance plan",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error update insurance plan"), 400);
     }
 
     /**
@@ -49,7 +49,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->getOneInsurancePlan($id);
 
-        return $rs ? response()->json($rs) : response()->json("Error, insurance not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
 
     /**
@@ -60,7 +60,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->getByName($name);
 
-        return $rs ? response()->json($rs) : response()->json("insurance plan not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
 
     /**
@@ -80,7 +80,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json([],204) : response()->json("Error! insurance plan not found",404);
+        return $rs ? response()->json([],204) : response()->json(__("Error, insurance plan not found"), 404);
     }
 
     /**
@@ -91,7 +91,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->InsurancePlanRepository->getByCompany($companyName);
 
-        return $rs ? response()->json($rs) : response()->json("Error, insurance not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
 
     /**

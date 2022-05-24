@@ -105,7 +105,7 @@ class AuthController extends Controller
         if (!$token) {
             $this->incrementLoginAttempts($request);
             if ($user->failedLoginAttempts()->where('status', true)->count() == $this->maxAttempts) {
-                return response()->json(['error' => 'You have entered bad credentials 3 times. If you enter bad credentials again your user will be blocked for security.'], 429);
+                return response()->json(['error' => __('You have entered bad credentials 3 times. If you enter bad credentials again your user will be blocked for security.')], 429);
             } elseif ($user->failedLoginAttempts()->where('status', true)->count() > $this->maxAttempts) {
                 /** elimina la cantidad de intentos fallidos del usuario */
                 $this->clearLoginAttempts($request);
@@ -114,7 +114,7 @@ class AuthController extends Controller
                 /** Se envia la respuesta de usuario bloqueado */
                 return $this->sendLockoutResponse();
             } else {
-                return response()->json(['error' => 'Bad Credencials'], 401);
+                return response()->json(['error' => __('Bad Credentials')], 401);
             }
         }
         $this->clearLoginAttempts($request);
@@ -206,7 +206,7 @@ class AuthController extends Controller
         User::whereId(auth()->id())->update(["isLogged" => false]);
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => __('Successfully logged out')]);
     }
 
     /**
@@ -326,7 +326,7 @@ class AuthController extends Controller
                 $user_agent
             )
         );
-        return response()->json(['error' => 'You are trying to access from a new device. Enter the code sent to your email.'], 403);
+        return response()->json(['error' => __('You are trying to access from a new device. Enter the code sent to your email.')], 403);
     }
 
     public function checkToken()
@@ -335,16 +335,16 @@ class AuthController extends Controller
            $user = JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
           if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-            return response()->json(['status' => 'Token is Invalid'], 403);
+            return response()->json(['status' => __('Token is Invalid')], 403);
           } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
-            return response()->json(['status' => 'Token is Expired'], 401);
+            return response()->json(['status' => __('Token is Expired')], 401);
           } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
-            return response()->json(['status' => 'Token is Blacklisted'], 400);
+            return response()->json(['status' => __('Token is Blacklisted')], 400);
           } else {
-                return response()->json(['status' => 'Authorization Token not found'], 404);
+                return response()->json(['status' => __('Authorization Token not found')], 404);
           }
         }
-        return response()->json(['status' => 'Token is valid'], 200);
+        return response()->json(['status' => __('Token is valid')], 200);
     }
 
     protected function incrementLoginAttempts(Request $request)
@@ -370,6 +370,6 @@ class AuthController extends Controller
 
     protected function sendLockoutResponse()
     {
-        return response()->json(['error' => 'Your user has been blocked. Enter your user code or try again in 24 hours.'], 401);
+        return response()->json(['error' => __('Your user has been blocked. Enter your user code or try again in 24 hours.')], 401);
     }
 }

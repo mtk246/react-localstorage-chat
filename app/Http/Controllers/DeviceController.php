@@ -62,6 +62,6 @@ class DeviceController extends Controller
     {
         $rs = $this->deviceRepository->allowDevice($request->input("code"));
 
-        return $rs ? response()->json([],204) : response()->json("device not found or wrong code",404);
+        return $rs ? response()->json([],204) : response()->json(__("Error, device not found or wrong code"), 404);
     }
 }

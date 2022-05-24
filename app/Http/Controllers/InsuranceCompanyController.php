@@ -25,7 +25,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->searchByName($name);
 
-        return count($rs) > 0 ? response()->json($rs) : response()->json("Insurance companies not found",404);
+        return count($rs) > 0 ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
     }
 
     /**
@@ -36,7 +36,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->createInsurance($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("error creating insurance",400);
+        return $rs ? response()->json($rs,201) : response()->json(__("Error creating insurance company"), 400);
     }
 
     /**
@@ -47,7 +47,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->getOneInsurance($id);
 
-        return $rs ? response()->json($rs) : response()->json("insurance not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
     }
 
     /**
@@ -69,7 +69,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json([], 204) : response()->json("Error, insurance not found", 404);
+        return $rs ? response()->json([], 204) : response()->json(__("Error, insurance company not found"), 404);
     }
 
     /**
@@ -81,7 +81,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->updateInsurance($request->validated(),$id);
 
-        return $rs ? response()->json($rs) : response()->json("Error! updating insurance",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating insurance company"), 400);
     }
 
     /**
@@ -92,7 +92,7 @@ class InsuranceCompanyController extends Controller
     {
         $rs = $this->InsuranceRepository->addToBillingCompany($id);
 
-        return $rs ? response()->json($rs) : response()->json("error add insurance company to billing company", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error add insurance company to billing company"), 404);
     }
 
     public function getList() {

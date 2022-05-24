@@ -197,14 +197,14 @@ class AuditController extends Controller
     {
         try {
             $model = Audit::find($audit);
-            if ($model->event == 'created') return response()->json('Error, unable to restore registry', 404);
+            if ($model->event == 'created') return response()->json(__('Error, unable to restore registry'), 404);
             $auditable = $model->auditable;
             $newAuditable = $auditable->transitionTo($model, true);
             $newAuditable->save();
             
-            return ($newAuditable) ? response()->json($newAuditable, 200) : response()->json('Error audit not found', 404);
+            return ($newAuditable) ? response()->json($newAuditable, 200) : response()->json(__('Error, audit not found'), 404);
         } catch (\Exception $e) {
-            return response()->json('Error wrong id', 404);
+            return response()->json(__('Error, wrong id'), 404);
         }
     }
 
@@ -215,9 +215,9 @@ class AuditController extends Controller
             $audit = Audit::with(['user' => function ($query) {
                 $query->with('profile', 'roles');
             }])->find($id);
-            return ($audit) ? response()->json($audit, 200) : response()->json('Error audit not found', 404);
+            return ($audit) ? response()->json($audit, 200) : response()->json(__('Error, audit not found'), 404);
         } catch (\Exception $e) {
-            return response()->json('Error wrong id', 404);
+            return response()->json(__('Error, wrong id'), 404);
         }
     }
 }

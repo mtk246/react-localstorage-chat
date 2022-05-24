@@ -25,7 +25,7 @@ class BillingCompanyController extends Controller
     {
         $rs = $this->billingCompanyRepository->createBillingCompany($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("error creating billing company",400);
+        return $rs ? response()->json($rs,201) : response()->json(__("Error creating billing company"), 400);
     }
 
     /**
@@ -37,7 +37,7 @@ class BillingCompanyController extends Controller
     {
         $rs = $this->billingCompanyRepository->update($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json("Error updating billing company", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating billing company"), 400);
     }
 
     /**
@@ -49,7 +49,7 @@ class BillingCompanyController extends Controller
     {
         $rs = $this->billingCompanyRepository->changeStatus($request->input("status"), $id);
 
-        return $rs ? response()->json([],204) : response()->json("error updating status",400);
+        return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 400);
     }
 
     /**
@@ -59,7 +59,7 @@ class BillingCompanyController extends Controller
     {
         $rs = $this->billingCompanyRepository->getBillingCompany($id);
 
-        return $rs ? response()->json($rs) : response()->json("Billing company not found", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, billing company not found"), 404);
     }
 
     /**
@@ -70,7 +70,7 @@ class BillingCompanyController extends Controller
     {
         $rs = $this->billingCompanyRepository->getAllBillingCompanyByUser($user_id);
 
-        return $rs ? response()->json($rs) : response()->json("user not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
     /**

@@ -25,7 +25,7 @@ class PatientController extends Controller
     {
         $rs = $this->patientRepository->createPatient($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("Error creating patient",400);
+        return $rs ? response()->json($rs,201) : response()->json(__("Error creating patient"), 400);
     }
 
     /**
@@ -36,7 +36,7 @@ class PatientController extends Controller
     {
         $rs = $this->patientRepository->getOnePatient($id);
 
-        return $rs ? response()->json($rs) : response()->json("Patient not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, patient not found"), 404);
     }
 
     /**
@@ -58,7 +58,7 @@ class PatientController extends Controller
     {
         $rs = $this->patientRepository->updatePatient($request->validated(),$id);
 
-        return $rs ? response()->json($rs) : response()->json("error updating user",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating patient"), 400);
     }
 
     /**

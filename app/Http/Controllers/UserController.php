@@ -162,9 +162,9 @@ class UserController extends Controller
 
             $rs = $this->userRepository->sendEmailToRescuePassword($request->input("email"));
 
-            if(is_null($rs)) return response()->json("User not found",403);
+            if(is_null($rs)) return response()->json(__("Error, user not found"), 403);
 
-            return ($rs) ? response()->json([],204) : response()->json("Error, a error have occurred",404);
+            return ($rs) ? response()->json([],204) : response()->json(__("Error, a error have occurred"), 404);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
@@ -218,14 +218,14 @@ class UserController extends Controller
             $user = $this->getInfoToken($token);
 
             if(!$user) {
-                return response()->json("token expired",403);
+                return response()->json(__("Token is Expired"), 403);
             }
 
             $rs = $this->userRepository->changePassword($request,$token);
 
-            if(is_null($rs)) return response()->json("Error, token not exist",403);
+            if(is_null($rs)) return response()->json(__("Token is Invalid"), 403);
 
-            return ($rs) ? response()->json([],204) : response()->json("Error, a error have occurred",403);
+            return ($rs) ? response()->json([],204) : response()->json(__("Error, a error have occurred"), 403);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
@@ -235,7 +235,7 @@ class UserController extends Controller
     {
         try {
             $rs = $this->userRepository->newToken($request->token_old);
-            return ($rs) ? response()->json([], 204) : response()->json("Error, a error have occurred",403);
+            return ($rs) ? response()->json([], 204) : response()->json(__("Error, a error have occurred"), 403);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
@@ -259,7 +259,7 @@ class UserController extends Controller
     public function editUser(EditUserRequest $request, $id): JsonResponse
     {
         $rs = $this->userRepository->editUser($request->validated(), $id);
-        return $rs ? response()->json($rs) : response()->json("Error updating user", 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating user"), 400);
     }
 
     /**
@@ -274,7 +274,7 @@ class UserController extends Controller
 
             $rs = $this->userRepository->changeStatus($request->input("status"),$id);
 
-            return $rs ? response()->json([],204) : response()->json("error changing status",400);
+            return $rs ? response()->json([],204) : response()->json(__("Error changing status"), 400);
         }catch (\Exception $exception){
             return response()->json($exception->getMessage(),500);
         }
@@ -300,7 +300,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->getOneUser($id);
 
-        return $rs ? response()->json($rs) : response()->json("user not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
     /**
@@ -311,7 +311,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->updateImgProfile($request);
 
-        return ($rs) ? response()->json($rs) : response()->json("error updating image profile",400);
+        return ($rs) ? response()->json($rs) : response()->json(__("Error updating image profile"), 400);
     }
 
     /**
@@ -322,7 +322,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->updateSocialMediaProfile($request->validated(), $id);
 
-        return ($rs) ? response()->json($rs) : response()->json("error updating social media profile", 400);
+        return ($rs) ? response()->json($rs) : response()->json(__("Error updating social media profile"), 400);
     }
 
     /**
@@ -333,7 +333,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->recoveryUser($request);
 
-        return $rs ? response()->json($rs) : response()->json("Error user not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
     /**
@@ -344,7 +344,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->changePasswordForm($request->input("password"));
 
-        return $rs ? response()->json([],204) : response()->json("Error updating password",400);
+        return $rs ? response()->json([],204) : response()->json(__("Error updating password"), 400);
     }
 
     /**
@@ -355,7 +355,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->unlockUser($request);
 
-        return $rs ? response()->json($rs) : response()->json("Error wrong otp code", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, wrong otp code"), 404);
     }
 
     /**
@@ -366,13 +366,13 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->searchBySsn($ssn);
 
-        return $rs ? response()->json($ssn) : response()->json("user not found",404);
+        return $rs ? response()->json($ssn) : response()->json(__("Error, user not found"), 404);
     }
 
     public function updateLang(Request $request)
     {
         $rs = $this->userRepository->updateLang($request->input("language"));
 
-        return $rs ? response()->json($rs) : response()->json("Error updating language",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating language"), 400);
     }
 }

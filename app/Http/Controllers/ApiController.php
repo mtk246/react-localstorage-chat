@@ -39,7 +39,7 @@ class ApiController extends Controller
 
         $data = json_decode($response->getBody());
         if (isset($data->Errors)) {
-            return response()->json("Field contains special character(s) or wrong number of characters", 404);
+            return response()->json(__('Field contains special character(s) or wrong number of characters'), 404);
         } else {
             $r = $data->results[0];
             foreach ($r->addresses as $address) {

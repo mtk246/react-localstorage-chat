@@ -27,7 +27,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->create($request->validated());
 
-        return $rs ? response()->json($rs,201) : response()->json("error creating clearing house",400);
+        return $rs ? response()->json($rs,201) : response()->json(__("Error creating clearing house"), 400);
     }
 
     /**
@@ -48,7 +48,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->getOneClearingHouse($id);
 
-        return is_null($rs) ? response()->json("clearing house not found",404) : response()->json($rs);
+        return is_null($rs) ? response()->json(__("Error, clearing house not found"), 404) : response()->json($rs);
     }
 
     /**
@@ -60,7 +60,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->updateClearingHouse($request->validated(),$clearing_id);
 
-        return $rs ? response()->json($rs) : response()->json("Error updating clearing house",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating clearing house"), 400);
     }
 
     /**
@@ -71,7 +71,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->getByName($name);
 
-        return $rs ? response()->json($rs) : response()->json("Error clearing not found", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, clearing house not found"), 404);
     }
 
     /**
@@ -83,7 +83,7 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->changeStatus($request->input("status"),$clearing_id);
 
-        return $rs ? response()->json([], 204) : response()->json("Error updating status",400);
+        return $rs ? response()->json([], 204) : response()->json(__("Error updating status"), 400);
     }
 
     /**
@@ -94,6 +94,6 @@ class ClearingHouseController extends Controller
     {
         $rs = $this->clearingRepository->addToBillingCompany($id);
 
-        return $rs ? response()->json($rs) : response()->json("error add clearing house to billing company", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error add clearing house to billing company"), 404);
     }
 }

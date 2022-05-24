@@ -27,7 +27,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->create($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json("Error creating facility",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error creating facility"), 400);
     }
 
     /**
@@ -58,7 +58,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->getOneFacility($id);
 
-        return $rs ? response()->json($rs) : response()->json("facility not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, facility not found"), 404);
     }
 
     /**
@@ -70,7 +70,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->updateFacility($request->validated(),$id);
 
-        return $rs ? response()->json($rs) : response()->json("Error updating facility",400);
+        return $rs ? response()->json($rs) : response()->json(__("Error updating facility"), 400);
     }
 
     /**
@@ -81,7 +81,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->getByName($name);
 
-        return $rs ? response()->json($rs) : response()->json("facility not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, facility not found"), 404);
     }
 
     /**
@@ -92,7 +92,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->getOneByNpi($npi);
 
-        return $rs ? response()->json($rs) : response()->json("facility not found",404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, facility not found"), 404);
     }
 
     /**
@@ -104,7 +104,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->changeStatus($request->input("status"),$id);
 
-        return $rs ? response()->json([],204) : response()->json("Error, facility not found",404);
+        return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 404);
     }
 
     /**
@@ -115,6 +115,6 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->addToBillingCompany($id);
 
-        return $rs ? response()->json($rs) : response()->json("error add facility to billing company", 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error add facility to billing company"), 404);
     }
 }
