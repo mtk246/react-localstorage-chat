@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PatientCreateRequest;
 use App\Http\Requests\PatientUpdateRequest;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
-#use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
@@ -69,5 +69,17 @@ class PatientController extends Controller
         return response()->json(
             $this->patientRepository->getAllSuscribers($ssn)
         );
+    }
+
+    /**
+     * @param ChangeStatusRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusRequest $request, int $id)
+    {
+        $rs = $this->patientRepository->changeStatus($request->input("status"), $id);
+
+        return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 404);
     }
 }

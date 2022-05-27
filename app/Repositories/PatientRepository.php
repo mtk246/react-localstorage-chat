@@ -322,8 +322,15 @@ class PatientRepository
             "emergencyContacts",
             "publicNote",
             "privateNotes",
-            "insurancePlans" => function ($query) {
-                $query->with("insuranceCompany", "suscribers");
+            "insurancePlans" => function ($query) use ($id) {
+                $query->with([
+                    "insuranceCompany",
+                    "suscribers" => function ($q) use ($id) {
+                        $q->whereHas('patients', function ($qq) use ($id) {
+                            $qq->where('patient_id', $id);
+                        });
+                    }
+                ]);
             }
         ])->find($id);
 

@@ -66,6 +66,13 @@ class Patient extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['insurance_policies'];
+
+    /**
      * Patient belongs to user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -174,5 +181,25 @@ class Patient extends Model implements Auditable
     public function insurancePlans()
     {
         return $this->belongsToMany(InsurancePlan::class)->withPivot('status', 'own_insurance')->withTimestamps();
+    }
+
+    /*
+     * Get the insurance policies patient.
+     *
+     * @return array
+     */
+    public function getInsurancePoliciesAttribute()
+    {
+        $insurancePolicies = [];
+        foreach ($this->insurancePlans as $insurancePlan) {
+            array_push($insurancePolicies, [
+                'insurance_company_id' => $insurancePlan['insurance_company_id'],
+                'insurance_plan_id'    => $insurancePlan['id'],
+                'own'                  => $insurancePlan['pivot']['own_insurance'],
+                'suscriber'            => $insurancePlan['suscribers']['0'] ?? null
+            ]);
+            
+        }
+        return $insurancePolicies;
     }
 }
