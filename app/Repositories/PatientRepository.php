@@ -326,7 +326,7 @@ class PatientRepository
                 $query->with([
                     "insuranceCompany",
                     "suscribers" => function ($q) use ($id) {
-                        $q->whereHas('patients', function ($qq) use ($id) {
+                        $q->with('addresses', 'contacts')->whereHas('patients', function ($qq) use ($id) {
                             $qq->where('patient_id', $id);
                         });
                     }
