@@ -70,7 +70,17 @@ class Patient extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['insurance_policies'];
+    protected $appends = ['insurance_policies', 'status'];
+
+    /**
+     * The billingCompanies that belong to the patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function billingCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
 
     /**
      * Patient belongs to user.
@@ -201,5 +211,18 @@ class Patient extends Model implements Auditable
             
         }
         return $insurancePolicies;
+    }
+
+    /*
+     * Get the patient's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (is_null($billingCompany)) return false;
+        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 }

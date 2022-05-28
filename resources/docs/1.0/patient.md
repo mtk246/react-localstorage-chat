@@ -9,6 +9,7 @@
 - [Get all patient](#get-all-patient)
 - [Get one patient](#get-one-patient)
 - [Update patient](#Update-patient)
+- [Change status patient](#change-status-patient)
 - [Get all patient suscribers](#get-all-patient-suscribers)
 
 
@@ -23,7 +24,8 @@
 | 2 |GET | `Get all Patient`                   | `/patient/`        |yes            |Get all Patient|
 | 3 |GET | `Get one Patient`                   | `/patient/{id}`|yes|Get one Patient|
 | 4 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
-| 9 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
+| 5 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
+| 6 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -705,6 +707,41 @@
     "updated_at": "2022-03-17T20:45:39.000000Z"
 }
 ```
+
+<a name="change-status-patient"></a>
+## Change status Patient
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Body Param
+
+```json
+{
+    "status": <boolean>
+}
+```
+
+## Response
+
+> {success} 204 Status changed
+
+
+#
 
 <a name="get-all-patient-suscribers"></a>
 ## Get All Patient Suscribers

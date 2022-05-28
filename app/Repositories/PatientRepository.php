@@ -115,6 +115,8 @@ class PatientRepository
                 "user_id"        => $user->id
             ]);
 
+            $this->changeStatus(true, $patient->id);
+
             if (isset($data['public_note'])) {
                 /** PublicNote */
                 PublicNote::create([
@@ -647,5 +649,25 @@ class PatientRepository
         }])->first();
 
         return $patient->suscribers ?? [];
+    }
+
+    /**
+     * @param bool $status
+     * @param int $id
+     * @return bool|int|null
+     */
+    public function changeStatus(bool $status, int $id) {
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (is_null($billingCompany)) return null;
+        
+        $patient = Patient::find($id);
+        if (is_null($patient->billingCompanies()->find($billingCompany->id))) {
+            $patient->billingCompanies()->attach($billingCompany->id);
+            return $patient;
+        } else {
+            return $patient->billingCompanies()->updateExistingPivot($billingCompany->id, [
+                'status' => $status,
+            ]);
+        }
     }
 }

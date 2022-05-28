@@ -256,6 +256,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
         Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
+        Route::patch("/change-status/{id}",[\App\Http\Controllers\PatientController::class,'changeStatus']);
 
         Route::get("/get-suscribers/{ssn_patient}",[\App\Http\Controllers\PatientController::class,"getAllSuscribers"]);
     });

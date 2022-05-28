@@ -133,6 +133,16 @@ class BillingCompany extends Model implements Auditable
     }
 
     /**
+     * The patients that belong to the BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function patients(): BelongsToMany
+    {
+        return $this->belongsToMany(Patient::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
      * The insuranceCompany that belong to the BillingCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
