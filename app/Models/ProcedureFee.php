@@ -12,21 +12,14 @@ class ProcedureFee extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "label",
         "fee",
-        "insurance_type_id",
-        "procedure_id"
+        "fee_percentage"
+        "insurance_label_fee_id",
+        "procedure_id",
+        "mac_locality_id",
+        "fee_start_date",
+        "fee_end_date"
     ];
-
-    /**
-     * ProcedureFee belongs to InsuranceType.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function insuranceType()
-    {
-        return $this->belongsTo(InsuranceType::class);
-    }
 
     /**
      * ProcedureFee belongs to Procedure.
@@ -36,5 +29,25 @@ class ProcedureFee extends Model implements Auditable
     public function procedure()
     {
         return $this->belongsTo(Procedure::class);
+    }
+
+    /**
+     * ProcedureFee belongs to InsuranceLabelFee.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insuranceLabelFee()
+    {
+        return $this->belongsTo(InsuranceLabelFee::class);
+    }
+
+    /**
+     * ProcedureFee belongs to MacLocality.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function macLocality()
+    {
+        return $this->belongsTo(MacLocality::class);
     }
 }

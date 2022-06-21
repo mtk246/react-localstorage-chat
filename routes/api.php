@@ -318,6 +318,17 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list",[\App\Http\Controllers\ModifierController::class,"getList"]);
     });
 
+    Route::prefix("procedure")->middleware([
+        "auth:api",
+        'role:superuser|biller|billingmanager',
+    ])->group(function(){
+        Route::post("/",[\App\Http\Controllers\ProcedureController::class,"createProcedure"]);
+        Route::get("/",[\App\Http\Controllers\ProcedureController::class,"getAllProcedures"]);
+        Route::get("/{id}",[\App\Http\Controllers\ProcedureController::class,"getOneProcedure"]);
+        Route::put("/{id}",[\App\Http\Controllers\ProcedureController::class,"updateProcedure"]);
+        Route::patch("/change-status/{id}",[\App\Http\Controllers\ProcedureController::class,'changeStatus']);
+    });
+
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });

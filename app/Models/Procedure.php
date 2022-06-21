@@ -28,6 +28,16 @@ class Procedure extends Model implements Auditable
     }
 
     /**
+     * Procedure has many ProcedureCosiderations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function procedureCosiderations()
+    {
+        return $this->hasMany(ProcedureCosideration::class);
+    }
+
+    /**
      * The companies that belong to the Procedure. 
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -65,5 +75,25 @@ class Procedure extends Model implements Auditable
     public function macLocalities()
     {
         return $this->belongsToMany(MacLocality::class)->withTimestamps();
+    }
+
+    /**
+     * The insurancePlan that belong to the Procedure. 
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function insurancePlans()
+    {
+        return $this->belongsToMany(InsurancePlan::class)->withPivot('price', 'price_percentage')->withTimestamps();
+    }
+
+    /**
+     * Procedure morphs one publicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function publicNote()
+    {
+        return $this->morphOne(PublicNote::class, 'publishable');
     }
 }

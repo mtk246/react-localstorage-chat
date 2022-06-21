@@ -153,6 +153,16 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * The procedures that belongs to the InsurancePlan.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function procedures(): BelongsToMany
+    {
+        return $this->belongsToMany(Procedure::class)->withTimestamps();
+    }
+
+    /**
      * InsurancePlan morphs many PublicNote.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

@@ -7,30 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class MacLocality extends Model implements Auditable
+class InsuranceLabelFee extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "mac",
-        "locality_number",
-        "state",
-        "fsa",
-        "counties"
+        "description",
+        "insurance_type_id"
     ];
 
     /**
-     * The procedures that belong to the MacLocality. 
+     * InsuranceLabelFee belongs to InsuranceType.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function procedures()
+    public function insuranceType()
     {
-        return $this->belongsToMany(Procedure::class)->withTimestamps();
+        return $this->belongsTo(InsuranceType::class);
     }
 
     /**
-     * MacLocality has many ProcedureFees.
+     * InsuranceLabelFee has many ProcedureFees.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -38,6 +35,4 @@ class MacLocality extends Model implements Auditable
     {
         return $this->hasMany(ProcedureFee::class);
     }
-
-
 }

@@ -16,12 +16,12 @@ class InsuranceType extends Model implements Auditable
     ];
 
     /**
-     * InsuranceType has many ProcedureFees.
+     * InsuranceType has many InsuranceLabelFees.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function procedureFees()
+    public function insuranceLabelFees()
     {
-        return $this->hasMany(ProcedureFee::class);
+        return $this->hasMany(InsuranceLabelFee::class);
     }
 }
