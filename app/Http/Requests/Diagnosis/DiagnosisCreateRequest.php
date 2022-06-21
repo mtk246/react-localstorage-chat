@@ -25,7 +25,7 @@ class DiagnosisCreateRequest extends FormRequest
     {
         return [
             'code'        => ['required', 'string', 'max:50'],
-            'description' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:255'],
             'note'        => ['required', 'string'],
         ];
     }
