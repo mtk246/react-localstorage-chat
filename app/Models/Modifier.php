@@ -46,4 +46,14 @@ class Modifier extends Model implements Auditable
     {
         return $this->belongsToMany(Procedure::class)->withTimestamps();
     }
+
+    /**
+     * Modifier morphs one publicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function publicNote()
+    {
+        return $this->morphOne(PublicNote::class, 'publishable');
+    }
 }

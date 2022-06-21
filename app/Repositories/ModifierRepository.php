@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Modifier;
+use App\Models\ModifierInvalidCombination;
 use App\Models\PublicNote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -20,9 +21,17 @@ class ModifierRepository
             DB::beginTransaction();
             $modifier = Modifier::create([
                 "modifier"                    => $data["modifier"],
-                "description"                 => $data["description"],
                 "special_coding_instructions" => $data["special_coding_instructions"]
             ]);
+
+            if (isset($data['modifier_invalid_combinations'])) {
+                foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
+                    ModifierInvalidCombination::create([
+                        'modifier_id'         => $modifier->id,
+                        'invalid_combination' => $invalidCombination['invalid_combination']
+                    ]);
+                }
+            }
             
             if (isset($data['note'])) {
                 PublicNote::create([
@@ -55,6 +64,7 @@ class ModifierRepository
     public function getAllModifiers() {
         $modifiers = Modifier::with([
             "publicNote",
+            "modifierInvalidCombinations"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         
         return is_null($modifiers) ? null : $modifiers;
@@ -67,6 +77,7 @@ class ModifierRepository
     public function getOneModifier(int $id) {
         $modifier = Modifier::whereId($id)->with([
             "publicNote",
+            "modifierInvalidCombinations"
         ])->first();
 
         return !is_null($modifier) ? $modifier : null;
@@ -84,9 +95,34 @@ class ModifierRepository
 
             $modifier->update([
                 "modifier"                    => $data["modifier"],
-                "description"                 => $data["description"],
                 "special_coding_instructions" => $data["special_coding_instructions"]
             ]);
+
+            if (isset($data['modifier_invalid_combinations'])) {
+                $invalidCombinations = $modifier->modifierInvalidCombinations;
+
+                /** Delete modifierInvalidCombinations */
+                foreach ($invalidCombinations as $invalidC) {
+                    $validated = false;
+                    foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
+                        if ($invalidCombination['invalid_combination'] == $invalidC->invalid_combination) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                    if (!$validated) $invalidC->delete();
+                }
+
+                foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
+                    ModifierInvalidCombination::updateOrCreate([
+                        'modifier_id'         => $modifier->id,
+                        'invalid_combination' => $invalidCombination['invalid_combination']
+                    ], [
+                        'modifier_id'         => $modifier->id,
+                        'invalid_combination' => $invalidCombination['invalid_combination']
+                    ]);
+                }
+            }
 
             if (isset($data['note'])) {
                 /** PublicNote */

@@ -24,11 +24,11 @@ class ModifierCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'modifier',
-            'invalid_combination',
-            'special_coding_instructions',
-            'active',
-            'deactivated_date'
+            'modifier'                                            => ['required', 'string', 'max:2'],
+            'special_coding_instructions'                         => ['required', 'string'],
+            'modifier_invalid_combinations'                       => ['required', 'array'],
+            'modifier_invalid_combinations.*.invalid_combination' => ['required', 'string', 'max:2'],
+            'note'                                                => ['required', 'string']
         ];
     }
 }

@@ -15,7 +15,8 @@ class ModifierConsideration extends Model implements Auditable
         "modifier_id",
         "gender_id",
         "age_init",
-        "age_end"
+        "age_end",
+        "discriminatory_id"
     ];
 
     /**
@@ -36,5 +37,15 @@ class ModifierConsideration extends Model implements Auditable
     public function gender()
     {
         return $this->belongsTo(Gender::class);
+    }
+
+    /**
+     * ModifierConsideration belongs to Discriminatory.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function discriminatory()
+    {
+        return $this->belongsTo(Discriminatory::class);
     }
 }
