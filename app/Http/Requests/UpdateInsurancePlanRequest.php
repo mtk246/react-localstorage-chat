@@ -25,6 +25,7 @@ class UpdateInsurancePlanRequest extends FormRequest
     public function rules()
     {
         return [
+            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'name'                 => ['required', 'string', Rule::unique('insurance_plans', 'name')->ignore($this->id)],
             'ins_type'             => ['required', 'string'],
             'cap_group'            => ['required', 'string'],

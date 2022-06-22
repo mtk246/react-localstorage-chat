@@ -26,6 +26,7 @@ class CreateInsurancePlanRequest extends FormRequest
     {
         return [
             'name'                 => ['required', 'string', Rule::unique('insurance_plans', 'name')],
+            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'ins_type'             => ['required', 'string'],
             'cap_group'            => ['required', 'string'],
             'accept_assign'        => ['required', 'boolean'],

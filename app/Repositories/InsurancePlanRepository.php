@@ -41,15 +41,21 @@ class InsurancePlanRepository
                 'insurance_company_id' => $data['insurance_company_id']
             ]);
 
-            $this->changeStatus(true, $insurancePlan->id);
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /** Attach billing company */
+            $insurancePlan->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
                     'nickname'           => $data['nickname'],
                     'nicknamable_id'     => $insurancePlan->id,
                     'nicknamable_type'   => InsurancePlan::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
@@ -97,14 +103,17 @@ class InsurancePlanRepository
                 'insurance_company_id' => $data['insurance_company_id']
             ]);
 
-            $this->changeStatus(true, $insurancePlan->id);
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $insurancePlan->id,
                     'nicknamable_type'   => InsurancePlan::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'nickname'           => $data['nickname'],
                 ]);

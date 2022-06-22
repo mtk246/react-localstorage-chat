@@ -48,6 +48,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
         "name":"dsfsdfsfeddsddfg",
         "nickname":"alias insurance",
@@ -371,6 +372,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
         "name":"dsfsdfsfeddsddfg",
         "nickname":"alias insurance edit",

@@ -30,6 +30,8 @@ class UpdateInsuranceRequest extends FormRequest
             'insurance.naic'        => ['required', 'string'],
             'insurance.file_method' => ['required', 'string'],
             'insurance.nickname'    => ['sometimes', 'string'],
+
+            'billing_company_id'    => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],

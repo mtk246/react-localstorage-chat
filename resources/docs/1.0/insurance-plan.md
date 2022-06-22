@@ -48,6 +48,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "ins_type":"some ins_type",
     "name":"someName",
     "nickname":"nickname plan someName",
@@ -307,6 +308,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "ins_type":"some ins_type edited",
     "name":"someName",
     "nickname":"nickname plan someName edit",

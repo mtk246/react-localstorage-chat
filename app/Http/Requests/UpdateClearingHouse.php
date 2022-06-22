@@ -25,21 +25,23 @@ class UpdateClearingHouse extends FormRequest
     public function rules()
     {
         return [
-            'name'            => ['required', 'string', Rule::unique('clearing_houses', 'name')->ignore($this->clearing_id)],
-            'org_type'        => ['required', 'string'],
-            'ack_required'    => ['required', 'boolean'],
-            'nickname'        => ['sometimes', 'string'],
+            'name'               => ['required', 'string', Rule::unique('clearing_houses', 'name')->ignore($this->clearing_id)],
+            'org_type'           => ['required', 'string'],
+            'ack_required'       => ['required', 'boolean'],
+            'nickname'           => ['sometimes', 'string'],
+
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             
-            'address'         => ['required', 'array'],
-            'address.address' => ['required', 'string'],
-            'address.city'    => ['required', 'string'],
-            'address.state'   => ['required', 'string'],
-            'address.zip'     => ['required', 'string'],
+            'address'            => ['required', 'array'],
+            'address.address'    => ['required', 'string'],
+            'address.city'       => ['required', 'string'],
+            'address.state'      => ['required', 'string'],
+            'address.zip'        => ['required', 'string'],
             
-            'contact'         => ['required', 'array'],
-            'contact.phone'   => ['required', 'string'],
-            'contact.fax'     => ['nullable', 'string'],
-            'contact.email'   => ['required', 'email:rfc'],
+            'contact'            => ['required', 'array'],
+            'contact.phone'      => ['required', 'string'],
+            'contact.fax'        => ['nullable', 'string'],
+            'contact.email'      => ['required', 'email:rfc'],
         ];
     }
 }

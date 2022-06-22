@@ -29,6 +29,8 @@ class CompanyCreateRequest extends FormRequest
             'npi'                  => ['required', 'integer'],
             'nickname'             => ['sometimes', 'string'],
             
+            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
             'taxonomies.*.name'    => ['required', 'string'],

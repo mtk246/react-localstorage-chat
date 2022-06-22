@@ -43,6 +43,7 @@
     "org_type":"222CH123",
     "ack_required":true,
     "nickname":"alias clearingName",
+    "billing_company_id": 1, /** Only required by superuser */
     "address": {
         "address":"address Clearing",
         "city":"city Clearing",
@@ -376,6 +377,7 @@
     "org_type":"222CH124",
     "ack_required":true,
     "nickname":"alias clearingName",
+    "billing_company_id": 1, /** Only required by superuser */
     "address": {
         "address":"address Clearing",
         "city":"city Clearing",

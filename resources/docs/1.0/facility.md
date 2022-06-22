@@ -66,6 +66,7 @@
     "facility_type_id": 1,
     "company_id": 1,
     "nickname":"alias facilityName",
+    "billing_company_id": 1, /** Only required by superuser */
     "facility_type": {
         "id": 1,
         "type": "01 - Clinics",
@@ -366,6 +367,7 @@
     "facility_type_id": 1,
     "company_id": 1,
     "nickname":"alias facilityName",
+    "billing_company_id": 1, /** Only required by superuser */
     "facility_type": {
         "id": 1,
         "type": "01 - Clinics",

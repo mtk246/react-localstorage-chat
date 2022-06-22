@@ -28,26 +28,32 @@ class ClearingHouseRepository
                 "ack_required" => $data["ack_required"]
             ]);
             
-            $this->changeStatus(true, $clearing->id);
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /** Attach billing company */
+            $clearing->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
                     'nickname'           => $data['nickname'],
                     'nicknamable_id'     => $clearing->id,
                     'nicknamable_type'   => ClearingHouse::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $clearing->id;
                 $data["address"]["addressable_type"]   = ClearingHouse::class;
                 Address::create($data["address"]);
             }
             if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["contact"]["contactable_id"]     = $clearing->id;
                 $data["contact"]["contactable_type"]   = ClearingHouse::class;
                 Contact::create($data["contact"]);
@@ -132,13 +138,17 @@ class ClearingHouseRepository
                 "ack_required" => $data["ack_required"]
             ]);
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $clearing->id,
                     'nicknamable_type'   => ClearingHouse::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'nickname'           => $data['nickname'],
                 ]);
@@ -146,7 +156,7 @@ class ClearingHouseRepository
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $clearing->id,
                     "contactable_type"   => ClearingHouse::class
                 ], $data['contact']);
@@ -154,7 +164,7 @@ class ClearingHouseRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $clearing->id,
                     "addressable_type"   => ClearingHouse::class
                 ], $data["address"]);

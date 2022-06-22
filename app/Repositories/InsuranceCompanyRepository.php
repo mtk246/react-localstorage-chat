@@ -26,27 +26,33 @@ class InsuranceCompanyRepository
                 "naic"        => $data["insurance"]["naic"],
                 "file_method" => $data["insurance"]["file_method"]
             ]);
-            $this->changeStatus(true, $insurance->id);
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /** Attach billing company */
+            $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['insurance']['nickname'])) {
                 EntityNickname::create([
                     'nickname'           => $data['insurance']['nickname'],
                     'nicknamable_id'     => $insurance->id,
                     'nicknamable_type'   => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $insurance->id;
                 $data["address"]["addressable_type"]   = InsuranceCompany::class;
                 Address::create($data["address"]);
             }
             if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["contact"]["contactable_id"]     = $insurance->id;
                 $data["contact"]["contactable_type"]   = InsuranceCompany::class;
                 Contact::create($data["contact"]);
@@ -159,15 +165,17 @@ class InsuranceCompanyRepository
                 "file_method" => $data["insurance"]["file_method"]
             ]);
 
-            $this->changeStatus(true, $insurance->id);
-
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             if (isset($data['insurance']['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $insurance->id,
                     'nicknamable_type'   => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'nickname'           => $data['insurance']['nickname'],
                 ]);
@@ -175,7 +183,7 @@ class InsuranceCompanyRepository
 
             if (isset($data['address']['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $insurance->id,
                     "addressable_type"   => InsuranceCompany::class,
                 ],
@@ -183,7 +191,7 @@ class InsuranceCompanyRepository
             }
             if (isset($data["contact"]["email"])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $insurance->id,
                     "contactable_type"   => InsuranceCompany::class,
                 ], $data["contact"]);

@@ -25,6 +25,7 @@ class CreateInsuranceRequest extends FormRequest
     public function rules()
     {
         return [
+            'billing_company_id'    => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'insurance'             => ['required', 'array'],
             'insurance.name'        => ['required', 'string', Rule::unique('insurance_companies', 'name')],
             'insurance.naic'        => ['required', 'string'],

@@ -36,26 +36,33 @@ class CompanyRepository
                 }
                 $company->taxonomies()->sync($tax_array);
             }
-            $this->changeStatus(true, $company->id);
-            $billingCompany = auth()->user()->billingCompanies->first();
+            
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /** Attach billing company */
+            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
                     'nickname'           => $data['nickname'],
                     'nicknamable_id'     => $company->id,
                     'nicknamable_type'   => Company::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $company->id;
                 $data["address"]["addressable_type"]   = Company::class;
                 Address::create($data["address"]);
             }
             if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["contact"]["contactable_id"]     = $company->id;
                 $data["contact"]["contactable_type"]   = Company::class;
                 Contact::create($data["contact"]);
@@ -158,11 +165,15 @@ class CompanyRepository
             DB::beginTransaction();
             $company = Company::find($id);
 
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
             $company->update([
                 "name"       => $data["name"],
                 "npi"        => $data["npi"]
             ]);
-            $this->changeStatus(true, $company->id);
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
@@ -174,13 +185,12 @@ class CompanyRepository
                 }
                 $company->taxonomies()->sync($tax_array);
             }
-            $billingCompany = auth()->user()->billingCompanies->first();
 
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $company->id,
                     'nicknamable_type'   => Company::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'nickname'           => $data['nickname'],
                 ]);
@@ -188,7 +198,7 @@ class CompanyRepository
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $company->id,
                     "contactable_type"   => Company::class
                 ], $data['contact']);
@@ -196,7 +206,7 @@ class CompanyRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $company->id,
                     "addressable_type"   => Company::class
                 ], $data["address"]);

@@ -51,6 +51,7 @@
     "name":"company first",
     "nickname":"alias company first",
     "npi":"222CF123",
+    "billing_company_id": 1, /** Only required by superuser */
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -712,6 +713,7 @@
     "name":"company first",
     "nickname":"alias company first",
     "npi":"222CF123",
+    "billing_company_id": 1, /** Only required by superuser */
     "taxonomies": [
         {
             "tax_id": "TAX01213",

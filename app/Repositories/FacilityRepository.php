@@ -40,26 +40,33 @@ class FacilityRepository
                 }
                 $facility->taxonomies()->sync($tax_array);
             }
-            $this->changeStatus(true, $facility->id);
-            $billingCompany = auth()->user()->billingCompanies->first();
+            
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /** Attach billing company */
+            $facility->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
                     'nickname'           => $data['nickname'],
                     'nicknamable_id'     => $facility->id,
                     'nicknamable_type'   => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $facility->id;
                 $data["address"]["addressable_type"]   = Facility::class;
                 Address::create($data["address"]);
             }
             if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["contact"]["contactable_id"]     = $facility->id;
                 $data["contact"]["contactable_type"]   = Facility::class;
                 Contact::create($data["contact"]);
@@ -184,7 +191,6 @@ class FacilityRepository
                 "facility_type_id" => $data["facility_type_id"],
                 "company_id"       => $data["company_id"]
             ]);
-            $this->changeStatus(true, $facility->id);
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
@@ -197,13 +203,17 @@ class FacilityRepository
                 $facility->taxonomies()->sync($tax_array);
             }
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $facility->id,
                     'nicknamable_type'   => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
                     'nickname'           => $data['nickname'],
                 ]);
@@ -211,7 +221,7 @@ class FacilityRepository
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $facility->id,
                     "contactable_type"   => Facility::class
                 ], $data['contact']);
@@ -219,7 +229,7 @@ class FacilityRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $facility->id,
                     "addressable_type"   => Facility::class
                 ], $data["address"]);

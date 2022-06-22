@@ -30,21 +30,23 @@ class CompanyUpdateRequest extends FormRequest
             'npi'                  => ['required', 'integer'],
             'nickname'             => ['sometimes', 'string'],
 
+            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
             'taxonomies.*.name'    => ['required', 'string'],
             'taxonomies.*.primary' => ['required', 'boolean'],
 
-            'address'               => ['required', 'array'],
-            'address.address'       => ['required', 'string'],
-            'address.city'          => ['required', 'string'],
-            'address.state'         => ['required', 'string'],
-            'address.zip'           => ['required', 'string'],
+            'address'              => ['required', 'array'],
+            'address.address'      => ['required', 'string'],
+            'address.city'         => ['required', 'string'],
+            'address.state'        => ['required', 'string'],
+            'address.zip'          => ['required', 'string'],
             
-            'contact'               => ['required', 'array'],
-            'contact.phone'         => ['required', 'string'],
-            'contact.fax'           => ['nullable', 'string'],
-            'contact.email'         => ['required', 'email:rfc']
+            'contact'              => ['required', 'array'],
+            'contact.phone'        => ['required', 'string'],
+            'contact.fax'          => ['nullable', 'string'],
+            'contact.email'        => ['required', 'email:rfc']
         ];
     }
 }
