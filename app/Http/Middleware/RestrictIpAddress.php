@@ -22,7 +22,12 @@ class RestrictIpAddress
         if (isset($request->email)) {
             $validate = null;
             $user = User::where('email', $request->email)->first();
-            $billingCompany = $user->billingCompanies->first();
+            
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = null;
+            } else {
+                $billingCompany = $user->billingCompanies->first();
+            }
 
             $restrictions = IpRestrictionMult::where([
                 'ip_beginning' => $request->ip(),

@@ -14,6 +14,7 @@ use App\Models\Contact;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\SocialMedia;
+use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -29,8 +30,8 @@ class UserRepository{
      * @return User|Model|null
      */
     public function create(array $data) {
-        try {
-            DB::beginTransaction();
+        //try {
+            //DB::beginTransaction();
 
             /** Create Profile */
             $profile = Profile::updateOrCreate([
@@ -81,8 +82,16 @@ class UserRepository{
             }
 
             /** Attach billing company */
-            if (isset($data['roles']))
-                $user->assignRole($data['roles']);
+            if (isset($data['roles'])) {
+                $roles = [];
+                foreach ($data['roles'] as $role) {
+                    $rol = Role::whereName($role)->first();
+                    if (isset($rol)) {
+                        array_push($roles, $rol->id);
+                    }
+                }
+                $user->syncRoles($roles);
+            }
 
             if (isset($data['contact'])) {
                 $data["contact"]["contactable_id"]     = $user->id;
@@ -111,12 +120,12 @@ class UserRepository{
                 )
             );
 
-            DB::commit();
+            //DB::commit();
             return $user;
-        }catch (\Exception $e) {
-            DB::rollBack();
-            return null;
-        }
+        //}catch (\Exception $e) {
+            //DB::rollBack();
+            //return null;
+        //}
     }
 
     /**
@@ -290,8 +299,16 @@ class UserRepository{
         }
 
         /** Attach billing company */
-        if (isset($data['roles']))
-            $user->syncRoles($data['roles']);
+        if (isset($data['roles'])) {
+            $roles = [];
+            foreach ($data['roles'] as $role) {
+                $rol = Role::whereName($role)->first();
+                if (isset($rol)) {
+                    array_push($roles, $rol->id);
+                }
+            }
+            $user->syncRoles($roles);
+        }
 
         if (isset($data['contact'])) {
             $data["contact"]["email"] = $data['email'];
