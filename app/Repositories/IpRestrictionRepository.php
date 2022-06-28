@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class IpRestrictionRepository
 {
@@ -120,6 +121,34 @@ class IpRestrictionRepository
                                         ->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
         return !is_null($restrictions) ? $restrictions : null;
+    }
+
+    public function getServerAllRestrictions() {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults')
+                                         ->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults')
+                                        ->where('billing_company_id', $bC)
+                                        ->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+        
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     public function getOneRestriction(int $id) {

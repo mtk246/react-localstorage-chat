@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\BillingCompanyRepository;
-
+use Illuminate\Http\Request;
 use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
@@ -96,6 +96,38 @@ class BillingCompanyRepository
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
         return !is_null($billingCompanies) ? $billingCompanies : null;
+    }
+
+    public function getServerAllBillingCompany(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = BillingCompany::with([
+                "users",
+                "address",
+                "contact"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = BillingCompany::whereId($bC)->with([
+                "users",
+                "address",
+                "contact"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     public function getByCode($code){

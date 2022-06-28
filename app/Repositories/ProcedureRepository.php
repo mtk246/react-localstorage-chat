@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Models\InsuranceLabelFee;
 use App\Models\InsuranceType;
@@ -129,6 +130,28 @@ class ProcedureRepository
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         
         return is_null($procedures) ? null : $procedures;
+    }
+
+    public function getServerAllProcedures(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $records = Procedure::with([
+            "publicNote",
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     /**

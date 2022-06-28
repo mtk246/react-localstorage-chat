@@ -168,6 +168,39 @@ class UserRepository{
         return is_null($users) ? null : $users;
     }
 
+    public function getServerAllUsers(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = User::with([
+                "profile",
+                "roles"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = User::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "profile",
+                    "roles"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
+    }
+
     /**
      * @param string $email
      * @return bool|null

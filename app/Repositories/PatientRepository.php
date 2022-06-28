@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
@@ -363,6 +364,43 @@ class PatientRepository
                 $query->with("insuranceCompany", "suscribers");
             }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+    }
+
+    public function getServerAllPatient(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $records = Patient::with([
+            "user" => function ($query) {
+                $query->with(["profile" => function ($q) {
+                    $q->with("socialMedias");
+                }, "roles", "addresses", "contacts", "billingCompanies"]);
+            },
+            "marital",
+            "guarantor",
+            "companies",
+            "employments",
+            "patientPrivate",
+            "emergencyContacts",
+            "publicNote",
+            "privateNotes",
+            "insurancePlans" => function ($query) {
+                $query->with("insuranceCompany", "suscribers");
+            }
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     /**

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Http\Request;
 use App\Models\InsurancePlan;
 use App\Models\PublicNote;
 use App\Models\EntityNickname;
@@ -200,6 +200,43 @@ class InsurancePlanRepository
         }
 
         return !is_null($insurance) ? $insurance : null;
+    }
+
+    public function getServerAllInsurancePlan(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = InsurancePlan::with([
+                "nicknames",
+                "publicNotes",
+                "insuranceCompany"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = InsurancePlan::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "publicNotes",
+                    "insuranceCompany"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     public function changeStatus(bool $status,int $id) {

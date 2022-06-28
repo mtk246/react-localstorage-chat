@@ -7,6 +7,7 @@ use App\Models\BillingCompany;
 use App\Models\Contact;
 use App\Models\EntityNickname;
 use App\Models\InsuranceCompany;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,47 @@ class InsuranceCompanyRepository
         }
 
         return !is_null($insuranceCompanies) ? $insuranceCompanies : null;
+    }
+
+    public function getServerAllInsurance(Request $request) {
+        $sortBy   = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = InsuranceCompany::with([
+                "addresses",
+                "contacts",
+                "nicknames"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "addresses" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    }
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
     }
 
     public function getOneInsurance(int $id) {

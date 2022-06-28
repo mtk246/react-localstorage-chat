@@ -42,6 +42,38 @@ class AuditController extends Controller
         return response()->json($records, 200);
     }
 
+    public function getServerAuditAll(Request $request) {
+        $sortBy = $request->sortBy ?? 'id';
+        $sortDesc = $request->sortDesc ?? false;
+        $page = $request->page ?? 1;
+        $itemsPerPage = $request->itemsPerPage ?? 5;
+        $search = $request->search ?? '';
+
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $records = Audit::with(['user' => function ($query) {
+                $query->with('profile');
+            }])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        } else {
+            $records = Audit::whereHas('user', function ($query) use ($bC) {
+                    $query->whereHas('billingCompanies', function ($q) use ($bC) {
+                        $q->where('billing_company_id', $bC);
+                    });
+                })->with(['user' => function ($query) {
+                $query->with('profile');
+            }])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        }
+        return response()->json([
+            'pagination'  => [
+                'total'       => $records->total(),
+                'currentPage' => $records->currentPage(),
+                'perPage'     => $records->perPage(),
+                'lastPage'    => $records->lastPage()
+            ],
+            'items' =>  $records->items()
+        ], 200);
+    },
+
     public function getAudit(Request $request)
     {
         $sortBy = $request->sortBy ?? 'id';
