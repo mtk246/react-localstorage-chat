@@ -21,9 +21,12 @@ class RestrictIpAddress
     {
         if (isset($request->email)) {
             $validate = null;
-            $user = User::where('email', $request->email)->first();
+            $user = auth()->user();
+            if (is_null($user)) {
+                $user = User::where('email', $request->email)->first();
+            }
             
-            if (auth()->user()->hasRole('superuser')) {
+            if ($user->hasRole('superuser')) {
                 $billingCompany = null;
             } else {
                 $billingCompany = $user->billingCompanies->first();
