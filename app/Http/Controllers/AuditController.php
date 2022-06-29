@@ -72,7 +72,7 @@ class AuditController extends Controller
             ],
             'items' =>  $records->items()
         ], 200);
-    },
+    }
 
     public function getAudit(Request $request)
     {
