@@ -168,15 +168,32 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = User::whereId(auth()->id())->with([
-            "roles",
-            "permissions",
-            "profile" => function ($query) {
-                $query->with('socialMedias');
-            },
-            "addresses",
-            "contacts"
-        ])->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $user = User::whereId(auth()->id())->with([
+                "roles",
+                "permissions",
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "addresses",
+                "contacts"
+            ])->first();
+        } else {
+            $user = User::whereId(auth()->id())->with([
+                "roles",
+                "permissions",
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                }
+            ])->first();
+        }
 
         return response()->json($user);
     }

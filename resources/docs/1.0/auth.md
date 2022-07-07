@@ -177,7 +177,35 @@
         "created_at": "2022-03-14T20:49:19.000000Z",
         "updated_at": "2022-03-14T20:49:19.000000Z",
         "social_medias": []
-    }
+    },
+    "addresses": [
+        {
+            "id": 1,
+            "address": "Singleton Rd",
+            "city": "Calimesa",
+            "state": "California",
+            "zip": "923202207",
+            "billing_company_id": null,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z",
+            "addressable_type": "App\\Models\\User",
+            "addressable_id": 1
+        }
+    ],
+    "contacts": [
+        {
+            "id": 1,
+            "phone": "(740) 208-8506",
+            "fax": "(918) 534-7718",
+            "email": "dach.leopold@nikolaus.com",
+            "billing_company_id": null,
+            "created_at": "2022-03-14T20:49:20.000000Z",
+            "updated_at": "2022-03-14T20:49:20.000000Z",
+            "mobile": "218-885-3211",
+            "contactable_type": "App\\Models\\User",
+            "contactable_id": 1
+        }
+    ],
 }
 ```
 
