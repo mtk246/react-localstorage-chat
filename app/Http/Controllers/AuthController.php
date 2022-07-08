@@ -96,6 +96,9 @@ class AuthController extends Controller
         //}
 
         $user = User::where('email', $dataValidated["email"])->first();
+        if (!isset($user)) {
+            return response()->json(['error' => __('Bad Credentials')], 401);
+        }
         if ($user !== null && ($user->isBlocked == true)) {
             return $this->sendLockoutResponse();
         }

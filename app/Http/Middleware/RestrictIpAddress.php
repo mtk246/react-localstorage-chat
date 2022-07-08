@@ -20,12 +20,13 @@ class RestrictIpAddress
     public function handle(Request $request, Closure $next)
     {
         if (isset($request->email)) {
-            $validate = null;
+            $user = User::whereEmail($request->email)->first();
+        } else {
             $user = auth()->user();
-            if (is_null($user)) {
-                $user = User::where('email', $request->email)->first();
-            }
-            
+        }
+
+        if (isset($user)) {
+            $validate = null;
             if ($user->hasRole('superuser')) {
                 $billingCompany = null;
             } else {
