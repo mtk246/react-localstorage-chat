@@ -236,7 +236,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/insurance-company/{id}/get-by-insurance-company",[\App\Http\Controllers\InsurancePlanController::class,'getAllPlanByInsuranceCompany']);
     });
 
-    Route::prefix("doctor")->middleware([
+    Route::prefix("health-professional")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
