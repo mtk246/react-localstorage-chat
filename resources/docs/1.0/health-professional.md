@@ -1,28 +1,28 @@
-# Doctor Docs
+# Health Professional Docs
 
 ---
 
 - [Basic data](#basic-data)
-- [Create doctor](#create-doctor)
-- [Get all doctor](#get-all-doctor)
-- [Get one doctor](#get-one-doctor)
-- [Update doctor](#update-doctor)
-- [Get one doctor by npi](#get-one-doctor-by-npi)
-- [Change status Doctor](#change-status-doctor)
+- [Create health professional](#create-health-professional)
+- [Get all health professional](#get-all-health-professional)
+- [Get one health professional](#get-one-health-professional)
+- [Update health professional](#update-health-professional)
+- [Get one health professional by npi](#get-one-health-professional-by-npi)
+- [Change status health professional](#change-status-health-professional)
 
 
 <a name="basic-data"></a>
 ## Basic data to make request
 
 
-| # | METHOD   | Name             | URL                     | Token required|Description|
-| : ||   :-                 |  :                      |               |                    |  
-| 1 |POST| `Create Doctor`                    | `/doctor/`               |yes             |Create Doctor|         
-| 2 |GET | `Get all Doctor`                   | `/doctor/`        |yes            |Get all Doctor|
-| 3 |GET | `Get one Doctor`                   | `/doctor/{id}`|yes|Get one Doctor|
-| 4 |PUT | `Update Doctor`                | `/doctor/{id}`|yes|Update Doctor|
-| 5 |GET | `Get one Doctor by npi`           | `/doctor/{npi}/get-by-npi`|yes|Get one Doctor by npi|
-| 6 |PATCH | `change status Doctor`           | `/doctor/{id}/change-status`|yes|change status doctor Doctor|
+| # | METHOD| Name                                 | URL            | Token required|Description|
+| : |       |   :-                 |  :            |               |                          |  
+| 1 | POST  | `Create health professional`         | `/health-professional/`                  |yes|Create health professional|
+| 2 | GET   | `Get all health professional`        | `/health-professional/`                  |yes|Get all health professional|
+| 3 | GET   | `Get one health professional`        | `/health-professional/{id}`              |yes|Get one health professional|
+| 4 | PUT   | `Update health professional`         | `/health-professional/{id}`              |yes|Update health professional|
+| 5 | GET   | `Get one health professional by npi` | `/health-professional/{npi}/get-by-npi`  |yes|Get one health professional by npi|
+| 6 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 
 
 
@@ -35,8 +35,8 @@
 
 
 
-<a name="create-doctor"></a>
-## Create Doctor
+<a name="create-health-professional"></a>
+## Create Health Professional
 
 ### Body request example
 
@@ -89,7 +89,7 @@
 
 ## Response
 
-> {success} 201 Doctor created
+> {success} 201 Health Professional created
 
 
 #
@@ -110,8 +110,8 @@
 
 #
 
-<a name="get-all-doctor"></a>
-## Get All Doctors
+<a name="get-all-health-professional"></a>
+## Get All Health Professionals
 
 
 ### Param in header
@@ -125,7 +125,7 @@
 
 ## Response
 
-> {success} 200 Doctor found
+> {success} 200 Health Professional found
 
 #
 
@@ -170,7 +170,7 @@
             "roles": [
                 {
                     "id": 8,
-                    "name": "DOCTOR",
+                    "name": "Health Professional",
                     "guard_name": "api",
                     "created_at": "2022-03-16T23:18:56.000000Z",
                     "updated_at": "2022-03-16T23:18:56.000000Z",
@@ -246,8 +246,8 @@
 
 #
 
-<a name="get-one-doctor"></a>
-## Get One Doctor
+<a name="get-one-health-professional"></a>
+## Get One Health Professional
 
 ### Param in header
 
@@ -267,7 +267,7 @@
 
 ## Response
 
-> {success} 200 Doctor found
+> {success} 200 Health Professional found
 
 #
 
@@ -311,7 +311,7 @@
         "roles": [
             {
                 "id": 8,
-                "name": "DOCTOR",
+                "name": "Health Professional",
                 "guard_name": "api",
                 "created_at": "2022-03-16T23:18:56.000000Z",
                 "updated_at": "2022-03-16T23:18:56.000000Z",
@@ -386,8 +386,8 @@
 
 #
 
-<a name="update-doctor"></a>
-## Update Doctor
+<a name="update-health-professional"></a>
+## Update Health Professional
 
 ### Body request example
 
@@ -439,7 +439,7 @@
 
 ## Response
 
-> {success} 200 Doctor updated
+> {success} 200 Health Professional updated
 
 
 #
@@ -488,8 +488,8 @@
 
 #
 
-<a name="get-one-doctor-by-npi"></a>
-##Get One Doctor by NPI
+<a name="get-one-health-professional-by-npi"></a>
+##Get One Health Professional by NPI
 
 
 ### Param in header
@@ -510,7 +510,7 @@
 
 ## Response
 
-> {success} 200 Doctor found
+> {success} 200 Health Professional found
 
 #
 
@@ -554,7 +554,7 @@
         "roles": [
             {
                 "id": 8,
-                "name": "DOCTOR",
+                "name": "Health Professional",
                 "guard_name": "api",
                 "created_at": "2022-03-16T23:18:56.000000Z",
                 "updated_at": "2022-03-16T23:18:56.000000Z",
@@ -631,8 +631,8 @@
 
 #
 
-<a name="change-status-doctor"></a>
-## Change status Doctor
+<a name="change-status-health-professional"></a>
+## Change status Health Professional
 
 
 ### Param in header

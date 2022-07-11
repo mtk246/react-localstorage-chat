@@ -36,8 +36,8 @@
 - ## Insurance-plan
     - [Insurance-Plan](/{{route}}/{{version}}/insurance-plan)
     
-- ## Doctor
-    - [Doctor](/{{route}}/{{version}}/doctor)
+- ## Health Professional
+    - [Health Professional](/{{route}}/{{version}}/health-professional)
 
 - ## Patient
     - [Patient](/{{route}}/{{version}}/patient)
