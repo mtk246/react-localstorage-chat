@@ -244,7 +244,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
         Route::get("/{id}",[\App\Http\Controllers\DoctorController::class,'getOneDoctor']);
         Route::get("/",[\App\Http\Controllers\DoctorController::class,'getAllDoctors']);
-        Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getByNpi']);
+        Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getOneByNpi']);
         Route::patch("/{id}/change-status",[\App\Http\Controllers\DoctorController::class,'changeStatus']);
     });
 
