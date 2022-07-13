@@ -40,7 +40,7 @@ class ApiController extends Controller
         $data = json_decode($response->getBody());
         if (isset($data->Errors)) {
             return response()->json(__('Field contains special character(s) or wrong number of characters'), 404);
-        } else {
+        } elseif (isset($data->results[0])) {
             $r = $data->results[0];
             foreach ($r->addresses as $address) {
                 if ($address->address_purpose == 'MAILING') {
@@ -68,6 +68,7 @@ class ApiController extends Controller
             unset($r->addresses);
             return response()->json($r);
         }
+        return response()->json(__('Npi not found'), 404);
     }
 
     /**
