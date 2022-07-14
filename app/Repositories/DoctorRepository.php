@@ -9,6 +9,9 @@ use App\Models\HealthProfessional;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Taxonomy;
+use App\Models\SocialMedia;
+use App\Models\SocialNetwork;
+use App\Roles\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,10 +41,13 @@ class DoctorRepository
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
-                    foreach ($data["profile"]["social_medias"] as $socialM) {
-                        if ($socialM['name'] == $socialMedia->name) {
-                            $validated = true;
-                            break;
+                    $socialNetwork = $socialMedia->SocialNetwork;
+                    if (isset($socialNetwork)) {
+                        foreach ($data["profile"]["social_medias"] as $socialM) {
+                            if ($socialM['name'] == $socialNetwork->name) {
+                                $validated = true;
+                                break;
+                            }
                         }
                     }
                     if (!$validated) $socialMedia->delete();
@@ -49,13 +55,15 @@ class DoctorRepository
 
                 /** update or create new social medias */
                 foreach ($data["profile"]["social_medias"] as $socialMedia) {
-                    SocialMedia::updateOrCreate([
-                        "name" => $socialMedia["name"]
-                    ], [
-                        "name" => $socialMedia["name"],
-                        "link" => $socialMedia["link"],
-                        "profile_id" => $profile->id
-                    ]);
+                    $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                    if (isset($socialNetwork)) {
+                        SocialMedia::updateOrCreate([
+                            "profile_id"        => $profile->id,
+                            "social_network_id" => $socialNetwork->id
+                        ], [
+                            "link" => $socialMedia["link"]
+                        ]);
+                    }
                 }
             }
             /** Create User */
@@ -66,22 +74,27 @@ class DoctorRepository
                 "profile_id" => $profile->id
             ]);
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
             
             if (isset($data['contact'])) {
                 $data["contact"]["contactable_id"]     = $user->id;
                 $data["contact"]["contactable_type"]   = User::class;
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 Contact::create($data["contact"]);
             }
 
             if (isset($data['address'])) {
                 $data["address"]["addressable_id"]     = $user->id;
                 $data["address"]["addressable_type"]   = User::class;
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 Address::create($data["address"]);
             }
             $healthP = HealthProfessional::create([
+                "code"    => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
                 "npi"     => $data["npi"],
                 "dea"     => $data["dea"],
                 "user_id" => $user->id
@@ -97,7 +110,8 @@ class DoctorRepository
             $this->changeStatus(true, $healthP->id);
 
             if(!is_null($healthP) && !is_null($user)){
-                $user->assignRole("DOCTOR");
+                $role = Role::whereSlug('healthprofessional')->first();
+                $user->attachRole($role);
 
                 $token = encrypt($user->id."@#@#$".$user->email);
                 $user->token = $token;
@@ -174,10 +188,13 @@ class DoctorRepository
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
-                    foreach ($data["profile"]["social_medias"] as $socialM) {
-                        if ($socialM['name'] == $socialMedia->name) {
-                            $validated = true;
-                            break;
+                    $socialNetwork = $socialMedia->SocialNetwork;
+                    if (isset($socialNetwork)) {
+                        foreach ($data["profile"]["social_medias"] as $socialM) {
+                            if ($socialM['name'] == $socialNetwork->name) {
+                                $validated = true;
+                                break;
+                            }
                         }
                     }
                     if (!$validated) $socialMedia->delete();
@@ -185,22 +202,27 @@ class DoctorRepository
 
                 /** update or create new social medias */
                 foreach ($data["profile"]["social_medias"] as $socialMedia) {
-                    SocialMedia::updateOrCreate([
-                        "name"       => $socialMedia["name"],
-                        "profile_id" => $profile->id
-                    ], [
-                        "name" => $socialMedia["name"],
-                        "link" => $socialMedia["link"],
-                        "profile_id" => $profile->id
-                    ]);
+                    $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                    if (isset($socialNetwork)) {
+                        SocialMedia::updateOrCreate([
+                            "profile_id"        => $profile->id,
+                            "social_network_id" => $socialNetwork->id
+                        ], [
+                            "link" => $socialMedia["link"]
+                        ]);
+                    }
                 }
             }
             
-            $billingCompany = auth()->user()->billingCompanies->first();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "contactable_id"     => $user->id,
                     "contactable_type"   => User::class
                 ], $data['contact']);
@@ -208,7 +230,7 @@ class DoctorRepository
 
             if (isset($data['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? null,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $user->id,
                     "addressable_type"   => User::class
                 ], $data["address"]);
@@ -231,7 +253,9 @@ class DoctorRepository
             $healthProfessionals = HealthProfessional::with([
                 "user" => function ($query) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses",
                         "contacts"
@@ -245,7 +269,9 @@ class DoctorRepository
                 })->with([
                 "user" => function ($query) use ($bC) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
@@ -273,7 +299,9 @@ class DoctorRepository
             $records = HealthProfessional::with([
                 "user" => function ($query) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses",
                         "contacts"
@@ -287,7 +315,9 @@ class DoctorRepository
                 })->with([
                 "user" => function ($query) use ($bC) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
@@ -321,7 +351,9 @@ class DoctorRepository
             $healthP = HealthProfessional::whereId($id)->with([
                 "user" => function ($query) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses",
                         "contacts"
@@ -333,7 +365,9 @@ class DoctorRepository
             $healthP = HealthProfessional::whereId($id)->with([
                 "user" => function ($query) use ($bC) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
@@ -359,7 +393,9 @@ class DoctorRepository
             $healthP = HealthProfessional::whereNpi($npi)->with([
                 "user" => function ($query) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses",
                         "contacts"
@@ -371,7 +407,9 @@ class DoctorRepository
             $healthP = HealthProfessional::whereNpi($npi)->with([
                 "user" => function ($query) {
                     $query->with([
-                        "profile",
+                        "profile" => function ($query) {
+                            $query->with('socialMedias');
+                        },
                         "roles",
                         "addresses" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);

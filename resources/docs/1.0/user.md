@@ -13,6 +13,7 @@
 - [Unlock user](#unlock-user)
 - [Change password](#change-password)
 - [Update image user](#update-image-user)
+- [Get list social networks](#get-list-social-networks)
 - [Update social media by user](#update-social-media-by-user)
 - [Update password](#update-password)
 - [Search by ssn](#search-by-ssn)
@@ -36,11 +37,12 @@
 | 8 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
 | 9 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
 | 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
-| 11 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
-| 12|PATCH | `update password`   | `/user/update-password` |yes|update password|
-| 13|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
-| 14 |POST | `new token`   | `/user/new-token` |no|generate new token user|
-| 15|PATCH | `update language`   | `/setting/lang` |yes|update language|
+| 11 |GET  | `get list social social networks`   | `/user/social-networks/get-list` |yes|get list social networks|
+| 12 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
+| 13|PATCH | `update password`   | `/user/update-password` |yes|update password|
+| 14|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
+| 15 |POST | `new token`   | `/user/new-token` |no|generate new token user|
+| 16|PATCH | `update language`   | `/setting/lang` |yes|update language|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -680,6 +682,53 @@
 
 
 #
+
+<a name="get-list-social-networks"></a>
+## Get all social networks
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Social networks found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Facebook"
+    },
+    {
+        "id": 2,
+        "name": "Twitter"
+    },
+    {
+        "id": 3,
+        "name": "LinkedIn"
+    },
+    {
+        "id": 4,
+        "name": "YouTube"
+    },
+    {
+        "id": 5,
+        "name": "Instagram"
+    },
+    {
+        "id": 6,
+        "name": "TikTok"
+    }
+]
+```
 
 <a name="update-social-media-by-user"></a>
 ## Update social medias by user

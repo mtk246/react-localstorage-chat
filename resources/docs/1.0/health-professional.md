@@ -42,6 +42,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "email":"user1@gmail.com",
     "npi":"123456719",
     "dea":"1234DEA",
@@ -63,7 +64,17 @@
         "last_name":"Last Name",
         "middle_name":"Middle Name",
         "sex":"m",
-        "date_of_birth":"1990-11-11"
+        "date_of_birth":"1990-11-11",
+        "social_medias": [
+            {
+                "name": "nameSocialMedia1",
+                "link": "URLSocialMedia1"
+            },
+            {
+                "name": "nameSocialMedia2",
+                "link": "URLSocialMedia2"
+            }
+        ]
     },
     "address": {
         "address": "Direction address",
@@ -393,6 +404,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "email":"user1edit@gmail.com",
     "npi":"123456719",
     "dea":"1234DEA",
@@ -413,7 +425,17 @@
         "last_name":"Last Name",
         "middle_name":"Middle Name",
         "sex":"m",
-        "date_of_birth":"1990-11-11"
+        "date_of_birth":"1990-11-11",
+        "social_medias": [
+            {
+                "name": "nameSocialMedia1",
+                "link": "URLSocialMedia1"
+            },
+            {
+                "name": "nameSocialMedia2",
+                "link": "URLSocialMedia2"
+            }
+        ]
     },
     "address": {
         "address": "Direction address",

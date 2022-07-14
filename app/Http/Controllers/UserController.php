@@ -315,6 +315,17 @@ class UserController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getListSocialNetworks(): JsonResponse
+    {
+        $rs = $this->userRepository->getListSocialNetworks();
+        return response()->json($rs);
+    }
+
+    /**
      * @param SocialMediaProfileRequest $request
      * @return JsonResponse
      */

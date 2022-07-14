@@ -14,6 +14,7 @@ use App\Models\Contact;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\SocialMedia;
+use App\Models\SocialNetwork;
 use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,8 +31,8 @@ class UserRepository{
      * @return User|Model|null
      */
     public function create(array $data) {
-        //try {
-            //DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
             /** Create Profile */
             $profile = Profile::updateOrCreate([
@@ -120,12 +121,12 @@ class UserRepository{
                 )
             );
 
-            //DB::commit();
+            DB::commit();
             return $user;
-        //}catch (\Exception $e) {
-            //DB::rollBack();
-            //return null;
-        //}
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -428,6 +429,17 @@ class UserRepository{
         ]);
 
         return $pathNameFile;
+    }
+
+    /**
+     * @return Builder[]|Collection
+     */
+    public function getListSocialNetworks() {
+        try {
+            return getList(SocialNetwork::class, 'name', ['active' => true]);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     /**

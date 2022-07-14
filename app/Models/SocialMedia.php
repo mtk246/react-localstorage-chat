@@ -12,10 +12,17 @@ class SocialMedia extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "name",
         "link",
-        "profile_id"
+        "profile_id",
+        "social_network_id"
     ];
+
+    /**
+     * Lista de relaciones a incorporar en las consultas
+     *
+     * @var    array
+     */
+    protected $with = ['socialNetwork'];
 
     /**
      * SocialMedia belongs to Profile.
@@ -25,5 +32,15 @@ class SocialMedia extends Model implements Auditable
     public function profile()
     {
         return $this->belongsTo(Profile::class);
+    }
+
+    /**
+     * SocialMedia belongs to SocialNetwork.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function socialNetwork()
+    {
+        return $this->belongsTo(SocialNetwork::class);
     }
 }

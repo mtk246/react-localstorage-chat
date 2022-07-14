@@ -29,6 +29,8 @@ class CreateDoctorRequest extends FormRequest
             'dea'                   => ['required', 'string'],
             'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
             'taxonomies.*.name'    => ['required', 'string'],
@@ -41,6 +43,10 @@ class CreateDoctorRequest extends FormRequest
             'profile.middle_name'   => ['nullable', 'string', 'max:20'],
             'profile.ssn'           => ['required', 'string'],
             'profile.date_of_birth' => ['required', 'date'],
+
+            'profile.social_medias' => ['sometimes', 'array'],
+            'profile.social_medias.*.name' => ['sometimes', 'string'],
+            'profile.social_medias.*.link' => ['sometimes', 'string'],
 
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],
