@@ -18,6 +18,7 @@ use App\Models\PrivateNote;
 use App\Models\PublicNote;
 use App\Models\Profile;
 use App\Models\SocialMedia;
+use App\Models\SocialNetwork;
 use App\Models\Address;
 use App\Models\Contact;
 use App\Models\Marital;
@@ -55,10 +56,13 @@ class PatientRepository
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
-                    foreach ($data["profile"]["social_medias"] as $socialM) {
-                        if ($socialM['name'] == $socialMedia->name) {
-                            $validated = true;
-                            break;
+                    $socialNetwork = $socialMedia->SocialNetwork;
+                    if (isset($socialNetwork)) {
+                        foreach ($data["profile"]["social_medias"] as $socialM) {
+                            if ($socialM['name'] == $socialNetwork->name) {
+                                $validated = true;
+                                break;
+                            }
                         }
                     }
                     if (!$validated) $socialMedia->delete();
@@ -66,14 +70,15 @@ class PatientRepository
 
                 /** update or create new social medias */
                 foreach ($data["profile"]["social_medias"] as $socialMedia) {
-                    SocialMedia::updateOrCreate([
-                        "name"       => $socialMedia["name"],
-                        "profile_id" => $profile->id
-                    ], [
-                        "name" => $socialMedia["name"],
-                        "link" => $socialMedia["link"],
-                        "profile_id" => $profile->id
-                    ]);
+                    $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                    if (isset($socialNetwork)) {
+                        SocialMedia::updateOrCreate([
+                            "profile_id"        => $profile->id,
+                            "social_network_id" => $socialNetwork->id
+                        ], [
+                            "link" => $socialMedia["link"]
+                        ]);
+                    }
                 }
             }
 
@@ -112,6 +117,7 @@ class PatientRepository
 
             /** Create Patient */
             $patient = Patient::create([
+                "code"           => generateNewCode("PA", 5, date("Y"), Patient::class, "code"),
                 "driver_license" => $data["driver_license"],
                 "user_id"        => $user->id
             ]);
@@ -474,10 +480,13 @@ class PatientRepository
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
-                    foreach ($data["profile"]["social_medias"] as $socialM) {
-                        if ($socialM['name'] == $socialMedia->name) {
-                            $validated = true;
-                            break;
+                    $socialNetwork = $socialMedia->SocialNetwork;
+                    if (isset($socialNetwork)) {
+                        foreach ($data["profile"]["social_medias"] as $socialM) {
+                            if ($socialM['name'] == $socialNetwork->name) {
+                                $validated = true;
+                                break;
+                            }
                         }
                     }
                     if (!$validated) $socialMedia->delete();
@@ -485,14 +494,15 @@ class PatientRepository
 
                 /** update or create new social medias */
                 foreach ($data["profile"]["social_medias"] as $socialMedia) {
-                    SocialMedia::updateOrCreate([
-                        "name"       => $socialMedia["name"],
-                        "profile_id" => $profile->id
-                    ], [
-                        "name" => $socialMedia["name"],
-                        "link" => $socialMedia["link"],
-                        "profile_id" => $profile->id
-                    ]);
+                    $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                    if (isset($socialNetwork)) {
+                        SocialMedia::updateOrCreate([
+                            "profile_id"        => $profile->id,
+                            "social_network_id" => $socialNetwork->id
+                        ], [
+                            "link" => $socialMedia["link"]
+                        ]);
+                    }
                 }
             }
             
