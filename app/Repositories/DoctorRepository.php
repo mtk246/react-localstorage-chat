@@ -258,7 +258,8 @@ class DoctorRepository
                         },
                         "roles",
                         "addresses",
-                        "contacts"
+                        "contacts",
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
@@ -279,6 +280,7 @@ class DoctorRepository
                         "contacts" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
@@ -356,7 +358,8 @@ class DoctorRepository
                         },
                         "roles",
                         "addresses",
-                        "contacts"
+                        "contacts",
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
@@ -375,6 +378,7 @@ class DoctorRepository
                         "contacts" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
@@ -398,7 +402,8 @@ class DoctorRepository
                         },
                         "roles",
                         "addresses",
-                        "contacts"
+                        "contacts",
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
@@ -417,6 +422,7 @@ class DoctorRepository
                         "contacts" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },
+                        "billingCompanies"
                     ]);
                 },
                 "taxonomies"
