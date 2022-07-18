@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\OnlyRoleIf;
 
 class UserCreateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UserCreateRequest extends FormRequest
     public function rules()
     {
         $roles = $this->roles;
-        $invalidRoles = ['SUPER_USER', 'DEVELOPMENT_SUPPORT'];
+        $invalidRoles = ['Super User', 'Development Support'];
         return [
             'profile'               => ['required', 'array'],
             'profile.sex'           => ['required', 'string', 'max:1'],
@@ -40,7 +41,7 @@ class UserCreateRequest extends FormRequest
             'profile.social_medias.*.link' => ['sometimes', 'string'],
 
             'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
-            'roles'                 => ['required', 'array'],
+            'roles'                 => ['required', 'array', new OnlyRoleIf()],
             'company-billing'       => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
                 return (!in_array_any($invalidRoles, $roles));
             }), 'integer', 'nullable'],

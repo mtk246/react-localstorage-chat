@@ -72,7 +72,8 @@
     "Error updating social media profile": "Error al actualizar el perfil de las redes sociales",
     "Error updating password": "Error al actualizar la contraseña",
     "Error, wrong otp code": "Error, código otp incorrecto",
-    "Error updating language": "Error al actualizar idioma"
+    "Error updating language": "Error al actualizar idioma",
+    "No more roles can be assigned to a super user": "No se le pueden asignar mas roles a un super usuario"
 
 
 

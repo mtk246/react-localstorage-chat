@@ -46,29 +46,37 @@ class UserRepository{
                 "date_of_birth" => $data["profile"]["date_of_birth"]
             ]);
 
-            $socialMedias = $profile->socialMedias;
-            /** Delete socialMedia */
-            foreach ($socialMedias as $socialMedia) {
-                $validated = false;
-                foreach ($data["profile"]["social_medias"] as $socialM) {
-                    if ($socialM['name'] == $socialMedia->name) {
-                        $validated = true;
-                        break;
+            if (isset($data["profile"]["social_medias"])) {
+                $socialMedias = $profile->socialMedias;
+                /** Delete socialMedia */
+                foreach ($socialMedias as $socialMedia) {
+                    $validated = false;
+                    $socialNetwork = $socialMedia->SocialNetwork;
+                    if (isset($socialNetwork)) {
+                        foreach ($data["profile"]["social_medias"] as $socialM) {
+                            if ($socialM['name'] == $socialNetwork->name) {
+                                $validated = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$validated) $socialMedia->delete();
+                }
+
+                /** update or create new social medias */
+                foreach ($data["profile"]["social_medias"] as $socialMedia) {
+                    $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                    if (isset($socialNetwork)) {
+                        SocialMedia::updateOrCreate([
+                            "profile_id"        => $profile->id,
+                            "social_network_id" => $socialNetwork->id
+                        ], [
+                            "link" => $socialMedia["link"]
+                        ]);
                     }
                 }
-                if (!$validated) $socialMedia->delete();
             }
 
-            /** update or create new social medias */
-            foreach ($data["profile"]["social_medias"] as $socialMedia) {
-                SocialMedia::updateOrCreate([
-                    "name" => $socialMedia["name"]
-                ], [
-                    "name" => $socialMedia["name"],
-                    "link" => $socialMedia["link"],
-                    "profile_id" => $profile->id
-                ]);
-            }
             /** Create User */
             $user = User::create([
                 "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
@@ -298,28 +306,35 @@ class UserRepository{
             "date_of_birth" => $data["profile"]["date_of_birth"]
         ]);
 
-        $socialMedias = $profile->socialMedias;
-        /** Delete socialMedia */
-        foreach ($socialMedias as $socialMedia) {
-            $validated = false;
-            foreach ($data["profile"]["social_medias"] as $socialM) {
-                if ($socialM['name'] == $socialMedia->name) {
-                    $validated = true;
-                    break;
+        if (isset($data["profile"]["social_medias"])) {
+            $socialMedias = $profile->socialMedias;
+            /** Delete socialMedia */
+            foreach ($socialMedias as $socialMedia) {
+                $validated = false;
+                $socialNetwork = $socialMedia->SocialNetwork;
+                if (isset($socialNetwork)) {
+                    foreach ($data["profile"]["social_medias"] as $socialM) {
+                        if ($socialM['name'] == $socialNetwork->name) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                }
+                if (!$validated) $socialMedia->delete();
+            }
+
+            /** update or create new social medias */
+            foreach ($data["profile"]["social_medias"] as $socialMedia) {
+                $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+                if (isset($socialNetwork)) {
+                    SocialMedia::updateOrCreate([
+                        "profile_id"        => $profile->id,
+                        "social_network_id" => $socialNetwork->id
+                    ], [
+                        "link" => $socialMedia["link"]
+                    ]);
                 }
             }
-            if (!$validated) $socialMedia->delete();
-        }
-
-        /** update or create new social medias */
-        foreach ($data["profile"]["social_medias"] as $socialMedia) {
-            SocialMedia::updateOrCreate([
-                "name" => $socialMedia["name"]
-            ], [
-                "name" => $socialMedia["name"],
-                "link" => $socialMedia["link"],
-                "profile_id" => $profile->id
-            ]);
         }
 
         /** Update User */
