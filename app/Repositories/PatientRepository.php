@@ -97,7 +97,7 @@ class PatientRepository
             }
 
             /** Attach billing company */
-            $user->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
             
             /** Create Contact */
             if (isset($data['contact'])) {
@@ -122,7 +122,16 @@ class PatientRepository
                 "user_id"        => $user->id
             ]);
 
-            $this->changeStatus(true, $patient->id);
+            if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $patient->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $patient->billingCompanies()->updateExistingPivot(
+                    $billingCompany->id ?? $billingCompany,
+                    [
+                        'status' => true
+                    ]
+                );
+            }
 
             if (isset($data['public_note'])) {
                 /** PublicNote */
@@ -420,6 +429,7 @@ class PatientRepository
 
             $patient = Patient::find($id);
             $user = $patient->user;
+            
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"];
             } else {
@@ -431,6 +441,18 @@ class PatientRepository
                 "driver_license" => $data["driver_license"],
                 "user_id"        => $user->id
             ]);
+
+            if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $patient->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $patient->billingCompanies()->updateExistingPivot(
+                    $billingCompany->id ?? $billingCompany,
+                    [
+                        'status' => true
+                    ]
+                );
+            }
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['public_note'])) {
                 /** PublicNote */

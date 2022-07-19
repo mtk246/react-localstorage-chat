@@ -79,6 +79,9 @@ class DoctorRepository
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
+
+            /** Attach billing company */
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
             
             if (isset($data['contact'])) {
                 $data["contact"]["contactable_id"]     = $user->id;
@@ -99,6 +102,18 @@ class DoctorRepository
                 "dea"     => $data["dea"],
                 "user_id" => $user->id
             ]);
+
+            if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $healthP->billingCompanies()->updateExistingPivot(
+                    $billingCompany->id ?? $billingCompany,
+                    [
+                        'status' => true
+                    ]
+                );
+            }
+
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
                 foreach ($data['taxonomies'] as $taxonomy) {
@@ -107,7 +122,6 @@ class DoctorRepository
                 }
                 $healthP->taxonomies()->sync($tax_array);
             }
-            $this->changeStatus(true, $healthP->id);
 
             if(!is_null($healthP) && !is_null($user)){
                 $role = Role::whereSlug('healthprofessional')->first();
@@ -219,6 +233,19 @@ class DoctorRepository
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
+
+            if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $healthP->billingCompanies()->updateExistingPivot(
+                    $billingCompany->id ?? $billingCompany,
+                    [
+                        'status' => true
+                    ]
+                );
+            }
+
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
