@@ -346,6 +346,9 @@ class UserRepository{
         if (isset($data['company-billing'])) {
             $user->billingCompanies()->sync($data["company-billing"]);
         }
+        
+        $user->detachAllPermissions();
+        $user->detachAllRoles();
 
         /** Attach billing company */
         if (isset($data['roles'])) {
@@ -354,6 +357,11 @@ class UserRepository{
                 $rol = Role::whereName($role)->first();
                 if (isset($rol)) {
                     array_push($roles, $rol->id);
+                    $permissions = $rol->permissions;
+                    foreach($permissions as $perm) {
+                        $user->attachPermission($perm);
+
+                    }
                 }
             }
             $user->syncRoles($roles);
