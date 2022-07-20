@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                "email"      => "admin@billing.com",
+                "email"      => "begentohealthcare@gmail.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@kevin.com",
+                "email"      => "kp@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -98,7 +98,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@alfredo.com",
+                "email"      => "aq@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -111,20 +111,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@alejandro.com",
-                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "superuser",
-                "profile"    => [
-                                    "ssn"           => randomNumber(9),
-                                    "first_name"    => "Alejandro",
-                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
-                                    "last_name"     => "Perez",
-                                    "sex"           => "M",
-                                    "date_of_birth" => "1990-04-01",
-                                ],
-            ],
-            [
-                "email"      => "admin@andrea.com",
+                "email"      => "anp@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -137,7 +124,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@edgar.com",
+                "email"      => "ec@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -150,33 +137,20 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@jesus.com",
-                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                "role"       => "superuser",
-                "profile"    => [
-                                    "ssn"           => randomNumber(9),
-                                    "first_name"    => "Jesus",
-                                    "middle_name"   => "Abrahan",
-                                    "last_name"     => "Peña",
-                                    "sex"           => "M",
-                                    "date_of_birth" => "1990-04-01",
-                                ],
-            ],
-            [
-                "email"      => "admin@juan.com",
+                "email"      => "js@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
                                     "ssn"           => randomNumber(9),
                                     "first_name"    => "Juan",
                                     "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
-                                    "last_name"     => "Barreto",
+                                    "last_name"     => "Schloter",
                                     "sex"           => "M",
                                     "date_of_birth" => "1990-04-01",
                                 ],
             ],
             [
-                "email"      => "admin@moises.com",
+                "email"      => "mp@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -189,7 +163,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@henry.com",
+                "email"      => "hp@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
@@ -197,6 +171,32 @@ class UserSeeder extends Seeder
                                     "first_name"    => "Henry",
                                     "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
                                     "last_name"     => "Paredes",
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+            ],
+            [
+                "email"      => "rm@ciph3r.co",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "superuser",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => "Roberto",
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => "Muñoz",
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+            ],
+            [
+                "email"      => "mr@ciph3r.co",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "superuser",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => "Miguel",
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => "Renault",
                                     "sex"           => "M",
                                     "date_of_birth" => "1990-04-01",
                                 ],
@@ -231,20 +231,21 @@ class UserSeeder extends Seeder
             );
             $usr->password='$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
             $usr->save();
-            //$usr->syncRoles($user["role"]);
+            
+            $usr->detachAllPermissions();
+            $usr->detachAllRoles();
             
             //$usr->detachAllPermissions();
-            $usr->detachAllRoles();
+            //$usr->detachAllRoles();
 
             $role = Role::where('slug', $user['role'])->first();
-            $usr->attachRole($role);
-
-            /*$permissions = Permission::whereHas('roles', function ($query) use ($role) {
-                $query->where('role_id', $role->id);
-            })->get();
-            foreach ($permissions as $permission) {
-                $usr->attachPermission($permission->id);
-            }*/
+            if (isset($role)) {
+                $usr->attachRole($role);
+                $permissions = $role->permissions;
+                foreach($permissions as $perm) {
+                    $usr->attachPermission($perm);
+                }
+            }
         }
     }
 }
