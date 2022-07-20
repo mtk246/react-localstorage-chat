@@ -90,13 +90,18 @@ class UserRepository{
                 $user->billingCompanies()->attach($data["company-billing"]);
             }
 
-            /** Attach billing company */
+            /** Attach Role and permission */
             if (isset($data['roles'])) {
                 $roles = [];
                 foreach ($data['roles'] as $role) {
                     $rol = Role::whereName($role)->first();
                     if (isset($rol)) {
                         array_push($roles, $rol->id);
+                        $permissions = $rol->permissions;
+                        foreach($permissions as $perm) {
+                            $user->attachPermission($perm);
+
+                        }
                     }
                 }
                 $user->syncRoles($roles);
