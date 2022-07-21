@@ -85,7 +85,7 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
-                "email"      => "admin@rosana.com",
+                "email"      => "rs@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
                 "profile"    => [
