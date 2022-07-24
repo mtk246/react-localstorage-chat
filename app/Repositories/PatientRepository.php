@@ -304,7 +304,7 @@ class PatientRepository
                         $profile->first_name . ' ' . $profile->last_name,
                         $user->email,
                         \Crypt::decrypt($user->userkey),
-                        env('URL_FRONT') . "/newPassword?mcctoken=" . $token
+                        env('URL_FRONT') . "/#/newPassword?mcctoken=" . $token
                     )
                 );
             } else {

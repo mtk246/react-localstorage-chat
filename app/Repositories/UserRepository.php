@@ -130,7 +130,7 @@ class UserRepository{
                     $profile->first_name . ' ' . $profile->last_name,
                     $user->email,
                     \Crypt::decrypt($user->userkey),
-                    env('URL_FRONT') . "/newPassword?mcctoken=" . $token
+                    env('URL_FRONT') . "/#/newPassword?mcctoken=" . $token
                 )
             );
 
@@ -231,7 +231,7 @@ class UserRepository{
             $user->token = $token;
             $user->save();
 
-            $url = env("URL_FRONT") . "/newCredentials?mcctoken=" . $token;
+            $url = env('URL_FRONT') . "/#/newCredentials?mcctoken=" . $token;
             $fullName = $user->profile->first_name . " " . $user->profile->last_name;
 
             Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));
@@ -282,7 +282,7 @@ class UserRepository{
             $user->save();
             $profile = $user->profile;
 
-            $url = env("URL_FRONT") . "/newCredentials?mcctoken=" . $token;
+            $url = env('URL_FRONT') . "/#/newCredentials?mcctoken=" . $token;
             $fullName = $profile->first_name . " " . $profile->last_name;
 
             Mail::to($user->email)->send(new SendEmailRecoveryPassword($fullName, $url));
