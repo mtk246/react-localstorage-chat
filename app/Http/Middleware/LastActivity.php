@@ -51,10 +51,10 @@ class LastActivity
                         $user->save();
                     }
                 }
+                return response()->json(__("Your session has expired due to inactivity"), 401);
             }
         }
-
-        return response()->json(__("Your session has expired due to inactivity"), 401);
+        return $next($request);
 
     }
 }
