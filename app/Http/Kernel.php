@@ -78,5 +78,6 @@ class Kernel extends HttpKernel
         'audit' => AuditoryMiddleware::class,
         'checkAvailable' => CheckAvailableUser::class,
         'restrictIpAddress' => \App\Http\Middleware\RestrictIpAddress::class,
+        'lastActivity' => \App\Http\Middleware\LastActivity::class
     ];
 }

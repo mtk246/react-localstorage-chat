@@ -101,6 +101,7 @@ class User extends Authenticatable implements JWTSubject, Auditable
         'token',
         'status',
         'last_login',
+        'last_activity',
         'isLogged',
         'isBlocked',
         'profile_id',
@@ -132,6 +133,14 @@ class User extends Authenticatable implements JWTSubject, Auditable
      * @var array
      */
     protected $appends = ['billing_company_id'];
+
+    /**
+     * Attributes to exclude from the Audit.
+     * @var array
+     */
+    protected $auditExclude = [
+        'last_activity',
+    ];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

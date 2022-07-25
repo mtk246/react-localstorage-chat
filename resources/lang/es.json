@@ -73,7 +73,8 @@
     "Error updating password": "Error al actualizar la contraseña",
     "Error, wrong otp code": "Error, código otp incorrecto",
     "Error updating language": "Error al actualizar idioma",
-    "No more roles can be assigned to a super user": "No se le pueden asignar mas roles a un super usuario"
+    "No more roles can be assigned to a super user": "No se le pueden asignar mas roles a un super usuario",
+    "Your session has expired due to inactivity": "Su sesión a expirado por inactividad"
 
 
 
