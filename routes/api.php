@@ -300,6 +300,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\DiagnosisController::class,"createDiagnosis"]);
         Route::get("/",[\App\Http\Controllers\DiagnosisController::class,"getAllDiagnoses"]);
+        Route::get("get-by-code/{code}",[\App\Http\Controllers\DiagnosisController::class,"getByCode"]);
         Route::get("/{id}",[\App\Http\Controllers\DiagnosisController::class,"getOneDiagnosis"]);
         Route::put("/{id}",[\App\Http\Controllers\DiagnosisController::class,"updateDiagnosis"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\DiagnosisController::class,'changeStatus']);

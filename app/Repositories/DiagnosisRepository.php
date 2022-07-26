@@ -21,6 +21,8 @@ class DiagnosisRepository
             DB::beginTransaction();
             $diagnosis = Diagnosis::create([
                 "code"        => $data["code"],
+                "start_date"  => $data["start_date"],
+                "end_date"    => $data["end_date"],
                 "description" => $data["description"]
             ]);
             
@@ -95,6 +97,18 @@ class DiagnosisRepository
     }
 
     /**
+     * @param string $code
+     * @return Diagnosis|Builder|Model|object|null
+     */
+    public function getByCode(string $code) {
+        $diagnosis = Diagnosis::whereCode($code)->with([
+                "publicNote",
+            ])->first();
+
+        return !is_null($diagnosis) ? $diagnosis : null;
+    }
+
+    /**
      * @param array $data
      * @param int $id
      * @return Diagnosis|Builder|Model|object|null
@@ -106,6 +120,8 @@ class DiagnosisRepository
 
             $diagnosis->update([
                 "code"        => $data["code"],
+                "start_date"  => $data["start_date"],
+                "end_date"    => $data["end_date"],
                 "description" => $data["description"]
             ]);
 

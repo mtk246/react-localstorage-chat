@@ -15,6 +15,8 @@ class Diagnosis extends Model implements Auditable
     
     protected $fillable = [
         "code",
+        "start_date",
+        "end_date",
         "description",
         "active"
     ];

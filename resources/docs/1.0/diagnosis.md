@@ -6,6 +6,7 @@
 - [Create diagnosis](#create-diagnosis)
 - [Get all diagnosis](#get-all-diagnosis)
 - [Get one diagnosis](#get-one-diagnosis)
+- [Get one diagnosis by code](#get-one-diagnosis-by-code)
 - [Update diagnosis](#update-diagnosis)
 - [Change status diagnosis](#change-status-diagnosis)
 
@@ -20,8 +21,9 @@
 | 1 |POST    | `Create Diagnosis`  | `/diagnosis/`     | yes            | Create diagnosis  |         
 | 2 |GET     | `Get all Diagnoses` | `/diagnosis/`     | yes            | Get all diagnoses |
 | 3 |GET     | `Get one Diagnosis` | `/diagnosis/{id}` | yes            | Get one diagnosis |
-| 4 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
-| 5 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
+| 4 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{id}` | yes            | Get one diagnosis by code|
+| 5 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
+| 6 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
 
 
 <a name="create-diagnosis"></a>
@@ -32,6 +34,8 @@
 ```json
 {
     "code": "D1",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
     "description": "Description diagnosis 1",
     "note": "Note diagnosis 1"
 }
@@ -56,6 +60,8 @@
 {
     "code": "D1",
     "description": "Description diagnosis 1",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
     "updated_at": "2022-06-20T07:53:23.000000Z",
     "created_at": "2022-06-20T07:53:23.000000Z",
     "id": 72751
@@ -92,6 +98,8 @@
         "active": true,
         "created_at": "2022-06-20T07:53:23.000000Z",
         "updated_at": "2022-06-20T07:53:23.000000Z",
+        "start_date": "2022-07-05",
+        "end_date": "2022-08-05",
         "public_note": {
             "id": 12,
             "note": "Note diagnosis 1",
@@ -138,6 +146,55 @@
     "active": true,
     "created_at": "2022-06-20T07:53:23.000000Z",
     "updated_at": "2022-06-20T07:53:23.000000Z",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
+    "public_note": {
+        "id": 12,
+        "note": "Note diagnosis 1",
+        "publishable_type": "App\\Models\\Diagnosis",
+        "publishable_id": 72751,
+        "created_at": "2022-06-20T07:53:23.000000Z",
+        "updated_at": "2022-06-20T07:53:23.000000Z"
+    }
+}
+```
+
+<a name="get-one-diagnosis-by-code"></a>
+## Get One diagnosis by code
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "code": <string>
+}
+```
+
+## Response
+
+> {success} 200 diagnosis found
+
+#
+
+
+```json
+{
+    "id": 72751,
+    "code": "D1",
+    "description": "Description diagnosis 1",
+    "active": true,
+    "created_at": "2022-06-20T07:53:23.000000Z",
+    "updated_at": "2022-06-20T07:53:23.000000Z",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
     "public_note": {
         "id": 12,
         "note": "Note diagnosis 1",
@@ -157,6 +214,8 @@
 ```json
 {
     "code": "D1 edited",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
     "description": "Description diagnosis 1 edited",
     "note": "Note diagnosis 1 edited"
 }
@@ -189,6 +248,8 @@
     "id": 72751,
     "code": "D1 edited",
     "description": "Description diagnosis 1 edited",
+    "start_date": "2022-07-05",
+    "end_date": "2022-08-05",
     "active": true,
     "created_at": "2022-06-20T07:53:23.000000Z",
     "updated_at": "2022-06-20T08:04:59.000000Z"

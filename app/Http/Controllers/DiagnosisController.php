@@ -40,6 +40,17 @@ class DiagnosisController extends Controller
     }
 
     /**
+     * @param string
+     * @return JsonResponse
+     */
+    public function getByCode(string $code): JsonResponse
+    {
+        $rs = $this->diagnosisRepository->getByCode($code);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, diagnosis not found"), 404);
+    }
+
+    /**
      * @return JsonResponse
      */
     public function getAllDiagnoses(): JsonResponse
