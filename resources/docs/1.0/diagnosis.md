@@ -21,7 +21,7 @@
 | 1 |POST    | `Create Diagnosis`  | `/diagnosis/`     | yes            | Create diagnosis  |         
 | 2 |GET     | `Get all Diagnoses` | `/diagnosis/`     | yes            | Get all diagnoses |
 | 3 |GET     | `Get one Diagnosis` | `/diagnosis/{id}` | yes            | Get one diagnosis |
-| 4 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{id}` | yes            | Get one diagnosis by code|
+| 4 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{code}` | yes            | Get one diagnosis by code|
 | 5 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
 | 6 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
 
