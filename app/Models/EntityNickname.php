@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -36,5 +37,18 @@ class EntityNickname extends Model implements Auditable
     public function nicknamable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Interact with the entityNickname's nickname.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function nickname(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
     }
 }

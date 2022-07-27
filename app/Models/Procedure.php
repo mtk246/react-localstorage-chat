@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -95,5 +96,18 @@ class Procedure extends Model implements Auditable
     public function publicNote()
     {
         return $this->morphOne(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * Interact with the procedure's description.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst(strtolower($value)),
+            set: fn ($value) => ucfirst(strtolower($value)),
+        );
     }
 }

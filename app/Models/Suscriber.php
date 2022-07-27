@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -56,5 +57,31 @@ class Suscriber extends Model implements Auditable
     public function addresses()
     {
         return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
+     * Interact with the suscriber's first_name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function firstName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
+
+    /**
+     * Interact with the suscriber's last_name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function lastName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
     }
 }

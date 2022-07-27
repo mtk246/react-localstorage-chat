@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 /**
@@ -190,5 +191,44 @@ class InsurancePlan extends Model implements Auditable
     public function nicknames()
     {
         return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
+    /**
+     * Interact with the insurancePlan's name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
+
+    /**
+     * Interact with the insurancePlan's ins_type.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function insType(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
+
+    /**
+     * Interact with the insurancePlan's cap_group.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function capGroup(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
     }
 }

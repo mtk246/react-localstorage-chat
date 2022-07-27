@@ -89,3 +89,9 @@ if (!function_exists('toModel')) {
         return $namespace . '\\' . implode('', array_map('ucfirst', explode('-', $entity)));
     }
 }
+
+if (!function_exists('upperCaseWords')) {
+    function upperCaseWords($string) {
+        return ucwords(strtolower($string));
+    }
+}
