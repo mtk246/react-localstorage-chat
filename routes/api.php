@@ -315,6 +315,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::post("/",[\App\Http\Controllers\ModifierController::class,"createModifier"]);
         Route::get("/",[\App\Http\Controllers\ModifierController::class,"getAllModifiers"]);
         Route::get("/{id}",[\App\Http\Controllers\ModifierController::class,"getOneModifier"]);
+        Route::get("/get-by-code/{code}",[\App\Http\Controllers\ModifierController::class,"getByCode"]);
         Route::put("/{id}",[\App\Http\Controllers\ModifierController::class,"updateModifier"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ModifierController::class,'changeStatus']);
 

@@ -14,6 +14,8 @@ class Modifier extends Model implements Auditable
 
     protected $fillable = [
         "modifier",
+        "start_date",
+        "end_date",
         "special_coding_instructions",
         "active"
     ];

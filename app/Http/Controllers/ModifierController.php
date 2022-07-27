@@ -40,6 +40,17 @@ class ModifierController extends Controller
     }
 
     /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getByCode(string $code): JsonResponse
+    {
+        $rs = $this->modifierRepository->getByCode($code);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, modifier not found"), 404);
+    }
+
+    /**
      * @return JsonResponse
      */
     public function getAllModifiers(): JsonResponse
