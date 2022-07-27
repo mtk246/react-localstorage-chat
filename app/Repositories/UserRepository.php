@@ -558,8 +558,36 @@ class UserRepository{
      * @return User|Builder|Model|object|null
      */
     public function searchBySsn(string $ssn) {
-        $profile = Profile::where("ssn", $ssn)->first();
-        $user = User::where('profile_id', $profile->id)->first();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $user = User::with([
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "roles",
+                "addresses",
+                "contacts",
+                "billingCompanies"
+            ])->whereHas('profile', function ($query) use ($ssn) {
+                $query->where("ssn", $ssn);
+            })->first();
+        } else {
+            $user = User::with([
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "roles",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies"
+            ])->whereHas('profile', function ($query) use ($ssn) {
+                $query->where("ssn", $ssn);
+            })->first();
+        }
         return $user;
     }
 

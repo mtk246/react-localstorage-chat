@@ -377,7 +377,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->searchBySsn($ssn);
 
-        return $rs ? response()->json($ssn) : response()->json(__("Error, user not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
     public function updateLang(Request $request)
