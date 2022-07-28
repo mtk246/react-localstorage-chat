@@ -192,7 +192,8 @@ class AuditController extends Controller
         if (isset($record)) {
             $auditables = Audit::where('url', 'like', '%/' . $entity . '/' . $id)
                                ->orWhere('url', 'like', '%/' . $entity)
-                               ->where('created_at', $record->created_at)->get([
+                               ->where('created_at', $record->created_at)
+                               ->orderBy("created_at", "desc")->orderBy("id", "asc")->get([
                 'id',
                 'event',
                 'created_at as date',
