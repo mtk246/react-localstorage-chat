@@ -136,7 +136,9 @@ class DiagnosisRepository
             }
 
             DB::commit();
-            return Diagnosis::whereId($id)->first();
+            return Diagnosis::whereId($id)->with([
+                "publicNote",
+            ])->first();
         } catch (\Exception $e) {
             DB::rollBack();
             return null;
