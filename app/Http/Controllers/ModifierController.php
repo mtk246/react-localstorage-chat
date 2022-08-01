@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Modifier\ModifierCreateRequest;
+use App\Http\Requests\Modifier\ModifierUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ModifierRepository;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,7 @@ class ModifierController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function updateModifier(ModifierCreateRequest $request, int $id): JsonResponse
+    public function updateModifier(ModifierUpdateRequest $request, int $id): JsonResponse
     {
         $rs = $this->modifierRepository->updateModifier($request->validated(),$id);
 

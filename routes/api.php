@@ -313,7 +313,8 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("modifier")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',
-    ])->group(function(){
+    ])->group(function() {
+        Route::get("/get-list",[\App\Http\Controllers\ModifierController::class,"getList"]);
         Route::post("/",[\App\Http\Controllers\ModifierController::class,"createModifier"]);
         Route::get("/",[\App\Http\Controllers\ModifierController::class,"getAllModifiers"]);
         Route::get("/{id}",[\App\Http\Controllers\ModifierController::class,"getOneModifier"]);
@@ -321,7 +322,6 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{id}",[\App\Http\Controllers\ModifierController::class,"updateModifier"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ModifierController::class,'changeStatus']);
 
-        Route::get("/get-list",[\App\Http\Controllers\ModifierController::class,"getList"]);
     });
 
     Route::prefix("procedure")->middleware([
