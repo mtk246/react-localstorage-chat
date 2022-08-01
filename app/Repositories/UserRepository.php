@@ -183,35 +183,44 @@ class UserRepository{
     }
 
     public function getServerAllUsers(Request $request) {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
-
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $records = User::with([
+            $data = User::with([
                 "profile",
                 "roles"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
         } else {
-            $records = User::whereHas("billingCompanies", function ($query) use ($bC) {
+            $data = User::whereHas("billingCompanies", function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 })->with([
                     "profile",
                     "roles"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
+        }
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        if ($request->sortBy) {
+            if (str_contains($request->sortBy, 'role')) {
+                $data = $data->orderBy('id', $request->sortDesc ? 'desc' : 'asc');
+                /**$data = $data->orderBy(Role::select('name')
+                        ->join('role_user', 'role_user.role_id', '=', 'roles.id')
+                        ->whereColumn('role_user.user_id', 'users.id'), $request->sortDesc ? 'desc' : 'asc');*/
+            } elseif (str_contains($request->sortBy, 'name')) {
+                $data = $data->orderBy(
+                    Profile::select('first_name')->whereColumn('profiles.id', 'users.profile_id'), $request->sortDesc ? 'desc' : 'asc');
+            } else {
+                $data = $data->orderBy($request->sortBy, $request->sortDesc ? 'desc' : 'asc');
+            }
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
         }
 
+        $data = $data->paginate($request->itemsPerPage);
+
         return response()->json([
-            'pagination'  => [
-                'total'       => $records->total(),
-                'currentPage' => $records->currentPage(),
-                'perPage'     => $records->perPage(),
-                'lastPage'    => $records->lastPage()
-            ],
-            'items' =>  $records->items()
+            'data'  => $data->items(),
+            'count' => $data->total()
         ], 200);
     }
 
@@ -483,10 +492,13 @@ class UserRepository{
         /** Delete socialMedia */
         foreach ($socialMedias as $socialMedia) {
             $validated = false;
-            foreach ($data["social_medias"] as $socialM) {
-                if ($socialM['name'] == $socialMedia->name) {
-                    $validated = true;
-                    break;
+            $socialNetwork = $socialMedia->SocialNetwork;
+            if (isset($socialNetwork)) {
+                foreach ($data["social_medias"] as $socialM) {
+                    if ($socialM['name'] == $socialNetwork->name) {
+                        $validated = true;
+                        break;
+                    }
                 }
             }
             if (!$validated) $socialMedia->delete();
@@ -494,13 +506,15 @@ class UserRepository{
 
         /** update or create new social medias */
         foreach ($data["social_medias"] as $socialMedia) {
-            SocialMedia::updateOrCreate([
-                "name" => $socialMedia["name"]
-            ], [
-                "name" => $socialMedia["name"],
-                "link" => $socialMedia["link"],
-                "profile_id" => $profile->id
-            ]);
+            $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
+            if (isset($socialNetwork)) {
+                SocialMedia::updateOrCreate([
+                    "profile_id"        => $profile->id,
+                    "social_network_id" => $socialNetwork->id
+                ], [
+                    "link" => $socialMedia["link"]
+                ]);
+            }
         }
 
         return $user->refresh()->load("profile", "profile.socialMedias");

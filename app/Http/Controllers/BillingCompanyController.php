@@ -84,6 +84,14 @@ class BillingCompanyController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function getServerAllBillingCompanies(Request $request): JsonResponse
+    {
+        return $this->billingCompanyRepository->getServerAllBillingCompanies($request);
+    }
+
+    /**
      * @param string $code
      * @return JsonResponse
      */

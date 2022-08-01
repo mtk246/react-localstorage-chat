@@ -7,6 +7,7 @@
 - [Change status user](#change-status-user)
 - [Edit users](#edit-users)
 - [Get all users](#get-all-users)
+- [Get all users from server](#get-all-users-server)
 - [Get one user](#get-one-user)
 - [Send email to recovery password](#send-email-to-recovery-password)
 - [Recovery user](#recovery-user)
@@ -31,18 +32,19 @@
 | 2 |PATCH | `change status user`| `/user/{user_id?}/change-status`        |yes            |change status users|
 | 3 |PUT | `edit users`          | `/user/{user_id?}`|yes|Update data users|
 | 4 |GET | `get all users`   | `/user/` |yes            |get all users|
-| 5 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
-| 6 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
-| 7 |POST | `recovery user`   | `/user/recovery-user` |no|recovery user|
-| 8 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
-| 9 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
-| 10 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
-| 11 |GET  | `get list social social networks`   | `/user/social-networks/get-list` |yes|get list social networks|
-| 12 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
-| 13|PATCH | `update password`   | `/user/update-password` |yes|update password|
-| 14|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
-| 15 |POST | `new token`   | `/user/new-token` |no|generate new token user|
-| 16|PATCH | `update language`   | `/setting/lang` |yes|update language|
+| 5 |GET | `get all users from server`   | `/user/get-server-all` |yes            |get all users from server|
+| 6 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
+| 7 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
+| 8 |POST | `recovery user`   | `/user/recovery-user` |no|recovery user|
+| 9 |POST | `unlock user`   | `/user/unlock-user` |no|unlock user by code OTP|
+| 10 |POST | `change password`   | `/user/change-password/{token}` |no|change password user|
+| 11 |POST | `update image user`   | `/user/img-profile` |yes|update image profile|
+| 12 |GET  | `get list social social networks`   | `/user/social-networks/get-list` |yes|get list social networks|
+| 13 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
+| 14|PATCH | `update password`   | `/user/update-password` |yes|update password|
+| 15|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
+| 16 |POST | `new token`   | `/user/new-token` |no|generate new token user|
+| 17|PATCH | `update language`   | `/setting/lang` |yes|update language|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -426,6 +428,150 @@
         "billing_companies": []
     },
 ]
+```
+
+<a name="get-all-users-server"></a>
+## Get all users from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+#
+
+>{success} 200 request made successfully
+
+#
+
+>{primary} response 200 too when is empty
+
+
+```json
+{
+    "data": [
+        {
+            "id": 21,
+            "email": "avery1@gmail.com",
+            "email_verified_at": null,
+            "created_at": "2022-04-25T20:36:51.000000Z",
+            "updated_at": "2022-04-25T20:36:52.000000Z",
+            "token": "eyJpdiI6InI4RVkweno4dUFDbmRnN3NDWUhEU0E9PSIsInZhbHVlIjoiTElLMDJ5TFRWb1E2Rjc1VlVHd1BmY1VmV2hIMmtLWmRLY2NUZFN5ekVDUT0iLCJtYWMiOiI4NzlmMDYwOTlhMWRiZjNjZGY2ZjZiMGJmZDUyOGQ2ZDIxMTExYmZjNjkxM2VlZjIyOWM5YTdkYWJjZDk5ZmU1IiwidGFnIjoiIn0=",
+            "isLogged": false,
+            "isBlocked": false,
+            "usercode": "US-00018-2022",
+            "userkey": "eyJpdiI6ImlCaWsyRWhwLzBtdkxRTkNMY3UwZHc9PSIsInZhbHVlIjoiLzc4b1gzYXdmZkdGSHBZVGlGZ3dySUYwRjl5ZE1kNmhoekNlY2R5N01GOD0iLCJtYWMiOiJkZGI4Nzc4ZThhYTJhY2NkYTk0MjY4NDM0YzhkN2Q5OTJlYWJmZDI5YTc4ZGE0ZDkxMGExNzc3NzVhNWI4ZjVkIiwidGFnIjoiIn0=",
+            "status": false,
+            "last_login": null,
+            "profile_id": 18,
+            "language": "en",
+            "last_activity": null,
+            "billing_company_id": null,
+            "last_modified": {
+                "user": "Johan Julian",
+                "roles": null
+            },
+            "profile": {
+                "id": 18,
+                "ssn": "1231",
+                "first_name": "Avery",
+                "middle_name": "Joseph",
+                "last_name": "Sample",
+                "sex": "M",
+                "date_of_birth": "2022-04-25",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-04-25T20:31:27.000000Z",
+                "updated_at": "2022-04-25T20:31:27.000000Z"
+            },
+            "roles": [
+                {
+                    "id": 9,
+                    "name": "Patient",
+                    "slug": "patient",
+                    "description": "Allows access to system functions for patient management",
+                    "level": 4,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z",
+                    "pivot": {
+                        "user_id": 21,
+                        "role_id": 9,
+                        "created_at": "2022-04-25T20:36:52.000000Z",
+                        "updated_at": "2022-04-25T20:36:52.000000Z"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "email": "healthprofessional@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-04-20T21:52:52.000000Z",
+            "updated_at": "2022-07-20T21:03:59.000000Z",
+            "token": null,
+            "isLogged": false,
+            "isBlocked": false,
+            "usercode": "US-00029-2022",
+            "userkey": null,
+            "status": false,
+            "last_login": null,
+            "profile_id": 221,
+            "language": "en",
+            "last_activity": null,
+            "billing_company_id": null,
+            "last_modified": {
+                "user": "Console",
+                "roles": []
+            },
+            "profile": {
+                "id": 221,
+                "ssn": "461986528",
+                "first_name": "Tyreek",
+                "middle_name": "Nelson",
+                "last_name": "Ryleigh",
+                "sex": "M",
+                "date_of_birth": "1990-04-01",
+                "avatar": null,
+                "credit_score": false,
+                "created_at": "2022-07-20T21:03:59.000000Z",
+                "updated_at": "2022-07-20T21:03:59.000000Z"
+            },
+            "roles": [
+                {
+                    "id": 8,
+                    "name": "Health Professional",
+                    "slug": "healthprofessional",
+                    "description": "Allows access to system functions for health professional management",
+                    "level": 4,
+                    "created_at": "2022-04-20T21:52:51.000000Z",
+                    "updated_at": "2022-04-20T21:52:51.000000Z",
+                    "pivot": {
+                        "user_id": 3,
+                        "role_id": 8,
+                        "created_at": "2022-07-20T21:03:59.000000Z",
+                        "updated_at": "2022-07-20T21:03:59.000000Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "count": 29
+}
 ```
 
 <a name="get-one-user"></a>

@@ -14,6 +14,7 @@ use App\Roles\Traits\HasRoleAndPermission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use App\Models\Audit;
 
 /**
  * App\Models\User
@@ -132,7 +133,7 @@ class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['billing_company_id'];
+    protected $appends = ['billing_company_id', 'last_modified'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -264,5 +265,53 @@ class User extends Authenticatable implements JWTSubject, Auditable
         if (is_null($user)) return null;
         $billingCompany = $user->billingCompanies->first();
         return $billingCompany->id ?? null;
+    }
+
+    /*
+     * Get the company's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } elseif ($lastModified->user_id != $this->id) {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        } elseif ($lastModified->user_id == $this->id) {
+            $profile = $this->profile;
+            return [
+                'user'  => $profile->first_name . ' ' . $profile->last_name,
+                'roles' => $this->getRoles(),
+            ];
+        }
+    }
+
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereHas('profile', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
+                              ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereHas('roles', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
     }
 }

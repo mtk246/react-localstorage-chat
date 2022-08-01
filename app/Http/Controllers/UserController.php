@@ -292,6 +292,16 @@ class UserController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAllUsers(Request $request): JsonResponse
+    {
+        return $this->userRepository->getServerAllUsers($request);
+    }
+
+    /**
      * @param int $id
      * @param Request $request
      * @return JsonResponse

@@ -36,6 +36,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("user")->group(function(){
+        Route::get("/get-server-all",[\App\Http\Controllers\UserController::class,'getServerAllUsers'])->middleware(['auth:api']);
         Route::post("/",[\App\Http\Controllers\UserController::class,'createUser']);
         Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware(['auth:api']);
         Route::get("{id}/",[\App\Http\Controllers\UserController::class,'getOneUser'])->middleware(['auth:api']);
@@ -92,6 +93,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("billing-company")->group(function(){
+        Route::get("/get-server-all",[\App\Http\Controllers\BillingCompanyController::class,'getServerAllBillingCompanies'])->middleware(['auth:api']);
         Route::post("create",
             [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
             "auth:api",

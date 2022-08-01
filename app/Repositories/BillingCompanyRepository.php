@@ -98,35 +98,44 @@ class BillingCompanyRepository
         return !is_null($billingCompanies) ? $billingCompanies : null;
     }
 
-    public function getServerAllBillingCompany(Request $request) {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
+    public function getServerAllBillingCompanies(Request $request) {
 
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $records = BillingCompany::with([
+            $data = BillingCompany::with([
                 "users",
                 "address",
                 "contact"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
         } else {
-            $records = BillingCompany::whereId($bC)->with([
+            $data = BillingCompany::whereId($bC)->with([
                 "users",
                 "address",
                 "contact"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
         }
+
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        if ($request->sortBy) {
+            if (str_contains($request->sortBy, 'email')) {
+                $data = $data->orderBy('id', $request->sortDesc ? 'desc' : 'asc');
+                /**$data = $data->orderBy(Contact::select('email')
+                             ->join('contacts', 'contacts.contactable_id', '=', 'billing_companies.id')
+                             ->whereColumn('contacts.contactable_type', BillingCompany::class), $request->sortDesc ? 'desc' : 'asc');*/
+            } else {
+                $data = $data->orderBy($request->sortBy, $request->sortDesc ? 'desc' : 'asc');
+            }
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+        }
+
+        $data = $data->paginate($request->itemsPerPage);
+
         return response()->json([
-            'pagination'  => [
-                'total'       => $records->total(),
-                'currentPage' => $records->currentPage(),
-                'perPage'     => $records->perPage(),
-                'lastPage'    => $records->lastPage()
-            ],
-            'items' =>  $records->items()
+            'data'  => $data->items(),
+            'count' => $data->total()
         ], 200);
     }
 

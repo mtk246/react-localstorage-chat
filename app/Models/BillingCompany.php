@@ -175,4 +175,16 @@ class BillingCompany extends Model implements Auditable
             set: fn ($value) => upperCaseWords($value),
         );
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereHas('contact', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
+    }
 }
