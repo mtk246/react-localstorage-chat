@@ -22,7 +22,6 @@ class DiagnosisRepository
             $diagnosis = Diagnosis::create([
                 "code"        => $data["code"],
                 "start_date"  => $data["start_date"],
-                "end_date"    => $data["end_date"],
                 "description" => $data["description"]
             ]);
             
@@ -119,7 +118,6 @@ class DiagnosisRepository
             $diagnosis = Diagnosis::find($id);
 
             $diagnosis->update([
-                "code"        => $data["code"],
                 "start_date"  => $data["start_date"],
                 "end_date"    => $data["end_date"],
                 "description" => $data["description"]

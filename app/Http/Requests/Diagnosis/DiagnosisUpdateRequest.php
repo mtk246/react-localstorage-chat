@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Diagnosis;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class DiagnosisCreateRequest extends FormRequest
+class DiagnosisUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,13 +19,13 @@ class DiagnosisCreateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules()
     {
         return [
-            'code'        => ['required', 'string', 'max:50', Rule::unique('diagnoses', 'code')],
             'start_date'  => ['required', 'date'],
+            'end_date'    => ['required', 'date'],
             'description' => ['required', 'string', 'max:255'],
             'note'        => ['required', 'string'],
         ];

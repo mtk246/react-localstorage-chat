@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Diagnosis\DiagnosisCreateRequest;
+use App\Http\Requests\Diagnosis\DiagnosisUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\DiagnosisRepository;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,7 @@ class DiagnosisController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function updateDiagnosis(DiagnosisCreateRequest $request, int $id): JsonResponse
+    public function updateDiagnosis(DiagnosisUpdateRequest $request, int $id): JsonResponse
     {
         $rs = $this->diagnosisRepository->updateDiagnosis($request->validated(),$id);
 

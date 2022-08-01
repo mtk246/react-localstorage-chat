@@ -35,7 +35,6 @@
 {
     "code": "D1",
     "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
     "description": "Description diagnosis 1",
     "note": "Note diagnosis 1"
 }
@@ -61,7 +60,7 @@
     "code": "D1",
     "description": "Description diagnosis 1",
     "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
+    "end_date": null,
     "updated_at": "2022-06-20T07:53:23.000000Z",
     "created_at": "2022-06-20T07:53:23.000000Z",
     "id": 72751
@@ -213,7 +212,6 @@
 
 ```json
 {
-    "code": "D1 edited",
     "start_date": "2022-07-05",
     "end_date": "2022-08-05",
     "description": "Description diagnosis 1 edited",
@@ -246,7 +244,7 @@
 ```json
 {
     "id": 72751,
-    "code": "D1 edited",
+    "code": "D1",
     "description": "Description diagnosis 1 edited",
     "start_date": "2022-07-05",
     "end_date": "2022-08-05",
