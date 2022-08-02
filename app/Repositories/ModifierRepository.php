@@ -133,7 +133,7 @@ class ModifierRepository
 
             $modifier->update([
                 "start_date"                  => $data["start_date"],
-                "end_date"                    => $data["end_date"],
+                "end_date"                    => $data["end_date"] ?? null,
                 "special_coding_instructions" => $data["special_coding_instructions"]
             ]);
 

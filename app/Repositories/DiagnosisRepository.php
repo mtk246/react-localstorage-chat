@@ -119,7 +119,7 @@ class DiagnosisRepository
 
             $diagnosis->update([
                 "start_date"  => $data["start_date"],
-                "end_date"    => $data["end_date"],
+                "end_date"    => $data["end_date"] ?? null,
                 "description" => $data["description"]
             ]);
 

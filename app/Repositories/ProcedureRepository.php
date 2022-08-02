@@ -26,18 +26,25 @@ class ProcedureRepository
         try {
             DB::beginTransaction();
             $procedure = Procedure::create([
-                "code" => $data['code'],
+                "code"        => $data['code'],
+                "start_date"  => $data["start_date"],
                 "description" => $data['description']
             ]);
 
             if (isset($data['mac_localities'])) {
                 foreach ($data['mac_localities'] as $macL) {
-                    $macLocality = MacLocality::create([
+                    $macLocality = MacLocality::updateOrCreate([
                         "mac"             => $macL['mac'],
                         "locality_number" => $macL['locality_number'],
                         "state"           => $macL['state'],
                         "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['countries']
+                        "counties"        => $macL['counties']
+                    ], [
+                        "mac"             => $macL['mac'],
+                        "locality_number" => $macL['locality_number'],
+                        "state"           => $macL['state'],
+                        "fsa"             => $macL['fsa'],
+                        "counties"        => $macL['counties']
                     ]);
                     if (isset($macLocality)) {
                         /** Attach macLocality to procedure */
@@ -88,21 +95,17 @@ class ProcedureRepository
                     'procedure_id'      => $procedure->id,
                     'gender_id'         => $data['procedure_considerations']['gender_id'],
                     'age_init'          => $data['procedure_considerations']['age_init'],
-                    'age_end'           => $data['procedure_considerations']['age_end'],
+                    'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
                     'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
                 ]);
             }
 
             if (isset($data['modifiers'])) {
-                foreach ($data['modifiers'] as $modifier) {
-                    $procedure->modifiers()->sync($tax_array);
-                }
+                $procedure->modifiers()->sync($data['modifiers']);
             }
 
             if (isset($data['diagnoses'])) {
-                foreach ($data['diagnoses'] as $diagnosis) {
-                    $procedure->diagnoses()->sync($tax_array);
-                }
+                $procedure->diagnoses()->sync($data['diagnoses']);
             }
 
             if (isset($data['note'])) {
@@ -161,7 +164,29 @@ class ProcedureRepository
     public function getOneProcedure(int $id) {
         $procedure = Procedure::whereId($id)->with([
             "publicNote",
+            "procedureCosiderations",
+            "companies",
+            "diagnoses",
+            "modifiers",
+            "macLocalities"
         ])->first();
+
+        return !is_null($procedure) ? $procedure : null;
+    }
+
+    /**
+     * @param string $code
+     * @return Procedure|Builder|Model|object|null
+     */
+    public function getByCode(string $code) {
+        $procedure = Procedure::whereCode($code)->with([
+                "publicNote",
+                "procedureCosiderations",
+                "companies",
+                "diagnoses",
+                "modifiers",
+                "macLocalities"
+            ])->first();
 
         return !is_null($procedure) ? $procedure : null;
     }
@@ -177,7 +202,91 @@ class ProcedureRepository
             $procedure = Procedure::find($id);
 
             $procedure->update([
+                "start_date"  => $data["start_date"],
+                "end_date"  => $data["end_date"] ?? null,
+                "description" => $data['description']
             ]);
+
+            if (isset($data['mac_localities'])) {
+                /** Delete mac localities */
+                $procedure->macLocalities()->detach();
+                /** update or create new mac localities */
+                foreach ($data['mac_localities'] as $macL) {
+                    $macLocality = MacLocality::updateOrCreate([
+                        "mac"             => $macL['mac'],
+                        "locality_number" => $macL['locality_number'],
+                        "state"           => $macL['state'],
+                        "fsa"             => $macL['fsa'],
+                        "counties"        => $macL['counties']
+                    ], [
+                        "mac"             => $macL['mac'],
+                        "locality_number" => $macL['locality_number'],
+                        "state"           => $macL['state'],
+                        "fsa"             => $macL['fsa'],
+                        "counties"        => $macL['counties']
+                    ]);
+                    if (isset($macLocality)) {
+                        /** Attach macLocality to procedure */
+                        $procedure->macLocalities()->attach($macLocality->id);
+                    }
+                    foreach ($macL['procedure_fees'] as $procedureFees) {
+                        /** insuranceType == Medicare */
+                        $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
+                            $query->whereDescription('Medicare');
+                        })->get();
+
+                        foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
+                            $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
+                            if (isset($procedureFees[$field])) {
+                                ProcedureFee::updateOrCreate([
+                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                    'procedure_id'           => $procedure->id,
+                                    'mac_locality_id'        => $macLocality->id
+                                ], [
+                                    'fee'                    => $procedureFees[$field]
+                                ]);
+                            }
+                        }
+
+                        /** insuranceType == Medicaid */
+                        $insuranceLabelFeesMedicaid = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
+                            $query->whereDescription('Medicaid');
+                        })->get();
+
+                        foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
+                            $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
+                            if (isset($procedureFees[$field])) {
+                                ProcedureFee::updateOrCreate([
+                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                    'procedure_id'           => $procedure->id,
+                                    'mac_locality_id'        => $macLocality->id
+                                ], [
+                                    'fee'                    => $procedureFees[$field]
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (isset($data['procedure_considerations'])) {
+                ProcedureConsideration::updateOrCreate([
+                    'procedure_id'      => $procedure->id,
+                ], [
+                    'gender_id'         => $data['procedure_considerations']['gender_id'],
+                    'age_init'          => $data['procedure_considerations']['age_init'],
+                    'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
+                    'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
+                ]);
+            }
+
+            if (isset($data['modifiers'])) {
+                $procedure->modifiers()->sync($data['modifiers']);
+            }
+
+            if (isset($data['diagnoses'])) {
+                $procedure->diagnoses()->sync($data['diagnoses']);
+            }
 
             if (isset($data['note'])) {
                 /** PublicNote */
@@ -208,5 +317,45 @@ class ProcedureRepository
         if (is_null($procedure)) return null;
 
         return $procedure->update(["active" => $status]);
+    }
+
+    public function getListMac() {
+        try {
+            return getList(MacLocality::class, ['mac']);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListLocalityNumber() {
+        try {
+            return getList(MacLocality::class, ['locality_number']);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListState() {
+        try {
+            return getList(MacLocality::class, ['state']);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListFsa() {
+        try {
+            return getList(MacLocality::class, ['fsa']);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListCounties() {
+        try {
+            return getList(MacLocality::class, ['counties']);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

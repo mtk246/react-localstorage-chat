@@ -14,6 +14,8 @@ class Procedure extends Model implements Auditable
 
     protected $fillable = [
         "code",
+        "start_date",
+        "end_date",
         "description",
         "active",
     ];
@@ -35,7 +37,7 @@ class Procedure extends Model implements Auditable
      */
     public function procedureCosiderations()
     {
-        return $this->hasMany(ProcedureCosideration::class);
+        return $this->hasMany(ProcedureConsideration::class);
     }
 
     /**
@@ -55,7 +57,7 @@ class Procedure extends Model implements Auditable
      */
     public function diagnoses()
     {
-        return $this->belongsToMany(Diagnosis::class)->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class, 'diagnosis_procedure', 'procedure_id', 'diagnoses_id')->withTimestamps();
     }
 
     /**

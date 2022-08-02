@@ -328,6 +328,13 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-by-code/{code}",[\App\Http\Controllers\ProcedureController::class,"getByCode"]);
+        Route::get("/get-list-mac",[\App\Http\Controllers\ProcedureController::class,"getListMac"]);
+        Route::get("/get-list-locality-number",[\App\Http\Controllers\ProcedureController::class,"getListLocalityNumber"]);
+        Route::get("/get-list-state",[\App\Http\Controllers\ProcedureController::class,"getListState"]);
+        Route::get("/get-list-fsa",[\App\Http\Controllers\ProcedureController::class,"getListFsa"]);
+        Route::get("/get-list-counties",[\App\Http\Controllers\ProcedureController::class,"getListCounties"]);
+
         Route::post("/",[\App\Http\Controllers\ProcedureController::class,"createProcedure"]);
         Route::get("/",[\App\Http\Controllers\ProcedureController::class,"getAllProcedures"]);
         Route::get("/{id}",[\App\Http\Controllers\ProcedureController::class,"getOneProcedure"]);

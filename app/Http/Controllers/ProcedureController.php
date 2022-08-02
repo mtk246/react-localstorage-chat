@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
+use App\Http\Requests\Procedure\ProcedureUpdateRequest;
 use App\Repositories\ProcedureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,6 +40,17 @@ class ProcedureController extends Controller
     }
 
     /**
+     * @param string
+     * @return JsonResponse
+     */
+    public function getByCode(string $code): JsonResponse
+    {
+        $rs = $this->procedureRepository->getByCode($code);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, procedure not found"), 404);
+    }
+
+    /**
      * @return JsonResponse
      */
     public function getAllProcedures(): JsonResponse
@@ -53,7 +65,7 @@ class ProcedureController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function updateProcedure(ProcedureCreateRequest $request, int $id): JsonResponse
+    public function updateProcedure(ProcedureUpdateRequest $request, int $id): JsonResponse
     {
         $rs = $this->procedureRepository->updateProcedure($request->validated(), $id);
 
@@ -70,5 +82,52 @@ class ProcedureController extends Controller
         $rs = $this->procedureRepository->changeStatus($request->input("status"), $id);
 
         return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 400);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListMac(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListMac()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListLocalityNumber(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListLocalityNumber()
+        );
+    }
+    /**
+     * @return JsonResponse
+     */
+    public function getListState(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListState()
+        );
+    }
+    /**
+     * @return JsonResponse
+     */
+    public function getListFsa(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListFsa()
+        );
+    }
+    /**
+     * @return JsonResponse
+     */
+    public function getListCounties(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListCounties()
+        );
     }
 }

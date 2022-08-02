@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Procedure;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ProcedureCreateRequest extends FormRequest
+class ProcedureUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,16 +19,16 @@ class ProcedureCreateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules()
     {
         return [
-            'code'                                                         => ['required', 'string', 'max:50', Rule::unique('procedures', 'code')],
             'description'                                                  => ['required', 'string'],
             'companies'                                                    => ['nullable', 'array'],
             'specific_company'                                             => ['required', 'boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
+            'end_date'                                                     => ['nullable', 'date'],
             
             'mac_localities'                                               => ['required', 'array'],
             'mac_localities.*.mac'                                         => ['required', 'string'],

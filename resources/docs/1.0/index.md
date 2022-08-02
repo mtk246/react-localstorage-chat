@@ -48,5 +48,8 @@
 - ## Diagnosis
     - [Diagnosis](/{{route}}/{{version}}/diagnosis)
 
+- ## Procedure
+    - [Procedure](/{{route}}/{{version}}/procedure)
+
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)
