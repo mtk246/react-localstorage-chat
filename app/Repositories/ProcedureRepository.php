@@ -15,6 +15,8 @@ use App\Models\PublicNote;
 use App\Models\ProcedureConsideration;
 use App\Models\ProcedureFee;
 use App\Models\Procedure;
+use App\Models\Gender;
+use App\Models\Discriminatory;
 
 class ProcedureRepository
 {
@@ -394,5 +396,13 @@ class ProcedureRepository
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    public function getListGenders() {
+        return getList(Gender::class, 'description');
+    }
+
+    public function getListDiscriminatories() {
+        return getList(Discriminatory::class, 'description');
     }
 }

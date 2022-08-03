@@ -335,6 +335,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-state",[\App\Http\Controllers\ProcedureController::class,"getListState"]);
         Route::get("/get-list-fsa",[\App\Http\Controllers\ProcedureController::class,"getListFsa"]);
         Route::get("/get-list-counties",[\App\Http\Controllers\ProcedureController::class,"getListCounties"]);
+        Route::get("/get-list-genders",[\App\Http\Controllers\ProcedureController::class,"getListGenders"]);
+        Route::get("/get-list-discriminatories",[\App\Http\Controllers\ProcedureController::class,"getListDiscriminatories"]);
 
         Route::post("/",[\App\Http\Controllers\ProcedureController::class,"createProcedure"]);
         Route::get("/",[\App\Http\Controllers\ProcedureController::class,"getAllProcedures"]);

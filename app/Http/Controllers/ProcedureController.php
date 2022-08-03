@@ -140,4 +140,24 @@ class ProcedureController extends Controller
             $this->procedureRepository->getListCounties()
         );
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListGenders(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListGenders()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListDiscriminatories(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListDiscriminatories()
+        );
+    }
 }

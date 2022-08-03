@@ -8,6 +8,8 @@
 - [Get one procedure](#get-one-procedure)
 - [Get one procedure by code](#get-one-procedure-by-code)
 - [Get list mac localities](#get-list-mac-localities)
+- [Get list discriminatories](#get-list-discriminatories)
+- [Get list genders](#get-list-genders)
 - [Update procedure](#update-procedure)
 - [Change status procedure](#change-status-procedure)
 
@@ -24,8 +26,10 @@
 | 3 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
 | 4 |GET     | `Get one procedure by code` | `/procedure/get-by-code/{code}` | yes            | Get one procedure by code|
 | 5 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
-| 6 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 7 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 6 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
+| 7 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
+| 8 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 9 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
 
 
 <a name="create-procedure"></a>
@@ -562,6 +566,76 @@
         }
     ]
 }
+```
+
+<a name="get-list-discriminatories"></a>
+## Get list discriminatories
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Discriminatories found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Greater or equal"
+    },
+    {
+        "id": 2,
+        "name": "Smaller or equal"
+    },
+    {
+        "id": 3,
+        "name": "Range"
+    }
+]
+```
+
+<a name="get-list-genders"></a>
+## Get list genders
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Genders found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Female"
+    },
+    {
+        "id": 2,
+        "name": "Male"
+    },
+    {
+        "id": 3,
+        "name": "Both"
+    }
+]
 ```
 
 <a name="update-procedure"></a>
