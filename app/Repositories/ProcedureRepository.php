@@ -319,6 +319,43 @@ class ProcedureRepository
         return $procedure->update(["active" => $status]);
     }
 
+    public function getListMacLocalities(Request $request) {
+        try {
+            $records['mac'] = MacLocality::select('mac')->distinct()->get();
+            $records['locality_number'] = MacLocality::select('locality_number')->distinct()->get();
+            $records['state'] = MacLocality::select('state')->distinct()->get();
+            $records['fsa'] = MacLocality::select('fsa')->distinct()->get();
+            $records['counties'] = MacLocality::select('counties')->distinct()->get();
+            $options = [
+                'mac'             => [],
+                'locality_number' => [],
+                'state'           => [],
+                'fsa'             => [],
+                'counties'        => []
+
+            ];
+            foreach ($records['mac'] as $rec) {
+                array_push($options['mac'], ['id' => $rec->mac, 'name' => $rec->mac]);
+            }
+            foreach ($records['locality_number'] as $rec) {
+                array_push($options['locality_number'], ['id' => $rec->locality_number, 'name' => $rec->locality_number]);
+            }
+            foreach ($records['state'] as $rec) {
+                array_push($options['state'], ['id' => $rec->state, 'name' => $rec->state]);
+            }
+            foreach ($records['fsa'] as $rec) {
+                array_push($options['fsa'], ['id' => $rec->fsa, 'name' => $rec->fsa]);
+            }
+            foreach ($records['counties'] as $rec) {
+                array_push($options['counties'], ['id' => $rec->counties, 'name' => $rec->counties]);
+            }
+
+            return $options;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getListMac() {
         try {
             return getList(MacLocality::class, ['mac']);

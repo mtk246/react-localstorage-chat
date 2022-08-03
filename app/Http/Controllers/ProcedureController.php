@@ -87,6 +87,16 @@ class ProcedureController extends Controller
     /**
      * @return JsonResponse
      */
+    public function getListMacLocalities(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListMacLocalities($request)
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getListMac(): JsonResponse
     {
         return response()->json(

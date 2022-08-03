@@ -7,11 +7,7 @@
 - [Get all procedure](#get-all-procedure)
 - [Get one procedure](#get-one-procedure)
 - [Get one procedure by code](#get-one-procedure-by-code)
-- [Get list mac](#get-list-mac)
-- [Get list locality number](#get-list-locality-number)
-- [Get list state](#get-list-state)
-- [Get list fsa](#get-list-fsa)
-- [Get list counties](#get-list-counties)
+- [Get list mac localities](#get-list-mac-localities)
 - [Update procedure](#update-procedure)
 - [Change status procedure](#change-status-procedure)
 
@@ -27,13 +23,9 @@
 | 2 |GET     | `Get all procedures` | `/procedure/`     | yes            | Get all procedures |
 | 3 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
 | 4 |GET     | `Get one procedure by code` | `/procedure/get-by-code/{code}` | yes            | Get one procedure by code|
-| 5 |GET     | `Get list mac localities` | `/procedure/get-list-mac` | yes            | Get list mac localities|
-| 6 |GET     | `Get list mac localities` | `/procedure/get-list-locality-number` | yes            | Get list locality number|
-| 7 |GET     | `Get list state` | `/procedure/get-list-state` | yes            | Get list state|
-| 8 |GET     | `Get list fsa` | `/procedure/get-list-fsa` | yes            | Get list fsa|
-| 9 |GET     | `Get list counties` | `/procedure/get-list-counties` | yes            | Get list counties|
-| 10 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 11 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 5 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
+| 6 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 7 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
 
 
 <a name="create-procedure"></a>
@@ -45,8 +37,8 @@
 {
     "code": "Code procedure 1",
     "description": "Description procedure 1",
-    "companies": [1, 2],
-    "specific_company": true,
+    "insurance_companies": [1, 2],
+    "specific_insurance_company": true,
     "start_date": "2022-07-05",
     "mac_localities": [
         {
@@ -458,8 +450,8 @@
 }
 ```
 
-<a name="get-list-mac"></a>
-## Get list mac
+<a name="get-list-mac-localities"></a>
+## Get list mac localities
 
 
 ### Param in header
@@ -469,6 +461,17 @@
     "Authorization": bearer <token>
 }
 ```
+## Param in path
+
+`mac <string>`
+`locality_number <string>`
+`state <integer>`
+`fsa <string>`
+`counties <boolean>`
+
+## Example path
+
+>{primary} ?mac=fieldMac&locality_number=fieldLocalityNumber&state=fieldState&fsa=fieldFsa&counties=fieldCounties
 
 ## Response
 
@@ -477,216 +480,88 @@
 #
 
 ```json
-[
-    {
-        "id": 113,
-        "name": "10112"
-    },
-    {
-        "id": 114,
-        "name": "02102"
-    },
-    {
-        "id": 115,
-        "name": "03102"
-    },
-    {
-        "id": 116,
-        "name": "07102"
-    }
-]
-```
-
-<a name="get-list-locality-number"></a>
-## Get list locality numbers
-
-
-### Param in header
-
-```json
 {
-    "Authorization": bearer <token>
+    "mac": [
+        {
+            "id": "03302",
+            "name": "03302"
+        },
+        {
+            "id": "01182",
+            "name": "01182"
+        },
+        {
+            "id": "03502",
+            "name": "03502"
+        },
+        {
+            "id": "05302",
+            "name": "05302"
+        }
+    ],
+    "state": [
+        {
+            "id": "SOUTH DAKOTA",
+            "name": "SOUTH DAKOTA"
+        },
+        {
+            "id": "SOUTH CAROLINA",
+            "name": "SOUTH CAROLINA"
+        },
+        {
+            "id": "MAINE",
+            "name": "MAINE"
+        },
+        {
+            "id": "PUERTO RICO",
+            "name": "PUERTO RICO"
+        }
+    ],
+    "fsa": [
+        {
+            "id": "REST OF STATE*",
+            "name": "REST OF STATE*"
+        },
+        {
+            "id": "EAST ST. LOUIS",
+            "name": "EAST ST. LOUIS"
+        },
+        {
+            "id": "NYC SUBURBS/LONG ISLAND",
+            "name": "NYC SUBURBS/LONG ISLAND"
+        },
+        {
+            "id": "SALINAS",
+            "name": "SALINAS"
+        }
+    ],
+    "counties": [
+        {
+            "id": "BROWARD, COLLIER, INDIAN RIVER, LEE, MARTIN, PALM BEACH, AND ST. LUCIE",
+            "name": "BROWARD, COLLIER, INDIAN RIVER, LEE, MARTIN, PALM BEACH, AND ST. LUCIE"
+        },
+        {
+            "id": "ALL OTHER COUNTIES",
+            "name": "ALL OTHER COUNTIES"
+        },
+        {
+            "id": "SAN LUIS OBISPO",
+            "name": "SAN LUIS OBISPO"
+        },
+        {
+            "id": "BERGEN, ESSEX, HUDSON, HUNTERDON, MIDDLESEX, MORRIS, PASSAIC, SOMERSET, SUSSEX, UNION AND WARREN",
+            "name": "BERGEN, ESSEX, HUDSON, HUNTERDON, MIDDLESEX, MORRIS, PASSAIC, SOMERSET, SUSSEX, UNION AND WARREN"
+        },
+        {
+            "id": "CLAY, JACKSON AND PLATTE",
+            "name": "CLAY, JACKSON AND PLATTE"
+        },
+        {
+            "id": "STANISLAUS",
+            "name": "STANISLAUS"
+        }
+    ]
 }
-```
-
-## Response
-
-> {success} 200 Locality numbers found
-
-#
-
-```json
-[
-    {
-        "id": 113,
-        "name": "00"
-    },
-    {
-        "id": 114,
-        "name": "01"
-    },
-    {
-        "id": 115,
-        "name": "00"
-    },
-    {
-        "id": 116,
-        "name": "13"
-    },
-    {
-        "id": 117,
-        "name": "26"
-    },
-    {
-        "id": 118,
-        "name": "18"
-    },
-    {
-        "id": 119,
-        "name": "52"
-    }
-]
-```
-
-<a name="get-list-state"></a>
-## Get list state
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 State found
-
-#
-
-```json
-[
-    {
-        "id": 113,
-        "name": "ALABAMA"
-    },
-    {
-        "id": 114,
-        "name": "ALASKA"
-    },
-    {
-        "id": 115,
-        "name": "ARIZONA"
-    },
-    {
-        "id": 116,
-        "name": "ARKANSAS"
-    },
-    {
-        "id": 117,
-        "name": "CALIFORNIA"
-    }
-]
-```
-
-<a name="get-list-fsa"></a>
-## Get list fsa
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Fee Schedule Area found
-
-#
-
-```json
-[
-    {
-        "id": 113,
-        "name": "STATEWIDE"
-    },
-    {
-        "id": 114,
-        "name": "STATEWIDE"
-    },
-    {
-        "id": 115,
-        "name": "STATEWIDE"
-    },
-    {
-        "id": 116,
-        "name": "STATEWIDE"
-    },
-    {
-        "id": 117,
-        "name": "LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)"
-    },
-    {
-        "id": 118,
-        "name": "LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)"
-    }
-]
-```
-
-<a name="get-list-counties"></a>
-## Get list counties
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Counties found
-
-#
-
-```json
-[
-    {
-        "id": 116,
-        "name": "ALL COUNTIES"
-    },
-    {
-        "id": 117,
-        "name": "ORANGE"
-    },
-    {
-        "id": 118,
-        "name": "LOS ANGELES"
-    },
-    {
-        "id": 119,
-        "name": "MARIN"
-    },
-    {
-        "id": 120,
-        "name": "ALAMEDA AND CONTRA COSTA"
-    },
-    {
-        "id": 121,
-        "name": "SAN FRANCISCO"
-    },
-    {
-        "id": 122,
-        "name": "SAN MATEO"
-    }
-]
 ```
 
 <a name="update-procedure"></a>
@@ -697,8 +572,8 @@
 ```json
 {    
     "description": "Description procedure edit",
-    "companies": [1, 2],
-    "specific_company": true,
+    "insurance_companies": [1, 2],
+    "specific_insurance_company": true,
     "start_date": "2022-07-05",
     "mac_localities": [
         {

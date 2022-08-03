@@ -329,6 +329,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::get("/get-by-code/{code}",[\App\Http\Controllers\ProcedureController::class,"getByCode"]);
+        Route::get("/get-list-mac-localities",[\App\Http\Controllers\ProcedureController::class,"getListMacLocalities"]);
         Route::get("/get-list-mac",[\App\Http\Controllers\ProcedureController::class,"getListMac"]);
         Route::get("/get-list-locality-number",[\App\Http\Controllers\ProcedureController::class,"getListLocalityNumber"]);
         Route::get("/get-list-state",[\App\Http\Controllers\ProcedureController::class,"getListState"]);

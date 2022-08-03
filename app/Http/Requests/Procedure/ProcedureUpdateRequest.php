@@ -25,8 +25,8 @@ class ProcedureUpdateRequest extends FormRequest
     {
         return [
             'description'                                                  => ['required', 'string'],
-            'companies'                                                    => ['nullable', 'array'],
-            'specific_company'                                             => ['required', 'boolean', 'nullable'],
+            'insurance_companies'                                          => ['nullable', 'array'],
+            'specific_insurance_company'                                   => ['required', 'boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
             'end_date'                                                     => ['nullable', 'date'],
             

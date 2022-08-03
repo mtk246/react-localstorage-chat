@@ -27,8 +27,8 @@ class ProcedureCreateRequest extends FormRequest
         return [
             'code'                                                         => ['required', 'string', 'max:50', Rule::unique('procedures', 'code')],
             'description'                                                  => ['required', 'string'],
-            'companies'                                                    => ['nullable', 'array'],
-            'specific_company'                                             => ['required', 'boolean', 'nullable'],
+            'insurance_companies'                                          => ['nullable', 'array'],
+            'specific_insurance_company'                                   => ['required', 'boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
             
             'mac_localities'                                               => ['required', 'array'],
