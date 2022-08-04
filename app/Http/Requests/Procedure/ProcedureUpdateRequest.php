@@ -26,36 +26,36 @@ class ProcedureUpdateRequest extends FormRequest
         return [
             'description'                                                  => ['required', 'string'],
             'insurance_companies'                                          => ['nullable', 'array'],
-            'specific_insurance_company'                                   => ['required', 'boolean', 'nullable'],
+            'specific_insurance_company'                                   => ['boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
             'end_date'                                                     => ['nullable', 'date'],
             
-            'mac_localities'                                               => ['required', 'array'],
-            'mac_localities.*.mac'                                         => ['required', 'string'],
-            'mac_localities.*.modifier_id'                                 => ['required', 'integer'],
-            'mac_localities.*.locality_number'                             => ['required', 'numeric'],
-            'mac_localities.*.state'                                       => ['required', 'string'],
-            'mac_localities.*.fsa'                                         => ['required', 'string'],
-            'mac_localities.*.counties'                                    => ['required', 'string'],
+            'mac_localities'                                               => ['nullable', 'array'],
+            'mac_localities.*.mac'                                         => ['sometimes', 'string'],
+            'mac_localities.*.modifier_id'                                 => ['sometimes', 'integer'],
+            'mac_localities.*.locality_number'                             => ['sometimes', 'numeric'],
+            'mac_localities.*.state'                                       => ['sometimes', 'string'],
+            'mac_localities.*.fsa'                                         => ['sometimes', 'string'],
+            'mac_localities.*.counties'                                    => ['sometimes', 'string'],
             
-            'mac_localities.*.procedure_fees'                              => ['required', 'array'],
-            'mac_localities.*.procedure_fees.non_facility_price'           => ['sometimes', 'required', 'numeric'],
-            'mac_localities.*.procedure_fees.facility_price'               => ['sometimes', 'required', 'numeric'],
-            'mac_localities.*.procedure_fees.non_facility_limiting_charge' => ['sometimes', 'required', 'numeric'],
-            'mac_localities.*.procedure_fees.facility_limiting_charge'     => ['sometimes', 'required', 'numeric'],
+            'mac_localities.*.procedure_fees'                              => ['nullable', 'array'],
+            'mac_localities.*.procedure_fees.non_facility_price'           => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_price'               => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.non_facility_limiting_charge' => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_limiting_charge'     => ['sometimes', 'numeric'],
 
-            'mac_localities.*.procedure_fees.facility_rate'                => ['sometimes', 'required', 'numeric'],
-            'mac_localities.*.procedure_fees.non_facility_rate'            => ['sometimes', 'required', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_rate'                => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.non_facility_rate'            => ['sometimes', 'numeric'],
 
-            'procedure_considerations'                                     => ['required', 'array'],
-            'procedure_considerations.gender_id'                           => ['required', 'integer'],
-            'procedure_considerations.age_init'                            => ['required', 'numeric'],
+            'procedure_considerations'                                     => ['nullable', 'array'],
+            'procedure_considerations.gender_id'                           => ['nullable', 'integer'],
+            'procedure_considerations.age_init'                            => ['nullable', 'numeric'],
             'procedure_considerations.age_end'                             => ['nullable', 'numeric'],
-            'procedure_considerations.discriminatory_id'                   => ['required', 'numeric'],
+            'procedure_considerations.discriminatory_id'                   => ['nullable', 'numeric'],
 
-            'modifiers'                                                    => ['required', 'array'],
-            'diagnoses'                                                    => ['required', 'array'],
-            'note'                                                         => ['required', 'string']
+            'modifiers'                                                    => ['nullable', 'array'],
+            'diagnoses'                                                    => ['nullable', 'array'],
+            'note'                                                         => ['nullable', 'string']
         ];
     }
 }
