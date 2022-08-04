@@ -93,13 +93,17 @@ class ProcedureRepository
             }
 
             if (isset($data['procedure_considerations'])) {
-                ProcedureConsideration::create([
-                    'procedure_id'      => $procedure->id,
-                    'gender_id'         => $data['procedure_considerations']['gender_id'],
-                    'age_init'          => $data['procedure_considerations']['age_init'],
-                    'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
-                    'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
-                ]);
+                if (isset($data['procedure_considerations']['gender_id']) &&
+                    isset($data['procedure_considerations']['age_init']) &&
+                    isset($data['procedure_considerations']['discriminatory_id'])) {
+                    ProcedureConsideration::create([
+                        'procedure_id'      => $procedure->id,
+                        'gender_id'         => $data['procedure_considerations']['gender_id'],
+                        'age_init'          => $data['procedure_considerations']['age_init'],
+                        'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
+                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
+                    ]);
+                }
             }
 
             if (isset($data['modifiers'])) {
@@ -272,14 +276,18 @@ class ProcedureRepository
             }
 
             if (isset($data['procedure_considerations'])) {
-                ProcedureConsideration::updateOrCreate([
-                    'procedure_id'      => $procedure->id,
-                ], [
-                    'gender_id'         => $data['procedure_considerations']['gender_id'],
-                    'age_init'          => $data['procedure_considerations']['age_init'],
-                    'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
-                    'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
-                ]);
+                if (isset($data['procedure_considerations']['gender_id']) &&
+                    isset($data['procedure_considerations']['age_init']) &&
+                    isset($data['procedure_considerations']['discriminatory_id'])) {
+                    ProcedureConsideration::updateOrCreate([
+                        'procedure_id'      => $procedure->id,
+                    ], [
+                        'gender_id'         => $data['procedure_considerations']['gender_id'],
+                        'age_init'          => $data['procedure_considerations']['age_init'],
+                        'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
+                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
+                    ]);
+                };
             }
 
             if (isset($data['modifiers'])) {
