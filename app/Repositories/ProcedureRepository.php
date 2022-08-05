@@ -418,11 +418,10 @@ class ProcedureRepository
 
     public function getListDiagnoses($code = '') {
         try {
-            return getList(Diagnosis::class, 'code');
             if ($code == '') {
                 return getList(Diagnosis::class, 'code');
             } else {
-                return getList(Diagnosis::class, 'code', ['code', 'LIKE', "%$code%"]);
+                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]]);
             }
         } catch (\Exception $e) {
             return [];
@@ -431,31 +430,10 @@ class ProcedureRepository
 
     public function getListModifiers($code = '') {
         try {
-            return getList(Modifier::class, 'modifier');
             if ($code == '') {
                 return getList(Modifier::class, 'modifier');
             } else {
-                $records = Modifier::whereRaw('LOWER(code) LIKE (?)', [strtolower("%$code%")])->get();
-                $options = [];
-
-                foreach ($records as $rec) {
-                    if (is_array($fields)) {
-                        $text = '';
-                        foreach ($fields as $field) {
-                            $text .= ($field !== "-" && $field !== " ")
-                                ? $rec->$field
-                                : (($field === " ") ? $field : " {$field} ");
-                        }
-                    } else {
-                        $text = $rec->$fields;
-                    }
-
-                    if (is_null($except_id) || $except_id !== $rec->id) {
-                        array_push($options, ['id' => $rec->id, 'name' => $text]);
-                    }
-                }
-                return $options;
-                //return getList(Modifier::class, 'modifier', ['whereRaw' => ]]);
+                return getList(Modifier::class, 'modifier', ['whereRaw' => ['search' => $code]]);
             }
             
         } catch (\Exception $e) {

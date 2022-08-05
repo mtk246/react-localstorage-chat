@@ -52,7 +52,10 @@ if (!function_exists('getList')) {
     {
         $records = (is_object($model)) ? $model : $model::all();
         if ($filters) {
-            if (!isset($filters['relationship'])) {
+            if (isset($filters['whereRaw'])) {
+                $search = $filters['whereRaw']['search'];
+                $records = $model::whereRaw("LOWER($fields) LIKE (?)", [strtolower("%$search%")])->get();
+            } else if (!isset($filters['relationship'])) {
                 $records = $model::where($filters)->get();
             } else {
                 /** Filtra la información a obtener mediante relaciones */
