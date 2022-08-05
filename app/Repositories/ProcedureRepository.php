@@ -17,6 +17,8 @@ use App\Models\ProcedureFee;
 use App\Models\Procedure;
 use App\Models\Gender;
 use App\Models\Discriminatory;
+use App\Models\Diagnosis;
+use App\Models\Modifier;
 
 class ProcedureRepository
 {
@@ -412,5 +414,52 @@ class ProcedureRepository
 
     public function getListDiscriminatories() {
         return getList(Discriminatory::class, 'description');
+    }
+
+    public function getListDiagnoses($code = '') {
+        try {
+            return getList(Diagnosis::class, 'code');
+            if ($code == '') {
+                return getList(Diagnosis::class, 'code');
+            } else {
+                return getList(Diagnosis::class, 'code', ['code', 'LIKE', "%$code%"]);
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListModifiers($code = '') {
+        try {
+            return getList(Modifier::class, 'modifier');
+            if ($code == '') {
+                return getList(Modifier::class, 'modifier');
+            } else {
+                $records = Modifier::whereRaw('LOWER(code) LIKE (?)', [strtolower("%$code%")])->get();
+                $options = [];
+
+                foreach ($records as $rec) {
+                    if (is_array($fields)) {
+                        $text = '';
+                        foreach ($fields as $field) {
+                            $text .= ($field !== "-" && $field !== " ")
+                                ? $rec->$field
+                                : (($field === " ") ? $field : " {$field} ");
+                        }
+                    } else {
+                        $text = $rec->$fields;
+                    }
+
+                    if (is_null($except_id) || $except_id !== $rec->id) {
+                        array_push($options, ['id' => $rec->id, 'name' => $text]);
+                    }
+                }
+                return $options;
+                //return getList(Modifier::class, 'modifier', ['whereRaw' => ]]);
+            }
+            
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

@@ -10,6 +10,8 @@
 - [Get list mac localities](#get-list-mac-localities)
 - [Get list discriminatories](#get-list-discriminatories)
 - [Get list genders](#get-list-genders)
+- [Get list modifiers](#get-list-modifiers)
+- [Get list diagnoses](#get-list-diagnoses)
 - [Update procedure](#update-procedure)
 - [Change status procedure](#change-status-procedure)
 
@@ -28,8 +30,10 @@
 | 5 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
 | 6 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
 | 7 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
-| 8 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 9 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 8 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
+| 9 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
+| 10 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 11 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
 
 
 <a name="create-procedure"></a>
@@ -634,6 +638,96 @@
     {
         "id": 3,
         "name": "Both"
+    }
+]
+```
+
+<a name="get-list-modifiers"></a>
+## Get list modifiers
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "code": <string>
+}
+```
+
+## Response
+
+> {success} 200 Modifiers found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "M1"
+    },
+    {
+        "id": 2,
+        "name": "M2"
+    },
+    {
+        "id": 3,
+        "name": "M3"
+    }
+]
+```
+
+<a name="get-list-diagnoses"></a>
+## Get list diagnoses
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "code": <string>
+}
+```
+
+## Response
+
+> {success} 200 Diagnoses found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "A000"
+    },
+    {
+        "id": 2,
+        "name": "A001"
+    },
+    {
+        "id": 3,
+        "name": "A009"
+    },
+    {
+        "id": 4,
+        "name": "A0100"
     }
 ]
 ```

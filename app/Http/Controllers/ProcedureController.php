@@ -160,4 +160,24 @@ class ProcedureController extends Controller
             $this->procedureRepository->getListDiscriminatories()
         );
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListModifiers(string $code = ''): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListModifiers($code)
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListDiagnoses(string $code = ''): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListDiagnoses($code)
+        );
+    }
 }
