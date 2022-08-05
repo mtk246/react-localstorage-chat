@@ -222,13 +222,13 @@ class ClearingHouseRepository
     public function getByName(string $name) {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
+            $clearing = ClearingHouse::whereRaw('LOWER(name) LIKE (?)', [strtolower("$name")])->with([
                 "addresses",
                 "contacts",
                 "billingCompanies"
-            ])->get();
+            ])->first();
         } else {
-            $clearing = ClearingHouse::where("name","ILIKE","%${name}%")->with([
+            $clearing = ClearingHouse::whereRaw('LOWER(name) LIKE (?)', [strtolower("$name")])->with([
                 "addresses" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
@@ -236,7 +236,7 @@ class ClearingHouseRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "billingCompanies"
-            ])->get();
+            ])->first();
         }
         return !is_null($clearing) ? $clearing : null;
     }

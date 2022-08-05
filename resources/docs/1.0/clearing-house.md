@@ -7,7 +7,7 @@
 - [Get all clearing house](#get-all-clearing-house)
 - [Get one clearing house](#get-one-clearing-house)
 - [Update one clearing house](#update-one-clearing-house)
-- [Get all Clearing house by name](#get-all-clearing-house-by-name)
+- [Get one Clearing house by name](#get-one-clearing-house-by-name)
 - [Change status Clearing house](#change-status-clearing-house)
 - [Add to billing company](#add-to-billing-company)
 
@@ -21,7 +21,7 @@
 | 2 |GET | `Get all clearing house`                   | `/clearing-house/`        |yes            |Get all Clearing House|
 | 3 |GET | `Get one Clearing house`                   | `/clearing-house/{id}`|yes|Get one Clearing House|
 | 4 |PUT | `Update one Clearing house`                | `/clearing-house/{id}`|yes|Update one Clearing House|
-| 5 |GET | `Get all Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get all Clearing House by name|
+| 5 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
 | 6 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
 | 7 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
 
@@ -440,8 +440,8 @@
 
 # 
 
-<a name="get-all-clearing-house-by-name"></a>
-## Get All Clearing House by name
+<a name="get-one-clearing-house-by-name"></a>
+## Get one Clearing House by name
 
 ### Param in Path
 
@@ -467,18 +467,16 @@
 #
 
 ```json
-[
-    {
-        "code": "CH-00001-2022",
-        "name": "clearing first",
-        "org_type": "222CH123",
-        "ack_required": true,
-        "updated_at": "2022-03-16T11:00:09.000000Z",
-        "created_at": "2022-03-16T11:00:09.000000Z",
-        "id": 1,
-        "status": true,
-    }
-]
+{
+    "code": "CH-00001-2022",
+    "name": "clearing first",
+    "org_type": "222CH123",
+    "ack_required": true,
+    "updated_at": "2022-03-16T11:00:09.000000Z",
+    "created_at": "2022-03-16T11:00:09.000000Z",
+    "id": 1,
+    "status": true,
+}
 ```
 
 
