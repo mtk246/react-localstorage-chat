@@ -91,9 +91,9 @@ class AuthController extends Controller
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
 
-        if ($this->checkIsLogged($request->input("email"))) {
-            return response()->json("this user has a session active in other device", 401);
-        }
+        //if ($this->checkIsLogged($request->input("email"))) {
+            //return response()->json("this user has a session active in other device", 401);
+        //}
 
         $user = User::where('email', $dataValidated["email"])->first();
         if (!isset($user)) {
@@ -197,7 +197,35 @@ class AuthController extends Controller
                 }
             ])->first();
         }
-
+        $perms = [];
+        foreach ($user->permissions->groupBy('module') as $module => $permissions) {
+            $perms[strtolower($module)] = [];
+            $perms[strtolower($module)]['create'] = false;
+            $perms[strtolower($module)]['view'] = false;
+            $perms[strtolower($module)]['show'] = false;
+            $perms[strtolower($module)]['edit'] = false;
+            $perms[strtolower($module)]['disable'] = false;
+            $perms[strtolower($module)]['history'] = false;
+            foreach ($permissions as $permission) {
+                if (str_contains(strtolower($permission->name), 'create')) {
+                    $perms[strtolower($module)]['create'] = true;
+                } else if (str_contains(strtolower($permission->name), 'view')) {
+                    $perms[strtolower($module)]['view'] = true;
+                } else if (str_contains(strtolower($permission->name), 'show')) {
+                    $perms[strtolower($module)]['show'] = true;
+                } else if (str_contains(strtolower($permission->name), 'edit')) {
+                    $perms[strtolower($module)]['edit'] = true;
+                } else if (str_contains(strtolower($permission->name), 'disable')) {
+                    $perms[strtolower($module)]['disable'] = true;
+                } else if (str_contains(strtolower($permission->name), 'history')) {
+                    $perms[strtolower($module)]['history'] = true;
+                } else {
+                    $perms[strtolower($module)][strtolower($permission->name)] = true;
+                }
+            }
+        }
+        //unset($user['permissions']);
+        $user->menu = $perms;
         return response()->json($user);
     }
 
