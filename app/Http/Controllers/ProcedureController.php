@@ -180,4 +180,24 @@ class ProcedureController extends Controller
             $this->procedureRepository->getListDiagnoses($code)
         );
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getList(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getList()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListInsuranceLabelFees(): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListInsuranceLabelFees()
+        );
+    }
 }

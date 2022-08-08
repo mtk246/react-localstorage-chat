@@ -440,4 +440,20 @@ class ProcedureRepository
             return [];
         }
     }
+
+    public function getList() {
+        try {
+            return getList(Procedure::class, 'code');
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListInsuranceLabelFees() {
+        try {
+            return getList(InsuranceLabelFee::class, 'description');
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 }

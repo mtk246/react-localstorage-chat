@@ -1,4 +1,4 @@
-# Procedure Docs
+# Procedure / Service Docs
 
 ---
 
@@ -12,6 +12,8 @@
 - [Get list genders](#get-list-genders)
 - [Get list modifiers](#get-list-modifiers)
 - [Get list diagnoses](#get-list-diagnoses)
+- [Get list procedure](#get-list)
+- [Get list insurance label fees](#get-list-insurance-label-fees)
 - [Update procedure](#update-procedure)
 - [Change status procedure](#change-status-procedure)
 
@@ -32,8 +34,10 @@
 | 7 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
 | 8 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
 | 9 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
-| 10 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 11 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 10 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
+| 11 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 13 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
 
 
 <a name="create-procedure"></a>
@@ -728,6 +732,88 @@
     {
         "id": 4,
         "name": "A0100"
+    }
+]
+```
+
+<a name="get-list"></a>
+## Get list procedures
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Procedures found
+
+#
+
+```json
+[
+    {
+        "id": 11,
+        "name": "Code procedure2"
+    },
+    {
+        "id": 12,
+        "name": "Code procedure1"
+    },
+    {
+        "id": 13,
+        "name": "Code procedure3"
+    }
+]
+```
+
+<a name="get-list-insurance-label-fees"></a>
+## Get list insurance label fees
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance label fees found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Non facility price"
+    },
+    {
+        "id": 2,
+        "name": "Facility price"
+    },
+    {
+        "id": 3,
+        "name": "Non facility limiting charge"
+    },
+    {
+        "id": 4,
+        "name": "Facility limiting charge"
+    },
+    {
+        "id": 5,
+        "name": "Facility rate"
+    },
+    {
+        "id": 6,
+        "name": "Non facility rate"
     }
 ]
 ```
