@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
 use App\Http\Requests\Company\AddProcedureRequest;
+use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ProcedureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
