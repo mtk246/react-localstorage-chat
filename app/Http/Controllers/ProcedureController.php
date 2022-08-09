@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
+use App\Http\Requests\Company\AddProcedureRequest;
 use App\Repositories\ProcedureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -184,6 +185,16 @@ class ProcedureController extends Controller
     /**
      * @return JsonResponse
      */
+    public function getListInsuranceCompanies(int $procedure_id = null): JsonResponse
+    {
+        return response()->json(
+            $this->procedureRepository->getListInsuranceCompanies($procedure_id)
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getList(): JsonResponse
     {
         return response()->json(
@@ -199,5 +210,16 @@ class ProcedureController extends Controller
         return response()->json(
             $this->procedureRepository->getListInsuranceLabelFees()
         );
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToCompany(AddProcedureRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->procedureRepository->addToCompany($request->validated());
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add procedure to company"), 404);
     }
 }

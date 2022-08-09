@@ -13,7 +13,6 @@ class ProcedureFee extends Model implements Auditable
 
     protected $fillable = [
         "fee",
-        "fee_percentage"
         "insurance_label_fee_id",
         "procedure_id",
         "mac_locality_id",

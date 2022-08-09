@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\InsuranceLabelFee;
+use App\Models\InsuranceCompany;
 use App\Models\InsuranceType;
 use App\Models\MacLocality;
 use App\Models\PublicNote;
@@ -19,6 +20,7 @@ use App\Models\Gender;
 use App\Models\Discriminatory;
 use App\Models\Diagnosis;
 use App\Models\Modifier;
+use App\Models\Company;
 
 class ProcedureRepository
 {
@@ -441,6 +443,22 @@ class ProcedureRepository
         }
     }
 
+    public function getListInsuranceCompanies($procedure_id = null) {
+        try {
+            if ($procedure_id == null) {
+                return getList(InsuranceCompany::class);
+            } else {
+                return getList(
+                    InsuranceCompany::class,
+                    'name',
+                    ['relationship' => 'procedures', 'where' => ['id' => $procedure_id]]
+                );
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getList() {
         try {
             return getList(Procedure::class, 'code');
@@ -452,6 +470,20 @@ class ProcedureRepository
     public function getListInsuranceLabelFees() {
         try {
             return getList(InsuranceLabelFee::class, 'description');
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param int $id
+     * @return Procedure|Builder|Model|object|null
+     */
+    public function addToCompany(array $data, int $id) {
+        try {
+            $company = Company::find($id);
+            return $company;
         } catch (\Exception $e) {
             return [];
         }

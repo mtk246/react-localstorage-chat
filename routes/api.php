@@ -330,15 +330,16 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::get("/get-by-code/{code}",[\App\Http\Controllers\ProcedureController::class,"getByCode"]);
         Route::get("/get-list-mac-localities",[\App\Http\Controllers\ProcedureController::class,"getListMacLocalities"]);
-        Route::get("/get-list-mac",[\App\Http\Controllers\ProcedureController::class,"getListMac"]);
-        Route::get("/get-list-locality-number",[\App\Http\Controllers\ProcedureController::class,"getListLocalityNumber"]);
-        Route::get("/get-list-state",[\App\Http\Controllers\ProcedureController::class,"getListState"]);
-        Route::get("/get-list-fsa",[\App\Http\Controllers\ProcedureController::class,"getListFsa"]);
-        Route::get("/get-list-counties",[\App\Http\Controllers\ProcedureController::class,"getListCounties"]);
+        //Route::get("/get-list-mac",[\App\Http\Controllers\ProcedureController::class,"getListMac"]);
+        //Route::get("/get-list-locality-number",[\App\Http\Controllers\ProcedureController::class,"getListLocalityNumber"]);
+        //Route::get("/get-list-state",[\App\Http\Controllers\ProcedureController::class,"getListState"]);
+        //Route::get("/get-list-fsa",[\App\Http\Controllers\ProcedureController::class,"getListFsa"]);
+        //Route::get("/get-list-counties",[\App\Http\Controllers\ProcedureController::class,"getListCounties"]);
         Route::get("/get-list-genders",[\App\Http\Controllers\ProcedureController::class,"getListGenders"]);
         Route::get("/get-list-discriminatories",[\App\Http\Controllers\ProcedureController::class,"getListDiscriminatories"]);
         Route::get("/get-list-modifiers/{code?}",[\App\Http\Controllers\ProcedureController::class,"getListModifiers"]);
         Route::get("/get-list-diagnoses/{code?}",[\App\Http\Controllers\ProcedureController::class,"getListdiagnoses"]);
+        Route::get("/get-list-insurance-companies/{procedure_id?}",[\App\Http\Controllers\ProcedureController::class,"getListInsuranceCompanies"]);
         Route::get("/get-list-insurance-label-fees",[\App\Http\Controllers\ProcedureController::class,"getListInsuranceLabelFees"]);
         Route::get("/get-list",[\App\Http\Controllers\ProcedureController::class,"getList"]);
 
@@ -347,6 +348,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/{id}",[\App\Http\Controllers\ProcedureController::class,"getOneProcedure"]);
         Route::put("/{id}",[\App\Http\Controllers\ProcedureController::class,"updateProcedure"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ProcedureController::class,'changeStatus']);
+        Route::patch("/add-to-company/{company_id}",[\App\Http\Controllers\ProcedureController::class,'addToCompany']);
     });
 
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
