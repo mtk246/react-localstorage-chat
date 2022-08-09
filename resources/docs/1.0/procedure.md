@@ -12,10 +12,13 @@
 - [Get list genders](#get-list-genders)
 - [Get list modifiers](#get-list-modifiers)
 - [Get list diagnoses](#get-list-diagnoses)
-- [Get list procedure](#get-list)
-- [Get list insurance label fees](#get-list-insurance-label-fees)
 - [Update procedure](#update-procedure)
 - [Change status procedure](#change-status-procedure)
+- [Get list procedure](#get-list)
+- [Get list insurance label fees](#get-list-insurance-label-fees)
+- [Get list insurance companies](#get-list-insurance-companies)
+- [Add to company](#add-to-company)
+- [Get to company](#get-procedure-to-company)
 
 
 
@@ -34,10 +37,13 @@
 | 7 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
 | 8 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
 | 9 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
-| 10 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
-| 11 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 13 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 10 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 11 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 12 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
+| 13 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 14 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 15 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 16 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 
 
 <a name="create-procedure"></a>
@@ -736,88 +742,6 @@
 ]
 ```
 
-<a name="get-list"></a>
-## Get list procedures
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Procedures found
-
-#
-
-```json
-[
-    {
-        "id": 11,
-        "name": "Code procedure2"
-    },
-    {
-        "id": 12,
-        "name": "Code procedure1"
-    },
-    {
-        "id": 13,
-        "name": "Code procedure3"
-    }
-]
-```
-
-<a name="get-list-insurance-label-fees"></a>
-## Get list insurance label fees
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Insurance label fees found
-
-#
-
-```json
-[
-    {
-        "id": 1,
-        "name": "Non facility price"
-    },
-    {
-        "id": 2,
-        "name": "Facility price"
-    },
-    {
-        "id": 3,
-        "name": "Non facility limiting charge"
-    },
-    {
-        "id": 4,
-        "name": "Facility limiting charge"
-    },
-    {
-        "id": 5,
-        "name": "Facility rate"
-    },
-    {
-        "id": 6,
-        "name": "Non facility rate"
-    }
-]
-```
-
 <a name="update-procedure"></a>
 ## Update procedure
 
@@ -925,3 +849,308 @@
 ## Response
 
 > {success} 204 Status changed
+
+#
+
+<a name="get-list"></a>
+## Get list procedures
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Procedures found
+
+#
+
+```json
+[
+    {
+        "id": 11,
+        "name": "Code procedure2"
+    },
+    {
+        "id": 12,
+        "name": "Code procedure1"
+    },
+    {
+        "id": 13,
+        "name": "Code procedure3"
+    }
+]
+```
+
+<a name="get-list-insurance-label-fees"></a>
+## Get list insurance label fees
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance label fees found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Non facility price"
+    },
+    {
+        "id": 2,
+        "name": "Facility price"
+    },
+    {
+        "id": 3,
+        "name": "Non facility limiting charge"
+    },
+    {
+        "id": 4,
+        "name": "Facility limiting charge"
+    },
+    {
+        "id": 5,
+        "name": "Facility rate"
+    },
+    {
+        "id": 6,
+        "name": "Non facility rate"
+    }
+]
+```
+
+<a name="get-list-insurance-companies"></a>
+## Get list insurance companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`procedure_id required <integer>`
+
+## Response
+
+> {success} 200 Insurance companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    }
+]
+```
+
+<a name="add-to-company"></a>
+## Add to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required <integer>`
+
+
+### Body request example
+
+```json
+{
+    "procedures" : [
+        {
+            "procedure_id": 1,
+            "mac_localities": [
+                {
+                    "modifier_id": 1,
+                    "mac": "02102",
+                    "locality_number": "01",
+                    "state": "ALASKA",
+                    "fsa": "STATEWIDE",
+                    "counties": "ALL COUNTIES",
+                    "procedure_fees": {
+                        "non_facility_price": "190.20",
+                        "facility_price": "136.50",
+                        "non_facility_limiting_charge": "60.50",
+                        "facility_limiting_charge": "190.00",
+                        "facility_rate": "200.10",
+                        "non_facility_rate": "55.90"
+                    },
+                    "company_procedure": {
+                        "price": "13.30",
+                        "price_percentage": "100",
+                        "insurance_label_fee_id": 1
+                    },
+                    "insurance_plan_procedure": {
+                        "price": "13.30",
+                        "price_percentage": "100",
+                        "insurance_label_fee_id": 1,
+                        "insurance_plan_id": 1,
+                    }
+                }
+            ],
+        }
+    ]
+}
+```
+
+## Response
+
+> {success} 200 Added procedure/service to company
+
+```json
+[
+    {
+        "procedure_id": 1,
+        "procedure": {
+            "code": "Code procedure1",
+            "description": "Description procedure edit",
+            "active": true,
+            "created_at": "2022-08-02T13:25:35.000000Z",
+            "updated_at": "2022-08-02T13:56:14.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": null,
+        },
+        "mac_localities": [
+            {
+                "modifier_id": 1,
+                "mac": "02102",
+                "locality_number": "01",
+                "state": "ALASKA",
+                "fsa": "STATEWIDE",
+                "counties": "ALL COUNTIES",
+                "procedure_fees": {
+                    "non_facility_price": "190.20",
+                    "facility_price": "136.50",
+                    "non_facility_limiting_charge": "60.50",
+                    "facility_limiting_charge": "190.00",
+                    "facility_rate": "200.10",
+                    "non_facility_rate": "55.90"
+                },
+                "company_procedure": {
+                    "price": "13.30",
+                    "price_percentage": "100",
+                    "insurance_label_fee_id": 1
+                },
+                "insurance_plan_procedure": {
+                    "price": "13.30",
+                    "price_percentage": "100",
+                    "insurance_label_fee_id": 1,
+                    "insurance_plan_id": 1,
+                }
+            }
+        ],
+    }
+]
+```
+
+#
+
+>{warning} 404 error add procedure/service to company
+
+
+<a name="get-procedures-to-company"></a>
+## Get procedures to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required <integer>`
+
+
+## Response
+
+> {success} 200 Procedure/Service to company found
+
+```json
+[
+    {
+        "procedure_id": 1,
+        "procedure": {
+            "code": "Code procedure1",
+            "description": "Description procedure edit",
+            "active": true,
+            "created_at": "2022-08-02T13:25:35.000000Z",
+            "updated_at": "2022-08-02T13:56:14.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": null,
+        },
+        "mac_localities": [
+            {
+                "modifier_id": 1,
+                "mac": "02102",
+                "locality_number": "01",
+                "state": "ALASKA",
+                "fsa": "STATEWIDE",
+                "counties": "ALL COUNTIES",
+                "procedure_fees": {
+                    "non_facility_price": "190.20",
+                    "facility_price": "136.50",
+                    "non_facility_limiting_charge": "60.50",
+                    "facility_limiting_charge": "190.00",
+                    "facility_rate": "200.10",
+                    "non_facility_rate": "55.90"
+                },
+                "company_procedure": {
+                    "price": "13.30",
+                    "price_percentage": "100",
+                    "insurance_label_fee_id": 1
+                },
+                "insurance_plan_procedure": {
+                    "price": "13.30",
+                    "price_percentage": "100",
+                    "insurance_label_fee_id": 1,
+                    "insurance_plan_id": 1,
+                }
+            }
+        ],
+    }
+]
+```
+
+#
+
+>{warning} 404 error get procedure/service to company not found
