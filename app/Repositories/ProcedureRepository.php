@@ -36,6 +36,12 @@ class ProcedureRepository
                 "start_date"  => $data["start_date"],
                 "description" => $data['description']
             ]);
+            
+            if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
+                if ($data['specific_insurance_company']) {
+                    $procedure->insuranceCompanies()->sync($data['insurance_companies']);
+                }
+            }
 
             if (isset($data['mac_localities'])) {
                 foreach ($data['mac_localities'] as $macL) {
@@ -54,9 +60,9 @@ class ProcedureRepository
                     ]);
                     if (isset($macLocality)) {
                         /** Attach macLocality to procedure */
-                        $procedure->macLocalities()->attach($macLocality->id);
+                        $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
-                    foreach ($macL['procedure_fees'] as $procedureFees) {
+                    foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         /** insuranceType == Medicare */
                         $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
                             $query->whereDescription('Medicare');
@@ -64,13 +70,13 @@ class ProcedureRepository
 
                         foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
-                            if (isset($procedureFees[$field])) {
+                            if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
                                     'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
-                                    'fee'                    => $procedureFees[$field]
+                                    'fee'                    => $value
                                 ]);
                             }
                         }
@@ -82,13 +88,13 @@ class ProcedureRepository
 
                         foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
-                            if (isset($procedureFees[$field])) {
+                            if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
                                     'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
-                                    'fee'                    => $procedureFees[$field]
+                                    'fee'                    => $value
                                 ]);
                             }
                         }
@@ -175,10 +181,14 @@ class ProcedureRepository
         $procedure = Procedure::whereId($id)->with([
             "publicNote",
             "procedureCosiderations",
-            "companies",
+            "insuranceCompanies",
             "diagnoses",
             "modifiers",
-            "macLocalities"
+            "macLocalities" => function ($query) {
+                $query->with(['procedureFees' => function ($q) {
+                    $q->with('insuranceLabelFee');
+                }]);
+            }
         ])->first();
 
         return !is_null($procedure) ? $procedure : null;
@@ -217,6 +227,12 @@ class ProcedureRepository
                 "description" => $data['description']
             ]);
 
+            if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
+                if ($data['specific_insurance_company']) {
+                    $procedure->insuranceCompanies()->sync($data['insurance_companies']);
+                }
+            }
+
             if (isset($data['mac_localities'])) {
                 /** Delete mac localities */
                 $procedure->macLocalities()->detach();
@@ -237,9 +253,9 @@ class ProcedureRepository
                     ]);
                     if (isset($macLocality)) {
                         /** Attach macLocality to procedure */
-                        $procedure->macLocalities()->attach($macLocality->id);
+                        $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
-                    foreach ($macL['procedure_fees'] as $procedureFees) {
+                    foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         /** insuranceType == Medicare */
                         $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
                             $query->whereDescription('Medicare');
@@ -247,13 +263,13 @@ class ProcedureRepository
 
                         foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
-                            if (isset($procedureFees[$field])) {
+                            if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
                                     'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
-                                    'fee'                    => $procedureFees[$field]
+                                    'fee'                    => $value
                                 ]);
                             }
                         }
@@ -265,13 +281,13 @@ class ProcedureRepository
 
                         foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
-                            if (isset($procedureFees[$field])) {
+                            if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
                                     'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
-                                    'fee'                    => $procedureFees[$field]
+                                    'fee'                    => $value
                                 ]);
                             }
                         }

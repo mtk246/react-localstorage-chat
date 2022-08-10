@@ -77,7 +77,17 @@ class Procedure extends Model implements Auditable
      */
     public function macLocalities()
     {
-        return $this->belongsToMany(MacLocality::class)->withTimestamps();
+        return $this->belongsToMany(MacLocality::class)->withPivot('modifier_id')->withTimestamps();
+    }
+
+    /**
+     * The insuranceCompany that belong to the Procedure. 
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function insuranceCompanies()
+    {
+        return $this->belongsToMany(InsuranceCompany::class)->withTimestamps();
     }
 
     /**

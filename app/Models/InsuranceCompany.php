@@ -70,13 +70,23 @@ class InsuranceCompany extends Model implements Auditable
     }
 
     /**
-     * The billingCompanies that belong to the company.
+     * The billingCompanies that belong to the insuranceCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * The procedures that belongs to the InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function procedures(): BelongsToMany
+    {
+        return $this->belongsToMany(Procedure::class)->withTimestamps();
     }
 
     /**
