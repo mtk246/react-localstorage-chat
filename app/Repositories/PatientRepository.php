@@ -358,6 +358,50 @@ class PatientRepository
     }
 
     /**
+     * @param string $ssn
+     * @return Patient|Builder|Model|object|null
+     */
+    public function getBySsn(string $ssn) {
+        $patientId = Patient::whereHas("user", function ($query) use ($ssn) {
+                $query->whereHas("profile", function ($q) use ($ssn) {
+                    $q->where('ssn', $ssn);
+                });
+            })->first();
+        $id = $patientId->id ?? null;
+
+        $patient = Patient::with([
+            "user" => function ($query) use ($ssn){
+                $query->with(["profile" => function ($q) use ($ssn) {
+                    $q->where('ssn', $ssn)
+                      ->with("socialMedias");
+                }, "roles", "addresses", "contacts", "billingCompanies"]);
+            },
+            "marital",
+            "guarantor",
+            "companies",
+            "employments",
+            "patientPrivate",
+            "emergencyContacts",
+            "publicNote",
+            "privateNotes",
+            "insurancePlans" => function ($query) use ($id) {
+                $query->with([
+                    "insuranceCompany",
+                    "suscribers" => function ($q) use ($id) {
+                        $q->with('addresses', 'contacts')->whereHas('patients', function ($qq) use ($id) {
+                            $qq->where('patient_id', $id);
+                        });
+                    }
+                ]);
+            }
+        ])->find($id);
+
+        if(is_null($patient)) return null;
+
+        return $patient;
+    }
+
+    /**
      * @return Builder[]|Collection
      */
     public function getAllPatient() {

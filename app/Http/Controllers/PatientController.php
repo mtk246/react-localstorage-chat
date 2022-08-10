@@ -32,6 +32,17 @@ class PatientController extends Controller
      * @param int $id
      * @return JsonResponse
      */
+    public function getBySsn(string $ssn): JsonResponse
+    {
+        $rs = $this->patientRepository->getBySsn($ssn);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, patient not found"), 404);
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
     public function getOnePatient(int $id): JsonResponse
     {
         $rs = $this->patientRepository->getOnePatient($id);

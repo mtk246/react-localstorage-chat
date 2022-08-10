@@ -8,6 +8,7 @@
 - [Create patient](#create-patient)
 - [Get all patient](#get-all-patient)
 - [Get one patient](#get-one-patient)
+- [Get one patient by ssn](#get-one-patient-by-ssn)
 - [Update patient](#Update-patient)
 - [Change status patient](#change-status-patient)
 - [Get all patient suscribers](#get-all-patient-suscribers)
@@ -23,9 +24,10 @@
 | 1 |POST| `Create Patient`                    | `/patient/`               |yes             |Create Patient|         
 | 2 |GET | `Get all Patient`                   | `/patient/`        |yes            |Get all Patient|
 | 3 |GET | `Get one Patient`                   | `/patient/{id}`|yes|Get one Patient|
-| 4 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
-| 5 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
-| 6 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
+| 4 |GET | `Get one Patient by ssn`            | `/patient/get-by-ssn{ssn}`|yes|Get one Patient by ssn|
+| 5 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
+| 6 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
+| 7 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -372,6 +374,218 @@
 ```json
 {
     "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Patient found
+
+#
+
+
+`````json
+{
+    "id": 1,
+    "driver_license": "driver license",
+    "credit_score": "credit score",
+    "user_id": 1,
+    "user": {
+        "id": 1,
+        "email": "user@billing.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-14T20:49:19.000000Z",
+        "updated_at": "2022-03-15T08:59:12.000000Z",
+        "token": null,
+        "isLogged": true,
+        "isBlocked": false,
+        "usercode": "US-00001-2022",
+        "userkey": null,
+        "status": false,
+        "last_login": "2022-03-15 08:59:12",
+        "profile_id": 1,
+        "billing_company_id": null,
+        "roles": [
+            {
+                "id": 1,
+                "name": "PATIENT",
+                "guard_name": "api",
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-14T20:49:19.000000Z",
+                "pivot": {
+                    "model_id": 1,
+                    "role_id": 1,
+                    "model_type": "App\\Models\\User"
+                }
+            }
+        ],
+        "addresses": [
+            {
+                "id": 1,
+                "address": "Singleton Rd",
+                "city": "Calimesa",
+                "state": "California",
+                "zip": "923202207",
+                "billing_company_id": null,
+                "created_at": "2022-03-14T20:49:20.000000Z",
+                "updated_at": "2022-03-14T20:49:20.000000Z",
+                "addressable_type": "App\\Models\\User",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
+            {
+                "id": 1,
+                "phone": "(740) 208-8506",
+                "fax": "(918) 534-7718",
+                "email": "dach.leopold@nikolaus.com",
+                "billing_company_id": null,
+                "created_at": "2022-03-14T20:49:20.000000Z",
+                "updated_at": "2022-03-14T20:49:20.000000Z",
+                "mobile": "218-885-3211",
+                "contactable_type": "App\\Models\\User",
+                "contactable_id": 1
+            }
+        ]
+
+    },
+    "marital": {
+        "spuse_name": "Spuse name",
+        "spuse_work": "Spuse work",
+        "spuse_work_phone": "Spuse phone",
+        "created_at": "2022-03-17T20:45:39.000000Z",
+        "updated_at": "2022-03-17T20:45:39.000000Z"
+    },
+    "guarantor": {
+        "name": "name",
+        "phone": "phone",
+        "created_at": "2022-03-17T20:45:39.000000Z",
+        "updated_at": "2022-03-17T20:45:39.000000Z"
+    },
+    "companies": [
+        {
+            "id": 1,
+            "code": "CO-00001-2022",
+            "name": "company first",
+            "npi": "222CF123",
+            "created_at": "2022-05-02T14:45:27.000000Z",
+            "updated_at": "2022-05-02T14:45:27.000000Z",
+            "status": false,
+            "pivot": {
+                "patient_id": 1,
+                "company_id": 1,
+                "created_at": "2022-05-06T21:21:48.000000Z",
+                "updated_at": "2022-05-06T21:21:48.000000Z"
+            }
+        },
+        {
+            "id": 3,
+            "code": "CO-00003-2022",
+            "name": "PANAMERICAN INTERNAL MEDICINE INC",
+            "npi": "1396903308",
+            "created_at": "2022-05-04T01:38:14.000000Z",
+            "updated_at": "2022-05-04T01:38:14.000000Z",
+            "status": false,
+            "pivot": {
+                "patient_id": 1,
+                "company_id": 3,
+                "created_at": "2022-05-06T21:21:48.000000Z",
+                "updated_at": "2022-05-06T21:21:48.000000Z"
+            }
+        }
+    ],
+    "employments": [
+        {
+            "employer_name": "employer name",
+            "employer_address": "employer address",
+            "employer_phone": "employer phone",
+            "position": "patient position",
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        }
+    ],
+    "emergency_contacts": [
+        {
+            "name": "name emergency contact 1",
+            "cellphone": "cellphone emergency contacts 1",
+            "relationship": "relationship emergency contacts 1",
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        }
+    ],
+    "public_notes": [
+        {
+            "id": 2,
+            "note": "Note public",
+            "publishable_type": "App\\Models\\Patient",
+            "publishable_id": 1,
+            "created_at": "2022-04-20T21:53:26.000000Z",
+            "updated_at": "2022-04-20T21:53:26.000000Z"
+        }
+    ],
+    "private_notes": [
+        {
+            "id": 1,
+            "note": "Note private",
+            "billing_company_id": 1,
+            "publishable_type": "App\\Models\\Patient",
+            "publishable_id": 1,
+            "created_at": "2022-04-20T21:53:26.000000Z",
+            "updated_at": "2022-04-20T21:53:26.000000Z"
+        }
+    ],
+    "insurance_plans": [
+        {
+            "id": 1,
+            "code": "663611",
+            "name": "sdafdasf",
+            "ins_type": "dfssdfads",
+            "cap_group": "3242",
+            "accept_assign": true,
+            "pre_authorization": true,
+            "file_zero_changes": false,
+            "referral_required": true,
+            "accrue_patient_resp": true,
+            "require_abn": true,
+            "pqrs_eligible": true,
+            "allow_attached_files": true,
+            "eff_date": "2022-03-17",
+            "charge_using": "324234",
+            "format": "d-m-y",
+            "method": "324234",
+            "naic": "324234",
+            "insurance_company_id": 1,
+            "suscriber": {
+                "ssn": "ssn suscriber",
+                "first_name" : "firstName suscriber",
+                "last_name"  : "lastName suscriber",
+            },
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        }
+    ],
+    "created_at": "2022-03-17T20:45:39.000000Z",
+    "updated_at": "2022-03-17T20:45:39.000000Z"
+}
+`````
+
+#
+<a name="get-one-patient-by-ssn"></a>
+## Get one patient by ssn
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "ssn": <string>
 }
 ```
 

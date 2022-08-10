@@ -258,6 +258,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
+        Route::get("/get-by-ssn/{ssn}",[\App\Http\Controllers\PatientController::class,"getBySsn"]);
         Route::get("/{id}",[\App\Http\Controllers\PatientController::class,"getOnePatient"]);
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\PatientController::class,'changeStatus']);
