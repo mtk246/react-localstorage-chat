@@ -971,6 +971,27 @@
 
 >{warning} 404 user not found
 
+#
+<a name="update-password"></a>
+## Update Password
+
+## Body request example
+
+```json
+{
+    "password":"some password"
+}
+```
+
+>{success} 204 response empty, password changed
+
+#
+
+>{warning} 404 user not found, 500 some exception
+
+
+#
+
 <a name="search-by-ssn"></a>
 ## Search By Ssn
 
