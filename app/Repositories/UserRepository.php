@@ -8,6 +8,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Mail\GenerateNewPassword;
 use App\Mail\RecoveryUserMail;
 use App\Mail\SendEmailRecoveryPassword;
+use App\Mail\SendEmailChangePassword;
 use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
@@ -269,6 +270,11 @@ class UserRepository{
             $user->token = null;
             $user->password = bcrypt($request->input("password"));
             $user->save();
+
+            $url = env('URL_FRONT') . "/#/";
+            $fullName = $user->profile->first_name . " " . $user->profile->last_name;
+
+            Mail::to($user->email)->send(new SendEmailChangePassword($fullName, $url));
         }catch (\Exception $exception) {
             return false;
         }
@@ -542,7 +548,14 @@ class UserRepository{
     }
 
     public function changePasswordForm(string $password) {
-        return User::whereId(auth()->id())->update(["password" => bcrypt($password)]);
+        $user = User::whereId(auth()->id())->first();
+        $user->update(["password" => bcrypt($password)]);
+        
+        $url = env('URL_FRONT') . "/#/";
+        $fullName = $user->profile->first_name . " " . $user->profile->last_name;
+
+        Mail::to($user->email)->send(new SendEmailChangePassword($fullName, $url));
+        return $user;
     }
 
     public function unlockUser(Request $request) {
