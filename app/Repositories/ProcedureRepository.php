@@ -352,11 +352,28 @@ class ProcedureRepository
 
     public function getListMacLocalities(Request $request) {
         try {
-            $records['mac'] = MacLocality::select('mac')->distinct()->get();
-            $records['locality_number'] = MacLocality::select('locality_number')->distinct()->get();
-            $records['state'] = MacLocality::select('state')->distinct()->get();
-            $records['fsa'] = MacLocality::select('fsa')->distinct()->get();
-            $records['counties'] = MacLocality::select('counties')->distinct()->get();
+            $filters = [];
+            if (isset($request->mac)) {
+                $filters['mac'] = $request->mac;
+            }
+            if (isset($request->locality_number)) {
+                $filters['locality_number'] = $request->locality_number;
+            }
+            if (isset($request->state)) {
+                $filters['state'] = $request->state;
+            }
+            if (isset($request->fsa)) {
+                $filters['fsa'] = $request->fsa;
+            }
+            if (isset($request->counties)) {
+                $filters['counties'] = $request->counties;
+            }
+            $records['mac'] = MacLocality::where($filters)->distinct('mac')->get();
+            $records['locality_number'] = MacLocality::where($filters)->distinct('locality_number')->get();
+            $records['state'] = MacLocality::where($filters)->distinct('state')->get();
+            $records['fsa'] = MacLocality::where($filters)->distinct('fsa')->get();
+            $records['counties'] = MacLocality::where($filters)->distinct('counties')->get();
+            
             $options = [
                 'mac'             => [],
                 'locality_number' => [],

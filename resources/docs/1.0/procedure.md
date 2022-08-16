@@ -483,9 +483,9 @@
 
 `mac <string>`
 `locality_number <string>`
-`state <integer>`
+`state <string>`
 `fsa <string>`
-`counties <boolean>`
+`counties <string>`
 
 ## Example path
 
