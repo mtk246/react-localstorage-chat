@@ -71,6 +71,16 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * The procedures that belong to the Company 
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function procedures()
+    {
+        return $this->belongsToMany(Procedure::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id')->withTimestamps();
+    }
+
+    /**
      * The healthProfessionals that belong to the company.
      *
      * @return BelongsToMany

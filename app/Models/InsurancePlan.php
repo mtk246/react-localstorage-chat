@@ -160,7 +160,7 @@ class InsurancePlan extends Model implements Auditable
      */
     public function procedures(): BelongsToMany
     {
-        return $this->belongsToMany(Procedure::class)->withTimestamps();
+        return $this->belongsToMany(Procedure::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id')->withTimestamps();
     }
 
     /**

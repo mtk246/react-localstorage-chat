@@ -219,7 +219,7 @@ class ProcedureController extends Controller
      */
     public function addToCompany(AddProcedureRequest $request, int $id): JsonResponse
     {
-        $rs = $this->procedureRepository->addToCompany($request->validated());
+        $rs = $this->procedureRepository->addToCompany($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error add procedure to company"), 404);
     }

@@ -25,7 +25,7 @@ class AddProcedureRequest extends FormRequest
     {
         return [
             'procedures'                                                                    => ['nullable', 'array'],
-            'procedures.*.procedure_id'                                                     => ['sometimes', 'integer'],
+            'procedures.*.procedure_id'                                                     => ['required', 'integer'],
             'procedures.*.mac_localities.*.mac'                                             => ['sometimes', 'string'],
             'procedures.*.mac_localities.*.modifier_id'                                     => ['sometimes', 'integer'],
             'procedures.*.mac_localities.*.locality_number'                                 => ['sometimes', 'numeric'],
@@ -50,7 +50,7 @@ class AddProcedureRequest extends FormRequest
             'procedures.*.mac_localities.*.insurance_plan_procedure.price'                  => ['sometimes', 'numeric'],
             'procedures.*.mac_localities.*.insurance_plan_procedure.price_percentage'       => ['sometimes', 'numeric'],
             'procedures.*.mac_localities.*.insurance_plan_procedure.insurance_label_fee_id' => ['sometimes', 'integer'],
-            'procedures.*.mac_localities.*.insurance_plan_procedure.insurance_plan_id'      => ['sometimes', 'integer'],
+            'procedures.*.mac_localities.*.insurance_plan_procedure.insurance_plan_id'      => ['required', 'integer'],
         ];
     }
 }

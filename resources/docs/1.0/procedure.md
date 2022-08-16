@@ -1021,10 +1021,10 @@
                         "price": "13.30",
                         "price_percentage": "100",
                         "insurance_label_fee_id": 1,
-                        "insurance_plan_id": 1,
+                        "insurance_plan_id": 1
                     }
                 }
-            ],
+            ]
         }
     ]
 }
@@ -1072,10 +1072,10 @@
                     "price": "13.30",
                     "price_percentage": "100",
                     "insurance_label_fee_id": 1,
-                    "insurance_plan_id": 1,
+                    "insurance_plan_id": 1
                 }
             }
-        ],
+        ]
     }
 ]
 ```
@@ -1143,10 +1143,10 @@
                     "price": "13.30",
                     "price_percentage": "100",
                     "insurance_label_fee_id": 1,
-                    "insurance_plan_id": 1,
+                    "insurance_plan_id": 1
                 }
             }
-        ],
+        ]
     }
 ]
 ```

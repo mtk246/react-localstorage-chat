@@ -27,7 +27,7 @@ class MacLocality extends Model implements Auditable
      */
     public function procedures()
     {
-        return $this->belongsToMany(Procedure::class)->withTimestamps();
+        return $this->belongsToMany(Procedure::class)->withPivot('modifier_id')->withTimestamps();
     }
 
     /**
