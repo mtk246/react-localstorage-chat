@@ -48,7 +48,7 @@ if (!function_exists('generateNewCode')) {
 }
 
 if (!function_exists('getList')) {
-    function getList($model, $fields = 'name', $filters = [], $except_id = null)
+    function getList($model, $fields = 'name', $filters = [], $except_id = null, $others = [])
     {
         $records = (is_object($model)) ? $model : $model::all();
         if ($filters) {
@@ -80,7 +80,11 @@ if (!function_exists('getList')) {
             }
 
             if (is_null($except_id) || $except_id !== $rec->id) {
-                array_push($options, ['id' => $rec->id, 'name' => $text]);
+                $fieldPush = ['id' => $rec->id, 'name' => $text];
+                foreach ($others as $other) {
+                    $fieldPush[$other] = $rec->$other;
+                }
+                array_push($options, $fieldPush);
             }
         }
         return $options;

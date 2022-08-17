@@ -495,7 +495,7 @@ class ProcedureRepository
 
     public function getList() {
         try {
-            return getList(Procedure::class, 'code');
+            return getList(Procedure::class, 'code', [], null, ['description']);
         } catch (\Exception $e) {
             return [];
         }
