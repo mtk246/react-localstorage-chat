@@ -21,6 +21,13 @@ class MacLocality extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['modifier'];
+
+    /**
      * The procedures that belong to the MacLocality. 
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -77,6 +84,16 @@ class MacLocality extends Model implements Auditable
             get: fn ($value) => strtoupper($value),
             set: fn ($value) => strtoupper($value),
         );
+    }
+
+    /**
+     * Interact with the macLocality's modifier.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getModifierAttribute()
+    {
+        return Modifier::find($this->pivot->modifier_id);
     }
 
 }
