@@ -91,7 +91,7 @@ class ProcedureRepository
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
                             if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
-                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicaid->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
@@ -284,7 +284,7 @@ class ProcedureRepository
                             $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
                             if ($procedureFees == $field) {
                                 ProcedureFee::updateOrCreate([
-                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                    'insurance_label_fee_id' => $insuranceLabelFeeMedicaid->id,
                                     'procedure_id'           => $procedure->id,
                                     'mac_locality_id'        => $macLocality->id
                                 ], [
