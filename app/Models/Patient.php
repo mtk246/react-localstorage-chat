@@ -113,6 +113,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * Patient has many ClaimInformation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimInformations()
+    {
+        return $this->hasMany(ClaimInformation::class);
+    }
+
+    /**
      * Patient has one Employment.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

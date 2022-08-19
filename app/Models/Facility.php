@@ -105,6 +105,16 @@ class Facility extends Model implements Auditable
     }
 
     /**
+     * The PlaceOfServices that belong to the Facility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function placeOfServices(): BelongsToMany
+    {
+        return $this->belongsToMany(PlaceOfService::class)->withTimestamps();
+    }
+
+    /**
      * The taxonomies that belong to the Facility.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
