@@ -40,13 +40,13 @@ class ProcedureCreateRequest extends FormRequest
             'mac_localities.*.counties'                                    => ['sometimes', 'string'],
             
             'mac_localities.*.procedure_fees'                              => ['nullable', 'array'],
-            'mac_localities.*.procedure_fees.non_facility_price'           => ['sometimes', 'numeric'],
-            'mac_localities.*.procedure_fees.facility_price'               => ['sometimes', 'numeric'],
-            'mac_localities.*.procedure_fees.non_facility_limiting_charge' => ['sometimes', 'numeric'],
-            'mac_localities.*.procedure_fees.facility_limiting_charge'     => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.non_facility_price'           => ['nullable', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_price'               => ['nullable', 'numeric'],
+            'mac_localities.*.procedure_fees.non_facility_limiting_charge' => ['nullable', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_limiting_charge'     => ['nullable', 'numeric'],
 
-            'mac_localities.*.procedure_fees.facility_rate'                => ['sometimes', 'numeric'],
-            'mac_localities.*.procedure_fees.non_facility_rate'            => ['sometimes', 'numeric'],
+            'mac_localities.*.procedure_fees.facility_rate'                => ['nullable', 'numeric'],
+            'mac_localities.*.procedure_fees.non_facility_rate'            => ['nullable', 'numeric'],
 
             'procedure_considerations'                                     => ['nullable', 'array'],
             'procedure_considerations.gender_id'                           => ['nullable', 'integer'],
