@@ -207,7 +207,9 @@ class AuthController extends Controller
             $perms[strtolower($module)]['disable'] = false;
             $perms[strtolower($module)]['history'] = false;
             foreach ($permissions as $permission) {
-                if (str_contains(strtolower($permission->name), 'create')) {
+                if (str_contains(strtolower($permission->name), 'history')) {
+                    $perms[strtolower($module)]['history'] = true;
+                } else if (str_contains(strtolower($permission->name), 'create')) {
                     $perms[strtolower($module)]['create'] = true;
                 } else if (str_contains(strtolower($permission->name), 'view')) {
                     $perms[strtolower($module)]['view'] = true;
@@ -217,8 +219,6 @@ class AuthController extends Controller
                     $perms[strtolower($module)]['edit'] = true;
                 } else if (str_contains(strtolower($permission->name), 'disable')) {
                     $perms[strtolower($module)]['disable'] = true;
-                } else if (str_contains(strtolower($permission->name), 'history')) {
-                    $perms[strtolower($module)]['history'] = true;
                 } else {
                     $perms[strtolower($module)][strtolower($permission->name)] = true;
                 }

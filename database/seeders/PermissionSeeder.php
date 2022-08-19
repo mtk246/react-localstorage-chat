@@ -494,46 +494,53 @@ class  PermissionSeeder extends Seeder
                 'description' => 'View a Patient Change History'
             ],
             [
-                'name' => 'View Procedure of Services',
-                'slug' => 'service.view',
-                'module' => 'Procedure of Service',
+                'name' => 'View Procedure',
+                'slug' => 'procedure.view',
+                'module' => 'Procedure Management',
                 'constraint' => '',
-                'description' => 'View Procedure of Services'
+                'description' => 'View Procedure'
             ],
             [
-                'name' => 'Create Procedure of Service',
-                'slug' => 'service.create',
-                'module' => 'Procedure of Service',
-                'constraint' => 'service.view',
-                'description' => 'Create Procedure of Service'
+                'name' => 'Create Procedure',
+                'slug' => 'procedure.create',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.view',
+                'description' => 'Create Procedure'
             ],
             [
-                'name' => 'Show Procedure of Service',
-                'slug' => 'service.show',
-                'module' => 'Procedure of Service',
-                'constraint' => 'service.view',
-                'description' => 'Show Procedure of Service'
+                'name' => 'Show Procedure',
+                'slug' => 'procedure.show',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.view',
+                'description' => 'Show Procedure Management'
             ],
             [
-                'name' => 'Edit Procedure of Service',
-                'slug' => 'service.edit',
-                'module' => 'Procedure of Service',
-                'constraint' => 'service.show',
-                'description' => 'Edit Procedure of Service'
+                'name' => 'Edit Procedure',
+                'slug' => 'procedure.edit',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.show',
+                'description' => 'Edit Procedure'
             ],
             [
-                'name' => 'Disable Procedure of Service',
-                'slug' => 'service.disable',
-                'module' => 'Procedure of Service',
-                'constraint' => 'service.show',
-                'description' => 'Disable Procedure of Service'
+                'name' => 'Disable Procedure',
+                'slug' => 'procedure.disable',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.show',
+                'description' => 'Disable Procedure'
             ],
             [
-                'name' => 'View a Procedure of Service Change History',
-                'slug' => 'service.history',
-                'module' => 'Procedure of Service',
-                'constraint' => 'service.show',
-                'description' => 'View a Procedure of Service Change History'
+                'name' => 'View a Procedure Change History',
+                'slug' => 'procedure.history',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.show',
+                'description' => 'View a Procedure Change History'
+            ],
+            [
+                'name' => 'Validity Period Procedure',
+                'slug' => 'procedure.validityperiod',
+                'module' => 'Procedure Management',
+                'constraint' => 'procedure.view',
+                'description' => 'Validity Period Procedure'
             ],
             [
                 'name' => 'View Audits',
@@ -654,6 +661,104 @@ class  PermissionSeeder extends Seeder
                 'constraint' => '',
                 'description' => 'Manage responses in the FAQ forum'
             ],
+            [
+                'name' => 'View Modifier',
+                'slug' => 'modifier.view',
+                'module' => 'Modifier Management',
+                'constraint' => '',
+                'description' => 'View Modifier'
+            ],
+            [
+                'name' => 'Create Modifier',
+                'slug' => 'modifier.create',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.view',
+                'description' => 'Create Modifier'
+            ],
+            [
+                'name' => 'Show Modifier',
+                'slug' => 'modifier.show',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.view',
+                'description' => 'Show Modifier'
+            ],
+            [
+                'name' => 'Edit Modifier',
+                'slug' => 'modifier.edit',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.show',
+                'description' => 'Edit Modifier'
+            ],
+            [
+                'name' => 'Disable Modifier',
+                'slug' => 'modifier.disable',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.show',
+                'description' => 'Disable Modifier'
+            ],
+            [
+                'name' => 'View a Modifier Change History',
+                'slug' => 'modifier.history',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.show',
+                'description' => 'View a Modifier Change History'
+            ],
+            [
+                'name' => 'Validity Period Modifier',
+                'slug' => 'modifier.validityperiod',
+                'module' => 'Modifier Management',
+                'constraint' => 'modifier.view',
+                'description' => 'Validity Period Modifier'
+            ],
+            [
+                'name' => 'View Diagnosis',
+                'slug' => 'diagnosis.view',
+                'module' => 'Diagnosis Management',
+                'constraint' => '',
+                'description' => 'View Diagnosis'
+            ],
+            [
+                'name' => 'Create Diagnosis',
+                'slug' => 'diagnosis.create',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.view',
+                'description' => 'Create Diagnosis'
+            ],
+            [
+                'name' => 'Show Diagnosis',
+                'slug' => 'diagnosis.show',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.view',
+                'description' => 'Show Diagnosis'
+            ],
+            [
+                'name' => 'Edit Diagnosis',
+                'slug' => 'diagnosis.edit',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.show',
+                'description' => 'Edit Diagnosis'
+            ],
+            [
+                'name' => 'Disable Diagnosis',
+                'slug' => 'diagnosis.disable',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.show',
+                'description' => 'Disable Diagnosis'
+            ],
+            [
+                'name' => 'View a Diagnosis Change History',
+                'slug' => 'diagnosis.history',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.show',
+                'description' => 'View a Diagnosis Change History'
+            ],
+            [
+                'name' => 'Validity Period Diagnosis',
+                'slug' => 'diagnosis.validityperiod',
+                'module' => 'Diagnosis Management',
+                'constraint' => 'diagnosis.view',
+                'description' => 'Validity Period Diagnosis'
+            ],
         ];
 
         $defaultPermissions = [
@@ -715,11 +820,12 @@ class  PermissionSeeder extends Seeder
                 'patient.show',
                 'patient.edit',
                 'patient.history',
-                'service.view',
-                'service.create',
-                'service.show',
-                'service.edit',
-                'service.history',
+                'procedure.view',
+                'procedure.create',
+                'procedure.show',
+                'procedure.edit',
+                'procedure.disable',
+                'procedure.history',
                 'audit.view',
                 'audit.show',
                 'audit.user.view',
@@ -735,6 +841,18 @@ class  PermissionSeeder extends Seeder
                 'payment.sendcopayscoinsurance',
                 'report.create',
                 'report.view',
+                'diagnosis.view',
+                'diagnosis.create',
+                'diagnosis.show',
+                'diagnosis.edit',
+                'diagnosis.disable',
+                'diagnosis.history',
+                'modifier.view',
+                'modifier.create',
+                'modifier.show',
+                'modifier.edit',
+                'modifier.disable',
+                'modifier.history',
             ],
             'billingmanager' => [
                 'permission.manage.user',
@@ -798,12 +916,12 @@ class  PermissionSeeder extends Seeder
                 'patient.edit',
                 'patient.disable',
                 'patient.history',
-                'service.view',
-                'service.create',
-                'service.show',
-                'service.edit',
-                'service.disable',
-                'service.history',
+                'procedure.view',
+                'procedure.create',
+                'procedure.show',
+                'procedure.edit',
+                'procedure.disable',
+                'procedure.history',
                 'claim.view',
                 'claim.create',
                 'claim.show',
@@ -816,6 +934,18 @@ class  PermissionSeeder extends Seeder
                 'payment.sendcopayscoinsurance',
                 'report.create',
                 'report.view',
+                'diagnosis.view',
+                'diagnosis.create',
+                'diagnosis.show',
+                'diagnosis.edit',
+                'diagnosis.disable',
+                'diagnosis.history',
+                'modifier.view',
+                'modifier.create',
+                'modifier.show',
+                'modifier.edit',
+                'modifier.disable',
+                'modifier.history',
             ],
             'biller' => [
                 'setting.profile.show',
@@ -842,12 +972,8 @@ class  PermissionSeeder extends Seeder
                 'patient.show',
                 'patient.edit',
                 'patient.history',
-                'service.view',
-                'service.create',
-                'service.show',
-                'service.edit',
-                'service.disable',
-                'service.history',
+                'procedure.view',
+                'procedure.show',
                 'claim.view',
                 'claim.create',
                 'claim.show',
@@ -856,6 +982,10 @@ class  PermissionSeeder extends Seeder
                 'claim.generateappeal',
                 'report.create',
                 'report.view',
+                'diagnosis.view',
+                'diagnosis.show',
+                'modifier.view',
+                'modifier.show',
             ],
             'paymentprocessor' => [
                 'setting.profile.show',
@@ -870,6 +1000,12 @@ class  PermissionSeeder extends Seeder
                 'payment.sendcopayscoinsurance',
                 'report.create',
                 'report.view',
+                'procedure.view',
+                'procedure.show',
+                'diagnosis.view',
+                'diagnosis.show',
+                'modifier.view',
+                'modifier.show',
             ],
             'collector' => [
                 'setting.profile.show',
@@ -877,9 +1013,8 @@ class  PermissionSeeder extends Seeder
                 'patient.view',
                 'patient.show',
                 'patient.edit',
-                'service.view',
-                'service.show',
-                'service.edit',
+                'procedure.view',
+                'procedure.show',
                 'claim.view',
                 'claim.show',
                 'claim.verifydebug',
@@ -888,6 +1023,10 @@ class  PermissionSeeder extends Seeder
                 'payment.generatepatientaccount',
                 'report.create',
                 'report.view',
+                'diagnosis.view',
+                'diagnosis.show',
+                'modifier.view',
+                'modifier.show',
             ],
             'accountmanager' => [
                 'setting.profile.show',
@@ -896,6 +1035,12 @@ class  PermissionSeeder extends Seeder
                 'claim.show',
                 'report.create',
                 'report.view',
+                'procedure.view',
+                'procedure.show',
+                'diagnosis.view',
+                'diagnosis.show',
+                'modifier.view',
+                'modifier.show',
             ],
             'client' => [
                 'setting.profile.show',
@@ -914,12 +1059,33 @@ class  PermissionSeeder extends Seeder
                 'setting.profile.edit',
                 'audit.view',
                 'audit.show',
+                'procedure.view',
+                'procedure.show',
+                'procedure.history',
+                'diagnosis.view',
+                'diagnosis.show',
+                'diagnosis.history',
+                'modifier.view',
+                'modifier.show',
+                'modifier.history',
             ],
             'developmentsupport' => [
                 'setting.profile.show',
                 'setting.profile.edit',
                 'setting.errorreport.create',
                 'setting.responses.manage',
+                'procedure.view',
+                'procedure.show',
+                'procedure.history',
+                'procedure.validityperiod',
+                'diagnosis.view',
+                'diagnosis.show',
+                'diagnosis.history',
+                'diagnosis.validityperiod',
+                'modifier.view',
+                'modifier.show',
+                'modifier.history',
+                'modifier.validityperiod',
             ],
         ];
 
