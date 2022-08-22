@@ -542,15 +542,21 @@ class ProcedureRepository
 
     public function getListInsuranceCompanies($procedure_id = null) {
         try {
-            return getList(InsuranceCompany::class);
             if ($procedure_id == null) {
-                return getList(InsuranceCompany::class);
+                return [];
             } else {
-                return getList(
-                    InsuranceCompany::class,
-                    'name',
-                    ['relationship' => 'procedures', 'where' => ['id' => $procedure_id]]
-                );
+                $procedure = Procedure::whereId($procedure_id)->with([
+                    "insuranceCompanies",
+                ])->first();
+                if (count($procedure->insuranceCompanies) > 0) {
+                    return getList(
+                        InsuranceCompany::class,
+                        'name',
+                        ['relationship' => 'procedures', 'where' => ['procedure_id' => $procedure_id]]
+                    );
+                } else {
+                    return getList(InsuranceCompany::class);
+                }
             }
         } catch (\Exception $e) {
             return [];
