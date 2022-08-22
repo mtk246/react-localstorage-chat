@@ -204,6 +204,47 @@ class ProcedureRepository
     }
 
     /**
+     * @param int $id
+     * @return Procedure|Builder|Model|object|null
+     */
+    public function getPriceOfProcedure(Request $request) {
+        if (isset($request->procedure_id)) {
+            $id = $request->procedure_id;
+            $filters = [];
+            
+            if (isset($request->mac)) {
+                $filters['mac'] = $request->mac;
+            }
+            if (isset($request->locality_number)) {
+                $filters['locality_number'] = $request->locality_number;
+            }
+            if (isset($request->state)) {
+                $filters['state'] = $request->state;
+            }
+            if (isset($request->fsa)) {
+                $filters['fsa'] = $request->fsa;
+            }
+            if (isset($request->counties)) {
+                $filters['counties'] = $request->counties;
+            }
+            $procedure = Procedure::whereId($id)->with([
+                "macLocalities" => function ($query) use ($id, $filters) {
+                    $query->where($filters)->with(['procedureFees' => function ($q) use ($id) {
+                        $q->where('procedure_id', $id)->with('insuranceLabelFee');
+                    }]);
+                }
+            ])->first();
+            if (isset($procedure->macLocalities)) {
+                if (count($procedure->macLocalities) == 1) {
+                    return $procedure->macLocalities->first();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string $code
      * @return Procedure|Builder|Model|object|null
      */
@@ -501,6 +542,7 @@ class ProcedureRepository
 
     public function getListInsuranceCompanies($procedure_id = null) {
         try {
+            return getList(InsuranceCompany::class);
             if ($procedure_id == null) {
                 return getList(InsuranceCompany::class);
             } else {

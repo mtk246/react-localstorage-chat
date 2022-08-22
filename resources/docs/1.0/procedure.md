@@ -7,6 +7,7 @@
 - [Get all procedure](#get-all-procedure)
 - [Get one procedure](#get-one-procedure)
 - [Get one procedure by code](#get-one-procedure-by-code)
+- [Get price of procedure](#get-price-of-procedure)
 - [Get list mac localities](#get-list-mac-localities)
 - [Get list discriminatories](#get-list-discriminatories)
 - [Get list genders](#get-list-genders)
@@ -32,18 +33,19 @@
 | 2 |GET     | `Get all procedures` | `/procedure/`     | yes            | Get all procedures |
 | 3 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
 | 4 |GET     | `Get one procedure by code` | `/procedure/get-by-code/{code}` | yes            | Get one procedure by code|
-| 5 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
-| 6 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
-| 7 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
-| 8 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
-| 9 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
-| 10 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 11 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 12 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
-| 13 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 14 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 15 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 16 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 5 |GET     | `Get price of procedure` | `/procedure/get-price-of-procedure` | yes            | Get prices of procedure|
+| 6 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
+| 7 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
+| 8 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
+| 9 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
+| 10 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
+| 11 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 12 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 13 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
+| 14 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 15 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 16 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 17 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 
 
 <a name="create-procedure"></a>
@@ -462,6 +464,176 @@
                 "mac_locality_id": 114,
                 "created_at": "2022-08-02T13:56:14.000000Z",
                 "updated_at": "2022-08-02T13:56:14.000000Z"
+            }
+        }
+    ]
+}
+```
+
+<a name="get-price-of-procedure"></a>
+## Get price of procedure
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+## Param in path
+
+`procedure_id <integer>`
+`modifier_id <integer>`
+`mac <string>`
+`locality_number <string>`
+`state <string>`
+`fsa <string>`
+`counties <string>`
+
+## Example path
+
+>{primary} ?procedure_id=ID&modifier_id=ID&mac=fieldMac&locality_number=fieldLocalityNumber&state=fieldState&fsa=fieldFsa&counties=fieldCounties
+
+## Response
+
+> {success} 200 Mac locality with fees found
+
+#
+
+```json
+{
+    "id": 185,
+    "mac": "01312",
+    "state": "NEVADA",
+    "fsa": "STATEWIDE",
+    "counties": "ALL COUNTIES",
+    "created_at": "2022-08-02T12:33:53.000000Z",
+    "updated_at": "2022-08-02T12:33:53.000000Z",
+    "locality_number": "00",
+    "modifier": {
+        "id": 2,
+        "modifier": "M2",
+        "special_coding_instructions": "Especial Coding Instructions Modifier 1 Edited",
+        "active": true,
+        "created_at": "2022-07-27T13:24:39.000000Z",
+        "updated_at": "2022-07-27T13:24:39.000000Z",
+        "start_date": "2022-07-06",
+        "end_date": "2022-08-06"
+    },
+    "pivot": {
+        "procedure_id": 33,
+        "mac_locality_id": 185,
+        "modifier_id": 2,
+        "created_at": "2022-08-19T23:12:15.000000Z",
+        "updated_at": "2022-08-19T23:12:15.000000Z"
+    },
+    "procedure_fees": [
+        {
+            "id": 65,
+            "fee": "123",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:16.000000Z",
+            "updated_at": "2022-08-19T20:51:16.000000Z",
+            "insurance_label_fee_id": 1,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 1,
+                "description": "Non facility price",
+                "insurance_type_id": 1,
+                "created_at": "2022-06-21T05:40:50.000000Z",
+                "updated_at": "2022-06-21T05:40:50.000000Z"
+            }
+        },
+        {
+            "id": 66,
+            "fee": "234",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:16.000000Z",
+            "updated_at": "2022-08-19T20:51:16.000000Z",
+            "insurance_label_fee_id": 2,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 2,
+                "description": "Facility price",
+                "insurance_type_id": 1,
+                "created_at": "2022-06-21T05:40:50.000000Z",
+                "updated_at": "2022-06-21T05:40:50.000000Z"
+            }
+        },
+        {
+            "id": 67,
+            "fee": "345",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:16.000000Z",
+            "updated_at": "2022-08-19T20:51:16.000000Z",
+            "insurance_label_fee_id": 3,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 3,
+                "description": "Non facility limiting charge",
+                "insurance_type_id": 1,
+                "created_at": "2022-06-21T05:40:50.000000Z",
+                "updated_at": "2022-06-21T05:40:50.000000Z"
+            }
+        },
+        {
+            "id": 68,
+            "fee": "456",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:17.000000Z",
+            "updated_at": "2022-08-19T20:51:17.000000Z",
+            "insurance_label_fee_id": 4,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 4,
+                "description": "Facility limiting charge",
+                "insurance_type_id": 1,
+                "created_at": "2022-06-21T05:40:50.000000Z",
+                "updated_at": "2022-06-21T05:40:50.000000Z"
+            }
+        },
+        {
+            "id": 69,
+            "fee": "567",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:17.000000Z",
+            "updated_at": "2022-08-19T20:51:17.000000Z",
+            "insurance_label_fee_id": 5,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 5,
+                "description": "Facility rate",
+                "insurance_type_id": 2,
+                "created_at": "2022-06-21T05:40:50.000000Z",
+                "updated_at": "2022-06-21T05:40:50.000000Z"
+            }
+        },
+        {
+            "id": 70,
+            "fee": "678",
+            "procedure_id": 33,
+            "created_at": "2022-08-19T20:51:17.000000Z",
+            "updated_at": "2022-08-19T20:51:17.000000Z",
+            "insurance_label_fee_id": 6,
+            "mac_locality_id": 185,
+            "fee_start_date": null,
+            "fee_end_date": null,
+            "insurance_label_fee": {
+                "id": 6,
+                "description": "Non facility rate",
+                "insurance_type_id": 2,
+                "created_at": "2022-06-21T05:40:51.000000Z",
+                "updated_at": "2022-06-21T05:40:51.000000Z"
             }
         }
     ]

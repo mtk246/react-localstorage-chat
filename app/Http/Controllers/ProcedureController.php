@@ -99,6 +99,15 @@ class ProcedureController extends Controller
     /**
      * @return JsonResponse
      */
+    public function getPriceOfProcedure(Request $request): JsonResponse
+    {
+        $rs = $this->procedureRepository->getPriceOfProcedure($request);
+        return $rs ? response()->json($rs) : response()->json(__("Error price of procedure not found"), 404);
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getListMac(): JsonResponse
     {
         return response()->json(
