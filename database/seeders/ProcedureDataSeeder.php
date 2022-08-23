@@ -114,217 +114,217 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "01182",
                 "locality_number" => "18",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)",
                 "counties"        => "LOS ANGELES"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "52",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN FRANCISCO-OAKLAND-BERKELEY (MARIN CNTY)",
                 "counties"        => "MARIN"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "07",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN FRANCISCO-OAKLAND-BERKELEY (ALAMEDA/CONTRA COSTA CNTY)",
                 "counties"        => "ALAMEDA AND CONTRA COSTA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "05",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN FRANCISCO-OAKLAND-BERKELEY (SAN FRANCISCO CNTY)",
                 "counties"        => "SAN FRANCISCO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "06",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN FRANCISCO-OAKLAND-BERKELEY (SAN MATEO CNTY)",
                 "counties"        => "SAN MATEO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "09",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN JOSE-SUNNYVALE-SANTA CLARA (SANTA CLARA CNTY)",
                 "counties"        => "SANTA CLARA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "51",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "NAPA",
                 "counties"        => "NAPA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "53",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "VALLEJO",
                 "counties"        => "SOLANO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "54",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "BAKERSFIELD",
                 "counties"        => "KERN"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "55",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "CHICO",
                 "counties"        => "BUTTE"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "56",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "FRESNO",
                 "counties"        => "FRESNO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "57",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "HANFORD-CORCORAN",
                 "counties"        => "KINGS"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "58",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "MADERA",
                 "counties"        => "MADERA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "59",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "MERCED",
                 "counties"        => "MERCED"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "60",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "MODESTO",
                 "counties"        => "STANISLAUS"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "61",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "REDDING",
                 "counties"        => "SHASTA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "62",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "RIVERSIDE-SAN BERNARDINO-ONTARIO",
                 "counties"        => "SAN BERNARDINO, RIVERSIDE"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "63",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SACRAMENTO-ROSEVILLE-FOLSOM",
                 "counties"        => "SACRAMENTO, PLACER, YOLO, EL DORADO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "64",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SALINAS",
                 "counties"        => "MONTEREY"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "65",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)",
                 "counties"        => "SAN BENITO"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "66",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SANTA CRUZ-WATSONVILLE",
                 "counties"        => "SANTA CRUZ"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "67",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SANTA ROSA-PETALUMA",
                 "counties"        => "SONOMA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "68",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "STOCKTON",
                 "counties"        => "SAN JOAQUIN"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "69",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "VISALIA",
                 "counties"        => "TULARE"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "70",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "YUBA CITY",
                 "counties"        => "SUTTER, YUBA"
             ],
             [
                 "mac"             => "01182",
                 "locality_number" => "71",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "EL CENTRO",
                 "counties"        => "IMPERIAL"
             ],
             [
                 "mac"             => "01182",
                 "locality_number" => "72",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN DIEGO-CHULA VISTA-CARLSBAD",
                 "counties"        => "SAN DIEGO"
             ],
             [
                 "mac"             => "01182",
                 "locality_number" => "73",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SAN LUIS OBISPO-PASO ROBLES",
                 "counties"        => "SAN LUIS OBISPO"
             ],
             [
                 "mac"             => "01182",
                 "locality_number" => "74",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "SANTA MARIA-SANTA BARBARA",
                 "counties"        => "SANTA BARBARA"
             ],
             [
                 "mac"             => "01182",
                 "locality_number" => "17",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "OXNARD-THOUSAND OAKS-VENTURA",
                 "counties"        => "VENTURA"
             ],
             [
                 "mac"             => "01112",
                 "locality_number" => "75",
-                "state"           => "",
+                "state"           => "CALIFORNIA",
                 "fsa"             => "REST OF STATE*",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -366,14 +366,14 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "09102",
                 "locality_number" => "04",
-                "state"           => "",
+                "state"           => "FLORIDA",
                 "fsa"             => "MIAMI",
                 "counties"        => "DADE AND MONROE"
             ],
             [
                 "mac"             => "09102",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "FLORIDA",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -387,7 +387,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "10212",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "GEORGIA",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -415,21 +415,21 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "06102",
                 "locality_number" => "12",
-                "state"           => "",
+                "state"           => "ILLINOIS",
                 "fsa"             => "EAST ST. LOUIS",
                 "counties"        => "BOND, CALHOUN, CLINTON, JERSEY, MACOUPIN, MADISON, MONROE, MONTGOMERY, RANDOLPH, ST. CLAIR AND WASHINGTON"
             ],
             [
                 "mac"             => "06102",
                 "locality_number" => "15",
-                "state"           => "",
+                "state"           => "ILLINOIS",
                 "fsa"             => "SUBURBAN CHICAGO",
                 "counties"        => "DUPAGE, KANE, LAKE AND WILL"
             ],
             [
                 "mac"             => "06102",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "ILLINOIS",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -471,7 +471,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "07202",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "LOUISIANA",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -485,7 +485,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "14112",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MAINE",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -499,7 +499,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "12302",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MARYLAND",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES EXCEPT MONTGOMERY AND PRINCE GEORGE'S"
             ],
@@ -513,7 +513,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "14212",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MASSACHUSETTS",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -527,7 +527,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "08202",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MICHIGAN",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -555,21 +555,21 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "05302",
                 "locality_number" => "01",
-                "state"           => "",
+                "state"           => "MISSOURI",
                 "fsa"             => "METROPOLITAN ST. LOUIS",
                 "counties"        => "JEFFERSON, ST. CHARLES, ST. LOUIS AND ST. LOUIS CITY"
             ],
             [
                 "mac"             => "05302",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MISSOURI",
                 "fsa"             => "REST OF STATE*",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
             [
                 "mac"             => "05302",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "MISSOURI",
                 "fsa"             => "REST OF STATE*",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -611,7 +611,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "12402",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "NEW JERSEY",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -632,28 +632,28 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "13202",
                 "locality_number" => "02",
-                "state"           => "",
+                "state"           => "NEW YORK",
                 "fsa"             => "NYC SUBURBS/LONG ISLAND",
                 "counties"        => "BRONX, KINGS, NASSAU, RICHMOND, ROCKLAND, SUFFOLK AND WESTCHESTER"
             ],
             [
                 "mac"             => "13202",
                 "locality_number" => "03",
-                "state"           => "",
+                "state"           => "NEW YORK",
                 "fsa"             => "POUGHKPSIE/N NYC SUBURBS",
                 "counties"        => "COLUMBIA, DELAWARE, DUTCHESS, GREENE, ORANGE, PUTNAM, SULLIVAN AND ULSTER"
             ],
             [
                 "mac"             => "13292",
                 "locality_number" => "04",
-                "state"           => "",
+                "state"           => "NEW YORK",
                 "fsa"             => "QUEENS",
                 "counties"        => "QUEENS"
             ],
             [
                 "mac"             => "13282",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "NEW YORK",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -695,7 +695,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "02302",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "OREGON",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -709,7 +709,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "12502",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "PENNSYLVANIA",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -758,49 +758,49 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "04412",
                 "locality_number" => "20",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "BEAUMONT",
                 "counties"        => "JEFFERSON "
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "09",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "BRAZORIA",
                 "counties"        => "BRAZORIA "
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "11",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "DALLAS",
                 "counties"        => "DALLAS"
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "28",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "FORT WORTH",
                 "counties"        => "TARRANT "
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "15",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "GALVESTON",
                 "counties"        => "GALVESTON "
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "18",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "HOUSTON",
                 "counties"        => "HARRIS"
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "TEXAS",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
@@ -842,7 +842,7 @@ class ProcedureDataSeeder extends Seeder
             [
                 "mac"             => "02402",
                 "locality_number" => "99",
-                "state"           => "",
+                "state"           => "WASHINGTON",
                 "fsa"             => "REST OF STATE",
                 "counties"        => "ALL OTHER COUNTIES"
             ],
