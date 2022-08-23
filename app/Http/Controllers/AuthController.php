@@ -207,7 +207,16 @@ class AuthController extends Controller
             $perms[strtolower($module)]['disable'] = false;
             $perms[strtolower($module)]['history'] = false;
             foreach ($permissions as $permission) {
-                if (str_contains(strtolower($permission->name), 'history')) {
+                if (str_contains(strtolower($permission->name), 'manage permissions')) {
+                    $perms[strtolower($module)]['history'] = true;
+                    $perms[strtolower($module)]['create'] = true;
+                    $perms[strtolower($module)]['view'] = true;
+                    $perms[strtolower($module)]['show'] = true;
+                    $perms[strtolower($module)]['edit'] = true;
+                } else if (str_contains(strtolower($permission->name), 'show profile')) {
+                    $perms[strtolower($module)]['view'] = true;
+                    $perms[strtolower($module)]['show'] = true;
+                } else if (str_contains(strtolower($permission->name), 'history')) {
                     $perms[strtolower($module)]['history'] = true;
                 } else if (str_contains(strtolower($permission->name), 'create')) {
                     $perms[strtolower($module)]['create'] = true;
@@ -217,15 +226,6 @@ class AuthController extends Controller
                     $perms[strtolower($module)]['show'] = true;
                 } else if (str_contains(strtolower($permission->name), 'edit')) {
                     $perms[strtolower($module)]['edit'] = true;
-                } else if (str_contains(strtolower($permission->name), 'manage permissions')) {
-                    $perms[strtolower($module)]['history'] = true;
-                    $perms[strtolower($module)]['create'] = true;
-                    $perms[strtolower($module)]['view'] = true;
-                    $perms[strtolower($module)]['show'] = true;
-                    $perms[strtolower($module)]['edit'] = true;
-                } else if (str_contains(strtolower($permission->name), 'show profile')) {
-                    $perms[strtolower($module)]['view'] = true;
-                    $perms[strtolower($module)]['show'] = true;
                 } else {
                     $perms[strtolower($module)][strtolower($permission->name)] = true;
                 }
