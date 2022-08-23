@@ -217,8 +217,15 @@ class AuthController extends Controller
                     $perms[strtolower($module)]['show'] = true;
                 } else if (str_contains(strtolower($permission->name), 'edit')) {
                     $perms[strtolower($module)]['edit'] = true;
-                } else if (str_contains(strtolower($permission->name), 'disable')) {
-                    $perms[strtolower($module)]['disable'] = true;
+                } else if (str_contains(strtolower($permission->name), 'manage permissions')) {
+                    $perms[strtolower($module)]['history'] = true;
+                    $perms[strtolower($module)]['create'] = true;
+                    $perms[strtolower($module)]['view'] = true;
+                    $perms[strtolower($module)]['show'] = true;
+                    $perms[strtolower($module)]['edit'] = true;
+                } else if (str_contains(strtolower($permission->name), 'show profile')) {
+                    $perms[strtolower($module)]['view'] = true;
+                    $perms[strtolower($module)]['show'] = true;
                 } else {
                     $perms[strtolower($module)][strtolower($permission->name)] = true;
                 }
