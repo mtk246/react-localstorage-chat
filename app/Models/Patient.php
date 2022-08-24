@@ -123,6 +123,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * Patient has many Encounter.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function encounters()
+    {
+        return $this->hasMany(Encounter::class);
+    }
+
+    /**
      * Patient has one Employment.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -25,6 +27,16 @@ class Subscriber extends Model implements Auditable
         "billing_company_id",
         "payment_responsibility_level_code_id"
     ];
+
+    /**
+     * Subscriber has many claim eligibilities.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimEligibilities(): HasMany
+    {
+        return $this->hasMany(ClaimEligibility::class);
+    }
 
     /**
      * Subscriber belongs to Patients.

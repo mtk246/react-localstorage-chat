@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payment_responsibility_level_codes', function (Blueprint $table) {
+        Schema::create('type_of_services', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_responsibility_level_code', 50);
+            $table->string('code', 2);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_responsibility_level_codes');
+        Schema::dropIfExists('type_of_services');
     }
 };

@@ -60,6 +60,16 @@ class InsuranceCompany extends Model implements Auditable
 
 
     /**
+     * InsuranceCompany has many claim eligibilities.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimEligibilities(): HasMany
+    {
+        return $this->hasMany(ClaimEligibility::class);
+    }
+
+    /**
      * InsuranceCompany has many InsurancePlans.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

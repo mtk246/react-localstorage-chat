@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_plan_participation_codes', function (Blueprint $table) {
+        Schema::create('claim_eligibility_payers', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 1);
-            $table->string('plan_participation_code', 50);
+            $table->string('name', 50);
+            $table->string('entity_type', 50);
+            $table->string('entity_identifier', 50);
+            $table->foreignId('claim_eligibility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_plan_participation_codes');
+        Schema::dropIfExists('claim_eligibility_payers');
     }
 };

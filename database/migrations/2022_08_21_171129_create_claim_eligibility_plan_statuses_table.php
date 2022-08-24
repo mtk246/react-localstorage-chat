@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_supplemental_information', function (Blueprint $table) {
+        Schema::create('claim_eligibility_plan_statuses', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('claim_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->string('assigned_number');
+            $table->string('status_code');
+            $table->string('status', 50);
+            $table->foreignId('claim_eligibility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_supplemental_information');
+        Schema::dropIfExists('claim_eligibility_plan_statuses');
     }
 };

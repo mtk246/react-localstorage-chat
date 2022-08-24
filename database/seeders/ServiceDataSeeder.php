@@ -3,13 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\ServiceApplicableTo;
-use App\Models\ServiceGroup;
-use App\Models\ServiceType;
-use App\Models\ServiceTypeOfService;
-use App\Models\ServiceRevCenter;
-use App\Models\ServiceStmtDescription;
-use App\Models\ServiceSpecialInstruction;
+use App\Models\TypeOfService;
+use App\Models\RevCenter;
 
 class ServiceDataSeeder extends Seeder
 {
@@ -20,7 +15,7 @@ class ServiceDataSeeder extends Seeder
      */
     public function run()
     {
-        $serviceApplicableTo = [
+        /**$serviceApplicableTo = [
             ['applicable_to' => 'Male'],
             ['applicable_to' => 'Female'],
             ['applicable_to' => 'Both']
@@ -86,14 +81,42 @@ class ServiceDataSeeder extends Seeder
             ['type_of_service' => '99 - Other Used For prescription drugsMedical Care'],
             ['type_of_service' => 'MA - Mammography']
 
+        ]; */
+
+        $serviceTypeOfServices = [
+            ['code' => '01'],
+            ['code' => '02'],
+            ['code' => '03'],
+            ['code' => '04'],
+            ['code' => '05'],
+            ['code' => '06'],
+            ['code' => '07'],
+            ['code' => '08'],
+            ['code' => '09'],
+            ['code' => '10'],
+            ['code' => '11'],
+            ['code' => '12'],
+            ['code' => '13'],
+            ['code' => '14'],
+            ['code' => '15'],
+            ['code' => '16'],
+            ['code' => '17'],
+            ['code' => '18'],
+            ['code' => '19'],
+            ['code' => '20'],
+            ['code' => '21'],
+            ['code' => '22'],
+            ['code' => '99'],
+            ['code' => 'MA']
+
         ];
 
         foreach ($serviceTypeOfServices as $typeOfService) {
 
-            ServiceTypeOfService::updateOrCreate($typeOfService, $typeOfService);
+            TypeOfService::updateOrCreate($typeOfService, $typeOfService);
         }
 
-        $serviceRevCenters = [
+        /*$serviceRevCenters = [
             ['rev_center' => 'AD - Administrative Charge'],
             ['rev_center' => 'CO - Consultations'],
             ['rev_center' => 'DM - DME Charge'],
@@ -108,14 +131,31 @@ class ServiceDataSeeder extends Seeder
             ['rev_center' => 'RA - Radiology'],
             ['rev_center' => 'SP - Supplies'],
             ['rev_center' => 'SU - Surgery']
+        ];*/
+
+        $serviceRevCenters = [
+            ['code' => 'AD'],
+            ['code' => 'CO'],
+            ['code' => 'DM'],
+            ['code' => 'EP'],
+            ['code' => 'HV'],
+            ['code' => 'IN'],
+            ['code' => 'LB'],
+            ['code' => 'ME'],
+            ['code' => 'MI'],
+            ['code' => 'NP'],
+            ['code' => 'PR'],
+            ['code' => 'RA'],
+            ['code' => 'SP'],
+            ['code' => 'SU']
         ];
 
         foreach ($serviceRevCenters as $revCenter) {
 
-            ServiceRevCenter::updateOrCreate($revCenter, $revCenter);
+            RevCenter::updateOrCreate($revCenter, $revCenter);
         }
 
-        $serviceStmtDescriptions = [
+        /**$serviceStmtDescriptions = [
             ['stmt_description' => 'HV - Hospital Visit'],
             ['stmt_description' => 'IN - Injection'],
             ['stmt_description' => 'LB - Lab Test'],
@@ -141,6 +181,6 @@ class ServiceDataSeeder extends Seeder
         foreach ($serviceSpecialInstructions as $specialInstruction) {
 
             ServiceSpecialInstruction::updateOrCreate($specialInstruction, $specialInstruction);
-        }
+        }*/
     }
 }

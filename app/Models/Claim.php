@@ -21,7 +21,7 @@ class Claim extends Model implements Auditable
         "submitter_phone",
         "company_id",
         "facility_id",
-        "subscriber_id",
+        "suscriber_id",
         "insurance_company_id"
     ];
 
@@ -33,5 +33,15 @@ class Claim extends Model implements Auditable
     public function claimServiceLines()
     {
         return $this->hasMany(ClaimServiceLine::class);
+    }
+
+    /**
+     * Claim has many ClaimDate.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimDates()
+    {
+        return $this->hasMany(ClaimDate::class);
     }
 }

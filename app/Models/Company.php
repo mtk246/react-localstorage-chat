@@ -121,6 +121,16 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * Company has many claim eligibilities.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimEligibilities(): HasMany
+    {
+        return $this->hasMany(ClaimEligibility::class);
+    }
+
+    /**
      * Company has many facilities.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_dependent', function (Blueprint $table) {
+        Schema::create('rev_centers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('claim_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('dependent_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->string('code', 2);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_dependent');
+        Schema::dropIfExists('rev_centers');
     }
 };

@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClaimContractTypeCode extends Model
+class RevCenter extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['code'];
 }
