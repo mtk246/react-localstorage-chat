@@ -348,6 +348,21 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/add-to-company/{company_id}",[\App\Http\Controllers\ProcedureController::class,'addToCompany']);
     });
 
+
+    Route::prefix("claim")->middleware([
+        "auth:api",
+        'role:superuser|biller|billingmanager',
+    ])->group(function(){
+        Route::get("/get-list-type-of-service",[\App\Http\Controllers\ClaimController::class,"getListTypeOfService"]);
+        Route::get("/get-list-place-of-service",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfService"]);
+        Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);
+
+        Route::post("/",[\App\Http\Controllers\ClaimController::class,"createClaim"]);
+        Route::get("/",[\App\Http\Controllers\ClaimController::class,"getAllClaims"]);
+        Route::get("/{id}",[\App\Http\Controllers\ClaimController::class,"getOneClaim"]);
+        Route::put("/{id}",[\App\Http\Controllers\ClaimController::class,"updateClaim"]);
+    });
+
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });
