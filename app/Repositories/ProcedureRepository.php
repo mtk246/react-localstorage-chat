@@ -63,10 +63,8 @@ class ProcedureRepository
                         /** Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
-                    $revertData = true;
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
-                            $revertData = false;
                             /** insuranceType == Medicare */
                             $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
                                 $query->whereDescription('Medicare');
@@ -103,10 +101,6 @@ class ProcedureRepository
                                 }
                             }
                         }
-                    }
-                    if ($revertData) {
-                        DB::rollBack();
-                        return null;
                     }
                 }
             }
@@ -311,10 +305,8 @@ class ProcedureRepository
                         /** Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
-                    $revertData = true;
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
-                            $revertData = false;
                             /** insuranceType == Medicare */
                             $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
                                 $query->whereDescription('Medicare');
@@ -351,10 +343,6 @@ class ProcedureRepository
                                 }
                             }
                         }
-                    }
-                    if ($revertData) {
-                        DB::rollBack();
-                        return null;
                     }
                 }
             }
@@ -410,7 +398,21 @@ class ProcedureRepository
 
         if (is_null($procedure)) return null;
 
-        return $procedure->update(["active" => $status]);
+        if ($status) {
+            return $procedure->update(
+                [
+                    "active"   => $status,
+                    "end_date" => null
+                ]
+            );
+        } else {
+            return $procedure->update(
+                [
+                    "active"   => $status,
+                    "end_date" => now()
+                ]
+            );
+        }
     }
 
     public function getListMacLocalities(Request $request) {

@@ -21,6 +21,13 @@ class Procedure extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['description', 'last_modified'];
+
+    /**
      * Procedure has many ProcedureFees.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -121,5 +128,32 @@ class Procedure extends Model implements Auditable
             get: fn ($value) => ucfirst(strtolower($value)),
             set: fn ($value) => ucfirst(strtolower($value)),
         );
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } elseif ($lastModified->user_id != $this->id) {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        } elseif ($lastModified->user_id == $this->id) {
+            $profile = $this->profile;
+            return [
+                'user'  => $profile->first_name . ' ' . $profile->last_name,
+                'roles' => $this->getRoles(),
+            ];
+        }
     }
 }
