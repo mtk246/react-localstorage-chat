@@ -212,6 +212,10 @@ class CompanyRepository
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
+            
+            /** Attach billing company */
+            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+
             $company->update([
                 "name"       => $data["name"],
                 "npi"        => $data["npi"]
