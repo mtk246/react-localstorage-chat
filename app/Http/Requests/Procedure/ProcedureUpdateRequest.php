@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Procedure;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\MacLocalityFeeRequired;
 
 class ProcedureUpdateRequest extends FormRequest
 {
@@ -30,9 +31,9 @@ class ProcedureUpdateRequest extends FormRequest
             'start_date'                                                   => ['required', 'date'],
             'end_date'                                                     => ['nullable', 'date'],
             
-            'mac_localities'                                               => ['nullable', 'array'],
+            'mac_localities'                                               => ['nullable', 'array', new MacLocalityFeeRequired()],
             'mac_localities.*.mac'                                         => ['sometimes', 'string'],
-            'mac_localities.*.modifier_id'                                 => ['sometimes', 'integer'],
+            'mac_localities.*.modifier_id'                                 => ['nullable', 'integer'],
             'mac_localities.*.locality_number'                             => ['sometimes', 'numeric'],
             'mac_localities.*.state'                                       => ['sometimes', 'string'],
             'mac_localities.*.fsa'                                         => ['sometimes', 'string'],

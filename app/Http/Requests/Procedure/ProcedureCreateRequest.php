@@ -4,6 +4,7 @@ namespace App\Http\Requests\Procedure;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\MacLocalityFeeRequired;
 
 class ProcedureCreateRequest extends FormRequest
 {
@@ -31,9 +32,9 @@ class ProcedureCreateRequest extends FormRequest
             'specific_insurance_company'                                   => ['boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
             
-            'mac_localities'                                               => ['nullable', 'array'],
+            'mac_localities'                                               => ['nullable', 'array', new MacLocalityFeeRequired()],
             'mac_localities.*.mac'                                         => ['sometimes', 'string'],
-            'mac_localities.*.modifier_id'                                 => ['sometimes', 'integer'],
+            'mac_localities.*.modifier_id'                                 => ['nullable', 'integer'],
             'mac_localities.*.locality_number'                             => ['sometimes', 'numeric'],
             'mac_localities.*.state'                                       => ['sometimes', 'string'],
             'mac_localities.*.fsa'                                         => ['sometimes', 'string'],
