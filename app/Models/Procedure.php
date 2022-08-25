@@ -25,7 +25,7 @@ class Procedure extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['description', 'last_modified'];
+    protected $appends = ['last_modified'];
 
     /**
      * Procedure has many ProcedureFees.
