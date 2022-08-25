@@ -51,6 +51,16 @@ class FacilityController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function getAllByCompany($company_id): JsonResponse
+    {
+        return response()->json(
+            $this->facilityRepository->getAllByCompany($company_id)
+        );
+    }
+
+    /**
      * @param int $id
      * @return JsonResponse
      */

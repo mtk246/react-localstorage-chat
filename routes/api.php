@@ -170,6 +170,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-by-npi/{npi}",[\App\Http\Controllers\FacilityController::class,'getOneByNpi'])->middleware([
             "auth:api",
         ]);
+        Route::get("/get-all-by-company/{company_id}",[\App\Http\Controllers\FacilityController::class,'getAllByCompany'])->middleware([
+            "auth:api",
+        ]);
         Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\FacilityController::class,'addToBillingCompany'])->middleware([
             "auth:api",
         ]);

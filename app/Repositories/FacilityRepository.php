@@ -139,6 +139,41 @@ class FacilityRepository
         return !is_null($facilities) ? $facilities : null;
     }
 
+    /**
+     * @return Facility[]|Collection
+     */
+    public function getAllByCompany($company_id) {
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $facilities = Facility::where('company_id', $company_id)->with([
+                "addresses",
+                "contacts",
+                "nicknames",
+                "company",
+                "facilityType"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $facilities = Facility::where('company_id', $company_id)
+                ->whereHas("billingCompanies", function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    "addresses" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "contacts" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "company",
+                    "facilityType"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
+
+        return !is_null($facilities) ? $facilities : null;
+    }
+
     public function getServerAllFacilities(Request $request) {
         $sortBy   = $request->sortBy ?? 'id';
         $sortDesc = $request->sortDesc ?? false;

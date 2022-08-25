@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create facility](#create-facility)
 - [Get all facility](#get-all-facility)
+- [Get all facility by company](#get-all-facility-by-company)
 - [Get one Facility](#get-one-facility)
 - [Update facility](#update-facility)
 - [Change status facility](#change-status-facility)
@@ -22,13 +23,14 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create Facility`          | `/facility/`               |yes             |Create facility|         
 | 2 |GET | `Get all Facility`| `/facility/`        |yes            |Get all facility|
-| 3 |GET | `Get one Facility`          | `/facility/{id}`|yes|Get one facility|
-| 4 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
-| 5 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
-| 6 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
-| 7 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
-| 8 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
-| 9 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
+| 3 |GET | `Get all Facility by company`| `/facility/get-all-by-company/{company_id}`        |yes            |Get all facility by company|
+| 4 |GET | `Get one Facility`          | `/facility/{id}`|yes|Get one facility|
+| 5 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
+| 6 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
+| 7 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
+| 8 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
+| 9 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
+| 10 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
 
 
 
@@ -217,7 +219,95 @@
 ]
 ```
 
+# 
 
+<a name="get-all-facility-by-company"></a>
+## Get all facilities by company
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "company_id": required <integer>
+}
+```
+
+## Response
+
+> {success} 200 Facility found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "facility_type_id": 1,
+        "name": "facilityName",
+        "npi": "123fac321",
+        "created_at": "2022-03-16T10:03:40.000000Z",
+        "updated_at": "2022-03-16T10:03:40.000000Z",
+        "company_id": 1,
+        "code": "FA-00001-2022",
+        "status": false,
+        "facility_type": {
+            "id": 1,
+            "type": "01 - Clinics",
+            "created_at": "2022-04-07T20:50:55.000000Z",
+            "updated_at": "2022-04-07T20:50:55.000000Z"
+        },
+        "addresses": [
+            {
+                "id": 4,
+                "address": "address Facility",
+                "city": "city Facility",
+                "state": "state Facility",
+                "zip": "234",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T10:03:41.000000Z",
+                "updated_at": "2022-03-16T10:03:41.000000Z",
+                "addressable_type": "App\\Models\\Facility",
+                "addressable_id": 1
+            }
+        ],
+        "contacts": [
+            {
+                "id": 5,
+                "phone": "34324234",
+                "fax": "567674576457",
+                "email": "facility@facility.com",
+                "billing_company_id": 1,
+                "created_at": "2022-03-16T10:03:41.000000Z",
+                "updated_at": "2022-03-16T10:03:41.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Facility",
+                "contactable_id": 1
+            }
+        ],
+        "nicknames": [
+            {
+                "id": 1,
+                "nickname": "alias facilityName",
+                "nicknamable_type": "App\\Models\\Facility",
+                "nicknamable_id": 6,
+                "billing_company_id": 1,
+                "created_at": "2022-04-04T12:55:15.000000Z",
+                "updated_at": "2022-04-04T12:55:15.000000Z"
+            }
+        ],
+        "billing_companies": []
+    }
+]
+```
 
 #
 
