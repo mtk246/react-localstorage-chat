@@ -174,22 +174,17 @@ class Facility extends Model implements Auditable
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
+        return $lastModified;
         if ($lastModified->user_id == '') {
             return [
                 'user'  => 'Console',
                 'roles' => [],
             ];
-        } elseif ($lastModified->user_id != $this->id) {
+        } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
             return [
                 'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
                 'roles' => $user->roles,
-            ];
-        } elseif ($lastModified->user_id == $this->id) {
-            $profile = $this->profile;
-            return [
-                'user'  => $profile->first_name . ' ' . $profile->last_name,
-                'roles' => $this->getRoles(),
             ];
         }
     }
