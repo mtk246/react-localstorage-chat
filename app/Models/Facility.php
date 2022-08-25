@@ -174,7 +174,6 @@ class Facility extends Model implements Auditable
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
-        return $lastModified;
         if ($lastModified->user_id == '') {
             return [
                 'user'  => 'Console',
