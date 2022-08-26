@@ -410,7 +410,7 @@ class ProcedureDataSeeder extends Seeder
                 "locality_number" => "16",
                 "state"           => "ILLINOIS",
                 "fsa"             => "CHICAGO",
-                "counties"        => "COOK "
+                "counties"        => "COOK"
             ],
             [
                 "mac"             => "06102",
@@ -627,7 +627,7 @@ class ProcedureDataSeeder extends Seeder
                 "locality_number" => "01",
                 "state"           => "NEW YORK",
                 "fsa"             => "MANHATTAN",
-                "counties"        => "NEW YORK "
+                "counties"        => "NEW YORK"
             ],
             [
                 "mac"             => "13202",
@@ -760,14 +760,14 @@ class ProcedureDataSeeder extends Seeder
                 "locality_number" => "20",
                 "state"           => "TEXAS",
                 "fsa"             => "BEAUMONT",
-                "counties"        => "JEFFERSON "
+                "counties"        => "JEFFERSON"
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "09",
                 "state"           => "TEXAS",
                 "fsa"             => "BRAZORIA",
-                "counties"        => "BRAZORIA "
+                "counties"        => "BRAZORIA"
             ],
             [
                 "mac"             => "04412",
@@ -781,14 +781,14 @@ class ProcedureDataSeeder extends Seeder
                 "locality_number" => "28",
                 "state"           => "TEXAS",
                 "fsa"             => "FORT WORTH",
-                "counties"        => "TARRANT "
+                "counties"        => "TARRANT"
             ],
             [
                 "mac"             => "04412",
                 "locality_number" => "15",
                 "state"           => "TEXAS",
                 "fsa"             => "GALVESTON",
-                "counties"        => "GALVESTON "
+                "counties"        => "GALVESTON"
             ],
             [
                 "mac"             => "04412",
@@ -837,7 +837,7 @@ class ProcedureDataSeeder extends Seeder
                 "locality_number" => "02",
                 "state"           => "WASHINGTON",
                 "fsa"             => "SEATTLE (KING CNTY)",
-                "counties"        => "KING "
+                "counties"        => "KING"
             ],
             [
                 "mac"             => "02402",
