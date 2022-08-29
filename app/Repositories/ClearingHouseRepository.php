@@ -186,6 +186,15 @@ class ClearingHouseRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
+            /** Attach billing company */
+            if (is_null($clearing->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $clearing->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $clearing->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
+                ]);
+            }
+
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $clearing->id,

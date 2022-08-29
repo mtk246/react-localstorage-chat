@@ -213,6 +213,15 @@ class InsuranceCompanyRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
+            /** Attach billing company */
+            if (is_null($insurance->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $insurance->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
+                ]);
+            }
+
             if (isset($data['insurance']['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $insurance->id,

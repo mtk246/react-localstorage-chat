@@ -290,6 +290,15 @@ class FacilityRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
+            /** Attach billing company */
+            if (is_null($facility->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $facility->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $facility->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
+                ]);
+            }
+
             if (isset($data['nickname'])) {
                 EntityNickname::updateOrCreate([
                     'nicknamable_id'     => $facility->id,

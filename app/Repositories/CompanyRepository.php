@@ -214,7 +214,13 @@ class CompanyRepository
             }
             
             /** Attach billing company */
-            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            if (is_null($company->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $company->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
+                ]);
+            }
 
             $company->update([
                 "name"       => $data["name"],
