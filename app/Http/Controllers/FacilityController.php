@@ -127,4 +127,26 @@ class FacilityController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error add facility to billing company"), 404);
     }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addToCompany(int $facilityId, int $companyId): JsonResponse
+    {
+        $rs = $this->facilityRepository->addToCompany($facilityId, $companyId);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add facility to company"), 404);
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function removeToCompany(int $facilityId, int $companyId): JsonResponse
+    {
+        $rs = $this->facilityRepository->removeToCompany($facilityId, $companyId);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error remove facility to company"), 404);
+    }
 }

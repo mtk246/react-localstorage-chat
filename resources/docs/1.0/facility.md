@@ -13,6 +13,8 @@
 - [Get one facility by npi](#get-one-facility-by-npi)
 - [Add to billing company](#add-to-billing-company)
 - [Get all facility types](#get-all-facility-types)
+- [Add to company](#add-to-company)
+- [Remove to company](#remove-to-company)
 
 
 <a name="basic-data"></a>
@@ -31,6 +33,8 @@
 | 8 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
 | 9 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
 | 10 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
+| 11 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
+| 12 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
 
 
 
@@ -66,7 +70,7 @@
 {
     "name":"facilityName",
     "facility_type_id": 1,
-    "company_id": 1,
+    "companies": [1,2],
     "nickname":"alias facilityName",
     "billing_company_id": 1, /** Only required by superuser */
     "facility_type": {
@@ -128,7 +132,6 @@
     "name": "facilityName",
     "npi": "123fac321",
     "facility_type_id": 1,
-    "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
     "id": 1,
@@ -166,7 +169,6 @@
         "npi": "123fac321",
         "created_at": "2022-03-16T10:03:40.000000Z",
         "updated_at": "2022-03-16T10:03:40.000000Z",
-        "company_id": 1,
         "code": "FA-00001-2022",
         "status": false,
         "facility_type": {
@@ -214,7 +216,19 @@
                 "updated_at": "2022-04-04T12:55:15.000000Z"
             }
         ],
-        "billing_companies": []
+        "billing_companies": [],
+        "companies": [
+            {
+                "id": 1,
+                "code": "CO-00001-2022",
+                "name": "company first",
+                "npi": "222CF123",
+                "created_at": "2022-03-16T10:06:31.000000Z",
+                "updated_at": "2022-03-16T10:06:31.000000Z",
+                "status": false,
+                "billing_companies": []
+            }
+        ]
     }
 ]
 ```
@@ -256,7 +270,6 @@
         "npi": "123fac321",
         "created_at": "2022-03-16T10:03:40.000000Z",
         "updated_at": "2022-03-16T10:03:40.000000Z",
-        "company_id": 1,
         "code": "FA-00001-2022",
         "status": false,
         "facility_type": {
@@ -304,7 +317,19 @@
                 "updated_at": "2022-04-04T12:55:15.000000Z"
             }
         ],
-        "billing_companies": []
+        "billing_companies": [],
+        "companies": [
+            {
+                "id": 1,
+                "code": "CO-00001-2022",
+                "name": "company first",
+                "npi": "222CF123",
+                "created_at": "2022-03-16T10:06:31.000000Z",
+                "updated_at": "2022-03-16T10:06:31.000000Z",
+                "status": false,
+                "billing_companies": []
+            }
+        ]
     }
 ]
 ```
@@ -340,7 +365,6 @@
     "npi": "123fac321",
     "created_at": "2022-03-16T10:03:40.000000Z",
     "updated_at": "2022-03-16T10:03:40.000000Z",
-    "company_id": 1,
     "code": "FA-00001-2022",
     "status": false,
     "facility_type": {
@@ -404,16 +428,18 @@
             "updated_at": "2022-04-04T12:55:15.000000Z"
         }
     ],
-    "company": {
-        "id": 1,
-        "code": "CO-00001-2022",
-        "name": "company first",
-        "npi": "222CF123",
-        "created_at": "2022-03-16T10:06:31.000000Z",
-        "updated_at": "2022-03-16T10:06:31.000000Z",
-        "status": false,
-        "billing_companies": []
-    },
+    "companies": [
+        {
+            "id": 1,
+            "code": "CO-00001-2022",
+            "name": "company first",
+            "npi": "222CF123",
+            "created_at": "2022-03-16T10:06:31.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "status": false,
+            "billing_companies": []
+        }
+    ],
     "billing_companies": []
 }
 ```
@@ -455,7 +481,7 @@
 {
     "name":"facilityName",
     "facility_type_id": 1,
-    "company_id": 1,
+    "companies": [1,2],
     "nickname":"alias facilityName",
     "billing_company_id": 1, /** Only required by superuser */
     "facility_type": {
@@ -518,7 +544,6 @@
     "name": "facilityName",
     "npi": "123fac321",
     "facility_type_id": 1,
-    "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
     "id": 1,
@@ -594,7 +619,6 @@
     "npi": "1598094005",
     "created_at": "2022-03-17T23:36:20.000000Z",
     "updated_at": "2022-03-17T23:36:20.000000Z",
-    "company_id": 1,
     "code": "FA-00001-2022",
     "status": true,
     "facility_type": {
@@ -647,6 +671,18 @@
                 "updated_at": "2022-03-17T23:36:20.000000Z"
             }
         }
+    ],
+    "companies": [
+        {
+            "id": 1,
+            "code": "CO-00001-2022",
+            "name": "company first",
+            "npi": "222CF123",
+            "created_at": "2022-03-16T10:06:31.000000Z",
+            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "status": false,
+            "billing_companies": []
+        }
     ]
 }
 ```
@@ -682,7 +718,6 @@
     "name": "facilityName",
     "npi": "123fac321",
     "facility_type_id": 1,
-    "company_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
     "id": 1,
@@ -760,3 +795,83 @@
     }
 ]
 ```
+
+#
+
+<a name="add-to-company"></a>
+## Add to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`facility_id required integer`
+`company_id  required integer`
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+{
+    "code": "FA-00001-2022",
+    "name": "facilityName",
+    "npi": "123fac321",
+    "facility_type_id": 1,
+    "updated_at": "2022-03-16T10:03:40.000000Z",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "id": 1,
+    "status": true
+}
+```
+
+#
+
+>{warning} 404 error add facility to company
+
+#
+
+<a name="remove-to-company"></a>
+## Remove to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`facility_id required integer`
+`company_id  required integer`
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+{
+    "code": "FA-00001-2022",
+    "name": "facilityName",
+    "npi": "123fac321",
+    "facility_type_id": 1,
+    "updated_at": "2022-03-16T10:03:40.000000Z",
+    "created_at": "2022-03-16T10:03:40.000000Z",
+    "id": 1,
+    "status": true
+}
+```
+
+#
+
+>{warning} 404 error remove facility to company

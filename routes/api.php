@@ -176,6 +176,12 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\FacilityController::class,'addToBillingCompany'])->middleware([
             "auth:api",
         ]);
+        Route::patch("/{facility_id}/add-to-company/{company_id}",[\App\Http\Controllers\FacilityController::class,'addToCompany'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/{facility_id}/remove-to-company/{company_id}",[\App\Http\Controllers\FacilityController::class,'removeToCompany'])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("company")->group(function() {

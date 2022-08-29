@@ -30,7 +30,7 @@ class UpdateFacilityRequest extends FormRequest
             'name'             => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
             'npi'              => ['required', 'string'],
             'facility_type_id' => ['required', 'integer'],
-            'company_id'       => ['required', 'integer'],
+            'companies'        => ['required', 'array'],
             'nickname'         => ['sometimes', 'string'],
 
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],

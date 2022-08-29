@@ -111,6 +111,16 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * The facilities that belong to the company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function facilities(): BelongsToMany
+    {
+        return $this->belongsToMany(Facility::class)->withTimestamps();
+    }
+
+    /**
      * The taxonomies that belong to the company.
      *
      * @return BelongsToMany
@@ -128,16 +138,6 @@ class Company extends Model implements Auditable
     public function claimEligibilities(): HasMany
     {
         return $this->hasMany(ClaimEligibility::class);
-    }
-
-    /**
-     * Company has many facilities.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function facilities(): HasMany
-    {
-        return $this->hasMany(Facility::class);
     }
 
     /**

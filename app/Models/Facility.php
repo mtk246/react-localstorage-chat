@@ -53,7 +53,6 @@ class Facility extends Model implements Auditable
         "code",
         "name",
         "npi",
-        "company_id",
         "facility_type_id",
     ];
 
@@ -63,16 +62,6 @@ class Facility extends Model implements Auditable
      * @var array
      */
     protected $appends = ['status', 'last_modified'];
-
-    /**
-     * Facility belongs to Company.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
 
     /**
      * Facility belongs to FacilityType.
@@ -92,6 +81,16 @@ class Facility extends Model implements Auditable
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    /**
+     * The companies that belong to the facility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)->withTimestamps();
     }
 
     /**
