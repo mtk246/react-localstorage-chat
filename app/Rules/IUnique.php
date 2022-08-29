@@ -52,16 +52,14 @@ class IUnique implements Rule
      */
     public function passes($attribute, $value)
     {
-        $value = json_decode($value, true);
-        if (is_array($value)) {
-            $attrValue = $value[$this->attr];
-            $record = $this->model::whereRaw("LOWER($this->attr) LIKE (?)", [strtolower("$attrValue")])->first();
-        } else{
-            $record = $this->model::whereRaw("LOWER($attribute) LIKE (?)", [strtolower("$value")])->first();
-        }
-
-        if ($record && $record->id == $this->id_exception) {
-            return true;
+        $val = json_decode($value, true);
+        if (is_array($val)) {
+            $attrValue = $val[$this->attr];
+            $record = $this->model::whereRaw("LOWER($this->attr) LIKE (?)", [strtolower("$attrValue")])
+                                  ->whereNot('id', $this->id_exception)->first();
+        } else {
+            $record = $this->model::whereRaw("LOWER($attribute) LIKE (?)", [strtolower("$value")])
+                                  ->whereNot('id', $this->id_exception)->first();
         }
 
         return ($record) ? false : true;
@@ -74,6 +72,6 @@ class IUnique implements Rule
      */
     public function message()
     {
-        return __('The field ' . $this->field_name.' is already registered.');
+        return __('The field ' . $this->field_name . ' is already registered.');
     }
 }
