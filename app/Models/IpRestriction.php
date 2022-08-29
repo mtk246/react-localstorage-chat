@@ -16,6 +16,13 @@ class IpRestriction extends Model implements Auditable
     protected $fillable = ['entity', 'billing_company_id'];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * The billingCompanies that belong to the ip restriction.
      *
      * @return BelongsTo
@@ -53,5 +60,26 @@ class IpRestriction extends Model implements Auditable
     public function roles()
     {
         return $this->morphedByMany(Role::class, 'restrictable');
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }

@@ -183,6 +183,27 @@ class Company extends Model implements Auditable
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
+    }
+
     /**
      * Interact with the company's name.
      *

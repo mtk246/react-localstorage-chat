@@ -19,6 +19,13 @@ class HealthProfessional extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * HealthProfessional belongs to User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -56,5 +63,26 @@ class HealthProfessional extends Model implements Auditable
     public function billingCompanies()
     {
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }

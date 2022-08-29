@@ -56,7 +56,7 @@ class InsuranceCompany extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status'];
+    protected $appends = ['status', 'last_modified'];
 
 
     /**
@@ -160,6 +160,27 @@ class InsuranceCompany extends Model implements Auditable
         $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return false;
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 
     /**

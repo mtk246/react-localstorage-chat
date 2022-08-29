@@ -21,6 +21,13 @@ class Modifier extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * Modifier has many ModifierInvalidCombinations.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -71,5 +78,26 @@ class Modifier extends Model implements Auditable
             get: fn ($value) => upperCaseWords($value),
             set: fn ($value) => upperCaseWords($value),
         );
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }

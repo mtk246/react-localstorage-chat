@@ -70,7 +70,7 @@ class Patient extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['insurance_policies', 'status'];
+    protected $appends = ['insurance_policies', 'status', 'last_modified'];
 
     /**
      * The billingCompanies that belong to the patient.
@@ -244,5 +244,26 @@ class Patient extends Model implements Auditable
         $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return false;
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if ($lastModified->user_id == '') {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }
