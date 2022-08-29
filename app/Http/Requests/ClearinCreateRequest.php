@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\ClearingHouse;
 
 class ClearinCreateRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class ClearinCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'               => ['required', 'string', Rule::unique('clearing_houses', 'name')],
+            'name'               => ['required', 'string', new IUnique(ClearingHouse::class, 'name')],
             'org_type'           => ['required', 'string'],
             'ack_required'       => ['required', 'boolean'],
             'nickname'           => ['sometimes', 'string'],

@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\InsurancePlan;
 
 class CreateInsurancePlanRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class CreateInsurancePlanRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', Rule::unique('insurance_plans', 'name')],
+            'name'                 => ['required', 'string', new IUnique(InsurancePlan::class, 'name')],
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'ins_type'             => ['required', 'string'],
             'cap_group'            => ['required', 'string'],

@@ -3,7 +3,8 @@
 namespace App\Http\Requests\Diagnosis;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\Diagnosis;
 
 class DiagnosisCreateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class DiagnosisCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'        => ['required', 'string', 'max:50', Rule::unique('diagnoses', 'code')],
+            'code'        => ['required', 'string', 'max:50', new IUnique(Diagnosis::class, 'code')],
             'start_date'  => ['required', 'date'],
             'description' => ['required', 'string', 'max:255'],
             'note'        => ['required', 'string'],

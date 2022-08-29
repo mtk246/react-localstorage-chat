@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\Company;
 
 class CompanyCreateRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class CompanyCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', Rule::unique('companies', 'name')],
+            'name'                 => ['required', 'string', new IUnique(Company::class, 'name')],
             'npi'                  => ['required', 'integer'],
             'nickname'             => ['sometimes', 'string'],
             

@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Diagnosis;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\IUnique;
+use App\Models\Diagnosis;
 
 class DiagnosisUpdateRequest extends FormRequest
 {

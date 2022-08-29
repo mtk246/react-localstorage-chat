@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\Facility;
 
 class UpdateFacilityRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'             => ['required', 'string', Rule::unique('facilities', 'name')->ignore($this->id)],
+            'name'             => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
             'npi'              => ['required', 'string'],
             'facility_type_id' => ['required', 'integer'],
             'company_id'       => ['required', 'integer'],

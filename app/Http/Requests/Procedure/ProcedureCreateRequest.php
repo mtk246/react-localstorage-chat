@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Procedure;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use App\Rules\MacLocalityFeeRequired;
+use App\Rules\IUnique;
+use App\Models\Procedure;
 
 class ProcedureCreateRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class ProcedureCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'                                                         => ['required', 'string', 'max:50', Rule::unique('procedures', 'code')],
+            'code'                                                         => ['required', 'string', 'max:50', new IUnique(Procedure::class, 'code')],
             'description'                                                  => ['required', 'string'],
             'insurance_companies'                                          => ['nullable', 'array'],
             'specific_insurance_company'                                   => ['boolean', 'nullable'],

@@ -3,7 +3,8 @@
 namespace App\Http\Requests\Modifier;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\Modifier;
 
 class ModifierCreateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class ModifierCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'modifier'                                            => ['required', 'string', 'max:2', Rule::unique('modifiers', 'modifier')],
+            'modifier'                                            => ['required', 'string', 'max:2', new IUnique(Modifier::class, 'modifier')],
             'start_date'                                          => ['required', 'date'],
             'special_coding_instructions'                         => ['required', 'string'],
             'modifier_invalid_combinations'                       => ['required', 'array'],

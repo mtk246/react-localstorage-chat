@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
+use App\Models\InsuranceCompany;
 
 class UpdateInsuranceRequest extends FormRequest
 {
@@ -26,7 +28,7 @@ class UpdateInsuranceRequest extends FormRequest
     {
         return [
             'insurance'             => ['required', 'array'],
-            'insurance.name'        => ['required', 'string', Rule::unique('insurance_companies', 'name')->ignore($this->id)],
+            'insurance.name'        => ['required', 'string', new IUnique(InsuranceCompany::class, 'name', $this->id)],
             'insurance.naic'        => ['required', 'string'],
             'insurance.file_method' => ['required', 'string'],
             'insurance.nickname'    => ['sometimes', 'string'],

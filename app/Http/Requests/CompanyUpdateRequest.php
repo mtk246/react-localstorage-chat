@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
 use App\Models\Company;
 
 class CompanyUpdateRequest extends FormRequest
@@ -26,7 +27,7 @@ class CompanyUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', Rule::unique('companies', 'name')->ignore($this->id)],
+            'name'                 => ['required', 'string', new IUnique(Company::class, 'name', $this->id)],
             'npi'                  => ['required', 'integer'],
             'nickname'             => ['sometimes', 'string'],
 
