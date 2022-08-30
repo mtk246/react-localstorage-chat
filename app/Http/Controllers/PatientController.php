@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PatientCreateRequest;
 use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
+use App\Http\Requests\Patient\PatientPolicyRequest;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
 
@@ -92,5 +93,29 @@ class PatientController extends Controller
         $rs = $this->patientRepository->changeStatus($request->input("status"), $id);
 
         return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 404);
+    }
+
+    /**
+     * @param PatientUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function addNewPolicy(PatientPolicyRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->patientRepository->addNewPolicy($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add new policy"), 400);
+    }
+
+    /**
+     * @param PatientUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function removePolicy(int $patient_id, int $insurance_plan_id): JsonResponse
+    {
+        $rs = $this->patientRepository->removePolicy($insurance_plan_id, $patient_id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error remove policy"), 400);
     }
 }

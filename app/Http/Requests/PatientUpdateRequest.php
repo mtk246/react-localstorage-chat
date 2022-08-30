@@ -86,6 +86,7 @@ class PatientUpdateRequest extends FormRequest
 
             'insurance_policies'                       => ['required', 'array'],
             'insurance_policies.*.insurance_company'   => ['required', 'numeric'],
+            'insurance_policies.*.policy_number'       => ['required', 'numeric'],
             'insurance_policies.*.insurance_plan'      => ['required', 'numeric'],
             'insurance_policies.*.own_insurance'       => ['required', 'boolean'],
 

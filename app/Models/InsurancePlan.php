@@ -127,7 +127,7 @@ class InsurancePlan extends Model implements Auditable
      */
     public function patients(): BelongsToMany
     {
-        return $this->belongsToMany(Patient::class)->withPivot('status', 'own_insurance')->withTimestamps();
+        return $this->belongsToMany(Patient::class)->withPivot('policy_number', 'status', 'own_insurance')->withTimestamps();
     }
 
     /**

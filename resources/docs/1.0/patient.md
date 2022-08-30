@@ -12,6 +12,8 @@
 - [Update patient](#Update-patient)
 - [Change status patient](#change-status-patient)
 - [Get all patient suscribers](#get-all-patient-suscribers)
+- [Add policy to patient](#add-policy-to-patient)
+- [Remove policy to patient](#remove-policy-to-patient)
 
 
 
@@ -28,6 +30,8 @@
 | 5 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
 | 6 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
 | 7 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
+| 8 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
+| 9 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{insurance_plan_id}`|yes|remove policy to patient|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -114,6 +118,7 @@
         {
             "insurance_company": 1,
             "insurance_plan": 1,
+            "policy_number": 12344,
             "own_insurance": true
         },
         {
@@ -866,6 +871,7 @@
         {
             "insurance_company": 1,
             "insurance_plan": 1,
+            "policy_number": 12344,
             "own_insurance": true
         },
         {
@@ -1022,3 +1028,113 @@
     }
 ]
 ```
+
+<a name="add-policy-to-patient"></a>
+## Add policy to patient
+
+### Body request example 1
+
+```json
+{
+    "insurance_company": 1,
+    "insurance_plan": 1,
+    "policy_number": 12344,
+    "own_insurance": true
+}
+```
+### Body request example 2
+```json
+{
+    "insurance_company": 1,
+    "insurance_plan": 2,
+    "policy_number": 12344,
+    "own_insurance": false,
+    "suscriber": {
+        "ssn": "ssn suscriber",
+        "first_name" : "firstName suscriber",
+        "last_name"  : "lastName suscriber",
+        "address": {
+            "address": "Direction address suscriber",
+            "city": "city address suscriber",
+            "state": "state address suscriber",
+            "zip": "123456789"
+        },
+        "contact": {
+            "phone": "04241234321",
+            "fax": "",
+            "mobile": "",
+            "email": "suscriber@gmail.com"
+        }
+    }
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`patient_id required integer`
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+{
+    "id": 1,
+    "driver_license": "driver license",
+    "credit_score": "credit score",
+    "user_id": 1,
+    "created_at": "2022-03-17T20:45:39.000000Z",
+    "updated_at": "2022-03-17T20:45:39.000000Z"
+}
+```
+
+#
+
+>{warning} 404 error add policy to patient
+
+#
+
+<a name="remove-policy-to-patient"></a>
+## Remove policy to patient
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`insurance_plan_id required integer`
+`patient_id  required integer`
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+{
+    "id": 1,
+    "driver_license": "driver license",
+    "credit_score": "credit score",
+    "user_id": 1,
+    "created_at": "2022-03-17T20:45:39.000000Z",
+    "updated_at": "2022-03-17T20:45:39.000000Z"
+}
+```
+
+#
+
+>{warning} 404 error remove policy to patient

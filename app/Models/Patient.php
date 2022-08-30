@@ -210,7 +210,7 @@ class Patient extends Model implements Auditable
      */
     public function insurancePlans()
     {
-        return $this->belongsToMany(InsurancePlan::class)->withPivot('status', 'own_insurance')->withTimestamps();
+        return $this->belongsToMany(InsurancePlan::class)->withPivot('policy_number', 'status', 'own_insurance')->withTimestamps();
     }
 
     /*
@@ -225,6 +225,7 @@ class Patient extends Model implements Auditable
             array_push($insurancePolicies, [
                 'insurance_company_id' => $insurancePlan['insurance_company_id'],
                 'insurance_plan_id'    => $insurancePlan['id'],
+                'policy_number'        => $insurancePlan['pivot']['policy_number'] ?? '',
                 'own'                  => $insurancePlan['pivot']['own_insurance'],
                 'suscriber'            => $insurancePlan['suscribers']['0'] ?? null
             ]);
