@@ -60,6 +60,7 @@ class Patient extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
+        "code",
         "driver_license",
         "credit_score",
         "user_id",

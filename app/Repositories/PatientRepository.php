@@ -160,13 +160,13 @@ class PatientRepository
             }
 
             /** Create Marital */
-            if (isset($data['marital']['spuse_name']) || isset($data['marital']['spuse_work']) || isset($data['marital']['spuse_work_phone'])) {
+            if (isset($data['marital']['spuse_name'])) {
                 $data["marital"]["patient_id"] = $patient->id;
                 $marital = Marital::create($data["marital"]);
             }
 
             /** Create Guarantor */
-            if (isset($data['guarantor']['name']) || isset($data['guarantor']['name'])) {
+            if (isset($data['guarantor']['name'])) {
                 $data["guarantor"]["patient_id"] = $patient->id;
                 $guarantor = Guarantor::create($data["guarantor"]);
             }
@@ -592,14 +592,14 @@ class PatientRepository
             }
 
             /** Create Marital */
-            if (isset($data['marital']['spuse_name']) || isset($data['marital']['spuse_work']) || isset($data['marital']['spuse_work_phone'])) {
+            if (isset($data['marital']['spuse_name'])) {
                 Marital::updateOrCreate([
                     "patient_id" => $patient->id
                 ], $data["marital"]);
             }
 
             /** Create Guarantor */
-            if (isset($data['guarantor']['name']) || isset($data['guarantor']['name'])) {
+            if (isset($data['guarantor']['name'])) {
                 Guarantor::updateOrCreate([
                     "patient_id" => $patient->id
                 ], $data["guarantor"]);
