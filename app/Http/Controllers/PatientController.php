@@ -100,11 +100,11 @@ class PatientController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function addNewPolicy(PatientPolicyRequest $request, int $id): JsonResponse
+    public function addPolicies(PatientPolicyRequest $request, int $id): JsonResponse
     {
-        $rs = $this->patientRepository->addNewPolicy($request->validated(), $id);
+        $rs = $this->patientRepository->addPolicies($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error add new policy"), 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error add policies"), 400);
     }
 
     /**

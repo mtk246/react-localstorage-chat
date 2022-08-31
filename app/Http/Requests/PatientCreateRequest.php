@@ -60,15 +60,15 @@ class PatientCreateRequest extends FormRequest
             'contact.fax'                       => ['nullable', 'string'],
             'contact.email'                     => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
-            'marital'                           => ['sometimes', 'required', 'array'],
-            'marital.spuse_name'                => ['sometimes', 'required', 'string'],
-            'marital.spuse_work'                => ['sometimes', 'required', 'string'],
-            'marital.spuse_work_phone'          => ['sometimes', 'required', 'string'],
+            'marital'                           => ['nullable', 'array'],
+            'marital.spuse_name'                => ['nullable', 'string'],
+            'marital.spuse_work'                => ['nullable', 'string'],
+            'marital.spuse_work_phone'          => ['nullable', 'string'],
 
             
-            'guarantor'                         => ['sometimes', 'required', 'array'],
-            'guarantor.name'                    => ['sometimes', 'required', 'string'],
-            'guarantor.phone'                   => ['sometimes', 'required', 'string'],
+            'guarantor'                         => ['nullable', 'array'],
+            'guarantor.name'                    => ['nullable', 'string'],
+            'guarantor.phone'                   => ['nullable', 'string'],
 
             'employments'                       => ['sometimes', 'required', 'array'],
             'employments.*.employer_name'       => ['sometimes', 'required', 'string'],

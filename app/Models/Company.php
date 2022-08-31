@@ -190,7 +190,7 @@ class Company extends Model implements Auditable
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
-        if ($lastModified->user_id == '') {
+        if (!isset($lastModified->user_id)) {
             return [
                 'user'  => 'Console',
                 'roles' => [],
