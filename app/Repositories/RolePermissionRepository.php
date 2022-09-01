@@ -107,13 +107,23 @@ class RolePermissionRepository
      * @param int $role_id
      * @param int $permission_id
      */
-    public function assignPermissionRole(int $role_id,int $permission_id)
+    public function assignPermissionRole(int $role_id, int $permission_id)
     {
         try {
             $role = Role::find($role_id);
             $permission = Permission::find($permission_id);
 
             $role->attachPermission($permission);
+
+            /** Attach permisions to users by rol */
+            $users = User::with('roles')->whereHas('roles', function ($query) use ($role_id) {
+                $query->where('role_id', $role_id);
+            })->get();
+            foreach ($users as $user) {
+                if (is_null($user->permissions()->find($permission_id))) {
+                    $user->permissions()->attach($permission_id);
+                }
+            }
             return $role->load('permissions');
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
             return response()->json($e->getMessage(),500);
@@ -125,14 +135,23 @@ class RolePermissionRepository
      * @param int $user_id
      * @return User|Builder|Model|JsonResponse|object|null
      */
-    public function assignRoleUser(int $role_id,int $user_id){
-        try{
+    public function assignRoleUser(int $role_id, int $user_id)
+    {
+        try {
             $role = Role::find($role_id);
             $user = User::whereId($user_id)->first();
 
             if( is_null($user) ) return null;
 
             $user->attachRole($role);
+            /** Attach permisions to users by rol */
+            $role->load('permissions');
+
+            foreach ($role->permissions as $perm) {
+                if (is_null($user->permissions()->find($perm->id))) {
+                    $user->permissions()->attach($perm->id);
+                }
+            }
             return $user->load('roles');
         }catch(RoleDoesNotExist | \Exception $exception){
             return response()->json($exception->getMessage(),500);
@@ -170,6 +189,18 @@ class RolePermissionRepository
                 $permission = Permission::find($permission_id);
 
                 $role->attachPermission($permission);
+            }
+            /** Attach permisions to users by rol */
+            $users = User::with('roles')->whereHas('roles', function ($query) use ($role) {
+                $query->where('role_id', $role->id);
+            })->get();
+            foreach ($users as $user) {
+                foreach ($permissions as $permission_id) {
+                    $permission = Permission::find($permission_id);
+                    if (is_null($user->permissions()->find($permission->id))) {
+                        $user->permissions()->attach($permission->id);
+                    }
+                }
             }
             return $role->load('permissions');
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
