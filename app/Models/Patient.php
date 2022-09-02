@@ -223,12 +223,20 @@ class Patient extends Model implements Auditable
     {
         $insurancePolicies = [];
         foreach ($this->insurancePlans as $insurancePlan) {
+            if (isset($insurancePlan['suscribers']['0'])) {
+                $insurancePlan['suscribers']['0']->load(['addresses', 'contacts']);
+            }
+            if (isset($insurancePlan['insurance_company_id'])) {
+                $insurancePlan->load(['insuranceCompany']);
+            }
             array_push($insurancePolicies, [
-                'insurance_company_id' => $insurancePlan['insurance_company_id'],
-                'insurance_plan_id'    => $insurancePlan['id'],
-                'policy_number'        => $insurancePlan['pivot']['policy_number'] ?? '',
-                'own'                  => $insurancePlan['pivot']['own_insurance'],
-                'suscriber'            => $insurancePlan['suscribers']['0'] ?? null
+                'insurance_company_name' => $insurancePlan['insuranceCompany']['name'] ?? '',
+                'payer_id'               => $insurancePlan['insuranceCompany']['code'] ?? '',
+                'policy_number'          => $insurancePlan['pivot']['policy_number'] ?? '',
+                'insurance_company_id'   => $insurancePlan['insurance_company_id'],
+                'insurance_plan_id'      => $insurancePlan['id'],
+                'own'                    => $insurancePlan['pivot']['own_insurance'],
+                'suscriber'              => $insurancePlan['suscribers']['0'] ?? null
             ]);
             
         }

@@ -25,27 +25,26 @@ class PatientPolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_policies'                        => ['required', 'array'],
-            'insurance_policies.*.insurance_company'    => ['required', 'numeric'],
-            'insurance_policies.*.policy_number'        => ['required', 'numeric'],
-            'insurance_policies.*.insurance_plan'       => ['required', 'numeric'],
-            'insurance_policies.*.own_insurance'        => ['required', 'boolean'],
+            'insurance_company'    => ['required', 'numeric'],
+            'policy_number'        => ['required', 'numeric'],
+            'insurance_plan'       => ['required', 'numeric'],
+            'own_insurance'        => ['required', 'boolean'],
 
-            'insurance_policies.*.suscriber'            => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.suscriber.ssn'        => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.first_name' => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.last_name'  => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
+            'suscriber'            => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'suscriber.ssn'        => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.last_name'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
 
-            'insurance_policies.*.suscriber.address'         => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.suscriber.address.address' => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.address.city'    => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.address.state'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.address.zip'     => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
+            'suscriber.address'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'suscriber.address.address' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.address.city'    => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.address.state'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.address.zip'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             
-            'insurance_policies.*.suscriber.contact'         => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.suscriber.contact.phone'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.contact.fax'     => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.suscriber.contact.email'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'email:rfc'],
+            'suscriber.contact'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'suscriber.contact.phone'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.contact.fax'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'suscriber.contact.email'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'email:rfc'],
         ];
     }
 }

@@ -100,11 +100,11 @@ class PatientController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function addPolicies(PatientPolicyRequest $request, int $id): JsonResponse
+    public function addPolicy(PatientPolicyRequest $request, int $id): JsonResponse
     {
-        $rs = $this->patientRepository->addPolicies($request->validated(), $id);
+        $rs = $this->patientRepository->addPolicy($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error add policies"), 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error add policy to patient"), 400);
     }
 
     /**
@@ -116,6 +116,18 @@ class PatientController extends Controller
     {
         $rs = $this->patientRepository->removePolicy($insurance_plan_id, $patient_id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error remove policy"), 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error remove policy to patient"), 400);
+    }
+
+    /**
+     * @param PatientUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getPolicy(int $patient_id, int $insurance_plan_id): JsonResponse
+    {
+        $rs = $this->patientRepository->getPolicy($insurance_plan_id, $patient_id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, policy to patient not found"), 400);
     }
 }
