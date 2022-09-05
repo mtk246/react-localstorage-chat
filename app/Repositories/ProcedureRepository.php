@@ -591,85 +591,81 @@ class ProcedureRepository
             DB::beginTransaction();
             $company = Company::find($id);
 
-            if (isset($data['procedures'])) {
-                foreach ($data['procedures'] as $dataProcedure) {
-                    $procedure = Procedure::find($dataProcedure['procedure_id']);
+            if (isset($data['mac_localities'])) {
+                foreach ($data['mac_localities'] as $macL) {
+                    $procedure = Procedure::find($macL['procedure_id']);
 
-                    if (isset($dataProcedure['mac_localities'])) {
-                        foreach ($dataProcedure['mac_localities'] as $macL) {
-                            $macLocality = MacLocality::where([
-                                "mac"             => $macL['mac'],
-                                "locality_number" => $macL['locality_number'],
-                                "state"           => $macL['state'],
-                                "fsa"             => $macL['fsa'],
-                                "counties"        => $macL['counties']
-                            ])->first();
+                    $macLocality = MacLocality::where([
+                        "mac"             => $macL['mac'],
+                        "locality_number" => $macL['locality_number'],
+                        "state"           => $macL['state'],
+                        "fsa"             => $macL['fsa'],
+                        "counties"        => $macL['counties']
+                    ])->first();
 
-                            if (is_null($macLocality->procedures()->wherePivot('modifier_id', $macL['modifier_id'])->find($procedure->id))) {
-                                $macLocality->procedures()->attach($procedure->id, ['modifier_id'  => $macL['modifier_id']]);
-                            }
+                    if (is_null($macLocality->procedures()->wherePivot('modifier_id', $macL['modifier_id'])->find($procedure->id))) {
+                        $macLocality->procedures()->attach($procedure->id, ['modifier_id'  => $macL['modifier_id']]);
+                    }
 
-                            if (isset($macL['procedure_fees'])) {
-                                foreach ($macL['procedure_fees'] as $procedureFees => $value) {
-                                    /** insuranceType == Medicare */
-                                    $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
-                                        $query->whereDescription('Medicare');
-                                    })->get();
+                    if (isset($macL['procedure_fees'])) {
+                        foreach ($macL['procedure_fees'] as $procedureFees => $value) {
+                            /** insuranceType == Medicare */
+                            $insuranceLabelFeesMedicare = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
+                                $query->whereDescription('Medicare');
+                            })->get();
 
-                                    foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
-                                        $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
-                                        if ($procedureFees == $field) {
-                                            ProcedureFee::updateOrCreate([
-                                                'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                                'procedure_id'           => $procedure->id,
-                                                'mac_locality_id'        => $macLocality->id
-                                            ], [
-                                                'fee'                    => $value
-                                            ]);
-                                        }
-                                    }
-
-                                    /** insuranceType == Medicaid */
-                                    $insuranceLabelFeesMedicaid = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
-                                        $query->whereDescription('Medicaid');
-                                    })->get();
-
-                                    foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
-                                        $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
-                                        if ($procedureFees == $field) {
-                                            ProcedureFee::updateOrCreate([
-                                                'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                                'procedure_id'           => $procedure->id,
-                                                'mac_locality_id'        => $macLocality->id
-                                            ], [
-                                                'fee'                    => $value
-                                            ]);
-                                        }
-                                    }
-                                }
-                                if (isset($macL['company_procedure'])) {
-                                    $company->procedures()->attach(
-                                        $procedure->id,
-                                        [
-                                            'price'                  => $macL['company_procedure']['price'],
-                                            'price_percentage'       => $macL['company_procedure']['price_percentage'],
-                                            'insurance_label_fee_id' => $macL['company_procedure']['insurance_label_fee_id']
-                                        ]
-                                    );
-                                }
-
-                                if (isset($macL['insurance_plan_procedure'])) {
-                                    $insurancePlan = InsurancePlan::find($macL['insurance_plan_procedure']['insurance_plan_id']);
-                                    $insurancePlan->procedures()->attach(
-                                        $procedure->id,
-                                        [
-                                            'price'                  => $macL['insurance_plan_procedure']['price'],
-                                            'price_percentage'       => $macL['insurance_plan_procedure']['price_percentage'],
-                                            'insurance_label_fee_id' => $macL['insurance_plan_procedure']['insurance_label_fee_id']
-                                        ]
-                                    );
+                            foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
+                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
+                                if ($procedureFees == $field) {
+                                    ProcedureFee::updateOrCreate([
+                                        'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                        'procedure_id'           => $procedure->id,
+                                        'mac_locality_id'        => $macLocality->id
+                                    ], [
+                                        'fee'                    => $value
+                                    ]);
                                 }
                             }
+
+                            /** insuranceType == Medicaid */
+                            $insuranceLabelFeesMedicaid = InsuranceLabelFee::whereHas('insuranceType', function ($query) {
+                                $query->whereDescription('Medicaid');
+                            })->get();
+
+                            foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
+                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
+                                if ($procedureFees == $field) {
+                                    ProcedureFee::updateOrCreate([
+                                        'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
+                                        'procedure_id'           => $procedure->id,
+                                        'mac_locality_id'        => $macLocality->id
+                                    ], [
+                                        'fee'                    => $value
+                                    ]);
+                                }
+                            }
+                        }
+                        if (isset($macL['company_procedure'])) {
+                            $company->procedures()->attach(
+                                $procedure->id,
+                                [
+                                    'price'                  => $macL['company_procedure']['price'],
+                                    'price_percentage'       => $macL['company_procedure']['price_percentage'],
+                                    'insurance_label_fee_id' => $macL['company_procedure']['insurance_label_fee_id']
+                                ]
+                            );
+                        }
+
+                        if (isset($macL['insurance_plan_procedure'])) {
+                            $insurancePlan = InsurancePlan::find($macL['insurance_plan_procedure']['insurance_plan_id']);
+                            $insurancePlan->procedures()->attach(
+                                $procedure->id,
+                                [
+                                    'price'                  => $macL['insurance_plan_procedure']['price'],
+                                    'price_percentage'       => $macL['insurance_plan_procedure']['price_percentage'],
+                                    'insurance_label_fee_id' => $macL['insurance_plan_procedure']['insurance_label_fee_id']
+                                ]
+                            );
                         }
                     }
                 }

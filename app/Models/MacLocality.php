@@ -93,7 +93,7 @@ class MacLocality extends Model implements Auditable
      */
     public function getModifierAttribute()
     {
-        return Modifier::find($this->pivot->modifier_id);
+        return Modifier::find($this->pivot->modifier_id ?? null);
     }
 
 }

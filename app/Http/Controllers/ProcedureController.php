@@ -232,4 +232,15 @@ class ProcedureController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error add procedure to company"), 404);
     }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function getToCompany(int $id): JsonResponse
+    {
+        $rs = $this->procedureRepository->getToCompany($id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, get procedures to company not found"), 404);
+    }
 }
