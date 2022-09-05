@@ -85,6 +85,12 @@ class PatientCreateRequest extends FormRequest
             'insurance_policies.*.insurance_company'   => ['required', 'numeric'],
             'insurance_policies.*.policy_number'       => ['required', 'numeric'],
             'insurance_policies.*.insurance_plan'      => ['required', 'numeric'],
+            'insurance_policies.*.copay'               => ['nullable', 'numeric'],
+            'insurance_policies.*.group_number'        => ['nullable', 'numeric'],
+            'insurance_policies.*.eff_date'            => ['required', 'date'],
+            'insurance_policies.*.end_date'            => ['nullable', 'date'],
+            'insurance_policies.*.release_info'        => ['required', 'boolean'],
+            'insurance_policies.*.assign_benefits'     => ['required', 'boolean'],
             'insurance_policies.*.own_insurance'       => ['required', 'boolean'],
 
             'insurance_policies.*.subscriber'            => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],

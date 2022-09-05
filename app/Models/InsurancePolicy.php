@@ -25,6 +25,7 @@ class InsurancePolicy extends Model implements Auditable
     ];
 
     protected $with = ['insurancePlan'];
+    
     protected $appends = ['insurance_company_name', 'insurance_company_id', 'subscriber', 'payer_id', 'own'];
 
     /**

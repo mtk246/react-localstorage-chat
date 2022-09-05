@@ -242,9 +242,17 @@ class PatientRepository
                     /** Attached patient to insurance plan */
                     $insurancePlan = InsurancePlan::find($insurance_policy["insurance_plan"]);
 
-                    $insurancePolicy = InsurancePolicy::firstOrCreate([
+                    $insurancePolicy = InsurancePolicy::updateOrCreate([
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
+                    ], [
+                        'copay'           => $insurance_policy["copay"],
+                        'group_number'    => $insurance_policy["group_number"],
+                        'eff_date'        => $insurance_policy["eff_date"],
+                        'end_date'        => $insurance_policy["end_date"],
+                        'release_info'    => $insurance_policy["release_info"],
+                        'assign_benefits' => $insurance_policy["assign_benefits"]
+
                     ]);
 
                     /** Attach insurance policy to patient */
@@ -398,6 +406,7 @@ class PatientRepository
             "emergencyContacts",
             "publicNote",
             "privateNotes",
+            "insurancePolicies",
             "insurancePlans" => function ($query) use ($id) {
                 $query->with([
                     "insuranceCompany"
@@ -456,6 +465,7 @@ class PatientRepository
             "emergencyContacts",
             "publicNote",
             "privateNotes",
+            "insurancePolicies",
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany");
             }
@@ -699,9 +709,17 @@ class PatientRepository
                     /** Attached patient to insurance plan */
                     $insurancePlan = InsurancePlan::find($insurance_policy["insurance_plan"]);
 
-                    $insurancePolicy = InsurancePolicy::firstOrCreate([
+                    $insurancePolicy = InsurancePolicy::updateOrCreate([
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
+                    ], [
+                        'copay'           => $insurance_policy["copay"],
+                        'group_number'    => $insurance_policy["group_number"],
+                        'eff_date'        => $insurance_policy["eff_date"],
+                        'end_date'        => $insurance_policy["end_date"],
+                        'release_info'    => $insurance_policy["release_info"],
+                        'assign_benefits' => $insurance_policy["assign_benefits"]
+
                     ]);
 
                     /** Attach insurance policy to patient */
@@ -826,9 +844,17 @@ class PatientRepository
             /** Attached patient to insurance plan */
             $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
 
-            $insurancePolicy = InsurancePolicy::firstOrCreate([
+            $insurancePolicy = InsurancePolicy::updateOrCreate([
                 'policy_number'     => $data["policy_number"],
                 'insurance_plan_id' => $insurancePlan->id
+            ], [
+                'copay'           => $data["copay"],
+                'group_number'    => $data["group_number"],
+                'eff_date'        => $data["eff_date"],
+                'end_date'        => $data["end_date"],
+                'release_info'    => $data["release_info"],
+                'assign_benefits' => $data["assign_benefits"],
+
             ]);
 
             /** Attach insurance policy to patient */
@@ -923,7 +949,13 @@ class PatientRepository
 
         $insurancePolicy->update([
             'policy_number'     => $data["policy_number"],
-            'insurance_plan_id' => $insurancePlan->id
+            'insurance_plan_id' => $insurancePlan->id,
+            'copay'             => $data["copay"],
+            'group_number'      => $data["group_number"],
+            'eff_date'          => $data["eff_date"],
+            'end_date'          => $data["end_date"],
+            'release_info'      => $data["release_info"],
+            'assign_benefits'   => $data["assign_benefits"],
         ]);
 
         /** Attach insurance policy to patient */

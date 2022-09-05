@@ -123,6 +123,12 @@
             "insurance_company": 1,
             "insurance_plan": 1,
             "policy_number": 12344,
+            "copay": 200,  //optional
+            "group_number": 1234, //optional
+            "eff_date": "2020-01-23",
+            "end_date": "2022-01-23",  //optional
+            "release_info": false,
+            "assign_benefits": false,
             "own_insurance": true
         },
         {
@@ -878,6 +884,12 @@
             "insurance_company": 1,
             "insurance_plan": 1,
             "policy_number": 12344,
+            "copay": 200,  //optional
+            "group_number": 1234, //optional
+            "eff_date": "2020-01-23",
+            "end_date": "2022-01-23",  //optional
+            "release_info": false,
+            "assign_benefits": false,
             "own_insurance": true
         },
         {
@@ -1047,6 +1059,12 @@
     "insurance_company": 1,
     "insurance_plan": 1,
     "policy_number": 12344,
+    "copay": 200,  //optional
+    "group_number": 1234, //optional
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",  //optional
+    "release_info": false,
+    "assign_benefits": false,
     "own_insurance": true
 }
 ```
@@ -1057,6 +1075,12 @@
     "insurance_company": 1,
     "insurance_plan": 2,
     "policy_number": 13442,
+    "copay": 200,  //optional
+    "group_number": 1234, //optional
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",  //optional
+    "release_info": false,
+    "assign_benefits": false,
     "own_insurance": false,
     "subscriber": {
         "ssn": "ssn subscriber",
@@ -1097,12 +1121,72 @@
 
 ```json
 {
-    "id": 1,
-    "driver_license": "driver license",
-    "credit_score": "credit score",
-    "user_id": 1,
-    "created_at": "2022-03-17T20:45:39.000000Z",
-    "updated_at": "2022-03-17T20:45:39.000000Z"
+    "id": 8,
+    "policy_number": "369851",
+    "group_number": "1234",
+    "payment_responsibility_level_code": null,
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",
+    "copay": "200",
+    "release_info": false,
+    "assign_benefits": false,
+    "insurance_plan_id": 2,
+    "created_at": "2022-09-05T06:16:35.000000Z",
+    "updated_at": "2022-09-05T15:04:54.000000Z",
+    "insurance_company_name": "Dsfsdfsfeddsddfg",
+    "insurance_company_id": 1,
+    "subscriber": {
+        "id": 3,
+        "ssn": "85",
+        "member_id": null,
+        "first_name": "F Name",
+        "last_name": "L Name",
+        "created_at": "2022-09-05T05:27:41.000000Z",
+        "updated_at": "2022-09-05T05:27:41.000000Z",
+        "pivot": {
+            "insurance_policy_id": 8,
+            "subscriber_id": 3,
+            "created_at": "2022-09-05T06:16:35.000000Z",
+            "updated_at": "2022-09-05T06:16:35.000000Z"
+        },
+        "addresses": [
+            {
+                "id": 46,
+                "address": "Address",
+                "city": "City",
+                "state": "state",
+                "zip": "zip",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "addressable_type": "App\\Models\\Subscriber",
+                "addressable_id": 3
+            }
+        ],
+        "contacts": [
+            {
+                "id": 51,
+                "phone": "phone",
+                "fax": "fax",
+                "email": "correo@correo.com",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Subscriber",
+                "contactable_id": 3
+            }
+        ]
+    },
+    "payer_id": "IC-00001-2022",
+    "own": false,
+    "pivot": {
+        "patient_id": 30,
+        "insurance_policy_id": 8,
+        "own_insurance": false,
+        "created_at": "2022-09-05T15:04:54.000000Z",
+        "updated_at": "2022-09-05T15:04:54.000000Z"
+    }
 }
 ```
 
@@ -1136,6 +1220,12 @@
     "insurance_company": 1,
     "insurance_plan": 1,
     "policy_number": 12344,
+    "copay": 200,  //optional
+    "group_number": 1234, //optional
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",  //optional
+    "release_info": false,
+    "assign_benefits": false,
     "own_insurance": true
 }
 ```
@@ -1146,6 +1236,12 @@
     "insurance_company": 1,
     "insurance_plan": 2,
     "policy_number": 13442,
+    "copay": 200,  //optional
+    "group_number": 1234, //optional
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",  //optional
+    "release_info": false,
+    "assign_benefits": false,
     "own_insurance": false,
     "subscriber": {
         "ssn": "ssn subscriber",
@@ -1172,7 +1268,74 @@
 > {success} 200 Good response
 
 ```json
-
+{
+    "id": 8,
+    "policy_number": "369851",
+    "group_number": "1234",
+    "payment_responsibility_level_code": null,
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",
+    "copay": "200",
+    "release_info": false,
+    "assign_benefits": false,
+    "insurance_plan_id": 2,
+    "created_at": "2022-09-05T06:16:35.000000Z",
+    "updated_at": "2022-09-05T15:04:54.000000Z",
+    "insurance_company_name": "Dsfsdfsfeddsddfg",
+    "insurance_company_id": 1,
+    "subscriber": {
+        "id": 3,
+        "ssn": "85",
+        "member_id": null,
+        "first_name": "F Name",
+        "last_name": "L Name",
+        "created_at": "2022-09-05T05:27:41.000000Z",
+        "updated_at": "2022-09-05T05:27:41.000000Z",
+        "pivot": {
+            "insurance_policy_id": 8,
+            "subscriber_id": 3,
+            "created_at": "2022-09-05T06:16:35.000000Z",
+            "updated_at": "2022-09-05T06:16:35.000000Z"
+        },
+        "addresses": [
+            {
+                "id": 46,
+                "address": "Address",
+                "city": "City",
+                "state": "state",
+                "zip": "zip",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "addressable_type": "App\\Models\\Subscriber",
+                "addressable_id": 3
+            }
+        ],
+        "contacts": [
+            {
+                "id": 51,
+                "phone": "phone",
+                "fax": "fax",
+                "email": "correo@correo.com",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Subscriber",
+                "contactable_id": 3
+            }
+        ]
+    },
+    "payer_id": "IC-00001-2022",
+    "own": false,
+    "pivot": {
+        "patient_id": 30,
+        "insurance_policy_id": 8,
+        "own_insurance": false,
+        "created_at": "2022-09-05T15:04:54.000000Z",
+        "updated_at": "2022-09-05T15:04:54.000000Z"
+    }
+}
 ```
 
 #
@@ -1203,7 +1366,76 @@
 > {success} 200 Good response
 
 ```json
-
+[
+    {
+        "id": 8,
+        "policy_number": "369851",
+        "group_number": "1234",
+        "payment_responsibility_level_code": null,
+        "eff_date": "2020-01-23",
+        "end_date": "2022-01-23",
+        "copay": "200",
+        "release_info": false,
+        "assign_benefits": false,
+        "insurance_plan_id": 2,
+        "created_at": "2022-09-05T06:16:35.000000Z",
+        "updated_at": "2022-09-05T15:04:54.000000Z",
+        "insurance_company_name": "Dsfsdfsfeddsddfg",
+        "insurance_company_id": 1,
+        "subscriber": {
+            "id": 3,
+            "ssn": "85",
+            "member_id": null,
+            "first_name": "F Name",
+            "last_name": "L Name",
+            "created_at": "2022-09-05T05:27:41.000000Z",
+            "updated_at": "2022-09-05T05:27:41.000000Z",
+            "pivot": {
+                "insurance_policy_id": 8,
+                "subscriber_id": 3,
+                "created_at": "2022-09-05T06:16:35.000000Z",
+                "updated_at": "2022-09-05T06:16:35.000000Z"
+            },
+            "addresses": [
+                {
+                    "id": 46,
+                    "address": "Address",
+                    "city": "City",
+                    "state": "state",
+                    "zip": "zip",
+                    "billing_company_id": 2,
+                    "created_at": "2022-09-05T05:27:41.000000Z",
+                    "updated_at": "2022-09-05T05:27:41.000000Z",
+                    "addressable_type": "App\\Models\\Subscriber",
+                    "addressable_id": 3
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 51,
+                    "phone": "phone",
+                    "fax": "fax",
+                    "email": "correo@correo.com",
+                    "billing_company_id": 2,
+                    "created_at": "2022-09-05T05:27:41.000000Z",
+                    "updated_at": "2022-09-05T05:27:41.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\Subscriber",
+                    "contactable_id": 3
+                }
+            ]
+        },
+        "payer_id": "IC-00001-2022",
+        "own": false,
+        "pivot": {
+            "patient_id": 30,
+            "insurance_policy_id": 8,
+            "own_insurance": false,
+            "created_at": "2022-09-05T15:04:54.000000Z",
+            "updated_at": "2022-09-05T15:04:54.000000Z"
+        }
+    }
+]
 ```
 
 #
@@ -1234,26 +1466,71 @@
 
 ```json
 {
-    "insurance_company": 1,
-    "insurance_plan": 2,
-    "policy_number": 13442,
-    "own_insurance": false,
+    "id": 8,
+    "policy_number": "369851",
+    "group_number": "1234",
+    "payment_responsibility_level_code": null,
+    "eff_date": "2020-01-23",
+    "end_date": "2022-01-23",
+    "copay": "200",
+    "release_info": false,
+    "assign_benefits": false,
+    "insurance_plan_id": 2,
+    "created_at": "2022-09-05T06:16:35.000000Z",
+    "updated_at": "2022-09-05T15:04:54.000000Z",
+    "insurance_company_name": "Dsfsdfsfeddsddfg",
+    "insurance_company_id": 1,
     "subscriber": {
-        "ssn": "ssn subscriber",
-        "first_name" : "firstName subscriber",
-        "last_name"  : "lastName subscriber",
-        "address": {
-            "address": "Direction address subscriber",
-            "city": "city address subscriber",
-            "state": "state address subscriber",
-            "zip": "123456789"
+        "id": 3,
+        "ssn": "85",
+        "member_id": null,
+        "first_name": "F Name",
+        "last_name": "L Name",
+        "created_at": "2022-09-05T05:27:41.000000Z",
+        "updated_at": "2022-09-05T05:27:41.000000Z",
+        "pivot": {
+            "insurance_policy_id": 8,
+            "subscriber_id": 3,
+            "created_at": "2022-09-05T06:16:35.000000Z",
+            "updated_at": "2022-09-05T06:16:35.000000Z"
         },
-        "contact": {
-            "phone": "04241234321",
-            "fax": "",
-            "mobile": "",
-            "email": "subscriber@gmail.com"
-        }
+        "addresses": [
+            {
+                "id": 46,
+                "address": "Address",
+                "city": "City",
+                "state": "state",
+                "zip": "zip",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "addressable_type": "App\\Models\\Subscriber",
+                "addressable_id": 3
+            }
+        ],
+        "contacts": [
+            {
+                "id": 51,
+                "phone": "phone",
+                "fax": "fax",
+                "email": "correo@correo.com",
+                "billing_company_id": 2,
+                "created_at": "2022-09-05T05:27:41.000000Z",
+                "updated_at": "2022-09-05T05:27:41.000000Z",
+                "mobile": null,
+                "contactable_type": "App\\Models\\Subscriber",
+                "contactable_id": 3
+            }
+        ]
+    },
+    "payer_id": "IC-00001-2022",
+    "own": false,
+    "pivot": {
+        "patient_id": 30,
+        "insurance_policy_id": 8,
+        "own_insurance": false,
+        "created_at": "2022-09-05T15:04:54.000000Z",
+        "updated_at": "2022-09-05T15:04:54.000000Z"
     }
 }
 ```
