@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -16,16 +16,9 @@ class Subscriber extends Model implements Auditable
 
     protected $fillable = [
         "ssn",
-        "email",
+        "member_id",
         "last_name",
         "first_name",
-        "middle_name",
-        "group_number",
-        "policy_number",
-        "date_of_birth",
-        "gender_id",
-        "billing_company_id",
-        "payment_responsibility_level_code_id"
     ];
 
     /**
@@ -43,19 +36,19 @@ class Subscriber extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function patients()
+    public function patients(): BelongsToMany
     {
         return $this->belongsToMany(Patient::class)->withTimestamps();
     }
 
     /**
-     * Subscriber belongs to InsurancePlans.
+     * Subscriber belongs to InsurancePolicy.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function insurancePlans()
+    public function insurancePolicies(): BelongsToMany
     {
-        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
+        return $this->belongsToMany(InsurancePolicies::class)->withTimestamps();
     }
 
     /**

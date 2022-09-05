@@ -11,8 +11,9 @@
 - [Get one patient by ssn](#get-one-patient-by-ssn)
 - [Update patient](#Update-patient)
 - [Change status patient](#change-status-patient)
-- [Get all patient suscribers](#get-all-patient-suscribers)
+- [Get all patient subscribers](#get-all-patient-subscribers)
 - [Add policy to patient](#add-policy-to-patient)
+- [Edit policy to patient](#edit-policy-to-patient)
 - [Remove policy to patient](#remove-policy-to-patient)
 - [Get policy to patient](#get-policy-to-patient)
 
@@ -30,10 +31,11 @@
 | 4 |GET | `Get one Patient by ssn`            | `/patient/get-by-ssn{ssn}`|yes|Get one Patient by ssn|
 | 5 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
 | 6 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
-| 7 |GET | `Get all patient suscribers`| `/patient/get-suscribers/{ssn_patient}`        |yes            |Get all patient suscribers|
+| 7 |GET | `Get all patient subscribers`| `/patient/get-subscribers/{ssn_patient}`        |yes            |Get all patient subscribers|
 | 8 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
-| 9 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{insurance_plan_id}`|yes|remove policy to patient|
-| 10 |PATCH | `Get policy to patient`           | `/patient/{patient_id}/get-policy/{insurance_plan_id}`|yes|get policy to patient|
+| 9 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
+| 10 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
+| 11 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -127,21 +129,21 @@
             "insurance_company": 1,
             "insurance_plan": 2,
             "own_insurance": false,
-            "suscriber": {
-                "ssn": "ssn suscriber",
-                "first_name" : "firstName suscriber",
-                "last_name"  : "lastName suscriber",
+            "subscriber": {
+                "ssn": "ssn subscriber",
+                "first_name" : "firstName subscriber",
+                "last_name"  : "lastName subscriber",
                 "address": {
-                    "address": "Direction address suscriber",
-                    "city": "city address suscriber",
-                    "state": "state address suscriber",
+                    "address": "Direction address subscriber",
+                    "city": "city address subscriber",
+                    "state": "state address subscriber",
                     "zip": "123456789"
                 },
                 "contact": {
                     "phone": "04241234321",
                     "fax": "",
                     "mobile": "",
-                    "email": "suscriber@gmail.com"
+                    "email": "subscriber@gmail.com"
                 }
             }
         }
@@ -346,10 +348,10 @@
                 "method": "324234",
                 "naic": "324234",
                 "insurance_company_id": 1,
-                "suscriber": {
-                    "ssn": "ssn suscriber",
-                    "first_name" : "firstName suscriber",
-                    "last_name"  : "lastName suscriber",
+                "subscriber": {
+                    "ssn": "ssn subscriber",
+                    "first_name" : "firstName subscriber",
+                    "last_name"  : "lastName subscriber",
                 },
                 "created_at": "2022-03-17T20:45:39.000000Z",
                 "updated_at": "2022-03-17T20:45:39.000000Z"
@@ -562,10 +564,10 @@
             "method": "324234",
             "naic": "324234",
             "insurance_company_id": 1,
-            "suscriber": {
-                "ssn": "ssn suscriber",
-                "first_name" : "firstName suscriber",
-                "last_name"  : "lastName suscriber",
+            "subscriber": {
+                "ssn": "ssn subscriber",
+                "first_name" : "firstName subscriber",
+                "last_name"  : "lastName subscriber",
             },
             "created_at": "2022-03-17T20:45:39.000000Z",
             "updated_at": "2022-03-17T20:45:39.000000Z"
@@ -774,10 +776,10 @@
             "method": "324234",
             "naic": "324234",
             "insurance_company_id": 1,
-            "suscriber": {
-                "ssn": "ssn suscriber",
-                "first_name" : "firstName suscriber",
-                "last_name"  : "lastName suscriber",
+            "subscriber": {
+                "ssn": "ssn subscriber",
+                "first_name" : "firstName subscriber",
+                "last_name"  : "lastName subscriber",
             },
             "created_at": "2022-03-17T20:45:39.000000Z",
             "updated_at": "2022-03-17T20:45:39.000000Z"
@@ -884,21 +886,21 @@
             "insurance_company": 1,
             "insurance_plan": 2,
             "own_insurance": false,
-            "suscriber": {
-                "ssn": "ssn suscriber",
-                "first_name" : "firstName suscriber",
-                "last_name"  : "lastName suscriber",
+            "subscriber": {
+                "ssn": "ssn subscriber",
+                "first_name" : "firstName subscriber",
+                "last_name"  : "lastName subscriber",
                 "address": {
-                    "address": "Direction address suscriber",
-                    "city": "city address suscriber",
-                    "state": "state address suscriber",
+                    "address": "Direction address subscriber",
+                    "city": "city address subscriber",
+                    "state": "state address subscriber",
                     "zip": "123456789"
                 },
                 "contact": {
                     "phone": "04241234321",
                     "fax": "",
                     "mobile": "",
-                    "email": "suscriber@gmail.com"
+                    "email": "subscriber@gmail.com"
                 }
             }
         }
@@ -969,8 +971,8 @@
 
 #
 
-<a name="get-all-patient-suscribers"></a>
-## Get All Patient Suscribers
+<a name="get-all-patient-subscribers"></a>
+## Get All Patient Subscribers
 
 
 ### Param in header
@@ -983,7 +985,7 @@
 
 ## Response
 
-> {success} 200 Patient Suscribers found
+> {success} 200 Patient Subscribers found
 
 #
 
@@ -991,29 +993,29 @@
 [
     {
         "id": 1,
-        "ssn": "ssn suscriber",
-        "first_name": "firstName suscriber",
-        "last_name": "lastName suscriber",
+        "ssn": "ssn subscriber",
+        "first_name": "firstName subscriber",
+        "last_name": "lastName subscriber",
         "billing_company_id": 1,
         "created_at": "2022-04-08T16:03:46.000000Z",
         "updated_at": "2022-04-08T16:03:46.000000Z",
         "pivot": {
             "patient_id": 3,
-            "suscriber_id": 1,
+            "subscriber_id": 1,
             "created_at": "2022-04-08T16:49:25.000000Z",
             "updated_at": "2022-04-08T16:49:25.000000Z"
         },
         "addresses": [
             {
                 "id": 11,
-                "address": "Direction address suscriber",
-                "city": "city address suscriber",
-                "state": "state address suscriber",
+                "address": "Direction address subscriber",
+                "city": "city address subscriber",
+                "state": "state address subscriber",
                 "zip": "123456789",
                 "billing_company_id": 1,
                 "created_at": "2022-04-08T16:49:25.000000Z",
                 "updated_at": "2022-04-08T16:49:25.000000Z",
-                "addressable_type": "App\\Models\\Suscriber",
+                "addressable_type": "App\\Models\\Subscriber",
                 "addressable_id": 1
             }
         ],
@@ -1022,12 +1024,12 @@
                 "id": 12,
                 "phone": "04241234321",
                 "fax": null,
-                "email": "suscriber11@gmail.com",
+                "email": "subscriber11@gmail.com",
                 "billing_company_id": 1,
                 "created_at": "2022-04-08T16:49:25.000000Z",
                 "updated_at": "2022-04-08T16:49:25.000000Z",
                 "mobile": null,
-                "contactable_type": "App\\Models\\Suscriber",
+                "contactable_type": "App\\Models\\Subscriber",
                 "contactable_id": 1
             }
         ]
@@ -1056,21 +1058,21 @@
     "insurance_plan": 2,
     "policy_number": 13442,
     "own_insurance": false,
-    "suscriber": {
-        "ssn": "ssn suscriber",
-        "first_name" : "firstName suscriber",
-        "last_name"  : "lastName suscriber",
+    "subscriber": {
+        "ssn": "ssn subscriber",
+        "first_name" : "firstName subscriber",
+        "last_name"  : "lastName subscriber",
         "address": {
-            "address": "Direction address suscriber",
-            "city": "city address suscriber",
-            "state": "state address suscriber",
+            "address": "Direction address subscriber",
+            "city": "city address subscriber",
+            "state": "state address subscriber",
             "zip": "123456789"
         },
         "contact": {
             "phone": "04241234321",
             "fax": "",
             "mobile": "",
-            "email": "suscriber@gmail.com"
+            "email": "subscriber@gmail.com"
         }
     }
 }
@@ -1110,6 +1112,75 @@
 
 #
 
+<a name="edit-policy-to-patient"></a>
+## Edit policy to patient
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`patient_id required integer`
+`policy_id  required integer`
+
+
+### Body request example 1
+
+```json
+{
+    "insurance_company": 1,
+    "insurance_plan": 1,
+    "policy_number": 12344,
+    "own_insurance": true
+}
+```
+### Body request example 2
+
+```json
+{
+    "insurance_company": 1,
+    "insurance_plan": 2,
+    "policy_number": 13442,
+    "own_insurance": false,
+    "subscriber": {
+        "ssn": "ssn subscriber",
+        "first_name" : "firstName subscriber",
+        "last_name"  : "lastName subscriber",
+        "address": {
+            "address": "Direction address subscriber",
+            "city": "city address subscriber",
+            "state": "state address subscriber",
+            "zip": "123456789"
+        },
+        "contact": {
+            "phone": "04241234321",
+            "fax": "",
+            "mobile": "",
+            "email": "subscriber@gmail.com"
+        }
+    }
+}
+```
+
+## Response
+
+> {success} 200 Good response
+
+```json
+
+```
+
+#
+
+>{warning} 404 error edit policy to patient
+
+#
+
 <a name="remove-policy-to-patient"></a>
 ## Remove policy to patient
 
@@ -1123,8 +1194,8 @@
 
 ## Param in path
 
-`insurance_plan_id required integer`
-`patient_id  required integer`
+`patient_id required integer`
+`policy_id  required integer`
 
 
 ## Response
@@ -1132,14 +1203,7 @@
 > {success} 200 Good response
 
 ```json
-{
-    "id": 1,
-    "driver_license": "driver license",
-    "credit_score": "credit score",
-    "user_id": 1,
-    "created_at": "2022-03-17T20:45:39.000000Z",
-    "updated_at": "2022-03-17T20:45:39.000000Z"
-}
+
 ```
 
 #
@@ -1161,8 +1225,7 @@
 
 ## Param in path
 
-`insurance_plan_id required integer`
-`patient_id  required integer`
+`policy_id  required integer`
 
 
 ## Response
@@ -1175,21 +1238,21 @@
     "insurance_plan": 2,
     "policy_number": 13442,
     "own_insurance": false,
-    "suscriber": {
-        "ssn": "ssn suscriber",
-        "first_name" : "firstName suscriber",
-        "last_name"  : "lastName suscriber",
+    "subscriber": {
+        "ssn": "ssn subscriber",
+        "first_name" : "firstName subscriber",
+        "last_name"  : "lastName subscriber",
         "address": {
-            "address": "Direction address suscriber",
-            "city": "city address suscriber",
-            "state": "state address suscriber",
+            "address": "Direction address subscriber",
+            "city": "city address subscriber",
+            "state": "state address subscriber",
             "zip": "123456789"
         },
         "contact": {
             "phone": "04241234321",
             "fax": "",
             "mobile": "",
-            "email": "suscriber@gmail.com"
+            "email": "subscriber@gmail.com"
         }
     }
 }

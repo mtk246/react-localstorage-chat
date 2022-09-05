@@ -30,21 +30,21 @@ class PatientPolicyRequest extends FormRequest
             'insurance_plan'       => ['required', 'numeric'],
             'own_insurance'        => ['required', 'boolean'],
 
-            'suscriber'            => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'suscriber.ssn'        => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.last_name'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber'            => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'subscriber.ssn'        => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.last_name'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
 
-            'suscriber.address'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'suscriber.address.address' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.address.city'    => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.address.state'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.address.zip'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'subscriber.address.address' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address.city'    => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address.state'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address.zip'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             
-            'suscriber.contact'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'suscriber.contact.phone'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.contact.fax'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'suscriber.contact.email'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'email:rfc'],
+            'subscriber.contact'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'subscriber.contact.phone'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.contact.fax'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.contact.email'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'email:rfc'],
         ];
     }
 }

@@ -17,7 +17,7 @@ class ClaimEligibility extends Model implements Auditable
         "control_number",
         "eligibility",
         "company_id",
-        "suscriber_id",
+        "subscriber_id",
         "insurance_company_id"
     ];
 

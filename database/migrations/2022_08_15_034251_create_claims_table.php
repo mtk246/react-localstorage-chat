@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('facility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('suscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('subscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
 
             $table->timestamps();

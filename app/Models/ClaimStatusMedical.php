@@ -16,7 +16,7 @@ class ClaimStatusMedical extends Model implements Auditable
     protected $fillable = [
         "control_number",
         "company_id",
-        "suscriber_id",
+        "subscriber_id",
         "insurance_company_id"
     ];
 

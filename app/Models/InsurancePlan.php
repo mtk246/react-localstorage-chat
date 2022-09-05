@@ -121,13 +121,23 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * InsurancePlan has many InsurePolicies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function insurancePolicies()
+    {
+        return $this->hasMany(InsurancePolicy::class);
+    }
+
+    /**
      * InsurancePlan belongs to Patients.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function patients(): BelongsToMany
     {
-        return $this->belongsToMany(Patient::class)->withPivot('policy_number', 'status', 'own_insurance')->withTimestamps();
+        return $this->belongsToMany(Patient::class)->withPivot('status')->withTimestamps();
     }
 
     /**
@@ -138,16 +148,6 @@ class InsurancePlan extends Model implements Auditable
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class)->withPivot('price', 'aliance')->withTimestamps();
-    }
-
-    /**
-     * InsurancePlan belongs to Suscribers.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function suscribers(): BelongsToMany
-    {
-        return $this->belongsToMany(Suscriber::class)->withTimestamps();
     }
 
     /**

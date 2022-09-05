@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('eligibility', 50);
             
             $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('suscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('subscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });

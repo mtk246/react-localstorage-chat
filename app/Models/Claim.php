@@ -21,7 +21,7 @@ class Claim extends Model implements Auditable
         "submitter_phone",
         "company_id",
         "facility_id",
-        "suscriber_id",
+        "subscriber_id",
         "insurance_company_id"
     ];
 

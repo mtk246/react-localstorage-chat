@@ -71,7 +71,7 @@ class Patient extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['insurance_policies', 'status', 'last_modified'];
+    protected $appends = ['status', 'last_modified'];
 
     /**
      * The billingCompanies that belong to the patient.
@@ -185,13 +185,13 @@ class Patient extends Model implements Auditable
     }
 
     /**
-     * Patient belongs to Suscribers.
+     * Patient belongs to Subscribers.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function suscribers()
+    public function subscribers()
     {
-        return $this->belongsToMany(Suscriber::class)->withTimestamps();
+        return $this->belongsToMany(Subscriber::class)->withTimestamps();
     }
 
     /**
@@ -211,36 +211,17 @@ class Patient extends Model implements Auditable
      */
     public function insurancePlans()
     {
-        return $this->belongsToMany(InsurancePlan::class)->withPivot('policy_number', 'status', 'own_insurance')->withTimestamps();
+        return $this->belongsToMany(InsurancePlan::class)->withPivot('status')->withTimestamps();
     }
 
-    /*
-     * Get the insurance policies patient.
+    /**
+     * The insurancePlans that belong to the Patient.
      *
-     * @return array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function getInsurancePoliciesAttribute()
+    public function insurancePolicies()
     {
-        $insurancePolicies = [];
-        foreach ($this->insurancePlans as $insurancePlan) {
-            if (isset($insurancePlan['suscribers']['0'])) {
-                $insurancePlan['suscribers']['0']->load(['addresses', 'contacts']);
-            }
-            if (isset($insurancePlan['insurance_company_id'])) {
-                $insurancePlan->load(['insuranceCompany']);
-            }
-            array_push($insurancePolicies, [
-                'insurance_company_name' => $insurancePlan['insuranceCompany']['name'] ?? '',
-                'payer_id'               => $insurancePlan['insuranceCompany']['code'] ?? '',
-                'policy_number'          => $insurancePlan['pivot']['policy_number'] ?? '',
-                'insurance_company_id'   => $insurancePlan['insurance_company_id'],
-                'insurance_plan_id'      => $insurancePlan['id'],
-                'own'                    => $insurancePlan['pivot']['own_insurance'],
-                'suscriber'              => $insurancePlan['suscribers']['0'] ?? null
-            ]);
-            
-        }
-        return $insurancePolicies;
+        return $this->belongsToMany(InsurancePolicy::class)->withPivot('own_insurance')->withTimestamps();
     }
 
     /*

@@ -272,10 +272,11 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{id}",[\App\Http\Controllers\PatientController::class,"updatePatient"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\PatientController::class,'changeStatus']);
         Route::patch("/add-policy-to-patient/{id}",[\App\Http\Controllers\PatientController::class,'addPolicy']);
-        Route::patch("/{patient_id}/remove-policy/{insurance_plan_id}",[\App\Http\Controllers\PatientController::class,'removePolicy']);
-        Route::get("/{patient_id}/get-policy/{insurance_plan_id}",[\App\Http\Controllers\PatientController::class,'getPolicy']);
+        Route::patch("/{patient_id}/remove-policy/{policy_id}",[\App\Http\Controllers\PatientController::class,'removePolicy']);
+        Route::patch("/{patient_id}/edit-policy/{policy_id}",[\App\Http\Controllers\PatientController::class,'editPolicy']);
+        Route::get("/{patient_id}/get-policy/{policy_id}",[\App\Http\Controllers\PatientController::class,'getPolicy']);
 
-        Route::get("/get-suscribers/{ssn_patient}",[\App\Http\Controllers\PatientController::class,"getAllSuscribers"]);
+        Route::get("/get-subscribers/{ssn_patient}",[\App\Http\Controllers\PatientController::class,"getAllSubscribers"]);
     });
 
     Route::prefix("taxonomy")->middleware([
@@ -358,6 +359,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/{id}",[\App\Http\Controllers\ProcedureController::class,"updateProcedure"]);
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ProcedureController::class,'changeStatus']);
         Route::patch("/add-to-company/{company_id}",[\App\Http\Controllers\ProcedureController::class,'addToCompany']);
+        Route::get("/get-to-company/{company_id}",[\App\Http\Controllers\ProcedureController::class,'getToCompany']);
     });
 
 

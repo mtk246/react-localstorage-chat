@@ -681,4 +681,21 @@ class ProcedureRepository
             return $e;
         }
     }
+
+    /**
+     * @param  int $id
+     * @return Company|Builder|Model|object|null
+     */
+    public function getToCompany(int $companyId) {
+        $procedures = Procedure::whereHas('companies', function ($query) use ($companyId) {
+            $query->where('company_id', $companyId);
+        })->get();
+        return $procedures;
+        $records = MacLocality::whereHas('procedures', function ($query) use ($companyId){
+            $query->whereHas('companies', function($q) use ($companyId) {
+                $q->where('company_id', $companyId);
+            });
+        })->get();
+        return $records;
+    }
 }

@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_status_medicals', function (Blueprint $table) {
+        Schema::create('insurance_policy_subscriber', function (Blueprint $table) {
             $table->id();
-            $table->string('control_number', 9);
-            $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('subscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('insurance_policy_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_status_medicals');
+        Schema::dropIfExists('insurance_policy_subscriber');
     }
 };

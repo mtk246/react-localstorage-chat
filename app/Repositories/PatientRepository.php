@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
+use App\Models\InsurancePolicy;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\Patient;
@@ -25,7 +26,7 @@ use App\Models\Marital;
 use App\Models\Guarantor;
 use App\Models\Employment;
 use App\Models\EmergencyContact;
-use App\Models\Suscriber;
+use App\Models\Subscriber;
 use App\Models\User;
 use App\Roles\Models\Role;
 
@@ -236,57 +237,72 @@ class PatientRepository
                 }
 
                 /** Attach new insurance plan*/
-                foreach ($data["insurance_policies"] as $insurancePolicy) {
+                foreach ($data["insurance_policies"] as $insurance_policy) {
 
                     /** Attached patient to insurance plan */
-                    $insurancePlan = InsurancePlan::find($insurancePolicy["insurance_plan"]);
+                    $insurancePlan = InsurancePlan::find($insurance_policy["insurance_plan"]);
 
-                    if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
-                        $patient->insurancePlans()->attach($insurancePlan->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"],
-                            'policy_number' => $insurancePolicy["policy_number"]
+                    $insurancePolicy = InsurancePolicy::firstOrCreate([
+                        'policy_number'     => $insurance_policy["policy_number"],
+                        'insurance_plan_id' => $insurancePlan->id
+                    ]);
+
+                    /** Attach insurance policy to patient */
+                    if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                            'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     } else {
-                        $patient->insurancePlans()->updateExistingPivot($insurancePlan->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"],
-                            'policy_number' => $insurancePolicy["policy_number"]
+                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                            'own_insurance' => $insurancePolicy["own_insurance"]
                         ]);
                     }
-                    if ($insurancePolicy["own_insurance"] == false) {
+                    
+                    if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
+                        $patient->insurancePlans()->attach($insurancePlan->id);
+                    }
+
+                    if ($insurance_policy["own_insurance"] == false) {
 
                         /** The subscriber is searched for each billing company */
-                        $suscriber = Suscriber::firstOrCreate([
-                            "ssn"                => $insurancePolicy["suscriber"]["ssn"],
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany
+                        $subscriber = Subscriber::firstOrCreate([
+                            "ssn"         => $insurance_policy["subscriber"]["ssn"]
                         ], [
-                            "first_name" => $insurancePolicy["suscriber"]["first_name"],
-                            "last_name" => $insurancePolicy["suscriber"]["last_name"]
+                            "first_name" => $insurance_policy["subscriber"]["first_name"],
+                            "last_name" => $insurance_policy["subscriber"]["last_name"]
                         ]);
 
-                        if (isset($suscriber)) {
+                        if (isset($subscriber)) {
                             /** Create Contact */
-                            if (isset($insurancePolicy["suscriber"]['contact'])) {
-                                $insurancePolicy["suscriber"]["contact"]["contactable_id"]     = $suscriber->id;
-                                $insurancePolicy["suscriber"]["contact"]["contactable_type"]   = Suscriber::class;
-                                $insurancePolicy["suscriber"]["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                                Contact::create($insurancePolicy["suscriber"]["contact"]);
+                            if (isset($insurance_policy["subscriber"]['contact'])) {
+                                Contact::updateOrCreate([
+                                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                                    "contactable_id"     => $subscriber->id,
+                                    "contactable_type"   => Subscriber::class
+                                ], $insurance_policy["subscriber"]["contact"]);
                             }
 
                             /** Create Address */
-                            if (isset($insurancePolicy["suscriber"]['address'])) {
-                                $insurancePolicy["suscriber"]["address"]["addressable_id"]     = $suscriber->id;
-                                $insurancePolicy["suscriber"]["address"]["addressable_type"]   = Suscriber::class;
-                                $insurancePolicy["suscriber"]["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                                Address::create($insurancePolicy["suscriber"]["address"]);
+                            if (isset($insurance_policy["subscriber"]['address'])) {
+                                Address::updateOrCreate([
+                                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                                    "addressable_id"     => $subscriber->id,
+                                    "addressable_type"   => Subscriber::class
+                                ], $insurance_policy["subscriber"]["address"]);
                             }
-                            /** Attached patient to suscriber */
-                            if (is_null($patient->suscribers()->find($suscriber->id))) {
-                                $patient->suscribers()->attach($suscriber->id);
+                            /** Attached patient to subscriber */
+                            if (is_null($patient->subscribers()->find($subscriber->id))) {
+                                $patient->subscribers()->attach($subscriber->id);
                             }
                             
-                            /** Attached suscriber to insurance plan */
-                            if (is_null($suscriber->insurancePlans()->find($insurancePolicy["insurance_plan"]))) {
-                                $suscriber->insurancePlans()->attach($insurancePolicy["insurance_plan"]);
+                            /** Attached subscriber to insurance plan */
+                            /**if (is_null($subscriber->insurancePlans()->find($insurance_policy["insurance_plan"]))) {
+                                $subscriber->insurancePlans()->attach($insurance_policy["insurance_plan"]);
+                            }*/
+
+                            /** Attached patient to subscriber */
+                            if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
+                                $insurancePolicy->subscribers()->attach($subscriber->id);
                             }
                         }
                     }
@@ -342,14 +358,10 @@ class PatientRepository
             "emergencyContacts",
             "publicNote",
             "privateNotes",
+            "insurancePolicies",
             "insurancePlans" => function ($query) use ($id) {
                 $query->with([
-                    "insuranceCompany",
-                    "suscribers" => function ($q) use ($id) {
-                        $q->with('addresses', 'contacts')->whereHas('patients', function ($qq) use ($id) {
-                            $qq->where('patient_id', $id);
-                        });
-                    }
+                    "insuranceCompany"
                 ]);
             }
         ])->find($id);
@@ -388,12 +400,7 @@ class PatientRepository
             "privateNotes",
             "insurancePlans" => function ($query) use ($id) {
                 $query->with([
-                    "insuranceCompany",
-                    "suscribers" => function ($q) use ($id) {
-                        $q->with('addresses', 'contacts')->whereHas('patients', function ($qq) use ($id) {
-                            $qq->where('patient_id', $id);
-                        });
-                    }
+                    "insuranceCompany"
                 ]);
             }
         ])->find($id);
@@ -421,8 +428,9 @@ class PatientRepository
             "emergencyContacts",
             "publicNote",
             "privateNotes",
+            "insurancePolicies",
             "insurancePlans" => function ($query) {
-                $query->with("insuranceCompany", "suscribers");
+                $query->with("insuranceCompany");
             }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
@@ -449,7 +457,7 @@ class PatientRepository
             "publicNote",
             "privateNotes",
             "insurancePlans" => function ($query) {
-                $query->with("insuranceCompany", "suscribers");
+                $query->with("insuranceCompany");
             }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
 
@@ -687,58 +695,71 @@ class PatientRepository
                 }
 
                 /** Attach new insurance plan*/
-                foreach ($data["insurance_policies"] as $insurancePolicy) {
-
+                foreach ($data["insurance_policies"] as $insurance_policy) {
                     /** Attached patient to insurance plan */
-                    $insurancePlan = InsurancePlan::find($insurancePolicy["insurance_plan"]);
+                    $insurancePlan = InsurancePlan::find($insurance_policy["insurance_plan"]);
 
-                    if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
-                        $patient->insurancePlans()->attach($insurancePlan->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"],
-                            'policy_number' => $insurancePolicy["policy_number"]
+                    $insurancePolicy = InsurancePolicy::firstOrCreate([
+                        'policy_number'     => $insurance_policy["policy_number"],
+                        'insurance_plan_id' => $insurancePlan->id
+                    ]);
+
+                    /** Attach insurance policy to patient */
+                    if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                            'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     } else {
-                        $patient->insurancePlans()->updateExistingPivot($insurancePlan->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"],
-                            'policy_number' => $insurancePolicy["policy_number"]
+                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                            'own_insurance' => $insurancePolicy["own_insurance"]
                         ]);
                     }
-                    if ($insurancePolicy["own_insurance"] == false) {
+                    
+                    if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
+                        $patient->insurancePlans()->attach($insurancePlan->id);
+                    }
+
+                    if ($insurance_policy["own_insurance"] == false) {
 
                         /** The subscriber is searched for each billing company */
-                        $suscriber = Suscriber::updateOrCreate([
-                            "ssn"                => $insurancePolicy["suscriber"]["ssn"],
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany
+                        $subscriber = Subscriber::firstOrCreate([
+                            "ssn"         => $insurance_policy["subscriber"]["ssn"]
                         ], [
-                            "first_name" => $insurancePolicy["suscriber"]["first_name"],
-                            "last_name" => $insurancePolicy["suscriber"]["last_name"]
+                            "first_name" => $insurance_policy["subscriber"]["first_name"],
+                            "last_name" => $insurance_policy["subscriber"]["last_name"]
                         ]);
 
-                        if (isset($suscriber)) {
+                        if (isset($subscriber)) {
                             /** Create Contact */
-                            if (isset($insurancePolicy["suscriber"]['contact'])) {
+                            if (isset($insurance_policy["subscriber"]['contact'])) {
                                 Contact::updateOrCreate([
                                     "billing_company_id" => $billingCompany->id ?? $billingCompany,
-                                    "contactable_id"     => $suscriber->id,
-                                    "contactable_type"   => Suscriber::class
-                                ], $insurancePolicy["suscriber"]['contact']);
+                                    "contactable_id"     => $subscriber->id,
+                                    "contactable_type"   => Subscriber::class
+                                ], $insurance_policy["subscriber"]["contact"]);
                             }
 
-                            if (isset($insurancePolicy["suscriber"]['address'])) {
+                            /** Create Address */
+                            if (isset($insurance_policy["subscriber"]['address'])) {
                                 Address::updateOrCreate([
                                     "billing_company_id" => $billingCompany->id ?? $billingCompany,
-                                    "addressable_id"     => $suscriber->id,
-                                    "addressable_type"   => User::class
-                                ], $insurancePolicy["suscriber"]["address"]);
+                                    "addressable_id"     => $subscriber->id,
+                                    "addressable_type"   => Subscriber::class
+                                ], $insurance_policy["subscriber"]["address"]);
                             }
-                            /** Attached patient to suscriber */
-                            if (is_null($patient->suscribers()->find($suscriber->id))) {
-                                $patient->suscribers()->attach($suscriber->id);
+                            /** Attached patient to subscriber */
+                            if (is_null($patient->subscribers()->find($subscriber->id))) {
+                                $patient->subscribers()->attach($subscriber->id);
                             }
                             
-                            /** Attached suscriber to insurance plan */
-                            if (is_null($suscriber->insurancePlans()->find($insurancePolicy["insurance_plan"]))) {
-                                $suscriber->insurancePlans()->attach($insurancePolicy["insurance_plan"]);
+                            /** Attached subscriber to insurance plan */
+                            /**if (is_null($subscriber->insurancePlans()->find($insurance_policy["insurance_plan"]))) {
+                                $subscriber->insurancePlans()->attach($insurance_policy["insurance_plan"]);
+                            }*/
+
+                            /** Attached patient to subscriber */
+                            if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
+                                $insurancePolicy->subscribers()->attach($subscriber->id);
                             }
                         }
                     }
@@ -757,16 +778,16 @@ class PatientRepository
     /**
      * @return Builder[]|Collection
      */
-    public function getAllSuscribers(string $ssn) {
+    public function getAllSubscribers(string $ssn) {
         $patient = Patient::whereHas('user', function ($query) use ($ssn) {
             $query->whereHas('profile', function ($q) use ($ssn) {
                 $q->where('ssn', $ssn);
             });
-        })->with(['suscribers' => function ($query) {
+        })->with(['subscribers' => function ($query) {
             $query->with('addresses', 'contacts');
         }])->first();
 
-        return $patient->suscribers ?? [];
+        return $patient->subscribers ?? [];
     }
 
     /**
@@ -805,89 +826,169 @@ class PatientRepository
             /** Attached patient to insurance plan */
             $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
 
-            if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
-                $patient->insurancePlans()->attach($insurancePlan->id, [
-                    'own_insurance' => $data["own_insurance"],
-                    'policy_number' => $data["policy_number"]
-                ]);
-            } else {
-                $patient->insurancePlans()->updateExistingPivot($insurancePlan->id, [
-                    'own_insurance' => $data["own_insurance"],
-                    'policy_number' => $data["policy_number"]
+            $insurancePolicy = InsurancePolicy::firstOrCreate([
+                'policy_number'     => $data["policy_number"],
+                'insurance_plan_id' => $insurancePlan->id
+            ]);
+
+            /** Attach insurance policy to patient */
+            if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+                $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                    'own_insurance' => $data["own_insurance"]
                 ]);
             }
+            
+            if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
+                $patient->insurancePlans()->attach($insurancePlan->id);
+            }
+
             if ($data["own_insurance"] == false) {
 
                 /** The subscriber is searched for each billing company */
-                $suscriber = Suscriber::firstOrCreate([
-                    "ssn"                => $data["suscriber"]["ssn"],
-                    "billing_company_id" => $billingCompany->id ?? $billingCompany
+                $subscriber = Subscriber::firstOrCreate([
+                    "ssn"         => $data["subscriber"]["ssn"]
                 ], [
-                    "first_name" => $data["suscriber"]["first_name"],
-                    "last_name" => $data["suscriber"]["last_name"]
+                    "first_name" => $data["subscriber"]["first_name"],
+                    "last_name" => $data["subscriber"]["last_name"]
                 ]);
 
-                if (isset($suscriber)) {
+                if (isset($subscriber)) {
                     /** Create Contact */
-                    if (isset($data["suscriber"]['contact'])) {
-                        $data["suscriber"]["contact"]["contactable_id"]     = $suscriber->id;
-                        $data["suscriber"]["contact"]["contactable_type"]   = Suscriber::class;
-                        $data["suscriber"]["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                        Contact::create($data["suscriber"]["contact"]);
+                    if (isset($data["subscriber"]['contact'])) {
+                        Contact::updateOrCreate([
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                            "contactable_id"     => $subscriber->id,
+                            "contactable_type"   => Subscriber::class
+                        ], $data["subscriber"]["contact"]);
                     }
 
                     /** Create Address */
-                    if (isset($data["suscriber"]['address'])) {
-                        $data["suscriber"]["address"]["addressable_id"]     = $suscriber->id;
-                        $data["suscriber"]["address"]["addressable_type"]   = Suscriber::class;
-                        $data["suscriber"]["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                        Address::create($data["suscriber"]["address"]);
+                    if (isset($data["subscriber"]['address'])) {
+                        Address::updateOrCreate([
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                            "addressable_id"     => $subscriber->id,
+                            "addressable_type"   => Subscriber::class
+                        ], $data["subscriber"]["address"]);
                     }
-                    /** Attached patient to suscriber */
-                    if (is_null($patient->suscribers()->find($suscriber->id))) {
-                        $patient->suscribers()->attach($suscriber->id);
+                    /** Attached patient to subscriber */
+                    if (is_null($patient->subscribers()->find($subscriber->id))) {
+                        $patient->subscribers()->attach($subscriber->id);
                     }
                     
-                    /** Attached suscriber to insurance plan */
-                    if (is_null($suscriber->insurancePlans()->find($data["insurance_plan"]))) {
-                        $suscriber->insurancePlans()->attach($data["insurance_plan"]);
+                    /** Attached subscriber to insurance plan */
+                    /**if (is_null($subscriber->insurancePlans()->find($data["insurance_plan"]))) {
+                        $subscriber->insurancePlans()->attach($data["insurance_plan"]);
+                    }*/
+
+                    /** Attached patient to subscriber */
+                    if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
+                        $insurancePolicy->subscribers()->attach($subscriber->id);
                     }
                 }
             }
 
             DB::commit();
-            return $patient;
+            return $patient->insurancePolicies()->find($insurancePolicy->id);
         } catch (\Exception $e) {
             DB::rollBack();
             return null;
         }
     }
 
-    public function removePolicy(int $insurance_plan_id, int $id)
+    public function removePolicy(int $insurance_policy_id, int $patient_id)
     {
-        $patient = Patient::find($id);
-        $insurancePlan = $patient->insurancePlans()->find($insurance_plan_id);
-        /** Detach Insurance plan */
-        if ($insurancePlan) {
-            $patient->insurancePlans()->detach($insurance_plan_id);
+        $patient = Patient::find($patient_id);
+        $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
+
+        if (count($insurancePolicy->patients) > 1) {
+            $insurancePolicy->patients()->detach($patient_id);
+        } else {
+            $patient = $insurancePolicy->patients()->find($patient_id);
+            /** Detach Insurance policy */
+            if ($patient) {
+                $insurancePolicy->patients()->detach();
+                $insurancePolicy->subscribers()->detach();
+                $insurancePolicy->delete();
+            }
         }
-        return $patient;
+        return $patient->insurancePolicies ?? [];
     }
 
-    public function getPolicy(int $insurance_plan_id, int $id)
+    public function editPolicy(array $data, int $insurance_policy_id, int $patient_id)
     {
-        $patient = Patient::find($id);
-        $insurancePlan = $patient->insurancePlans()->find($insurance_plan_id);
-        if (isset($insurancePlan['suscribers']['0'])) {
-            $insurancePlan['suscribers']['0']->load(['addresses', 'contacts']);
+        $patient = Patient::find($patient_id);
+        $billingCompany = $patient->user->billingCompanies->first();
+        $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
+        $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
+
+        $insurancePolicy->update([
+            'policy_number'     => $data["policy_number"],
+            'insurance_plan_id' => $insurancePlan->id
+        ]);
+
+        /** Attach insurance policy to patient */
+        if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+            $patient->insurancePolicies()->attach($insurancePolicy->id, [
+                'own_insurance' => $data["own_insurance"]
+            ]);
+        } else {
+            $patient->insurancePolicies()->updateExistingPivot($insurancePolicy->id, [
+                'own_insurance' => $data["own_insurance"]
+            ]);
         }
-        $data = [
-            'insurance_company_id' => $insurancePlan['insurance_company_id'],
-            'insurance_plan_id'    => $insurancePlan['id'],
-            'policy_number'        => $insurancePlan['pivot']['policy_number'] ?? '',
-            'own'                  => $insurancePlan['pivot']['own_insurance'],
-            'suscriber'            => $insurancePlan['suscribers']['0'] ?? null
-        ];
-        return $data;
+
+        if ($data["own_insurance"] == false) {
+
+            /** The subscriber is searched for each billing company */
+            $subscriber = Subscriber::firstOrCreate([
+                "ssn"                => $data["subscriber"]["ssn"]
+            ], [
+                "first_name" => $data["subscriber"]["first_name"],
+                "last_name"  => $data["subscriber"]["last_name"]
+            ]);
+
+            if (isset($subscriber)) {
+                /** Create Contact */
+                if (isset($data["subscriber"]['contact'])) {
+                    Contact::updateOrCreate([
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                        "contactable_id"     => $subscriber->id,
+                        "contactable_type"   => Subscriber::class
+                    ], $data["subscriber"]["contact"]);
+                }
+
+                /** Create Address */
+                if (isset($data["subscriber"]['address'])) {
+                    Address::updateOrCreate([
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                        "addressable_id"     => $subscriber->id,
+                        "addressable_type"   => Subscriber::class
+                    ], $data["subscriber"]['address']);
+                }
+                /** Attached patient to subscriber */
+                if (is_null($patient->subscribers()->find($subscriber->id))) {
+                    $patient->subscribers()->attach($subscriber->id);
+                }
+                
+                /** Attached subscriber to insurance plan */
+                /**if (is_null($subscriber->insurancePlans()->find($data["insurance_plan"]))) {
+                    $subscriber->insurancePlans()->attach($data["insurance_plan"]);
+                }*/
+
+                /** Attached patient to subscriber */
+                if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
+                    $insurancePolicy->subscribers()->attach($subscriber->id);
+                }
+            }
+        }
+
+        return $patient->insurancePolicies ?? [];
+    }
+
+    public function getPolicy(int $insurance_policy_id, int $patient_id)
+    {
+        $patient = Patient::find($patient_id);
+        $insurancePolicy = $patient->insurancePolicies()->find($insurance_policy_id);
+        return $insurancePolicy;
     }
 }
