@@ -719,7 +719,9 @@ class ProcedureRepository
                     'insurance_plan_procedure' => [
                         'price'                  => $procedure['insurancePlans']['0']['pivot']['price'],
                         'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'],
-                        'insurance_label_fee_id' => $procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id']
+                        'insurance_label_fee_id' => $procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id'],
+                        'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'],
+                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id']
                     ]
                 ]);
             }
