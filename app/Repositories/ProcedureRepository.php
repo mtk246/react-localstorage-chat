@@ -687,15 +687,39 @@ class ProcedureRepository
      * @return Company|Builder|Model|object|null
      */
     public function getToCompany(int $companyId) {
+        $mac_localities = [];
         $procedures = Procedure::whereHas('companies', function ($query) use ($companyId) {
             $query->where('company_id', $companyId);
-        })->with(['macLocalities', 'macLocalities.procedureFees'])->get();
-        return $procedures;
-        $records = MacLocality::whereHas('procedures', function ($query) use ($companyId) {
-            $query->whereHas('companies', function($q) use ($companyId) {
-                $q->where('company_id', $companyId);
-            });
-        })->get();
-        return $records;
+        })->with(['companies', 'insurancePlans', 'macLocalities', 'macLocalities.procedureFees', 'macLocalities.procedureFees.insuranceLabelFee'])->get();
+
+        foreach ($procedures as $procedure) {
+            foreach ($procedure['macLocalities'] as $macL) {
+                $fees = [];
+                foreach ($macL['procedureFees'] as $procedureFee) {
+                    $fees[$procedureFee['insuranceLabelFee']['description']] = $procedureFee['fee'];
+                }
+                array_push($mac_localities, [
+                    'procedure_id'    => $macL['pivot']['procedure_id'],
+                    'modifier_id'     => $macL['pivot']['modifier_id'],
+                    'mac'             => $macL['mac'],
+                    'state'           => $macL['state'],
+                    'fsa'             => $macL['fsa'],
+                    'counties'        => $macL['counties'],
+                    'locality_number' => $macL['locality_number'],
+                    'procedure_fees'  => $fees,
+                    'company_procedure' => [
+                        'price'                  => $procedure['companies']['0']['pivot']['price'],
+                        'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'],
+                        'insurance_label_fee_id' => $procedure['companies']['0']['pivot']['insurance_label_fee_id']
+                    ],
+                    'insurance_plan_procedure' => [
+                        'price'                  => $procedure['insurancePlans']['0']['pivot']['price'],
+                        'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'],
+                        'insurance_label_fee_id' => $procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id']
+                    ]
+                ]);
+            }
+        }
+        return $mac_localities;
     }
 }
