@@ -48,7 +48,6 @@
 ```json
 {
     "driver_license": "Driver License",
-    "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
     "companies": [1,3],
     "public_note": "Some note publics",
@@ -129,11 +128,19 @@
             "end_date": "2022-01-23",  //optional
             "release_info": false,
             "assign_benefits": false,
-            "own_insurance": true
+            "own_insurance": true,
+            "subscriber": null
         },
         {
             "insurance_company": 1,
             "insurance_plan": 2,
+            "policy_number": 12344,
+            "copay": 200,  //optional
+            "group_number": 1234, //optional
+            "eff_date": "2020-01-23",
+            "end_date": "2022-01-23",  //optional
+            "release_info": false,
+            "assign_benefits": false,
             "own_insurance": false,
             "subscriber": {
                 "ssn": "ssn subscriber",
@@ -178,7 +185,6 @@
 {
     "id": 1,
     "driver_license": "driver license",
-    "credit_score": "credit score",
     "user_id": 1,
     "created_at": "2022-03-17T20:45:39.000000Z",
     "updated_at": "2022-03-17T20:45:39.000000Z"
@@ -211,7 +217,6 @@
     {
         "id": 1,
         "driver_license": "driver license",
-        "credit_score": "credit score",
         "user_id": 1,
         "user": {
             "id": 1,
@@ -333,36 +338,6 @@
                 "updated_at": "2022-04-20T21:53:26.000000Z"
             }
         ],
-        "insurance_plans": [
-            {
-                "id": 1,
-                "code": "663611",
-                "name": "sdafdasf",
-                "ins_type": "dfssdfads",
-                "cap_group": "3242",
-                "accept_assign": true,
-                "pre_authorization": true,
-                "file_zero_changes": false,
-                "referral_required": true,
-                "accrue_patient_resp": true,
-                "require_abn": true,
-                "pqrs_eligible": true,
-                "allow_attached_files": true,
-                "eff_date": "2022-03-17",
-                "charge_using": "324234",
-                "format": "d-m-y",
-                "method": "324234",
-                "naic": "324234",
-                "insurance_company_id": 1,
-                "subscriber": {
-                    "ssn": "ssn subscriber",
-                    "first_name" : "firstName subscriber",
-                    "last_name"  : "lastName subscriber",
-                },
-                "created_at": "2022-03-17T20:45:39.000000Z",
-                "updated_at": "2022-03-17T20:45:39.000000Z"
-            }
-        ],
         "created_at": "2022-03-17T20:45:39.000000Z",
         "updated_at": "2022-03-17T20:45:39.000000Z"
     }
@@ -403,7 +378,6 @@
 {
     "id": 1,
     "driver_license": "driver license",
-    "credit_score": "credit score",
     "user_id": 1,
     "user": {
         "id": 1,
@@ -547,36 +521,6 @@
             "publishable_id": 1,
             "created_at": "2022-04-20T21:53:26.000000Z",
             "updated_at": "2022-04-20T21:53:26.000000Z"
-        }
-    ],
-    "insurance_plans": [
-        {
-            "id": 1,
-            "code": "663611",
-            "name": "sdafdasf",
-            "ins_type": "dfssdfads",
-            "cap_group": "3242",
-            "accept_assign": true,
-            "pre_authorization": true,
-            "file_zero_changes": false,
-            "referral_required": true,
-            "accrue_patient_resp": true,
-            "require_abn": true,
-            "pqrs_eligible": true,
-            "allow_attached_files": true,
-            "eff_date": "2022-03-17",
-            "charge_using": "324234",
-            "format": "d-m-y",
-            "method": "324234",
-            "naic": "324234",
-            "insurance_company_id": 1,
-            "subscriber": {
-                "ssn": "ssn subscriber",
-                "first_name" : "firstName subscriber",
-                "last_name"  : "lastName subscriber",
-            },
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
         }
     ],
     "created_at": "2022-03-17T20:45:39.000000Z",
@@ -615,7 +559,6 @@
 {
     "id": 1,
     "driver_license": "driver license",
-    "credit_score": "credit score",
     "user_id": 1,
     "user": {
         "id": 1,
@@ -761,36 +704,6 @@
             "updated_at": "2022-04-20T21:53:26.000000Z"
         }
     ],
-    "insurance_plans": [
-        {
-            "id": 1,
-            "code": "663611",
-            "name": "sdafdasf",
-            "ins_type": "dfssdfads",
-            "cap_group": "3242",
-            "accept_assign": true,
-            "pre_authorization": true,
-            "file_zero_changes": false,
-            "referral_required": true,
-            "accrue_patient_resp": true,
-            "require_abn": true,
-            "pqrs_eligible": true,
-            "allow_attached_files": true,
-            "eff_date": "2022-03-17",
-            "charge_using": "324234",
-            "format": "d-m-y",
-            "method": "324234",
-            "naic": "324234",
-            "insurance_company_id": 1,
-            "subscriber": {
-                "ssn": "ssn subscriber",
-                "first_name" : "firstName subscriber",
-                "last_name"  : "lastName subscriber",
-            },
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
-        }
-    ],
     "created_at": "2022-03-17T20:45:39.000000Z",
     "updated_at": "2022-03-17T20:45:39.000000Z"
 }
@@ -807,7 +720,6 @@
 ```json
 {
     "driver_license": "Driver License",
-    "credit_score": "Credit Score",
     "billing_company_id": 1, /** Only required by superuser */
     "companies": [1,3],
     "public_note": "Note public",
@@ -890,13 +802,21 @@
             "end_date": "2022-01-23",  //optional
             "release_info": false,
             "assign_benefits": false,
-            "own_insurance": true
+            "own_insurance": true,
+            "subscriber": null
         },
         {
             "insurance_company_name": "Name Company",
             "payer_id": "Code Company",
             "insurance_company": 1,
             "insurance_plan": 2,
+            "policy_number": 12344,
+            "copay": 200,  //optional
+            "group_number": 1234, //optional
+            "eff_date": "2020-01-23",
+            "end_date": "2022-01-23",  //optional
+            "release_info": false,
+            "assign_benefits": false,
             "own_insurance": false,
             "subscriber": {
                 "ssn": "ssn subscriber",
@@ -941,7 +861,6 @@
 {
     "id": 1,
     "driver_license": "driver license",
-    "credit_score": "credit score",
     "user_id": 1,
     "created_at": "2022-03-17T20:45:39.000000Z",
     "updated_at": "2022-03-17T20:45:39.000000Z"
@@ -1065,7 +984,8 @@
     "end_date": "2022-01-23",  //optional
     "release_info": false,
     "assign_benefits": false,
-    "own_insurance": true
+    "own_insurance": true,
+    "subscriber": null
 }
 ```
 ### Body request example 2
@@ -1226,7 +1146,8 @@
     "end_date": "2022-01-23",  //optional
     "release_info": false,
     "assign_benefits": false,
-    "own_insurance": true
+    "own_insurance": true,
+    "subscriber": null
 }
 ```
 ### Body request example 2
