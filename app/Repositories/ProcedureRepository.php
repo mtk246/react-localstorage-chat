@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 use App\Models\InsuranceLabelFee;
@@ -688,15 +689,18 @@ class ProcedureRepository
      */
     public function getToCompany(int $companyId) {
         $mac_localities = [];
+        $labelFees = getList(InsuranceLabelFee::class, 'description');
         $procedures = Procedure::whereHas('companies', function ($query) use ($companyId) {
             $query->where('company_id', $companyId);
         })->with(['companies', 'insurancePlans', 'macLocalities', 'macLocalities.procedureFees', 'macLocalities.procedureFees.insuranceLabelFee'])->get();
 
         foreach ($procedures as $procedure) {
             foreach ($procedure['macLocalities'] as $macL) {
-                $fees = [];
+                foreach ($labelFees as $labelFee) {
+                    $fees[Str::snake($labelFee['name'])] = '';
+                }
                 foreach ($macL['procedureFees'] as $procedureFee) {
-                    $fees[$procedureFee['insuranceLabelFee']['description']] = $procedureFee['fee'];
+                    $fees[Str::snake($procedureFee['insuranceLabelFee']['description'])] = $procedureFee['fee'];
                 }
                 array_push($mac_localities, [
                     'procedure_id'    => $macL['pivot']['procedure_id'],
