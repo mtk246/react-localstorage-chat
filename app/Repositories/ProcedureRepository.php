@@ -648,18 +648,21 @@ class ProcedureRepository
                                 }
                             }
                         }
+
                         if (isset($macL['company_procedure']) && isset($macL['company_procedure']['price'])) {
+                            $companyProcedureLabelFee = InsuranceLabelFee::whereDescription(ucfirst(strtolower($macL['selectedPrice'])))->first();
                             $company->procedures()->attach(
                                 $procedure->id,
                                 [
                                     'price'                  => $macL['company_procedure']['price'],
                                     'price_percentage'       => $macL['company_procedure']['price_percentage'],
-                                    'insurance_label_fee_id' => $macL['company_procedure']['insurance_label_fee_id']
+                                    'insurance_label_fee_id' => $companyProcedureLabelFee->id ?? null
                                 ]
                             );
                         }
 
                         if (isset($macL['insurance_plan_procedure']) && isset($macL['insurance_plan_procedure']['price'])) {
+                            $planProcedureLabelFee = InsuranceLabelFee::whereDescription(ucfirst(strtolower($macL['selectedPriceContractFee'])))->first();
                             $insurancePlan = InsurancePlan::find($macL['insurance_plan_procedure']['insurance_plan_id']);
                             if (isset($insurancePlan)) {
                                 $insurancePlan->procedures()->attach(
@@ -667,7 +670,7 @@ class ProcedureRepository
                                     [
                                         'price'                  => $macL['insurance_plan_procedure']['price'],
                                         'price_percentage'       => $macL['insurance_plan_procedure']['price_percentage'],
-                                        'insurance_label_fee_id' => $macL['insurance_plan_procedure']['insurance_label_fee_id']
+                                        'insurance_label_fee_id' => $planProcedureLabelFee->id ?? null
                                     ]
                                 );
                             }
@@ -679,7 +682,7 @@ class ProcedureRepository
             return $company;
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e;
+            return null;
         }
     }
 
@@ -702,6 +705,9 @@ class ProcedureRepository
                 foreach ($macL['procedureFees'] as $procedureFee) {
                     $fees[Str::snake($procedureFee['insuranceLabelFee']['description'])] = $procedureFee['fee'];
                 }
+                $companyProcedureLabelFee = InsuranceLabelFee::find($procedure['companies']['0']['pivot']['insurance_label_fee_id']);
+                $planProcedureLabelFee = InsuranceLabelFee::find($procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id']);
+
                 array_push($mac_localities, [
                     'procedure_id'    => $macL['pivot']['procedure_id'],
                     'modifier_id'     => $macL['pivot']['modifier_id'],
@@ -714,15 +720,15 @@ class ProcedureRepository
                     'company_procedure' => [
                         'price'                  => $procedure['companies']['0']['pivot']['price'],
                         'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'],
-                        'insurance_label_fee_id' => $procedure['companies']['0']['pivot']['insurance_label_fee_id']
                     ],
                     'insurance_plan_procedure' => [
                         'price'                  => $procedure['insurancePlans']['0']['pivot']['price'],
                         'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'],
-                        'insurance_label_fee_id' => $procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id'],
                         'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'],
                         'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id']
-                    ]
+                    ],
+                    "selectedPrice"              => ucwords($companyProcedureLabelFee->description ?? ''),
+                    "selectedPriceContractFee"   => ucwords($planProcedureLabelFee->description ?? '')
                 ]);
             }
         }

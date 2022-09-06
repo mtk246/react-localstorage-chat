@@ -19,7 +19,7 @@
 - [Get list insurance label fees](#get-list-insurance-label-fees)
 - [Get list insurance companies](#get-list-insurance-companies)
 - [Add to company](#add-to-company)
-- [Get to company](#get-procedure-to-company)
+- [Get to company](#get-procedures-to-company)
 
 
 
@@ -1165,36 +1165,36 @@
 
 ```json
 {
-    "mac_localities": [
-        {
-            "procedure_id": 26,
-            "mac": "02102",
-            "modifier_id": null,
-            "locality_number":"01",
-            "state": "ALASKA",
-            "fsa": "STATEWIDE",
-            "counties": "ALL COUNTIES",
-            "procedure_fees": {
-                "non_facility_price": "190.2",
-                "facility_price": "136.5",
-                "non_facility_limiting_charge": "60.5",
-                "facility_limiting_charge": "55.9",
-                "facility_rate": "60.5",
-                "non_facility_rate": "60.5"
-            },
-            "company_procedure": {
-                "price": 133.14,
-                "price_percentage": "70",
-                "insurance_label_fee_id": null
-            },
-            "insurance_plan_procedure": {
-                "price": 171.18,
-                "price_percentage": "90",
-                "insurance_label_fee_id": null,
-                "insurance_plan_id": 1
-            }
-        }
-    ]
+  "mac_localities": [
+    {
+        "procedure_id": 26,
+        "mac": "02102",
+        "modifier_id": null,
+        "locality_number":"01",
+        "state": "ALASKA",
+        "fsa": "STATEWIDE",
+        "counties": "ALL COUNTIES",
+        "procedure_fees": {
+            "non_facility_price": "190.2",
+            "facility_price": "136.5",
+            "non_facility_limiting_charge": "60.5",
+            "facility_limiting_charge": "55.9",
+            "facility_rate": "60.5",
+            "non_facility_rate": "60.5"
+        },
+        "company_procedure": {
+            "price": 133.14,
+            "price_percentage": "70"
+        },
+        "insurance_plan_procedure": {
+            "price": 171.18,
+            "price_percentage": "90",
+            "insurance_plan_id": 1
+        },
+        "selectedPrice": "Non Facility Rate",
+        "selectedPriceContractFee": ""
+    }
+  ]
 }
 ```
 
@@ -1244,35 +1244,6 @@
 [
     {
         "procedure_id": 26,
-        "modifier_id": null,
-        "mac": "02102",
-        "state": "ALASKA",
-        "fsa": "STATEWIDE",
-        "counties": "ALL COUNTIES",
-        "locality_number": "01",
-        "procedure_fees": {
-            "non_facility_price": "190.2",
-            "facility_price": "136.5",
-            "non_facility_limiting_charge": "60.5",
-            "facility_limiting_charge": "60.5",
-            "facility_rate": "",
-            "non_facility_rate": ""
-        },
-        "company_procedure": {
-            "price": "133.14",
-            "price_percentage": "70",
-            "insurance_label_fee_id": null
-        },
-        "insurance_plan_procedure": {
-            "price": "171.18",
-            "price_percentage": "90",
-            "insurance_label_fee_id": null,
-            "insurance_company_id": 1,
-            "insurance_plan_id": 1
-        }
-    },
-    {
-        "procedure_id": 26,
         "modifier_id": 1,
         "mac": "02102",
         "state": "ALASKA",
@@ -1289,16 +1260,16 @@
         },
         "company_procedure": {
             "price": "133.14",
-            "price_percentage": "70",
-            "insurance_label_fee_id": null
+            "price_percentage": "70"
         },
         "insurance_plan_procedure": {
             "price": "171.18",
             "price_percentage": "90",
-            "insurance_label_fee_id": null,
             "insurance_company_id": 1,
             "insurance_plan_id": 1
-        }
+        },
+        "selectedPrice": "Facility Price",
+        "selectedPriceContractFee": "Non Facility Rate"
     }
 ]
 ```
