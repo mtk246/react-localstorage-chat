@@ -246,10 +246,10 @@ class PatientRepository
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
                     ], [
-                        'copay'           => $insurance_policy["copay"],
-                        'group_number'    => $insurance_policy["group_number"],
+                        'copay'           => $insurance_policy["copay"] ?? '',
+                        'group_number'    => $insurance_policy["group_number"] ?? '',
                         'eff_date'        => $insurance_policy["eff_date"],
-                        'end_date'        => $insurance_policy["end_date"],
+                        'end_date'        => $insurance_policy["end_date"] ?? '',
                         'release_info'    => $insurance_policy["release_info"],
                         'assign_benefits' => $insurance_policy["assign_benefits"]
 
@@ -261,8 +261,8 @@ class PatientRepository
                             'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     } else {
-                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"]
+                        $patient->insurancePolicies()->updateExistingPivot($insurancePolicy->id, [
+                            'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     }
                     
@@ -625,7 +625,7 @@ class PatientRepository
 
             /** Create Employment */
             if (isset($data["employments"])) {
-                $patient->employments->delete();
+                $patient->employments()->delete();
                 foreach ($data["employments"] as $employment) {
                     $employment["patient_id"] = $patient->id;
                     Employment::create($employment);
@@ -713,10 +713,10 @@ class PatientRepository
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
                     ], [
-                        'copay'           => $insurance_policy["copay"],
-                        'group_number'    => $insurance_policy["group_number"],
+                        'copay'           => $insurance_policy["copay"] ?? '',
+                        'group_number'    => $insurance_policy["group_number"] ?? '',
                         'eff_date'        => $insurance_policy["eff_date"],
-                        'end_date'        => $insurance_policy["end_date"],
+                        'end_date'        => $insurance_policy["end_date"] ?? '',
                         'release_info'    => $insurance_policy["release_info"],
                         'assign_benefits' => $insurance_policy["assign_benefits"]
 
@@ -728,8 +728,8 @@ class PatientRepository
                             'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     } else {
-                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
-                            'own_insurance' => $insurancePolicy["own_insurance"]
+                        $patient->insurancePolicies()->updateExistingPivot($insurancePolicy->id, [
+                            'own_insurance' => $insurance_policy["own_insurance"]
                         ]);
                     }
                     
@@ -848,10 +848,10 @@ class PatientRepository
                 'policy_number'     => $data["policy_number"],
                 'insurance_plan_id' => $insurancePlan->id
             ], [
-                'copay'           => $data["copay"],
-                'group_number'    => $data["group_number"],
+                'copay'           => $data["copay"] ?? '',
+                'group_number'    => $data["group_number"] ?? '',
                 'eff_date'        => $data["eff_date"],
-                'end_date'        => $data["end_date"],
+                'end_date'        => $data["end_date"] ?? '',
                 'release_info'    => $data["release_info"],
                 'assign_benefits' => $data["assign_benefits"],
 
@@ -950,10 +950,10 @@ class PatientRepository
         $insurancePolicy->update([
             'policy_number'     => $data["policy_number"],
             'insurance_plan_id' => $insurancePlan->id,
-            'copay'             => $data["copay"],
-            'group_number'      => $data["group_number"],
+            'copay'             => $data["copay"] ?? '',
+            'group_number'      => $data["group_number"] ?? '',
             'eff_date'          => $data["eff_date"],
-            'end_date'          => $data["end_date"],
+            'end_date'          => $data["end_date"] ?? '',
             'release_info'      => $data["release_info"],
             'assign_benefits'   => $data["assign_benefits"],
         ]);
