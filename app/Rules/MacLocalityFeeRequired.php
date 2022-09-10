@@ -47,23 +47,8 @@ class MacLocalityFeeRequired implements Rule
                     
                     $this->message = 'Error, cannot register a price without assigning a mac locality';
                     return false;
-                } else {
-                    $this->message = 'Error, a valid locality has not been defined.';
-                    return false;
                 }
-            }/** else {
-                if (!isset($macL['procedure_fees']['non_facility_price']) || 
-                    !isset($macL['procedure_fees']['facility_price']) ||
-                    !isset($macL['procedure_fees']['non_facility_limiting_charge']) ||
-                    !isset($macL['procedure_fees']['facility_limiting_charge']) ||
-                    !isset($macL['procedure_fees']['facility_rate']) ||
-                    !isset($macL['procedure_fees']['non_facility_rate'])) {
-
-                    $this->message = 'Error, at least one price must be indicated.';
-                    return false;
-
-                }
-            }*/
+            }
         }
         return true;
     }

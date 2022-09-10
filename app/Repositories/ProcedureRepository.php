@@ -47,19 +47,13 @@ class ProcedureRepository
 
             if (isset($data['mac_localities'])) {
                 foreach ($data['mac_localities'] as $macL) {
-                    $macLocality = MacLocality::updateOrCreate([
+                    $macLocality = MacLocality::where([
                         "mac"             => $macL['mac'],
                         "locality_number" => $macL['locality_number'],
                         "state"           => $macL['state'],
                         "fsa"             => $macL['fsa'],
                         "counties"        => $macL['counties']
-                    ], [
-                        "mac"             => $macL['mac'],
-                        "locality_number" => $macL['locality_number'],
-                        "state"           => $macL['state'],
-                        "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['counties']
-                    ]);
+                    ])->first();
                     if (isset($macLocality)) {
                         /** Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
@@ -289,19 +283,13 @@ class ProcedureRepository
                 $procedure->macLocalities()->detach();
                 /** update or create new mac localities */
                 foreach ($data['mac_localities'] as $macL) {
-                    $macLocality = MacLocality::updateOrCreate([
+                    $macLocality = MacLocality::where([
                         "mac"             => $macL['mac'],
                         "locality_number" => $macL['locality_number'],
                         "state"           => $macL['state'],
                         "fsa"             => $macL['fsa'],
                         "counties"        => $macL['counties']
-                    ], [
-                        "mac"             => $macL['mac'],
-                        "locality_number" => $macL['locality_number'],
-                        "state"           => $macL['state'],
-                        "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['counties']
-                    ]);
+                    ])->first();
                     if (isset($macLocality)) {
                         /** Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
@@ -603,9 +591,10 @@ class ProcedureRepository
                         "fsa"             => $macL['fsa'],
                         "counties"        => $macL['counties']
                     ])->first();
-
-                    if (is_null($macLocality->procedures()->wherePivot('modifier_id', $macL['modifier_id'])->find($procedure->id))) {
-                        $macLocality->procedures()->attach($procedure->id, ['modifier_id'  => $macL['modifier_id']]);
+                    if (isset($macLocality)) {
+                        if (is_null($macLocality->procedures()->wherePivot('modifier_id', $macL['modifier_id'])->find($procedure->id))) {
+                            $macLocality->procedures()->attach($procedure->id, ['modifier_id'  => $macL['modifier_id']]);
+                        }
                     }
 
                     if (isset($macL['procedure_fees'])) {
