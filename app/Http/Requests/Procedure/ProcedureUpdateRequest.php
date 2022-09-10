@@ -29,7 +29,7 @@ class ProcedureUpdateRequest extends FormRequest
             'insurance_companies'                                          => ['nullable', 'array'],
             'specific_insurance_company'                                   => ['boolean', 'nullable'],
             'start_date'                                                   => ['required', 'date'],
-            'end_date'                                                     => ['nullable', 'date'],
+            'end_date'                                                     => ['nullable', 'date', 'after_or_equal:start_date'],
             
             'mac_localities'                                               => ['nullable', 'array', new MacLocalityFeeRequired()],
             'mac_localities.*.mac'                                         => ['sometimes', 'string'],
