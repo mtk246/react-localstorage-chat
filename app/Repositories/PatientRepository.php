@@ -1013,8 +1013,8 @@ class PatientRepository
                 }
             }
         }
-
-        return $patient->insurancePolicies ?? [];
+        $insurancePolicy = $patient->insurancePolicies()->find($insurance_policy_id);
+        return $insurancePolicy;
     }
 
     public function getPolicy(int $insurance_policy_id, int $patient_id)
