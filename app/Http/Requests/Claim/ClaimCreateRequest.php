@@ -24,8 +24,7 @@ class ClaimCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            
+        return [      
             "format"                         => ['required', 'integer'],
             "company_id"                     => ['required', 'integer'],
             "facility_id"                    => ['required', 'integer'],
@@ -33,6 +32,7 @@ class ClaimCreateRequest extends FormRequest
             "health_professional_id"         => ['required', 'integer'],
             
             "diagnoses"                      => ["array", "nullable"],
+            "insurance_policies"             => ["array", "nullable"],
 
             "services"                       => ["array", "nullable"],
             "services.*.procedure_id"        => ["sometimes", "nullable", "integer"],

@@ -7,6 +7,8 @@
 - [Get list rev centers](#get-list-rev-centers)
 - [Get list type of services](#get-list-type-of-services)
 - [Get list place of services](#get-list-type-of-services)
+- [Get list type formats](#get-list-type-formats)
+- [Get list status claim](#get-list-status-claim)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
@@ -20,12 +22,14 @@
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |
 | 1 |POST    | `Create claim`  | `/claim/`     | yes            | Create claim  |
-| 2 |GET    | `Get list rev centers`  | `/claim/get-list-rev-centers`     | yes            | Get list rev centers |
-| 3 |GET    | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
-| 4 |GET    | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
-| 5 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
-| 6 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 7 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 2 |GET     | `Get list rev centers`  | `/claim/get-list-rev-centers`     | yes            | Get list rev centers |
+| 3 |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
+| 4 |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
+| 5 |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
+| 6 |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
+| 7 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
+| 8 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 9 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
 
 
 <a name="create-claim"></a>
@@ -35,7 +39,25 @@
 
 ```json
 {
-    
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [1,2],
+
+    "services": [
+        {
+            "procedure_id": 1,
+            "modifier_id": 1,
+            "rev_center_id": 2,
+            "place_of_service_id": 1,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": "pointers one",
+            "std": 192.3,
+            "price": 200
+        }
+    ],
 }
 ```
 
@@ -378,6 +400,96 @@
     {
         "id": 24,
         "name": "MA"
+    }
+]
+```
+
+#
+
+<a name="get-list-type-formats"></a>
+## Get list type formats
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type formats of Claim found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "837P"
+    },
+    {
+        "id": 2,
+        "name": "837I"
+    }
+]
+```
+
+#
+
+<a name="get-list-status-claim"></a>
+## Get list status
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Status of Claim found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Draft"
+    },
+    {
+        "id": 2,
+        "name": "Verified - Not submitted"
+    },
+    {
+        "id": 3,
+        "name": "Submitted - In approval"
+    },
+    {
+        "id": 4,
+        "name": "Accepted - Pending adjudication"
+    },
+    {
+        "id": 5,
+        "name": "Approved - Finished"
+    },
+    {
+        "id": 6,
+        "name": "Rejected"
+    },
+    {
+        "id": 7,
+        "name": "Denied - Under Review"
+    },
+    {
+        "id": 8,
+        "name": "Denied - Finished"
     }
 ]
 ```

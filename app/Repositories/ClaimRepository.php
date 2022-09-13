@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Models\TypeOfService;
+use App\Models\PlaceOfService;
+use App\Models\RevCenter;
+use App\Models\TypeForm;
+use App\Models\StatusClaim;
+
 class claimRepository
 {
     /**
@@ -17,10 +23,29 @@ class claimRepository
     public function createClaim(array $data) {
         try {
             DB::beginTransaction();
-            return null;
+            $newCode = 1;
+            $targetModel = Claim::select("id")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+            
+            $newCode += ($targetModel) ? (int)explode('-', $targetModel->$field)[1] : 0;
+            $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
+
+            $claim = Claim::create([
+                "control_number"         => $newCode,
+                "company_id"             => $data["company_id"],
+                "facility_id"            => $data["facility_id"],
+                "patient_id"             => $data["patient_id"],
+                "health_professional_id" => $data["health_professional_id"]
+            ]);
 
             if (isset($data['diagnoses'])) {
-                $claim->diagnoses()->sync($data['diagnoses']);
+                //$claim->diagnoses()->sync($data['diagnoses']);
+            }
+
+            if (isset($data['services'])) {
+            }
+
+            if (isset($data['insurance_policies'])) {
+                $claim->insuranncePolicies()->sync($data['insurance_policies']);
             }
 
             DB::commit();
@@ -58,7 +83,13 @@ class claimRepository
     public function updateClaim(array $data, int $id) {
         try {
             DB::beginTransaction();
-            return null;
+            $claim = Claim::find($id);
+            $claim->update([
+                "company_id"             => $data["company_id"],
+                "facility_id"            => $data["facility_id"],
+                "patient_id"             => $data["patient_id"],
+                "health_professional_id" => $data["health_professional_id"]
+            ]);
 
             DB::commit();
             return Claim::whereId($id)->first();
@@ -66,5 +97,25 @@ class claimRepository
             DB::rollBack();
             return null;
         }
+    }
+
+    public function getListTypeOfServices() {
+        return getList(TypeOfService::class, 'code');
+    }
+
+    public function getListPlaceOfServices() {
+        return getList(PlaceOfService::class, 'code');
+    }
+
+    public function getListRevCenters() {
+        return getList(RevCenter::class, 'code');
+    }
+
+    public function getListTypeFormats() {
+        return getList(TypeForm::class, 'form');
+    }
+
+    public function getListStatus() {
+        return getList(StatusClaim::class, 'status');
     }
 }

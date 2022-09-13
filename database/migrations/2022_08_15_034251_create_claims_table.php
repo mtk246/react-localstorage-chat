@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('claims', function (Blueprint $table) {
             $table->id();
-            $table->string('qr_claim', 50);
-            $table->string('control_number', 9);
+            $table->string('qr_claim', 50)->nullable();
+            $table->string('control_number', 9)->nullable();
             $table->string('submitter_name', 50)->nullable();
             $table->string('submitter_contact', 50)->nullable();
             $table->string('submitter_phone')->nullable();
@@ -24,9 +24,9 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('facility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('health_professional_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('health_professional_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->morphs('claim_formattable')->nullable();
+            $table->nullableMorphs('claim_formattable');
 
             $table->timestamps();
         });

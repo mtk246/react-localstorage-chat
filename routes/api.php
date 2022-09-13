@@ -370,6 +370,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-type-of-service",[\App\Http\Controllers\ClaimController::class,"getListTypeOfService"]);
         Route::get("/get-list-place-of-service",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfService"]);
         Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);
+        Route::get("/get-list-type-formats",[\App\Http\Controllers\ClaimController::class,"getListTypeFormats"]);
+        Route::get("/get-list-status",[\App\Http\Controllers\ClaimController::class,"getListStatus"]);
 
         Route::post("/",[\App\Http\Controllers\ClaimController::class,"createClaim"]);
         Route::get("/",[\App\Http\Controllers\ClaimController::class,"getAllClaims"]);

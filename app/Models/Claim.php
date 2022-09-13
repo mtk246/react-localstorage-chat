@@ -21,7 +21,8 @@ class Claim extends Model implements Auditable
         "submitter_phone",
         "company_id",
         "facility_id",
-        "subscriber_id",
+        "patient_id",
+        "health_professional_id",
         "insurance_company_id"
     ];
 
@@ -44,4 +45,14 @@ class Claim extends Model implements Auditable
     {
         return $this->hasMany(ClaimDate::class);
     }
+
+    /**
+     * Claim morphs to models in claimFormattable_type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function claimFormattable()
+    {
+        return $this->morphTo();
+    }    
 }
