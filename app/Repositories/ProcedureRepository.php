@@ -694,8 +694,8 @@ class ProcedureRepository
                 foreach ($macL['procedureFees'] as $procedureFee) {
                     $fees[Str::snake($procedureFee['insuranceLabelFee']['description'])] = $procedureFee['fee'];
                 }
-                $companyProcedureLabelFee = InsuranceLabelFee::find($procedure['companies']['0']['pivot']['insurance_label_fee_id']);
-                $planProcedureLabelFee = InsuranceLabelFee::find($procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id']);
+                $companyProcedureLabelFee = InsuranceLabelFee::find($procedure['companies']['0']['pivot']['insurance_label_fee_id'] ?? null);
+                $planProcedureLabelFee = InsuranceLabelFee::find($procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id'] ?? null);
 
                 array_push($mac_localities, [
                     'procedure_id'    => $macL['pivot']['procedure_id'],
@@ -707,14 +707,14 @@ class ProcedureRepository
                     'locality_number' => $macL['locality_number'],
                     'procedure_fees'  => $fees,
                     'company_procedure' => [
-                        'price'                  => $procedure['companies']['0']['pivot']['price'],
-                        'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'],
+                        'price'                  => $procedure['companies']['0']['pivot']['price'] ?? '',
+                        'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'] ?? ''
                     ],
                     'insurance_plan_procedure' => [
-                        'price'                  => $procedure['insurancePlans']['0']['pivot']['price'],
-                        'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'],
-                        'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'],
-                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id']
+                        'price'                  => $procedure['insurancePlans']['0']['pivot']['price'] ?? '',
+                        'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'] ?? '',
+                        'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'] ?? '',
+                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id'] ?? ''
                     ],
                     "selectedPrice"              => ucwords($companyProcedureLabelFee->description ?? ''),
                     "selectedPriceContractFee"   => ucwords($planProcedureLabelFee->description ?? '')
