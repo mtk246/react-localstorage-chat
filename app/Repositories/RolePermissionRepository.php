@@ -287,14 +287,36 @@ class RolePermissionRepository
             $role = Role::find($role_id);
             $permission = Permission::find($permission_id);
             $permissionConstraints = Permission::whereConstraint($permission->slug)->get();
+            $users = User::with('roles')->whereHas('roles', function ($query) use ($role_id) {
+                $query->where('role_id', $role_id);
+            })->get();
             foreach ($permissionConstraints as $permissionC) {
                 $permissionsC = Permission::whereConstraint($permissionC->slug)->get();
                 foreach ($permissionsC as $permC) {
                     $role->detachPermission($permC);
+                    /** Attach permisions to users by rol */
+                    foreach ($users as $user) {
+                        if (!is_null($user->permissions()->find($permC->id))) {
+                            $user->permissions()->detach($permC->id);
+                        }
+                    }
                 }
                 $role->detachPermission($permissionC);
+                /** Attach permisions to users by rol */
+                foreach ($users as $user) {
+                    if (!is_null($user->permissions()->find($permissionC->id))) {
+                        $user->permissions()->detach($permissionC->id);
+                    }
+                }
             }
             $role->detachPermission($permission);
+            /** Attach permisions to users by rol */
+            foreach ($users as $user) {
+                if (!is_null($user->permissions()->find($permission->id))) {
+                    $user->permissions()->detach($permission->id);
+                }
+            }
+
             return $role->load('permissions');
         }catch (RoleDoesNotExist | PermissionDoesNotExist | \Exception $e){
             return response()->json($e->getMessage(),500);
@@ -331,11 +353,20 @@ class RolePermissionRepository
         try {
             $permissions = $request->permissions ?? [];
             $role = Role::whereId($role_id)->first();
+            $users = User::with('roles')->whereHas('roles', function ($query) use ($role_id) {
+                $query->where('role_id', $role_id);
+            })->get();
 
             foreach ($permissions as $permission_id) {
                 $permission = Permission::find($permission_id);
 
                 $role->detachPermission($permission);
+                /** Attach permisions to users by rol */
+                foreach ($users as $user) {
+                    if (!is_null($user->permissions()->find($permission->id))) {
+                        $user->permissions()->detach($permission->id);
+                    }
+                }
             }
             return $role->load('permissions');
         } catch(PermissionDoesNotExist | \Exception $exception){
