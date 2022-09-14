@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use JWTAuth;
+use Carbon\Carbon;
 
 /**
  * @OA\Info(title="Api Medical billing",version="1.0")
@@ -128,9 +129,20 @@ class AuthController extends Controller
                 'user_agent' => $request->userAgent(),
                 'status'     => false
             ])->first();
-            if ($request->code == $device->code_temp) {
-                $device->status = true;
-                $device->save();
+
+            if (isset($device)) {
+                if ($request->code == $device->code_temp) {
+                    $date = new \DateTime($device->updated_at);
+                    $now  = new \DateTime(now());
+                    $difference = $now->diff($date);
+                    if ($difference->i > 5) {
+                        return response()->json(['error' => __('The validation code has expired. request a new code.')], 403);
+                    }
+                    $device->status = true;
+                    $device->save();
+                } else {
+                    return response()->json(['error' => __('The validation code is incorrect. Please check and enter again.')], 403);
+                }
             }
         }
         if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent())) {

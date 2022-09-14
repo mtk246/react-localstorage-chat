@@ -74,7 +74,9 @@
     "Error, wrong otp code": "Error, código otp incorrecto",
     "Error updating language": "Error al actualizar idioma",
     "No more roles can be assigned to a super user": "No se le pueden asignar mas roles a un super usuario",
-    "Your session has expired due to inactivity": "Su sesión a expirado por inactividad"
+    "Your session has expired due to inactivity": "Su sesión a expirado por inactividad",
+    "The validation code is incorrect. Please check and enter again.": "El código de validación es incorrecto. Verifique e introduzca nuevamente.",
+    "The validation code has expired. request a new code.": "el código de validación ha caducado. Solicite un nuevo código."
 
 
 
