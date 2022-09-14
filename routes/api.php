@@ -29,6 +29,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("auth")->group(function(){
         Route::post("login",[\App\Http\Controllers\AuthController::class,'login']);
+        Route::post("send-email-code",[\App\Http\Controllers\AuthController::class,'sendEmailCode']);
         Route::get("check-token",[\App\Http\Controllers\AuthController::class,'checkToken']);
         Route::get("logout",[\App\Http\Controllers\AuthController::class,'logout'])->middleware('auth:api');
         Route::get("refresh-token",[\App\Http\Controllers\AuthController::class,'refresh'])->middleware('auth:api');

@@ -46,7 +46,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'checkToken']]);
+        $this->middleware('auth:api', ['except' => ['login', 'checkToken', 'sendEmailCode']]);
     }
 
     /**
@@ -438,5 +438,40 @@ class AuthController extends Controller
     protected function sendLockoutResponse()
     {
         return response()->json(['error' => __('Your user has been blocked. Enter your user code or try again in 24 hours.')], 401);
+    }
+
+    public function sendEmailCode(Request $request): JsonResponse
+    {
+        try {
+           $user = User::where('email', $request->email)->first();
+           if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent())) {
+                $code = Str::random(6);
+                Device::updateOrCreate([
+                    'user_id'    => $user->id,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'status'     => false
+                ], [
+                    'user_id'    => $user->id,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'code_temp'  => $code,
+                    'status'     => false
+                ]);
+
+                \Mail::to($user->email)->send(
+                    new LogNewDevice(
+                        $user->first_name,
+                        $request->ip(),
+                        $code,
+                        $request->userAgent()
+                    )
+                );
+                return response()->json(__('The new code has been sent.'), 200);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => __('Error, An error has occurred, please try again later')], 401);
+        }
     }
 }

@@ -8,6 +8,7 @@
 - [Me](#me)
 - [Refresh token](#refresh-token)
 - [Check token](#check-token)
+- [Send email code](#send-email-code)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -20,6 +21,7 @@
 | 3 |GET| `me`      | `/auth/me`            |yes            |get info from user authenticate|
 | 4 |GET| `refresh-token`  | `/auth/refresh-token` |yes            |to refresh token auth|
 | 5 |GET| `check-token`  | `/auth/check-token?token={token}` |yes            |to refresh token auth|
+| 6 |POST| `send-email-code`  | `/auth/send-email-code` |yes            |to send email code auth|
 
 
 
@@ -284,5 +286,33 @@
 ```json
 {
     "status": "Token is Invalid"
+}
+```
+
+
+<a name="send-email-code"></a>
+## Send email code
+### Body request example
+
+```json
+{
+    "email":"admin@billing.com"
+}
+```
+> {success} code is 200 when is success the request to make send email
+
+
+
+### Response
+```json
+"The new code has been sent."
+```
+
+> {warning} code is 401 when the error in send email
+
+### Response
+```json
+{
+    "error": "Error, An error has occurred, please try again later."
 }
 ```
