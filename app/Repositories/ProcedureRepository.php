@@ -698,15 +698,18 @@ class ProcedureRepository
                 $planProcedureLabelFee = InsuranceLabelFee::find($procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id'] ?? null);
 
                 array_push($mac_localities, [
-                    'procedure_id'    => $macL['pivot']['procedure_id'],
-                    'modifier_id'     => $macL['pivot']['modifier_id'],
-                    'mac'             => $macL['mac'],
-                    'state'           => $macL['state'],
-                    'fsa'             => $macL['fsa'],
-                    'counties'        => $macL['counties'],
-                    'locality_number' => $macL['locality_number'],
-                    'procedure_fees'  => $fees,
-                    'company_procedure' => [
+                    'procedure_id'          => $macL['pivot']['procedure_id'],
+                    'procedure_code'        => $procedure['code'],
+                    'procedure_description' => $procedure['description'],
+                    'modifier_id'           => $macL['pivot']['modifier_id'],
+                    'modifier_code'         => $macL['modifier']['modifier'] ?? '',
+                    'mac'                   => $macL['mac'],
+                    'state'                 => $macL['state'],
+                    'fsa'                   => $macL['fsa'],
+                    'counties'              => $macL['counties'],
+                    'locality_number'       => $macL['locality_number'],
+                    'procedure_fees'        => $fees,
+                    'company_procedure'     => [
                         'price'                  => $procedure['companies']['0']['pivot']['price'] ?? '',
                         'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'] ?? ''
                     ],
