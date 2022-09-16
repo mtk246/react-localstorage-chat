@@ -51,5 +51,8 @@
 - ## Procedure / Service
     - [Procedure/Service](/{{route}}/{{version}}/procedure)
 
+- ## Claim
+    - [Claim](/{{route}}/{{version}}/claim)
+
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)
