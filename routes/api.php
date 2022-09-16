@@ -368,8 +368,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
-        Route::get("/get-list-type-of-service",[\App\Http\Controllers\ClaimController::class,"getListTypeOfServices"]);
-        Route::get("/get-list-place-of-service",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
+        Route::get("/get-list-type-of-services",[\App\Http\Controllers\ClaimController::class,"getListTypeOfServices"]);
+        Route::get("/get-list-place-of-services",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
         Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);
         Route::get("/get-list-type-formats",[\App\Http\Controllers\ClaimController::class,"getListTypeFormats"]);
         Route::get("/get-list-status",[\App\Http\Controllers\ClaimController::class,"getListStatus"]);
