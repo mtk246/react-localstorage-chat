@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_form_i_s');
+        Schema::dropIfExists('claim_forms_i');
     }
 };

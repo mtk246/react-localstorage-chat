@@ -27,23 +27,13 @@ class Claim extends Model implements Auditable
     ];
 
     /**
-     * Claim has many ClaimServiceLine.
+     * Claim has many ClaimService.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function claimServiceLines()
+    public function claimService()
     {
-        return $this->hasMany(ClaimServiceLine::class);
-    }
-
-    /**
-     * Claim has many ClaimDate.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimDates()
-    {
-        return $this->hasMany(ClaimDate::class);
+        return $this->hasMany(ClaimService::class);
     }
 
     /**
@@ -54,5 +44,25 @@ class Claim extends Model implements Auditable
     public function claimFormattable()
     {
         return $this->morphTo();
-    }    
+    }
+
+    /**
+     * The diagnoses that belong to the Claim.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function diagnoses()
+    {
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnoses_id')->withTimestamps();
+    }
+
+    /**
+     * The insurance policies that belong to the Claim.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function insurancePolicies()
+    {
+        return $this->belongsToMany(InsurancePolicy::class, 'claim_insurance_policy', 'claim_id', 'insurance_policy_id')->withTimestamps();
+    }
 }

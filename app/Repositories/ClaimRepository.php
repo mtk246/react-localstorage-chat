@@ -13,6 +13,8 @@ use App\Models\PlaceOfService;
 use App\Models\RevCenter;
 use App\Models\TypeForm;
 use App\Models\StatusClaim;
+use App\Models\Claim;
+use App\Models\ClaimService;
 
 class claimRepository
 {
@@ -38,14 +40,19 @@ class claimRepository
             ]);
 
             if (isset($data['diagnoses'])) {
-                //$claim->diagnoses()->sync($data['diagnoses']);
+                $claim->diagnoses()->sync($data['diagnoses']);
             }
 
-            if (isset($data['services'])) {
+            if (isset($data['claim_services'])) {
+                $claim->claimServices()->delete();
+                foreach ($data['claim_services'] as $service) {
+                    $service["claim_id"] = $claim->id;
+                    ClaimService::create($service);
+                }
             }
 
             if (isset($data['insurance_policies'])) {
-                $claim->insuranncePolicies()->sync($data['insurance_policies']);
+                $claim->insurancePolicies()->sync($data['insurance_policies']);
             }
 
             DB::commit();
@@ -60,8 +67,11 @@ class claimRepository
      * @return claim[]|Collection
      */
     public function getAllClaims() {
-        $claims = Claim::orderBy("created_at", "desc")->orderBy("id", "asc")->get();
-        
+        $claims = Claim::with([
+            "diagnoses",
+            "claim_services",
+            "insurance_policies"
+        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         return is_null($claims) ? null : $claims;
     }
 
@@ -70,7 +80,11 @@ class claimRepository
      * @return claim|Builder|Model|object|null
      */
     public function getOneclaim(int $id) {
-        $claim = claim::whereId($id)->first();
+        $claim = claim::with([
+            "diagnoses",
+            "claim_services",
+            "insurance_policies"
+        ])->whereId($id)->first();
 
         return !is_null($claim) ? $claim : null;
     }
