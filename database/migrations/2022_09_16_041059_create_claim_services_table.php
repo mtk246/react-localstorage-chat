@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('from_service');
             $table->date('to_service');
             $table->decimal('price', 8, 2)->nullable();
+            $table->foreignId('std_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('claim_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('modifier_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('procedure_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');

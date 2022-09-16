@@ -26,12 +26,33 @@ class Claim extends Model implements Auditable
         "insurance_company_id"
     ];
 
+    
+    /**
+     * Claim belongs to Company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Claim belongs to Patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
     /**
      * Claim has many ClaimService.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function claimService()
+    public function claimServices()
     {
         return $this->hasMany(ClaimService::class);
     }
@@ -53,7 +74,7 @@ class Claim extends Model implements Auditable
      */
     public function diagnoses()
     {
-        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnoses_id')->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withTimestamps();
     }
 
     /**

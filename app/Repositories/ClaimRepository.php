@@ -59,7 +59,7 @@ class claimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
+            return $e;
         }
     }
 
@@ -68,9 +68,9 @@ class claimRepository
      */
     public function getAllClaims() {
         $claims = Claim::with([
-            "diagnoses",
-            "claim_services",
-            "insurance_policies"
+            "claimServices",
+            "company",
+            "patient"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         return is_null($claims) ? null : $claims;
     }
@@ -82,8 +82,8 @@ class claimRepository
     public function getOneclaim(int $id) {
         $claim = claim::with([
             "diagnoses",
-            "claim_services",
-            "insurance_policies"
+            "claimServices",
+            "insurancePolicies"
         ])->whereId($id)->first();
 
         return !is_null($claim) ? $claim : null;
@@ -105,11 +105,27 @@ class claimRepository
                 "health_professional_id" => $data["health_professional_id"]
             ]);
 
+            if (isset($data['diagnoses'])) {
+                $claim->diagnoses()->sync($data['diagnoses']);
+            }
+
+            if (isset($data['claim_services'])) {
+                $claim->claimServices()->delete();
+                foreach ($data['claim_services'] as $service) {
+                    $service["claim_id"] = $claim->id;
+                    ClaimService::create($service);
+                }
+            }
+
+            if (isset($data['insurance_policies'])) {
+                $claim->insurancePolicies()->sync($data['insurance_policies']);
+            }
+
             DB::commit();
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
+            return $e;
         }
     }
 

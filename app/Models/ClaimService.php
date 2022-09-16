@@ -19,6 +19,7 @@ class ClaimService extends Model implements Auditable
         "to_service",
         "price",
         "claim_id",
+        "std_id",
         "modifier_id",
         "procedure_id",
         "rev_center_id",
@@ -95,5 +96,15 @@ class ClaimService extends Model implements Auditable
     public function diagnosticPointer()
     {
         return $this->belongsTo(DiagnosticPointer::class);
+    }
+
+    /**
+     * ClaimService belongs to Std.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function std()
+    {
+        return $this->belongsTo(Std::class);
     }
 }

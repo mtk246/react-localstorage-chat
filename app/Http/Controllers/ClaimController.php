@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Claim\CreateClaimRequest;
+use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,11 +20,39 @@ class ClaimController extends Controller
      * @param claimCreateRequest $request
      * @return JsonResponse
      */
-    public function create(CreateclaimRequest $request)
+    public function createClaim(claimCreateRequest $request)
     {
-        $rs = $this->claimRepository->create($request->validated());
+        $rs = $this->claimRepository->createClaim($request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__("Error creating claim"), 400);
+    }
+
+    /**
+     * @param claimCreateRequest $request
+     * @return JsonResponse
+     */
+    public function updateClaim(claimCreateRequest $request, $id)
+    {
+        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error updating claim"), 400);
+    }
+
+    public function getAllClaims() {
+        return response()->json(
+            $this->claimRepository->getAllClaims()
+        );
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getOneClaim(int $id): JsonResponse
+    {
+        $rs = $this->claimRepository->getOneClaim($id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, claim not found"), 404);
     }
 
     public function getListTypeOfServices()

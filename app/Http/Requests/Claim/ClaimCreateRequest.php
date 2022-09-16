@@ -43,7 +43,7 @@ class ClaimCreateRequest extends FormRequest
             "claim_services.*.place_of_service_id"   => ["sometimes", "nullable", "integer"],
             "claim_services.*.type_of_service_id"    => ["sometimes", "nullable", "integer"],
             "claim_services.*.diagnostic_pointer_id" => ["sometimes", "nullable", "integer"],
-            "claim_services.*.std"                   => ["sometimes", "nullable", "numeric"],
+            "claim_services.*.std_id"                => ["sometimes", "nullable", "numeric"],
             "claim_services.*.price"                 => ["sometimes", "nullable", "numeric"]
         ];
     }
