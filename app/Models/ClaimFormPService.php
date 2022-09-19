@@ -10,7 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
 
-class ClaimService extends Model implements Auditable
+class ClaimFormPService extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
@@ -18,24 +18,33 @@ class ClaimService extends Model implements Auditable
         "from_service",
         "to_service",
         "price",
-        "claim_id",
-        "std_id",
+        "claim_form_p_id",
+        "epstd",
         "modifier_id",
         "procedure_id",
-        "rev_center_id",
+        "rev",
         "place_of_service_id",
         "type_of_service_id",
-        "diagnostic_pointer_id"
+        "diagnostic_pointers"
     ];
 
     /**
-     * ClaimService belongs to Claim.
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'diagnostic_pointers' => 'array',
+    ];
+
+    /**
+     * ClaimFormPService belongs to ClaimFormP.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function claim()
+    public function claimFormP()
     {
-        return $this->belongsTo(Claim::class);
+        return $this->belongsTo(ClaimFormP::class);
     }
 
     /**
@@ -59,16 +68,6 @@ class ClaimService extends Model implements Auditable
     }
 
     /**
-     * ClaimService belongs to RevCenter.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function revCenter()
-    {
-        return $this->belongsTo(RevCenter::class);
-    }
-
-    /**
      * ClaimService belongs to PlaceOfService.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -86,25 +85,5 @@ class ClaimService extends Model implements Auditable
     public function typeOfService()
     {
         return $this->belongsTo(TypeOfService::class);
-    }
-
-    /**
-     * ClaimService belongs to DiagnosticPointer.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function diagnosticPointer()
-    {
-        return $this->belongsTo(DiagnosticPointer::class);
-    }
-
-    /**
-     * ClaimService belongs to Std.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function std()
-    {
-        return $this->belongsTo(Std::class);
     }
 }

@@ -20,7 +20,7 @@ class ClaimController extends Controller
      * @param claimCreateRequest $request
      * @return JsonResponse
      */
-    public function createClaim(claimCreateRequest $request)
+    public function createClaim(ClaimCreateRequest $request)
     {
         $rs = $this->claimRepository->createClaim($request->validated());
 
@@ -31,7 +31,7 @@ class ClaimController extends Controller
      * @param claimCreateRequest $request
      * @return JsonResponse
      */
-    public function updateClaim(claimCreateRequest $request, $id)
+    public function updateClaim(ClaimCreateRequest $request, $id)
     {
         $rs = $this->claimRepository->updateClaim($request->validated(), $id);
 

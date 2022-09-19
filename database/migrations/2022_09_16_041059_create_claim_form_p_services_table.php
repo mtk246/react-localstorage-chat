@@ -13,19 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_services', function (Blueprint $table) {
+        Schema::create('claim_form_p_services', function (Blueprint $table) {
             $table->id();
             $table->date('from_service');
             $table->date('to_service');
             $table->decimal('price', 8, 2)->nullable();
-            $table->foreignId('std_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('claim_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->integer('epstd')->nullable();
+            $table->integer('rev')->nullable();
+            $table->string('diagnostic_pointers', 20)->nullable();
+            
+            $table->foreignId('claim_form_p_id')->constrained('claim_forms_p')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('modifier_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('procedure_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('rev_center_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('place_of_service_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('type_of_service_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('diagnostic_pointer_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_services');
+        Schema::dropIfExists('claim_form_p_services');
     }
 };

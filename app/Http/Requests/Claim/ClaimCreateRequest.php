@@ -32,19 +32,22 @@ class ClaimCreateRequest extends FormRequest
             "health_professional_id"         => ['required', 'integer'],
             
             "diagnoses"                      => ["array", "nullable"],
+            "diagnoses.*.item"               => ["string", "nullable"],
+            "diagnoses.*.diagnosis_id"       => ["integer", "nullable"],
+
             "insurance_policies"             => ["array", "nullable"],
 
             "claim_services"                       => ["array", "nullable"],
-            "claim_services.*.from_service"          => ["sometimes", "nullable", "date"],
-            "claim_services.*.to_service"            => ["sometimes", "nullable", "date"],
-            "claim_services.*.procedure_id"          => ["sometimes", "nullable", "integer"],
-            "claim_services.*.modifier_id"           => ["sometimes", "nullable", "integer"],
-            "claim_services.*.rev_center_id"         => ["sometimes", "nullable", "integer"],
-            "claim_services.*.place_of_service_id"   => ["sometimes", "nullable", "integer"],
-            "claim_services.*.type_of_service_id"    => ["sometimes", "nullable", "integer"],
-            "claim_services.*.diagnostic_pointer_id" => ["sometimes", "nullable", "integer"],
-            "claim_services.*.std_id"                => ["sometimes", "nullable", "numeric"],
-            "claim_services.*.price"                 => ["sometimes", "nullable", "numeric"]
+            "claim_services.*.from_service"        => ["sometimes", "nullable", "date"],
+            "claim_services.*.to_service"          => ["sometimes", "nullable", "date"],
+            "claim_services.*.procedure_id"        => ["sometimes", "nullable", "integer"],
+            "claim_services.*.modifier_id"         => ["sometimes", "nullable", "integer"],
+            "claim_services.*.rev"                 => ["sometimes", "nullable", "integer"],
+            "claim_services.*.place_of_service_id" => ["sometimes", "nullable", "integer"],
+            "claim_services.*.type_of_service_id"  => ["sometimes", "nullable", "integer"],
+            "claim_services.*.diagnostic_pointers" => ["sometimes", "nullable", "array"],
+            "claim_services.*.epstd"               => ["sometimes", "nullable", "integer"],
+            "claim_services.*.price"               => ["sometimes", "nullable", "numeric"]
         ];
     }
 }

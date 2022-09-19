@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('claim_diagnosis', function (Blueprint $table) {
             $table->id();
+            $table->string('item', 1);
             $table->foreignId('claim_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('diagnosis_id')->constrained('diagnoses')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();

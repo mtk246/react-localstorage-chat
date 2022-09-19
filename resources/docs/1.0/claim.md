@@ -4,7 +4,6 @@
 
 - [Basic data](#basic-data)
 - [Create claim](#create-claim)
-- [Get list rev centers](#get-list-rev-centers)
 - [Get list type of services](#get-list-type-of-services)
 - [Get list place of services](#get-list-place-of-services)
 - [Get list type formats](#get-list-type-formats)
@@ -22,14 +21,13 @@
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |
 | 1 |POST    | `Create claim`  | `/claim/`     | yes            | Create claim  |
-| 2 |GET     | `Get list rev centers`  | `/claim/get-list-rev-centers`     | yes            | Get list rev centers |
-| 3 |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
-| 4 |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
-| 5 |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
-| 6 |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
-| 7 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
-| 8 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 9 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 2 |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
+| 3 |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
+| 4 |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
+| 5 |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
+| 6 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
+| 7 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 8 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
 
 
 <a name="create-claim"></a>
@@ -44,7 +42,18 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
-    "diagnoses": [1,2],
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
     "insurance_policies": [8,10],
     "claim_services": [
         {
@@ -52,11 +61,11 @@
             "to_service": "2022-07-05",
             "procedure_id": 11,
             "modifier_id": 1,
-            "rev_center_id": 2,
-            "place_of_service_id": null,
+            "rev": 2,
+            "place_of_service_id": 3,
             "type_of_service_id": 2,
-            "diagnostic_pointer_id": null,
-            "std_id": null,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1, //1,2,3
             "price": 200
         }
     ]
@@ -93,87 +102,6 @@
 
 #
 
-<a name="get-list-rev-centers"></a>
-## Get list Rev. Centers
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Rev. Centers found
-
-#
-
-```json
-[
-    {
-        "id":1,
-        "name":"AD"
-    },
-    {
-        "id":2,
-        "name":"CO"
-    },
-    {
-        "id":3,
-        "name":"DM"
-    },
-    {
-        "id":4,
-        "name":"EP"
-    },
-    {
-        "id":5,
-        "name":"HV"
-    },
-    {
-        "id":6,
-        "name":"IN"
-    },
-    {
-        "id":7,
-        "name":"LB"
-    },
-    {
-        "id":8,
-        "name":"ME"
-    },
-    {
-        "id":9,
-        "name":"MI"
-    },
-    {
-        "id":10,
-        "name":"NP"
-    },
-    {
-        "id":11,
-        "name":"PR"
-    },
-    {
-        "id":12,
-        "name":"RA"
-    },
-    {
-        "id":13,
-        "name":"SP"
-    },
-    {
-        "id":14,
-        "name":"SU"
-    }
-]
-```
-
-#
-
 <a name="get-list-type-of-services"></a>
 ## Get list Type of Service
 
@@ -196,99 +124,127 @@
 [
     {
         "id": 1,
-        "name": "01"
+        "name": "0 - Whole Blood"
     },
     {
         "id": 2,
-        "name": "02"
+        "name": "1 - Medical Care"
     },
     {
         "id": 3,
-        "name": "03"
+        "name": "2 - Surgery"
     },
     {
         "id": 4,
-        "name": "04"
+        "name": "3 - Consultation"
     },
     {
         "id": 5,
-        "name": "05"
+        "name": "4 - Diagnostic Radiology"
     },
     {
         "id": 6,
-        "name": "06"
+        "name": "5 - Diagnostic Laboratory"
     },
     {
         "id": 7,
-        "name": "07"
+        "name": "6 - Therapeutic Radiology"
     },
     {
         "id": 8,
-        "name": "08"
+        "name": "7 - Anesthesia"
     },
     {
         "id": 9,
-        "name": "09"
+        "name": "8 - Assistant at Surgery"
     },
     {
         "id": 10,
-        "name": "10"
+        "name": "9 - Other Medical Items or Services"
     },
     {
         "id": 11,
-        "name": "11"
+        "name": "A - Used DME"
     },
     {
         "id": 12,
-        "name": "12"
+        "name": "B - High Risk Screening Mammography"
     },
     {
         "id": 13,
-        "name": "13"
+        "name": "C - Low Risk Screening Mammography"
     },
     {
         "id": 14,
-        "name": "14"
+        "name": "D - Ambulance"
     },
     {
         "id": 15,
-        "name": "15"
+        "name": "E - Enteral/Parenteral Nutrients/Supplies"
     },
     {
         "id": 16,
-        "name": "16"
+        "name": "F - Ambulatory Surgical Center (Facility Usage for Surgical Services)"
     },
     {
         "id": 17,
-        "name": "17"
+        "name": "G - Immunosuppressive Drugs"
     },
     {
         "id": 18,
-        "name": "18"
+        "name": "H - Hospice"
     },
     {
         "id": 19,
-        "name": "19"
+        "name": "J - Diabetic Shoes"
     },
     {
         "id": 20,
-        "name": "20"
+        "name": "K - Hearing Items and Services"
     },
     {
         "id": 21,
-        "name": "21"
+        "name": "L - ESRD Supplies"
     },
     {
         "id": 22,
-        "name": "22"
+        "name": "M - Monthly Capitation Payment for Dialysis"
     },
     {
         "id": 23,
-        "name": "99"
+        "name": "N - Kidney Donor"
     },
     {
         "id": 24,
-        "name": "MA"
+        "name": "P - Lump Sum Purchase of DME, Prosthetics, Orthotics"
+    },
+    {
+        "id": 25,
+        "name": "Q - Vision Items or Services"
+    },
+    {
+        "id": 26,
+        "name": "R - Rental of DME"
+    },
+    {
+        "id": 27,
+        "name": "S - Surgical Dressings or Other Medical Supplies"
+    },
+    {
+        "id": 28,
+        "name": "T - Outpatient Mental Health Treatment Limitation"
+    },
+    {
+        "id": 29,
+        "name": "U - Occupational Therapy"
+    },
+    {
+        "id": 30,
+        "name": "V - Pneumococcal/Flu Vaccine"
+    },
+    {
+        "id": 31,
+        "name": "W - Physical Therapy"
     }
 ]
 ```
@@ -309,12 +265,169 @@
 
 ## Response
 
-> {success} 200 Type of Service found
+> {success} 200 Place of Service found
 
 #
 
 ```json
-[]
+[
+    {
+        "id": 1,
+        "name": "03 - School"
+    },
+    {
+        "id": 2,
+        "name": "04 - Homeless Shelter"
+    },
+    {
+        "id": 3,
+        "name": "05 - Indian Health Service Free-Standing Facility"
+    },
+    {
+        "id": 4,
+        "name": "06 - Indian Health Service Provider-Based Facility"
+    },
+    {
+        "id": 5,
+        "name": "07 - Tribal 638 Free-Standing Facility"
+    },
+    {
+        "id": 6,
+        "name": "08 - Tribal 638 Provider Based-Facility"
+    },
+    {
+        "id": 7,
+        "name": "11 - Office Visit"
+    },
+    {
+        "id": 8,
+        "name": "12 - Home"
+    },
+    {
+        "id": 9,
+        "name": "13 - Assisted Living"
+    },
+    {
+        "id": 10,
+        "name": "14 - Group Home"
+    },
+    {
+        "id": 11,
+        "name": "15 - Mobile Unit"
+    },
+    {
+        "id": 12,
+        "name": "20 - Urgent Care Facility"
+    },
+    {
+        "id": 13,
+        "name": "21 - Inpatient Hospital"
+    },
+    {
+        "id": 14,
+        "name": "22 - Outpatient Hospital"
+    },
+    {
+        "id": 15,
+        "name": "23 - Emergency Room"
+    },
+    {
+        "id": 16,
+        "name": "24 - Ambulatory Surgical Center"
+    },
+    {
+        "id": 17,
+        "name": "25 - Birthing Center"
+    },
+    {
+        "id": 18,
+        "name": "26 - Military Treatment Facility"
+    },
+    {
+        "id": 19,
+        "name": "31 - Skilled Nursing Facility"
+    },
+    {
+        "id": 20,
+        "name": "32 - Nursing Facility"
+    },
+    {
+        "id": 21,
+        "name": "33 - Custodial Care Facility"
+    },
+    {
+        "id": 22,
+        "name": "34 - Hospice"
+    },
+    {
+        "id": 23,
+        "name": "41 - Ambulance - Land"
+    },
+    {
+        "id": 24,
+        "name": "42 - Ambulance - Air or Water"
+    },
+    {
+        "id": 25,
+        "name": "50 - Federally Qualified Health Center"
+    },
+    {
+        "id": 26,
+        "name": "51 - Inpatient Psychiatric Facility"
+    },
+    {
+        "id": 27,
+        "name": "52 - Psychiatric Facility Partial Hospitalization"
+    },
+    {
+        "id": 28,
+        "name": "53 - Community Mental Health Center"
+    },
+    {
+        "id": 29,
+        "name": "54 - Intermediate Care Facility"
+    },
+    {
+        "id": 30,
+        "name": "55 - Residential Substance Abuse Treatment Facility"
+    },
+    {
+        "id": 31,
+        "name": "56 - Psychiatric Residential Treatment Center"
+    },
+    {
+        "id": 32,
+        "name": "60 - Mass Immunization Center"
+    },
+    {
+        "id": 33,
+        "name": "61 - Comprehensive Inpatient Rehab Facility"
+    },
+    {
+        "id": 34,
+        "name": "62 - Comprehensive Outpatient Rehab Facility"
+    },
+    {
+        "id": 35,
+        "name": "65 - End Stage Renal Disease Treatment Facility"
+    },
+    {
+        "id": 36,
+        "name": "71 - State or Local Public Health Clinic"
+    },
+    {
+        "id": 37,
+        "name": "2  - Rural Health Clinic"
+    },
+    {
+        "id": 38,
+        "name": "81 - Independent Laboratory"
+    },
+    {
+        "id": 39,
+        "name": "99 - Other Unlisted Facility"
+    }
+]
 ```
 
 #
@@ -643,7 +756,18 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
-    "diagnoses": [1,2],
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
     "insurance_policies": [8,10],
     "claim_services": [
         {
@@ -651,11 +775,11 @@
             "to_service": "2022-07-05",
             "procedure_id": 11,
             "modifier_id": 1,
-            "rev_center_id": 2,
-            "place_of_service_id": null,
+            "rev": 2,
+            "place_of_service_id": 3,
             "type_of_service_id": 2,
-            "diagnostic_pointer_id": null,
-            "std_id": null,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1, //1,2,3
             "price": 200
         }
     ]

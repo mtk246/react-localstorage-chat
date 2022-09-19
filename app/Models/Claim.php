@@ -74,7 +74,7 @@ class Claim extends Model implements Auditable
      */
     public function diagnoses()
     {
-        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withPivot('item')->withTimestamps();
     }
 
     /**

@@ -16,16 +16,13 @@ return new class extends Migration
         Schema::create('claim_forms_p', function (Blueprint $table) {
             $table->id();
             $table->boolean('head_benefit_plan_other')->default(false);
-            $table->date('date_of_current');
-            $table->string('total_charge', 50);
+            $table->date('date_of_current')->nullable();
+            $table->string('total_charge', 50)->nullable();
 
             $table->foreignId('type_form_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('type_insurance_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('insurance_policy_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('facility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('relationship_to_insured_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('type_insurance_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('relationship_to_insured_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('billing_company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }

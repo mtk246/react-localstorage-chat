@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('type_of_services', function (Blueprint $table) {
             $table->id();
             $table->string('code', 2);
+            $table->string('name', 100);
             $table->timestamps();
         });
     }

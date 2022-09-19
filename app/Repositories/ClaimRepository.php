@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
-use App\Models\RevCenter;
 use App\Models\TypeForm;
 use App\Models\StatusClaim;
 use App\Models\Claim;
-use App\Models\ClaimService;
+use App\Models\ClaimFormP;
+use App\Models\ClaimFormPService;
 
 class claimRepository
 {
@@ -40,14 +40,27 @@ class claimRepository
             ]);
 
             if (isset($data['diagnoses'])) {
-                $claim->diagnoses()->sync($data['diagnoses']);
+                $claim->diagnoses()->detach();
+                foreach ($data['diagnoses'] as $diagnosis) {
+                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
+                }
+            }
+
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
             }
 
             if (isset($data['claim_services'])) {
-                $claim->claimServices()->delete();
+                $claimFormP = ClaimFormP::create([
+                    'type_form_id' => $data['format'],
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany
+                ]);
+                $claimFormP->claimFormPServices()->delete();
                 foreach ($data['claim_services'] as $service) {
-                    $service["claim_id"] = $claim->id;
-                    ClaimService::create($service);
+                    $service["claim_form_p_id"] = $claimFormP->id;
+                    ClaimFormPService::create($service);
                 }
             }
 
@@ -68,7 +81,6 @@ class claimRepository
      */
     public function getAllClaims() {
         $claims = Claim::with([
-            "claimServices",
             "company",
             "patient"
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -82,7 +94,6 @@ class claimRepository
     public function getOneclaim(int $id) {
         $claim = claim::with([
             "diagnoses",
-            "claimServices",
             "insurancePolicies"
         ])->whereId($id)->first();
 
@@ -106,19 +117,28 @@ class claimRepository
             ]);
 
             if (isset($data['diagnoses'])) {
-                $claim->diagnoses()->sync($data['diagnoses']);
-            }
-
-            if (isset($data['claim_services'])) {
-                $claim->claimServices()->delete();
-                foreach ($data['claim_services'] as $service) {
-                    $service["claim_id"] = $claim->id;
-                    ClaimService::create($service);
+                $claim->diagnoses()->detach();
+                foreach ($data['diagnoses'] as $diagnosis) {
+                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
                 }
             }
 
-            if (isset($data['insurance_policies'])) {
-                $claim->insurancePolicies()->sync($data['insurance_policies']);
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (isset($data['claim_services'])) {
+                $claimFormP = ClaimFormP::create([
+                    'type_form_id' => $data['format'],
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany
+                ]);
+                $claimFormP->claimFormPServices()->delete();
+                foreach ($data['claim_services'] as $service) {
+                    $service["claim_form_p_id"] = $claimFormP->id;
+                    ClaimFormPService::create($service);
+                }
             }
 
             DB::commit();
@@ -130,11 +150,11 @@ class claimRepository
     }
 
     public function getListTypeOfServices() {
-        return getList(TypeOfService::class, 'code');
+        return getList(TypeOfService::class, ['code', '-', 'name']);
     }
 
     public function getListPlaceOfServices() {
-        return getList(PlaceOfService::class, 'code');
+        return getList(PlaceOfService::class, ['code', '-', 'name']);
     }
 
     public function getListRevCenters() {

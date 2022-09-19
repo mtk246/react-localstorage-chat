@@ -28,8 +28,6 @@ return new class extends Migration
             $table->integer('admit_dx')->nullable();
             
             $table->foreignId('type_form_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }

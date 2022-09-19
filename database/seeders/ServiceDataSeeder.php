@@ -83,7 +83,7 @@ class ServiceDataSeeder extends Seeder
 
         ]; */
 
-        $serviceTypeOfServices = [
+        /**$serviceTypeOfServices = [
             ['code' => '01'],
             ['code' => '02'],
             ['code' => '03'],
@@ -114,7 +114,7 @@ class ServiceDataSeeder extends Seeder
         foreach ($serviceTypeOfServices as $typeOfService) {
 
             TypeOfService::updateOrCreate($typeOfService, $typeOfService);
-        }
+        }*/
 
         /*$serviceRevCenters = [
             ['rev_center' => 'AD - Administrative Charge'],

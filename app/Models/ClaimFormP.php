@@ -12,12 +12,14 @@ class ClaimFormP extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
+    protected $table = "claim_forms_p";
+
     protected $fillable = [
         "head_benefit_plan_other",
         "date_of_current",
         "total_charge",
         "type_form_id",
-        "type_insurance_id"
+        "type_insurance_id",
         "insurance_policy_id",
         "facility_id",
         "patient_id",
@@ -93,5 +95,15 @@ class ClaimFormP extends Model implements Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    /**
+     * ClaimFormP has many ClaimFormPService.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimFormPServices()
+    {
+        return $this->hasMany(ClaimFormPService::class);
     }
 }
