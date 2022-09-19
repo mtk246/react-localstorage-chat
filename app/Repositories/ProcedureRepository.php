@@ -554,9 +554,19 @@ class ProcedureRepository
         }
     }
 
-    public function getList() {
+    public function getList($company_id = null) {
         try {
-            return getList(Procedure::class, 'code', [], null, ['description']);
+            if ($company_id == null) {
+                return getList(Procedure::class, 'code', [], null, ['description']);
+            } else {
+                return getList(
+                    Procedure::class,
+                    'code',
+                    ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
+                    null,
+                    ['description']
+                );
+            }
         } catch (\Exception $e) {
             return [];
         }

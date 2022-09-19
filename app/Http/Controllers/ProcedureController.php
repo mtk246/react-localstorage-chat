@@ -205,10 +205,10 @@ class ProcedureController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getList(): JsonResponse
+    public function getList(int $company_id = null): JsonResponse
     {
         return response()->json(
-            $this->procedureRepository->getList()
+            $this->procedureRepository->getList($company_id)
         );
     }
 

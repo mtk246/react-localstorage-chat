@@ -352,7 +352,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-diagnoses/{code?}",[\App\Http\Controllers\ProcedureController::class,"getListdiagnoses"]);
         Route::get("/get-list-insurance-companies/{procedure_id?}",[\App\Http\Controllers\ProcedureController::class,"getListInsuranceCompanies"]);
         Route::get("/get-list-insurance-label-fees",[\App\Http\Controllers\ProcedureController::class,"getListInsuranceLabelFees"]);
-        Route::get("/get-list",[\App\Http\Controllers\ProcedureController::class,"getList"]);
+        Route::get("/get-list/{company_id?}",[\App\Http\Controllers\ProcedureController::class,"getList"]);
 
         Route::post("/",[\App\Http\Controllers\ProcedureController::class,"createProcedure"]);
         Route::get("/",[\App\Http\Controllers\ProcedureController::class,"getAllProcedures"]);

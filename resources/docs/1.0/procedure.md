@@ -41,7 +41,7 @@
 | 10 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
 | 11 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
 | 12 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 13 |GET     | `Get list procedure` | `/procedure/get-list` | yes            | Get list procedure|
+| 13 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
 | 14 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
 | 15 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
 | 16 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
@@ -1033,6 +1033,14 @@
 ```json
 {
     "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "company_id": <integer>
 }
 ```
 
