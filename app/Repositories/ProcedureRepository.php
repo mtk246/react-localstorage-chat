@@ -727,7 +727,9 @@ class ProcedureRepository
                         'price'                  => $procedure['insurancePlans']['0']['pivot']['price'] ?? '',
                         'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'] ?? '',
                         'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'] ?? '',
-                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id'] ?? ''
+                        'insurance_company_name' => $procedure['insurancePlans']['0']['insuranceCompany']['name'] ?? '',
+                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id'] ?? '',
+                        'insurance_plan_name'    => $procedure['insurancePlans']['0']['name'] ?? ''
                     ],
                     "selectedPrice"              => ucwords($companyProcedureLabelFee->description ?? ''),
                     "selectedPriceContractFee"   => ucwords($planProcedureLabelFee->description ?? '')
