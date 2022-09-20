@@ -140,7 +140,7 @@ class User extends Authenticatable implements JWTSubject, Auditable
      * @var array
      */
     protected $auditExclude = [
-        'last_activity',
+        'last_activity', 'updated_at'
     ];
 
     /**
