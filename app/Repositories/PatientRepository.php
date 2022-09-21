@@ -1023,4 +1023,11 @@ class PatientRepository
         $insurancePolicy = $patient->insurancePolicies()->find($insurance_policy_id);
         return $insurancePolicy;
     }
+
+    public function getPolicies(int $patient_id)
+    {
+        $patient = Patient::with("insurancePolicies")->find($patient_id);
+        $insurancePolicies = $patient->insurancePolicies ?? [];
+        return $insurancePolicies;
+    }
 }
