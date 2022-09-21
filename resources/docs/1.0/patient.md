@@ -37,7 +37,7 @@
 | 9 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
 | 10 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
 | 11 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
-| 11 |GET | `Get all policies to patient`           | `/patient/get-policies`|yes|get all policies to patient|
+| 11 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -1553,126 +1553,7 @@
             "own_insurance": false,
             "created_at": "2022-09-05T15:04:54.000000Z",
             "updated_at": "2022-09-05T15:04:54.000000Z"
-        },
-        "insurance_plan": {
-            "id": 2,
-            "code": "IP-00002-2022",
-            "name": "Somename 2",
-            "ins_type": "Some Ins_type",
-            "cap_group": "Somecapgroup",
-            "accept_assign": true,
-            "pre_authorization": true,
-            "file_zero_changes": true,
-            "referral_required": true,
-            "accrue_patient_resp": true,
-            "require_abn": true,
-            "pqrs_eligible": true,
-            "allow_attached_files": true,
-            "eff_date": "2022-01-23",
-            "charge_using": "someCharge",
-            "format": "y-m-d",
-            "method": "someMethod",
-            "naic": "someNaic",
-            "insurance_company_id": 1,
-            "created_at": "2022-04-20T21:53:18.000000Z",
-            "updated_at": "2022-04-20T21:53:18.000000Z",
-            "last_modified": {
-                "user": "Console",
-                "roles": []
-            },
-            "insurance_company": {
-                "id": 1,
-                "code": "IC-00001-2022",
-                "name": "Dsfsdfsfeddsddfg",
-                "file_method": "someFileNaic",
-                "naic": "someNaic",
-                "created_at": "2022-04-20T21:53:08.000000Z",
-                "updated_at": "2022-04-20T21:53:08.000000Z",
-                "status": false,
-                "last_modified": {
-                    "user": "Johan Julian",
-                    "roles": [
-                        {
-                            "id": 2,
-                            "name": "Billing Manager",
-                            "slug": "billingmanager",
-                            "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
-                            "level": 2,
-                            "created_at": "2022-04-20T21:52:51.000000Z",
-                            "updated_at": "2022-04-20T21:52:51.000000Z",
-                            "pivot": {
-                                "user_id": 2,
-                                "role_id": 2,
-                                "created_at": "2022-07-20T21:03:58.000000Z",
-                                "updated_at": "2022-07-20T21:03:58.000000Z"
-                            }
-                        }
-                    ]
-                },
-                "billing_companies": [
-                    {
-                        "id": 1,
-                        "name": "Zulauf Group",
-                        "created_at": "2022-04-20T21:52:55.000000Z",
-                        "updated_at": "2022-04-20T21:52:55.000000Z",
-                        "code": "BC-00001-2022",
-                        "status": false,
-                        "pivot": {
-                            "insurance_company_id": 1,
-                            "billing_company_id": 1,
-                            "status": true,
-                            "created_at": "2022-04-20T21:53:08.000000Z",
-                            "updated_at": "2022-04-20T21:53:08.000000Z"
-                        }
-                    }
-                ]
-            }
-        },
-        "subscribers": [
-            {
-                "id": 3,
-                "ssn": "85",
-                "member_id": null,
-                "first_name": "F Name",
-                "last_name": "L Name",
-                "created_at": "2022-09-05T05:27:41.000000Z",
-                "updated_at": "2022-09-05T05:27:41.000000Z",
-                "pivot": {
-                    "insurance_policy_id": 8,
-                    "subscriber_id": 3,
-                    "created_at": "2022-09-05T06:16:35.000000Z",
-                    "updated_at": "2022-09-05T06:16:35.000000Z"
-                },
-                "addresses": [
-                    {
-                        "id": 46,
-                        "address": "Address",
-                        "city": "City",
-                        "state": "state",
-                        "zip": "zip",
-                        "billing_company_id": 2,
-                        "created_at": "2022-09-05T05:27:41.000000Z",
-                        "updated_at": "2022-09-05T05:27:41.000000Z",
-                        "addressable_type": "App\\Models\\Subscriber",
-                        "addressable_id": 3
-                    }
-                ],
-                "contacts": [
-                    {
-                        "id": 51,
-                        "phone": "phone",
-                        "fax": "fax",
-                        "email": "correo@correo.com",
-                        "billing_company_id": 2,
-                        "created_at": "2022-09-05T05:27:41.000000Z",
-                        "updated_at": "2022-09-05T05:27:41.000000Z",
-                        "mobile": null,
-                        "contactable_type": "App\\Models\\Subscriber",
-                        "contactable_id": 3
-                    }
-                ]
-            }
-        ]
+        }
     }
 ]
 ```
