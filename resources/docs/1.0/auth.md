@@ -21,7 +21,7 @@
 | 3 |GET| `me`      | `/auth/me`            |yes            |get info from user authenticate|
 | 4 |GET| `refresh-token`  | `/auth/refresh-token` |yes            |to refresh token auth|
 | 5 |GET| `check-token`  | `/auth/check-token?token={token}` |yes            |to refresh token auth|
-| 6 |POST| `send-email-code`  | `/auth/send-email-code` |yes            |to send email code auth|
+| 6 |POST| `send-email-code`  | `/auth/send-email-code` |no            |to send email code auth|
 
 
 
