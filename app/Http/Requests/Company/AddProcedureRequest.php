@@ -50,7 +50,7 @@ class AddProcedureRequest extends FormRequest
             'mac_localities.*.insurance_plan_procedure'                    => ['nullable', 'array'],
             'mac_localities.*.insurance_plan_procedure.price'              => ['nullable', 'numeric'],
             'mac_localities.*.insurance_plan_procedure.price_percentage'   => ['nullable', 'numeric'],
-            'mac_localities.*.insurance_plan_procedure.insurance_plan_id'  => ['required', 'integer'],
+            'mac_localities.*.insurance_plan_procedure.insurance_plan_id'  => ['nullable', 'integer'],
 
             'mac_localities.*.selectedPrice'                                => ['nullable', 'string'],
             'mac_localities.*.selectedPriceContractFee'                     => ['nullable', 'string'],

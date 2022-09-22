@@ -589,6 +589,15 @@ class ProcedureRepository
         try {
             DB::beginTransaction();
             $company = Company::find($id);
+            
+            $procedures = Procedure::whereHas('companies', function ($query) use ($company) {
+                $query->where('company_id', $company->id);
+            })->with(['companies', 'macLocalities'])->get();
+
+            foreach ($procedures as $procedure) {
+                $procedure->macLocalities()->detach();
+            }
+            $company->procedures()->detach();
 
             if (isset($data['mac_localities'])) {
                 foreach ($data['mac_localities'] as $macL) {

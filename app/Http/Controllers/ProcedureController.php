@@ -239,8 +239,6 @@ class ProcedureController extends Controller
      */
     public function getToCompany(int $id): JsonResponse
     {
-        $rs = $this->procedureRepository->getToCompany($id);
-
-        return $rs ? response()->json($rs) : response()->json(__("Error, get procedures to company not found"), 404);
+        return response()->json($this->procedureRepository->getToCompany($id));
     }
 }
