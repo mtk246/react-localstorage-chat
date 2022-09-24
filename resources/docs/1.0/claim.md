@@ -11,6 +11,8 @@
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
+- [Save as draft claim](#save-as-draft-claim)
+- [Update as draft claim](#update-as-draft-claim)
 
 
 
@@ -28,6 +30,8 @@
 | 6 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
 | 7 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 8 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 9 |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
 
 
 <a name="create-claim"></a>
@@ -746,6 +750,162 @@
 
 <a name="update-claim"></a>
 ## Update claim
+
+### Body request example
+
+```json
+{
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
+    "insurance_policies": [8,10],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "modifier_id": 1,
+            "rev": 2,
+            "place_of_service_id": 3,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1, //1,2,3
+            "price": 200
+        }
+    ]
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim updated
+
+#
+
+```json
+{
+    "id": 1,
+    "qr_claim": null,
+    "control_number": "000000001",
+    "submitter_name": null,
+    "submitter_contact": null,
+    "submitter_phone": null,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "insurance_company_id": null,
+    "claim_formattable_type": null,
+    "claim_formattable_id": null,
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "updated_at": "2022-09-16T13:23:19.000000Z"
+}
+```
+#
+
+<a name="save-as-draft-claim"></a>
+## Save as draft claim
+
+### Body request example
+
+```json
+{
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
+    "insurance_policies": [8,10],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "modifier_id": 1,
+            "rev": 2,
+            "place_of_service_id": 3,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1,
+            "price": 200
+        }
+    ]
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 201 claim created
+
+
+#
+
+```json
+{
+    "control_number": "000000001",
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "updated_at": "2022-09-16T13:23:19.000000Z",
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "id": 1
+}
+```
+#
+
+<a name="update-as-draft-claim"></a>
+## Update as draft claim
 
 ### Body request example
 

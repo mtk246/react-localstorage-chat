@@ -381,6 +381,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\ClaimController::class,"getAllClaims"]);
         Route::get("/{id}",[\App\Http\Controllers\ClaimController::class,"getOneClaim"]);
         Route::put("/{id}",[\App\Http\Controllers\ClaimController::class,"updateClaim"]);
+        
+        Route::post("/draft",[\App\Http\Controllers\ClaimController::class,"saveAsDraft"]);
+        Route::put("/draft/{id}",[\App\Http\Controllers\ClaimController::class,"updateAsDraft"]);
     });
 
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);

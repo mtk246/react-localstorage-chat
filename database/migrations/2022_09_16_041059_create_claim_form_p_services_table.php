@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('claim_form_p_services', function (Blueprint $table) {
             $table->id();
-            $table->date('from_service');
-            $table->date('to_service');
+            $table->date('from_service')->nullable();
+            $table->date('to_service')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->integer('epstd')->nullable();
             $table->integer('rev')->nullable();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Claim\ClaimCreateRequest;
+use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,28 @@ class ClaimController extends Controller
     public function __construct()
     {
         $this->claimRepository = new ClaimRepository();
+    }
+
+    /**
+     * @param claimCreateRequest $request
+     * @return JsonResponse
+     */
+    public function saveAsDraft(ClaimDraftRequest $request)
+    {
+        $rs = $this->claimRepository->createClaim($request->validated());
+
+        return $rs ? response()->json($rs) : response()->json(__("Error creating claim"), 400);
+    }
+
+    /**
+     * @param claimCreateRequest $request
+     * @return JsonResponse
+     */
+    public function updateAsDraft(ClaimDraftRequest $request, $id)
+    {
+        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error updating claim"), 400);
     }
 
     /**

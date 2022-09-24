@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('submitter_contact', 50)->nullable();
             $table->string('submitter_phone')->nullable();
 
-            $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('facility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('facility_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('patient_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('health_professional_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->nullableMorphs('claim_formattable');

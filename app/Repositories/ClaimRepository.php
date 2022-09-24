@@ -33,10 +33,10 @@ class claimRepository
 
             $claim = Claim::create([
                 "control_number"         => $newCode,
-                "company_id"             => $data["company_id"],
-                "facility_id"            => $data["facility_id"],
-                "patient_id"             => $data["patient_id"],
-                "health_professional_id" => $data["health_professional_id"]
+                "company_id"             => $data["company_id"] ?? null,
+                "facility_id"            => $data["facility_id"] ?? null,
+                "patient_id"             => $data["patient_id"] ?? null,
+                "health_professional_id" => $data["health_professional_id"] ?? null
             ]);
 
             if (isset($data['diagnoses'])) {
@@ -54,7 +54,7 @@ class claimRepository
 
             if (isset($data['claim_services'])) {
                 $claimFormP = ClaimFormP::create([
-                    'type_form_id' => $data['format'],
+                    'type_form_id' => $data['format'] ?? null,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany
                 ]);
                 $claimFormP->claimFormPServices()->delete();
@@ -110,10 +110,10 @@ class claimRepository
             DB::beginTransaction();
             $claim = Claim::find($id);
             $claim->update([
-                "company_id"             => $data["company_id"],
-                "facility_id"            => $data["facility_id"],
-                "patient_id"             => $data["patient_id"],
-                "health_professional_id" => $data["health_professional_id"]
+                "company_id"             => $data["company_id"] ?? null,
+                "facility_id"            => $data["facility_id"] ?? null,
+                "patient_id"             => $data["patient_id"] ?? null,
+                "health_professional_id" => $data["health_professional_id"] ?? null
             ]);
 
             if (isset($data['diagnoses'])) {
@@ -131,7 +131,7 @@ class claimRepository
 
             if (isset($data['claim_services'])) {
                 $claimFormP = ClaimFormP::create([
-                    'type_form_id' => $data['format'],
+                    'type_form_id' => $data['format'] ?? null,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany
                 ]);
                 $claimFormP->claimFormPServices()->delete();

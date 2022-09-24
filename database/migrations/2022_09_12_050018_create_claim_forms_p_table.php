@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date_of_current')->nullable();
             $table->string('total_charge', 50)->nullable();
 
-            $table->foreignId('type_form_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('type_form_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('type_insurance_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('relationship_to_insured_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('billing_company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
