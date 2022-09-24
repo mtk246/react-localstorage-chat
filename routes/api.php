@@ -375,6 +375,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-type-formats",[\App\Http\Controllers\ClaimController::class,"getListTypeFormats"]);
         Route::get("/get-list-status",[\App\Http\Controllers\ClaimController::class,"getListStatus"]);
 
+        Route::get("/get-access-token",[\App\Http\Controllers\ClaimController::class,"getSecurityAuthorizationAccessToken"]);
+
         Route::post("/",[\App\Http\Controllers\ClaimController::class,"createClaim"]);
         Route::get("/",[\App\Http\Controllers\ClaimController::class,"getAllClaims"]);
         Route::get("/{id}",[\App\Http\Controllers\ClaimController::class,"getOneClaim"]);
