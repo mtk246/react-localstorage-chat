@@ -564,7 +564,8 @@ class ProcedureRepository
                     'code',
                     ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
                     null,
-                    ['description']
+                    ['description'],
+                    ['price']
                 );
             }
         } catch (\Exception $e) {

@@ -1054,15 +1054,19 @@
 [
     {
         "id": 11,
-        "name": "Code procedure2"
+        "name": "Code procedure2",
+        "description": "Description procedure2",
+        "price": 231 //Only if the company_id field is specified and there is a price for the procedure
     },
     {
         "id": 12,
-        "name": "Code procedure1"
+        "name": "Code procedure1",
+        "description": "Description procedure1"
     },
     {
         "id": 13,
-        "name": "Code procedure3"
+        "name": "Code procedure3",
+        "description": "Description procedure3"
     }
 ]
 ```

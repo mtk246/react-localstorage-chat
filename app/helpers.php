@@ -48,7 +48,7 @@ if (!function_exists('generateNewCode')) {
 }
 
 if (!function_exists('getList')) {
-    function getList($model, $fields = 'name', $filters = [], $except_id = null, $others = [])
+    function getList($model, $fields = 'name', $filters = [], $except_id = null, $others = [], $pivotOthers = [])
     {
         $records = (is_object($model)) ? $model : $model::all();
         if ($filters) {
@@ -83,6 +83,12 @@ if (!function_exists('getList')) {
                 $fieldPush = ['id' => $rec->id, 'name' => $text];
                 foreach ($others as $other) {
                     $fieldPush[$other] = $rec->$other;
+                }
+                foreach ($pivotOthers as $pivotOther) {
+                    $object = $rec->$relationship()->where($filters['where'])->first();
+                    if (isset($object)) {
+                        $fieldPush[$pivotOther] = $object->pivot[$pivotOther];
+                    }
                 }
                 array_push($options, $fieldPush);
             }
