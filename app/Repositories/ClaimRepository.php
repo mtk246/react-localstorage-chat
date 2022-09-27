@@ -26,9 +26,9 @@ class claimRepository
         try {
             DB::beginTransaction();
             $newCode = 1;
-            $targetModel = Claim::select("id")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+            $targetModel = Claim::select("id", "control_number")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
             
-            $newCode += ($targetModel) ? (int)explode('-', $targetModel->$field)[1] : 0;
+            $newCode += ($targetModel) ? (int)$targetModel->control_number : 0;
             $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
 
             $claim = Claim::create([
@@ -47,7 +47,7 @@ class claimRepository
             }
 
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
+                $billingCompany = $data["billing_company_id"] ?? null;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
@@ -82,7 +82,9 @@ class claimRepository
     public function getAllClaims() {
         $claims = Claim::with([
             "company",
-            "patient"
+            "patient" => function ($query) {
+                $query->with("user.profile");
+            }
         ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         return is_null($claims) ? null : $claims;
     }
@@ -124,7 +126,7 @@ class claimRepository
             }
 
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
+                $billingCompany = $data["billing_company_id"] ?? null;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
