@@ -20,12 +20,11 @@ class ClaimFormP extends Model implements Auditable
         "total_charge",
         "type_form_id",
         "type_insurance_id",
-        "insurance_policy_id",
-        "facility_id",
-        "patient_id",
         "relationship_to_insured_id",
         "billing_company_id"
     ];
+
+    protected $with = ["claimFormServices"];
 
     /**
      * TypeForm belongs to ClaimFormP.
@@ -102,7 +101,7 @@ class ClaimFormP extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function claimFormPServices()
+    public function claimFormServices()
     {
         return $this->hasMany(ClaimFormPService::class);
     }

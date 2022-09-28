@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -23,9 +24,17 @@ class Claim extends Model implements Auditable
         "facility_id",
         "patient_id",
         "health_professional_id",
-        "insurance_company_id"
+        "insurance_company_id",
+        "claim_formattable_type",
+        "claim_formattable_id"
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['format'];
     
     /**
      * Claim belongs to Company.
@@ -85,5 +94,16 @@ class Claim extends Model implements Auditable
     public function insurancePolicies()
     {
         return $this->belongsToMany(InsurancePolicy::class, 'claim_insurance_policy', 'claim_id', 'insurance_policy_id')->withTimestamps();
+    }
+
+
+    /**
+     * Interact with the claim's format.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getFormatAttribute()
+    {
+        return $this->claimFormattable->type_form_id ?? '';
     }
 }

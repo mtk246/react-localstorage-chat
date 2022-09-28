@@ -31,36 +31,48 @@ class claimRepository
             $newCode += ($targetModel) ? (int)$targetModel->control_number : 0;
             $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
 
-            $claim = Claim::create([
-                "control_number"         => $newCode,
-                "company_id"             => $data["company_id"] ?? null,
-                "facility_id"            => $data["facility_id"] ?? null,
-                "patient_id"             => $data["patient_id"] ?? null,
-                "health_professional_id" => $data["health_professional_id"] ?? null
-            ]);
-
-            if (isset($data['diagnoses'])) {
-                $claim->diagnoses()->detach();
-                foreach ($data['diagnoses'] as $diagnosis) {
-                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
-                }
-            }
-
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data['claim_services'])) {
-                $claimFormP = ClaimFormP::create([
-                    'type_form_id' => $data['format'] ?? null,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany
-                ]);
-                $claimFormP->claimFormPServices()->delete();
-                foreach ($data['claim_services'] as $service) {
-                    $service["claim_form_p_id"] = $claimFormP->id;
-                    ClaimFormPService::create($service);
+            if (isset($data["format"])) {
+                $typeFormat = TypeForm::find($data["format"]);
+                if (isset($typeFormat)) {
+                    if ($typeFormat->form == '837P') {
+                        $model = ClaimFormP::class;
+                        if (isset($data['claim_services'])) {
+                            $claimForm = ClaimFormP::create([
+                                'type_form_id' => $data['format'] ?? null,
+                                'billing_company_id' => $billingCompany->id ?? $billingCompany
+                            ]);
+                            $claimForm->claimFormServices()->delete();
+                            foreach ($data['claim_services'] as $service) {
+                                $service["claim_form_p_id"] = $claimForm->id;
+                                ClaimFormPService::create($service);
+                            }
+                        }
+                    } else {
+                        $model = ClaimFormI::class;
+                    }
+                }
+            }
+
+            $claim = Claim::create([
+                "control_number"         => $newCode,
+                "company_id"             => $data["company_id"] ?? null,
+                "facility_id"            => $data["facility_id"] ?? null,
+                "patient_id"             => $data["patient_id"] ?? null,
+                "health_professional_id" => $data["health_professional_id"] ?? null,
+                "claim_formattable_type" => $model ?? null,
+                "claim_formattable_id"   => $claimForm->id ?? null,
+            ]);
+
+            if (isset($data['diagnoses'])) {
+                $claim->diagnoses()->detach();
+                foreach ($data['diagnoses'] as $diagnosis) {
+                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
                 }
             }
 
@@ -96,7 +108,8 @@ class claimRepository
     public function getOneclaim(int $id) {
         $claim = claim::with([
             "diagnoses",
-            "insurancePolicies"
+            "insurancePolicies",
+            "claimFormattable"
         ])->whereId($id)->first();
 
         return !is_null($claim) ? $claim : null;
@@ -111,11 +124,45 @@ class claimRepository
         try {
             DB::beginTransaction();
             $claim = Claim::find($id);
+
+            $claimForm = $claim->claimFormattable;
+            $claimForm->claimFormServices()->delete();
+            $claimForm->delete();
+
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"] ?? null;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (isset($data["format"])) {
+                $typeFormat = TypeForm::find($data["format"]);
+                if (isset($typeFormat)) {
+                    if ($typeFormat->form == '837P') {
+                        $model = ClaimFormP::class;
+                        if (isset($data['claim_services'])) {
+                            $claimForm = ClaimFormP::create([
+                                'type_form_id' => $data['format'],
+                                'billing_company_id' => $billingCompany->id ?? $billingCompany
+                            ]);
+                            foreach ($data['claim_services'] as $service) {
+                                $service["claim_form_p_id"] = $claimForm->id;
+                                ClaimFormPService::create($service);
+                            }
+                        }
+                    } else {
+                        $model = ClaimFormI::class;
+                    }
+                }
+            }
+
             $claim->update([
                 "company_id"             => $data["company_id"] ?? null,
                 "facility_id"            => $data["facility_id"] ?? null,
                 "patient_id"             => $data["patient_id"] ?? null,
-                "health_professional_id" => $data["health_professional_id"] ?? null
+                "health_professional_id" => $data["health_professional_id"] ?? null,
+                "claim_formattable_type" => $model ?? null,
+                "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
 
             if (isset($data['diagnoses'])) {
@@ -125,22 +172,8 @@ class claimRepository
                 }
             }
 
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"] ?? null;
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-
-            if (isset($data['claim_services'])) {
-                $claimFormP = ClaimFormP::create([
-                    'type_form_id' => $data['format'] ?? null,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany
-                ]);
-                $claimFormP->claimFormPServices()->delete();
-                foreach ($data['claim_services'] as $service) {
-                    $service["claim_form_p_id"] = $claimFormP->id;
-                    ClaimFormPService::create($service);
-                }
+            if (isset($data['insurance_policies'])) {
+                $claim->insurancePolicies()->sync($data['insurance_policies']);
             }
 
             DB::commit();

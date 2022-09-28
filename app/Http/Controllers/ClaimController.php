@@ -143,7 +143,8 @@ class ClaimController extends Controller
                 'client_secret' => 'EBPadsDKoOuEoOWv',
                 'grant_type'    => 'client_credentials'
             ]);
-            return response()->json($response);
+            $responseData = json_decode($response->body());
+            return response()->json($responseData);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 500);
         }
