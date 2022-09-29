@@ -353,7 +353,7 @@ class claimRepository
                         "firstName" => "janetwo",
                         "lastName" => "doetwo",
                         "middleName" => "middletwo",
-                        "ssn" : "000000000"
+                        "ssn" => "000000000"
                     ]
                 ],
                 "claimInformation" => [
@@ -380,42 +380,43 @@ class claimRepository
                             "diagnosisCode" => "25000"
                         ]
                     ],
-                "serviceFacilityLocation" => [
-                    "organizationName" => "HAPPY DOCTORS GROUP",
-                    "address" => [
-                        "address1" => "000 address1",
-                        "city" => "city2",
-                        "state" => "tn",
-                        "postalCode" => "372030000"
-                    ]
-                ],
-                "serviceLines" => [
-                    [
-                        "serviceDate" => "20050514",
-                        "professionalService" => [
-                            "procedureIdentifier" => "HC",
-                            "lineItemChargeAmount" => "25",
-                            "procedureCode" => "E0570",
-                            "measurementUnit" => "UN",
-                            "serviceUnitCount" => "1",
-                            "compositeDiagnosisCodePointers" => [
-                                "diagnosisCodePointers" => ["1","2"]
-                            ]
+                    "serviceFacilityLocation" => [
+                        "organizationName" => "HAPPY DOCTORS GROUP",
+                        "address" => [
+                            "address1" => "000 address1",
+                            "city" => "city2",
+                            "state" => "tn",
+                            "postalCode" => "372030000"
                         ]
                     ],
-                    [
-                        "serviceDate" => "20050514",
-                        "professionalService" => [
-                            "procedureIdentifier" => "HC",
-                            "lineItemChargeAmount" => "3.75",
-                            "procedureCode" => "A7003",
-                            "measurementUnit" => "UN",
-                            "serviceUnitCount" => "1",
-                            "compositeDiagnosisCodePointers" => [
-                                "diagnosisCodePointers" => ["1" ]
+                    "serviceLines" => [
+                        [
+                            "serviceDate" => "20050514",
+                            "professionalService" => [
+                                "procedureIdentifier" => "HC",
+                                "lineItemChargeAmount" => "25",
+                                "procedureCode" => "E0570",
+                                "measurementUnit" => "UN",
+                                "serviceUnitCount" => "1",
+                                "compositeDiagnosisCodePointers" => [
+                                    "diagnosisCodePointers" => ["1","2"]
+                                ]
                             ]
-                        ]
+                        ],
+                        [
+                            "serviceDate" => "20050514",
+                            "professionalService" => [
+                                "procedureIdentifier" => "HC",
+                                "lineItemChargeAmount" => "3.75",
+                                "procedureCode" => "A7003",
+                                "measurementUnit" => "UN",
+                                "serviceUnitCount" => "1",
+                                "compositeDiagnosisCodePointers" => [
+                                    "diagnosisCodePointers" => ["1" ]
+                                ]
+                            ]
 
+                        ]
                     ]
                 ]
             ]);
