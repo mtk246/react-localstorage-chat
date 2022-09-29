@@ -34,7 +34,7 @@ class Claim extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['format'];
+    protected $appends = ['format', 'last_modified'];
     
     /**
      * Claim belongs to Company.
@@ -105,5 +105,26 @@ class Claim extends Model implements Auditable
     public function getFormatAttribute()
     {
         return $this->claimFormattable->type_form_id ?? '';
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }
