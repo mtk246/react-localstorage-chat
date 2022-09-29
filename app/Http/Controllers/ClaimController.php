@@ -146,7 +146,7 @@ class ClaimController extends Controller
 
         if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
         
-        $rs = $this->claimRepository->checkEligibility($token, $id);
+        $rs = $this->claimRepository->checkEligibility($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error get check eligibility"), 400);
     }
