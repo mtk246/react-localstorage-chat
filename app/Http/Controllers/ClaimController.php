@@ -126,27 +126,28 @@ class ClaimController extends Controller
      */
     public function getSecurityAuthorizationAccessToken(): JsonResponse
     {
-        $client = new Client([
-            'base_uri' => 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token',
-            //'timeout'  => 2.0
-        ]);
-        try {
-            /**$response = $client->request('POST', '', [
-                'form_params' => [
-                    'client_id'     => '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF',
-                    'client_secret' => 'EBPadsDKoOuEoOWv',
-                    'grant_type'    => 'client_credentials'
-                ]
-            ]);*/
-            $response = Http::acceptJson()->post('https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token', [
-                'client_id'     => '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF',
-                'client_secret' => 'EBPadsDKoOuEoOWv',
-                'grant_type'    => 'client_credentials'
-            ]);
-            $responseData = json_decode($response->body());
-            return response()->json($responseData);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), 500);
-        }
+        $rs = $this->claimRepository->getSecurityAuthorizationAccessToken();
+
+        return $rs ? response()->json($rs) : response()->json(__("Error get security authorization access token"), 400);
+    }
+
+    /**
+     * Eligibility
+     *
+     * @method checkEligibility
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function checkEligibility(int $id): JsonResponse
+    {
+        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+
+        if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
+        
+        $rs = $this->claimRepository->checkEligibility($token, $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error get check eligibility"), 400);
     }
 }
