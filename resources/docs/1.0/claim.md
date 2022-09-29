@@ -13,6 +13,8 @@
 - [Update claim](#update-claim)
 - [Save as draft claim](#save-as-draft-claim)
 - [Update as draft claim](#update-as-draft-claim)
+- [Check eligibility](#check-eligibility-claim)
+- [Validation claim](#validation-claim)
 
 
 
@@ -32,6 +34,8 @@
 | 8 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
 | 9 |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
 | 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
+| 11 |GET     | `Check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
+| 12 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
 
 
 <a name="create-claim"></a>
@@ -985,5 +989,176 @@
     "claim_formattable_id": null,
     "created_at": "2022-09-16T13:23:19.000000Z",
     "updated_at": "2022-09-16T13:23:19.000000Z"
+}
+```
+#
+
+<a name="check-eligibility-claim"></a>
+## Check eligibility claim
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim found
+
+#
+
+
+```json
+{
+    "meta": {
+        "senderId": "MN_MCC_APP",
+        "applicationMode": "sandbox",
+        "traceId": "8cfb6d4f-38bd-d34c-566f-32385df277f3"
+    },
+    "controlNumber": "123456789",
+    "reassociationKey": "123456789",
+    "tradingPartnerServiceId": "CMSMED",
+    "provider": {
+        "providerName": "HAPPY DOCTORS GROUP PRACTICE",
+        "entityIdentifier": "Provider",
+        "entityType": "Non-Person Entity",
+        "npi": "1234567893"
+    },
+    "subscriber": {
+        "memberId": "0000000000",
+        "firstName": "JOHNONE",
+        "lastName": "DOEONE",
+        "middleName": "M",
+        "gender": "F",
+        "entityIdentifier": "Insured or Subscriber",
+        "entityType": "Person",
+        "dateOfBirth": "18800102",
+        "relationToSubscriber": "Self",
+        "insuredIndicator": "Y",
+        "maintenanceTypeCode": "001",
+        "maintenanceReasonCode": "25",
+        "address": {
+            "address1": "123 address1",
+            "city": "SEATTLE",
+            "state": "WA",
+            "postalCode": "981010000"
+        }
+    },
+    "subscriberTraceNumbers": [
+        {
+            "traceTypeCode": "2",
+            "traceType": "Referenced Transaction Trace Numbers",
+            "referenceIdentification": "123456789",
+            "originatingCompanyIdentifier": "9877281234"
+        },
+        {
+            "traceTypeCode": "2",
+            "traceType": "Referenced Transaction Trace Numbers",
+            "referenceIdentification": "123456789",
+            "originatingCompanyIdentifier": "9877281234"
+        }
+    ],
+    "payer": {
+        "entityIdentifier": "Payer",
+        "entityType": "Non-Person Entity",
+        "name": "CMS",
+        "payorIdentification": "CMSMED"
+    },
+    "planDateInformation": {
+        "eligibility": "20211020-20211020"
+    },
+    "planStatus": [
+        {
+            "statusCode": "1",
+            "status": "Active Coverage",
+            "serviceTypeCodes": [
+                "88",
+                "30",
+                "UC"
+            ]
+        }
+    ],
+    "benefitsInformation": [
+        {
+            "code": "I",
+            "name": "Non-Covered",
+            "serviceTypeCodes": [
+                "41",
+                "54"
+            ],
+            "serviceTypes": [
+                "Routine (Preventive) Dental",
+                "Long Term Care"
+            ]
+        }
+    ]
+}
+```
+
+#
+
+<a name="validation-claim"></a>
+## Validation claim
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim found
+
+#
+
+
+```json
+{
+    "status": "SUCCESS",
+    "controlNumber": "000000001",
+    "tradingPartnerServiceId": "9496",
+    "claimReference": {
+        "correlationId": "200715R999898~18620063139417176",
+        "submitterId": "999898",
+        "customerClaimNumber": "000000001",
+        "patientControlNumber": "12345",
+        "timeOfResponse": "2020-07-15T12:44:17.994-05:00",
+        "claimType": "PRO",
+        "formatVersion": "5010"
+    },
+    "meta": {
+        "submitterId": "999898",
+        "senderId": "MN_MCC_APP",
+        "billerId": "009998",
+        "traceId": "804d63e8-aca8-0f05-c573-166ba75c3acb",
+        "applicationMode": "sandbox"
+    },
+    "editStatus": "SUCCESS",
+    "payer": {
+        "payerName": "EXTRA HEALTHY INSURANCE",
+        "payerID": "9496"
+    }
 }
 ```
