@@ -377,6 +377,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
         Route::get("/get-access-token",[\App\Http\Controllers\ClaimController::class,"getSecurityAuthorizationAccessToken"]);
         Route::get("/check-eligibility/{id}",[\App\Http\Controllers\ClaimController::class,"checkEligibility"]);
+        Route::get("/validation/{id}",[\App\Http\Controllers\ClaimController::class,"claimValidation"]);
 
         Route::post("/",[\App\Http\Controllers\ClaimController::class,"createClaim"]);
         Route::get("/",[\App\Http\Controllers\ClaimController::class,"getAllClaims"]);
