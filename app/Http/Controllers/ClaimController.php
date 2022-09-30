@@ -170,4 +170,18 @@ class ClaimController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error get claim validation"), 400);
     }
+
+
+    /**
+     * @param claimCreateRequest $request
+     * @return JsonResponse
+     */
+    public function saveAsDraftAndEligibility(ClaimDraftRequest $request)
+    {
+        $claim = $this->claimRepository->createClaim($request->validated());
+
+        if (!isset($claim)) return response()->json(__("Error save claim"), 400);
+
+        return $this->checkEligibility($claim->id);
+    }
 }

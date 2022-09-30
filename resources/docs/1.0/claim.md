@@ -13,7 +13,7 @@
 - [Update claim](#update-claim)
 - [Save as draft claim](#save-as-draft-claim)
 - [Update as draft claim](#update-as-draft-claim)
-- [Check eligibility](#check-eligibility-claim)
+- [Draft and Check eligibility](#draft-check-eligibility-claim)
 - [Validation claim](#validation-claim)
 
 
@@ -22,19 +22,19 @@
 ## Basic data to make request
 
 
-| # | METHOD | Name              | URL             | Token required | Description     |
-| : |        |                   |                 |                |                 |
-| 1 |POST    | `Create claim`  | `/claim/`     | yes            | Create claim  |
-| 2 |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
-| 3 |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
-| 4 |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
-| 5 |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
-| 6 |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
-| 7 |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 8 |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
-| 9 |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| #  | METHOD | Name              | URL             | Token required | Description     |
+| :  |        |                   |                 |                |                 |
+| 1  |POST    | `Create claim`  | `/claim/`     | yes            | Create claim  |
+| 2  |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
+| 3  |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
+| 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
+| 5  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
+| 6  |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
+| 7  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 8  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 9  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
 | 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
-| 11 |GET     | `Check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
+| 11 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
 | 12 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
 
 
@@ -993,8 +993,8 @@
 ```
 #
 
-<a name="check-eligibility-claim"></a>
-## Check eligibility claim
+<a name="draft-check-eligibility"></a>
+## Save as draft and check eligibility claim
 
 ### Param in header
 
@@ -1003,15 +1003,43 @@
     "Authorization": bearer <token>
 }
 ```
-
-## Param in path
+### Body request example
 
 ```json
 {
-    "id": <integer>
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "modifier_id": 1,
+            "rev": 2,
+            "place_of_service_id": 3,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1, //1,2,3
+            "price": 200
+        }
+    ]
 }
 ```
-
 ## Response
 
 > {success} 200 claim found
@@ -1020,90 +1048,7 @@
 
 
 ```json
-{
-    "meta": {
-        "senderId": "MN_MCC_APP",
-        "applicationMode": "sandbox",
-        "traceId": "8cfb6d4f-38bd-d34c-566f-32385df277f3"
-    },
-    "controlNumber": "123456789",
-    "reassociationKey": "123456789",
-    "tradingPartnerServiceId": "CMSMED",
-    "provider": {
-        "providerName": "HAPPY DOCTORS GROUP PRACTICE",
-        "entityIdentifier": "Provider",
-        "entityType": "Non-Person Entity",
-        "npi": "1234567893"
-    },
-    "subscriber": {
-        "memberId": "0000000000",
-        "firstName": "JOHNONE",
-        "lastName": "DOEONE",
-        "middleName": "M",
-        "gender": "F",
-        "entityIdentifier": "Insured or Subscriber",
-        "entityType": "Person",
-        "dateOfBirth": "18800102",
-        "relationToSubscriber": "Self",
-        "insuredIndicator": "Y",
-        "maintenanceTypeCode": "001",
-        "maintenanceReasonCode": "25",
-        "address": {
-            "address1": "123 address1",
-            "city": "SEATTLE",
-            "state": "WA",
-            "postalCode": "981010000"
-        }
-    },
-    "subscriberTraceNumbers": [
-        {
-            "traceTypeCode": "2",
-            "traceType": "Referenced Transaction Trace Numbers",
-            "referenceIdentification": "123456789",
-            "originatingCompanyIdentifier": "9877281234"
-        },
-        {
-            "traceTypeCode": "2",
-            "traceType": "Referenced Transaction Trace Numbers",
-            "referenceIdentification": "123456789",
-            "originatingCompanyIdentifier": "9877281234"
-        }
-    ],
-    "payer": {
-        "entityIdentifier": "Payer",
-        "entityType": "Non-Person Entity",
-        "name": "CMS",
-        "payorIdentification": "CMSMED"
-    },
-    "planDateInformation": {
-        "eligibility": "20211020-20211020"
-    },
-    "planStatus": [
-        {
-            "statusCode": "1",
-            "status": "Active Coverage",
-            "serviceTypeCodes": [
-                "88",
-                "30",
-                "UC"
-            ]
-        }
-    ],
-    "benefitsInformation": [
-        {
-            "code": "I",
-            "name": "Non-Covered",
-            "serviceTypeCodes": [
-                "41",
-                "54"
-            ],
-            "serviceTypes": [
-                "Routine (Preventive) Dental",
-                "Long Term Care"
-            ]
-        }
-    ]
-}
+
 ```
 
 #
