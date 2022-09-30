@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('status_claims', function (Blueprint $table) {
+        Schema::create('claim_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status', 50);
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_claims');
+        Schema::dropIfExists('claim_statuses');
     }
 };

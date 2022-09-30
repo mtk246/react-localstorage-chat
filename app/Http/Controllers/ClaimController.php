@@ -63,7 +63,8 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error updating claim"), 400);
     }
 
-    public function getAllClaims() {
+    public function getAllClaims()
+    {
         return response()->json(
             $this->claimRepository->getAllClaims()
         );

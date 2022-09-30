@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\TypeForm;
-use App\Models\StatusClaim;
+use App\Models\ClaimStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
 
@@ -23,12 +23,10 @@ class ClaimDataSeeder extends Seeder
         ];
 
         foreach ($typeForms as $form) {
-
             TypeForm::updateOrCreate($form, $form);
-
         }
 
-        $statusClaims = [
+        $claimStatus = [
             ['status' => 'Draft'],
             ['status' => 'Verified - Not submitted'],
             ['status' => 'Submitted - In approval'],
@@ -39,10 +37,8 @@ class ClaimDataSeeder extends Seeder
             ['status' => 'Denied - Finished']
         ];
 
-        foreach ($statusClaims as $status) {
-
-            StatusClaim::updateOrCreate($status, $status);
-
+        foreach ($claimStatus as $status) {
+            ClaimStatus::updateOrCreate($status, $status);
         }
 
         $serviceTypeOfServices = [
@@ -80,7 +76,6 @@ class ClaimDataSeeder extends Seeder
         ];
 
         foreach ($serviceTypeOfServices as $typeOfService) {
-
             TypeOfService::updateOrCreate($typeOfService, $typeOfService);
         }
 
@@ -127,9 +122,7 @@ class ClaimDataSeeder extends Seeder
         ];
 
         foreach ($servicePlaceOfServices as $placeOfService) {
-
             PlaceOfService::updateOrCreate($placeOfService, $placeOfService);
         }
-
     }
 }

@@ -96,6 +96,17 @@ class Claim extends Model implements Auditable
         return $this->belongsToMany(InsurancePolicy::class, 'claim_insurance_policy', 'claim_id', 'insurance_policy_id')->withTimestamps();
     }
 
+    /**
+     * The insurance policies that belong to the Claim.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function claimStatus()
+    {
+        return $this->belongsToMany(ClaimStatus::class)->using(ClaimStatusClaim::class)->withTimestamps();
+    }
+
+
 
     /**
      * Interact with the claim's format.

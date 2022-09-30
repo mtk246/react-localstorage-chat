@@ -16,8 +16,9 @@ use App\Models\StatusClaim;
 use App\Models\Claim;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
+use App\Models\PrivateNote;
 
-class claimRepository
+class ClaimRepository
 {
     /**
      * @param array $data
@@ -79,6 +80,15 @@ class claimRepository
 
             if (isset($data['insurance_policies'])) {
                 $claim->insurancePolicies()->sync($data['insurance_policies']);
+            }
+
+            if (isset($data['private_note'])) {
+                PrivateNote::create([
+                    'publishable_type'   => ClaimStatus::class,
+                    'publishable_id'     => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'note'               => $data['private_note'],
+                ]);
             }
 
             DB::commit();

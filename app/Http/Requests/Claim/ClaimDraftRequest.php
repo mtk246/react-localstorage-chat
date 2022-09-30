@@ -24,7 +24,7 @@ class ClaimDraftRequest extends FormRequest
      */
     public function rules()
     {
-        return [      
+        return [
             "format"                         => ['nullable', 'integer'],
             "company_id"                     => ['nullable', 'integer'],
             "facility_id"                    => ['nullable', 'integer'],
@@ -47,7 +47,9 @@ class ClaimDraftRequest extends FormRequest
             "claim_services.*.type_of_service_id"  => ["sometimes", "nullable", "integer"],
             "claim_services.*.diagnostic_pointers" => ["sometimes", "nullable", "array"],
             "claim_services.*.epstd"               => ["sometimes", "nullable", "integer"],
-            "claim_services.*.price"               => ["sometimes", "nullable", "numeric"]
+            "claim_services.*.price"               => ["sometimes", "nullable", "numeric"],
+
+            "note"                                 => ["string", "nullable"]
         ];
     }
 }
