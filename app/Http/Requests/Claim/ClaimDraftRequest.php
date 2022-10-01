@@ -49,7 +49,7 @@ class ClaimDraftRequest extends FormRequest
             "claim_services.*.epstd"               => ["sometimes", "nullable", "integer"],
             "claim_services.*.price"               => ["sometimes", "nullable", "numeric"],
 
-            "note"                                 => ["string", "nullable"]
+            "private_note"                         => ["string", "nullable"]
         ];
     }
 }

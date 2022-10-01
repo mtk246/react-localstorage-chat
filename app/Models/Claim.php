@@ -34,7 +34,7 @@ class Claim extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['format', 'last_modified'];
+    protected $appends = ['format', 'last_modified', 'private_note', 'status'];
     
     /**
      * Claim belongs to Company.
@@ -101,9 +101,9 @@ class Claim extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function claimStatus()
+    public function claimStatusClaims()
     {
-        return $this->belongsToMany(ClaimStatus::class)->using(ClaimStatusClaim::class)->withTimestamps();
+        return $this->hasMany(ClaimStatusClaim::class);
     }
 
 
@@ -116,6 +116,30 @@ class Claim extends Model implements Auditable
     public function getFormatAttribute()
     {
         return $this->claimFormattable->type_form_id ?? '';
+    }
+
+    /**
+     * Interact with the claim's privateNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getPrivateNoteAttribute()
+    {
+        return $this->claimStatusClaims()
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "asc")->first()->privateNotes->note ?? '';
+    }
+
+    /**
+     * Interact with the claim's format.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getStatusAttribute()
+    {
+        return $this->claimStatusClaims()
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "asc")->first()->claimStatus->status ?? 'Draft';
     }
 
     public function getLastModifiedAttribute()

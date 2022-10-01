@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
 use App\Models\TypeForm;
-use App\Models\StatusClaim;
+use App\Models\ClaimStatus;
+use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
@@ -83,9 +84,14 @@ class ClaimRepository
             }
 
             if (isset($data['private_note'])) {
+                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+                $claimStatusClaim = ClaimStatusClaim::create([
+                    'claim_id'        => $claim->id,
+                    'claim_status_id' => $claimStatus->id,
+                ]);
                 PrivateNote::create([
-                    'publishable_type'   => ClaimStatus::class,
-                    'publishable_id'     => $patient->id,
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'note'               => $data['private_note'],
                 ]);
@@ -95,7 +101,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
+            return $e;
         }
     }
 
@@ -212,7 +218,7 @@ class ClaimRepository
     }
 
     public function getListStatus() {
-        return getList(StatusClaim::class, 'status');
+        return getList(ClaimStatus::class, 'status');
     }
 
     public function getSecurityAuthorizationAccessToken() {
