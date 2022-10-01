@@ -193,6 +193,21 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($data['insurance_policies']);
             }
 
+            if (isset($data['private_note'])) {
+                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+                $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
+                    'claim_id'        => $claim->id,
+                    'claim_status_id' => $claimStatus->id,
+                ]);
+                PrivateNote::updateOrCreate([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany
+                ], [
+                    'note'               => $data['private_note'],
+                ]);
+            }
+
             DB::commit();
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {

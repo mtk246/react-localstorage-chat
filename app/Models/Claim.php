@@ -34,7 +34,7 @@ class Claim extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['format', 'last_modified', 'private_note', 'status'];
+    protected $appends = ['format', 'last_modified', 'private_note', 'status', 'status_history'];
     
     /**
      * Claim belongs to Company.
@@ -131,7 +131,7 @@ class Claim extends Model implements Auditable
     }
 
     /**
-     * Interact with the claim's format.
+     * Interact with the claim's status.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
@@ -140,6 +140,27 @@ class Claim extends Model implements Auditable
         return $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
                     ->orderBy("id", "asc")->first()->claimStatus->status ?? 'Draft';
+    }
+
+    /**
+     * Interact with the claim's status history.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getStatusHistoryAttribute()
+    {
+        $records = [];
+        $history = $this->claimStatusClaims()
+                        ->orderBy("created_at", "desc")
+                        ->orderBy("id", "asc")->get() ?? [];
+        foreach ($history as $status) {
+            $record = [];
+            $record['note']   = $status->privateNotes->note ?? '';
+            $record['status'] = $status->claimStatus->status;
+            $record['last_modified'] = $status->last_modified ?? '';
+            array_push($records, $record);
+        }
+        return $records;
     }
 
     public function getLastModifiedAttribute()

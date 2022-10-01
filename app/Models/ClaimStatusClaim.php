@@ -20,6 +20,13 @@ class ClaimStatusClaim extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * ClaimStatusClaim belongs to Claim.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -47,5 +54,26 @@ class ClaimStatusClaim extends Model implements Auditable
     public function privateNotes()
     {
         return $this->morphOne(PrivateNote::class, 'publishable');
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }
