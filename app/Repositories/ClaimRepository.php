@@ -265,16 +265,15 @@ class ClaimRepository
                 $newCode += ($targetModel) ? (int)$targetModel->control_number : 0;
                 $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
 
-                $encounters = [];
-                foreach ($claim->claimFormattable->claimFormServices ?? [] $service) {
-                    array_push($encounters, [
-                        "beginningDateOfService" => str_replace("-", "", $service->from_service),
-                        "endDateOfService"       => str_replace("-", "", $service->to_service),
-                        "serviceTypeCodes"       => [
-                          $services->typeOfService->cod
-                        ]
-                    ]);
+                $encounter = [];
+                $serviceCodes = [];
+
+                foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                    $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
+                    $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
+                    array_push($serviceCodes, $service->typeOfService->code);
                 }
+                $encounter["serviceTypeCodes"] = $serviceCodes;
 
                 $data = [
                     'controlNumber'           => $newCode,
@@ -290,8 +289,8 @@ class ClaimRepository
                         'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
                         'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
                         'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
-                        'gender'      => $insurancePolicy->subscriber ? null : $patient->user->profile->sex,
-                        'dateOfBirth' => $insurancePolicy->subscriber ? null : $patient->user->profile->date_of_birth,
+                        'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
+                        'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
                         'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
                         'idCard'      => $insurancePolicy->subscriber->id_card ?? null
                     ],
@@ -299,15 +298,16 @@ class ClaimRepository
                         [
                             'firstName'   => $patient->user->profile->first_name,
                             'lastName'    => $patient->user->profile->last_name,
-                            'gender'      => $patient->user->profile->sex,
-                            'dateOfBirth' => $patient->user->profile->date_of_birth,
+                            'gender'      => strtoupper($patient->user->profile->sex),
+                            'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
                             'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
                         ]
                     ],
-                    'encounter' => $encounters
+                    'encounter' => $encounter
                 ];
                 $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', $data);
                 $responseData = json_decode($response->body());
+                if (isset($responseData->errors)) return $responseData;
 
                 $claimEligibility = ClaimEligibility::updateOrCreate([
                     "control_number"       => $newCode,
