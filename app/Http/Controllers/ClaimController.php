@@ -149,7 +149,7 @@ class ClaimController extends Controller
         
         $rs = $this->claimRepository->checkEligibility($token->access_token ?? '', $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get check eligibility"), 400);
+        return response()->json($rs);
     }
 
     /**

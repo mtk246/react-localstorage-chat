@@ -17,7 +17,9 @@ class ClaimEligibility extends Model implements Auditable
         "control_number",
         "eligibility",
         "company_id",
+        "patient_id",
         "subscriber_id",
+        "insurance_policy_id",
         "insurance_company_id"
     ];
 
@@ -29,6 +31,16 @@ class ClaimEligibility extends Model implements Auditable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * ClaimEligibility belongs to Patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class);
     }
 
     /**

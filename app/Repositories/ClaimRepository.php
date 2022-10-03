@@ -15,9 +15,11 @@ use App\Models\TypeForm;
 use App\Models\ClaimStatus;
 use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
+use App\Models\ClaimEligibility;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
+use App\Models\Patient;
 
 class ClaimRepository
 {
@@ -93,7 +95,7 @@ class ClaimRepository
                     'publishable_type'   => ClaimStatusClaim::class,
                     'publishable_id'     => $claimStatusClaim->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'note'               => $data['private_note'],
+                    'note'               => $data['private_note']
                 ]);
             }
 
@@ -252,92 +254,75 @@ class ClaimRepository
 
     public function checkEligibility($token, $id) {
         try {
-            $claim = Claim::with('patient')->find($id);
-            $patient = Patient::with("insurancePolicies")->find($claim->patient_id);
+            $claim = Claim::with(["patient", "company", "claimFormattable", "claimFormattable.claimFormServices.typeOfService"])->find($id);
+            $patient = Patient::with(["insurancePolicies", "user.profile"])->find($claim->patient_id);
             $insurancePolicies = [];
 
             foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
-                $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', [
-                    'controlNumber'           =>'123456789',
-                    'tradingPartnerServiceId' => 'CMSMED',
+                $newCode = 1;
+                $targetModel = ClaimEligibility::select("id", "control_number")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+                
+                $newCode += ($targetModel) ? (int)$targetModel->control_number : 0;
+                $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
+
+                $encounters = [];
+                foreach ($claim->claimFormattable->claimFormServices ?? [] $service) {
+                    array_push($encounters, [
+                        "beginningDateOfService" => str_replace("-", "", $service->from_service),
+                        "endDateOfService"       => str_replace("-", "", $service->to_service),
+                        "serviceTypeCodes"       => [
+                          $services->typeOfService->cod
+                        ]
+                    ]);
+                }
+
+                $data = [
+                    'controlNumber'           => $newCode,
+                    'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->code ?? null,
                     'provider' => [
-                        'organizationName'        => 'provider_name',
-                        'npi'                     => '0123456789',
-                        'serviceProviderNumber'   => '54321',
-                        'providerCode'            => 'AD',
-                        'referenceIdentification' => '54321g'
+                        'organizationName'        => $claim->company->name ?? null,
+                        'npi'                     => $claim->company->npi ?? null,
+                        'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
+                        'providerCode'            => $claim->company->code ?? null,
+                        'referenceIdentification' => $claim->company->reference_identification ?? null
                     ],
                     'subscriber' => [
-                        'memberId'    => '0000000000',
-                        'firstName'   => 'johnOne',
-                        'lastName'    => 'doeOne',
-                        'gender'      => 'M',
-                        'dateOfBirth' => '18800102',
-                        'ssn'         => '555443333',
-                        'idCard'      => 'card123'
+                        'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
+                        'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
+                        'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
+                        'gender'      => $insurancePolicy->subscriber ? null : $patient->user->profile->sex,
+                        'dateOfBirth' => $insurancePolicy->subscriber ? null : $patient->user->profile->date_of_birth,
+                        'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
+                        'idCard'      => $insurancePolicy->subscriber->id_card ?? null
                     ],
                     'dependents' => [
                         [
-                            'firstName'   =>'janeOne',
-                            'lastName'    =>'doeone',
-                            'gender'      =>'F',
-                            'dateOfBirth' =>'18160421',
-                            'groupNumber' => '1111111111'
+                            'firstName'   => $patient->user->profile->first_name,
+                            'lastName'    => $patient->user->profile->last_name,
+                            'gender'      => $patient->user->profile->sex,
+                            'dateOfBirth' => $patient->user->profile->date_of_birth,
+                            'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
                         ]
                     ],
-                    'encounter' => [
-                        'beginningDateOfService' => '20100101',
-                        'endDateOfService'       => '20100102',
-                        'serviceTypeCodes'       => [
-                            '98'
-                        ]
-                    ]
-                ]);
+                    'encounter' => $encounters
+                ];
+                $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', $data);
                 $responseData = json_decode($response->body());
-                $insurancePolicy['claim_eligibility'] = $responseData;
+
+                $claimEligibility = ClaimEligibility::updateOrCreate([
+                    "control_number"       => $newCode,
+                    "company_id"           => $claim->company_id,
+                    "patient_id"           => $patient->id,
+                    "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
+                    "insurance_policy_id"  => $insurancePolicy->id,
+                    "insurance_company_id" => $insurancePolicy->insurance_company_id
+                ]);
+                $insurancePolicy['claim_eligibility'] = $claimEligibility ?? null;
                 array_push($insurancePolicies, $insurancePolicy);
             }
             return $insurancePolicies;
-
-            /**$response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', [
-                'controlNumber'           =>'123456789',
-                'tradingPartnerServiceId' => 'CMSMED',
-                'provider' => [
-                    'organizationName'        => 'provider_name',
-                    'npi'                     => '0123456789',
-                    'serviceProviderNumber'   => '54321',
-                    'providerCode'            => 'AD',
-                    'referenceIdentification' => '54321g'
-                ],
-                'subscriber' => [
-                    'memberId'    => '0000000000',
-                    'firstName'   => 'johnOne',
-                    'lastName'    => 'doeOne',
-                    'gender'      => 'M',
-                    'dateOfBirth' => '18800102',
-                    'ssn'         => '555443333',
-                    'idCard'      => 'card123'
-                ],
-                'dependents' => [
-                    [
-                        'firstName'   =>'janeOne',
-                        'lastName'    =>'doeone',
-                        'gender'      =>'F',
-                        'dateOfBirth' =>'18160421',
-                        'groupNumber' => '1111111111'
-                    ]
-                ],
-                'encounter' => [
-                    'beginningDateOfService' => '20100101',
-                    'endDateOfService'       => '20100102',
-                    'serviceTypeCodes'       => [
-                        '98'
-                    ]
-                ]
-            ]);
-            $responseData = json_decode($response->body());
-            return $responseData;*/
         } catch (\Exception $e) {
+            DB::rollBack();
             return null;
         }
     }
@@ -495,6 +480,7 @@ class ClaimRepository
             $responseData = json_decode($response->body());
             return $responseData;
         } catch (\Exception $e) {
+            DB::rollBack();
             return null;
         }
     }

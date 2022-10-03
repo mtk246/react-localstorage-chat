@@ -16,10 +16,12 @@ return new class extends Migration
         Schema::create('claim_eligibilities', function (Blueprint $table) {
             $table->id();
             $table->string('control_number', 9);
-            $table->string('eligibility', 50);
+            $table->string('eligibility', 50)->nullable();
             
+            $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('subscriber_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('subscriber_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('insurance_policy_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
