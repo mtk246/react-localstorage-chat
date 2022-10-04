@@ -388,6 +388,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/draft/{id}",[\App\Http\Controllers\ClaimController::class,"updateAsDraft"]);
 
         Route::post("/draft-check-eligibility",[\App\Http\Controllers\ClaimController::class,"saveAsDraftAndEligibility"]);
+        Route::put("/verify-register/{id}", [\App\Http\Controllers\ClaimController::class,"verifyAndRegister"]);
     });
 
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);

@@ -15,6 +15,7 @@
 - [Update as draft claim](#update-as-draft-claim)
 - [Draft and Check eligibility](#draft-check-eligibility-claim)
 - [Validation claim](#validation-claim)
+- [verify and register claim](#verify-claim)
 
 
 
@@ -36,6 +37,7 @@
 | 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
 | 11 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
 | 12 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
+| 10 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
 
 
 <a name="create-claim"></a>
@@ -1105,5 +1107,90 @@
         "payerName": "EXTRA HEALTHY INSURANCE",
         "payerID": "9496"
     }
+}
+```
+
+
+<a name="verify-register"></a>
+## Verify and register claim
+
+### Body request example
+
+```json
+{
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
+    "insurance_policies": [8,10],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "modifier_id": 1,
+            "rev": 2,
+            "place_of_service_id": 3,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1,
+            "price": 200
+        }
+    ]
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim verify and register
+
+#
+
+```json
+{
+    "id": 1,
+    "qr_claim": null,
+    "control_number": "000000001",
+    "submitter_name": null,
+    "submitter_contact": null,
+    "submitter_phone": null,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "insurance_company_id": null,
+    "claim_formattable_type": null,
+    "claim_formattable_id": null,
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "updated_at": "2022-09-16T13:23:19.000000Z"
 }
 ```

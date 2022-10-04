@@ -390,7 +390,10 @@ class ClaimRepository
                 ])->find($claimEligibility->id) ?? null;
                 array_push($insurancePolicies, $insurancePolicy);
             }
-            return $insurancePolicies;
+            return [
+                "claim_id" => $claim->id,
+                "insurance_policies" => $insurancePolicies
+            ];
         } catch (\Exception $e) {
             DB::rollBack();
             return null;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
+use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -184,5 +185,15 @@ class ClaimController extends Controller
         if (!isset($claim)) return response()->json(__("Error save claim"), 400);
 
         return $this->checkEligibility($claim->id);
+    }
+
+    /**
+     * @param claimCreateRequest $request
+     * @return JsonResponse
+     */
+    public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
+    {
+        $rs = Claim::find($id);
+        return $rs ? response()->json($rs) : response()->json(__("Error verify claim"), 400);
     }
 }
