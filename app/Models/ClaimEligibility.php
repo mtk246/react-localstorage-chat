@@ -102,4 +102,14 @@ class ClaimEligibility extends Model implements Auditable
     {
         return $this->hasMany(ClaimEligibilityTraceNumber::class);
     }
+
+    /**
+     * ClaimEligibility has many claim eligibility plan status.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimEligibilityPlanStatus(): HasMany
+    {
+        return $this->hasMany(ClaimEligibilityPlanStatus::class);
+    }
 }

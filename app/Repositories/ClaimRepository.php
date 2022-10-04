@@ -16,6 +16,11 @@ use App\Models\ClaimStatus;
 use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
 use App\Models\ClaimEligibility;
+use App\Models\ClaimEligibilityPlanStatus;
+use App\Models\ClaimEligibilityTraceNumber;
+use App\Models\ClaimEligibilityPayer;
+use App\Models\ClaimEligibilityBenefitsInformation;
+use App\Models\ClaimEligibilityBenefitsInformationOther;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
@@ -305,9 +310,47 @@ class ClaimRepository
                     ],
                     'encounter' => $encounter
                 ];
-                $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', $data);
+                $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', [
+                    'controlNumber'           => "123456789",
+                    'tradingPartnerServiceId' => "CMSMED",
+                    'provider' => [
+                        'organizationName'        => "provider_name",
+                        'npi'                     => "0123456789",
+                        'serviceProviderNumber'   => "54321",
+                        'providerCode'            => "AD",
+                        'referenceIdentification' => "54321g"
+                    ],
+                    'subscriber' => [
+                        'memberId'    => "0000000000",
+                        'firstName'   => "johnOne",
+                        'lastName'    => "doeOne",
+                        'gender'      => "M",
+                        'dateOfBirth' => "18800102",
+                        'ssn'         => "555443333",
+                        'idCard'      => "card123"
+                    ],
+                    'dependents' => [
+                        [
+                            'firstName'   => "janeOne",
+                            'lastName'    => "doeone",
+                            'gender'      => "F",
+                            'dateOfBirth' => "18160421",
+                            'groupNumber' => "1111111111"
+                        ]
+                    ],
+                    'encounter' => [
+                        "beginningDateOfService" => "20100102",
+                        "endDateOfService"       => "20100102",
+                        "serviceTypeCodes"       => [
+                          "98"
+                        ]
+                    ]
+                ]);
                 $responseData = json_decode($response->body());
-                if (isset($responseData->errors)) return $responseData;
+                if (isset($responseData->errors)) {
+                    DB::rollBack();
+                    return $responseData;
+                }
 
                 $claimEligibility = ClaimEligibility::updateOrCreate([
                     "control_number"       => $newCode,
@@ -317,7 +360,34 @@ class ClaimRepository
                     "insurance_policy_id"  => $insurancePolicy->id,
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
-                $insurancePolicy['claim_eligibility'] = $claimEligibility ?? null;
+
+                foreach ($responseData->benefitsInformation as $rData) {
+                    $claimEligibilityBenefitsInformation = ClaimEligibilityBenefitsInformation::create([
+                        "code" => $rData->code,
+                        "name" => $rData->name,
+                        "claim_eligibility_id" => $claimEligibility->id,
+                        "service_type_codes" => $rData->serviceTypeCodes,
+                        "service_types" => $rData->serviceTypes,
+                        "insurance_type_code" => $rData->insuranceTypeCode ?? null,
+                        "insurance_type" => $rData->insuranceType ?? null,
+                        "time_qualifer_code" => $rData->timeQualifierCode ?? null,
+                        "time_qualifer"  => $rData->timeQualifier ?? null,
+                        "benefit_amount" => $rData->benefitAmount ?? null,
+                        "benefits_date_information"  => $rData->benefitsDateInformation ?? null,
+                        "additional_information"  => $rData->additionalInformation ?? null
+                    ]);
+                }
+                foreach ($responseData->planStatus as $rData) {
+                    $claimEligibilityPlanStatus = ClaimEligibilityPlanStatus::create([
+                        "status_code"          => $rData->statusCode,
+                        "status"               => $rData->status,
+                        "claim_eligibility_id" => $claimEligibility->id
+                    ]);
+
+                }
+                $insurancePolicy['claim_eligibility'] = ClaimEligibility::with([
+                    'claimEligibilityBenefitsInformations', 'claimEligibilityPlanStatus'
+                ])->find($claimEligibility->id) ?? null;
                 array_push($insurancePolicies, $insurancePolicy);
             }
             return $insurancePolicies;

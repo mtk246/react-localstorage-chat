@@ -30,6 +30,7 @@ class ClaimDraftRequest extends FormRequest
             "facility_id"                    => ['nullable', 'integer'],
             "patient_id"                     => ['nullable', 'integer'],
             "health_professional_id"         => ['nullable', 'integer'],
+            "control_number"                 => ['nullable', 'string'],
             
             "diagnoses"                      => ["array", "nullable"],
             "diagnoses.*.item"               => ["string", "nullable"],
