@@ -28,6 +28,18 @@ class ClaimEligibilityBenefitsInformation extends Model implements Auditable
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'service_type_codes'        => 'array',
+        "service_types"             => 'array',
+        "benefits_date_information" => 'array',
+        "additional_information"    => 'array'
+    ];
+
+    /**
      * ClaimEligibilityBenefitsInformation belongs to ClaimEligibility.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

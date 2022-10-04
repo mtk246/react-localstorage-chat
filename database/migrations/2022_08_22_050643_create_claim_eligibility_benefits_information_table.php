@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('code', 50);
             $table->string('name', 50);
-            $table->string('service_type_codes')->nullable();
-            $table->string('service_types')->nullable();
+            $table->text('service_type_codes')->nullable();
+            $table->text('service_types')->nullable();
             $table->string('insurance_type_code')->nullable();
             $table->string('insurance_type')->nullable();
             $table->string('time_qualifer_code')->nullable();
