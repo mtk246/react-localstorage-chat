@@ -130,7 +130,7 @@ class ClaimRepository
      * @return claim|Builder|Model|object|null
      */
     public function getOneclaim(int $id) {
-        $claim = claim::with([
+        $claim = Claim::with([
             "diagnoses",
             "insurancePolicies",
             "claimFormattable"
@@ -402,7 +402,7 @@ class ClaimRepository
 
     public function claimValidation($token, $id) {
         try {
-            $claim = claim::with([
+            $claim = Claim::with([
                 "diagnoses",
                 "insurancePolicies",
                 "claimFormattable"

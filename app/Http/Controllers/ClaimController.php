@@ -6,6 +6,7 @@ use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Repositories\ClaimRepository;
+use App\Models\Claim;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;

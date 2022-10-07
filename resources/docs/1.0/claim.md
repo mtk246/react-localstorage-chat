@@ -15,7 +15,7 @@
 - [Update as draft claim](#update-as-draft-claim)
 - [Draft and Check eligibility](#draft-check-eligibility-claim)
 - [Validation claim](#validation-claim)
-- [verify and register claim](#verify-claim)
+- [verify and register claim](#verify-register)
 
 
 
@@ -567,6 +567,34 @@
         "claim_formattable_id": null,
         "created_at": "2022-09-16T13:23:19.000000Z",
         "updated_at": "2022-09-16T13:23:19.000000Z",
+        "private_note": "Nota 1",
+        "status": "Draft",
+        "status_history": [
+            {
+                "note": "Nota 1",
+                "status": "Draft",
+                "last_modified": {
+                    "user": "Henry Paredes",
+                    "roles": [
+                        {
+                            "id": 2,
+                            "name": "Billing Manager",
+                            "slug": "billingmanager",
+                            "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
+                            "level": 2,
+                            "created_at": "2022-04-20T21:52:51.000000Z",
+                            "updated_at": "2022-04-20T21:52:51.000000Z",
+                            "pivot": {
+                                "user_id": 14,
+                                "role_id": 2,
+                                "created_at": "2022-07-20T21:04:22.000000Z",
+                                "updated_at": "2022-07-20T21:04:22.000000Z"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
         "claim_services": [
             {
                 "id": 1,
@@ -673,6 +701,34 @@
     "claim_formattable_id": null,
     "created_at": "2022-09-16T13:23:19.000000Z",
     "updated_at": "2022-09-16T13:23:19.000000Z",
+    "private_note": "Nota 1",
+    "status": "Draft",
+    "status_history": [
+        {
+            "note": "Nota 1",
+            "status": "Draft",
+            "last_modified": {
+                "user": "Henry Paredes",
+                "roles": [
+                    {
+                        "id": 2,
+                        "name": "Billing Manager",
+                        "slug": "billingmanager",
+                        "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
+                        "level": 2,
+                        "created_at": "2022-04-20T21:52:51.000000Z",
+                        "updated_at": "2022-04-20T21:52:51.000000Z",
+                        "pivot": {
+                            "user_id": 14,
+                            "role_id": 2,
+                            "created_at": "2022-07-20T21:04:22.000000Z",
+                            "updated_at": "2022-07-20T21:04:22.000000Z"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
     "diagnoses": [
         {
             "id": 1,
@@ -877,7 +933,8 @@
             "epstd": 1,
             "price": 200
         }
-    ]
+    ],
+    "private_note": "Note claim"
 }
 ```
 
@@ -948,7 +1005,8 @@
             "epstd": 1, //1,2,3
             "price": 200
         }
-    ]
+    ],
+    "private_note": "Note claim 1"
 }
 ```
 
@@ -995,7 +1053,7 @@
 ```
 #
 
-<a name="draft-check-eligibility"></a>
+<a name="draft-check-eligibility-claim"></a>
 ## Save as draft and check eligibility claim
 
 ### Param in header
@@ -1039,7 +1097,8 @@
             "epstd": 1, //1,2,3
             "price": 200
         }
-    ]
+    ],
+    "private_note": "Note claim 1"
 }
 ```
 ## Response

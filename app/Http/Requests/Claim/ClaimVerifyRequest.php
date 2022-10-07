@@ -13,7 +13,7 @@ class ClaimVerifyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
