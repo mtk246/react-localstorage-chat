@@ -116,12 +116,38 @@ class ClaimRepository
      * @return claim[]|Collection
      */
     public function getAllClaims() {
-        $claims = Claim::with([
-            "company",
-            "patient" => function ($query) {
-                $query->with("user.profile");
-            }
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $claims = Claim::with([
+                "company",
+                "patient" => function ($query) {
+                    $query->with([
+                        "user" => function ($q) {
+                            $q->with(["profile", "addresses", "contacts"]);
+                        }
+                    ]);
+                }
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        } else {
+            $claims = Claim::with([
+                "company",
+                "patient" => function ($query) use ($bC) {
+                    $query->with([
+                        "user" => function ($q) use ($bC) {
+                            $q->with([
+                                "profile",
+                                "addresses" => function ($qq) use ($bC) {
+                                    $qq->where('billing_company_id', $bC);
+                                },
+                                "contacts" => function ($qq) use ($bC) {
+                                    $qq->where('billing_company_id', $bC);
+                                },
+                            ]);
+                        }
+                    ]);
+                }
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+        }
         return is_null($claims) ? null : $claims;
     }
 
