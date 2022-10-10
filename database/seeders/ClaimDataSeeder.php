@@ -7,6 +7,8 @@ use App\Models\TypeForm;
 use App\Models\ClaimStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
+use App\Models\PayerResponsibility;
+use App\Models\EligibilityStatus;
 
 class ClaimDataSeeder extends Seeder
 {
@@ -123,6 +125,35 @@ class ClaimDataSeeder extends Seeder
 
         foreach ($servicePlaceOfServices as $placeOfService) {
             PlaceOfService::updateOrCreate($placeOfService, $placeOfService);
+        }
+
+        $payerResponsibilities = [
+            ['code' => 'A', 'description' => 'Payer Responsibility Four'],
+            ['code' => 'B', 'description' => 'Payer Responsibility Five'],
+            ['code' => 'C', 'description' => 'Payer Responsibility Six'],
+            ['code' => 'D', 'description' => 'Payer Responsibility Seven'],
+            ['code' => 'E', 'description' => 'Payer Responsibility Eight'],
+            ['code' => 'F', 'description' => 'Payer Responsibility Nine'],
+            ['code' => 'G', 'description' => 'Payer Responsibility Ten'],
+            ['code' => 'H', 'description' => 'Payer Responsibility Eleven'],
+            ['code' => 'P', 'description' => 'Primary'],
+            ['code' => 'S', 'description' => 'Secondary'],
+            ['code' => 'T', 'description' => 'Tertiary'],
+            ['code' => 'U', 'description' => 'Unknow'],
+        ];
+
+        foreach ($payerResponsibilities as $payerResponsibility) {
+            PayerResponsibility::updateOrCreate($payerResponsibility, $payerResponsibility);
+        }
+
+        $eligibilityStatuses = [
+            ['description' => 'Eligible policy'],
+            ['description' => 'Ineligible policy'],
+            ['description' => 'Unknow']
+        ];
+
+        foreach ($eligibilityStatuses as $eligibilityStatus) {
+            EligibilityStatus::updateOrCreate($eligibilityStatus, $eligibilityStatus);
         }
     }
 }
