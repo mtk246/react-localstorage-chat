@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('eligibility_statuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('description', 50);
-            $table->timestamps();
+        Schema::table('private_notes', function (Blueprint $table) {
+            $table->foreignId('billing_company_id')->nullable()->change()->constrained()->onDelete('restrict')->onUpdate('cascade');;
         });
     }
 
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('eligibility_statuses');
+        Schema::table('private_notes', function (Blueprint $table) {
+            //
+        });
     }
 };

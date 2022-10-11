@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('claim_eligibility_statuses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('claim_eligibility_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('eligibility_status_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }

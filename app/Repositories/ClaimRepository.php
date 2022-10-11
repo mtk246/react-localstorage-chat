@@ -22,6 +22,7 @@ use App\Models\ClaimEligibilityPayer;
 use App\Models\ClaimEligibilityBenefitsInformation;
 use App\Models\ClaimEligibilityBenefitsInformationOther;
 use App\Models\ClaimFormP;
+use App\Models\ClaimFormI;
 use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
 use App\Models\Patient;
@@ -64,7 +65,7 @@ class ClaimRepository
                             }
                         }
                     } else {
-                        $model = ClaimFormI::class;
+                        //$model = ClaimFormI::class;
                     }
                 }
             }
