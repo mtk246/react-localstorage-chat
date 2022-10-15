@@ -38,9 +38,7 @@
     "modifier": "M1",
     "start_date": "2022-07-05",
     "special_coding_instructions": "Especial coding instructions modifier 1",
-    "modifier_invalid_combinations": [
-        {"invalid_combination": "M2"}
-    ],
+    "modifier_invalid_combinations": ["M2", "M1"],
     "note": "Note modifier 1"
 }
 ```
@@ -278,9 +276,7 @@
     "start_date": "2022-07-05",
     "end_date": "2022-08-05",
     "special_coding_instructions": "Especial coding instructions modifier 1 Edited",
-    "modifier_invalid_combinations": [
-        {"invalid_combination": "M2"}
-    ],
+    "modifier_invalid_combinations": ["M2"],
     "note": "Note modifier 1 edited"
 }
 ```

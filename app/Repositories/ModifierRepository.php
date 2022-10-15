@@ -30,7 +30,7 @@ class ModifierRepository
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
                     ModifierInvalidCombination::create([
                         'modifier_id'         => $modifier->id,
-                        'invalid_combination' => $invalidCombination['invalid_combination']
+                        'invalid_combination' => $invalidCombination
                     ]);
                 }
             }
@@ -144,7 +144,7 @@ class ModifierRepository
                 foreach ($invalidCombinations as $invalidC) {
                     $validated = false;
                     foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-                        if ($invalidCombination['invalid_combination'] == $invalidC->invalid_combination) {
+                        if ($invalidCombination == $invalidC->invalid_combination) {
                             $validated = true;
                             break;
                         }
@@ -155,10 +155,10 @@ class ModifierRepository
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
                     ModifierInvalidCombination::updateOrCreate([
                         'modifier_id'         => $modifier->id,
-                        'invalid_combination' => $invalidCombination['invalid_combination']
+                        'invalid_combination' => $invalidCombination
                     ], [
                         'modifier_id'         => $modifier->id,
-                        'invalid_combination' => $invalidCombination['invalid_combination']
+                        'invalid_combination' => $invalidCombination
                     ]);
                 }
             }

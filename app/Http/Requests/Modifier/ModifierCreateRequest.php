@@ -30,7 +30,7 @@ class ModifierCreateRequest extends FormRequest
             'start_date'                                          => ['required', 'date'],
             'special_coding_instructions'                         => ['required', 'string'],
             'modifier_invalid_combinations'                       => ['required', 'array'],
-            'modifier_invalid_combinations.*.invalid_combination' => ['required', 'string', 'max:2'],
+            'modifier_invalid_combinations.*'                     => ['required', 'string', 'max:2'],
             'note'                                                => ['required', 'string']
         ];
     }
