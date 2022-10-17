@@ -65,10 +65,12 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error updating claim"), 400);
     }
 
-    public function getAllClaims()
+    public function getAllClaims(Request $request)
     {
+        $status = json_decode($request->status);
+        $subStatus = json_decode($request->subStatus);
         return response()->json(
-            $this->claimRepository->getAllClaims()
+            $this->claimRepository->getAllClaims($status ?? [], $subStatus ?? [])
         );
     }
 

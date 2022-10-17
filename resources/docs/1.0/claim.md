@@ -30,7 +30,7 @@
 | 3  |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
 | 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
 | 5  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
-| 6  |GET     | `Get all claims` | `/claim/`     | yes            | Get all claims |
+| 6  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
 | 7  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 8  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
 | 9  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
@@ -539,6 +539,15 @@
 ```json
 {
     "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "status": optional <array>       //[1,2]
+    "subStatus": optional <array>    //[1,2]
 }
 ```
 

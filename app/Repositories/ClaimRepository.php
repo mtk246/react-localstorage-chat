@@ -116,10 +116,14 @@ class ClaimRepository
     /**
      * @return claim[]|Collection
      */
-    public function getAllClaims() {
+    public function getAllClaims($status, $subStatus) {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $claims = Claim::with([
+            $claims = Claim::whereHas("claimStatusClaims", function ($query) use ($status) {
+                if ($status != []) {
+                    $query->whereIn("claim_status_id", $status);
+                }
+            })->with([
                 "company",
                 "patient" => function ($query) {
                     $query->with([
@@ -130,7 +134,11 @@ class ClaimRepository
                 }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
-            $claims = Claim::with([
+            $claims = Claim::whereHas("claimStatusClaims", function ($query) use ($status) {
+                if ($status != []) {
+                    $query->whereIn("claim_status_id", $status);
+                }
+            })->with([
                 "company",
                 "patient" => function ($query) use ($bC) {
                     $query->with([
