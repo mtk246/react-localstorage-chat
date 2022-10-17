@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('private_notes', function (Blueprint $table) {
-            $table->foreignId('billing_company_id')->nullable()->change()->constrained()->onDelete('restrict')->onUpdate('cascade');
+        Schema::create('type_diags', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 1);
+            $table->string('description', 50);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('private_notes', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('type_diags');
     }
 };
