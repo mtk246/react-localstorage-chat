@@ -18,6 +18,7 @@
 - [Update social media by user](#update-social-media-by-user)
 - [Update password](#update-password)
 - [Search by ssn](#search-by-ssn)
+- [Search](#search)
 - [New token](#new-token)
 - [Update language](#update-lang)
 
@@ -43,8 +44,9 @@
 | 13 |POST | `update social medias by user`   | `/user/social-medias/{user_id}` |yes|update social medias by user|
 | 14|PATCH | `update password`   | `/user/update-password` |yes|update password|
 | 15|GET | `search by ssn`   | `/user/{ssn}/get-by-ssn` |yes|Get by ssn|
-| 16 |POST | `new token`   | `/user/new-token` |no|generate new token user|
-| 17|PATCH | `update language`   | `/setting/lang` |yes|update language|
+| 16|GET | `search`   | `/user/search/{date_of_birth?}/{last_name?}/{first_name?}/{ssn?}` |yes|Get users |
+| 17 |POST | `new token`   | `/user/new-token` |no|generate new token user|
+| 18|PATCH | `update language`   | `/setting/lang` |yes|update language|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -1012,6 +1014,130 @@
 #
 
 >{warning} response 404 when user not found
+
+<a name="search"></a>
+## Search
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`date_of_birth required string`
+`last_name     required string`
+`first_name    required string`
+`ssn           optional string  last 4 digits`
+
+## Example path
+
+>{primary} /search?date_of_birth=1990-11-11&last_name=Last Name&first_name=Fisrt Name&ssn=1812
+
+#
+
+>{success} 200 request made successfully
+
+```json
+[
+    {
+        "id": 16,
+        "email": "user2@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-04-20T21:53:26.000000Z",
+        "updated_at": "2022-04-25T19:46:24.000000Z",
+        "token": "eyJpdiI6IkNaVFNiaTkwYU5PWWxiUVk1L1dESXc9PSIsInZhbHVlIjoibWVRTERUTjhaTHluKzNzckoyMU9SVHFFZHZKK3o0bkdPKzlLL0grTmxIVT0iLCJtYWMiOiJiZjdhZmJkY2Y0OTU0MmVjYzcwM2YyNjcwNzg4MzM3MTEzZjMxMzhiMTA4Yjg3YzFmYzc5N2RlNzIzMTA1OGFiIiwidGFnIjoiIn0=",
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00016-2022",
+        "userkey": "eyJpdiI6IlFJTEhpcjlGOEFveDFCZ0FnWTZkN3c9PSIsInZhbHVlIjoiVkVud2prbjRqL1piNEx6aUhiVkdubWtwTjJQbFM4N01obU1TbWhsWG1QVT0iLCJtYWMiOiJhNWVmOWM2M2Y5NjNmNWNjNjJkZTU1YmUxNDc0MTc5ZmI1ZmU3ZWNjYTQ5NWQxNWJiYzBjMDhkZmM5ODMyMjIxIiwidGFnIjoiIn0=",
+        "status": false,
+        "last_login": null,
+        "profile_id": 16,
+        "language": "en",
+        "last_activity": null,
+        "billing_company_id": 2,
+        "last_modified": {
+            "user": "Rodrick Maximillian",
+            "roles": null
+        },
+        "profile": {
+            "id": 16,
+            "ssn": "237891812",
+            "first_name": "Fisrt Name",
+            "middle_name": "Middle Name",
+            "last_name": "Last Name",
+            "sex": "m",
+            "date_of_birth": "1990-11-11",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-04-20T21:53:26.000000Z",
+            "updated_at": "2022-04-20T21:53:26.000000Z",
+            "social_medias": [
+                {
+                    "id": 1,
+                    "link": "URLSocialMedia1",
+                    "profile_id": 16,
+                    "created_at": "2022-04-20T21:53:26.000000Z",
+                    "updated_at": "2022-04-20T21:53:26.000000Z",
+                    "social_network_id": null,
+                    "social_network": null
+                },
+                {
+                    "id": 2,
+                    "link": "URLSocialMedia2",
+                    "profile_id": 16,
+                    "created_at": "2022-04-20T21:53:26.000000Z",
+                    "updated_at": "2022-04-20T21:53:26.000000Z",
+                    "social_network_id": null,
+                    "social_network": null
+                }
+            ]
+        },
+        "roles": [
+            {
+                "id": 9,
+                "name": "Patient",
+                "slug": "patient",
+                "description": "Allows access to system functions for patient management",
+                "level": 4,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "user_id": 16,
+                    "role_id": 9,
+                    "created_at": "2022-04-20T21:53:26.000000Z",
+                    "updated_at": "2022-04-20T21:53:26.000000Z"
+                }
+            }
+        ],
+        "addresses": [],
+        "contacts": [],
+        "billing_companies": [
+            {
+                "id": 1,
+                "name": "Zulauf Group",
+                "created_at": "2022-04-20T21:52:55.000000Z",
+                "updated_at": "2022-04-20T21:52:55.000000Z",
+                "code": "BC-00001-2022",
+                "status": false,
+                "pivot": {
+                    "user_id": 16,
+                    "billing_company_id": 1,
+                    "status": true,
+                    "created_at": null,
+                    "updated_at": null
+                }
+            }
+        ]
+    }
+]
+```
+
+#
 
 <a name="new-token"></a>
 ##Generate new token user

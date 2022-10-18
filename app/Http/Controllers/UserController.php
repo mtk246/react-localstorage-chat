@@ -390,6 +390,16 @@ class UserController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
+    /**
+     * @param string $ssn
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $rs = $this->userRepository->search($request);
+        return response()->json($rs);
+    }
+
     public function updateLang(Request $request)
     {
         $rs = $this->userRepository->updateLang($request->input("language"));

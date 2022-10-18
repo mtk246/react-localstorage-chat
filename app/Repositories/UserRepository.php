@@ -618,6 +618,55 @@ class UserRepository{
         return $user;
     }
 
+    public function search(Request $request) {
+        $date_of_birth = $request->date_of_birth ?? '';
+        $first_name = $request->first_name ?? '';
+        $last_name = $request->last_name ?? '';
+        $ssn = $request->ssn ?? '';
+        $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
+
+        $bC = auth()->user()->billing_company_id ?? null;
+
+        if (!$bC) {
+            $users = User::with([
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "roles",
+                "addresses",
+                "contacts",
+                "billingCompanies"
+            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                $query->whereDateOfBirth($date_of_birth)
+                      ->whereFirstName($first_name)
+                      ->whereLastName($last_name)
+                      ->where("ssn", "ilike", "%${ssn}")
+                      ->orWhere("ssn", "ilike", "%${ssnFormated}");
+            })->get();
+        } else {
+            $users = User::with([
+                "profile" => function ($query) {
+                    $query->with('socialMedias');
+                },
+                "roles",
+                "addresses" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "contacts" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies"
+            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                $query->whereDateOfBirth($date_of_birth)
+                      ->whereFirstName($first_name)
+                      ->whereLastName($last_name)
+                      ->where("ssn", "ilike", "%${ssn}")
+                      ->orWhere("ssn", "ilike", "%${ssnFormated}");
+            })->get();
+        }
+        return is_null($users) ? [] : $users;
+    }
+
     public function updateLang(string $lang)
     {
         $user = User::whereId(auth()->id())->first();
