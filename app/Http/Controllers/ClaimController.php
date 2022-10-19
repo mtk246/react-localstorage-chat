@@ -67,8 +67,8 @@ class ClaimController extends Controller
 
     public function getAllClaims(Request $request)
     {
-        $status = json_decode($request->status);
-        $subStatus = json_decode($request->subStatus);
+        $status = (is_array($request->status)) ? $request->status : json_decode($request->status);
+        $subStatus = (is_array($request->subStatus)) ? $request->subStatus : json_decode($request->subStatus);
         return response()->json(
             $this->claimRepository->getAllClaims($status ?? [], $subStatus ?? [])
         );
