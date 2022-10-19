@@ -153,6 +153,20 @@ class DiagnosisRepository
 
         if (is_null($diagnosis)) return null;
 
-        return $diagnosis->update(["active" => $status]);
+        if ($status) {
+            return $diagnosis->update(
+                [
+                    "active"   => $status,
+                    "end_date" => null
+                ]
+            );
+        } else {
+            return $diagnosis->update(
+                [
+                    "active"   => $status,
+                    "end_date" => now()
+                ]
+            );
+        }
     }
 }

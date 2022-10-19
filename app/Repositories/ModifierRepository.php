@@ -194,6 +194,20 @@ class ModifierRepository
 
         if (is_null($modifier)) return null;
 
-        return $modifier->update(["active" => $status]);
+        if ($status) {
+            return $modifier->update(
+                [
+                    "active"   => $status,
+                    "end_date" => null
+                ]
+            );
+        } else {
+            return $modifier->update(
+                [
+                    "active"   => $status,
+                    "end_date" => now()
+                ]
+            );
+        }
     }
 }
