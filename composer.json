@@ -11,6 +11,7 @@
         "binarytorch/larecipe": "^2.4",
         "binarytorch/larecipe-dark-theme": "^0.1.5",
         "darkaonline/l5-swagger": "^8.0",
+        "elibyy/tcpdf-laravel": "^9.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",
