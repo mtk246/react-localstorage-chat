@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\ReportRepository;
 
 class ClaimController extends Controller
 {
@@ -198,5 +199,16 @@ class ClaimController extends Controller
     {
         $rs = Claim::find($id);
         return $rs ? response()->json($rs) : response()->json(__("Error verify claim"), 400);
+    }
+
+    public function showReport() {
+        $pdf = new ReportRepository();
+
+        $pdf->setConfig(['urlVerify' => '']);
+        $pdf->setHeader('');
+        //$pdf->setFooter();
+        $pdf->setBody('pdf.837P', true, [
+            'pdf'      => $pdf
+        ]);
     }
 }
