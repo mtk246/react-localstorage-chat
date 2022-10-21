@@ -204,7 +204,7 @@ class ClaimController extends Controller
     public function showReport() {
         $pdf = new ReportRepository();
 
-        $pdf->setConfig(['urlVerify' => '']);
+        $pdf->setConfig(['urlVerify' => 'www.google.com.ve']);
         $pdf->setHeader('');
         //$pdf->setFooter();
         $pdf->setBody('pdf.837P', true, [

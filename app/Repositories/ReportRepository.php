@@ -114,10 +114,10 @@ class ReportRepository implements ReportInterface
                 $pdf->write2DBarcode(
                     $params->urlVerify,
                     'QRCODE,H',
-                    190,
-                    $params->headerY,
-                    12,
-                    12,
+                    24.3,
+                    19,
+                    11,
+                    11,
                     $params->qrCodeStyle,
                     'T'
                 );
@@ -126,8 +126,8 @@ class ReportRepository implements ReportInterface
                 storage_path('pictures') . '/ci_1.png',
                 21.84,
                 19.81,
-                226.3,
-                287,
+                '',
+                '',
                 '',
                 '',
                 'T',
