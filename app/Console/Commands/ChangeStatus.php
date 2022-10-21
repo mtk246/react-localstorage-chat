@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Modifier;
 
 class ChangeStatus extends Command
 {
@@ -18,7 +19,13 @@ class ChangeStatus extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Change the status of the modules when they reach their expiration date';
+
+    
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * Execute the console command.
@@ -27,6 +34,9 @@ class ChangeStatus extends Command
      */
     public function handle()
     {
+        Modifier::whereNotNull('end_date')->where('end_date', '<=', now())->where('active', true)->update([
+            'active' => false
+        ]);
         return 0;
     }
 }
