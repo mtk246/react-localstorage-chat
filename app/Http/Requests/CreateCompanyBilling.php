@@ -27,8 +27,10 @@ class CreateCompanyBilling extends FormRequest
     {
         return [
             'name'          => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
-            'address'       => ['sometimes', 'array'],
+            'address'       => ['nullable', 'array'],
             'contact'       => ['required', 'array'],
+            'contact.phone' => ['nullable', 'string'],
+            'contact.fax'   => ['nullable', 'string'],
             'contact.email' => ['required', 'email:rfc'],
         ];
     }

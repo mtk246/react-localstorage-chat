@@ -30,7 +30,7 @@ class BillingCompanyRepository
             Contact::create($data["contact"]);
         }
 
-        return $company;
+        return isset($company) ? $company->load('address', 'contact') : null;
     }
 
     /**
@@ -62,7 +62,7 @@ class BillingCompanyRepository
                 ], $data["contact"]);
             }
         }
-        return $billingCompany;
+        return isset($billingCompany) ? $billingCompany->load('contact', 'address') : null;
     }
 
     public function getBillingCompany($id) {
