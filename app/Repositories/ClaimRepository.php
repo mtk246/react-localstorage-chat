@@ -124,7 +124,9 @@ class ClaimRepository
                     $query->whereIn("claim_status_id", $status);
                 }
             })->with([
-                "company",
+                "company" => function ($query) {
+                    $query->with('nicknames');
+                },
                 "patient" => function ($query) {
                     $query->with([
                         "user" => function ($q) {
@@ -139,7 +141,13 @@ class ClaimRepository
                     $query->whereIn("claim_status_id", $status);
                 }
             })->with([
-                "company",
+                "company" => function ($query) {
+                    $query->with([
+                        "nicknames" => function ($q) use ($bC) {
+                            $q->where('billing_company_id', $bC);
+                        }
+                    ]);
+                },
                 "patient" => function ($query) use ($bC) {
                     $query->with([
                         "user" => function ($q) use ($bC) {

@@ -20,8 +20,8 @@ class ClaimDataSeeder extends Seeder
     public function run()
     {
         $typeForms = [
-            ['form' => '837P'],
-            ['form' => '837I'],
+            ['form' => 'CMS-1500 / 837P'],
+            ['form' => 'UB-04 / 837I'],
         ];
 
         foreach ($typeForms as $form) {
@@ -31,12 +31,12 @@ class ClaimDataSeeder extends Seeder
         $claimStatus = [
             ['status' => 'Draft'],
             ['status' => 'Verified - Not submitted'],
-            ['status' => 'Submitted - In approval'],
-            ['status' => 'Accepted - Pending adjudication'],
-            ['status' => 'Approved - Finished'],
+            ['status' => 'Submitted'],
+            ['status' => 'Accepted'],
             ['status' => 'Rejected'],
-            ['status' => 'Denied - Under Review'],
-            ['status' => 'Denied - Finished']
+            ['status' => 'Denied'],
+            ['status' => 'Complete'],
+            ['status' => 'Appel']
         ];
 
         foreach ($claimStatus as $status) {
