@@ -70,15 +70,15 @@ class ReportRepository implements ReportInterface
             'module_height' => 1 // height of a single module in points
         ];
         $this->lineStyle = $params['lineStyle'] ?? [
-            'width' => 0.2,
+            'width' => 0.5,
             'cap' => 'butt',
             'join' => 'miter',
             'dash' => 0,
             'color' => [0, 0, 0]
         ];
         $this->urlVerify = $params['urlVerify'] ?? null;
-        $this->headerY = 10;
-        $this->headerTextY = ($this->headerY === 22) ? 30 : 22;
+        $this->headerY = 20.8;
+        $this->headerTextY = 26.5;
         $this->filename = $params['filename'] ?? uniqid() . 'pdf';
         $this->subject = '';
     }
@@ -88,7 +88,7 @@ class ReportRepository implements ReportInterface
         $subTitle = '',
         $hasQR = true,
         $hasBarCode = false,
-        $titleAlign = 'C',
+        $titleAlign = 'L',
         $subTitleAlign = 'C'
     ) {
         $params = (object)[
@@ -104,55 +104,54 @@ class ReportRepository implements ReportInterface
             'subTitle' => $subTitle,
             'subTitleAlign' => $subTitleAlign,
             'reportDate' => $this->reportDate,
-            'headerY' => $this->headerY
+            'headerY' => $this->headerY,
+            'headerTextY' => $this->headerTextY
         ];
         $this->title = $title ?? '';
         $this->pdf->setHeaderCallback(function ($pdf) use ($params) {
-
-            if ($params->hasQR && !is_null($params->urlVerify)) {
-                /** Código QR con enlace de verificación del reporte */
-                $pdf->write2DBarcode(
-                    $params->urlVerify,
-                    'QRCODE,H',
-                    24.3,
-                    19,
-                    11,
-                    11,
-                    $params->qrCodeStyle,
-                    'T'
-                );
-            }
             $pdf->Image(
                 storage_path('pictures') . '/ci_1.png',
-                21.84,
-                19.81,
-                '',
-                '',
-                '',
+                5.4,
+                8.4,
+                218,
+                283,
+                'PNG',
                 '',
                 'T',
                 false,
                 300,
-                'C',
+                '',
                 false,
                 false,
-                0,
-                false,
-                false,
-                true
+                0
             );
+
+            if ($params->hasQR && !is_null($params->urlVerify)) {
+                $pdf->write2DBarcode(
+                    $params->urlVerify,
+                    'QRCODE,H',
+                    8.5,
+                    6,
+                    13,
+                    13,
+                    $params->qrCodeStyle,
+                    'T'
+                );
+            }
             /** Configuración de la fuente para el título del reporte */
-            $pdf->SetFont($params->fontFamily, 'B', 12);
+            $helveticaNeue = \TCPDF_FONTS::addTTFfont(storage_path() . '/fonts/HelveticaNeue/HELVETICANEUECYR-LIGHT.ttf', 'TrueTypeUnicode', '', 32);
+            /** Configuración de la fuente para el título del reporte */
+            $pdf->SetFont($params->fontFamily, 'B', 11);
             /** Título del reporte */
-            /**$pdf->MultiCell(
-                145,
-                7,
-                $params->title,
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'HEALTH INSURANCE CLAIM FORM',
                 0,
                 $params->titleAlign,
                 false,
                 1,
-                40,
+                8.5,
                 $params->headerY,
                 true,
                 0,
@@ -161,9 +160,368 @@ class ReportRepository implements ReportInterface
                 0,
                 'T',
                 true
-            );*/
+            );
+
+            /** Configuración de la fuente para el sub-título del reporte */
+            $pdf->SetFont($params->fontFamily, '', 6);
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'APPROVED BY NATIONAL UNIFORM CLAIM COMMITTEE (NUCC) 02/12',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                8.5,
+                $params->headerTextY,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+            /** Líneas de subrayado left pica del reporte */
+            $this->pdf->Line(
+                8.7,
+                31.4,
+                $this->pdf->getPageWidth() - 200,
+                31.4,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                8.7,
+                31.4,
+                8.7,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                8.7,
+                34.7,
+                $this->pdf->getPageWidth() - 200,
+                34.7,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 200,
+                31.4,
+                $this->pdf->getPageWidth() - 200,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 202.5,
+                31.4,
+                $this->pdf->getPageWidth() - 202.5,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 205,
+                31.4,
+                $this->pdf->getPageWidth() - 205,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'PICA',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                16,
+                $params->headerTextY + 4,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            /** Líneas de subrayado right pica del reporte */
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 21.8,
+                31.4,
+                $this->pdf->getPageWidth() - 14.5,
+                31.4,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 19.3,
+                31.4,
+                $this->pdf->getPageWidth() - 19.3,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 21.8,
+                34.7,
+                $this->pdf->getPageWidth() - 14.5,
+                34.7,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 16.8,
+                31.4,
+                $this->pdf->getPageWidth() - 16.8,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 14.5,
+                31.4,
+                $this->pdf->getPageWidth() - 14.5,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->Line(
+                $this->pdf->getPageWidth() - 21.8,
+                31.4,
+                $this->pdf->getPageWidth() - 21.8,
+                34.8,
+                [
+                    'width' => 0.2,
+                    'cap' => 'butt',
+                    'join' => 'miter',
+                    'dash' => 0,
+                    'color' => [0, 0, 0]
+                ]
+            );
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'PICA',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                $this->pdf->getPageWidth() - 27.5,
+                $params->headerTextY + 4,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            /** Línea de subrayado del titulo del reporte */
+            $this->pdf->Line(
+                8.5,
+                34.8,
+                $this->pdf->getPageWidth() - 14.5,
+                34.8,
+                $this->lineStyle
+            );
+
+            /** Sub 1 */
+            $this->pdf->MultiCell(
+                '',
+                '',
+                '1.',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                9.5,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'MEDICARE',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                13.5,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'MEDICAID',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                31,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'TRICARE',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                49,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'CHAMPVA',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                71.5,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'GROUP',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                89.3,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
+            $this->pdf->MultiCell(
+                '',
+                '',
+                'FECA',
+                0,
+                $params->titleAlign,
+                false,
+                1,
+                109.5,
+                $params->headerTextY + 9,
+                true,
+                0,
+                false,
+                true,
+                0,
+                'T',
+                true
+            );
+
             /** Configuración de la fuente para la breve descripción del reporte */
-            $pdf->SetFont($params->fontFamily, 'B', 12);
+            //$pdf->SetFont($params->fontFamily, 'B', 12);
             /** Descripción breve del reporte */
             /**$pdf->MultiCell(
                 145,
@@ -218,16 +576,18 @@ class ReportRepository implements ReportInterface
         /** Configuración sobre el asunto del reporte */
         $this->pdf->SetSubject($this->subject);
         /** Configuración de los márgenes del cuerpo del reporte */
-        $this->pdf->SetMargins(7, 45, 7);
+        $this->pdf->SetMargins(0, 0, 0);
+        $this->pdf->SetHeaderMargin(0);
+        $this->pdf->SetFooterMargin(0);
         /** Establece si se configura o no las fuentes para sub configuraciones */
         $this->pdf->SetFontSubsetting(false);
         /** Configuración de la fuente por defecto del cuerpo del reporte */
-        $this->pdf->SetFontSize('10px');
+        //$this->pdf->SetFontSize('10px');
         /**
          * Configuración que permite realizar un salto de página automático al alcanzar el límite inferior del cuerpo
          * del reporte
          */
-        $this->pdf->SetAutoPageBreak(true, 15); //PDF_MARGIN_BOTTOM
+        //$this->pdf->SetAutoPageBreak(true, 15); //PDF_MARGIN_BOTTOM
         /** Agrega las respectivas páginas del reporte */
         $this->pdf->AddPage($this->orientation, $this->format);
 
