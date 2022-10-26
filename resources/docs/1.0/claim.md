@@ -16,6 +16,7 @@
 - [Draft and Check eligibility](#draft-check-eligibility-claim)
 - [Validation claim](#validation-claim)
 - [verify and register claim](#verify-register)
+- [Show claim report preview](#preview-claim)
 
 
 
@@ -37,7 +38,8 @@
 | 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
 | 11 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
 | 12 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
-| 10 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 13 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 14 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
 
 
 <a name="create-claim"></a>
@@ -1307,3 +1309,69 @@
     "updated_at": "2022-09-16T13:23:19.000000Z"
 }
 ```
+#
+
+<a name="preview-claim"></a>
+## Show claim report preview
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Body request example
+
+```json
+{
+    "format": 1,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1
+
+        },
+        {
+            "item": "B",
+            "diagnosis_id": 3
+
+        }
+    ],
+    "insurance_policies": [8,10],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "modifier_id": 1,
+            "rev": 2,
+            "place_of_service_id": 3,
+            "type_of_service_id": 2,
+            "diagnostic_pointers": ["A", "B"],
+            "epstd": 1,
+            "price": 200
+        }
+    ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
+        }
+    ]
+}
+```
+
+## Response
+
+> {success} 200 claim found
+
+#

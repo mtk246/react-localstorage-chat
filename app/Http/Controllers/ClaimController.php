@@ -201,7 +201,7 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error verify claim"), 400);
     }
 
-    public function showReport() {
+    public function showReport(Request $request) {
         $pdf = new ReportRepository();
 
         $pdf->setConfig(['urlVerify' => 'www.google.com.ve']);
