@@ -108,3 +108,12 @@ if (!function_exists('upperCaseWords')) {
         return ucwords(strtolower($string));
     }
 }
+
+if (!function_exists('has_foreign_key')) {
+    function has_foreign_key($table, $foreignKey)
+    {
+        /** @var object Objeto con información detallada de las propiedades de la tabla */
+        $detailTable = Schema::getConnection()->getDoctrineSchemaManager()->listTableDetails($table);
+        return $detailTable->hasForeignKey($foreignKey);
+    }
+}
