@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('facilities', function (Blueprint $table) {
-            if (has_foreign_key('facilities', 'company_id')) {
-                $table->dropForeign(['company_id']);
-            };
-
-            if (Schema::hasColumn('facilities', 'company_id')) {
-                $table->dropColumn('company_id');
-            }
+        Schema::table('diagnoses', function (Blueprint $table) {
+            $table->boolean('injury_date_required')->default(false);
         });
     }
 
@@ -31,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('facilities', function (Blueprint $table) {
-            //
+        Schema::table('diagnoses', function (Blueprint $table) {
+            $table->dropColumn('injury_date_required');
         });
     }
 };

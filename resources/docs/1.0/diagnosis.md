@@ -36,6 +36,7 @@
     "code": "D1",
     "start_date": "2022-07-05",
     "description": "Description diagnosis 1",
+    "injury_date_required": true,
     "note": "Note diagnosis 1"
 }
 ```
@@ -215,6 +216,7 @@
     "start_date": "2022-07-05",
     "end_date": "2022-08-05",
     "description": "Description diagnosis 1 edited",
+    "injury_date_required": true,
     "note": "Note diagnosis 1 edited"
 }
 ```

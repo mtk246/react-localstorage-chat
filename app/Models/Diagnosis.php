@@ -19,7 +19,8 @@ class Diagnosis extends Model implements Auditable
         "start_date",
         "end_date",
         "description",
-        "active"
+        "active",
+        "injury_date_required"
     ];
 
     /**

@@ -29,6 +29,7 @@ class DiagnosisCreateRequest extends FormRequest
             'code'        => ['required', 'string', 'max:50', new IUnique(Diagnosis::class, 'code')],
             'start_date'  => ['required', 'date'],
             'description' => ['required', 'string', 'max:255'],
+            'injury_date_required' => ['nullable', 'boolean'],
             'note'        => ['required', 'string'],
         ];
     }

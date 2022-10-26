@@ -29,6 +29,7 @@ class DiagnosisUpdateRequest extends FormRequest
             'start_date'  => ['required', 'date'],
             'end_date'    => ['nullable', 'date'],
             'description' => ['required', 'string', 'max:255'],
+            'injury_date_required' => ['nullable', 'boolean'],
             'note'        => ['required', 'string'],
         ];
     }
