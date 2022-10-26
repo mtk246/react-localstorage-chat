@@ -47,7 +47,14 @@ class ClaimCreateRequest extends FormRequest
             "claim_services.*.type_of_service_id"  => ["sometimes", "nullable", "integer"],
             "claim_services.*.diagnostic_pointers" => ["sometimes", "nullable", "array"],
             "claim_services.*.epstd"               => ["sometimes", "nullable", "integer"],
-            "claim_services.*.price"               => ["sometimes", "nullable", "numeric"]
+            "claim_services.*.price"               => ["sometimes", "nullable", "numeric"],
+
+            'will_report_injuries'                 => ['nullable', 'boolean'],
+            'injuries'                             => ['nullable', 'array'],
+            'injuries.*.diag_date'                 => ['nullable', 'date'],
+            'injuries.*.diagnosis_id'              => ['nullable', 'integer'],
+            'injuries.*.type_diag_id'              => ['nullable', 'integer'],
+            'injuries.*.note'                      => ['nullable', 'string']
         ];
     }
 }

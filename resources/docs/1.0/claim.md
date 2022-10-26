@@ -78,6 +78,15 @@
             "epstd": 1, //1,2,3
             "price": 200
         }
+    ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
+        }
     ]
 }
 ```
@@ -857,6 +866,15 @@
             "epstd": 1, //1,2,3
             "price": 200
         }
+    ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
+        }
     ]
 }
 ```
@@ -943,6 +961,15 @@
             "price": 200
         }
     ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
+        }
+    ],
     "private_note": "Note claim"
 }
 ```
@@ -1013,6 +1040,15 @@
             "diagnostic_pointers": ["A", "B"],
             "epstd": 1, //1,2,3
             "price": 200
+        }
+    ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
         }
     ],
     "private_note": "Note claim 1"
@@ -1105,6 +1141,15 @@
             "diagnostic_pointers": ["A", "B"],
             "epstd": 1, //1,2,3
             "price": 200
+        }
+    ],
+    "will_report_any_injury": true,
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "note": "Note of injury"
         }
     ],
     "private_note": "Note claim 1"

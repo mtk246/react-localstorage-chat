@@ -49,7 +49,14 @@ class ClaimVerifyRequest extends FormRequest
             "claim_services.*.epstd"               => ["sometimes", "nullable", "integer"],
             "claim_services.*.price"               => ["sometimes", "nullable", "numeric"],
 
-            "private_note"                         => ["string", "nullable"]
+            "private_note"                         => ["string", "nullable"],
+
+            'will_report_injuries'                 => ['nullable', 'boolean'],
+            'injuries'                             => ['nullable', 'array'],
+            'injuries.*.diag_date'                 => ['nullable', 'date'],
+            'injuries.*.diagnosis_id'              => ['nullable', 'integer'],
+            'injuries.*.type_diag_id'              => ['nullable', 'integer'],
+            'injuries.*.note'                      => ['nullable', 'string']
         ];
     }
 }
