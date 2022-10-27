@@ -32,7 +32,7 @@ class ApiController extends Controller
             //'timeout'  => 2.0
         ]);
         try {
-            $response = $client->request('GET', '?number=' . $npi . '&version=2.0');
+            $response = $client->request('GET', '?number=' . $npi . '&version=2.1');
         } catch (\Exception $e){
             return response()->json($e->getMessage(),500);
         }
