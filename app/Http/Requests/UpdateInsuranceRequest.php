@@ -28,7 +28,7 @@ class UpdateInsuranceRequest extends FormRequest
     {
         return [
             'insurance'             => ['required', 'array'],
-            'insurance.name'        => ['required', 'string', new IUnique(InsuranceCompany::class, 'name', $this->id)],
+            'insurance.name'        => ['required', 'string'/**, new IUnique(InsuranceCompany::class, 'name', $this->id)*/],
             'insurance.naic'        => ['required', 'string'],
             'insurance.file_method' => ['required', 'string'],
             'insurance.nickname'    => ['sometimes', 'string'],
