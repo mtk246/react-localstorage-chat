@@ -27,8 +27,8 @@ class ModifierUpdateRequest extends FormRequest
             'start_date'                                          => ['required', 'date'],
             'end_date'                                            => ['nullable', 'date'],
             'special_coding_instructions'                         => ['required', 'string'],
-            'modifier_invalid_combinations'                       => ['required', 'array'],
-            'modifier_invalid_combinations.*'                     => ['required', 'string', 'max:2'],
+            'modifier_invalid_combinations'                       => ['nullable', 'array'],
+            'modifier_invalid_combinations.*'                     => ['nullable', 'string', 'max:2'],
             'note'                                                => ['required', 'string']
         ];
     }
