@@ -51,7 +51,7 @@ class ClaimRepository
             if (isset($data["format"])) {
                 $typeFormat = TypeForm::find($data["format"]);
                 if (isset($typeFormat)) {
-                    if ($typeFormat->form == '837P') {
+                    if ($typeFormat->form == 'CMS-1500 / 837P') {
                         $model = ClaimFormP::class;
                         if (isset($data['claim_services'])) {
                             $claimForm = ClaimFormP::create([
@@ -65,7 +65,22 @@ class ClaimRepository
                             }
                         }
                     } else {
-                        //$model = ClaimFormI::class;
+                        $model = ClaimFormI::class;
+                        $claimForm = ClaimFormI::create([
+                            'type_form_id'           => $data['format'] ?? null,
+                            'type_of_bill'           => $data['type_of_bill'],
+                            'federal_tax_number'     => $data['federal_tax_number'],
+                            'start_date_service'     => $data['start_date_service'] ?? null,
+                            'end_date_service'       => $data['end_date_service'] ?? null,
+                            'admission_date'         => $data['admission_date'] ?? null,
+                            'admission_hour'         => $data['admission_hour'] ?? null,
+                            'type_of_admission'      => $data['type_of_admission'],
+                            'source_admission'       => $data['source_admission'],
+                            'discharge_hour'         => $data['discharge_hour'] ?? null,
+                            'patient_discharge_stat' => $data['patient_discharge_stat'] ?? null,
+                            'admit_dx'               => $data['admit_dx'] ?? null,
+                            'billing_company_id'     => $billingCompany->id ?? $billingCompany
+                        ]);
                     }
                 }
             }
@@ -205,7 +220,7 @@ class ClaimRepository
             if (isset($data["format"])) {
                 $typeFormat = TypeForm::find($data["format"]);
                 if (isset($typeFormat)) {
-                    if ($typeFormat->form == '837P') {
+                    if ($typeFormat->form == 'CMS-1500 / 837P') {
                         $model = ClaimFormP::class;
                         if (isset($data['claim_services'])) {
                             $claimForm = ClaimFormP::create([
@@ -219,6 +234,21 @@ class ClaimRepository
                         }
                     } else {
                         $model = ClaimFormI::class;
+                        $claimForm = ClaimFormI::create([
+                            'type_form_id'           => $data['format'] ?? null,
+                            'type_of_bill'           => $data['type_of_bill'],
+                            'federal_tax_number'     => $data['federal_tax_number'],
+                            'start_date_service'     => $data['start_date_service'] ?? null,
+                            'end_date_service'       => $data['end_date_service'] ?? null,
+                            'admission_date'         => $data['admission_date'] ?? null,
+                            'admission_hour'         => $data['admission_hour'] ?? null,
+                            'type_of_admission'      => $data['type_of_admission'],
+                            'source_admission'       => $data['source_admission'],
+                            'discharge_hour'         => $data['discharge_hour'] ?? null,
+                            'patient_discharge_stat' => $data['patient_discharge_stat'] ?? null,
+                            'admit_dx'               => $data['admit_dx'] ?? null,
+                            'billing_company_id'     => $billingCompany->id ?? $billingCompany
+                        ]);
                     }
                 }
             }

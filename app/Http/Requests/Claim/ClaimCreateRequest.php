@@ -4,6 +4,7 @@ namespace App\Http\Requests\Claim;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\TypeForm;
 
 class ClaimCreateRequest extends FormRequest
 {
@@ -24,12 +25,41 @@ class ClaimCreateRequest extends FormRequest
      */
     public function rules()
     {
+        $typeFormat = TypeForm::find($this->input('format'));
         return [      
             "format"                         => ['required', 'integer'],
             "company_id"                     => ['required', 'integer'],
             "facility_id"                    => ['required', 'integer'],
             "patient_id"                     => ['required', 'integer'],
             "health_professional_id"         => ['required', 'integer'],
+
+            "type_of_bill"           => [
+                                            Rule::requiredIf(function () use ($typeFormat)
+                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
+                                            'string', 'max:3'
+                                        ],
+            "federal_tax_number"     => [
+                                            Rule::requiredIf(function () use ($typeFormat)
+                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
+                                            'string', 'max:50'
+                                        ],
+            "start_date_service"     => ['nullable', 'date'],
+            "end_date_service"       => ['nullable', 'date'],
+            "admission_date"         => ['nullable', 'date'],
+            "admission_hour"         => ['nullable', 'integer'],
+            "type_of_admission"      => [
+                                            Rule::requiredIf(function () use ($typeFormat)
+                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
+                                            'string', 'max:1'
+                                        ],
+            "source_admission"       => [
+                                            Rule::requiredIf(function () use ($typeFormat)
+                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
+                                            'string', 'max:1'
+                                        ],
+            "discharge_hour"         => ['nullable', 'integer'],
+            "patient_discharge_stat" => ['nullable', 'integer'],
+            "admit_dx"               => ['nullable', 'integer'],
             
             "diagnoses"                      => ["array", "nullable"],
             "diagnoses.*.item"               => ["string", "nullable"],
