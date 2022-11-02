@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
 use App\Models\TypeForm;
+use App\Models\TypeDiag;
 use App\Models\ClaimStatus;
 use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
@@ -310,6 +311,10 @@ class ClaimRepository
 
     public function getListTypeFormats() {
         return getList(TypeForm::class, 'form');
+    }
+
+    public function getListTypeDiags() {
+        return getList(TypeDiag::class, ['code', '-', 'description']);
     }
 
     public function getListStatus() {

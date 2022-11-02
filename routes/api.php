@@ -366,6 +366,14 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
 
+    Route::prefix("injury")->middleware([
+        "auth:api",
+        'role:superuser|biller|billingmanager',
+    ])->group(function() {
+        Route::get("/get-list-type-diags",[\App\Http\Controllers\ClaimController::class,"getListTypeDiags"]);
+
+    });
+
     Route::prefix("claim")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',

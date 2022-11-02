@@ -7,6 +7,7 @@
 - [Get list type of services](#get-list-type-of-services)
 - [Get list place of services](#get-list-place-of-services)
 - [Get list type formats](#get-list-type-formats)
+- [Get list type diags](#get-list-type-diags)
 - [Get list status claim](#get-list-status-claim)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
@@ -30,16 +31,17 @@
 | 2  |GET     | `Get list type of services`  | `/claim/get-list-type-of-services`     | yes            | Get list type of services |
 | 3  |GET     | `Get list place of services`  | `/claim/get-list-place-of-services`     | yes            | Get list place of services |
 | 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type formats |
-| 5  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
-| 6  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
-| 7  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 8  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
-| 9  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
-| 10 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
-| 11 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
-| 12 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
-| 13 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
-| 14 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
+| 5  |GET     | `Get list types diags`  | `/injury/get-list-type-diags`     | yes            | Get list type diags |
+| 6  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
+| 7  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
+| 8  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 9  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 10  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| 11 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
+| 12 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
+| 13 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
+| 14 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 15 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
 
 
 <a name="create-claim"></a>
@@ -475,11 +477,64 @@
 [
     {
         "id": 1,
-        "name": "837P"
+        "name": "CMS-1500 / 837P"
     },
     {
         "id": 2,
-        "name": "837I"
+        "name": "UB-04 / 837I"
+    }
+]
+```
+
+#
+
+<a name="get-list-type-diags"></a>
+## Get list type diags
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type diags of injury found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "A - Allergy"
+    },
+    {
+        "id": 2,
+        "name": "C - Chronic"
+    },
+    {
+        "id": 3,
+        "name": "D - Problem List"
+    },
+    {
+        "id": 4,
+        "name": "O - Other"
+    },
+    {
+        "id": 5,
+        "name": "P - Pre Existing Condition"
+    },
+    {
+        "id": 6,
+        "name": "S - Self Limiting"
+    },
+    {
+        "id": 7,
+        "name": "U - Acute"
     }
 ]
 ```

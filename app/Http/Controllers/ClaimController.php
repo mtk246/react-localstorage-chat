@@ -114,6 +114,13 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error get all type formats"), 400);
     }
 
+    public function getListTypeDiags()
+    {
+        $rs = $this->claimRepository->getListTypeDiags();
+
+        return $rs ? response()->json($rs) : response()->json(__("Error get all type diags"), 400);
+    }
+
     public function getListStatus()
     {
         $rs = $this->claimRepository->getListStatus();

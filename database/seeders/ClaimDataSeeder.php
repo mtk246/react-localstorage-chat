@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\TypeForm;
+use App\Models\TypeDiag;
 use App\Models\ClaimStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
@@ -154,6 +155,20 @@ class ClaimDataSeeder extends Seeder
 
         foreach ($eligibilityStatuses as $eligibilityStatus) {
             EligibilityStatus::updateOrCreate($eligibilityStatus, $eligibilityStatus);
+        }
+
+        $typeDiags = [
+            ['code' => 'A', 'description' => 'Allergy'],
+            ['code' => 'C', 'description' => 'Chronic'],
+            ['code' => 'D', 'description' => 'Problem List'],
+            ['code' => 'O', 'description' => 'Other'],
+            ['code' => 'P', 'description' => 'Pre Existing Condition'],
+            ['code' => 'S', 'description' => 'Self Limiting'],
+            ['code' => 'U', 'description' => 'Acute']
+        ];
+
+        foreach ($typeDiags as $type) {
+            TypeDiag::updateOrCreate($type, $type);
         }
     }
 }
