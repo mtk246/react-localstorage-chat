@@ -37,7 +37,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("user")->group(function(){
-        Route::get("/get-server-all",[\App\Http\Controllers\UserController::class,'getServerAllUsers'])->middleware(['auth:api']);
+        Route::get("/get-all-server",[\App\Http\Controllers\UserController::class,'getServerAllUsers'])->middleware(['auth:api']);
         Route::get("/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}", [\App\Http\Controllers\UserController::class,'search']);
         Route::post("/",[\App\Http\Controllers\UserController::class,'createUser']);
         Route::get("/",[\App\Http\Controllers\UserController::class,'getAllUsers'])->middleware(['auth:api']);
@@ -95,7 +95,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("billing-company")->group(function(){
-        Route::get("/get-server-all",[\App\Http\Controllers\BillingCompanyController::class,'getServerAllBillingCompanies'])->middleware(['auth:api']);
+        Route::get("/get-all-server",[\App\Http\Controllers\BillingCompanyController::class,'getServerAllBillingCompanies'])->middleware(['auth:api']);
         Route::post("create",
             [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
             "auth:api",

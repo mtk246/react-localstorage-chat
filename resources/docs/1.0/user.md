@@ -33,7 +33,7 @@
 | 2 |PATCH | `change status user`| `/user/{user_id?}/change-status`        |yes            |change status users|
 | 3 |PUT | `edit users`          | `/user/{user_id?}`|yes|Update data users|
 | 4 |GET | `get all users`   | `/user/` |yes            |get all users|
-| 5 |GET | `get all users from server`   | `/user/get-server-all` |yes            |get all users from server|
+| 5 |GET | `get all users from server`   | `/user/get-all-server` |yes            |get all users from server|
 | 6 |GET | `get one user`   | `/user/{user_id}` |yes            |get one user|
 | 7 |POST | `send email to recovery password`   | `/user/send-email-rescue-pass` |no|send email to recovery password|
 | 8 |POST | `recovery user`   | `/user/recovery-user` |no|recovery user|
