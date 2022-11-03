@@ -120,12 +120,12 @@ class BillingCompanyRepository
         }
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy('id', $request->sortDesc ? 'desc' : 'asc');
+                $data = $data->orderBy('id', (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
                 /**$data = $data->orderBy(Contact::select('email')
                              ->join('contacts', 'contacts.contactable_id', '=', 'billing_companies.id')
-                             ->whereColumn('contacts.contactable_type', BillingCompany::class), $request->sortDesc ? 'desc' : 'asc');*/
+                             ->whereColumn('contacts.contactable_type', BillingCompany::class), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');*/
             } else {
-                $data = $data->orderBy($request->sortBy, $request->sortDesc ? 'desc' : 'asc');
+                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
             }
         } else {
             $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
@@ -134,8 +134,9 @@ class BillingCompanyRepository
         $data = $data->paginate($request->itemsPerPage);
 
         return response()->json([
-            'data'  => $data->items(),
-            'count' => $data->total()
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
         ], 200);
     }
 

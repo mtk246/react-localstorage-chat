@@ -203,15 +203,15 @@ class UserRepository{
         }
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'role')) {
-                $data = $data->orderBy('id', $request->sortDesc ? 'desc' : 'asc');
+                $data = $data->orderBy('id', (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
                 /**$data = $data->orderBy(Role::select('name')
                         ->join('role_user', 'role_user.role_id', '=', 'roles.id')
-                        ->whereColumn('role_user.user_id', 'users.id'), $request->sortDesc ? 'desc' : 'asc');*/
+                        ->whereColumn('role_user.user_id', 'users.id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');*/
             } elseif (str_contains($request->sortBy, 'name')) {
                 $data = $data->orderBy(
-                    Profile::select('first_name')->whereColumn('profiles.id', 'users.profile_id'), $request->sortDesc ? 'desc' : 'asc');
+                    Profile::select('first_name')->whereColumn('profiles.id', 'users.profile_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
             } else {
-                $data = $data->orderBy($request->sortBy, $request->sortDesc ? 'desc' : 'asc');
+                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
             }
         } else {
             $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
@@ -220,8 +220,9 @@ class UserRepository{
         $data = $data->paginate($request->itemsPerPage);
 
         return response()->json([
-            'data'  => $data->items(),
-            'count' => $data->total()
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
         ], 200);
     }
 
