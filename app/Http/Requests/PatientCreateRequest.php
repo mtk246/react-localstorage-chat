@@ -29,6 +29,8 @@ class PatientCreateRequest extends FormRequest
             'public_note'                       => ['sometimes', 'required', 'string'],
             'private_note'                      => ['sometimes', 'required', 'string'],
 
+            'companies'                         => ['required', 'array'],
+
             'patient_condition_related'                => ['nullable', 'array'],
             'patient_condition_related.employment'     => ['nullable', 'boolean'],
             'patient_condition_related.auto_accident'  => ['nullable', 'boolean'],
@@ -90,7 +92,6 @@ class PatientCreateRequest extends FormRequest
             'insurance_policies.*.insurance_company'   => ['required', 'numeric'],
             'insurance_policies.*.policy_number'       => ['required', 'numeric'],
             'insurance_policies.*.insurance_plan'      => ['required', 'numeric'],
-            'insurance_policies.*.copay'               => ['nullable', 'numeric'],
             'insurance_policies.*.group_number'        => ['nullable', 'numeric'],
             'insurance_policies.*.eff_date'            => ['required', 'date'],
             'insurance_policies.*.end_date'            => ['nullable', 'date'],

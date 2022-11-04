@@ -12,6 +12,7 @@ use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePolicy;
 use App\Models\BillingCompany;
+use App\Models\Company;
 use App\Models\PatientConditionRelated;
 use App\Models\Patient;
 use App\Models\PatientPrivate;
@@ -216,16 +217,16 @@ class PatientRepository
             }
 
             /** Company */
-            //if (isset($data["companies"])) {
+            if (isset($data["companies"])) {
                 /** Attached patient to company */
-                /**foreach ($data["companies"] as $dataCompany) {
+                foreach ($data["companies"] as $dataCompany) {
                     $company = Company::find($dataCompany);
 
                     if (is_null($patient->companies()->find($company->id))) {
                         $patient->companies()->attach($company->id);
                     }
                 }
-            }*/
+            }
 
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
@@ -252,7 +253,6 @@ class PatientRepository
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
                     ], [
-                        'copay'           => $insurance_policy["copay"] ?? '',
                         'group_number'    => $insurance_policy["group_number"] ?? '',
                         'eff_date'        => $insurance_policy["eff_date"],
                         'end_date'        => $insurance_policy["end_date"] ?? '',
@@ -321,7 +321,6 @@ class PatientRepository
                         }
                     }
                 }
-
             }
             if ($user && $patient) {
                 $rolePatient = Role::where('slug', 'patient')->first();
@@ -368,6 +367,7 @@ class PatientRepository
             "guarantor",
             "employments",
             "patientPrivate",
+            "companies",
             "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
@@ -408,6 +408,7 @@ class PatientRepository
             "guarantor",
             "employments",
             "patientPrivate",
+            "companies",
             "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
@@ -439,6 +440,7 @@ class PatientRepository
             "guarantor",
             "employments",
             "patientPrivate",
+            "companies",
             "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
@@ -467,6 +469,7 @@ class PatientRepository
             "guarantor",
             "employments",
             "patientPrivate",
+            "companies",
             "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
@@ -674,13 +677,13 @@ class PatientRepository
             }
 
             /** Company */
-            /**if (isset($data["companies"])) {
+            if (isset($data["companies"])) {
                 $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
                     $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
                 })->get();
                 
                 /** Detach Company */
-                /**foreach ($companies as $company) {
+                foreach ($companies as $company) {
                     $validated = false;
                     foreach ($data["companies"] as $dataCompany) {
                         if ($dataCompany == $company->id) {
@@ -692,14 +695,14 @@ class PatientRepository
                 }
 
                 /** Attached patient to company */
-                /**foreach ($data["companies"] as $dataCompany) {
+                foreach ($data["companies"] as $dataCompany) {
                     $company = Company::find($dataCompany);
 
                     if (is_null($patient->companies()->find($company->id))) {
                         $patient->companies()->attach($company->id);
                     }
                 }
-            }*/
+            }
 
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
@@ -725,7 +728,6 @@ class PatientRepository
                         'policy_number'     => $insurance_policy["policy_number"],
                         'insurance_plan_id' => $insurancePlan->id
                     ], [
-                        'copay'           => $insurance_policy["copay"] ?? '',
                         'group_number'    => $insurance_policy["group_number"] ?? '',
                         'eff_date'        => $insurance_policy["eff_date"],
                         'end_date'        => $insurance_policy["end_date"] ?? '',
@@ -860,7 +862,6 @@ class PatientRepository
                 'policy_number'     => $data["policy_number"],
                 'insurance_plan_id' => $insurancePlan->id
             ], [
-                'copay'           => $data["copay"] ?? '',
                 'group_number'    => $data["group_number"] ?? '',
                 'eff_date'        => $data["eff_date"],
                 'end_date'        => $data["end_date"] ?? '',
@@ -962,7 +963,6 @@ class PatientRepository
         $insurancePolicy->update([
             'policy_number'     => $data["policy_number"],
             'insurance_plan_id' => $insurancePlan->id,
-            'copay'             => $data["copay"] ?? '',
             'group_number'      => $data["group_number"] ?? '',
             'eff_date'          => $data["eff_date"],
             'end_date'          => $data["end_date"] ?? '',

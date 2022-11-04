@@ -13,7 +13,6 @@ class InsurancePolicy extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "copay",
         "eff_date",
         "end_date",
         "release_info",

@@ -53,6 +53,7 @@
     "billing_company_id": 1, /** Only required by superuser */
     "public_note": "Some note publics",
     "private_note": "Some note privates",
+    "companies": [1,3],
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",
@@ -129,7 +130,6 @@
             "insurance_company": 1,
             "insurance_plan": 1,
             "policy_number": 12344,
-            "copay": 200,  //optional
             "group_number": 1234, //optional
             "eff_date": "2020-01-23",
             "end_date": "2022-01-23",  //optional
@@ -142,7 +142,6 @@
             "insurance_company": 1,
             "insurance_plan": 2,
             "policy_number": 12344,
-            "copay": 200,  //optional
             "group_number": 1234, //optional
             "eff_date": "2020-01-23",
             "end_date": "2022-01-23",  //optional
@@ -730,6 +729,7 @@
     "billing_company_id": 1, /** Only required by superuser */
     "public_note": "Note public",
     "private_note": "Note private",
+    "companies": [1,3],
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",
@@ -808,7 +808,6 @@
             "insurance_company": 1,
             "insurance_plan": 1,
             "policy_number": 12344,
-            "copay": 200,  //optional
             "group_number": 1234, //optional
             "eff_date": "2020-01-23",
             "end_date": "2022-01-23",  //optional
@@ -823,7 +822,6 @@
             "insurance_company": 1,
             "insurance_plan": 2,
             "policy_number": 12344,
-            "copay": 200,  //optional
             "group_number": 1234, //optional
             "eff_date": "2020-01-23",
             "end_date": "2022-01-23",  //optional
@@ -990,7 +988,6 @@
     "insurance_company": 1,
     "insurance_plan": 1,
     "policy_number": 12344,
-    "copay": 200,  //optional
     "group_number": 1234, //optional
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",  //optional
@@ -1007,7 +1004,6 @@
     "insurance_company": 1,
     "insurance_plan": 2,
     "policy_number": 13442,
-    "copay": 200,  //optional
     "group_number": 1234, //optional
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",  //optional
@@ -1059,7 +1055,6 @@
     "payment_responsibility_level_code": null,
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",
-    "copay": "200",
     "release_info": false,
     "assign_benefits": false,
     "insurance_plan_id": 2,
@@ -1152,7 +1147,6 @@
     "insurance_company": 1,
     "insurance_plan": 1,
     "policy_number": 12344,
-    "copay": 200,  //optional
     "group_number": 1234, //optional
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",  //optional
@@ -1169,7 +1163,6 @@
     "insurance_company": 1,
     "insurance_plan": 2,
     "policy_number": 13442,
-    "copay": 200,  //optional
     "group_number": 1234, //optional
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",  //optional
@@ -1208,7 +1201,6 @@
     "payment_responsibility_level_code": null,
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",
-    "copay": "200",
     "release_info": false,
     "assign_benefits": false,
     "insurance_plan_id": 2,
@@ -1307,7 +1299,6 @@
         "payment_responsibility_level_code": null,
         "eff_date": "2020-01-23",
         "end_date": "2022-01-23",
-        "copay": "200",
         "release_info": false,
         "assign_benefits": false,
         "insurance_plan_id": 2,
@@ -1405,7 +1396,6 @@
     "payment_responsibility_level_code": null,
     "eff_date": "2020-01-23",
     "end_date": "2022-01-23",
-    "copay": "200",
     "release_info": false,
     "assign_benefits": false,
     "insurance_plan_id": 2,
@@ -1504,7 +1494,6 @@
         "payment_responsibility_level_code": null,
         "eff_date": "2020-01-23",
         "end_date": "2022-01-23",
-        "copay": "200",
         "release_info": false,
         "assign_benefits": false,
         "insurance_plan_id": 2,
