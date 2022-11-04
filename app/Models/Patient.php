@@ -114,6 +114,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * Patient has one PatientConditionRelated
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function patientConditionRelated()
+    {
+        return $this->hasOne(PatientConditionRelated::class);
+    }
+
+    /**
      * Patient has many ClaimInformation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

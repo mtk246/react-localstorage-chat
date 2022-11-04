@@ -51,13 +51,18 @@
 {
     "driver_license": "Driver License",
     "billing_company_id": 1, /** Only required by superuser */
-    "companies": [1,3],
     "public_note": "Some note publics",
     "private_note": "Some note privates",
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",
         "patient_num"       : "Pat-001"
+    },
+    "patient_condition_related":{
+        "employment":     false,
+        "auto_accident":  false,
+        "place_state":    "placeStatePatient",
+        "other_accident": false
     },
     "profile": {
         "ssn":"237891812",
@@ -723,13 +728,18 @@
 {
     "driver_license": "Driver License",
     "billing_company_id": 1, /** Only required by superuser */
-    "companies": [1,3],
     "public_note": "Note public",
     "private_note": "Note private",
     "patient_private":{
         "reference_num"     : "Ref-0001",
         "med_num"           : "Med-001",
         "patient_num"       : "Pat-001"
+    },
+    "patient_condition_related":{
+        "employment":     false,
+        "auto_accident":  false,
+        "place_state":    "placeStatePatient",
+        "other_accident": false
     },
     "profile": {
         "ssn":"237891812",

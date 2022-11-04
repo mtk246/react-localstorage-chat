@@ -28,7 +28,12 @@ class PatientCreateRequest extends FormRequest
             'driver_license'                    => ['required', 'string'],
             'public_note'                       => ['sometimes', 'required', 'string'],
             'private_note'                      => ['sometimes', 'required', 'string'],
-            'companies'                         => ['required', 'array'],
+
+            'patient_condition_related'                => ['nullable', 'array'],
+            'patient_condition_related.employment'     => ['nullable', 'boolean'],
+            'patient_condition_related.auto_accident'  => ['nullable', 'boolean'],
+            'patient_condition_related.place_state'    => ['nullable', 'string'],
+            'patient_condition_related.other_accident' => ['nullable', 'boolean'],
 
             'billing_company_id'                => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
 

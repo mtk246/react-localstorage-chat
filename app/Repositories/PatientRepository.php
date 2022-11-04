@@ -12,7 +12,7 @@ use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePolicy;
 use App\Models\BillingCompany;
-use App\Models\Company;
+use App\Models\PatientConditionRelated;
 use App\Models\Patient;
 use App\Models\PatientPrivate;
 use App\Models\PrivateNote;
@@ -160,6 +160,12 @@ class PatientRepository
                 $patient_private = PatientPrivate::create($data["patient_private"]);
             }
 
+            /** Create PatienConditionRelated */
+            if (isset($data['patient_condition_related'])) {
+                $data["patient_condition_related"]["patient_id"] = $patient->id;
+                $patient_condition = PatientConditionRelated::create($data["patient_condition_related"]);
+            }
+
             /** Create Marital */
             if (isset($data['marital']['spuse_name'])) {
                 $data["marital"]["patient_id"] = $patient->id;
@@ -210,16 +216,16 @@ class PatientRepository
             }
 
             /** Company */
-            if (isset($data["companies"])) {
+            //if (isset($data["companies"])) {
                 /** Attached patient to company */
-                foreach ($data["companies"] as $dataCompany) {
+                /**foreach ($data["companies"] as $dataCompany) {
                     $company = Company::find($dataCompany);
 
                     if (is_null($patient->companies()->find($company->id))) {
                         $patient->companies()->attach($company->id);
                     }
                 }
-            }
+            }*/
 
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
@@ -360,9 +366,9 @@ class PatientRepository
             },
             "marital",
             "guarantor",
-            "companies",
             "employments",
             "patientPrivate",
+            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
@@ -400,9 +406,9 @@ class PatientRepository
             },
             "marital",
             "guarantor",
-            "companies",
             "employments",
             "patientPrivate",
+            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
@@ -431,9 +437,9 @@ class PatientRepository
             },
             "marital",
             "guarantor",
-            "companies",
             "employments",
             "patientPrivate",
+            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
@@ -459,9 +465,9 @@ class PatientRepository
             },
             "marital",
             "guarantor",
-            "companies",
             "employments",
             "patientPrivate",
+            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
@@ -543,6 +549,12 @@ class PatientRepository
             if (isset($data['patient_private'])) {
                 $patient_private = $patient->patientPrivate;
                 $patient_private->update($data["patient_private"]);
+            }
+
+            /** Update PatienPrivate */
+            if (isset($data['patient_condition_related'])) {
+                $patient_condition = $patient->patientConditionRelated;
+                $patient_condition->update($data["patient_condition_related"]);
             }
 
             /** Update User */
@@ -662,13 +674,13 @@ class PatientRepository
             }
 
             /** Company */
-            if (isset($data["companies"])) {
+            /**if (isset($data["companies"])) {
                 $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
                     $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
                 })->get();
                 
                 /** Detach Company */
-                foreach ($companies as $company) {
+                /**foreach ($companies as $company) {
                     $validated = false;
                     foreach ($data["companies"] as $dataCompany) {
                         if ($dataCompany == $company->id) {
@@ -680,14 +692,14 @@ class PatientRepository
                 }
 
                 /** Attached patient to company */
-                foreach ($data["companies"] as $dataCompany) {
+                /**foreach ($data["companies"] as $dataCompany) {
                     $company = Company::find($dataCompany);
 
                     if (is_null($patient->companies()->find($company->id))) {
                         $patient->companies()->attach($company->id);
                     }
                 }
-            }
+            }*/
 
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
