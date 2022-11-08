@@ -89,7 +89,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ]
 }
@@ -930,7 +930,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ]
 }
@@ -1024,7 +1024,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ],
     "private_note": "Note claim"
@@ -1105,7 +1105,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ],
     "private_note": "Note claim 1"
@@ -1206,7 +1206,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ],
     "private_note": "Note claim 1"
@@ -1419,7 +1419,7 @@
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
             "type_diag_id": 2,
-            "note": "Note of injury"
+            "public_note": "Note of injury"
         }
     ]
 }
