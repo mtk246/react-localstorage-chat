@@ -28,7 +28,6 @@ class PatientPolicyRequest extends FormRequest
             'insurance_company'    => ['required', 'numeric'],
             'policy_number'        => ['required', 'numeric'],
             'insurance_plan'       => ['required', 'numeric'],
-            'copay'                => ['nullable', 'numeric'],
             'group_number'         => ['nullable', 'numeric'],
             'eff_date'             => ['required', 'date'],
             'end_date'             => ['nullable', 'date'],

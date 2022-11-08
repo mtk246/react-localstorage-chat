@@ -116,6 +116,12 @@ class PatientUpdateRequest extends FormRequest
             'insurance_policies.*.subscriber.contact.phone'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
             'insurance_policies.*.subscriber.contact.fax'     => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
             'insurance_policies.*.subscriber.contact.email'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'email:rfc'],
+
+            'injuries'                             => ['nullable', 'array'],
+            'injuries.*.diag_date'                 => ['nullable', 'date'],
+            'injuries.*.diagnosis_id'              => ['nullable', 'integer'],
+            'injuries.*.type_diag_id'              => ['nullable', 'integer'],
+            'injuries.*.public_note'               => ['nullable', 'string']
         ];
     }
 }

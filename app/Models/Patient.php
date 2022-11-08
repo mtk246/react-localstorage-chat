@@ -84,6 +84,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * The injuries that belong to the Patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function injuries()
+    {
+        return $this->belongsToMany(Injury::class, 'injury_patient', 'patient_id', 'injury_id')->withTimestamps();
+    }
+
+    /**
      * Patient belongs to user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

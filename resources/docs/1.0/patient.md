@@ -166,6 +166,14 @@
                 }
             }
         }
+    ],
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "public_note": "Note of injury"
+        }
     ]
 }
 ```
@@ -845,6 +853,14 @@
                     "email": "subscriber@gmail.com"
                 }
             }
+        }
+    ],
+    "injuries": [
+        {
+            "diag_date": "2022-07-05",
+            "diagnosis_id": 1,
+            "type_diag_id": 2,
+            "public_note": "Note of injury"
         }
     ]
 }

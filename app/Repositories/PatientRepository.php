@@ -29,6 +29,7 @@ use App\Models\Employment;
 use App\Models\EmergencyContact;
 use App\Models\Subscriber;
 use App\Models\User;
+use App\Models\Injury;
 use App\Roles\Models\Role;
 
 class PatientRepository
@@ -317,6 +318,36 @@ class PatientRepository
                             /** Attached patient to subscriber */
                             if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
                                 $insurancePolicy->subscribers()->attach($subscriber->id);
+                            }
+                        }
+                    }
+                }
+
+                if (isset($data['injuries'])) {
+                    foreach ($data['injuries'] as $injury) {
+                        $patientInjury = Injury::updateOrCreate(
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ],
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ]
+                        );
+                        if (isset($injury['public_note'])) {
+                            /** PublicNote */
+                            PublicNote::create([
+                                'publishable_type' => Injury::class,
+                                'publishable_id'   => $patientInjury->id,
+                                'note'             => $injury['public_note'],
+                            ]);
+                        }
+                        if (isset($patientInjury)) {
+                            if (is_null($patient->injuries()->find($patientInjury->id))) {
+                                $patient->injuries()->attach($patientInjury->id);
                             }
                         }
                     }
@@ -796,7 +827,50 @@ class PatientRepository
                         }
                     }
                 }
+            }
 
+            if (isset($data['injuries'])) {
+                $injuries = $patient->injuries;
+                /** Delete injuries */
+                foreach ($injuries as $injury) {
+                    $validated = false;
+                    foreach ($data["injuries"] as $injuryP) {
+                        if (($injuryP['diag_date'] == $injury->diag_date) &&
+                            ($injuryP['diagnosis_id'] == $injury->diagnosis_id) &&
+                            ($injuryP['type_diag_id'] == $injury->type_diag_id)) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                    if (!$validated) $injury->delete();
+                }
+                foreach ($data['injuries'] as $injury) {
+                    $patientInjury = Injury::updateOrCreate(
+                        [
+                            'diag_date'    => $injury['diag_date'],
+                            'diagnosis_id' => $injury['diagnosis_id'],
+                            'type_diag_id' => $injury['type_diag_id'],
+                        ],
+                        [
+                            'diag_date'    => $injury['diag_date'],
+                            'diagnosis_id' => $injury['diagnosis_id'],
+                            'type_diag_id' => $injury['type_diag_id'],
+                        ]
+                    );
+                    if (isset($injury['public_note'])) {
+                        /** PublicNote */
+                        PublicNote::create([
+                            'publishable_type' => Injury::class,
+                            'publishable_id'   => $patientInjury->id,
+                            'note'             => $injury['public_note'],
+                        ]);
+                    }
+                    if (isset($patientInjury)) {
+                        if (is_null($patient->injuries()->find($patientInjury->id))) {
+                            $patient->injuries()->attach($patientInjury->id);
+                        }
+                    }
+                }
             }
 
             DB::commit();
