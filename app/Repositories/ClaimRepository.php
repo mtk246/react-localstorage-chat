@@ -27,6 +27,7 @@ use App\Models\ClaimFormI;
 use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
 use App\Models\Patient;
+use App\Models\Injury;
 
 class ClaimRepository
 {
@@ -95,6 +96,38 @@ class ClaimRepository
                 "claim_formattable_type" => $model ?? null,
                 "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
+
+            if (isset($data['will_report_injuries'])) {
+                if (isset($data['injuries'])) {
+                    foreach ($data['injuries'] as $injury) {
+                        $claimInjury = Injury::updateOrCreate(
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ],
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ]
+                        );
+                        if (isset($injury['public_note'])) {
+                            /** PublicNote */
+                            PublicNote::create([
+                                'publishable_type' => Injury::class,
+                                'publishable_id'   => $claimInjury->id,
+                                'note'             => $injury['public_note'],
+                            ]);
+                        }
+                        if (isset($claimInjury)) {
+                            if (is_null($claim->injuries()->find($claimInjury->id))) {
+                                $claim->injuries()->attach($claimInjury->id);
+                            }
+                        }
+                    }
+                }
+            }
 
             if (isset($data['diagnoses'])) {
                 $claim->diagnoses()->detach();
@@ -289,6 +322,51 @@ class ClaimRepository
                 ]);
             }
 
+            if (isset($data['will_report_injuries'])) {
+                if (isset($data['injuries'])) {
+                    $injuries = $claim->injuries;
+                    /** Delete injuries */
+                    foreach ($injuries as $injury) {
+                        $validated = false;
+                        foreach ($data["injuries"] as $injuryC) {
+                            if (($injuryC['diag_date'] == $injury->diag_date) &&
+                                ($injuryC['diagnosis_id'] == $injury->diagnosis_id) &&
+                                ($injuryC['type_diag_id'] == $injury->type_diag_id)) {
+                                $validated = true;
+                                break;
+                            }
+                        }
+                        if (!$validated) $injury->delete();
+                    }
+                    foreach ($data['injuries'] as $injury) {
+                        $claimInjury = Injury::updateOrCreate(
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ],
+                            [
+                                'diag_date'    => $injury['diag_date'],
+                                'diagnosis_id' => $injury['diagnosis_id'],
+                                'type_diag_id' => $injury['type_diag_id'],
+                            ]
+                        );
+                        if (isset($injury['public_note'])) {
+                            /** PublicNote */
+                            PublicNote::create([
+                                'publishable_type' => Injury::class,
+                                'publishable_id'   => $claimInjury->id,
+                                'note'             => $injury['public_note'],
+                            ]);
+                        }
+                        if (isset($claimInjury)) {
+                            if (is_null($claim->injuries()->find($claimInjury->id))) {
+                                $claim->injuries()->attach($claimInjury->id);
+                            }
+                        }
+                    }
+                }
+            }
             DB::commit();
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {

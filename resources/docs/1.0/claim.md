@@ -15,6 +15,7 @@
 - [Save as draft claim](#save-as-draft-claim)
 - [Update as draft claim](#update-as-draft-claim)
 - [Draft and Check eligibility](#draft-check-eligibility-claim)
+- [Check eligibility](#check-eligibility-claim)
 - [Validation claim](#validation-claim)
 - [verify and register claim](#verify-register)
 - [Show claim report preview](#preview-claim)
@@ -39,9 +40,10 @@
 | 10  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
 | 11 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
 | 12 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
-| 13 |GET     | `Validation claim`  | `/claim/validation/{claim_id}`     | yes            | Validation claim |
-| 14 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
-| 15 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
+| 13 |GET     | `check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
+| 14 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
+| 15 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 16 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
 
 
 <a name="create-claim"></a>
@@ -1223,6 +1225,37 @@
 
 ```
 
+#
+
+<a name="check-eligibility-claim"></a>
+## Check eligibility claim
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "claimId": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim found
+
+#
+
+
+```json
+
+```
 #
 
 <a name="validation-claim"></a>
