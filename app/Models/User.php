@@ -133,7 +133,7 @@ class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['billing_company_id', 'last_modified'];
+    protected $appends = ['billing_company_id', 'billing_company', 'last_modified'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -265,6 +265,18 @@ class User extends Authenticatable implements JWTSubject, Auditable
         if (is_null($user)) return null;
         $billingCompany = $user->billingCompanies->first();
         return $billingCompany->id ?? null;
+    }
+
+    /*
+     * Get the billing company's.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getBillingCompanyAttribute()
+    {
+        $billingCompany = $this->billingCompanies->first();
+        return $billingCompany ?? null;
     }
 
     /*
