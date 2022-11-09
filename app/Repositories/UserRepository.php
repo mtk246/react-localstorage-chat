@@ -82,6 +82,7 @@ class UserRepository{
             $user = User::create([
                 "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                 "email"      => $data['email'],
+                "status"     => true,
                 "userkey"    => encrypt(uniqid("", true)),
                 "profile_id" => $profile->id
             ]);

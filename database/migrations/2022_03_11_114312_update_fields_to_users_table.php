@@ -25,7 +25,7 @@ class UpdateFieldsToUsersTable extends Migration
             $table->dropColumn('dateOfBirth');
 
             $table->string("userkey")->nullable();
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->timestamp('last_login')->nullable();
             $table->foreignId('profile_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
 
