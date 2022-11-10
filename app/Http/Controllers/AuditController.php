@@ -192,12 +192,15 @@ class AuditController extends Controller
         if (isset($record)) {
             $auditables = Audit::where('url', 'like', '%/' . $entity . '/' . $id)
                                ->orWhere('url', 'like', '%/' . $entity)
+                               ->where('created_at', $record->created_at)
                                ->orWhere('url', 'like', '%/' . $entity . '/draft/' . $id)
                                ->orWhere('url', 'like', '%/' . $entity . '/draft')
-                               ->orWhere('url', 'like', '%/' . $entity . '/draft-check-eligibility')
-                               ->orWhere('url', 'like', '%/' . $entity . '/draft-check-eligibility')
+                               ->where('created_at', $record->created_at)
                                ->orWhere('url', 'like', '%/' . $entity . '/check-eligibility/' . $id)
+                               ->orWhere('url', 'like', '%/' . $entity . '/draft-check-eligibility')
+                               ->where('created_at', $record->created_at)
                                ->orWhere('url', 'like', '%/' . $entity . '/verify-register/' . $id)
+                               ->orWhere('url', 'like', '%/' . $entity . '/draft-check-eligibility')
                                ->where('created_at', $record->created_at)
                                ->orderBy("created_at", "desc")->orderBy("id", "asc")->get([
                 'id',
