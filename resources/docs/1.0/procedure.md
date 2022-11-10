@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create procedure](#create-procedure)
 - [Get all procedure](#get-all-procedure)
+- [Get all procedure from server](#get-all-procedure-server)
 - [Get one procedure](#get-one-procedure)
 - [Get one procedure by code](#get-one-procedure-by-code)
 - [Get price of procedure](#get-price-of-procedure)
@@ -30,22 +31,23 @@
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |  
 | 1 |POST    | `Create procedure`  | `/procedure/`     | yes            | Create procedure  |         
-| 2 |GET     | `Get all procedures` | `/procedure/`     | yes            | Get all procedures |
-| 3 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
-| 4 |GET     | `Get one procedure by code` | `/procedure/get-by-code/{code}` | yes            | Get one procedure by code|
-| 5 |GET     | `Get price of procedure` | `/procedure/get-price-of-procedure` | yes            | Get prices of procedure|
-| 6 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
-| 7 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
-| 8 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
-| 9 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
-| 10 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
-| 11 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 12 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 13 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
-| 14 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 15 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 16 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 17 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 2 |GET     | `Get all procedure` | `/procedure/`     | yes            | Get all procedures |
+| 3 |GET     | `Get all procedure from server`         | `/procedure/get-all-server`|yes|Get all procedure from server|
+| 4 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
+| 5 |GET     | `Get one procedure by code` | `/procedure/get-by-code/{code}` | yes            | Get one procedure by code|
+| 6 |GET     | `Get price of procedure` | `/procedure/get-price-of-procedure` | yes            | Get prices of procedure|
+| 7 |GET     | `Get list mac localities` | `/procedure/get-list-mac-localities` | yes            | Get list mac localities|
+| 8 |GET     | `Get list discriminatories` | `/procedure/get-list-discriminatories` | yes            | Get list discriminatories|
+| 9 |GET     | `Get list genders` | `/procedure/get-list-genders` | yes            | Get list genders|
+| 10 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
+| 11 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
+| 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
+| 13 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 14 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
+| 15 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 16 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 17 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 18 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 
 
 <a name="create-procedure"></a>
@@ -177,6 +179,82 @@
     }
 ]
 ```
+
+#
+
+<a name="get-all-procedure-server"></a>
+## Get all procedure from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 12,
+            "code": "Code procedure1",
+            "description": "Description procedure",
+            "active": true,
+            "created_at": "2022-08-02T13:25:35.000000Z",
+            "updated_at": "2022-08-02T13:25:35.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": null,
+            "public_note": {
+                "id": 19,
+                "note": "Note procedure 1",
+                "publishable_type": "App\\Models\\Procedure",
+                "publishable_id": 12,
+                "created_at": "2022-08-02T13:25:35.000000Z",
+                "updated_at": "2022-08-02T13:25:35.000000Z"
+            }
+        },
+        {
+            "id": 11,
+            "code": "Code procedure2",
+            "description": "Description procedure",
+            "active": true,
+            "created_at": "2022-08-02T13:24:48.000000Z",
+            "updated_at": "2022-08-02T13:24:48.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": null,
+            "public_note": {
+                "id": 18,
+                "note": "Note procedure 2",
+                "publishable_type": "App\\Models\\Procedure",
+                "publishable_id": 11,
+                "created_at": "2022-08-02T13:24:48.000000Z",
+                "updated_at": "2022-08-02T13:24:48.000000Z"
+            }
+        }
+    ],
+    "count": 10
+}
+```
+
+#
 
 <a name="get-one-procedure"></a>
 ## Get One procedure

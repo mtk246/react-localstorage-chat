@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create modifier](#create-modifier)
 - [Get all modifier](#get-all-modifier)
+- [Get all modifier from server](#get-all-modifier-server)
 - [Get one modifier](#get-one-modifier)
 - [Get one modifier by code](#get-one-modifier-by-code)
 - [Get list modifiers](#get-list-modifiers)
@@ -21,11 +22,12 @@
 | : |        |                   |                 |                |                 |  
 | 1 |POST    | `Create Modifier`  | `/modifier/`     | yes            | Create Modifier  |         
 | 2 |GET     | `Get all Modifier` | `/modifier/`     | yes            | Get all Modifier |
-| 3 |GET     | `Get one Modifier` | `/modifier/{id}` | yes            | Get one Modifier |
-| 4 |GET     | `Get one Modifier by code` | `/modifier/get-by-code/{code}` | yes            | Get one Modifier by code|
-| 5 |GET     | `Get list modifiers `| `/modifier/get-list`        |yes            |Get list modifier|
-| 6 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
-| 7 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
+| 3 |GET     | `Get all Modifier from server`          | `/modifier/get-all-server`|yes|Get all modifier from server|
+| 4 |GET     | `Get one Modifier` | `/modifier/{id}` | yes            | Get one Modifier |
+| 5 |GET     | `Get one Modifier by code` | `/modifier/get-by-code/{code}` | yes            | Get one Modifier by code|
+| 6 |GET     | `Get list modifiers `| `/modifier/get-list`        |yes            |Get list modifier|
+| 7 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
+| 8 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
 
 
 <a name="create-modifier"></a>
@@ -122,6 +124,73 @@
     }
 ]
 ```
+
+#
+
+<a name="get-all-modifier-server"></a>
+## Get all modifier from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "modifier": "M1",
+            "special_coding_instructions": "Especial coding instructions modifier 1",
+            "active": true,
+            "created_at": "2022-06-13T11:39:28.000000Z",
+            "updated_at": "2022-06-13T11:39:28.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": "2022-08-05",
+            "public_note": {
+                "id": 11,
+                "note": "Note modifier 1",
+                "publishable_type": "App\\Models\\Modifier",
+                "publishable_id": 1,
+                "created_at": "2022-06-13T11:39:28.000000Z",
+                "updated_at": "2022-06-13T11:39:28.000000Z"
+            },
+            "modifier_invalid_combinations": [
+                {
+                    "id": 1,
+                    "invalid_combination": "M2",
+                    "modifier_id": 1,
+                    "created_at": "2022-06-13T11:39:28.000000Z",
+                    "updated_at": "2022-06-13T11:39:28.000000Z"
+                }
+            ]
+        }
+    ],
+    "count": 10
+}
+```
+
+#
 
 <a name="get-one-modifier"></a>
 ## Get One Modifier

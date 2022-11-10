@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create company](#create-company)
 - [Get all company](#get-all-company)
+- [Get all company from server](#get-all-company-server)
 - [Get one company](#get-one-company)
 - [Get one company by name](#get-one-company-by-name)
 - [Get one company by email](#get-one-company-by-email)
@@ -22,14 +23,15 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create company`          | `/company/`               |yes             |Create company|         
 | 2 |GET | `Get all company`| `/company/`        |yes            |Get all company|
-| 3 |GET | `Get one company`          | `/company/{id}`|yes|Get one company|
-| 4 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
-| 5 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
-| 6 |GET | `Get one company by npi`          | `/company/get-by-npi/{npi}`|yes|Get company by npi|
-| 7 |GET | `Get list company by billing company`          | `/company/get-list-by-billing-company/{id?}`|yes|Get all companies by billing company|
-| 8 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 9 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
-| 10 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 3 |GET | `Get all company from server`          | `/company/get-all-server`|yes|Get all company from server|
+| 4 |GET | `Get one company`          | `/company/{id}`|yes|Get one company|
+| 5 |GET | `Get one company by name`          | `/company/get-by-name/{name}`|yes|Get company by name|
+| 6 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
+| 7 |GET | `Get one company by npi`          | `/company/get-by-npi/{npi}`|yes|Get company by npi|
+| 8 |GET | `Get list company by billing company`          | `/company/get-list-by-billing-company/{id?}`|yes|Get all companies by billing company|
+| 9 |PUT | `Update company`          | `/company/{id}`|yes|update company|
+| 10 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 11 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 
 
@@ -227,6 +229,140 @@
 ```
 
 
+
+#
+
+<a name="get-all-company-server"></a>
+## Get all company from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 2,
+            "code": "CO-00002-2022",
+            "name": "company second",
+            "npi": "222CF1222",
+            "created_at": "2022-03-16T09:49:06.000000Z",
+            "updated_at": "2022-03-16T09:49:06.000000Z",
+            "status": false,
+            "addresses": [
+                {
+                    "id": 5,
+                    "address": "address Company2",
+                    "city": "city Company2",
+                    "state": "state Company2",
+                    "zip": "234",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-16T09:49:06.000000Z",
+                    "updated_at": "2022-03-16T09:49:06.000000Z",
+                    "addressable_type": "App\\Models\\Company",
+                    "addressable_id": 2
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 6,
+                    "phone": "34324234",
+                    "fax": "567674576457",
+                    "email": "company2@company.com",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-16T09:49:06.000000Z",
+                    "updated_at": "2022-03-16T09:49:06.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\Company",
+                    "contactable_id": 2
+                }
+            ],
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias company second",
+                    "nicknamable_type": "App\\Models\\Company",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        },
+        {
+            "id": 1,
+            "code": "CO-00001-2022",
+            "name": "company first",
+            "npi": "222CF123",
+            "created_at": "2022-03-16T09:44:57.000000Z",
+            "updated_at": "2022-03-16T09:44:57.000000Z",
+            "status": false,
+            "addresses": [
+                {
+                    "id": 4,
+                    "address": "address Company",
+                    "city": "city Company",
+                    "state": "state Company",
+                    "zip": "234",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-16T09:44:57.000000Z",
+                    "updated_at": "2022-03-16T09:44:57.000000Z",
+                    "addressable_type": "App\\Models\\Company",
+                    "addressable_id": 1
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 5,
+                    "phone": "34324234",
+                    "fax": "567674576457",
+                    "email": "company@company.com",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-16T09:44:57.000000Z",
+                    "updated_at": "2022-03-16T09:44:57.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\Company",
+                    "contactable_id": 1
+                }
+            ],
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias company first",
+                    "nicknamable_type": "App\\Models\\Company",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        }
+    ],
+    "count": 10
+}
+```
 
 #
 

@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create facility](#create-facility)
 - [Get all facility](#get-all-facility)
+- [Get all facility from server](#get-all-facility-server)
 - [Get all facility by company](#get-all-facility-by-company)
 - [Get one Facility](#get-one-facility)
 - [Update facility](#update-facility)
@@ -25,16 +26,17 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create Facility`          | `/facility/`               |yes             |Create facility|         
 | 2 |GET | `Get all Facility`| `/facility/`        |yes            |Get all facility|
-| 3 |GET | `Get all Facility by company`| `/facility/get-all-by-company/{company_id}`        |yes            |Get all facility by company|
-| 4 |GET | `Get one Facility`          | `/facility/{id}`|yes|Get one facility|
-| 5 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
-| 6 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
-| 7 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
-| 8 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
-| 9 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
-| 10 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
-| 11 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
-| 12 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
+| 3 |GET | `Get all Facility from server`          | `/facility/get-all-server`|yes|Get all facility from server|
+| 4 |GET | `Get all Facility by company`| `/facility/get-all-by-company/{company_id}`        |yes            |Get all facility by company|
+| 5 |GET | `Get one Facility`          | `/facility/{id}`|yes|Get one facility|
+| 6 |PUT | `Update Facility`          | `/facility/{id}`|yes|Update facility|
+| 7 |PATCH | `change status Facility`          | `/facility/{id}/change-status`|yes|change status facility|
+| 8 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
+| 9 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
+| 10 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
+| 11 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
+| 12 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
+| 13 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
 
 
 
@@ -233,7 +235,112 @@
 ]
 ```
 
-# 
+#
+<a name="get-all-facility-server"></a>
+## Get all facility from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "facility_type_id": 1,
+            "name": "facilityName",
+            "npi": "123fac321",
+            "created_at": "2022-03-16T10:03:40.000000Z",
+            "updated_at": "2022-03-16T10:03:40.000000Z",
+            "code": "FA-00001-2022",
+            "status": false,
+            "facility_type": {
+                "id": 1,
+                "type": "01 - Clinics",
+                "created_at": "2022-04-07T20:50:55.000000Z",
+                "updated_at": "2022-04-07T20:50:55.000000Z"
+            },
+            "addresses": [
+                {
+                    "id": 4,
+                    "address": "address Facility",
+                    "city": "city Facility",
+                    "state": "state Facility",
+                    "zip": "234",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T10:03:41.000000Z",
+                    "updated_at": "2022-03-16T10:03:41.000000Z",
+                    "addressable_type": "App\\Models\\Facility",
+                    "addressable_id": 1
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 5,
+                    "phone": "34324234",
+                    "fax": "567674576457",
+                    "email": "facility@facility.com",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T10:03:41.000000Z",
+                    "updated_at": "2022-03-16T10:03:41.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\Facility",
+                    "contactable_id": 1
+                }
+            ],
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias facilityName",
+                    "nicknamable_type": "App\\Models\\Facility",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+            "billing_companies": [],
+            "companies": [
+                {
+                    "id": 1,
+                    "code": "CO-00001-2022",
+                    "name": "company first",
+                    "npi": "222CF123",
+                    "created_at": "2022-03-16T10:06:31.000000Z",
+                    "updated_at": "2022-03-16T10:06:31.000000Z",
+                    "status": false,
+                    "billing_companies": []
+                }
+            ]
+        }
+    ],
+    "count": 10
+}
+```
+
+#
 
 <a name="get-all-facility-by-company"></a>
 ## Get all facilities by company

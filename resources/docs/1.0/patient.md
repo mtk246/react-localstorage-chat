@@ -7,6 +7,7 @@
 - [Basic data](#basic-data)
 - [Create patient](#create-patient)
 - [Get all patient](#get-all-patient)
+- [Get all patient from server](#get-all-patient-server)
 - [Get one patient](#get-one-patient)
 - [Get one patient by ssn](#get-one-patient-by-ssn)
 - [Update patient](#Update-patient)
@@ -28,16 +29,17 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create Patient`                    | `/patient/`               |yes             |Create Patient|         
 | 2 |GET | `Get all Patient`                   | `/patient/`        |yes            |Get all Patient|
-| 3 |GET | `Get one Patient`                   | `/patient/{id}`|yes|Get one Patient|
-| 4 |GET | `Get one Patient by ssn`            | `/patient/get-by-ssn{ssn}`|yes|Get one Patient by ssn|
-| 5 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
-| 6 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
-| 7 |GET | `Get all patient subscribers`| `/patient/get-subscribers/{ssn_patient}`        |yes            |Get all patient subscribers|
-| 8 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
-| 9 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
-| 10 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
-| 11 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
-| 11 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
+| 3 |GET | `Get all Patient from server`       | `/patient/get-all-server`|yes|Get all Patient from server|
+| 4 |GET | `Get one Patient`                   | `/patient/{id}`|yes|Get one Patient|
+| 5 |GET | `Get one Patient by ssn`            | `/patient/get-by-ssn{ssn}`|yes|Get one Patient by ssn|
+| 6 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
+| 7 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
+| 8 |GET | `Get all patient subscribers`| `/patient/get-subscribers/{ssn_patient}`        |yes            |Get all patient subscribers|
+| 9 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
+| 10 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
+| 11 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
+| 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
+| 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -361,6 +363,172 @@
 
 #
 
+
+<a name="get-all-patient-server"></a>
+## Get all patient from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "driver_license": "driver license",
+            "user_id": 1,
+            "user": {
+                "id": 1,
+                "email": "user@billing.com",
+                "email_verified_at": null,
+                "created_at": "2022-03-14T20:49:19.000000Z",
+                "updated_at": "2022-03-15T08:59:12.000000Z",
+                "token": null,
+                "isLogged": true,
+                "isBlocked": false,
+                "usercode": "US-00001-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": "2022-03-15 08:59:12",
+                "profile_id": 1,
+                "billing_company_id": null,
+                "roles": [
+                    {
+                        "id": 1,
+                        "name": "PATIENT",
+                        "guard_name": "api",
+                        "created_at": "2022-03-14T20:49:19.000000Z",
+                        "updated_at": "2022-03-14T20:49:19.000000Z",
+                        "pivot": {
+                            "model_id": 1,
+                            "role_id": 1,
+                            "model_type": "App\\Models\\User"
+                        }
+                    }
+                ],
+                "addresses": [
+                    {
+                        "id": 1,
+                        "address": "Singleton Rd",
+                        "city": "Calimesa",
+                        "state": "California",
+                        "zip": "923202207",
+                        "billing_company_id": null,
+                        "created_at": "2022-03-14T20:49:20.000000Z",
+                        "updated_at": "2022-03-14T20:49:20.000000Z",
+                        "addressable_type": "App\\Models\\User",
+                        "addressable_id": 1
+                    }
+                ],
+                "contacts": [
+                    {
+                        "id": 1,
+                        "phone": "(740) 208-8506",
+                        "fax": "(918) 534-7718",
+                        "email": "dach.leopold@nikolaus.com",
+                        "billing_company_id": null,
+                        "created_at": "2022-03-14T20:49:20.000000Z",
+                        "updated_at": "2022-03-14T20:49:20.000000Z",
+                        "mobile": "218-885-3211",
+                        "contactable_type": "App\\Models\\User",
+                        "contactable_id": 1
+                    }
+                ]
+
+            },
+            "marital": {
+                "spuse_name": "Spuse name",
+                "spuse_work": "Spuse work",
+                "spuse_work_phone": "Spuse phone",
+                "created_at": "2022-03-17T20:45:39.000000Z",
+                "updated_at": "2022-03-17T20:45:39.000000Z"
+            },
+            "guarantor": {
+                "name": "name",
+                "phone": "phone",
+                "created_at": "2022-03-17T20:45:39.000000Z",
+                "updated_at": "2022-03-17T20:45:39.000000Z"
+            },
+            "companies": [],
+            "employments": [
+                {
+                    "employer_name": "employer name",
+                    "employer_address": "employer address",
+                    "employer_phone": "employer phone",
+                    "position": "patient position",
+                    "created_at": "2022-03-17T20:45:39.000000Z",
+                    "updated_at": "2022-03-17T20:45:39.000000Z"
+                }
+            ],
+            "emergency_contacts": [
+                {
+                    "name": "name emergency contact 1",
+                    "cellphone": "cellphone emergency contacts 1",
+                    "relationship": "relationship emergency contacts 1",
+                    "created_at": "2022-03-17T20:45:39.000000Z",
+                    "updated_at": "2022-03-17T20:45:39.000000Z"
+                },
+                {
+                    "name": "name emergency contact 2",
+                    "cellphone": "cellphone emergency contacts 2",
+                    "relationship": "relationship emergency contacts 2",
+                    "created_at": "2022-03-17T20:45:39.000000Z",
+                    "updated_at": "2022-03-17T20:45:39.000000Z"
+                }
+            ],
+            "public_notes": [
+                {
+                    "id": 2,
+                    "note": "Note public",
+                    "publishable_type": "App\\Models\\Patient",
+                    "publishable_id": 1,
+                    "created_at": "2022-04-20T21:53:26.000000Z",
+                    "updated_at": "2022-04-20T21:53:26.000000Z"
+                }
+            ],
+            "private_notes": [
+                {
+                    "id": 1,
+                    "note": "Note private",
+                    "billing_company_id": 1,
+                    "publishable_type": "App\\Models\\Patient",
+                    "publishable_id": 1,
+                    "created_at": "2022-04-20T21:53:26.000000Z",
+                    "updated_at": "2022-04-20T21:53:26.000000Z"
+                }
+            ],
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        }
+        
+    ],
+    "count": 10
+}
+```
+
+#
 
 <a name="get-one-patient"></a>
 ## Get One Patient

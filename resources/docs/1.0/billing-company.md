@@ -23,8 +23,8 @@
 | 1 |POST| `Create billing company`          | `/billing-company/create`               |yes             |Create Billing Company  |         
 | 2 |PUT| `Update billing company`          | `/billing-company/{billing_company_id}`               |yes             |Update Billing Company  |         
 | 3 |GET | `Get billing company`| `/billing-company/{billing_company_id}`        |yes            |Get one billing company|
-| 4 |GET | `Get all billing ompanies`          | `/billing-company`|yes|Get all billing companies|
-| 5 |GET | `Get all billing ompanies from server`          | `/billing-company/get-all-server`|yes|Get all billing companies from server|
+| 4 |GET | `Get all billing companies`          | `/billing-company`|yes|Get all billing companies|
+| 5 |GET | `Get all billing companies from server`          | `/billing-company/get-all-server`|yes|Get all billing companies from server|
 | 6 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
 | 7 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
 | 8 |PATCH | `Change status billing company`           | `/billing-company/change-status/{id}`|yes|Change status billing company|

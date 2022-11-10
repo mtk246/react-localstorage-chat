@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create clearing house](#create-clearing-house)
 - [Get all clearing house](#get-all-clearing-house)
+- [Get all clearing house from server](#get-all-clearing-house-server)
 - [Get one clearing house](#get-one-clearing-house)
 - [Update one clearing house](#update-one-clearing-house)
 - [Get one Clearing house by name](#get-one-clearing-house-by-name)
@@ -19,11 +20,12 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create clearing house`                    | `/clearing-house/`               |yes             |Create Clearing House  |         
 | 2 |GET | `Get all clearing house`                   | `/clearing-house/`        |yes            |Get all Clearing House|
-| 3 |GET | `Get one Clearing house`                   | `/clearing-house/{id}`|yes|Get one Clearing House|
-| 4 |PUT | `Update one Clearing house`                | `/clearing-house/{id}`|yes|Update one Clearing House|
-| 5 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
-| 6 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
-| 7 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
+| 3 |GET | `Get all clearing house from server`          | `/clearing-house/get-all-server`|yes|Get all clearing house from server|
+| 4 |GET | `Get one Clearing house`                   | `/clearing-house/{id}`|yes|Get one Clearing House|
+| 5 |PUT | `Update one Clearing house`                | `/clearing-house/{id}`|yes|Update one Clearing House|
+| 6 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
+| 7 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
+| 8 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
 
 
 
@@ -261,7 +263,175 @@
 ]
 ```
 
+#
 
+<a name="get-all-clearing-house-server"></a>
+## Get all clearing houses from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 2,
+            "code": "CH-00002-2022",
+            "name": "clearing second",
+            "created_at": "2022-03-16T11:02:28.000000Z",
+            "updated_at": "2022-03-16T11:02:28.000000Z",
+            "org_type": "222CH123",
+            "ack_required": true,
+            "status": true,
+            "addresses": [
+                {
+                    "id": 7,
+                    "address": "address Clearing 2",
+                    "city": "city Clearing 2",
+                    "state": "state Clearing 2",
+                    "zip": "234",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T11:02:28.000000Z",
+                    "updated_at": "2022-03-16T11:02:28.000000Z",
+                    "addressable_type": "App\\Models\\ClearingHouse",
+                    "addressable_id": 2
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 8,
+                    "phone": "34324234",
+                    "fax": "567674576457",
+                    "email": "clearing2@cclearing.com",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T11:02:28.000000Z",
+                    "updated_at": "2022-03-16T11:02:28.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\ClearingHouse",
+                    "contactable_id": 2
+                }
+            ],
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias clearingName second",
+                    "nicknamable_type": "App\\Models\\ClearingHouse",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+            "billing_companies": [
+                {
+                    "id": 1,
+                    "name": "Hammes and Sons",
+                    "created_at": "2022-03-16T10:02:29.000000Z",
+                    "updated_at": "2022-03-16T10:02:29.000000Z",
+                    "code": "BC-00001-2022",
+                    "status": false,
+                    "pivot": {
+                        "clearing_house_id": 2,
+                        "billing_company_id": 1,
+                        "status": true,
+                        "created_at": "2022-03-16T11:02:28.000000Z",
+                        "updated_at": "2022-03-16T11:02:28.000000Z"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "code": "CH-00001-2022",
+            "name": "clearing first",
+            "created_at": "2022-03-16T11:00:09.000000Z",
+            "updated_at": "2022-03-16T11:00:09.000000Z",
+            "org_type": "222CH123",
+            "ack_required": true,
+            "status": true,
+            "addresses": [
+                {
+                    "id": 6,
+                    "address": "address Clearing",
+                    "city": "city Clearing",
+                    "state": "state Clearing",
+                    "zip": "234",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T11:00:09.000000Z",
+                    "updated_at": "2022-03-16T11:00:09.000000Z",
+                    "addressable_type": "App\\Models\\ClearingHouse",
+                    "addressable_id": 1
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 7,
+                    "phone": "34324234",
+                    "fax": "567674576457",
+                    "email": "clearing@cclearing.com",
+                    "billing_company_id": 1,
+                    "created_at": "2022-03-16T11:00:09.000000Z",
+                    "updated_at": "2022-03-16T11:00:09.000000Z",
+                    "mobile": null,
+                    "contactable_type": "App\\Models\\ClearingHouse",
+                    "contactable_id": 1
+                }
+            ],
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias clearingName first",
+                    "nicknamable_type": "App\\Models\\ClearingHouse",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+            "billing_companies": [
+                {
+                    "id": 1,
+                    "name": "Hammes and Sons",
+                    "created_at": "2022-03-16T10:02:29.000000Z",
+                    "updated_at": "2022-03-16T10:02:29.000000Z",
+                    "code": "BC-00001-2022",
+                    "status": false,
+                    "pivot": {
+                        "clearing_house_id": 1,
+                        "billing_company_id": 1,
+                        "status": true,
+                        "created_at": "2022-03-16T11:00:09.000000Z",
+                        "updated_at": "2022-03-16T11:00:09.000000Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "count": 10
+}
+```
 
 #
 

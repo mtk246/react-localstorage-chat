@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create insurance company](#create-insurance-company)
 - [Get all insurance company](#get-all-insurance-company)
+- [Get all insurance company from server](#get-all-insurance-company-server)
 - [Get one insurance company](#get-one-insurance-company)
 - [Update insurance company](#update-insurance-company)
 - [Get one insurance company by name](#get-one-insurance-company-by-name)
@@ -22,13 +23,14 @@
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `Create Insurance Company`                    | `/insurance-company/`               |yes             |Create Insurance Company|         
 | 2 |GET | `Get all Insurance Company`                   | `/insurance-company/`        |yes            |Get all Insurance Company|
-| 3 |GET | `Get one Insurance Company`                   | `/insurance-company/{id}`|yes|Get one Insurance Company|
-| 4 |PUT | `Update Insurance Company`                | `/insurance-company/{id}`|yes|Update Insurance Company|
-| 5 |GET | `Get one Insurance Company by name`           | `/insurance-company/{name}/get-by-name`|yes|Get one Insurance Company by name|
-| 6 |GET | `Get one Insurance Company by company`           | `/insurance-company/{companyName}/get-by-company`|yes|Get one Insurance Company by name|
-| 7 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
-| 8 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
-| 9 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
+| 3 |GET | `Get all Insurance Company from server`       | `/insurance-company/get-all-server`|yes|Get all insurance company from server|
+| 4 |GET | `Get one Insurance Company`                   | `/insurance-company/{id}`|yes|Get one Insurance Company|
+| 5 |PUT | `Update Insurance Company`                | `/insurance-company/{id}`|yes|Update Insurance Company|
+| 6 |GET | `Get one Insurance Company by name`           | `/insurance-company/{name}/get-by-name`|yes|Get one Insurance Company by name|
+| 7 |GET | `Get one Insurance Company by company`           | `/insurance-company/{companyName}/get-by-company`|yes|Get one Insurance Company by name|
+| 8 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
+| 9 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
+| 10 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
 
 
 
@@ -278,6 +280,167 @@
         ],
     }
 ]
+```
+
+#
+
+<a name="get-all-insurance-company-server"></a>
+## Get all insurance company from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "code": "042151",
+            "name": "dsfsdfsfesddfg",
+            "file_method": "someFileNaic",
+            "naic": "someNaic",
+            "created_at": "2022-02-03T20:13:40.000000Z",
+            "updated_at": "2022-02-03T20:13:40.000000Z",
+            "status": false,
+            "address": null,
+            "contact": null,
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias insurance",
+                    "nicknamable_type": "App\\Models\\InsuranceCompany",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        },
+        {
+            "id": 2,
+            "code": "391961",
+            "name": "dsfsdfsfeddsddfg",
+            "file_method": "someFileNaic",
+            "naic": "someNaic",
+            "created_at": "2022-02-03T20:17:32.000000Z",
+            "updated_at": "2022-02-03T20:17:32.000000Z",
+            "status": false,
+            "address": {
+                "id": 22,
+                "address": "dfsdf",
+                "city": "cdfsf",
+                "state": "sdsfsd",
+                "zip": "3234",
+                "user_id": null,
+                "billing_company_id": null,
+                "created_at": "2022-02-03T20:17:32.000000Z",
+                "updated_at": "2022-02-03T20:17:32.000000Z",
+                "clearing_house_id": null,
+                "facility_id": null,
+                "company_id": null,
+                "insurance_company_id": 2
+            },
+            "contact": {
+                "id": 20,
+                "phone": "55433",
+                "fax": "fsdfs",
+                "email": "dsfsd@gdrfg.com",
+                "user_id": null,
+                "billing_company_id": null,
+                "created_at": "2022-02-03T20:17:32.000000Z",
+                "updated_at": "2022-02-03T20:17:32.000000Z",
+                "clearing_house_id": null,
+                "facility_id": null,
+                "company_id": null,
+                "insurance_company_id": 2
+            },
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias insurance",
+                    "nicknamable_type": "App\\Models\\InsuranceCompany",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        },
+        {
+            "id": 3,
+            "code": "389245",
+            "name": "dsfsdfsfffeddsddfg",
+            "file_method": "soffmeFileNaic",
+            "naic": "someNffaic",
+            "created_at": "2022-02-03T21:30:51.000000Z",
+            "updated_at": "2022-02-03T21:30:51.000000Z",
+            "status": false,
+            "address": {
+                "id": 23,
+                "address": "dfsdf",
+                "city": "cdfsf",
+                "state": "sdsfsd",
+                "zip": "3234",
+                "user_id": null,
+                "billing_company_id": null,
+                "created_at": "2022-02-03T21:30:51.000000Z",
+                "updated_at": "2022-02-03T21:30:51.000000Z",
+                "clearing_house_id": null,
+                "facility_id": null,
+                "company_id": null,
+                "insurance_company_id": 3
+            },
+            "contact": {
+                "id": 21,
+                "phone": "55433",
+                "fax": "fsdfs",
+                "email": "dsfsd@gdrfg.com",
+                "user_id": null,
+                "billing_company_id": null,
+                "created_at": "2022-02-03T21:30:51.000000Z",
+                "updated_at": "2022-02-03T21:30:51.000000Z",
+                "clearing_house_id": null,
+                "facility_id": null,
+                "company_id": null,
+                "insurance_company_id": 3
+            },
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias insurance",
+                    "nicknamable_type": "App\\Models\\InsuranceCompany",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        }
+    ],
+    "count": 10
+}
 ```
 
 #

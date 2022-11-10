@@ -5,6 +5,7 @@
 - [Basic data](#basic-data)
 - [Create diagnosis](#create-diagnosis)
 - [Get all diagnosis](#get-all-diagnosis)
+- [Get all diagnosis from server](#get-all-diagnosis-server)
 - [Get one diagnosis](#get-one-diagnosis)
 - [Get one diagnosis by code](#get-one-diagnosis-by-code)
 - [Update diagnosis](#update-diagnosis)
@@ -20,10 +21,11 @@
 | : |        |                   |                 |                |                 |  
 | 1 |POST    | `Create Diagnosis`  | `/diagnosis/`     | yes            | Create diagnosis  |         
 | 2 |GET     | `Get all Diagnoses` | `/diagnosis/`     | yes            | Get all diagnoses |
-| 3 |GET     | `Get one Diagnosis` | `/diagnosis/{id}` | yes            | Get one diagnosis |
-| 4 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{code}` | yes            | Get one diagnosis by code|
-| 5 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
-| 6 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
+| 3 |GET     | `Get all Diagnoses from server`          | `/diagnosis/get-all-server`|yes|Get all diagnoses from server|
+| 4 |GET     | `Get one Diagnosis` | `/diagnosis/{id}` | yes            | Get one diagnosis |
+| 5 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{code}` | yes            | Get one diagnosis by code|
+| 6 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
+| 7 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
 
 
 <a name="create-diagnosis"></a>
@@ -111,6 +113,64 @@
     }
 ]
 ```
+
+#
+
+<a name="get-all-diagnosis-server"></a>
+## Get all diagnosis from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 72751,
+            "code": "D1",
+            "description": "Description diagnosis 1",
+            "active": true,
+            "created_at": "2022-06-20T07:53:23.000000Z",
+            "updated_at": "2022-06-20T07:53:23.000000Z",
+            "start_date": "2022-07-05",
+            "end_date": "2022-08-05",
+            "public_note": {
+                "id": 12,
+                "note": "Note diagnosis 1",
+                "publishable_type": "App\\Models\\Diagnosis",
+                "publishable_id": 72751,
+                "created_at": "2022-06-20T07:53:23.000000Z",
+                "updated_at": "2022-06-20T07:53:23.000000Z"
+            }
+        }
+    ],
+    "count": 10
+}
+```
+
+#
 
 <a name="get-one-diagnosis"></a>
 ## Get One diagnosis
