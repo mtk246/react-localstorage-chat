@@ -287,7 +287,7 @@ class Patient extends Model implements Auditable
                                   ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
                                   ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
                             })->orWhereHas('billingCompanies', function ($qqq) use ($search) {
-                                $qqq->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                                $qqq->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
                             })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
                         });
         }
