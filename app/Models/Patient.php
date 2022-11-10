@@ -277,4 +277,21 @@ class Patient extends Model implements Auditable
             ];
         }
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereHas('user', function ($q) use ($search) {
+                            $q->whereHas('profile', function ($qq) use ($search) {
+                                $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
+                                  ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
+                                  ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
+                            })->orWhereHas('billingCompanies', function ($qqq) use ($search) {
+                                $qqq->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                            })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+                        });
+        }
+
+        return $query;
+    }
 }

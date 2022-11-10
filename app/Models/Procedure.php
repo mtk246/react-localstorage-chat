@@ -150,4 +150,14 @@ class Procedure extends Model implements Auditable
             ];
         }
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+                         ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
+    }
 }

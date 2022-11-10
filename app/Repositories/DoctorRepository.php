@@ -11,6 +11,7 @@ use App\Models\Profile;
 use App\Models\Taxonomy;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
+use App\Models\BillingCompany;
 use App\Roles\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -317,15 +318,9 @@ class DoctorRepository
     }
 
     public function getServerAllDoctors(Request $request) {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
-
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $records = HealthProfessional::with([
+            $data = HealthProfessional::with([
                 "user" => function ($query) {
                     $query->with([
                         "profile" => function ($query) {
@@ -337,9 +332,9 @@ class DoctorRepository
                     ]);
                 },
                 "taxonomies"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
         } else {
-            $records = HealthProfessional::whereHas("billingCompanies", function ($query) use ($bC) {
+            $data = HealthProfessional::whereHas("billingCompanies", function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 })->with([
                 "user" => function ($query) use ($bC) {
@@ -357,16 +352,33 @@ class DoctorRepository
                     ]);
                 },
                 "taxonomies"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            ]);
         }
+        
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        
+        if ($request->sortBy) {
+            if (str_contains($request->sortBy, 'billingcompany')) {
+                $data = $data->orderBy(
+                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'health_professionals.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } /**elseif (str_contains($request->sortBy, 'email')) {
+                $data = $data->orderBy(
+                    Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } */else {
+                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            }
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+        }
+
+        $data = $data->paginate($request->itemsPerPage ?? 5);
+
         return response()->json([
-            'pagination'  => [
-                'total'       => $records->total(),
-                'currentPage' => $records->currentPage(),
-                'perPage'     => $records->perPage(),
-                'lastPage'    => $records->lastPage()
-            ],
-            'items' =>  $records->items()
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
         ], 200);
     }
 

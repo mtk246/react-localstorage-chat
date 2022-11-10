@@ -51,6 +51,16 @@ class CompanyController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->companyRepository->getServerAllCompanies($request);
+    }
+
+    /**
      * @param int $id
      * @return JsonResponse
      */

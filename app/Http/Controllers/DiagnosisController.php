@@ -62,6 +62,16 @@ class DiagnosisController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->diagnosisRepository->getServerAllDiagnoses($request);
+    }
+
+    /**
      * @param diagnosisUpdateRequest $request
      * @param int $id
      * @return JsonResponse

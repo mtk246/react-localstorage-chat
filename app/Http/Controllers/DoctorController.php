@@ -50,6 +50,16 @@ class DoctorController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->doctorRepository->getServerAllDoctors($request);
+    }
+
+    /**
      * @param int $id
      * @return JsonResponse
      */

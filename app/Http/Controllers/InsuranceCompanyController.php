@@ -61,6 +61,16 @@ class InsuranceCompanyController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->InsuranceRepository->getServerAllInsurance($request);
+    }
+
+    /**
      * @param ChangeStatusInsuraceRequest $request
      * @param int $id
      * @return JsonResponse

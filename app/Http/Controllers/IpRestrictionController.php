@@ -48,6 +48,16 @@ class IpRestrictionController extends Controller
     }
 
     /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->ipRestrictionRepository->getServerAllRestrictions($request);
+    }
+
+    /**
      * @param int $id
      * @return JsonResponse
      */

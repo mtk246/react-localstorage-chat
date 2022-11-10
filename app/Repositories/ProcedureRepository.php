@@ -150,24 +150,26 @@ class ProcedureRepository
     }
 
     public function getServerAllProcedures(Request $request) {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
-
-        $records = Procedure::with([
-            "publicNote",
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+        $data = Procedure::with([
+            "publicNote"
+        ]);
         
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        
+        if ($request->sortBy) {
+            $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+        }
+
+        $data = $data->paginate($request->itemsPerPage ?? 5);
+
         return response()->json([
-            'pagination'  => [
-                'total'       => $records->total(),
-                'currentPage' => $records->currentPage(),
-                'perPage'     => $records->perPage(),
-                'lastPage'    => $records->lastPage()
-            ],
-            'items' =>  $records->items()
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
         ], 200);
     }
 

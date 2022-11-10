@@ -85,6 +85,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("setting")->middleware("auth:api")->group(function() {
         Route::prefix("ip-restriction")->group(function() {
+            Route::get("/get-all-server",[\App\Http\Controllers\IpRestrictionController::class,'getServerAll']);
             Route::post("/", [\App\Http\Controllers\IpRestrictionController::class,'store']);
             Route::get("/", [\App\Http\Controllers\IpRestrictionController::class,'getAllRestrictions']);
             Route::get("{id}", [\App\Http\Controllers\IpRestrictionController::class,'getOneRestriction']);
@@ -124,6 +125,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("clearing-house")->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\ClearingHouseController::class,'getServerAll'])->middleware(['auth:api']);
         Route::post("/",[\App\Http\Controllers\ClearingHouseController::class,'createClearingHouse'])->middleware([
             "auth:api",
         ]);
@@ -148,6 +150,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("facility")->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\FacilityController::class,'getServerAll'])->middleware(['auth:api']);
         Route::post("/",[\App\Http\Controllers\FacilityController::class,'create'])->middleware([
             "auth:api",
         ]);
@@ -187,6 +190,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     });
 
     Route::prefix("company")->group(function() {
+        Route::get("/get-all-server",[\App\Http\Controllers\CompanyController::class,'getServerAll'])->middleware(['auth:api']);
         Route::get("/get-list-by-billing-company/{id?}",[\App\Http\Controllers\CompanyController::class,'getList']);
         Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
             "auth:api",
@@ -225,6 +229,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\InsuranceCompanyController::class,'getServerAll']);
         Route::get("/get-list",[\App\Http\Controllers\InsuranceCompanyController::class,'getList']);
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);
@@ -255,6 +260,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\DoctorController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
         Route::get("/{id}",[\App\Http\Controllers\DoctorController::class,'getOneDoctor']);
@@ -267,6 +273,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\PatientController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
         Route::get("/get-by-ssn/{ssn}",[\App\Http\Controllers\PatientController::class,"getBySsn"]);
@@ -316,7 +323,8 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("diagnosis")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',
-    ])->group(function(){
+    ])->group(function() {
+        Route::get("/get-all-server",[\App\Http\Controllers\DiagnosisController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\DiagnosisController::class,"createDiagnosis"]);
         Route::get("/",[\App\Http\Controllers\DiagnosisController::class,"getAllDiagnoses"]);
         Route::get("get-by-code/{code}",[\App\Http\Controllers\DiagnosisController::class,"getByCode"]);
@@ -331,6 +339,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function() {
+        Route::get("/get-all-server",[\App\Http\Controllers\ModifierController::class,'getServerAll']);
         Route::get("/get-list",[\App\Http\Controllers\ModifierController::class,"getList"]);
         Route::post("/",[\App\Http\Controllers\ModifierController::class,"createModifier"]);
         Route::get("/",[\App\Http\Controllers\ModifierController::class,"getAllModifiers"]);
@@ -345,6 +354,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-all-server",[\App\Http\Controllers\ProcedureController::class,'getServerAll']);
         Route::get("/get-by-code/{code}",[\App\Http\Controllers\ProcedureController::class,"getByCode"]);
         Route::get("/get-list-mac-localities",[\App\Http\Controllers\ProcedureController::class,"getListMacLocalities"]);
         Route::get("/get-price-of-procedure",[\App\Http\Controllers\ProcedureController::class,"getPriceOfProcedure"]);
@@ -378,6 +388,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        //Route::get("/get-all-server",[\App\Http\Controllers\ClaimController::class,'getServerAll']);
         Route::get("/get-list-type-of-services",[\App\Http\Controllers\ClaimController::class,"getListTypeOfServices"]);
         Route::get("/get-list-place-of-services",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
         Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);

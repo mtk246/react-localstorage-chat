@@ -100,4 +100,14 @@ class Modifier extends Model implements Auditable
             ];
         }
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereRaw('LOWER(modifier) LIKE (?)', [strtolower("%$search%")])
+                         ->orWhereRaw('LOWER(special_coding_instructions) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\IpRestriction;
 use App\Models\IpRestrictionMult;
+use App\Models\BillingCompany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -124,30 +125,37 @@ class IpRestrictionRepository
     }
 
     public function getServerAllRestrictions() {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
-
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $records = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults')
-                                         ->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            $data = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults');
         } else {
-            $records = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults')
-                                        ->where('billing_company_id', $bC)
-                                        ->orderBy("created_at", "desc")->orderBy("id", "asc")->paginate($itemsPerPage);
+            $data = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults')
+                                        ->where('billing_company_id', $bC);
         }
         
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        
+        if ($request->sortBy) {
+            if (str_contains($request->sortBy, 'entity')) {
+                $data = $data->orderBy('entity', (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } elseif (str_contains($request->sortBy, 'billingcompany')) {
+                $data = $data->orderBy(
+                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'ip_restrictions.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } else {
+                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            }
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+        }
+
+        $data = $data->paginate($request->itemsPerPage ?? 5);
+
         return response()->json([
-            'pagination'  => [
-                'total'       => $records->total(),
-                'currentPage' => $records->currentPage(),
-                'perPage'     => $records->perPage(),
-                'lastPage'    => $records->lastPage()
-            ],
-            'items' =>  $records->items()
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
         ], 200);
     }
 

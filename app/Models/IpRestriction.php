@@ -82,4 +82,19 @@ class IpRestriction extends Model implements Auditable
             ];
         }
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereHas('billingCompany', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereHas('IpRestrictionMults', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(ip_beginning) LIKE (?)', [strtolower("%$search%")])
+                            ->orWhereRaw('LOWER(ip_finish) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereRaw('LOWER(entity) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
+    }
 }
