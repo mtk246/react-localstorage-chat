@@ -8,7 +8,7 @@ use App\Http\Requests\ClearinCreateRequest;
 use App\Http\Requests\UpdateClearingHouse;
 use App\Repositories\ClearingHouseRepository;
 use Illuminate\Http\JsonResponse;
-#use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class ClearingHouseController extends Controller
 {

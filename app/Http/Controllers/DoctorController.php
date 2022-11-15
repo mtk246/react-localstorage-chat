@@ -7,7 +7,7 @@ use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Repositories\DoctorRepository;
 use Illuminate\Http\JsonResponse;
-#use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {

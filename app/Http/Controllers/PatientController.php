@@ -8,6 +8,7 @@ use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Patient\PatientPolicyRequest;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {

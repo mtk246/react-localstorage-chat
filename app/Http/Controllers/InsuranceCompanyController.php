@@ -7,7 +7,7 @@ use App\Http\Requests\CreateInsuranceRequest;
 use App\Http\Requests\UpdateInsuranceRequest;
 use App\Repositories\InsuranceCompanyRepository;
 use Illuminate\Http\JsonResponse;
-#use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class InsuranceCompanyController extends Controller
 {

@@ -7,7 +7,7 @@ use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
-#use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
