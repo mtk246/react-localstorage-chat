@@ -141,8 +141,10 @@ class ReportRepository implements ReportInterface
             // set bacground image
             if (isset($this->typeForm)) {
                 $img_file = storage_path('pictures') . '/' . $this->typeForm . '.png';
-                $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+            } else {
+                $img_file = storage_path('pictures') . '/CMS-1500_837P_1.png';
             }
+            $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
 
             /**if ($params->hasQR && !is_null($params->urlVerify)) {
                 $pdf->write2DBarcode(
