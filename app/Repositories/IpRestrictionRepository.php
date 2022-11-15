@@ -124,7 +124,7 @@ class IpRestrictionRepository
         return !is_null($restrictions) ? $restrictions : null;
     }
 
-    public function getServerAllRestrictions() {
+    public function getServerAllRestrictions(Request $request) {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $data = IpRestriction::with('users', 'roles', 'billingCompany', 'ipRestrictionMults');
