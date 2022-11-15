@@ -211,11 +211,15 @@ class ClaimController extends Controller
     public function showReport(Request $request) {
         $pdf = new ReportRepository();
 
-        $pdf->setConfig(['urlVerify' => 'www.google.com.ve']);
+        $pdf->setConfig([
+            'urlVerify' => 'www.google.com.ve',
+            'typeFormat' => ($request->format != '') ? $request->format : null,
+            'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
+        ]);
         $pdf->setHeader('');
         //$pdf->setFooter();
-        $pdf->setBody('pdf.837P', true, [
+        return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
             'pdf'      => $pdf
-        ]);
+        ]))[1];
     }
 }

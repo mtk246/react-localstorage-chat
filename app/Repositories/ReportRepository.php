@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\Parameter;
+use App\Models\TypeForm;
+use App\Models\Patient;
 use Elibyy\TCPDF\TCPDF as PDF;
 use Illuminate\Support\Facades\View;
 use App\Repositories\Contracts\ReportInterface;
@@ -41,6 +43,9 @@ class ReportRepository implements ReportInterface
     private $headerTextY;
     /** @var object Crea y gestiona el objeto PDF */
     private $pdf;
+
+    private $typeForm;
+    private $patient;
 
     public function __construct()
     {
@@ -81,6 +86,21 @@ class ReportRepository implements ReportInterface
         $this->headerTextY = 26.5;
         $this->filename = $params['filename'] ?? uniqid() . 'pdf';
         $this->subject = '';
+        $typeForm = TypeForm::find($params['typeFormat']);
+        if (isset($typeForm)) {
+            if ($typeForm->form == 'CMS-1500 / 837P') {
+                $this->typeForm = 'CMS-1500_837P_1';
+            } elseif ($typeForm->form == 'UB-04 / 837I') {
+                $this->typeForm = 'UB-04_837I_1';
+            }
+        } else {
+            $this->typeForm = null;
+        }
+        $this->patient = Patient::with([
+            "user" => function ($query) {
+                $query->with(["addresses", "profile", "billingCompanies"]);
+            }
+        ])->find($params['patient_id']);
     }
 
     public function setHeader(
@@ -89,7 +109,8 @@ class ReportRepository implements ReportInterface
         $hasQR = true,
         $hasBarCode = false,
         $titleAlign = 'L',
-        $subTitleAlign = 'C'
+        $subTitleAlign = 'C',
+        $typeFormat = null
     ) {
         $params = (object)[
             'fontFamily' => $this->fontFamily,
@@ -105,7 +126,8 @@ class ReportRepository implements ReportInterface
             'subTitleAlign' => $subTitleAlign,
             'reportDate' => $this->reportDate,
             'headerY' => $this->headerY,
-            'headerTextY' => $this->headerTextY
+            'headerTextY' => $this->headerTextY,
+            'typeFormat' => $typeFormat
         ];
         $this->title = $title ?? '';
         $this->pdf->setHeaderCallback(function ($pdf) use ($params) {
@@ -117,8 +139,10 @@ class ReportRepository implements ReportInterface
             // disable auto-page-break
             $pdf->SetAutoPageBreak(false, 0);
             // set bacground image
-            $img_file = storage_path('pictures') . '/CMS-1500_837P_1.png';
-            $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+            if (isset($this->typeForm)) {
+                $img_file = storage_path('pictures') . '/' . $this->typeForm . '.png';
+                $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+            }
 
             /**if ($params->hasQR && !is_null($params->urlVerify)) {
                 $pdf->write2DBarcode(
@@ -135,7 +159,7 @@ class ReportRepository implements ReportInterface
         });
     }
 
-    public function setBody($body, $isHTML = true, $htmlParams = [], $storeAction = 'I')
+    public function setBody($body, $isHTML = true, $htmlParams = [], $storeAction = 'E')
     {
         /** @var string Contenido del reporte */
         $htmlContent = $body;
@@ -163,6 +187,31 @@ class ReportRepository implements ReportInterface
         /** Agrega las respectivas páginas del reporte */
         $this->pdf->AddPage($this->orientation, $this->format);
 
+        /** Information de paciente */
+        
+        /** Título del reporte */
+        if (isset($this->patient)) {
+            /** Configuración de la fuente  y tamaño en 20 para el título del reporte */
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                $name = $this->patient->user->profile->last_name . ', ' . $this->patient->user->profile->first_name . ', ' . substr($this->patient->user->profile->middle_name, 0, 1);
+                $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 10, 48, true, 0, false, true, 0, 'T', true);
+                $this->pdf->SetFont($this->fontFamily, '', 9);
+                $birthdate = explode('-', $this->patient->user->profile->date_of_birth);
+                $this->pdf->MultiCell(70, 10, $birthdate[2], 0, 'L', false, 1, 92, 48.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 10, $birthdate[1], 0, 'L', false, 1, 84, 48.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 10, $birthdate[0], 0, 'L', false, 1, 100, 48.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                $sex = $this->patient->user->profile->sex;
+                if (($sex == 'M') || ($sex == 'm')) {
+                    $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 111, 48.5, true, 0, false, true, 0, 'T', true);
+                } else {
+                    $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 123.5, 48.5, true, 0, false, true, 0, 'T', true);
+                }
+                $address = $this->patient->user->addresses->first();
+                $this->pdf->MultiCell(70, 5.8, $address->address, 0, 'L', false, 1, 10, 56, true, 0, false, true, 0, 'T', true);
+        }
+
+
         if ($isHTML) {
             $view = View::make($body, $htmlParams);
             $htmlContent = $view->render();
@@ -182,7 +231,7 @@ class ReportRepository implements ReportInterface
          * FD: Es equivalente a las opciones F + D
          * E: Devuelve el documento del tipo mime base64 para ser adjuntado en correos electrónicos
          */
-        $this->pdf->Output($this->filename, $storeAction);
+        return $this->pdf->Output($this->filename, $storeAction);
     }
 
     public function setFooter($pages = true, $footerText = '')
