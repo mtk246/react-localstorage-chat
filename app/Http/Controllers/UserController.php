@@ -8,6 +8,7 @@ use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\RecoveryUserRequest;
 use App\Http\Requests\UnlockUserRequest;
+use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\SocialMediaProfileRequest;
@@ -394,10 +395,10 @@ class UserController extends Controller
      * @param string $ssn
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(ValidateSearchRequest $request): JsonResponse
     {
         $rs = $this->userRepository->search($request);
-        return response()->json($rs);
+        return ($rs) ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
     }
 
     public function updateLang(Request $request)

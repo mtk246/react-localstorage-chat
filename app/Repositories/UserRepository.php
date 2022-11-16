@@ -666,7 +666,7 @@ class UserRepository{
                       ->orWhere("ssn", "ilike", "%${ssnFormated}");
             })->get();
         }
-        return is_null($users) ? [] : $users;
+        return (count($users) == 0) ? null : $users;
     }
 
     public function updateLang(string $lang)
