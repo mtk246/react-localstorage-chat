@@ -622,8 +622,8 @@ class UserRepository{
 
     public function search(Request $request) {
         $date_of_birth = $request->date_of_birth ?? '';
-        $first_name = $request->first_name ?? '';
-        $last_name = $request->last_name ?? '';
+        $first_name = upperCaseWords($request->first_name ?? '');
+        $last_name = upperCaseWords($request->last_name ?? '');
         $ssn = $request->ssn ?? '';
         $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
 
