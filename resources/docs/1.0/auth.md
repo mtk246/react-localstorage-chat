@@ -76,6 +76,7 @@
     },
     "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC92MVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDczMDE1MDQsImV4cCI6MTY0NzMwNTEwNCwibmJmIjoxNjQ3MzAxNTA0LCJqdGkiOiJsWEhyUUJZZHNGRWI0bFZPIiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.WYDpxMS9r3X0eU44k7jsAKjjnGw9kNIwIMOvsNHddSI",
     "token_type": "bearer",
+    "inactivity_time": 3600000,
     "expires_in": 3600
 }
 ```
