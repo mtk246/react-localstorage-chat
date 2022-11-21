@@ -40,6 +40,20 @@ class AuthController extends Controller
     protected $maxAttempts = 3;
 
     /**
+     * Maximum user inactivity time in the mobile version of the application
+     *
+     * @var    integer
+     */
+    protected $mobileDowntime = 1296000000;
+
+    /**
+     * Maximum user inactivity time in the web version of the application
+     *
+     * @var    integer
+     */
+    protected $webDowntime = 3600000;
+
+    /**
      * Create a new AuthController instance.
      *
      * @return void
@@ -350,10 +364,11 @@ class AuthController extends Controller
 //        }
 
         return response()->json([
-            'user'         => $user->load("permissions")->load("roles"),
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60
+            'user'            => $user->load("permissions")->load("roles"),
+            'access_token'    => $token,
+            'token_type'      => 'bearer',
+            'inactivity_time' => $this->webDowntime,
+            'expires_in'      => auth()->factory()->getTTL() * 60
         ]);
     }
     protected function checkNewDevice(int $user_id, string $ip_address, string $user_agent)
