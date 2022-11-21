@@ -14,8 +14,11 @@ class HealthProfessional extends Model implements Auditable
     protected $fillable = [
         "code",
         "npi",
+        "npi_company",
         "dea",
-        "user_id"
+        "is_provider",
+        "user_id",
+        "health_professional_type_id"
     ];
 
     /**
@@ -36,13 +39,23 @@ class HealthProfessional extends Model implements Auditable
     }
 
     /**
+     * HealthProfessional belongs to HealthProfessionalType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function healthProfessionalType()
+    {
+        return $this->belongsTo(HealthProfessionalType::class);
+    }
+
+    /**
      * The companies that belong to the heatProfessional.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function companies()
     {
-        return $this->belongsToMany(Company::class)->withTimestamps();
+        return $this->belongsToMany(Company::class)->withPivot('company_health_professional_type_id')->withTimestamps();
     }
 
     /**

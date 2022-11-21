@@ -47,7 +47,12 @@
     "billing_company_id": 1, /** Only required by superuser */
     "email":"user1@gmail.com",
     "npi":"123456719",
+    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
+    "is_provider": true,
+    "health_professional_type_id": 1,
     "dea":"1234DEA",
+    "private_note": "Note Private",
+    "public_note": "Note Public",
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -113,6 +118,9 @@
 {
     "npi": "123456789",
     "dea": "123DEA",
+    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
+    "is_provider": true,
+    "health_professional_type_id": 1,
     "user_id": 8,
     "updated_at": "2022-03-17T08:47:13.000000Z",
     "created_at": "2022-03-17T08:47:13.000000Z",
@@ -557,6 +565,11 @@
     "email":"user1edit@gmail.com",
     "npi":"123456719",
     "dea":"1234DEA",
+    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
+    "is_provider": true,
+    "health_professional_type_id": 1,
+    "private_note": "Note Private",
+    "public_note": "Note Public",
     "taxonomies": [
         {
             "tax_id": "TAX01213",
