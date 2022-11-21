@@ -259,6 +259,7 @@ class AuthController extends Controller
         }
         //unset($user['permissions']);
         $user->menu = $perms;
+        $user->inactivity_time = $this->webDowntime;
         return response()->json($user);
     }
 
