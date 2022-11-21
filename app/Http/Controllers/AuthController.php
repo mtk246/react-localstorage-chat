@@ -259,7 +259,9 @@ class AuthController extends Controller
         }
         //unset($user['permissions']);
         $user->menu = $perms;
-        $user->inactivity_time = $this->webDowntime;
+        $now = new \DateTime(Carbon::now());
+        $lastActivity = new \DateTime($user->last_activity);
+        $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()) - \strtotime($user->last_activity))*1000);
         return response()->json($user);
     }
 

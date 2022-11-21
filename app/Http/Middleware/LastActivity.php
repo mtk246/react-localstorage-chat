@@ -32,8 +32,10 @@ class LastActivity
                 $now = Carbon::now();
                 if (str_contains($request->userAgent(), 'Mobile')) {
                     if (($user->last_activity == null) || ($user->last_activity > $now->subMinute(21600))) {
-                        $user->last_activity = Carbon::now();
-                        $user->save();
+                        if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
+                            $user->last_activity = Carbon::now();
+                            $user->save();
+                        }
                         return $next($request);
                     } else {
                         $user->isLogged = false;
@@ -42,8 +44,10 @@ class LastActivity
                     }
                 } else {
                     if (($user->last_activity == null) || ($user->last_activity > $now->subMinute(65))) {
-                        $user->last_activity = Carbon::now();
-                        $user->save();
+                        if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
+                            $user->last_activity = Carbon::now();
+                            $user->save();
+                        }
                         return $next($request);
                     } else {
                         $user->isLogged = false;
