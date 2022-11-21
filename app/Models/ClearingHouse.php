@@ -49,7 +49,7 @@ class ClearingHouse extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status'];
+    protected $appends = ['last_mdified', 'status'];
 
     /**
      * The billingCompanies that belong to the ClearingHouse.
@@ -140,5 +140,26 @@ class ClearingHouse extends Model implements Auditable
         }
 
         return $query;
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => []
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user'       => 'Console',
+                'roles'      => []
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'       => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles'      => $user->roles
+            ];
+        }
     }
 }

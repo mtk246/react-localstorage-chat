@@ -54,6 +54,13 @@ class BillingCompany extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * BillingCompany has one Contact.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -186,5 +193,26 @@ class BillingCompany extends Model implements Auditable
         }
 
         return $query;
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => []
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user'       => 'Console',
+                'roles'      => []
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'       => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles'      => $user->roles
+            ];
+        }
     }
 }
