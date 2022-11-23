@@ -32,6 +32,7 @@ class ClaimCreateRequest extends FormRequest
             "facility_id"                    => ['required', 'integer'],
             "patient_id"                     => ['required', 'integer'],
             "health_professional_id"         => ['required', 'integer'],
+            'validate'                       => ['nullable', 'boolean'],
 
             "type_of_bill"           => [
                                             Rule::requiredIf(function () use ($typeFormat)

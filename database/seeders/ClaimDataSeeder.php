@@ -33,7 +33,7 @@ class ClaimDataSeeder extends Seeder
             ['status' => 'Draft'],
             ['status' => 'Verified - Not submitted'],
             ['status' => 'Submitted'],
-            ['status' => 'Accepted'],
+            ['status' => 'Approved'],
             ['status' => 'Rejected'],
             ['status' => 'Denied'],
             ['status' => 'Complete'],

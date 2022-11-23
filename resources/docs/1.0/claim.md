@@ -19,6 +19,7 @@
 - [Validation claim](#validation-claim)
 - [verify and register claim](#verify-register)
 - [Show claim report preview](#preview-claim)
+- [Change status Claim](#change-status-claim)
 
 
 
@@ -44,6 +45,7 @@
 | 14 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
 | 15 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
 | 16 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
+| 17 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
 
 
 <a name="create-claim"></a>
@@ -58,6 +60,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -899,6 +902,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -993,6 +997,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -1074,6 +1079,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -1176,6 +1182,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -1326,6 +1333,7 @@
     "facility_id": 1,
     "patient_id": 2,
     "health_professional_id": 1,
+    "validate": true,
     "diagnoses": [
         {
             "item": "A",
@@ -1462,4 +1470,34 @@
 
 > {success} 200 claim found
 
+# 
+
+<a name="change-status-claim"></a>
+## Change status Claim
+
+## Body request example
+
+```json
+{
+    "status_id": 1,
+    "private_note": "Note Status"
+}
+```
+
+## Response
+
+> {success} 204 Good response
+
+```json
+{
+    "control_number": "000000001",
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "updated_at": "2022-09-16T13:23:19.000000Z",
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "id": 1
+}
+```
 #

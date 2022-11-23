@@ -93,6 +93,7 @@ class ClaimRepository
                 "facility_id"            => $data["facility_id"] ?? null,
                 "patient_id"             => $data["patient_id"] ?? null,
                 "health_professional_id" => $data["health_professional_id"] ?? null,
+                "validate"               => $data["validate"] ?? false,
                 "claim_formattable_type" => $model ?? null,
                 "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
@@ -713,4 +714,25 @@ class ClaimRepository
             return null;
         }
     }
+
+    public function changeStatus($data, $id) {
+        try {
+            $claim = Claim::with('claimFormattable')->find($id);
+            $claimStatus = ClaimStatus::find($data['status_id']);
+            $claimStatusClaim = ClaimStatusClaim::create([
+                'claim_id'        => $claim->id,
+                'claim_status_id' => $claimStatus->id,
+            ]);
+            PrivateNote::create([
+                'publishable_type'   => ClaimStatusClaim::class,
+                'publishable_id'     => $claimStatusClaim->id,
+                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                'note'               => $data['private_note']
+            ]);
+            return $claim;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 }

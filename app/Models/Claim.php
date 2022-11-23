@@ -25,6 +25,7 @@ class Claim extends Model implements Auditable
         "patient_id",
         "health_professional_id",
         "insurance_company_id",
+        "validate",
         "claim_formattable_type",
         "claim_formattable_id"
     ];
@@ -34,7 +35,10 @@ class Claim extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['format', 'last_modified', 'private_note', 'status', 'status_history'];
+    protected $appends = [
+        'format', 'last_modified', 'private_note', 'status', 'status_history',
+        'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date'
+    ];
     
     /**
      * Claim belongs to Company.
@@ -157,6 +161,7 @@ class Claim extends Model implements Auditable
             $record = [];
             $record['note']   = $status->privateNotes->note ?? '';
             $record['status'] = $status->claimStatus->status;
+            $record['status_date'] = $status->created_at;
             $record['last_modified'] = $status->last_modified ?? '';
             array_push($records, $record);
         }
@@ -182,5 +187,53 @@ class Claim extends Model implements Auditable
                 'roles' => $user->roles,
             ];
         }
+    }
+
+    public function getBilledAmountAttribute()
+    {
+        return '0.00';
+    }
+
+    public function getAmountPaidAttribute()
+    {
+        return '0.00';
+    }
+
+    public function getPastDueDateAttribute()
+    {
+        $date = '';
+        $claimForm = $this->claimFormattable;
+        if ($this->claim_formattable_type == ClaimFormP::class) {
+            foreach ($claimForm->claimFormServices as $service) {
+                if ($date == '') {
+                    $date = $service->to_service;
+                } elseif ($service->to_service > $date) {
+                    $date = $service->to_service;
+                }
+            }
+        }
+        return $date;
+    }
+
+    public function getDateOfServiceAttribute()
+    {
+        $date = '';
+        $claimForm = $this->claimFormattable;
+        if ($this->claim_formattable_type == ClaimFormP::class) {
+            foreach ($claimForm->claimFormServices as $service) {
+                if ($date == '') {
+                    $date = $service->from_service;
+                } elseif ($service->from_service < $date) {
+                    $date = $service->from_service;
+                }
+            }
+        }
+        return $date;
+    }
+
+    public function getStatusDateAttribute()
+    {
+        $status = $this->claimStatusClaims()->orderBy("created_at", "desc")->orderBy("id", "asc")->first();
+        return (isset($status)) ? $status->created_at : '';
     }
 }

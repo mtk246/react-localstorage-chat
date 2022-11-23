@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Repositories\ClaimRepository;
 use App\Models\Claim;
 use Illuminate\Http\JsonResponse;
@@ -221,5 +222,20 @@ class ClaimController extends Controller
         return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
             'pdf'      => $pdf
         ]))[1];
+    }
+
+    /**
+     * changeStatus
+     *
+     * @method changeStatus
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function changeStatus(ClaimChangeStatusRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->claimRepository->changeStatus($request->validated(), $id);
+        return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
     }
 }

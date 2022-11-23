@@ -33,6 +33,7 @@ class ClaimVerifyRequest extends FormRequest
             "patient_id"                     => ['nullable', 'integer'],
             "health_professional_id"         => ['nullable', 'integer'],
             "control_number"                 => ['nullable', 'string'],
+            'validate'                       => ['nullable', 'boolean'],
 
             "type_of_bill"           => [
                                             Rule::requiredIf(function () use ($typeFormat)
