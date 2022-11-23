@@ -42,6 +42,7 @@ class EditUserRequest extends FormRequest
             'profile.social_medias.*.link' => ['sometimes', 'string'],
 
             'email'                 => ['required', Rule::unique('users', 'email')->ignore($id), 'string', 'email:rfc'],
+            'language'              => ['nullable', 'string'],
             'roles'                 => ['required', 'array', new OnlyRoleIf()],
 
             'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {

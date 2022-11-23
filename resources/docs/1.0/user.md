@@ -26,7 +26,6 @@
 <a name="basic-data"></a>
 ## Basic data to make request
 
-
 | # | METHOD   | Name             | URL                     | Token required|Description|
 | : ||   :-                 |  :                      |               |                    |  
 | 1 |POST| `create users`          | `/user/`               |yes             |Create Users  |         
@@ -55,6 +54,8 @@
 <a name="create-users"></a>
 ## Create User
 
+>{primary} the parameter "language" can have the values "en", "es"
+
 ### Body request example
 
 ```json
@@ -78,6 +79,7 @@
         ]
     },
     "email":"user@gmail.com",
+    "language":"es",
     "company-billing": 1,
     "roles":[
         "BILLING_MANAGER"
@@ -171,6 +173,8 @@
 <a name="edit-users"></a>
 ## Update User
 
+>{primary} the parameter "language" can have the values "en", "es"
+
 ## Param in header
 
 ```json
@@ -203,6 +207,7 @@
         ]
     },
     "email":"user@gmail.com",
+    "language":"es",
     "company-billing": 1,
     "roles":[
         "BILLING_MANAGER"
@@ -1160,7 +1165,7 @@
 #
 
 <a name="update-lang"></a>
-## Upadate language
+## Update language
 
 >{primary} the parameter "language" can have the values "en", "es"
 

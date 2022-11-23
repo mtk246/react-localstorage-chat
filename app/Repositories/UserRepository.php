@@ -82,6 +82,7 @@ class UserRepository{
             $user = User::create([
                 "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                 "email"      => $data['email'],
+                "language"   => $data['language'],
                 "status"     => true,
                 "userkey"    => encrypt(uniqid("", true)),
                 "profile_id" => $profile->id
@@ -361,7 +362,8 @@ class UserRepository{
 
         /** Update User */
         $user->update([
-            "email" => $data['email'],
+            "email"    => $data['email'],
+            "language" => $data['language'],
         ]);
 
         /** Attach billing company */
