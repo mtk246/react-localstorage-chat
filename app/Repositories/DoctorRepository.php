@@ -6,6 +6,8 @@ use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\Contact;
 use App\Models\HealthProfessional;
+use App\Models\HealthProfessionalType;
+use App\Models\CompanyHealthProfessionalType;
 use App\Models\User;
 use App\Models\Profile;
 use App\Models\Taxonomy;
@@ -98,10 +100,11 @@ class DoctorRepository
                 Address::create($data["address"]);
             }
             $healthP = HealthProfessional::create([
-                "code"    => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
-                "npi"     => $data["npi"],
-                "dea"     => $data["dea"],
-                "user_id" => $user->id
+                "code"                        => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
+                "npi"                         => $data["npi"],
+                "dea"                         => $data["dea"],
+                "health_professional_type_id" => $data["health_professional_type_id"],
+                "user_id"                     => $user->id
             ]);
 
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
@@ -505,5 +508,13 @@ class DoctorRepository
             $healthP->billingCompanies()->attach($billingCompany->id);
         }
         return $healthP;
+    }
+
+    public function getListTypes() {
+        return getList(HealthProfessionalType::class, 'type');
+    }
+
+    public function getListAuthorizations() {
+        return getList(CompanyHealthProfessionalType::class, 'type');
     }
 }

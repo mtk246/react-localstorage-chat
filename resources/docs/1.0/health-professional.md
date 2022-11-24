@@ -10,6 +10,8 @@
 - [Update health professional](#update-health-professional)
 - [Get one health professional by npi](#get-one-health-professional-by-npi)
 - [Change status health professional](#change-status-health-professional)
+- [Get list health professional types](#get-list-health-professional-types)
+- [Get list doctor authorizations](#get-list-authorization)
 
 
 <a name="basic-data"></a>
@@ -25,6 +27,8 @@
 | 5 | PUT   | `Update health professional`         | `/health-professional/{id}`              |yes|Update health professional|
 | 6 | GET   | `Get one health professional by npi` | `/health-professional/{npi}/get-by-npi`  |yes|Get one health professional by npi|
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
+| 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
+| 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
 
 
 
@@ -50,6 +54,7 @@
     "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
     "is_provider": true,
     "health_professional_type_id": 1,
+    "authorization_id": 1,
     "dea":"1234DEA",
     "private_note": "Note Private",
     "public_note": "Note Public",
@@ -568,6 +573,7 @@
     "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
     "is_provider": true,
     "health_professional_type_id": 1,
+    "authorization_id": 1,
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
@@ -839,5 +845,79 @@
 
 > {success} 204 Status changed
 
+
+#
+
+<a name="get-list-health-professional-types"></a>
+## Get list health professional types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Types of health professionals found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Medical"
+    },
+    {
+        "id": 2,
+        "name": "Male nurse"
+    },
+    {
+        "id": 3,
+        "name": "Attendees"
+    }
+]
+```
+
+#
+
+<a name="get-list-authorization"></a>
+## Get list doctor authorizations
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Authorizations of health professional type doctor found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Service Provider"
+    },
+    {
+        "id": 2,
+        "name": "Billing Provider"
+    },
+    {
+        "id": 3,
+        "name": "Referred"
+    }
+]
+```
 
 #

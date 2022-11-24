@@ -260,6 +260,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         "auth:api",
         'role:superuser|biller|billingmanager',
     ])->group(function(){
+        Route::get("/get-list-health-professional-types",[\App\Http\Controllers\DoctorController::class,'getListTypes']);
+        Route::get("/get-list-authorizations",[\App\Http\Controllers\DoctorController::class,'getListAuthorizations']);
         Route::get("/get-all-server",[\App\Http\Controllers\DoctorController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);

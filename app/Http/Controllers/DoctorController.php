@@ -92,4 +92,18 @@ class DoctorController extends Controller
 
         return $rs ? response()->json([],204) : response()->json(__("Error updating status"), 404);
     }
+
+    public function getListTypes()
+    {
+        $rs = $this->doctorRepository->getListTypes();
+
+        return $rs ? response()->json($rs) : response()->json(__("Error get all health professional types"), 400);
+    }
+
+    public function getListAuthorizations()
+    {
+        $rs = $this->doctorRepository->getListAuthorizations();
+
+        return $rs ? response()->json($rs) : response()->json(__("Error get all authorizations"), 400);
+    }
 }

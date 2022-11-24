@@ -30,6 +30,8 @@ class CreateDoctorRequest extends FormRequest
             'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'health_professional_type_id' => ['integer', 'required'],
+            'authorization_id'     => ['integer', 'nullable'],
 
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
