@@ -90,6 +90,8 @@ class InsurancePolicy extends Model implements Auditable
 
     public function getSubscriberAttribute()
     {
-        return (!$this->pivot['own_insurance']) ? ($this->subscribers['0']->load(['addresses', 'contacts']) ?? null) : null;
+	if(isset($this->pivot['own_insurance'])) {
+	    return (!$this->pivot['own_insurance']) ? ($this->subscribers['0']->load(['addresses', 'contacts']) ?? null) : null;
+	}
     }
 }
