@@ -29,7 +29,6 @@ class UpdateDoctorRequest extends FormRequest
         $user = $doctor->user;
         return [
             'npi'                   => ['required', 'string', Rule::unique('health_professionals', 'npi')->ignore($doctor->id)],
-            'dea'                   => ['required', 'string'],
             'email'                 => ['required', Rule::unique('users', 'email')->ignore($user->id), 'string', 'email:rfc'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],

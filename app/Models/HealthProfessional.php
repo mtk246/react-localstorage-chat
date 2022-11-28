@@ -15,7 +15,6 @@ class HealthProfessional extends Model implements Auditable
         "code",
         "npi",
         "npi_company",
-        "dea",
         "is_provider",
         "user_id",
         "health_professional_type_id"

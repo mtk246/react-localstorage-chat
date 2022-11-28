@@ -102,7 +102,6 @@ class DoctorRepository
             $healthP = HealthProfessional::create([
                 "code"                        => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
                 "npi"                         => $data["npi"],
-                "dea"                         => $data["dea"],
                 "health_professional_type_id" => $data["health_professional_type_id"],
                 "user_id"                     => $user->id
             ]);
@@ -168,8 +167,7 @@ class DoctorRepository
             
             $healthP = HealthProfessional::find($id);
             $healthP->update([
-                "npi"     => $data["npi"],
-                "dea"     => $data["dea"]
+                "npi"     => $data["npi"]
             ]);
 
             if (isset($data['taxonomies'])) {

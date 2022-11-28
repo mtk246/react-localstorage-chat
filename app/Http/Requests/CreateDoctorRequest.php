@@ -26,7 +26,6 @@ class CreateDoctorRequest extends FormRequest
     {
         return [
             'npi'                   => ['required', 'string', Rule::unique('health_professionals', 'npi')],
-            'dea'                   => ['required', 'string'],
             'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
