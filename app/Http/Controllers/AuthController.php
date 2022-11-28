@@ -51,7 +51,7 @@ class AuthController extends Controller
      *
      * @var    integer
      */
-    protected $webDowntime = 3600000;
+    protected $webDowntime = 120000;
 
     /**
      * Create a new AuthController instance.
