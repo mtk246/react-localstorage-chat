@@ -43,6 +43,7 @@ class Device extends Model implements Auditable
         "user_id",
         "status",
         "code_temp",
+        "last_login",
     ];
 
     /**

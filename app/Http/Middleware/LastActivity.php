@@ -19,12 +19,27 @@ class LastActivity
     public function handle(Request $request, Closure $next)
     {
         if (isset($request->email)) {
-            $user = User::whereEmail($request->email)->first();
-            if (isset($user)) {
-                $now = Carbon::now();
-                $user->last_activity = Carbon::now();
-                $user->save();
-                return $next($request);
+            if (str_contains($request->route()->uri, 'api/v1/auth/login')) {
+                $user = User::whereEmail($request->email)->first();
+                if (isset($user)) {
+                    if ($user->isLogged == true) {
+                        $lastActivity = new \DateTime($user->last_activity);
+                        $inactivity_time = 120 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
+                        if ($inactivity_time <= 0 ) {
+                            $user->isLogged = false;
+                            //$user->last_login = Carbon::now();
+                            $now = Carbon::now();
+                            $user->last_activity = Carbon::now();
+                            $user->save();
+                            return $next($request);
+                        }
+                    } else {
+                        $now = Carbon::now();
+                        $user->last_activity = Carbon::now();
+                        $user->save();
+                        return $next($request);
+                    }
+                }
             }
         } else {
             $user = auth()->user();

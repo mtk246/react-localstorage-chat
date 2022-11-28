@@ -253,6 +253,16 @@ class User extends Authenticatable implements JWTSubject, Auditable
         return $this->hasMany(FailedLoginAttempt::class);
     }
 
+    /**
+     * User has many Devices.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
+
     /*
      * Get the company's status.
      *

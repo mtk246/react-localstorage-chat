@@ -52,6 +52,7 @@ class AuthController extends Controller
      * @var    integer
      */
     protected $webDowntime = 120000;
+    //protected $webDowntime = 3600000;
 
     /**
      * Create a new AuthController instance.
@@ -106,9 +107,9 @@ class AuthController extends Controller
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
 
-        //if ($this->checkIsLogged($request->input("email"))) {
-            //return response()->json(['error' => __('This user has a session active in other device')], 401);
-        //}
+        if ($this->checkIsLogged($request->input("email"), $request->ip(), $request->userAgent())) {
+            return response()->json(['error' => __('This user has a session active in other device')], 401);
+        }
 
         $user = User::where('email', $dataValidated["email"])->first();
         if (!isset($user)) {
@@ -165,15 +166,36 @@ class AuthController extends Controller
 
         $user->last_login = date('Y-m-d H:i:s');
         $user->isLogged = true;
+        $device = Device::where([
+            'user_id'    => $user->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status'     => true
+        ])->first();
+        $device->last_login = $user->last_login;
+        $device->save();
         $user->save();
 
         return $this->respondWithToken($token, $request->ip(), $request->userAgent());
     }
 
-    public function checkIsLogged($email) {
+    public function checkIsLogged($email, $ip, $user_agent) {
         $user = User::whereEmail($email)->first();
-
-        return $user->isLogged;
+        $device = Device::where([
+            'user_id'    => $user->id,
+            'ip_address' => $ip,
+            'user_agent' => $user_agent,
+            'status'     => true
+        ])->first();
+        if ($user->isLogged == true) {
+            if ($device->last_login == $user->last_login) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
