@@ -53,7 +53,8 @@
         "fax": "737-883-3672",
         "email": "corine07@dooley.info",
         "mobile": "930.984.6441",
-    }
+    },
+    "logo": "file"
 }
 ```
 
@@ -131,7 +132,8 @@
         "fax": "737-883-3672",
         "email": "corine07@dooley.info",
         "mobile": "930.984.6441",
-    }
+    },
+    "logo": "file"
 }
 ```
 

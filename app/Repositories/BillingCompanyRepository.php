@@ -11,10 +11,22 @@ use App\Models\User;
 
 class BillingCompanyRepository
 {
-    public function createBillingCompany(array $data){
+    public function createBillingCompany(array $data) {
+        if (isset($data["logo"])) {
+            if(!file_exists(public_path("/img-billing-company")))
+                mkdir(public_path("/img-billing-company/"));
+
+            $file = $data['logo'];
+            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path("/img-billing-company/"), $fullNameFile);
+
+            $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
+        }
+
         $company = BillingCompany::create([
             "name" => $data["name"],
-            "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code")
+            "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code"),
+            "logo" => $pathNameFile ?? null
         ]);
 
         if (isset($data['address']['address'])) {
@@ -39,10 +51,22 @@ class BillingCompanyRepository
      * @return BillingCompany|Builder|Model|object|null
      */
     public function update(array $data, int $id) {
+        if (isset($data["logo"])) {
+            if(!file_exists(public_path("/img-billing-company")))
+                mkdir(public_path("/img-billing-company/"));
+
+            $file = $data['logo'];
+            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path("/img-billing-company/"), $fullNameFile);
+
+            $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
+        }
+
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
                 "name" => $data["name"],
+                "logo" => $pathNameFile ?? null
             ]);
 
             if (isset($data['address']['address'])) {

@@ -22,6 +22,9 @@ class LastActivity
             if (str_contains($request->route()->uri, 'api/v1/auth/login')) {
                 $user = User::whereEmail($request->email)->first();
                 if (isset($user)) {
+                    if ($user->status == false) {
+                        return response()->json(['error' => __("Your user is inactive, for more information contact the administrator.")], 401);
+                    }
                     if ($user->isLogged == true) {
                         $lastActivity = new \DateTime($user->last_activity);
                         $inactivity_time = 120 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));

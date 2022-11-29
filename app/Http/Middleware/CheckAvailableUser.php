@@ -20,7 +20,7 @@ class CheckAvailableUser
         $ip = Device::whereIp($request->ip())->where(false)->first();
 
         if( !is_null($ip) ){
-            return response()->json("You must to validate new device",401);
+            return response()->json("Your user is inactive, for more information contact the administrator.", 401);
         }
 
         return $next($request);

@@ -50,7 +50,8 @@ class BillingCompany extends Model implements Auditable
     protected $fillable = [
         "name",
         "code",
-        "status"
+        "status",
+        "logo"
     ];
 
     /**
