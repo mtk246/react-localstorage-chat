@@ -51,11 +51,12 @@
     "billing_company_id": 1, /** Only required by superuser */
     "email":"user1@gmail.com",
     "npi":"123456719",
-    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
-    "is_provider": true,
+    "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "nickname":"alias company",
+    "is_provider": true, /** Optional, only required if the type health professional is doctor */
+    "company_id": 1,  /** Optional, only required if the is provider field is false */
     "health_professional_type_id": 1,
-    "authorization_id": 1,
-    "dea":"1234DEA",
+    "authorization_id": 1,  /** Optional, only required if the is provider field is true and type health professional is doctor */
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
@@ -96,6 +97,7 @@
     },
     "contact": {
         "phone": "4245675712",
+        "mobile": "4245675712",
         "fax": "userHealthP",
         "email": "user@gmail.com"
     }
@@ -122,8 +124,7 @@
 ```json
 {
     "npi": "123456789",
-    "dea": "123DEA",
-    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
+    "npi_company":"123456719",
     "is_provider": true,
     "health_professional_type_id": 1,
     "user_id": 8,
@@ -161,7 +162,6 @@
     {
         "id": 3,
         "npi": "123456719",
-        "dea": "1234DEA",
         "user_id": 9,
         "created_at": "2022-03-17T08:58:40.000000Z",
         "updated_at": "2022-03-17T08:58:40.000000Z",
@@ -306,7 +306,6 @@
         {
             "id": 3,
             "npi": "123456719",
-            "dea": "1234DEA",
             "user_id": 9,
             "created_at": "2022-03-17T08:58:40.000000Z",
             "updated_at": "2022-03-17T08:58:40.000000Z",
@@ -449,7 +448,6 @@
 {
     "id": 3,
     "npi": "123456719",
-    "dea": "1234DEA",
     "user_id": 9,
     "created_at": "2022-03-17T08:58:40.000000Z",
     "updated_at": "2022-03-17T08:58:40.000000Z",
@@ -569,11 +567,11 @@
     "billing_company_id": 1, /** Only required by superuser */
     "email":"user1edit@gmail.com",
     "npi":"123456719",
-    "dea":"1234DEA",
-    "npi_company":"123456719", /** Optional, only required if the is provider field is true*/
-    "is_provider": true,
+    "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "nickname":"alias company",
+    "is_provider": true, /** Optional, only required if the type health professional is doctor */
     "health_professional_type_id": 1,
-    "authorization_id": 1,
+    "authorization_id": 1,  /** Optional, only required if the is provider field is true and type health professional is doctor */
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
@@ -613,6 +611,7 @@
     },
     "contact": {
         "phone": "4245675712",
+        "mobile": "4245675712",
         "fax": "userHealthP",
         "email": "user@gmail.com"
     }
@@ -640,7 +639,6 @@
 {
     "id": 3,
     "npi": "123456719",
-    "dea": "1234DEA",
     "user_id": 9,
     "created_at": "2022-03-17T08:58:40.000000Z",
     "updated_at": "2022-03-17T08:58:40.000000Z",
@@ -709,7 +707,6 @@
 {
     "id": 3,
     "npi": "123456719",
-    "dea": "1234DEA",
     "user_id": 9,
     "created_at": "2022-03-17T08:58:40.000000Z",
     "updated_at": "2022-03-17T08:58:40.000000Z",

@@ -77,6 +77,26 @@ class HealthProfessional extends Model implements Auditable
         return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
     }
 
+    /**
+     * HealthProfessional morphs one publicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function publicNote()
+    {
+        return $this->morphOne(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * HealthProfessional morphs one privateNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function privateNote()
+    {
+        return $this->morphOne(PrivateNote::class, 'publishable');
+    }
+
     public function getLastModifiedAttribute()
     {
         $record = [

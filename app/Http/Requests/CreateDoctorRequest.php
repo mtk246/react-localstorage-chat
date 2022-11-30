@@ -32,6 +32,13 @@ class CreateDoctorRequest extends FormRequest
             'health_professional_type_id' => ['integer', 'required'],
             'authorization_id'     => ['integer', 'nullable'],
 
+            'is_provider'          => ['nullable', 'boolean'],
+            'npi_company'          => ['nullable', 'string'],
+            'nickname'             => ['nullable', 'string'],
+
+            'private_note'           => ['nullable', 'string'],
+            'public_note'            => ['nullable', 'string'],
+
             'taxonomies'           => ['required', 'array'],
             'taxonomies.*.tax_id'  => ['required', 'string'],
             'taxonomies.*.name'    => ['required', 'string'],
@@ -45,9 +52,9 @@ class CreateDoctorRequest extends FormRequest
             'profile.ssn'           => ['required', 'string'],
             'profile.date_of_birth' => ['required', 'date'],
 
-            'profile.social_medias' => ['sometimes', 'array'],
-            'profile.social_medias.*.name' => ['sometimes', 'string'],
-            'profile.social_medias.*.link' => ['sometimes', 'string'],
+            'profile.social_medias'        => ['nullable', 'array'],
+            'profile.social_medias.*.name' => ['nullable', 'string'],
+            'profile.social_medias.*.link' => ['nullable', 'string'],
 
             'address'               => ['required', 'array'],
             'address.address'       => ['required', 'string'],
@@ -56,8 +63,9 @@ class CreateDoctorRequest extends FormRequest
             'address.zip'           => ['required', 'string'],
 
             'contact'               => ['required', 'array'],
-            'contact.phone'         => ['required', 'string'],
-            'contact.fax'           => ['required', 'string'],
+            'contact.phone'         => ['nullable', 'string'],
+            'contact.mobile'        => ['nullable', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
             'contact.email'         => ['required', 'email:rfc'],
         ];
     }

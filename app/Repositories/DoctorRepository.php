@@ -14,6 +14,8 @@ use App\Models\Taxonomy;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\BillingCompany;
+use App\Models\PublicNote;
+use App\Models\PrivateNote;
 use App\Roles\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,7 +35,7 @@ class DoctorRepository
             ], [
                 "ssn"           => $data["profile"]["ssn"],
                 "first_name"    => $data["profile"]["first_name"],
-                "middle_name"   => $data["profile"]["middle_name"],
+                "middle_name"   => $data["profile"]["middle_name"] ?? '',
                 "last_name"     => $data["profile"]["last_name"],
                 "sex"           => $data["profile"]["sex"],
                 "date_of_birth" => $data["profile"]["date_of_birth"]
@@ -103,8 +105,28 @@ class DoctorRepository
                 "code"                        => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
                 "npi"                         => $data["npi"],
                 "health_professional_type_id" => $data["health_professional_type_id"],
+                "is_provider"                 => $data["is_provider"] ?? false,
+                "npi_company"                 => $data["npi_company"] ?? '',
+                "company_id"                  => $data["company_id"] ?? null,
                 "user_id"                     => $user->id
             ]);
+
+            if (isset($data['private_note'])) {
+                PrivateNote::create([
+                    'publishable_type'   => HealthProfessional::class,
+                    'publishable_id'     => $healthP->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'note'               => $data['private_note']
+                ]);
+            }
+
+            if (isset($data['public_note'])) {
+                PublicNote::create([
+                    'publishable_type'   => HealthProfessional::class,
+                    'publishable_id'     => $healthP->id,
+                    'note'               => $data['private_note']
+                ]);
+            }
 
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
                 $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
@@ -167,7 +189,11 @@ class DoctorRepository
             
             $healthP = HealthProfessional::find($id);
             $healthP->update([
-                "npi"     => $data["npi"]
+                "npi"                         => $data["npi"],
+                "health_professional_type_id" => $data["health_professional_type_id"],
+                "is_provider"                 => $data["is_provider"] ?? false,
+                "npi_company"                 => $data["npi_company"] ?? '',
+                "company_id"                  => $data["company_id"] ?? null
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -193,7 +219,7 @@ class DoctorRepository
             $profile->update([
                 "ssn"           => $data["profile"]["ssn"],
                 "first_name"    => $data["profile"]["first_name"],
-                "middle_name"   => $data["profile"]["middle_name"],
+                "middle_name"   => $data["profile"]["middle_name"] ?? '',
                 "last_name"     => $data["profile"]["last_name"],
                 "sex"           => $data["profile"]["sex"],
                 "date_of_birth" => $data["profile"]["date_of_birth"]
@@ -263,6 +289,26 @@ class DoctorRepository
                     "addressable_id"     => $user->id,
                     "addressable_type"   => User::class
                 ], $data["address"]);
+            }
+
+            if (isset($data['public_note'])) {
+                /** PublicNote */
+                PublicNote::updateOrCreate([
+                    'publishable_type' => HealthProfessional::class,
+                    'publishable_id'   => $healthP->id,
+                ], [
+                    'note'             => $data['public_note'],
+                ]);
+            }
+
+            if (isset($data['private_note'])) {
+                /** PrivateNote */
+                PrivateNote::updateOrCreate([
+                    'publishable_type' => HealthProfessional::class,
+                    'publishable_id'   => $healthP->id,
+                ], [
+                    'note'             => $data['private_note'],
+                ]);
             }
 
             \DB::commit();
