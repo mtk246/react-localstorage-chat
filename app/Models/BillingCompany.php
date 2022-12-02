@@ -51,7 +51,8 @@ class BillingCompany extends Model implements Auditable
         "name",
         "code",
         "status",
-        "logo"
+        "logo",
+        "abbreviation"
     ];
 
     /**

@@ -42,6 +42,7 @@
 ```json
 {
     "name": "Medhurst-Schmidt",
+    "abbreviation": "MedSc",
     "address":{
         "address": "Singleton Rd",
         "city": "Calimesa",
@@ -75,6 +76,8 @@
 {
     "id": 1,
     "name": "Medhurst-Schmidt",
+    "abbreviation": "MedSc",
+    "logo": "File",
     "created_at": "2022-03-15T11:15:43.000000Z",
     "updated_at": "2022-03-15T11:15:43.000000Z",
     "code": "BC-00001-2022",
@@ -121,6 +124,7 @@
 ```json
 {
     "name": "Medhurst-Schmidt",
+    "abbreviation": "MedSc",
     "address":{
         "address": "Singleton Rd",
         "city": "Calimesa",
@@ -156,6 +160,7 @@
 {
     "id": 1,
     "name": "Medhurst-Schmidt",
+    "abbreviation": "MedSc",
     "created_at": "2022-03-15T11:15:43.000000Z",
     "updated_at": "2022-03-15T11:15:43.000000Z",
     "code": "BC-00001-2022",
@@ -668,10 +673,11 @@
 
 #
 ```json
-
+[
     {
         "id": 1,
         "name": "Medhurst-Schmidt",
+        "abbreviation": "MedSc",
         "created_at": "2022-03-15T11:15:43.000000Z",
         "updated_at": "2022-03-15T11:15:43.000000Z",
         "code": "BC-00001-2022",
@@ -701,7 +707,7 @@
             "contactable_id": 1
         }
     }
-
+]
 ```
 
 

@@ -26,13 +26,15 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
-            'name'          => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
-            'address'       => ['nullable', 'array'],
-            'contact'       => ['required', 'array'],
-            'contact.phone' => ['nullable', 'string'],
-            'contact.fax'   => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
-            'logo'          => ['nullable', 'file', 'mimes:jpg,png', 'max:1024']
+            'name'           => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
+            'address'        => ['nullable', 'array'],
+            'contact'        => ['required', 'array'],
+            'contact.phone'  => ['nullable', 'string'],
+            'contact.mobile' => ['nullable', 'string'],
+            'contact.fax'    => ['nullable', 'string'],
+            'contact.email'  => ['required', 'email:rfc'],
+            'logo'           => ['nullable', 'file', 'mimes:jpg,png', 'max:1024'],
+            'abbreviation'   => ['nullable', 'string'],
         ];
     }
 }

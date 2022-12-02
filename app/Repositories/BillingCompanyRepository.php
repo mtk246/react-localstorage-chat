@@ -24,9 +24,10 @@ class BillingCompanyRepository
         }
 
         $company = BillingCompany::create([
-            "name" => $data["name"],
-            "code" => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code"),
-            "logo" => $pathNameFile ?? null
+            "name"         => $data["name"],
+            "abbreviation" => $data["abbreviation"] ?? null,
+            "code"         => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code"),
+            "logo"         => $pathNameFile ?? null
         ]);
 
         if (isset($data['address']['address'])) {
@@ -65,8 +66,9 @@ class BillingCompanyRepository
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
-                "name" => $data["name"],
-                "logo" => $pathNameFile ?? null
+                "name"         => $data["name"],
+                "abbreviation" => $data["abbreviation"] ?? null,
+                "logo"         => $pathNameFile ?? null
             ]);
 
             if (isset($data['address']['address'])) {
@@ -169,7 +171,10 @@ class BillingCompanyRepository
     }
 
     public function getByName($name){
-        return BillingCompany::where("name","ilike","%${name}%")->get();
+        return BillingCompany::whereRaw('LOWER(name) LIKE (?)', [strtolower("%$name%")])->with([
+                "address",
+                "contact"
+            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
     public function getList() {
         return getList(BillingCompany::class);
