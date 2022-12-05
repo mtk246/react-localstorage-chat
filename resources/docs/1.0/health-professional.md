@@ -71,7 +71,7 @@
             "primary": false
         }
     ],
-    "taxonomies_health_professional": [
+    "taxonomies_company": [
         {
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
@@ -597,7 +597,7 @@
             "primary": false
         }
     ],
-    "taxonomies_health_professional": [
+    "taxonomies_company": [
         {
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
