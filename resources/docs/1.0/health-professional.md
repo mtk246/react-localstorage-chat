@@ -56,10 +56,22 @@
     "is_provider": true, /** Optional, only required if the type health professional is doctor */
     "company_id": 1,  /** Optional, only required if the is provider field is false */
     "health_professional_type_id": 1,
-    "authorization_id": 1,  /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "authorization": [1,2,3],  /** Optional, only required if the is provider field is true and type health professional is doctor */
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },
+        {
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],
+    "taxonomies_health_professional": [
         {
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
@@ -571,7 +583,7 @@
     "nickname":"alias company",
     "is_provider": true, /** Optional, only required if the type health professional is doctor */
     "health_professional_type_id": 1,
-    "authorization_id": 1,  /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "authorization": [1,2,3],  /** Optional, only required if the is provider field is true and type health professional is doctor */
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
@@ -580,6 +592,18 @@
             "name": "NameTaxonomy Company",
             "primary": true
         },{
+            "tax_id": "TAX01222",
+            "name": "NameTaxonomy 2 Company",
+            "primary": false
+        }
+    ],
+    "taxonomies_health_professional": [
+        {
+            "tax_id": "TAX01213",
+            "name": "NameTaxonomy Company",
+            "primary": true
+        },
+        {
             "tax_id": "TAX01222",
             "name": "NameTaxonomy 2 Company",
             "primary": false
