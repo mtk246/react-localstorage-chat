@@ -30,6 +30,8 @@ class Claim extends Model implements Auditable
         "claim_formattable_id"
     ];
 
+    protected $with = ["claimFormattable"];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -204,7 +206,7 @@ class Claim extends Model implements Auditable
         $date = '';
         $claimForm = $this->claimFormattable;
         if ($this->claim_formattable_type == ClaimFormP::class) {
-            foreach ($claimForm->claimFormServices as $service) {
+            foreach ($claimForm->claimFormServices  ?? [] as $service) {
                 if ($date == '') {
                     $date = $service->to_service;
                 } elseif ($service->to_service > $date) {
@@ -220,7 +222,7 @@ class Claim extends Model implements Auditable
         $date = '';
         $claimForm = $this->claimFormattable;
         if ($this->claim_formattable_type == ClaimFormP::class) {
-            foreach ($claimForm->claimFormServices as $service) {
+            foreach ($claimForm->claimFormServices ?? [] as $service) {
                 if ($date == '') {
                     $date = $service->from_service;
                 } elseif ($service->from_service < $date) {

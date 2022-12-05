@@ -389,7 +389,18 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("claim")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',
-    ])->group(function(){
+    ])->group(function() {
+        Route::prefix("/batch")->middleware([
+            "auth:api",
+            'role:superuser|biller|billingmanager',
+        ])->group(function(){
+            Route::get("/get-all-server", [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
+            Route::get("/get-all-server-claims", [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
+            Route::get("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"getOneClaimBatch"]);
+            Route::post("/",[\App\Http\Controllers\ClaimBatchController::class,"createBatch"]);
+            Route::put("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"updateBatch"]);
+        });
+
         //Route::get("/get-all-server",[\App\Http\Controllers\ClaimController::class,'getServerAll']);
         Route::get("/get-list-type-of-services",[\App\Http\Controllers\ClaimController::class,"getListTypeOfServices"]);
         Route::get("/get-list-place-of-services",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
