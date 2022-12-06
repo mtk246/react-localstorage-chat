@@ -62,4 +62,15 @@ class ClaimBatchController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error, claim batch not found"), 404);
     }
+
+    /**
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function deleteBatch(int $id)
+    {
+        $rs = $this->claimBatchRepository->deleteBatch($id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error erasing claim batch"), 400);
+    }
 }

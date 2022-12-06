@@ -399,6 +399,7 @@ Route::prefix("v1")/*->middleware('audit')*/
             Route::get("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"getOneClaimBatch"]);
             Route::post("/",[\App\Http\Controllers\ClaimBatchController::class,"createBatch"]);
             Route::put("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"updateBatch"]);
+            Route::delete("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"deleteBatch"]);
         });
 
         //Route::get("/get-all-server",[\App\Http\Controllers\ClaimController::class,'getServerAll']);

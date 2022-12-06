@@ -54,5 +54,8 @@
 - ## Claim
     - [Claim](/{{route}}/{{version}}/claim)
 
+- ## Claim Batch
+    - [Claim Batch](/{{route}}/{{version}}/claim-batch)
+
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)

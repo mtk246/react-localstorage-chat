@@ -30,8 +30,8 @@ class ClaimBatchRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data["sent"])) {
-                $status = ($data["sent"] == true) ? 'SENT' : 'NOT SENT';
+            if (isset($data["send"])) {
+                $status = ($data["send"] == true) ? 'SENT' : 'NOT SENT';
             }
 
             $claimBatch = ClaimBatch::create([
@@ -214,7 +214,7 @@ class ClaimBatchRepository
      * @param int $id
      * @return claim|Builder|Model|object|null
      */
-    public function updateClaim(array $data, int $id) {
+    public function updateBatch(array $data, int $id) {
         try {
             DB::beginTransaction();
             $status = 'NOT SENT';
@@ -225,8 +225,8 @@ class ClaimBatchRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data["sent"])) {
-                $status = ($data["sent"] == true) ? 'SENT' : 'NOT SENT';
+            if (isset($data["send"])) {
+                $status = ($data["send"] == true) ? 'SENT' : 'NOT SENT';
             }
 
             $claimBatch = ClaimBatch::find($id);
@@ -248,7 +248,22 @@ class ClaimBatchRepository
             return $claimBatch;
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e;
+            return null;
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return claim|Builder|Model|object|null
+     */
+    public function deleteBatch(int $id) {
+        try {
+            $claimBatch = ClaimBatch::find($id);
+            $claimBatch->claims()->detach();
+            $claimBatch->delete();
+            return !is_null($claimBatch) ? $claimBatch : null;
+        } catch (\Exception $e) {
+            return null;
         }
     }
 }
