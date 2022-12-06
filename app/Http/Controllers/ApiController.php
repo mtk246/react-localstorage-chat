@@ -60,7 +60,7 @@ class ApiController extends Controller
                 'state'   => $mailingAddress->state,
             ];
 
-            unset($r->enumeration_type);
+            //unset($r->enumeration_type);
             unset($r->last_updated_epoch);
             unset($r->created_epoch);
             unset($r->other_names);
