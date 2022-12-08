@@ -18,6 +18,7 @@
 - [Remove policy to patient](#remove-policy-to-patient)
 - [Get policy to patient](#get-policy-to-patient)
 - [Get all policies to patient](#get-all-policies-to-patient)
+- [Get list type diags](#get-list-type-diags)
 
 
 
@@ -40,6 +41,7 @@
 | 11 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
 | 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
+| 14  |GET     | `Get list types diags`  | `/injury/get-list-type-diags`     | yes            | Get list type diags |
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -1744,3 +1746,56 @@
 #
 
 >{warning} 404 error get all policies to patient
+
+#
+
+<a name="get-list-type-diags"></a>
+## Get list type diags
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type diags of injury found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "A - Allergy"
+    },
+    {
+        "id": 2,
+        "name": "C - Chronic"
+    },
+    {
+        "id": 3,
+        "name": "D - Problem List"
+    },
+    {
+        "id": 4,
+        "name": "O - Other"
+    },
+    {
+        "id": 5,
+        "name": "P - Pre Existing Condition"
+    },
+    {
+        "id": 6,
+        "name": "S - Self Limiting"
+    },
+    {
+        "id": 7,
+        "name": "U - Acute"
+    }
+]
+```
