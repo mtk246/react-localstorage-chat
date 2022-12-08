@@ -124,9 +124,9 @@ class BillingCompanyController extends Controller
      * @param  ImgBillingCompanyRequest $request
      * @return JsonResponse
      */
-    public function uploadImage(ImgBillingCompanyRequest $request): JsonResponse
+    public function uploadImage(ImgBillingCompanyRequest $request, int $id): JsonResponse
     {
-        $rs = $this->billingCompanyRepository->uploadImage($request);
+        $rs = $this->billingCompanyRepository->uploadImage($request, $id);
 
         return ($rs) ? response()->json($rs) : response()->json(__("Error updating image billing company"), 400);
     }

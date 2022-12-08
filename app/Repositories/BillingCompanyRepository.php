@@ -57,8 +57,7 @@ class BillingCompanyRepository
         if (isset($billingCompany)) {
             $billingCompany->update([
                 "name"         => $data["name"],
-                "abbreviation" => $data["abbreviation"] ?? null,
-                "logo"         => $data["logo"] ?? null,
+                "abbreviation" => $data["abbreviation"] ?? null
             ]);
 
             if (isset($data['address']['address'])) {
@@ -190,17 +189,23 @@ class BillingCompanyRepository
      * @param ImgProfileRequest $request
      * @return string
      */
-    public function uploadImage(ImgBillingCompanyRequest $request): string
+    public function uploadImage(ImgBillingCompanyRequest $request, int $id)
     {
+        $billingCompany = BillingCompany::find($id);
+        
         if(!file_exists(public_path("/img-billing-company")))
                 mkdir(public_path("/img-billing-company/"));
 
         $file = $request->file('logo');
-        $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path("/img-billing-company/"), $fullNameFile);
+        if (isset($file)) {
+            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path("/img-billing-company/"), $fullNameFile);
 
-        $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
+            $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
 
-        return $pathNameFile;
+            $billingCompany->logo = $pathNameFile;
+            $billingCompany->save();
+        }
+        return $pathNameFile ?? null;
     }
 }
