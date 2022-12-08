@@ -189,9 +189,9 @@ class BillingCompanyRepository
      * @param ImgProfileRequest $request
      * @return string
      */
-    public function uploadImage(ImgBillingCompanyRequest $request, int $id)
+    public function uploadImage(ImgBillingCompanyRequest $request)
     {
-        $billingCompany = BillingCompany::find($id);
+        $billingCompany = BillingCompany::find($request->billing_company_id);
         
         if(!file_exists(public_path("/img-billing-company")))
                 mkdir(public_path("/img-billing-company/"));

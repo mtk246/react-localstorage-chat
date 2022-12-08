@@ -24,7 +24,8 @@ class ImgBillingCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            "logo" => "file|mimes:jpg,png|max:1024"
+            'logo'               => ['required', 'file', 'mimes:jpg,png', 'max:1024'],
+            "billing_company_id" => ["required", "integer"]
         ];
     }
 }

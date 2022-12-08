@@ -101,7 +101,7 @@ Route::prefix("v1")/*->middleware('audit')*/
             [\App\Http\Controllers\BillingCompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);
-        Route::put("/{billing_company_id}/upload-image", [\App\Http\Controllers\BillingCompanyController::class, 'uploadImage'])->middleware(['auth:api']);
+        Route::post("/upload-image", [\App\Http\Controllers\BillingCompanyController::class, 'uploadImage'])->middleware(['auth:api']);
         Route::put("/{billing_company_id}",[\App\Http\Controllers\BillingCompanyController::class,'update'])->middleware([
             "auth:api",
         ]);

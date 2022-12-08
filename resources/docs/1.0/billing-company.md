@@ -30,7 +30,7 @@
 | 7 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
 | 8 |PATCH | `Change status billing company`           | `/billing-company/change-status/{id}`|yes|Change status billing company|
 | 9 |GET | `Get list billing companies`| `/billing-company/get-list`        |yes            |Get list billing companies|
-| 10 |PUT | `upload image billing company`   | `/billing-company/{billing_company_id}/upload-image` |yes|upload image billing company|
+| 10 |POST | `upload image billing company`   | `/billing-company/upload-image` |yes|upload image billing company|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -779,19 +779,12 @@
 <a name="upload-image"></a>
 ## Upload image billing company
 
-## Param in path
-
-```json
-{
-    "id": <integer> required
-}
-```
-
 ### Body request example
 
 ```json
 {
-    "logo": "file"
+    "logo": "file",
+    "billing_company_id": 1
 }
 ```
 
