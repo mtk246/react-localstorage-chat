@@ -60,26 +60,26 @@ class BillingCompany extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['last_modified'];
+    protected $appends = ['last_modified', 'contact', 'address'];
 
     /**
-     * BillingCompany has one Contact.
+     * ClearingHouse morphs many Contact.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function contact(): HasOne
+    public function contacts()
     {
-        return $this->hasOne(Contact::class);
+        return $this->morphMany(Contact::class, 'contactable');
     }
 
     /**
-     * BillingCompany has one Address.
+     * ClearingHouse morphs many Address.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function address(): HasOne
+    public function addresses()
     {
-        return $this->hasOne(Address::class);
+        return $this->morphMany(Address::class, 'addressable');
     }
 
     /**
@@ -216,5 +216,15 @@ class BillingCompany extends Model implements Auditable
                 'roles'      => $user->roles
             ];
         }
+    }
+
+    public function getContactAttribute()
+    {
+        return $this->contacts[0] ?? null;
+    }
+
+    public function getAddressAttribute()
+    {
+        return $this->addresses[0] ?? null;
     }
 }

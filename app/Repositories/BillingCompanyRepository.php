@@ -13,7 +13,6 @@ use App\Models\User;
 class BillingCompanyRepository
 {
     public function createBillingCompany(array $data) {
-        //$data = json_decode($data, true);
         if (isset($data["logo"])) {
             if(!file_exists(public_path("/img-billing-company")))
                 mkdir(public_path("/img-billing-company/"));
@@ -58,7 +57,7 @@ class BillingCompanyRepository
         if (isset($billingCompany)) {
             $billingCompany->update([
                 "name"         => $data["name"],
-                "abbreviation" => $data["abbreviation"] ?? null
+                "abbreviation" => $data["abbreviation"] ?? ''
             ]);
 
             if (isset($data['address']['address'])) {
@@ -66,7 +65,9 @@ class BillingCompanyRepository
                 $data["address"]["addressable_id"] = $billingCompany->id;
                 $data["address"]["addressable_type"] = BillingCompany::class;
                 $address = Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id
+                    "billing_company_id" => $billingCompany->id,
+                    "addressable_id"     => $billingCompany->id,
+                    "addressable_type"   => BillingCompany::class
                 ], $data["address"]);
             }
             if (isset($data["contact"]["email"])) {
@@ -74,7 +75,9 @@ class BillingCompanyRepository
                 $data["contact"]["contactable_id"] = $billingCompany->id;
                 $data["contact"]["contactable_type"] = BillingCompany::class;
                 $contact = Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id
+                    "billing_company_id" => $billingCompany->id,
+                    "contactable_id"     => $billingCompany->id,
+                    "contactable_type"   => BillingCompany::class
                 ], $data["contact"]);
             }
         }
@@ -83,8 +86,8 @@ class BillingCompanyRepository
 
     public function getBillingCompany($id) {
         return BillingCompany::with([
-            "address",
-            "contact"
+            "addresses",
+            "contacts"
         ])->find($id);
     }
 
