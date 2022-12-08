@@ -94,8 +94,8 @@ class BillingCompanyRepository
     public function getAllBillingCompanyByUser($user_id) {
         return User::whereId($user_id)->with([
             "billingCompanies",
-            "address",
-            "contact"
+            "addresses",
+            "contacts"
         ])->first();
     }
 
@@ -104,14 +104,14 @@ class BillingCompanyRepository
         if (!$bC) {
             $billingCompanies = BillingCompany::with([
                 "users",
-                "address",
-                "contact"
+                "addresses",
+                "contacts"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $billingCompanies = BillingCompany::whereId($bC)->with([
                 "users",
-                "address",
-                "contact"
+                "addresses",
+                "contacts"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
         return !is_null($billingCompanies) ? $billingCompanies : null;
@@ -123,14 +123,14 @@ class BillingCompanyRepository
         if (!$bC) {
             $data = BillingCompany::with([
                 "users",
-                "address",
-                "contact"
+                "addresses",
+                "contacts"
             ]);
         } else {
             $data = BillingCompany::whereId($bC)->with([
                 "users",
-                "address",
-                "contact"
+                "addresses",
+                "contacts"
             ]);
         }
 
@@ -165,8 +165,8 @@ class BillingCompanyRepository
 
     public function getByName($name){
         return BillingCompany::whereRaw('LOWER(name) LIKE (?)', [strtolower("%$name%")])->with([
-                "address",
-                "contact"
+                "addresses",
+                "contacts"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
     public function getList() {
