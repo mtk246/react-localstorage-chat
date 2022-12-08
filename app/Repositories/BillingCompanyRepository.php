@@ -13,6 +13,7 @@ use App\Models\User;
 class BillingCompanyRepository
 {
     public function createBillingCompany(array $data) {
+        //$data = json_decode($data, true);
         if (isset($data["logo"])) {
             if(!file_exists(public_path("/img-billing-company")))
                 mkdir(public_path("/img-billing-company/"));
@@ -26,9 +27,9 @@ class BillingCompanyRepository
 
         $company = BillingCompany::create([
             "name"         => $data["name"],
-            "abbreviation" => $data["abbreviation"] ?? null,
+            "abbreviation" => $data["abbreviation"] ?? '',
             "code"         => generateNewCode("BC", 5, date("Y"), BillingCompany::class, "code"),
-            "logo"         => $pathNameFile ?? null
+            "logo"         => $pathNameFile ?? ''
         ]);
 
         if (isset($data['address']['address'])) {
