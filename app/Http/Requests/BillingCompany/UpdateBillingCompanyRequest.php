@@ -36,7 +36,7 @@ class UpdateBillingCompanyRequest extends FormRequest
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax'    => ['nullable', 'string'],
             'contact.email'  => ['required', 'email:rfc'],
-            'logo'           => ['nullable', 'file', 'mimes:jpg,png', 'max:1024'],
+            'logo'           => ['nullable', 'string'],
             'abbreviation'   => ['nullable', 'string'],
         ];
     }

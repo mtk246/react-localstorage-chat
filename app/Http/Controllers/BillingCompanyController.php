@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCompanyBilling;
 use App\Http\Requests\BillingCompany\UpdateBillingCompanyRequest;
+use App\Http\Requests\ImgBillingCompanyRequest;
 use App\Repositories\BillingCompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -117,5 +118,16 @@ class BillingCompanyController extends Controller
         $rs = $this->billingCompanyRepository->getList();
 
         return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
+
+    /**
+     * @param  ImgBillingCompanyRequest $request
+     * @return JsonResponse
+     */
+    public function uploadImage(ImgBillingCompanyRequest $request): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->uploadImage($request);
+
+        return ($rs) ? response()->json($rs) : response()->json(__("Error updating image billing company"), 400);
     }
 }

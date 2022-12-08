@@ -12,6 +12,7 @@
 - [Get billing company by name](#get-billing-company-by-name)
 - [Change status billing company](#change-status-billing-company)
 - [Get list billing companies](#get-list-billing-companies)
+- [Upload image billing company](#upload-image)
 
 
 <a name="basic-data"></a>
@@ -29,6 +30,7 @@
 | 7 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
 | 8 |PATCH | `Change status billing company`           | `/billing-company/change-status/{id}`|yes|Change status billing company|
 | 9 |GET | `Get list billing companies`| `/billing-company/get-list`        |yes            |Get list billing companies|
+| 10 |POST | `upload image billing company`   | `/billing-company/upload-image` |yes|upload image billing company|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
@@ -137,7 +139,7 @@
         "email": "corine07@dooley.info",
         "mobile": "930.984.6441",
     },
-    "logo": "file"
+    "logo": "somepath"
 }
 ```
 
@@ -770,4 +772,25 @@
         "name": "Halvorson, Deckow and Bode"
     }
 ]
+```
+
+#
+
+<a name="upload-image"></a>
+## Upload image billing company
+
+### Body request example
+
+```json
+{
+    "logo": "file"
+}
+```
+
+>{success} 200 Response 
+
+```json
+{
+    "path":"somepath"
+}
 ```

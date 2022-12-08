@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\BillingCompanyRepository;
+use App\Http\Requests\ImgBillingCompanyRequest;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use App\Models\BillingCompany;
@@ -52,23 +53,12 @@ class BillingCompanyRepository
      * @return BillingCompany|Builder|Model|object|null
      */
     public function update(array $data, int $id) {
-        if (isset($data["logo"])) {
-            if(!file_exists(public_path("/img-billing-company")))
-                mkdir(public_path("/img-billing-company/"));
-
-            $file = $data['logo'];
-            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path("/img-billing-company/"), $fullNameFile);
-
-            $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
-        }
-
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
                 "name"         => $data["name"],
                 "abbreviation" => $data["abbreviation"] ?? null,
-                "logo"         => $pathNameFile ?? null
+                "logo"         => $data["logo"] ?? null,
             ]);
 
             if (isset($data['address']['address'])) {
@@ -177,7 +167,7 @@ class BillingCompanyRepository
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
     }
     public function getList() {
-        return getList(BillingCompany::class);
+        return getList(BillingCompany::class, 'name', ['status' => true]);
     }
 
 
@@ -194,5 +184,23 @@ class BillingCompanyRepository
         $billingCompany->users()->update(['status' => $status]);
 
         return $billingCompany->update(["status" => $status]);
+    }
+
+    /**
+     * @param ImgProfileRequest $request
+     * @return string
+     */
+    public function uploadImage(ImgBillingCompanyRequest $request): string
+    {
+        if(!file_exists(public_path("/img-billing-company")))
+                mkdir(public_path("/img-billing-company/"));
+
+        $file = $request->file('logo');
+        $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path("/img-billing-company/"), $fullNameFile);
+
+        $pathNameFile = asset("/img-billing-company/" . $fullNameFile);
+
+        return $pathNameFile;
     }
 }
