@@ -662,8 +662,8 @@ class UserRepository{
                 "billingCompanies"
             ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
                 $query->whereDateOfBirth($date_of_birth)
-                      ->whereFirstName($first_name)
-                      ->whereLastName($last_name)
+                      ->where("first_name", "ilike", "%${first_name}%")
+                      ->where("last_name", "ilike", "%${last_name}%")
                       ->where("ssn", "ilike", "%${ssn}")
                       ->orWhere("ssn", "ilike", "%${ssnFormated}");
             })->get();
