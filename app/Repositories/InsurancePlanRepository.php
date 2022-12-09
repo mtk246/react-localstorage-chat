@@ -21,7 +21,7 @@ class InsurancePlanRepository
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::create([
-                "code"                 => generateNewCode("IP", 5, date("Y"), InsurancePlan::class, "code"),
+                "code"                 => generateNewCode(getPrefix($data["name"]), 5, date("y"), InsurancePlan::class, "code"),
                 'name'                 => $data['name'],
                 'ins_type'             => $data['ins_type'],
                 'cap_group'            => $data['cap_group'],

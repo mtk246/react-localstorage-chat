@@ -25,7 +25,7 @@ class FacilityRepository
         try {
             DB::beginTransaction();
             $facility = Facility::create([
-                "code"             => generateNewCode("FA", 5, date("Y"), Facility::class, "code"),
+                "code"             => generateNewCode(getPrefix($data["name"]), 5, date("y"), Facility::class, "code"),
                 "name"             => $data["name"],
                 "npi"              => $data["npi"],
                 "facility_type_id" => $data["facility_type_id"]

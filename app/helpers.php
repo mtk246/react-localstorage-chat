@@ -33,7 +33,7 @@ if (!function_exists('generateNewCode')) {
     {
         $newCode = 1;
 
-        $targetModel = $model::select($field)->where($field, 'like', "{$prefix}-%-{$year}")
+        $targetModel = $model::select($field)->where($field, 'like', "%-%-{$year}")
             ->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
         
         $newCode += ($targetModel) ? (int)explode('-', $targetModel->$field)[1] : 0;
@@ -44,6 +44,22 @@ if (!function_exists('generateNewCode')) {
         $newCode = str_pad($newCode, $code_length, "0", STR_PAD_LEFT);
         
         return "{$prefix}-{$newCode}-{$year}";
+    }
+}
+
+if (!function_exists('getPrefix')) {
+    function getPrefix($name)
+    {
+        $prefix = '';
+        $stringName = explode(" ", trim(str_replace([",", ".", "-"], "", strtoupper($name))));
+        if (count($stringName) > 1) {
+
+            $prefix = ((strlen($stringName[0]) == 1) ? $stringName[0] : substr($stringName[0], 0, 2)) . ((strlen($stringName[1]) == 1) ? $stringName[1] : substr($stringName[1], 0, 2));
+        } else {
+            $prefix = (strlen($stringName[0]) <= 4) ? $stringName[0] : substr($stringName[0], -4, 4);
+        }
+        
+        return trim($prefix);
     }
 }
 

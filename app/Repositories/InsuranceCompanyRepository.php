@@ -22,7 +22,7 @@ class InsuranceCompanyRepository
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::create([
-                "code"        => generateNewCode("IC", 5, date("Y"), InsuranceCompany::class, "code"),
+                "code"        => generateNewCode(getPrefix($data["insurance"]["name"]), 5, date("y"), InsuranceCompany::class, "code"),
                 "name"        => $data["insurance"]["name"],
                 "naic"        => $data["insurance"]["naic"],
                 "file_method" => $data["insurance"]["file_method"]

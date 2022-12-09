@@ -35,7 +35,7 @@ class ClaimBatchRepository
             }
 
             $claimBatch = ClaimBatch::create([
-                "code"               => generateNewCode("CB", 5, date("Y"), ClaimBatch::class, "code"),
+                "code"               => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClaimBatch::class, "code"),
                 "name"               => $data["name"],
                 "status"             => $status,
                 "shipping_date"      => ($status == 'NOT SENT') ? null : now(),

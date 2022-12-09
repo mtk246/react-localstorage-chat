@@ -24,7 +24,7 @@ class CompanyRepository
         try {
             DB::beginTransaction();
             $company = Company::create([
-                "code" => generateNewCode("CO", 5, date("Y"), Company::class, "code"),
+                "code" => generateNewCode(getPrefix($data["name"]), 5, date("y"), Company::class, "code"),
                 "name" => $data["name"],
                 "npi"  => $data["npi"],
             ]);

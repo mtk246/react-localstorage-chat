@@ -38,7 +38,7 @@ class ServiceRepository
             }
             
             $service = Service::create([
-                "code"                           => generateNewCode("SE", 5, date("Y"), Service::class, "code"),
+                "code"                           => generateNewCode(getPrefix($data["name"]), 5, date("y"), Service::class, "code"),
                 "name"                           => $data['name'],
                 "description"                    => $data['description'],
                 "service_group_1_id"             => $data['service_group_1_id'],
