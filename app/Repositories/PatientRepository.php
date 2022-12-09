@@ -87,7 +87,7 @@ class PatientRepository
 
             /** Create User */
             $user = User::create([
-                "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
+                "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
                 "email"      => $data['contact']['email'],
                 "userkey"    => encrypt(uniqid("", true)),
                 "profile_id" => $profile->id
@@ -120,7 +120,7 @@ class PatientRepository
 
             /** Create Patient */
             $patient = Patient::create([
-                "code"           => generateNewCode("PA", 5, date("Y"), Patient::class, "code"),
+                "code"           => generateNewCode("PA", 5, date("y"), Patient::class, "code"),
                 "driver_license" => $data["driver_license"],
                 "user_id"        => $user->id
             ]);

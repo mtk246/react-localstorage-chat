@@ -73,7 +73,7 @@ class DoctorRepository
             }
             /** Create User */
             $user = User::create([
-                "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
+                "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
                 "email"      => $data['email'],
                 "userkey"    => encrypt(uniqid("", true)),
                 "profile_id" => $profile->id
@@ -102,7 +102,7 @@ class DoctorRepository
                 Address::create($data["address"]);
             }
             $healthP = HealthProfessional::create([
-                "code"                        => generateNewCode("HP", 5, date("Y"), HealthProfessional::class, "code"),
+                "code"                        => generateNewCode("HP", 5, date("y"), HealthProfessional::class, "code"),
                 "npi"                         => $data["npi"],
                 "health_professional_type_id" => $data["health_professional_type_id"],
                 "is_provider"                 => $data["is_provider"] ?? false,
