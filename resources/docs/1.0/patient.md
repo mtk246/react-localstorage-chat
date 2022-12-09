@@ -175,7 +175,7 @@
         {
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
-            "type_diag_id": 2,
+            "type_diag_id": 1,
             "public_note": "Note of injury"
         }
     ]
@@ -356,6 +356,36 @@
                 "updated_at": "2022-04-20T21:53:26.000000Z"
             }
         ],
+        "injuries": [
+            {
+                "id": 1,
+                "diag_date": "1990-11-11",
+                "diagnosis_id": 1,
+                "type_diag_id": 1,
+                "created_at": "2022-12-09T13:04:20.000000Z",
+                "updated_at": "2022-12-09T13:04:20.000000Z",
+                "diagnosis": {
+                    "id": 1,
+                    "code": "A000",
+                    "description": "Cholera due to vibrio cholerae 01, biovar cholerae",
+                    "active": true,
+                    "start_date": null,
+                    "end_date": null,
+                    "injury_date_required": false,
+                },
+                "type_diag": {
+                    "id": 1,
+                    "code": "A",
+                    "description": "Allergy",
+                },
+                "public_note": {
+                    "id": 46,
+                    "note": "Note of injury",
+                    "publishable_type": "App\\Models\\Injury",
+                    "publishable_id": 1,
+                }
+            }
+        ],
         "created_at": "2022-03-17T20:45:39.000000Z",
         "updated_at": "2022-03-17T20:45:39.000000Z"
     }
@@ -519,6 +549,22 @@
                     "publishable_id": 1,
                     "created_at": "2022-04-20T21:53:26.000000Z",
                     "updated_at": "2022-04-20T21:53:26.000000Z"
+                }
+            ],
+            "injuries": [
+                {
+                    "id": 1,
+                    "diag_date": "1990-11-11",
+                    "diagnosis_id": 1,
+                    "type_diag_id": 1,
+                    "created_at": "2022-12-09T13:04:20.000000Z",
+                    "updated_at": "2022-12-09T13:04:20.000000Z",
+                    "public_note": {
+                        "id": 46,
+                        "note": "Note of injury",
+                        "publishable_type": "App\\Models\\Injury",
+                        "publishable_id": 1,
+                    }
                 }
             ],
             "created_at": "2022-03-17T20:45:39.000000Z",
@@ -705,6 +751,36 @@
             "publishable_id": 1,
             "created_at": "2022-04-20T21:53:26.000000Z",
             "updated_at": "2022-04-20T21:53:26.000000Z"
+        }
+    ],
+    "injuries": [
+        {
+            "id": 1,
+            "diag_date": "1990-11-11",
+            "diagnosis_id": 1,
+            "type_diag_id": 1,
+            "created_at": "2022-12-09T13:04:20.000000Z",
+            "updated_at": "2022-12-09T13:04:20.000000Z",
+            "diagnosis": {
+                "id": 1,
+                "code": "A000",
+                "description": "Cholera due to vibrio cholerae 01, biovar cholerae",
+                "active": true,
+                "start_date": null,
+                "end_date": null,
+                "injury_date_required": false,
+            },
+            "type_diag": {
+                "id": 1,
+                "code": "A",
+                "description": "Allergy",
+            },
+            "public_note": {
+                "id": 46,
+                "note": "Note of injury",
+                "publishable_type": "App\\Models\\Injury",
+                "publishable_id": 1,
+            }
         }
     ],
     "created_at": "2022-03-17T20:45:39.000000Z",
@@ -1029,7 +1105,7 @@
         {
             "diag_date": "2022-07-05",
             "diagnosis_id": 1,
-            "type_diag_id": 2,
+            "type_diag_id": 1,
             "public_note": "Note of injury"
         }
     ]
