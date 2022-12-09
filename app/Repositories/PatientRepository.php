@@ -404,6 +404,11 @@ class PatientRepository
             "publicNote",
             "privateNotes",
             "insurancePolicies",
+            "injuries" => function ($query) {
+                $query->with([
+                    "diagnosis", "typeDiag", "publicNote"
+                ]);
+            },
             "insurancePlans" => function ($query) use ($id) {
                 $query->with([
                     "insuranceCompany"
@@ -477,6 +482,11 @@ class PatientRepository
             "publicNote",
             "privateNotes",
             "insurancePolicies",
+            "injuries" => function ($query) {
+                $query->with([
+                    "diagnosis", "typeDiag", "publicNote"
+                ]);
+            },
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany");
             }
@@ -502,6 +512,11 @@ class PatientRepository
                 "publicNote",
                 "privateNotes",
                 "insurancePolicies",
+                "injuries" => function ($query) {
+                    $query->with([
+                        "diagnosis", "typeDiag", "publicNote"
+                    ]);
+                },
                 "insurancePlans" => function ($query) {
                     $query->with("insuranceCompany");
                 }
@@ -527,6 +542,11 @@ class PatientRepository
                 "publicNote",
                 "privateNotes",
                 "insurancePolicies",
+                "injuries" => function ($query) {
+                    $query->with([
+                        "diagnosis", "typeDiag", "publicNote"
+                    ]);
+                },
                 "insurancePlans" => function ($query) {
                     $query->with("insuranceCompany");
                 }
