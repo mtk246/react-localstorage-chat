@@ -54,12 +54,6 @@ class RoleSeeder extends Seeder
                     'level' => 3
                 ],
                 [
-                    'name' => 'Auditor',
-                    'slug' => 'auditor',
-                    'description' => 'Allows access to system functions for audit management',
-                    'level' => 3
-                ],
-                [
                     'name' => 'Health Professional',
                     'slug' => 'healthprofessional',
                     'description' => 'Allows access to system functions for health professional management',
@@ -82,7 +76,19 @@ class RoleSeeder extends Seeder
                     'slug' => 'developmentsupport',
                     'description' => 'Allows access to system functions for development support management',
                     'level' => 5
-                ]
+                ],
+                [
+                    'name' => 'Super Auditor',
+                    'slug' => 'superauditor',
+                    'description' => 'Allows access to system functions for audit management',
+                    'level' => 6
+                ],
+                [
+                    'name' => 'Billing Company Auditor',
+                    'slug' => 'billingcompanyauditor',
+                    'description' => 'Allows access to system functions for audit management by billing company',
+                    'level' => 7
+                ],
             ];
 
             foreach ($roles as $role) {

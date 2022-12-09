@@ -24,7 +24,8 @@ class  PermissionSeeder extends Seeder
         $paymentProcessorRole = Role::where('slug', 'paymentprocessor')->first();
         $collectorRole = Role::where('slug', 'collector')->first();
         $accountManagerRole = Role::where('slug', 'accountmanager')->first();
-        $auditorRole = Role::where('slug', 'auditor')->first();
+        $auditorRole = Role::where('slug', 'superauditor')->first();
+        $auditorBCRole = Role::where('slug', 'billingcompanyauditor')->first();
         $healthProfessionalRole = Role::where('slug', 'healthprofessional')->first();
         $patientRole = Role::where('slug', 'patient')->first();
         $clientRole = Role::where('slug', 'client')->first();
@@ -1054,7 +1055,22 @@ class  PermissionSeeder extends Seeder
                 'setting.profile.show',
                 'setting.profile.edit',
             ],
-            'auditor' => [
+            'superauditor' => [
+                'setting.profile.show',
+                'setting.profile.edit',
+                'audit.view',
+                'audit.show',
+                'procedure.view',
+                'procedure.show',
+                'procedure.history',
+                'diagnosis.view',
+                'diagnosis.show',
+                'diagnosis.history',
+                'modifier.view',
+                'modifier.show',
+                'modifier.history',
+            ],
+            'billingcompanyauditor' => [
                 'setting.profile.show',
                 'setting.profile.edit',
                 'audit.view',
@@ -1093,7 +1109,7 @@ class  PermissionSeeder extends Seeder
 
         DB::transaction(function () use ($permissions, $defaultPermissions, $oldPermissions, $superUserRole,
                                          $billingManagerRole, $billerRole, $paymentProcessorRole, $collectorRole,
-                                         $accountManagerRole, $auditorRole, $healthProfessionalRole, $patientRole,
+                                         $accountManagerRole, $auditorRole, $auditorBCRole, $healthProfessionalRole, $patientRole,
                                          $clientRole, $developmentSupportRole) {
 
             $superUserRole->detachAllPermissions();
@@ -1103,6 +1119,7 @@ class  PermissionSeeder extends Seeder
             $collectorRole->detachAllPermissions();
             $accountManagerRole->detachAllPermissions();
             $auditorRole->detachAllPermissions();
+            $auditorBCRole->detachAllPermissions();
             $healthProfessionalRole->detachAllPermissions();
             $patientRole->detachAllPermissions();
             $clientRole->detachAllPermissions();
@@ -1144,8 +1161,11 @@ class  PermissionSeeder extends Seeder
                 if ($accountManagerRole && in_array($permission['slug'], $defaultPermissions['accountmanager'])) {
                     $accountManagerRole->attachPermission($per);
                 }
-                if ($auditorRole && in_array($permission['slug'], $defaultPermissions['auditor'])) {
+                if ($auditorRole && in_array($permission['slug'], $defaultPermissions['superauditor'])) {
                     $auditorRole->attachPermission($per);
+                }
+                if ($auditorBCRole && in_array($permission['slug'], $defaultPermissions['billingcompanyauditor'])) {
+                    $auditorBCRole->attachPermission($per);
                 }
                 if ($healthProfessionalRole && in_array($permission['slug'], $defaultPermissions['healthprofessional'])) {
                     $healthProfessionalRole->attachPermission($per);

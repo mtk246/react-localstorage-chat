@@ -19,8 +19,13 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             FacilityTypeSeeder::class,
-            DataTestSeeder::class,
-            ServiceDataSeeder::class
+            ModifierSeeder::class,
+            DiagnosisSeeder::class,
+            //DataTestSeeder::class,
+            ServiceDataSeeder::class,
+            ProcedureDataSeeder::class,
+            ClaimDataSeeder::class,
+            SocialNetworkSeeder::class,
         ]);
     }
 }
