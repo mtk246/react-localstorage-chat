@@ -17,6 +17,7 @@ class HealthProfessional extends Model implements Auditable
         "npi_company",
         "is_provider",
         "user_id",
+        "company_id",
         "health_professional_type_id"
     ];
 
@@ -35,6 +36,11 @@ class HealthProfessional extends Model implements Auditable
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**

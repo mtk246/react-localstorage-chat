@@ -52,8 +52,9 @@
     "email":"user1@gmail.com",
     "npi":"123456719",
     "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "name_company": "", /** Optional, only required if the npi_company exist */
     "nickname":"alias company",
-    "is_provider": true, /** Optional, only required if the type health professional is doctor */
+    "is_provider": true,
     "company_id": 1,  /** Optional, only required if the is provider field is false */
     "health_professional_type_id": 1,
     "authorization": [1,2,3],  /** Optional, only required if the is provider field is true and type health professional is doctor */
@@ -71,7 +72,7 @@
             "primary": false
         }
     ],
-    "taxonomies_company": [
+    "taxonomies_company": [ /** Optional, only required if the npi_company exist */
         {
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
@@ -580,6 +581,7 @@
     "email":"user1edit@gmail.com",
     "npi":"123456719",
     "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "name_company": "", /** Optional */
     "nickname":"alias company",
     "is_provider": true, /** Optional, only required if the type health professional is doctor */
     "health_professional_type_id": 1,

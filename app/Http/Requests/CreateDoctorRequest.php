@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\HealthProfessionalType;
 
 class CreateDoctorRequest extends FormRequest
 {
@@ -25,52 +26,55 @@ class CreateDoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            'npi'                   => ['required', 'string', Rule::unique('health_professionals', 'npi')],
-            'email'                 => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'npi'                          => ['required', 'string', Rule::unique('health_professionals', 'npi')],
+            'email'                        => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'is_provider'                  => ['nullable', 'boolean'],
 
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            'health_professional_type_id' => ['integer', 'required'],
-            'authorization'                            => ['nullable', 'array'],
-            'taxonomies_company'           => ['required', 'array'],
-            'taxonomies_company.*.tax_id'  => ['required', 'string'],
-            'taxonomies_company.*.name'    => ['required', 'string'],
-            'taxonomies_company.*.primary' => ['required', 'boolean'],
+            'billing_company_id'           => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'health_professional_type_id'  => ['required', 'integer'],
+            'company_id'                   => ["required_unless:is_provider,true", 'integer', 'nullable'],
+            'authorization'                => ["required_unless:is_provider,true", 'array', 'nullable'],
 
-            'is_provider'          => ['nullable', 'boolean'],
-            'npi_company'          => ['nullable', 'string'],
-            'nickname'             => ['nullable', 'string'],
+            'taxonomies_company'           => ['required_unless:npi_company,null', 'array', 'nullable'],
+            'taxonomies_company.*.tax_id'  => ['required_unless:npi_company,null', 'string', 'nullable'],
+            'taxonomies_company.*.name'    => ['required_unless:npi_company,null', 'string', 'nullable'],
+            'taxonomies_company.*.primary' => ['required_unless:npi_company,null', 'boolean', 'nullable'],
 
-            'private_note'           => ['nullable', 'string'],
-            'public_note'            => ['nullable', 'string'],
+            'npi_company'                  => ['nullable', 'string'],
+            'name_company'                 => ['required_unless:npi_company,null','nullable', 'string'],
+            'nickname'                     => ['nullable', 'string'],
 
-            'taxonomies'           => ['required', 'array'],
-            'taxonomies.*.tax_id'  => ['required', 'string'],
-            'taxonomies.*.name'    => ['required', 'string'],
-            'taxonomies.*.primary' => ['required', 'boolean'],
+            'private_note'                 => ['nullable', 'string'],
+            'public_note'                  => ['nullable', 'string'],
 
-            'profile'               => ['required', 'array'],
-            'profile.sex'           => ['required', 'string', 'max:1'],
-            'profile.first_name'    => ['required', 'string', 'max:20'],
-            'profile.last_name'     => ['required', 'string', 'max:20'],
-            'profile.middle_name'   => ['nullable', 'string', 'max:20'],
-            'profile.ssn'           => ['required', 'string'],
-            'profile.date_of_birth' => ['required', 'date'],
+            'taxonomies'                   => ['required', 'array'],
+            'taxonomies.*.tax_id'          => ['required', 'string'],
+            'taxonomies.*.name'            => ['required', 'string'],
+            'taxonomies.*.primary'         => ['required', 'boolean'],
+
+            'profile'                      => ['required', 'array'],
+            'profile.sex'                  => ['required', 'string', 'max:1'],
+            'profile.first_name'           => ['required', 'string', 'max:20'],
+            'profile.last_name'            => ['required', 'string', 'max:20'],
+            'profile.middle_name'          => ['nullable', 'string', 'max:20'],
+            'profile.ssn'                  => ['nullable', 'string'],
+            'profile.date_of_birth'        => ['required', 'date'],
 
             'profile.social_medias'        => ['nullable', 'array'],
             'profile.social_medias.*.name' => ['nullable', 'string'],
-            'profile.social_medias.*.link' => ['nullable', 'string'],
+            'profile.social_medias.*.link' => ['required_unless:profile.social_medias.*.name,null', 'nullable', 'string'],
 
-            'address'               => ['required', 'array'],
-            'address.address'       => ['required', 'string'],
-            'address.city'          => ['required', 'string'],
-            'address.state'         => ['required', 'string'],
-            'address.zip'           => ['required', 'string'],
+            'address'                      => ['required', 'array'],
+            'address.address'              => ['required', 'string'],
+            'address.city'                 => ['required', 'string'],
+            'address.state'                => ['required', 'string'],
+            'address.zip'                  => ['required', 'string'],
 
-            'contact'               => ['required', 'array'],
-            'contact.phone'         => ['nullable', 'string'],
-            'contact.mobile'        => ['nullable', 'string'],
-            'contact.fax'           => ['nullable', 'string'],
-            'contact.email'         => ['required', 'email:rfc'],
+            'contact'                      => ['required', 'array'],
+            'contact.phone'                => ['nullable', 'string'],
+            'contact.mobile'               => ['nullable', 'string'],
+            'contact.fax'                  => ['nullable', 'string'],
+            'contact.email'                => ['required', 'email:rfc']
         ];
     }
 }
