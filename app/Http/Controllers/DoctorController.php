@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateDoctorRequest;
 use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\UpdateDoctorRequest;
+use App\Http\Requests\HealthProfessional\UpdateCompaniesRequest;
 use App\Repositories\DoctorRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -105,5 +106,17 @@ class DoctorController extends Controller
         $rs = $this->doctorRepository->getListAuthorizations();
 
         return $rs ? response()->json($rs) : response()->json(__("Error get all authorizations"), 400);
+    }
+
+    /**
+     * @param UpdateDoctorRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function updateCompanies(UpdateCompaniesRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->doctorRepository->updateCompanies($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, update companies/providers by health professional"), 404);
     }
 }

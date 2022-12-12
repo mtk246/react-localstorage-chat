@@ -270,6 +270,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/",[\App\Http\Controllers\DoctorController::class,'getAllDoctors']);
         Route::get("/{npi}/get-by-npi",[\App\Http\Controllers\DoctorController::class,'getOneByNpi']);
         Route::patch("/{id}/change-status",[\App\Http\Controllers\DoctorController::class,'changeStatus']);
+        Route::put("/{id}/update-companies",[\App\Http\Controllers\DoctorController::class,'updateCompanies']);
     });
 
     Route::prefix("patient")->middleware([

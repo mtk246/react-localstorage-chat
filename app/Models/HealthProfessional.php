@@ -26,7 +26,7 @@ class HealthProfessional extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['last_modified'];
+    protected $appends = ['last_modified', 'companies_providers'];
 
     /**
      * HealthProfessional belongs to User.
@@ -60,7 +60,7 @@ class HealthProfessional extends Model implements Auditable
      */
     public function companies()
     {
-        return $this->belongsToMany(Company::class)->withPivot('company_health_professional_type_id')->withTimestamps();
+        return $this->belongsToMany(Company::class)->using(CompanyHealthProfessional::class)->withPivot('authorization', 'billing_company_id')->withTimestamps();
     }
 
     /**
@@ -122,6 +122,15 @@ class HealthProfessional extends Model implements Auditable
                 'roles' => $user->roles,
             ];
         }
+    }
+
+    public function getCompaniesProvidersAttribute()
+    {
+        $records = [];
+        foreach ($this->companies ?? [] as $key => $company) {
+            array_push($records, $company->pivot);
+        }
+        return $records;
     }
 
     public function scopeSearch($query, $search)

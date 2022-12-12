@@ -12,6 +12,7 @@
 - [Change status health professional](#change-status-health-professional)
 - [Get list health professional types](#get-list-health-professional-types)
 - [Get list doctor authorizations](#get-list-authorization)
+- [Update company providers](#update-providers)
 
 
 <a name="basic-data"></a>
@@ -29,6 +30,7 @@
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 | 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
 | 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
+| 10 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
 
 
 
@@ -944,3 +946,81 @@
 ```
 
 #
+
+<a name="update-providers"></a>
+## Update Company / Providers
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+### Body request example
+
+```json
+{
+    "companies": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "company_id": 2,
+            "authorization": [1,2] /** Optional, only required if type health professional is doctor */
+        }
+    ]
+}
+```
+
+## Response
+
+> {success} 200 Health Professional updated
+
+#
+
+```json
+{
+    "id": 3,
+    "npi": "123456719",
+    "user_id": 9,
+    "created_at": "2022-03-17T08:58:40.000000Z",
+    "updated_at": "2022-03-17T08:58:40.000000Z",
+    "user": {
+        "id": 9,
+        "email": "user1edit@gmail.com",
+        "email_verified_at": null,
+        "created_at": "2022-03-17T08:58:40.000000Z",
+        "updated_at": "2022-03-17T09:04:29.000000Z",
+        "token": "eyJpdiI6Impxa3V4RkV0MGN6REVkZitqT2dZb0E9PSIsInZhbHVlIjoiUHBac1ZxOW1kTWc0dElJVkJLcWxZRVgrdnk0SXJ3MmhkcFNWMnVBS1VNST0iLCJtYWMiOiI4NjZiZGY0MzMzY2VhODUxMTI1MzQ4ZWRhNDlkY2RlYzgzZjliOWQxZmU1M2YyMDhjYWJjYTk2MjIzN2UxMzUxIiwidGFnIjoiIn0=",
+        "isLogged": false,
+        "isBlocked": false,
+        "usercode": "US-00008-2022",
+        "userkey": "eyJpdiI6ImRvR0VHQjQvcCs2RmhCUnVYRlRGWFE9PSIsInZhbHVlIjoibk5FVTArb25iT2tjeWdwcmQraDVORllMQSt6d0p2SEVLK01mYStPekFFOD0iLCJtYWMiOiJjNGRiNTk0ZGUzOWMwYzVjN2Y1MzA2N2RhMThiNDYzNGMxZTcxZDA2MDBjMjg0ODExZWE3ZjVkOTlkMTU2OTU4IiwidGFnIjoiIn0=",
+        "status": false,
+        "last_login": null,
+        "profile_id": 9,
+        "billing_company_id": null,
+        "profile": {
+            "id": 9,
+            "ssn": "237891812",
+            "first_name": "Fisrt Name Edit",
+            "middle_name": "Middle Name",
+            "last_name": "Last Name",
+            "sex": "m",
+            "date_of_birth": "1990-11-11",
+            "avatar": null,
+            "credit_score": false,
+            "created_at": "2022-03-17T08:58:39.000000Z",
+            "updated_at": "2022-03-17T09:04:29.000000Z"
+        }
+    }
+}
+```
