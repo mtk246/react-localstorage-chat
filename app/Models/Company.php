@@ -58,7 +58,7 @@ class Company extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status'];
+    protected $appends = ['status', 'edit_name'];
 
     /**
      * The billingCompanies that belong to the company.
@@ -202,6 +202,15 @@ class Company extends Model implements Auditable
                 'roles' => $user->roles,
             ];
         }
+    }
+
+    public function getEditNameAttribute()
+    {
+        $names = $this->nicknames;
+        if (isset($names) && count($names) > 0) {
+            return true;
+        } else
+            return false;
     }
 
     /**

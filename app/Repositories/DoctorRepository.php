@@ -655,7 +655,9 @@ class DoctorRepository
                     $query->with(["taxonomies", "nicknames"]);
                 },
                 "healthProfessionalType",
-                "company"
+                "company" => function ($query) {
+                    $query->with(["taxonomies", "nicknames"]);
+                }
             ])->first();
         } else {
             $healthP = HealthProfessional::whereId($id)->with([
@@ -680,7 +682,14 @@ class DoctorRepository
                           ->with(["taxonomies", "nicknames"]);
                 },
                 "healthProfessionalType",
-                "company"
+                "company" => function ($query) use ($bC) {
+                    $query->with([
+                            "taxonomies",
+                            "nicknames" => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            }
+                        ]);
+                }
             ])->first();
         }
         return !is_null($healthP) ? $healthP : null;
