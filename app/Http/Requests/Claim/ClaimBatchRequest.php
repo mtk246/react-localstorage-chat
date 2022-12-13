@@ -26,6 +26,7 @@ class ClaimBatchRequest extends FormRequest
     {
         return [
             'name'               => ['required', 'string'],
+            'claims_reconciled'  => ['nullable', 'boolean'],
             'fake_transmission'  => ['nullable', 'boolean'],
             'company_id'         => ['required', 'integer'],
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],

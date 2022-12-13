@@ -22,7 +22,7 @@ class ClaimBatchRepository
     public function createBatch(array $data) {
         try {
             DB::beginTransaction();
-            $status = 'NOT SENT';
+            $status = 'Not submitted';
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
@@ -31,14 +31,15 @@ class ClaimBatchRepository
             }
 
             if (isset($data["send"])) {
-                $status = ($data["send"] == true) ? 'SENT' : 'NOT SENT';
+                $status = ($data["send"] == true) ? 'Submitted' : 'Not submitted';
             }
 
             $claimBatch = ClaimBatch::create([
                 "code"               => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClaimBatch::class, "code"),
                 "name"               => $data["name"],
                 "status"             => $status,
-                "shipping_date"      => ($status == 'NOT SENT') ? null : now(),
+                "shipping_date"      => ($status == 'Not submitted') ? null : now(),
+                "claims_reconciled"  => $data["claims_reconciled"] ?? false,
                 "fake_transmission"  => $data["fake_transmission"] ?? false,
                 "company_id"         => $data["company_id"],
                 "billing_company_id" => $billingCompany->id ?? $billingCompany,
@@ -146,7 +147,7 @@ class ClaimBatchRepository
             ])->whereId($id)->first();
         } else {
             $claimBatch = ClaimBatch::with([
-                "company" => function ($query) {
+                "company" => function ($query) use ($bC) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
                             $q->where('billing_company_id', $bC);
@@ -173,8 +174,8 @@ class ClaimBatchRepository
                 "claims"
             ]);
         } else {
-            $data = Claim::with([
-                "company" => function ($query) {
+            $data = ClaimBatch::with([
+                "company" => function ($query) use ($bC) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
                             $q->where('billing_company_id', $bC);
@@ -217,7 +218,7 @@ class ClaimBatchRepository
     public function updateBatch(array $data, int $id) {
         try {
             DB::beginTransaction();
-            $status = 'NOT SENT';
+            $status = 'Not submitted';
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
@@ -226,7 +227,7 @@ class ClaimBatchRepository
             }
 
             if (isset($data["send"])) {
-                $status = ($data["send"] == true) ? 'SENT' : 'NOT SENT';
+                $status = ($data["send"] == true) ? 'Submitted' : 'Not submitted';
             }
 
             $claimBatch = ClaimBatch::find($id);
@@ -234,7 +235,8 @@ class ClaimBatchRepository
             $claimBatch->update([
                 "name"               => $data["name"],
                 "status"             => $status,
-                "shipping_date"      => ($status == 'NOT SENT') ? null : now(),
+                "shipping_date"      => ($status == 'Not submitted') ? null : now(),
+                "claims_reconciled"  => $data["claims_reconciled"] ?? false,
                 "fake_transmission"  => $data["fake_transmission"] ?? false,
                 "company_id"         => $data["company_id"],
                 "billing_company_id" => $billingCompany->id ?? $billingCompany,

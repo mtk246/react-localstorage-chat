@@ -18,6 +18,7 @@ class ClaimBatch extends Model implements Auditable
         "status",
         "shipping_date",
         "fake_transmission",
+        "claims_reconciled",
         "company_id",
         "billing_company_id",
     ];
@@ -28,7 +29,9 @@ class ClaimBatch extends Model implements Auditable
      * @var array
      */
     protected $appends = [
-        'total_processed', 'claim_ids'
+        'total_processed', 'claim_ids', 'total_claims', 'total_accepted',
+        'total_denied', 'total_accepted_by_clearing_house', 'total_denied_by_clearing_house',
+        'total_accepted_by_payer', 'total_denied_by_payer'
     ];
 
     /**
@@ -63,7 +66,42 @@ class ClaimBatch extends Model implements Auditable
 
     public function getTotalProcessedAttribute()
     {
-        return '0';
+        return 0;
+    }
+
+    public function getTotalClaimsAttribute()
+    {
+        return count($this->claims ?? []);
+    }
+
+    public function getTotalAcceptedAttribute()
+    {
+        return 0;
+    }
+
+    public function getTotalDeniedAttribute()
+    {
+        return 0;
+    }
+
+    public function getTotalAcceptedByClearingHouseAttribute()
+    {
+        return 0;
+    }
+
+    public function getTotalDeniedByClearingHouseAttribute()
+    {
+        return 0;
+    }
+
+    public function getTotalAcceptedByPayerAttribute()
+    {
+        return 0;
+    }
+
+    public function getTotalDeniedByPayerAttribute()
+    {
+        return 0;
     }
 
     public function getclaimIdsAttribute()
