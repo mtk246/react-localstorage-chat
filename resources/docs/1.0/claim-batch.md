@@ -378,43 +378,30 @@
 
 ```json
 {
-    "id": 2,
-    "code": "CB-00002-2022",
-    "name": "Name batch",
+    "id": 3,
+    "code": "NABA-00001-22",
+    "name": "Name batch2",
     "status": "Not submitted",
     "shipping_date": null,
     "fake_transmission": false,
-    "claims_reconciled": false,
     "company_id": 1,
-    "billing_company_id": 1,
-    "created_at": "2022-12-06T11:32:00.000000Z",
-    "updated_at": "2022-12-06T11:32:00.000000Z",
-    "total_processed": "0",
+    "billing_company_id": 21,
+    "created_at": "2022-12-13T23:48:12.000000Z",
+    "updated_at": "2022-12-13T23:48:12.000000Z",
+    "claims_reconciled": false,
     "claim_ids": [
         1,
         2,
         3
     ],
-    "company": {
-        "id": 1,
-        "code": "CO-00001-2022",
-        "name": "Company First",
-        "npi": "2222222222",
-        "created_at": "2022-05-02T14:45:27.000000Z",
-        "updated_at": "2022-08-28T23:16:16.000000Z",
-        "status": false,
-        "nicknames": [
-            {
-                "id": 9,
-                "nickname": "Name New",
-                "nicknamable_type": "App\\Models\\Company",
-                "nicknamable_id": 1,
-                "billing_company_id": 10,
-                "created_at": "2022-10-25T11:32:37.000000Z",
-                "updated_at": "2022-10-25T11:32:37.000000Z"
-            }
-        ]
-    }
+    "total_processed": 0,
+    "total_claims": 3,
+    "total_accepted": 0,
+    "total_denied": 0,
+    "total_accepted_by_clearing_house": 0,
+    "total_denied_by_clearing_house": 0,
+    "total_accepted_by_payer": 0,
+    "total_denied_by_payer": 0,
 }
 ```
 
