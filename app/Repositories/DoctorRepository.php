@@ -659,7 +659,7 @@ class DoctorRepository
                 "company" => function ($query) {
                     $query->with(["taxonomies", "nicknames"]);
                 },
-                "privateNote",
+                "privateNotes",
                 "publicNote"
             ])->first();
         } else {
@@ -693,7 +693,7 @@ class DoctorRepository
                             }
                         ]);
                 },
-                "privateNote" => function ($query) use ($bC) {
+                "privateNotes" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "publicNote"

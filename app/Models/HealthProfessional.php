@@ -94,13 +94,13 @@ class HealthProfessional extends Model implements Auditable
     }
 
     /**
-     * HealthProfessional morphs one privateNote.
+     * Patient morphs many privateNotes.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function privateNote()
+    public function privateNotes()
     {
-        return $this->morphOne(PrivateNote::class, 'publishable');
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 
     public function getLastModifiedAttribute()
