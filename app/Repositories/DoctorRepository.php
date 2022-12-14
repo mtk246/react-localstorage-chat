@@ -229,7 +229,7 @@ class DoctorRepository
                 PublicNote::create([
                     'publishable_type'   => HealthProfessional::class,
                     'publishable_id'     => $healthP->id,
-                    'note'               => $data['private_note']
+                    'note'               => $data['public_note']
                 ]);
             }
 
@@ -409,8 +409,9 @@ class DoctorRepository
             if (isset($data['private_note'])) {
                 /** PrivateNote */
                 PrivateNote::updateOrCreate([
-                    'publishable_type' => HealthProfessional::class,
-                    'publishable_id'   => $healthP->id,
+                    'publishable_type'   => HealthProfessional::class,
+                    'publishable_id'     => $healthP->id,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
                 ], [
                     'note'             => $data['private_note'],
                 ]);
@@ -657,7 +658,9 @@ class DoctorRepository
                 "healthProfessionalType",
                 "company" => function ($query) {
                     $query->with(["taxonomies", "nicknames"]);
-                }
+                },
+                "privateNote",
+                "publicNote"
             ])->first();
         } else {
             $healthP = HealthProfessional::whereId($id)->with([
@@ -689,7 +692,11 @@ class DoctorRepository
                                 $q->where('billing_company_id', $bC);
                             }
                         ]);
-                }
+                },
+                "privateNote" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "publicNote"
             ])->first();
         }
         return !is_null($healthP) ? $healthP : null;
