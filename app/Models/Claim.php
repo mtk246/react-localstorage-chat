@@ -238,4 +238,9 @@ class Claim extends Model implements Auditable
         $status = $this->claimStatusClaims()->orderBy("created_at", "desc")->orderBy("id", "asc")->first();
         return (isset($status)) ? $status->created_at : '';
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query;
+    }
 }

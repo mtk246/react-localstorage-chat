@@ -107,6 +107,18 @@ class ClaimBatchRepository
                 }
             ]);
         }
+        if ($request->filterBy) {
+            if ($request->billing_company_id) {
+                $data = $data->whereHas("company", function ($query) use ($request) {
+                    $query->whereHas("billingCompanies", function ($q) use ($request) {
+                        $q->where('billing_company_id', $request->billing_company_id);
+                    });    
+                });
+            }
+            if ($request->company_id) {
+                $data = $data->where('company_id', $request->company_id);
+            }
+        }
 
         if (!empty($request->query('query')) && $request->query('query')!=="{}") {
             $data = $data->search($request->query('query'));
