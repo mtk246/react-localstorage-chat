@@ -155,7 +155,20 @@ class ClaimBatchRepository
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
-                "claims"
+                "claims" => function ($query) {
+                    $query->with([
+                        "insuranceCompany" => function ($query) {
+                            $query->with('nicknames');
+                        },
+                        "patient" => function ($query) {
+                            $query->with([
+                                "user" => function ($q) {
+                                    $q->with("profile");
+                                }
+                            ]);
+                        }
+                    ]);
+                }
             ])->whereId($id)->first();
         } else {
             $claimBatch = ClaimBatch::with([
@@ -166,7 +179,26 @@ class ClaimBatchRepository
                         }
                     ]);
                 },
-                "claims"
+                "claims" => function ($query) use ($bC) {
+                    $query->with([
+                        "insuranceCompany" => function ($query) use ($bC){
+                            $query->with([
+                                "nicknames" => function ($q) use ($bC) {
+                                    $q->where('billing_company_id', $bC);
+                                }
+                            ]);
+                        },
+                        "patient" => function ($query) use ($bC) {
+                            $query->with([
+                                "user" => function ($q) use ($bC) {
+                                    $q->with([
+                                        "profile"
+                                    ]);
+                                }
+                            ]);
+                        }
+                    ]);
+                }
             ])->whereId($id)->first();
         }
 

@@ -53,6 +53,16 @@ class Claim extends Model implements Auditable
     }
 
     /**
+     * Claim belongs to InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insuranceCompany()
+    {
+        return $this->belongsTo(InsuranceCompany::class);
+    }
+
+    /**
      * Claim belongs to Patient.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
