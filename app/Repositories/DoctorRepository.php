@@ -581,7 +581,8 @@ class DoctorRepository
                         "contacts"
                     ]);
                 },
-                "taxonomies"
+                "taxonomies",
+                "healthProfessionalType"
             ]);
         } else {
             $data = HealthProfessional::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -601,7 +602,8 @@ class DoctorRepository
                         },
                     ]);
                 },
-                "taxonomies"
+                "taxonomies",
+                "healthProfessionalType"
             ]);
         }
         
