@@ -188,6 +188,9 @@ class AuditController extends Controller
     {
         $model = toModel($entity);
         $record = $model::find($id);
+	if ($entity == 'claim-batch') {
+            $entity = 'claim/batch';
+        }
         
         if (isset($record)) {
             $auditables = Audit::where('url', 'like', '%/' . $entity . '/' . $id)
