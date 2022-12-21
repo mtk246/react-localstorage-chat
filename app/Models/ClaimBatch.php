@@ -110,7 +110,6 @@ class ClaimBatch extends Model implements Auditable
         foreach ($this->claims as $claim) {
             array_push($ids, $claim->id);
         }
-        unset($this->claims);
         return $ids;
     }
 
