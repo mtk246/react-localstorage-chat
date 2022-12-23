@@ -246,6 +246,25 @@ class AuthController extends Controller
             ])->first();
         }
         $perms = [];
+        $perms_v2 = [];
+        $menu_app = [
+            "Claims Process" => [
+                "Claims Management", "Payments Management", "Patient Management"
+            ],
+            "Administration" => [
+                "Health Care Professional Management", "Insurance Management", "Company Management",
+                "Facility Management", "Procedure Management", "Diagnosis Management", "Modifier Management",
+                "User Management", "Clearing House Management", "Billing Company Management"
+            ],
+            "Reports and statistics" => ["Reports"],
+            "Tools" => [
+                "File Manager", "Web Browser", "Sticky Notes", "Messenger", "Calculator", "Widgets"
+            ],
+            "System" => [
+                "Setting", "Profile", "Permission Management", "Role Management",
+                "Restriction by IP", "Technical Support", "Guidelines"
+            ]
+        ];
         foreach ($user->permissions->groupBy('module') as $module => $permissions) {
             $perms[strtolower($module)] = [];
             $perms[strtolower($module)]['create'] = false;
@@ -279,8 +298,25 @@ class AuthController extends Controller
                 }
             }
         }
+        foreach ($menu_app as $clasif => $apps) {
+            foreach ($apps as $app) {
+                if (isset($perms[strtolower($app)])) {
+                    $perms_v2[$clasif][$app] = $perms[strtolower($app)];
+                } else {
+                    $perms_v2[$clasif][$app] = [
+                        'create' => true,
+                        'view' => true,
+                        'show' => true,
+                        'edit' => true,
+                        'disable' => true,
+                        'history' => true,
+                    ];
+                }
+            }
+        }
         //unset($user['permissions']);
         $user->menu = $perms;
+        $user->menu_v2 = $perms_v2;
         $now = new \DateTime(Carbon::now());
         $lastActivity = new \DateTime($user->last_activity);
         $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()) - \strtotime($user->last_activity))*1000);
