@@ -16,6 +16,7 @@
 - [Get all facility types](#get-all-facility-types)
 - [Add to company](#add-to-company)
 - [Remove to company](#remove-to-company)
+- [Get list billing companies](#get-list-billing-companies)
 
 
 <a name="basic-data"></a>
@@ -37,6 +38,7 @@
 | 11 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
 | 12 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
 | 13 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
+| 14 |GET | `Get list billing companies`| `/facility/get-list-billing-companies`        |yes            |Get list billing companies|
 
 
 
@@ -75,12 +77,7 @@
     "companies": [1,2],
     "nickname":"alias facilityName",
     "billing_company_id": 1, /** Only required by superuser */
-    "facility_type": {
-        "id": 1,
-        "type": "01 - Clinics",
-        "created_at": "2022-04-07T20:50:55.000000Z",
-        "updated_at": "2022-04-07T20:50:55.000000Z"
-    },
+    "place_of_services": [1,2],
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -107,6 +104,7 @@
     },
     "contact":{
         "phone":"34324234",
+        "mobile":"34324234",
         "fax":"567674576457",
         "email":"facility@facility.com"
     }
@@ -133,6 +131,7 @@
     "code": "FA-00001-2022",
     "name": "facilityName",
     "npi": "123fac321",
+    "verified_on_nppes": true,
     "facility_type_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -169,6 +168,7 @@
         "facility_type_id": 1,
         "name": "facilityName",
         "npi": "123fac321",
+        "verified_on_nppes": true,
         "created_at": "2022-03-16T10:03:40.000000Z",
         "updated_at": "2022-03-16T10:03:40.000000Z",
         "code": "FA-00001-2022",
@@ -275,6 +275,7 @@
             "created_at": "2022-03-16T10:03:40.000000Z",
             "updated_at": "2022-03-16T10:03:40.000000Z",
             "code": "FA-00001-2022",
+            "verified_on_nppes": true,
             "status": false,
             "facility_type": {
                 "id": 1,
@@ -377,6 +378,7 @@
         "npi": "123fac321",
         "created_at": "2022-03-16T10:03:40.000000Z",
         "updated_at": "2022-03-16T10:03:40.000000Z",
+        "verified_on_nppes": true,
         "code": "FA-00001-2022",
         "status": false,
         "facility_type": {
@@ -472,6 +474,7 @@
     "npi": "123fac321",
     "created_at": "2022-03-16T10:03:40.000000Z",
     "updated_at": "2022-03-16T10:03:40.000000Z",
+    "verified_on_nppes": true,
     "code": "FA-00001-2022",
     "status": false,
     "facility_type": {
@@ -591,12 +594,7 @@
     "companies": [1,2],
     "nickname":"alias facilityName",
     "billing_company_id": 1, /** Only required by superuser */
-    "facility_type": {
-        "id": 1,
-        "type": "01 - Clinics",
-        "created_at": "2022-04-07T20:50:55.000000Z",
-        "updated_at": "2022-04-07T20:50:55.000000Z"
-    },
+    "place_of_services": [1,2],
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -623,6 +621,7 @@
     },
     "contact":{
         "phone":"34324234",
+        "mobile":"34324234",
         "fax":"567674576457",
         "email":"facility@facility.com"
     }
@@ -653,6 +652,7 @@
     "facility_type_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
+    "verified_on_nppes": true,
     "id": 1,
     "status": false
 }
@@ -726,6 +726,7 @@
     "npi": "1598094005",
     "created_at": "2022-03-17T23:36:20.000000Z",
     "updated_at": "2022-03-17T23:36:20.000000Z",
+    "verified_on_nppes": true,
     "code": "FA-00001-2022",
     "status": true,
     "facility_type": {
@@ -827,6 +828,7 @@
     "facility_type_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
+    "verified_on_nppes": true,
     "id": 1,
     "status": true
 }
@@ -934,6 +936,7 @@
     "facility_type_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
+    "verified_on_nppes": true,
     "id": 1,
     "status": true
 }
@@ -974,6 +977,7 @@
     "facility_type_id": 1,
     "updated_at": "2022-03-16T10:03:40.000000Z",
     "created_at": "2022-03-16T10:03:40.000000Z",
+    "verified_on_nppes": true,
     "id": 1,
     "status": true
 }
@@ -982,3 +986,42 @@
 #
 
 >{warning} 404 error remove facility to company
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```

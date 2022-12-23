@@ -54,6 +54,7 @@ class Facility extends Model implements Auditable
         "name",
         "npi",
         "facility_type_id",
+        "nppes_verified_at",
     ];
 
     /**
@@ -61,7 +62,7 @@ class Facility extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'last_modified'];
+    protected $appends = ['status', 'last_modified', 'verified_on_nppes'];
 
     /**
      * Facility belongs to FacilityType.
@@ -110,7 +111,7 @@ class Facility extends Model implements Auditable
      */
     public function placeOfServices(): BelongsToMany
     {
-        return $this->belongsToMany(PlaceOfService::class)->withTimestamps();
+        return $this->belongsToMany(PlaceOfService::class)->withTimestamps()->withPivot('billing_company_id');
     }
 
     /**
@@ -164,6 +165,11 @@ class Facility extends Model implements Auditable
         $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return false;
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
+    }
+
+    public function getVerifiedOnNppesAttribute()
+    {
+        return isset($this->nppes_verified_at) ? true : false;
     }
 
     public function getLastModifiedAttribute()
