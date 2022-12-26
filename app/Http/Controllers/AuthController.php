@@ -254,7 +254,7 @@ class AuthController extends Controller
             "Administration" => [
                 "Health Care Professional Management", "Insurance Management", "Company Management",
                 "Facility Management", "Procedure Management", "Diagnosis Management", "Modifier Management",
-                "User Management", "Clearing House Management", "Billing Company Management"
+                "User Management", "Clearing House Management", "Billing Company Management", "Status Management",
             ],
             "Reports and statistics" => ["Reports"],
             "Tools" => [
@@ -293,15 +293,24 @@ class AuthController extends Controller
                     $perms[strtolower($module)]['show'] = true;
                 } else if (str_contains(strtolower($permission->name), 'edit')) {
                     $perms[strtolower($module)]['edit'] = true;
+                } else if (str_contains(strtolower($permission->name), 'disable')) {
+                    $perms[strtolower($module)]['disable'] = true;
                 } else {
                     $perms[strtolower($module)][strtolower($permission->name)] = true;
                 }
             }
         }
+        if (auth()->user()->hasRole('billingmanager')) {
+            $perms['my billing company management'] = $perms['billing company management'];
+        }
         foreach ($menu_app as $clasif => $apps) {
             foreach ($apps as $app) {
                 if (isset($perms[strtolower($app)])) {
-                    $perms_v2[$clasif][$app] = $perms[strtolower($app)];
+                    if (auth()->user()->hasRole('billingmanager') && $app == "Billing Company Management") {
+                        $perms_v2[$clasif]["My Billing Company Management"] = $perms['my billing company management'];
+                    } else {
+                        $perms_v2[$clasif][$app] = $perms[strtolower($app)];
+                    }
                 } else {
                     $perms_v2[$clasif][$app] = [
                         'create' => true,
@@ -313,6 +322,9 @@ class AuthController extends Controller
                     ];
                 }
             }
+        }
+        if (auth()->user()->hasRole('billingmanager')) {
+            unset($perms['billing company management']);
         }
         //unset($user['permissions']);
         $user->menu = $perms;

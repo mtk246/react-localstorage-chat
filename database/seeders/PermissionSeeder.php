@@ -760,6 +760,48 @@ class  PermissionSeeder extends Seeder
                 'constraint' => 'diagnosis.view',
                 'description' => 'Validity Period Diagnosis'
             ],
+            [
+                'name' => 'View Status',
+                'slug' => 'status.view',
+                'module' => 'Status Management',
+                'constraint' => '',
+                'description' => 'View Status'
+            ],
+            [
+                'name' => 'Create Status',
+                'slug' => 'status.create',
+                'module' => 'Status Management',
+                'constraint' => 'status.view',
+                'description' => 'Create Status'
+            ],
+            [
+                'name' => 'Show Status',
+                'slug' => 'status.show',
+                'module' => 'Status Management',
+                'constraint' => 'status.view',
+                'description' => 'Show Status'
+            ],
+            [
+                'name' => 'Edit Status',
+                'slug' => 'status.edit',
+                'module' => 'Status Management',
+                'constraint' => 'status.show',
+                'description' => 'Edit Status'
+            ],
+            [
+                'name' => 'Disable Status',
+                'slug' => 'status.disable',
+                'module' => 'Status Management',
+                'constraint' => 'status.show',
+                'description' => 'Disable Status'
+            ],
+            [
+                'name' => 'View a Status Change History',
+                'slug' => 'status.history',
+                'module' => 'Status Management',
+                'constraint' => 'status.show',
+                'description' => 'View a Status Change History'
+            ],
         ];
 
         $defaultPermissions = [
@@ -854,6 +896,12 @@ class  PermissionSeeder extends Seeder
                 'modifier.edit',
                 'modifier.disable',
                 'modifier.history',
+                'status.view',
+                'status.create',
+                'status.show',
+                'status.edit',
+                'status.disable',
+                'status.history',
             ],
             'billingmanager' => [
                 'permission.manage.user',
@@ -947,6 +995,12 @@ class  PermissionSeeder extends Seeder
                 'modifier.edit',
                 'modifier.disable',
                 'modifier.history',
+                'status.view',
+                'status.create',
+                'status.show',
+                'status.edit',
+                'status.disable',
+                'status.history',
             ],
             'biller' => [
                 'setting.profile.show',
