@@ -4,9 +4,10 @@ namespace App\Http\Requests\ClaimSubStatus;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\IUnique;
 use App\Models\ClaimSubStatus;
 
-class ClaimSubStatusRequest extends FormRequest
+class ClaimSubStatusUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +27,8 @@ class ClaimSubStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'                     => ['required', 'string'],
-            'name'                     => ['required', 'string'],
+            'code'                     => ['required', 'string', 'max:20'],
+            'name'                     => ['required', 'string', 'max:50'],
             'description'              => ['nullable', 'string'],
             'claim_statuses'           => ['required', 'array'],
             'billing_companies'        => ['nullable', 'array'],

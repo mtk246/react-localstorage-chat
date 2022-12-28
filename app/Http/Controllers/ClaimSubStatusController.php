@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClaimSubStatus\ClaimSubStatusRequest;
+use App\Http\Requests\ClaimSubStatus\ClaimSubStatusCreateRequest;
+use App\Http\Requests\ClaimSubStatus\ClaimSubStatusUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ClaimSubStatusRepository;
 use App\Models\ClaimSubStatus;
@@ -23,7 +24,7 @@ class ClaimSubStatusController extends Controller
      * @param ClaimSubStatusRequest $request
      * @return JsonResponse
      */
-    public function createClaimSubStatus(ClaimSubStatusRequest $request): JsonResponse
+    public function createClaimSubStatus(ClaimSubStatusCreateRequest $request): JsonResponse
     {
         $rs = $this->claimSubStatusRepository->createClaimSubStatus($request->validated());
 
@@ -56,7 +57,7 @@ class ClaimSubStatusController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function updateClaimSubStatus(ClaimSubStatusRequest $request,int $id): JsonResponse
+    public function updateClaimSubStatus(ClaimSubStatusUpdateRequest $request,int $id): JsonResponse
     {
         $rs = $this->claimSubStatusRepository->updateClaimSubStatus($request->validated(), $id);
 
