@@ -27,8 +27,8 @@ class ClaimSubStatusUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'                     => ['required', 'string', 'max:20'],
-            'name'                     => ['required', 'string', 'max:50'],
+            'code'                     => ['required', 'string', 'max:20', new IUnique(ClaimSubStatus::class, 'code', $this->id)],
+            'name'                     => ['required', 'string', 'max:50', new IUnique(ClaimSubStatus::class, 'name', $this->id)],
             'description'              => ['nullable', 'string'],
             'claim_statuses'           => ['required', 'array'],
             'billing_companies'        => ['nullable', 'array'],
