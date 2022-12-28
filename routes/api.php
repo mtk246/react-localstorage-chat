@@ -279,6 +279,11 @@ Route::prefix("v1")/*->middleware('audit')*/
         'role:superuser|biller|billingmanager',
     ])->group(function(){
         Route::get("/get-all-server",[\App\Http\Controllers\PatientController::class,'getServerAll']);
+        Route::get("/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}", [\App\Http\Controllers\PatientController::class,'search']);
+        Route::get("/get-list",[\App\Http\Controllers\PatientController::class,"getList"]);
+        Route::get("/get-list-marital-status",[\App\Http\Controllers\PatientController::class,"getListMaritalStatus"]);
+        Route::get("/get-list-address-type",[\App\Http\Controllers\PatientController::class,"getListAddressType"]);
+        Route::get("/get-list-insurance-policy-type",[\App\Http\Controllers\PatientController::class,"getListInsurancePolicyType"]);
         Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
         Route::get("/get-by-ssn/{ssn}",[\App\Http\Controllers\PatientController::class,"getBySsn"]);
@@ -429,6 +434,31 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::put("/verify-register/{id}", [\App\Http\Controllers\ClaimController::class,"verifyAndRegister"]);
 
         Route::patch("/change-status/{id}",[\App\Http\Controllers\ClaimController::class,"changeStatus"]);
+    });
+
+    Route::prefix("claim-sub-status")->middleware([
+        "auth:api",
+        'role:superuser|biller|billingmanager',
+    ])->group(function() {
+        Route::get("/get-all-server",[\App\Http\Controllers\ClaimSubStatusController::class,'getServerAll'])->middleware(['auth:api']);
+        Route::get("/get-list",[\App\Http\Controllers\ClaimSubStatusController::class,"getList"]);
+        Route::get("/get-list-status",[\App\Http\Controllers\ClaimSubStatusController::class,"getListStatus"]);
+        Route::post("/",[\App\Http\Controllers\ClaimSubStatusController::class,'createClaimSubStatus'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/{id}",[\App\Http\Controllers\ClaimSubStatusController::class,'getOneClaimSubStatus'])->middleware([
+            "auth:api",
+        ]);
+        Route::get("/get-by-name/{name}",[\App\Http\Controllers\ClaimSubStatusController::class,'getByName'])->middleware([
+            "auth:api",
+        ]);
+        Route::put("/{id}",[\App\Http\Controllers\ClaimSubStatusController::class,'updateClaimSubStatus'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/change-status/{id}",[\App\Http\Controllers\ClaimSubStatusController::class,'changeStatus'])->middleware([
+            "auth:api",
+        ]);
+
     });
 
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);

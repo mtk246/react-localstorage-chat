@@ -57,5 +57,8 @@
 - ## Claim Batch
     - [Claim Batch](/{{route}}/{{version}}/claim-batch)
 
+- ## Claim Sub-status
+    - [Claim Sub-status](/{{route}}/{{version}}/claim-sub-status)
+
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)

@@ -11,7 +11,7 @@ class ClaimStatus extends Model
     use HasFactory;
 
     protected $fillable = [
-        "status"
+        "status", "background_color", "font_color"
     ];
 
     /**
