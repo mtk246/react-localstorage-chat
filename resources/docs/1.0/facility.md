@@ -13,7 +13,8 @@
 - [Get facility by name](#get-facility-by-name)
 - [Get one facility by npi](#get-one-facility-by-npi)
 - [Add to billing company](#add-to-billing-company)
-- [Get all facility types](#get-all-facility-types)
+- [Get list facility types](#get-list-facility-types)
+- [Get list place of services](#get-list-place-of-services)
 - [Add to company](#add-to-company)
 - [Remove to company](#remove-to-company)
 - [Get list billing companies](#get-list-billing-companies)
@@ -35,10 +36,11 @@
 | 8 |GET | `Get Facility by name`          | `/facility/{id}/get-by-name`|yes|get by facility|
 | 9 |GET | `Get Facility by npi`          | `/facility/get-by-npi/{npi}`|yes|get  facility by npy |
 | 10 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
-| 11 |GET | `Get all facility types`| `/facility/get-facility-types`        |yes            |Get all facility types|
-| 12 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
-| 13 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
-| 14 |GET | `Get list billing companies`| `/facility/get-list-billing-companies`        |yes            |Get list billing companies|
+| 11 |GET | `Get list facility types`| `/facility/get-list-facility-types`        |yes            |Get list facility types|
+| 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
+| 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
+| 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
+| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies`        |yes            |Get list billing companies|
 
 
 
@@ -838,8 +840,8 @@
 
 >{warning} 404 error add facility to billing company
 
-<a name="get-all-facility-types"></a>
-## Get All Facility Types
+<a name="get-list-facility-types"></a>
+## Get list facility types
 
 
 ### Param in header
@@ -852,7 +854,7 @@
 
 ## Response
 
-> {success} 200 Facility Types found
+> {success} 200 Facility types found
 
 #
 
@@ -901,6 +903,185 @@
     {
         "id": 11,
         "name": "SN - Skilled Nursing Facility"
+    }
+]
+```
+
+<a name="get-list-place-of-services"></a>
+## Get list place of services
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Place of services found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "03 - School"
+    },
+    {
+        "id": 2,
+        "name": "04 - Homeless Shelter"
+    },
+    {
+        "id": 3,
+        "name": "05 - Indian Health Service Free-Standing Facility"
+    },
+    {
+        "id": 4,
+        "name": "06 - Indian Health Service Provider-Based Facility"
+    },
+    {
+        "id": 5,
+        "name": "07 - Tribal 638 Free-Standing Facility"
+    },
+    {
+        "id": 6,
+        "name": "08 - Tribal 638 Provider Based-Facility"
+    },
+    {
+        "id": 7,
+        "name": "11 - Office Visit"
+    },
+    {
+        "id": 8,
+        "name": "12 - Home"
+    },
+    {
+        "id": 9,
+        "name": "13 - Assisted Living"
+    },
+    {
+        "id": 10,
+        "name": "14 - Group Home"
+    },
+    {
+        "id": 11,
+        "name": "15 - Mobile Unit"
+    },
+    {
+        "id": 12,
+        "name": "20 - Urgent Care Facility"
+    },
+    {
+        "id": 13,
+        "name": "21 - Inpatient Hospital"
+    },
+    {
+        "id": 14,
+        "name": "22 - Outpatient Hospital"
+    },
+    {
+        "id": 15,
+        "name": "23 - Emergency Room"
+    },
+    {
+        "id": 16,
+        "name": "24 - Ambulatory Surgical Center"
+    },
+    {
+        "id": 17,
+        "name": "25 - Birthing Center"
+    },
+    {
+        "id": 18,
+        "name": "26 - Military Treatment Facility"
+    },
+    {
+        "id": 19,
+        "name": "31 - Skilled Nursing Facility"
+    },
+    {
+        "id": 20,
+        "name": "32 - Nursing Facility"
+    },
+    {
+        "id": 21,
+        "name": "33 - Custodial Care Facility"
+    },
+    {
+        "id": 22,
+        "name": "34 - Hospice"
+    },
+    {
+        "id": 23,
+        "name": "41 - Ambulance - Land"
+    },
+    {
+        "id": 24,
+        "name": "42 - Ambulance - Air or Water"
+    },
+    {
+        "id": 25,
+        "name": "50 - Federally Qualified Health Center"
+    },
+    {
+        "id": 26,
+        "name": "51 - Inpatient Psychiatric Facility"
+    },
+    {
+        "id": 27,
+        "name": "52 - Psychiatric Facility Partial Hospitalization"
+    },
+    {
+        "id": 28,
+        "name": "53 - Community Mental Health Center"
+    },
+    {
+        "id": 29,
+        "name": "54 - Intermediate Care Facility"
+    },
+    {
+        "id": 30,
+        "name": "55 - Residential Substance Abuse Treatment Facility"
+    },
+    {
+        "id": 31,
+        "name": "56 - Psychiatric Residential Treatment Center"
+    },
+    {
+        "id": 32,
+        "name": "60 - Mass Immunization Center"
+    },
+    {
+        "id": 33,
+        "name": "61 - Comprehensive Inpatient Rehab Facility"
+    },
+    {
+        "id": 34,
+        "name": "62 - Comprehensive Outpatient Rehab Facility"
+    },
+    {
+        "id": 35,
+        "name": "65 - End Stage Renal Disease Treatment Facility"
+    },
+    {
+        "id": 36,
+        "name": "71 - State or Local Public Health Clinic"
+    },
+    {
+        "id": 37,
+        "name": "2  - Rural Health Clinic"
+    },
+    {
+        "id": 38,
+        "name": "81 - Independent Laboratory"
+    },
+    {
+        "id": 39,
+        "name": "99 - Other Unlisted Facility"
     }
 ]
 ```

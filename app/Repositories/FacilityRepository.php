@@ -104,7 +104,7 @@ class FacilityRepository
     /**
      * @return FacilityType[]|Collection
      */
-    public function getAllFacilityTypes() {
+    public function getListFacilityTypes() {
         $records = FacilityType::all();
         /** Inicia la opción vacia por defecto */
         $options = [];
