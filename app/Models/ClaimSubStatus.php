@@ -119,4 +119,17 @@ class ClaimSubStatus extends Model implements Auditable
         );
     }
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "") {
+            return $query->whereHas('billingCompanies', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereHas('claimStatuses', function ($q) use ($search) {
+                            $q->whereRaw('LOWER(status) LIKE (?)', [strtolower("%$search%")]);
+                        })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+        }
+
+        return $query;
+    }
 }
