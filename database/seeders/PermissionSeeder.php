@@ -900,7 +900,6 @@ class  PermissionSeeder extends Seeder
                 'status.create',
                 'status.show',
                 'status.edit',
-                'status.disable',
                 'status.history',
             ],
             'billingmanager' => [
@@ -1197,7 +1196,7 @@ class  PermissionSeeder extends Seeder
                         'description' => $permission['description']
                     ]
                 );
-                if ($superUserRole) {
+                if ($superUserRole && in_array($permission['slug'], $defaultPermissions['superuser'])) {
                     $superUserRole->attachPermission($per);
                 }
                 if ($billingManagerRole && in_array($permission['slug'], $defaultPermissions['billingmanager'])) {
