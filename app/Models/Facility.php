@@ -159,9 +159,9 @@ class Facility extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function nicknames()
+    public function abbreviations()
     {
-        return $this->morphMany(EntityNickname::class, 'nicknamable');
+        return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
     }
 
      /*
