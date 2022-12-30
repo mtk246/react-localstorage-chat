@@ -27,11 +27,13 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'             => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
-            'npi'              => ['required', 'string'],
-            'facility_type_id' => ['required', 'integer'],
-            'companies'        => ['required', 'array'],
-            'nickname'         => ['sometimes', 'string'],
+            'name'                 => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
+            'npi'                  => ['required', 'string'],
+            'facility_type_id'     => ['required', 'integer'],
+            'companies'            => ['required', 'array'],
+            'nickname'             => ['nullable', 'string'],
+            'abbreviation'         => ['required', 'string', 'max:20'],
+            'place_of_services'    => ['nullable', 'array'],
 
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
 
@@ -47,7 +49,8 @@ class UpdateFacilityRequest extends FormRequest
             'address.zip'           => ['required', 'string'],
             
             'contact'               => ['required', 'array'],
-            'contact.phone'         => ['required', 'string'],
+            'contact.phone'         => ['nullable', 'string'],
+            'contact.mobile'        => ['nullable', 'string'],
             'contact.fax'           => ['nullable', 'string'],
             'contact.email'         => ['required', 'email:rfc']
         ];

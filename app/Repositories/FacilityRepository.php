@@ -9,6 +9,7 @@ use App\Models\Taxonomy;
 use App\Models\Facility;
 use App\Models\FacilityType;
 use App\Models\EntityNickname;
+use App\Models\EntityAbbreviation;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -80,6 +81,15 @@ class FacilityRepository
                 ]);
             }
 
+            if (isset($data['abbreviation'])) {
+                EntityAbbreviation::create([
+                    'abbreviation'       => $data['abbreviation'],
+                    'abbreviable_id'     => $facility->id,
+                    'abbreviable_type'   => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            }
+
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $facility->id;
@@ -125,6 +135,7 @@ class FacilityRepository
                 "addresses",
                 "contacts",
                 "nicknames",
+                "abbreviations",
                 "companies",
                 "facilityType"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -139,6 +150,9 @@ class FacilityRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
                     "companies",
@@ -159,6 +173,7 @@ class FacilityRepository
                 "addresses",
                 "contacts",
                 "nicknames",
+                "abbreviations",
                 "companies",
                 "facilityType"
             ])->whereHas('companies', function ($query) use ($company_id) {
@@ -173,6 +188,9 @@ class FacilityRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
                     "companies",
@@ -195,6 +213,7 @@ class FacilityRepository
                 "addresses",
                 "contacts",
                 "nicknames",
+                "abbreviations",
                 "companies",
                 "facilityType",
                 "billingCompanies"
@@ -210,6 +229,9 @@ class FacilityRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
                     "companies",
@@ -258,6 +280,7 @@ class FacilityRepository
                 "companies",
                 "billingCompanies",
                 "nicknames",
+                "abbreviations",
                 "facilityType",
                 "placeOfServices"
             ])->first();
@@ -271,6 +294,9 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "nicknames" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "abbreviations" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
                 "companies",
@@ -360,6 +386,16 @@ class FacilityRepository
                 ]);
             }
 
+            if (isset($data['abbreviation'])) {
+                EntityAbbreviation::updateOrCreate([
+                    'abbreviable_id'     => $facility->id,
+                    'abbreviable_type'   => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'abbreviation'           => $data['abbreviation'],
+                ]);
+            }
+
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
                     "billing_company_id" => $billingCompany->id ?? $billingCompany,
@@ -379,10 +415,13 @@ class FacilityRepository
             DB::commit();
             $bC = auth()->user()->billing_company_id ?? null;
             if (!$bC) {
-                return Facility::whereId($id)->with(["nicknames", "companies"])->first();
+                return Facility::whereId($id)->with(["nicknames", "abbreviations", "companies"])->first();
             } else {
                 return Facility::whereId($id)->with([
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
                     "companies"
@@ -414,7 +453,7 @@ class FacilityRepository
         return !is_null($facility) ? $facility : null;
     }
 
-    public function getListBillingCompanies() {
+    public function getListBillingCompanies(int $facilityId) {
         return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities']);
     }
 

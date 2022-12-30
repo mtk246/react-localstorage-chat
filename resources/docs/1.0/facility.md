@@ -40,7 +40,7 @@
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
 | 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
-| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies`        |yes            |Get list billing companies|
+| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies/{facilityId?}`        |yes            |Get list billing companies|
 
 
 
@@ -78,6 +78,7 @@
     "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
+    "abbreviation":"ABBFAC",
     "billing_company_id": 1, /** Only required by superuser */
     "place_of_services": [1,2],
     "taxonomies": [
@@ -595,6 +596,7 @@
     "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
+    "abbreviation":"ABBFAC",
     "billing_company_id": 1, /** Only required by superuser */
     "place_of_services": [1,2],
     "taxonomies": [
@@ -1177,6 +1179,13 @@
 ```json
 {
     "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "facility_id": <integer>
 }
 ```
 

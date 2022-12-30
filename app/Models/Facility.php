@@ -154,6 +154,16 @@ class Facility extends Model implements Auditable
         return $this->morphMany(EntityNickname::class, 'nicknamable');
     }
 
+    /**
+     * Facility morphs many EntityAbbreviations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function nicknames()
+    {
+        return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
      /*
      * Get the insuranceCompany's status.
      *
