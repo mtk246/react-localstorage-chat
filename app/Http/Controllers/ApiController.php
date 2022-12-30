@@ -52,12 +52,12 @@ class ApiController extends Controller
                 $mailingAddress = $r->addresses[0];
             }
             $r->contact = [
-                'phone'   => $mailingAddress->telephone_number,
+                'phone'   => $mailingAddress->telephone_number ?? '',
                 'email'   => '',
-                'address' => $mailingAddress->address_1,
-                'country' => $mailingAddress->country_name,
-                'city'    => $mailingAddress->city,
-                'state'   => $mailingAddress->state,
+                'address' => $mailingAddress->address_1 ?? '',
+                'country' => $mailingAddress->country_name ?? '',
+                'city'    => $mailingAddress->city ?? '',
+                'state'   => $mailingAddress->state ?? '',
             ];
 
             //unset($r->enumeration_type);
