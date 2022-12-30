@@ -127,6 +127,7 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     Route::prefix("clearing-house")->group(function(){
         Route::get("/get-all-server",[\App\Http\Controllers\ClearingHouseController::class,'getServerAll'])->middleware(['auth:api']);
+        Route::get("/get-list-transmission-formats",[\App\Http\Controllers\ClearingHouseController::class,'getListTransmissionFormats'])->middleware(['auth:api']);
         Route::post("/",[\App\Http\Controllers\ClearingHouseController::class,'createClearingHouse'])->middleware([
             "auth:api",
         ]);

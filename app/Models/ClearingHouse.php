@@ -41,7 +41,8 @@ class ClearingHouse extends Model implements Auditable
         "code",
         "name",
         "ack_required",
-        "org_type"
+        "org_type",
+        "transmission_format_id"
     ];
 
     /**
@@ -49,7 +50,17 @@ class ClearingHouse extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['last_mdified', 'status'];
+    protected $appends = ['last_modified', 'status'];
+
+    /**
+     * ClearingHouse belongs to TransmissionFormat.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function transmissionFormat(): BelongsTo
+    {
+        return $this->belongsTo(TransmissionFormat::class);
+    }
 
     /**
      * The billingCompanies that belong to the ClearingHouse.
@@ -89,6 +100,16 @@ class ClearingHouse extends Model implements Auditable
     public function nicknames()
     {
         return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
+    /**
+     * ClearingHouse morphs many EntityAbbreviations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function abbreviations()
+    {
+        return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
     }
 
     /**

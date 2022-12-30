@@ -11,6 +11,7 @@
 - [Get one Clearing house by name](#get-one-clearing-house-by-name)
 - [Change status Clearing house](#change-status-clearing-house)
 - [Add to billing company](#add-to-billing-company)
+- [Get list transmission formats](#get-list-transmission-formats)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -26,6 +27,7 @@
 | 6 |GET | `Get one Clearing house by name`           | `/clearing-house/get-by-name/{name}`|yes|Get one Clearing House by name|
 | 7 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
 | 8 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
+| 9 |GET | `Get list transmission formats`| `/clearing-house/get-list-transmission-formats`        |yes            |Get list transmission formats|
 
 
 
@@ -45,6 +47,8 @@
     "org_type":"222CH123",
     "ack_required":true,
     "nickname":"alias clearingName",
+    "abbreviation":"ABBCLEARING",
+    "transmission_format_id": 1,
     "billing_company_id": 1, /** Only required by superuser */
     "address": {
         "address":"address Clearing",
@@ -547,6 +551,8 @@
     "org_type":"222CH124",
     "ack_required":true,
     "nickname":"alias clearingName",
+    "abbreviation":"ABBCLEARING",
+    "transmission_format_id": 1,
     "billing_company_id": 1, /** Only required by superuser */
     "address": {
         "address":"address Clearing",
@@ -709,3 +715,34 @@
 #
 
 >{warning} 404 error add clearing house to billing company
+
+<a name="get-list-transmission-formats"></a>
+## Get list transmission formats
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Transmission formats found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "ANSI X12"
+    },
+    {
+        "id": 2,
+        "name": "JSON"
+    }
+]
+```

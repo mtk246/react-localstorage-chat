@@ -106,4 +106,11 @@ class ClearingHouseController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error add clearing house to billing company"), 404);
     }
+    
+    public function getListTransmissionFormats(): JsonResponse
+    {
+        return response()->json(
+            $this->clearingRepository->getListTransmissionFormats()
+        );
+    }
 }

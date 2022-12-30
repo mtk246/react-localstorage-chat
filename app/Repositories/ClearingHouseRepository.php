@@ -7,6 +7,8 @@ use App\Models\BillingCompany;
 use App\Models\ClearingHouse;
 use App\Models\Contact;
 use App\Models\EntityNickname;
+use App\Models\EntityAbbreviation;
+use App\Models\TransmissionFormat;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,10 +25,11 @@ class ClearingHouseRepository
         try {
             DB::beginTransaction();
             $clearing = ClearingHouse::create([
-                "code"         => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClearingHouse::class, "code"),
-                "name"         => $data["name"],
-                "org_type"     => $data["org_type"],
-                "ack_required" => $data["ack_required"]
+                "code"                   => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClearingHouse::class, "code"),
+                "name"                   => $data["name"],
+                "org_type"               => $data["org_type"],
+                "ack_required"           => $data["ack_required"],
+                "transmission_format_id" => $data["transmission_format_id"]
             ]);
             
             if (auth()->user()->hasRole('superuser')) {
@@ -43,6 +46,15 @@ class ClearingHouseRepository
                     'nickname'           => $data['nickname'],
                     'nicknamable_id'     => $clearing->id,
                     'nicknamable_type'   => ClearingHouse::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            }
+
+            if (isset($data['abbreviation'])) {
+                EntityAbbreviation::create([
+                    'abbreviation'       => $data['abbreviation'],
+                    'abbreviable_id'     => $clearing->id,
+                    'abbreviable_type'   => ClearingHouse::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
@@ -76,7 +88,8 @@ class ClearingHouseRepository
             $clearings = ClearingHouse::with([
                 "addresses",
                 "contacts",
-                "nicknames"
+                "nicknames",
+                "abbreviations"
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         } else {
             $clearings = ClearingHouse::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -89,6 +102,9 @@ class ClearingHouseRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
@@ -103,7 +119,8 @@ class ClearingHouseRepository
             $data = ClearingHouse::with([
                 "addresses",
                 "contacts",
-                "nicknames"
+                "nicknames",
+                "abbreviations"
             ]);
         } else {
             $data = ClearingHouse::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -116,6 +133,9 @@ class ClearingHouseRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ]);
@@ -158,7 +178,9 @@ class ClearingHouseRepository
                 "addresses",
                 "contacts",
                 "billingCompanies",
-                "nicknames"
+                "nicknames",
+                "abbreviations",
+                "transmissionFormat"
             ])->first();
         } else {
             $clearing = ClearingHouse::whereId($id)->with([
@@ -171,6 +193,10 @@ class ClearingHouseRepository
                 "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
+                "abbreviations" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "transmissionFormat",
                 "billingCompanies"
             ])->first();
         }
@@ -184,9 +210,10 @@ class ClearingHouseRepository
 
             $clearing = ClearingHouse::find($id);
             $clearing->update([
-                "name"         => $data["name"],
-                "org_type"     => $data["org_type"],
-                "ack_required" => $data["ack_required"]
+                "name"                   => $data["name"],
+                "org_type"               => $data["org_type"],
+                "ack_required"           => $data["ack_required"],
+                "transmission_format_id" => $data["transmission_format_id"]
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
@@ -289,5 +316,9 @@ class ClearingHouseRepository
             $clearingHouse->billingCompanies()->attach($billingCompany->id);
         }
         return $clearingHouse;
+    }
+
+    public function getListTransmissionFormats() {
+        return getList(TransmissionFormat::class, 'name');
     }
 }

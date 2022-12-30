@@ -30,7 +30,9 @@ class ClearinCreateRequest extends FormRequest
             'name'               => ['required', 'string', new IUnique(ClearingHouse::class, 'name')],
             'org_type'           => ['required', 'string'],
             'ack_required'       => ['required', 'boolean'],
-            'nickname'           => ['sometimes', 'string'],
+            'nickname'           => ['nullable', 'string'],
+            'transmission_format_id' => ['required', 'integer'],
+            'abbreviation'         => ['required', 'string', 'max:20'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             

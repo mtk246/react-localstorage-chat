@@ -31,6 +31,7 @@ class UpdateClearingHouse extends FormRequest
             'org_type'           => ['required', 'string'],
             'ack_required'       => ['required', 'boolean'],
             'nickname'           => ['sometimes', 'string'],
+            'transmission_format_id' => ['required', 'integer'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             
