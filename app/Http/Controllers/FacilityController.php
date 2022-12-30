@@ -36,7 +36,7 @@ class FacilityController extends Controller
     public function getListFacilityTypes(): JsonResponse
     {
         return response()->json(
-            $this->facilityRepository->getListFacilityTypes($facilityId)
+            $this->facilityRepository->getListFacilityTypes()
         );
     }
 
@@ -115,8 +115,8 @@ class FacilityController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error, facility not found"), 404);
     }
 
-    public function getListBillingCompanies(int $facilityId) {
-        $rs = $this->facilityRepository->getListBillingCompanies();
+    public function getListBillingCompanies(int $facilityId = null) {
+        $rs = $this->facilityRepository->getListBillingCompanies($facilityId);
 
         return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
     }
