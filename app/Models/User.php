@@ -164,16 +164,6 @@ class User extends Authenticatable implements JWTSubject, Auditable
     }
 
     /**
-     * User belongs to BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function billingCompany()
-    {
-        return $this->belongsTo(BillingCompany::class);
-    }
-
-    /**
      * User belongs to Profile.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

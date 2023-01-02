@@ -59,6 +59,7 @@ class Address extends Model implements Auditable
         "city",
         "state",
         "zip",
+        "address_type",
         "billing_company_id",
         "addressable_type",
         "addressable_id"
@@ -103,6 +104,19 @@ class Address extends Model implements Auditable
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function city(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
+
+    /**
+     * Interact with the user's addressType.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function addressType(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => upperCaseWords($value),

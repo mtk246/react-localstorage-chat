@@ -19,6 +19,10 @@
 - [Get policy to patient](#get-policy-to-patient)
 - [Get all policies to patient](#get-all-policies-to-patient)
 - [Get list type diags](#get-list-type-diags)
+- [Get list marital status](#get-list-marital-status)
+- [Get list address type](#get-list-address-type)
+- [Get list insurance policy type](#get-list-insurance-policy-type)
+- [Search](#search)
 
 
 
@@ -42,6 +46,11 @@
 | 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 | 14  |GET     | `Get list types diags`  | `/injury/get-list-type-diags`     | yes            | Get list type diags |
+| 15  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
+| 16  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
+| 17  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
+| 18|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
+
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
@@ -1875,3 +1884,242 @@
     }
 ]
 ```
+#
+
+<a name="get-list-marital-status"></a>
+## Get list marital status
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Marital status of patient found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Single"
+    },
+    {
+        "id": 2,
+        "name": "Married"
+    }
+]
+```
+
+#
+
+<a name="get-list-address-type"></a>
+## Get list address type
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Address type of patient found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Work"
+    },
+    {
+        "id": 2,
+        "name": "House / Residence"
+    },
+    {
+        "id": 3,
+        "name": "Other"
+    }
+]
+```
+
+#
+
+<a name="get-list-insurance-policy-type"></a>
+## Get list insurance policy type
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance policy type of patient found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Health"
+    },
+    {
+        "id": 2,
+        "name": "Auto"
+    },
+    {
+        "id": 3,
+        "name": "Work Comp"
+    },
+    {
+        "id": 4,
+        "name": "Industrial"
+    },
+    {
+        "id": 5,
+        "name": "Liability"
+    },
+    {
+        "id": 6,
+        "name": "Other"
+    }
+]
+```
+#
+
+
+<a name="search"></a>
+## Search
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`date_of_birth required string`
+`last_name     required string`
+`first_name    required string`
+`ssn           optional string  last 4 digits`
+
+## Example path
+
+>{primary} /search?date_of_birth=1990-11-11&last_name=Last Name&first_name=Fisrt Name&ssn=1812
+
+#
+
+>{success} 200 request made successfully
+
+```json
+[
+    {
+        "id": 1,
+        "driver_license": "driver license",
+        "user_id": 1,
+        "user": {
+            "id": 1,
+            "email": "user@billing.com",
+            "email_verified_at": null,
+            "created_at": "2022-03-14T20:49:19.000000Z",
+            "updated_at": "2022-03-15T08:59:12.000000Z",
+            "token": null,
+            "isLogged": true,
+            "isBlocked": false,
+            "usercode": "US-00001-2022",
+            "userkey": null,
+            "status": false,
+            "last_login": "2022-03-15 08:59:12",
+            "profile_id": 1,
+            "billing_company_id": null,
+            "profile": {
+                "ssn":"237891812",
+                "first_name":"Fisrt Name",
+                "last_name":"Last Name",
+                "middle_name":"Middle Name",
+                "sex":"m",
+                "date_of_birth":"1990-11-11",
+                "social_medias": [
+                    {
+                        "name": "nameSocialMedia1",
+                        "link": "URLSocialMedia1"
+                    },
+                    {
+                        "name": "nameSocialMedia2",
+                        "link": "URLSocialMedia2"
+                    }
+                ],
+                "created_at": "2022-04-26T20:50:38.000000Z",
+                "updated_at": "2022-07-20T12:42:12.000000Z",
+            },
+            "roles": [
+                {
+                    "id": 1,
+                    "name": "PATIENT",
+                    "guard_name": "api",
+                    "created_at": "2022-03-14T20:49:19.000000Z",
+                    "updated_at": "2022-03-14T20:49:19.000000Z",
+                    "pivot": {
+                        "model_id": 1,
+                        "role_id": 1,
+                        "model_type": "App\\Models\\User"
+                    }
+                }
+            ],
+            "addresses": [
+                {
+                    "id": 1,
+                    "address": "Singleton Rd",
+                    "city": "Calimesa",
+                    "state": "California",
+                    "zip": "923202207",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-14T20:49:20.000000Z",
+                    "updated_at": "2022-03-14T20:49:20.000000Z",
+                    "addressable_type": "App\\Models\\User",
+                    "addressable_id": 1
+                }
+            ],
+            "contacts": [
+                {
+                    "id": 1,
+                    "phone": "(740) 208-8506",
+                    "fax": "(918) 534-7718",
+                    "email": "dach.leopold@nikolaus.com",
+                    "billing_company_id": null,
+                    "created_at": "2022-03-14T20:49:20.000000Z",
+                    "updated_at": "2022-03-14T20:49:20.000000Z",
+                    "mobile": "218-885-3211",
+                    "contactable_type": "App\\Models\\User",
+                    "contactable_id": 1
+                }
+            ]
+
+        },
+        "created_at": "2022-03-17T20:45:39.000000Z",
+        "updated_at": "2022-03-17T20:45:39.000000Z"
+    }
+    
+]
+```
+#

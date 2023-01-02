@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PatientCreateRequest;
 use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
+use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Requests\Patient\PatientPolicyRequest;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
@@ -159,5 +160,55 @@ class PatientController extends Controller
         $rs = $this->patientRepository->editPolicy($request->validated(), $insurance_policy_id, $patient_id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, edit policy to patient"), 400);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getList(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getList()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListMaritalStatus(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getListMaritalStatus()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListAddressType(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getListAddressType()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListInsurancePolicyType(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getListInsurancePolicyType()
+        );
+    }
+
+    /**
+     * @param string $ssn
+     * @return JsonResponse
+     */
+    public function search(ValidateSearchRequest $request): JsonResponse
+    {
+        $rs = $this->patientRepository->search($request);
+        return ($rs) ? response()->json($rs) : response()->json(__("Error, patient not found"), 404);
     }
 }

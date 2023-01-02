@@ -58,7 +58,7 @@ class Company extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'edit_name'];
+    protected $appends = ['status', 'edit_name', 'last_modified'];
 
     /**
      * The billingCompanies that belong to the company.

@@ -62,7 +62,7 @@ class Patient extends Model implements Auditable
     protected $fillable = [
         "code",
         "driver_license",
-        "credit_score",
+        "marital_status_id",
         "user_id",
     ];
 
@@ -72,6 +72,16 @@ class Patient extends Model implements Auditable
      * @var array
      */
     protected $appends = ['status', 'last_modified'];
+
+    /**
+     * Patient belongs to MaritalStatus.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function maritalStatus()
+    {
+        return $this->belongsTo(MaritalStatus::class);
+    }
 
     /**
      * The billingCompanies that belong to the patient.

@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('private_notes', function (Blueprint $table) {
-            $table->foreignId('billing_company_id')->nullable()->change()->constrained()->onDelete('restrict')->onUpdate('cascade');
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->foreignId('address_type_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
         });
     }
 
@@ -25,9 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('private_notes', function (Blueprint $table) {
-            $table->dropForeign(['billing_company_id']);
-            $table->dropColumn('billing_company_id');
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->dropForeign(['address_type_id']);
+            $table->dropColumn('address_type_id');
         });
     }
 };

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePolicy;
+use App\Models\InsurancePolicyType;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\PatientConditionRelated;
@@ -22,8 +23,10 @@ use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\Address;
+use App\Models\AddressType;
 use App\Models\Contact;
 use App\Models\Marital;
+use App\Models\MaritalStatus;
 use App\Models\Guarantor;
 use App\Models\Employment;
 use App\Models\EmergencyContact;
@@ -1173,5 +1176,75 @@ class PatientRepository
         $patient = Patient::with("insurancePolicies")->find($patient_id);
         $insurancePolicies = $patient->insurancePolicies ?? [];
         return $insurancePolicies;
+    }
+
+    public function getList($id = null) {
+        //try {
+            if (auth()->user()->hasRole('superuser')) {
+                //$billingCompany = $data["billing_company_id"];
+            } else {
+                //$billingCompany = auth()->user()->billingCompanies->first();
+            }
+            $billingCompany = 1;
+            return Patient::whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+            })->get();
+            //return getList(Patient::class, ['code', '-', 'description'], ['relationship' => 'user.profile', 'where' =>]);
+        //} catch (\Exception $e) {
+            return [];
+        //}
+    }
+
+    public function getListMaritalStatus() {
+        try {
+            return getList(MaritalStatus::class);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+    
+    public function getListAddressType() {
+        try {
+            return getList(AddressType::class);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListInsurancePolicyType() {
+        try {
+            return getList(InsurancePolicyType::class);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function search(Request $request) {
+        $date_of_birth = $request->date_of_birth ?? '';
+        $first_name = upperCaseWords($request->first_name ?? '');
+        $last_name = upperCaseWords($request->last_name ?? '');
+        $ssn = $request->ssn ?? '';
+        $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
+
+        $patients = Patient::with([
+            "user" => function ($query) {
+                $query->with(["profile" => function ($q) {
+                        $q->with("socialMedias");
+                    },
+                    "roles",
+                    "addresses",
+                    "contacts",
+                    "billingCompanies"
+                ]);
+            }
+        ])->whereHas('user.profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+            $query->whereDateOfBirth($date_of_birth)
+                  ->where("first_name", "ilike", "%${first_name}%")
+                  ->where("last_name", "ilike", "%${last_name}%")
+                  ->where("ssn", "ilike", "%${ssn}")
+                  ->orWhere("ssn", "ilike", "%${ssnFormated}");
+        })->get();
+
+        return (count($patients) == 0) ? null : $patients;
     }
 }
