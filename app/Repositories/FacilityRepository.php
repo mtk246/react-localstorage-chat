@@ -454,7 +454,7 @@ class FacilityRepository
     }
 
     public function getListBillingCompanies(int $facilityId = null) {
-        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities']);
+        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities', 'orWhereHas' => ['relationship' => 'facilities', 'where' => ['facility_id' => $facilityId]]]);
     }
 
     /**

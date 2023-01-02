@@ -74,7 +74,15 @@ if (!function_exists('getList')) {
             } else if (isset($filters['not_exists'])) {
                 /** Filtra la información a obtener mediante relaciones */
                 $exists = $filters['not_exists'];
-                $records = $model::has($exists, 0)->where($filters['where'])->get();
+                if (isset($filters['orWhereHas'])) {
+                    $relationship = $filters['orWhereHas']['relationship'];
+                    $records = $model::has($exists, 0)->where($filters['where'])
+                                     ->orWhereHas($relationship, function ($q) use ($filters) {
+                                         $q->where($filters['orWhereHas']['where']);
+                                     })->where($filters['where'])->get();
+                } else {
+                    $records = $model::has($exists, 0)->where($filters['where'])->get();
+                }
             } else if (!isset($filters['relationship'])) {
                 $records = $model::where($filters)->get();
             } else {
