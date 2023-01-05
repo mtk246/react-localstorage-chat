@@ -319,6 +319,14 @@ class AuthController extends Controller
                         'disable' => true,
                         'history' => true,
                     ];
+                    $perms[strtolower($app)] = [
+                        'create' => false,
+                        'view' => true,
+                        'show' => true,
+                        'edit' => false,
+                        'disable' => false,
+                        'history' => false,
+                    ];
                 }
             }
         }
