@@ -16,9 +16,14 @@ class HealthProfessionalTypeSeeder extends Seeder
     public function run()
     {
         $healthProfessionalTypes = [
-            ['type' => 'Medical'],
-            ['type' => 'Male nurse'],
-            ['type' => 'Attendees']
+            ['type' => 'Medical doctor'],
+            ['type' => 'Nurse practitioners'],
+            ['type' => 'Physician assistants'],
+            ['type' => 'Certified nurse specialists trained in a particular field such as E/R, pediatric or diabetic nursing'],
+            ['type' => 'Certified nurse midwives'],
+            ['type' => 'Certified registered nurse anesthetists'],
+            ['type' => 'Clinical social worker'],
+            ['type' => 'Physical therapists'],
         ];
 
         foreach ($healthProfessionalTypes as $type) {

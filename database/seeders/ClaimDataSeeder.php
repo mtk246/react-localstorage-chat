@@ -36,8 +36,8 @@ class ClaimDataSeeder extends Seeder
             ['status' => 'Approved',                 'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
             ['status' => 'Rejected',                 'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
             ['status' => 'Denied',                   'background_color' => '#FFDEDC', 'font_color' => '#A72821'],
-            ['status' => 'Complete',                 'background_color' => '#D1FFE5', 'font_color' => '#1B6D49'],
-            ['status' => 'Appel',                    'background_color' => '#E3F8FF', 'font_color' => '#018ECC']
+            ['status' => 'Complete',                 'background_color' => '#D1FFE5', 'font_color' => '#1B6D49']
+            //['status' => 'Appel',                    'background_color' => '#E3F8FF', 'font_color' => '#018ECC']
         ];
 
         foreach ($claimStatus as $status) {
