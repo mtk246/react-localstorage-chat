@@ -62,30 +62,16 @@
 
 ```json
 {
-    "driver_license": "Driver License",
     "billing_company_id": 1, /** Only required by superuser */
-    "public_note": "Some note publics",
-    "private_note": "Some note privates",
-    "companies": [1,3],
-    "patient_private":{
-        "reference_num"     : "Ref-0001",
-        "med_num"           : "Med-001",
-        "patient_num"       : "Pat-001"
-    },
-    "patient_condition_related":{
-        "employment":     false,
-        "auto_accident":  false,
-        "place_state":    "placeStatePatient",
-        "other_accident": false
-    },
+    "driver_license": "Driver License", /** Optional */
     "profile": {
-        "ssn":"237891812",
-        "first_name":"Fisrt Name",
-        "last_name":"Last Name",
-        "middle_name":"Middle Name",
-        "sex":"m",
-        "date_of_birth":"1990-11-11",
-        "social_medias": [
+        "ssn":"237891812", /** Optional */
+        "first_name":"Fisrt Name", /** Required */
+        "last_name":"Last Name", /** Required */
+        "middle_name":"Middle Name", /** Optional */
+        "date_of_birth":"1990-11-11", /** Required */
+        "sex":"m", /** Optional */
+        "social_medias": [  /** Optional */
             {
                 "name": "nameSocialMedia1",
                 "link": "URLSocialMedia1"
@@ -96,98 +82,107 @@
             }
         ]
     },
-    "address": {
-        "address": "Direction address",
-        "city": "city address",
-        "state": "state address",
-        "zip": "123456789"
-    },
-    "contact": {
-        "phone": "04241234321",
-        "fax": "",
-        "mobile": "",
-        "email": "user@gmail.com"
-    },
-    "marital": {
+    "marital_status_id": 1, /** Optional */
+    "marital": { /** required if marital status maried */
         "spuse_name": "Spuse name",
         "spuse_work": "Spuse work",
         "spuse_work_phone": "Spuse phone"
 
     },
-    "guarantor": {
-        "name": "name",
-        "phone": "phone"
+    "company_id": 1, /** required */
+    "company_med_num": "0001", /** Optional */
+    "language": "en", /** Optional */
+
+    "contact": {
+        "phone": "04241234321", /** Optional */
+        "mobile": "", /** Optional */
+        "fax": "", /** Optional */
+        "email": "user@gmail.com" /** Required */
     },
-    "employments": [
+    "addresses": [
         {
-            "employer_name": "employer name",
-            "employer_address": "employer address",
-            "employer_phone": "employer phone",
-            "position": "patient position"
-        }
-    ],
-    "emergency_contacts": [
-        {
-            "name": "name emergency contact 1",
-            "cellphone": "cellphone emergency contacts 1",
-            "relationship": "relationship emergency contacts 1"
-        },
-        {
-            "name": "name emergency contact 2",
-            "cellphone": "cellphone emergency contacts 2",
-            "relationship": "relationship emergency contacts 2"
+            "address_type_id": 1, /** Required */
+            "address": "Direction address", /** Required */
+            "city": "city address", /** Required */
+            "state": "state address", /** Required */
+            "zip": "123456789" /** Required */
         }
     ],
     "insurance_policies": [
         {
-            "insurance_company": 1,
-            "insurance_plan": 1,
-            "policy_number": 12344,
-            "group_number": 1234, //optional
-            "eff_date": "2020-01-23",
-            "end_date": "2022-01-23",  //optional
-            "release_info": false,
-            "assign_benefits": false,
-            "own_insurance": true,
-            "subscriber": null
+            "policy_number": 12344, /** Required */
+            "group_number": 1234, /** Optional */
+            "insurance_company": 1, /** Required */
+            "insurance_plan": 1, /** Required */
+            "type_responsibility_id": 1, /** Required */
+            "insurance_policy_type_id": 1, /** Optional */
+            "eff_date": "2020-01-23", /** Optional */
+            "end_date": "2022-01-23", /** Optional */
+            "assign_benefits": false,  /** Required */
+            "release_info": false, /** Required */
+            "own_insurance": true, /** Required */
+            "subscriber": null /** Optional */
         },
         {
-            "insurance_company": 1,
-            "insurance_plan": 2,
-            "policy_number": 12344,
-            "group_number": 1234, //optional
-            "eff_date": "2020-01-23",
-            "end_date": "2022-01-23",  //optional
-            "release_info": false,
-            "assign_benefits": false,
-            "own_insurance": false,
+            "policy_number": 12344, /** Required */
+            "group_number": 1234, /** Optional */
+            "insurance_company": 1, /** Required */
+            "insurance_plan": 1, /** Required */
+            "type_responsibility_id": 1, /** Required */
+            "insurance_policy_type_id": 1, /** Optional */
+            "eff_date": "2020-01-23", /** Optional */
+            "end_date": "2022-01-23", /** Optional */
+            "assign_benefits": false,  /** Required */
+            "release_info": false, /** Required */
+            "own_insurance": true, /** Required */
             "subscriber": {
+                "relationship_id": 1, /** Optional */
                 "ssn": "ssn subscriber",
-                "first_name" : "firstName subscriber",
-                "last_name"  : "lastName subscriber",
+                "date_of_birth":"1990-11-11", /** Optional */
+                "first_name" : "firstName subscriber", /** Required */
+                "last_name"  : "lastName subscriber", /** Required */
                 "address": {
-                    "address": "Direction address subscriber",
-                    "city": "city address subscriber",
-                    "state": "state address subscriber",
-                    "zip": "123456789"
+                    "address": "Direction address subscriber", /** Optional */
+                    "city": "city address subscriber", /** Optional */
+                    "state": "state address subscriber", /** Optional */
+                    "zip": "123456789" /** Optional */
                 },
                 "contact": {
-                    "phone": "04241234321",
-                    "fax": "",
-                    "mobile": "",
-                    "email": "subscriber@gmail.com"
+                    "phone": "04241234321", /** Optional */
+                    "fax": "", /** Optional */
+                    "mobile": "", /** Optional */
+                    "email": "subscriber@gmail.com"  /** Optional */
                 }
             }
         }
     ],
-    "injuries": [
+    "guarantor": {
+        "name": "name", /** Optional */
+        "phone": "phone" /** Optional */
+    },
+    "emergency_contacts": [
         {
-            "diag_date": "2022-07-05",
-            "diagnosis_id": 1,
-            "type_diag_id": 1,
-            "public_note": "Note of injury"
+            "name": "name emergency contact 1", /** Optional */
+            "cellphone": "cellphone emergency contacts 1", /** Optional */
+            "relationship_id": 1 /** Optional */
+        },
+        {
+            "name": "name emergency contact 2", /** Optional */
+            "cellphone": "cellphone emergency contacts 2", /** Optional */
+            "relationship_id": 2 /** Optional */
         }
-    ]
+    ],
+    "employments": [
+        {
+            "employer_name": "employer name", /** Optional */
+            "employer_address": "employer address", /** Optional */
+            "employer_phone": "employer phone", /** Optional */
+            "position": "patient position" /** Optional */
+        }
+    ],
+    "public_note": "Some note publics",
+    "private_note": "Some note privates",
+    "save_as_draft": false
 }
 ```
 
