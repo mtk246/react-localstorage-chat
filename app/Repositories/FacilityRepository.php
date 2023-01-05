@@ -282,8 +282,52 @@ class FacilityRepository
                 "nicknames",
                 "abbreviations",
                 "facilityType",
-                "placeOfServices"
+                //"placeOfServices"
             ])->first();
+
+            $facility->load(["placeOfServices" => function ($query) use ($facility) {
+                $query->where("billing_company_id", $facility->billingCompanies->first()->id ?? null);
+            }]);
+            
+            foreach ($facility->billingCompanies as $facility_BC) {
+                if (isset($facility->nicknames)) {
+                    foreach ($facility->nicknames as $index => $nickname) {
+                        if ($nickname->billing_company_id == $facility_BC->id) {
+                            $facility_BC->index_nickname = $index;
+                        }
+                    }
+                }
+                if (isset($facility->addresses)) {
+                    foreach ($facility->addresses as $index => $address) {
+                        if ($address->billing_company_id == $facility_BC->id) {
+                            $facility_BC->index_address = $index;
+                        }
+                    }
+                }
+                if (isset($facility->contacts)) {
+                    foreach ($facility->contacts as $index => $contact) {
+                        if ($contact->billing_company_id == $facility_BC->id) {
+                            $facility_BC->index_contact = $index;
+                        }
+                    }
+                }
+                if (isset($facility->abbreviations)) {
+                    foreach ($facility->abbreviations as $index => $abbreviation) {
+                        if ($abbreviation->billing_company_id == $facility_BC->id) {
+                            $facility_BC->index_abbreviation = $index;
+                        }
+                    }
+                }
+                if (isset($facility->placeOfServices)) {
+                    $index_place_of_services = [];
+                    foreach ($facility->placeOfServices->toArray() as $index => $pos) {
+                        if ($pos["pivot"]["billing_company_id"] == $facility_BC->id) {
+                            array_push($index_place_of_services, $index);
+                        }
+                    }
+                    $facility_BC->index_place_of_services = $index_place_of_services;
+                }
+            }
         } else {
             $facility = Facility::whereId($id)->with([
                 "taxonomies",
@@ -351,19 +395,13 @@ class FacilityRepository
             }
 
             if (isset($data['place_of_services'])) {
+                $facility->placeOfServices()
+                         ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
+                
                 foreach ($data['place_of_services'] as $pos) {
-                    if (is_null($facility->placeOfServices()
-                            ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($pos))) {
-                        $facility->placeOfServices()->attach($pos, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        ]);
-                    } else {
-                        $facility->placeOfServices()
-                                 ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
-                                 ->updateExistingPivot($pos, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        ]);
-                    }
+                    $facility->placeOfServices()->attach($pos, [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]);
                 }
             }
             
