@@ -57,7 +57,7 @@ class ClaimSubStatusRepository
 
     public function getListStatus() {
         try {
-            return getList(ClaimStatus::class, ['status']);
+            return getList(ClaimStatus::class, ['status'], [], null, ['background_color']);
         } catch (\Exception $e) {
             return [];
         }
