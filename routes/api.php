@@ -463,6 +463,13 @@ Route::prefix("v1")/*->middleware('audit')*/
 
     });
 
+    Route::prefix("reports")->middleware([
+        "auth:api",
+        'role:superuser|billingmanager',
+    ])->group(function() {
+        Route::get("/get-sheet/{name?}",[\App\Http\Controllers\ReportController::class,"getSheet"]);
+    });
+
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });

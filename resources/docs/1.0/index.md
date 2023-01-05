@@ -62,3 +62,6 @@
 
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)
+
+- ## Report
+    - [Report](/{{route}}/{{version}}/report)
