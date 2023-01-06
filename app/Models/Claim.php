@@ -155,7 +155,7 @@ class Claim extends Model implements Auditable
     {
         return $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first()->claimStatus->status ?? 'Draft';
+                    ->orderBy("id", "asc")->first()->claimStatus ?? null;
     }
 
     /**
@@ -173,6 +173,8 @@ class Claim extends Model implements Auditable
             $record = [];
             $record['note']   = $status->privateNotes->note ?? '';
             $record['status'] = $status->claimStatus->status;
+            $record['status_background_color'] = $status->claimStatus->background_color;
+            $record['status_font_color'] = $status->claimStatus->font_color;
             $record['status_date'] = $status->created_at;
             $record['last_modified'] = $status->last_modified ?? '';
             array_push($records, $record);
