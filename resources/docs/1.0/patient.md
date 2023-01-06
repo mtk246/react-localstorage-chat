@@ -21,8 +21,8 @@
 - [Get list type diags](#get-list-type-diags)
 - [Get list marital status](#get-list-marital-status)
 - [Get list address type](#get-list-address-type)
-- [Get list address type](#get-list-responsibility-type)
-- [Get list address type](#get-list-relationship)
+- [Get list relationship](#get-list-relationship)
+- [Get list responsibility type](#get-list-responsibility-type)
 - [Get list insurance policy type](#get-list-insurance-policy-type)
 - [Search](#search)
 
@@ -49,8 +49,8 @@
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 | 14  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
 | 15  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
-| 16  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
-| 17  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
+| 16  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
+| 17  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
 | 18  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
 | 19|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
 
