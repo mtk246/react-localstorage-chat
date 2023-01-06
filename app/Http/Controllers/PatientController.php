@@ -202,6 +202,20 @@ class PatientController extends Controller
         );
     }
 
+    public function getListRelationship(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getListRelationship()
+        );
+    }
+
+    public function getListResponsibilityType(): JsonResponse
+    {
+        return response()->json(
+            $this->patientRepository->getListResponsibilityType()
+        );
+    }
+
     /**
      * @param string $ssn
      * @return JsonResponse

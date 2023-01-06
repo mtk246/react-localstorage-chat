@@ -21,6 +21,8 @@
 - [Get list type diags](#get-list-type-diags)
 - [Get list marital status](#get-list-marital-status)
 - [Get list address type](#get-list-address-type)
+- [Get list address type](#get-list-responsibility-type)
+- [Get list address type](#get-list-relationship)
 - [Get list insurance policy type](#get-list-insurance-policy-type)
 - [Search](#search)
 
@@ -47,8 +49,10 @@
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 | 14  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
 | 15  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
-| 16  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
-| 17|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
+| 16  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
+| 17  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
+| 18  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
+| 19|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
 
 
 
@@ -1815,6 +1819,140 @@
     {
         "id": 3,
         "name": "Other"
+    }
+]
+```
+
+#
+
+<a name="get-list-responsibility-type"></a>
+## Get list responsibility type
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Responsibility type of patient found
+
+#
+
+```json
+[
+    {
+        "id": 47,
+        "name": "R1 - Responsibility type 1"
+    },
+    {
+        "id": 48,
+        "name": "R2 - Responsibility type 2"
+    }
+]
+```
+
+#
+
+<a name="get-list-relationship"></a>
+## Get list relationship
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Relationship of patient found
+
+#
+
+```json
+[
+    {
+        "id": 28,
+        "name": "1 - Self/Patient is Insured"
+    },
+    {
+        "id": 29,
+        "name": "2 - Spouse"
+    },
+    {
+        "id": 30,
+        "name": "3 - Natural Child/Insured Financial Resp."
+    },
+    {
+        "id": 31,
+        "name": "4 - Natural Child/Insured no Financial Resp."
+    },
+    {
+        "id": 32,
+        "name": "5 - Step Child"
+    },
+    {
+        "id": 33,
+        "name": "6 - Foster Child"
+    },
+    {
+        "id": 34,
+        "name": "7 - Ward of the Court"
+    },
+    {
+        "id": 35,
+        "name": "8 - Employee"
+    },
+    {
+        "id": 36,
+        "name": "9 - Other"
+    },
+    {
+        "id": 37,
+        "name": "10 - Handicapped Dependent"
+    },
+    {
+        "id": 38,
+        "name": "11 - Organ Donor"
+    },
+    {
+        "id": 39,
+        "name": "12 - Cadaver Donor"
+    },
+    {
+        "id": 40,
+        "name": "13 - Grandchild"
+    },
+    {
+        "id": 41,
+        "name": "14 - Nice/Nephew"
+    },
+    {
+        "id": 42,
+        "name": "15 - Injured Plaintiff"
+    },
+    {
+        "id": 43,
+        "name": "16 - Sponsored Dependent"
+    },
+    {
+        "id": 44,
+        "name": "17 - Minor Dependent of a Minor Dependent"
+    },
+    {
+        "id": 45,
+        "name": "18 - Parent"
+    },
+    {
+        "id": 46,
+        "name": "19 - Granparent"
     }
 ]
 ```

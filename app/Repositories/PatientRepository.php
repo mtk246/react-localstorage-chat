@@ -34,6 +34,7 @@ use App\Models\Subscriber;
 use App\Models\User;
 use App\Models\Injury;
 use App\Roles\Models\Role;
+use App\Models\TypeCatalog;
 
 class PatientRepository
 {
@@ -1187,6 +1188,22 @@ class PatientRepository
     public function getListInsurancePolicyType() {
         try {
             return getList(InsurancePolicyType::class);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListRelationship() {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Patient relationship']]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListResponsibilityType() {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Responsibility type']]);
         } catch (\Exception $e) {
             return [];
         }

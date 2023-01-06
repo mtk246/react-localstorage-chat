@@ -286,6 +286,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-marital-status",[\App\Http\Controllers\PatientController::class,"getListMaritalStatus"]);
         Route::get("/get-list-address-type",[\App\Http\Controllers\PatientController::class,"getListAddressType"]);
         Route::get("/get-list-insurance-policy-type",[\App\Http\Controllers\PatientController::class,"getListInsurancePolicyType"]);
+        Route::get("/get-list-responsibility-type",[\App\Http\Controllers\PatientController::class,"getListResponsibilityType"]);
+        Route::get("/get-list-relationship",[\App\Http\Controllers\PatientController::class,"getListRelationship"]);
         Route::post("/",[\App\Http\Controllers\PatientController::class,"createPatient"]);
         Route::get("/",[\App\Http\Controllers\PatientController::class,"getAllPatient"]);
         Route::get("/get-by-ssn/{ssn}",[\App\Http\Controllers\PatientController::class,"getBySsn"]);
