@@ -326,7 +326,7 @@ class PatientRepository
                     }
                 }
 
-                if (isset($data['injuries'])) {
+                /**if (isset($data['injuries'])) {
                     foreach ($data['injuries'] as $injury) {
                         $patientInjury = Injury::updateOrCreate(
                             [
@@ -341,7 +341,7 @@ class PatientRepository
                             ]
                         );
                         if (isset($injury['public_note'])) {
-                            /** PublicNote */
+                            /** PublicNote
                             PublicNote::create([
                                 'publishable_type' => Injury::class,
                                 'publishable_id'   => $patientInjury->id,
@@ -354,7 +354,7 @@ class PatientRepository
                             }
                         }
                     }
-                }
+                }*/
             }
             if ($user && $patient) {
                 $rolePatient = Role::where('slug', 'patient')->first();
@@ -397,26 +397,20 @@ class PatientRepository
                     $q->with("socialMedias");
                 }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
+            "maritalStatus",
             "marital",
-            "guarantor",
-            "employments",
-            "patientPrivate",
             "companies",
-            "patientConditionRelated",
-            "emergencyContacts",
-            "publicNote",
-            "privateNotes",
             "insurancePolicies",
-            "injuries" => function ($query) {
-                $query->with([
-                    "diagnosis", "typeDiag", "publicNote"
-                ]);
-            },
-            "insurancePlans" => function ($query) use ($id) {
+            "insurancePlans" => function ($query) {
                 $query->with([
                     "insuranceCompany"
                 ]);
-            }
+            },
+            "guarantor",
+            "emergencyContacts",
+            "employments",
+            "publicNote",
+            "privateNotes"
         ])->find($id);
 
         if(is_null($patient)) return null;
@@ -443,17 +437,16 @@ class PatientRepository
                       ->with("socialMedias");
                 }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
+            "maritalStatus",
             "marital",
             "guarantor",
             "employments",
-            "patientPrivate",
             "companies",
-            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
             "insurancePolicies",
-            "insurancePlans" => function ($query) use ($id) {
+            "insurancePlans" => function ($query) {
                 $query->with([
                     "insuranceCompany"
                 ]);
@@ -475,21 +468,15 @@ class PatientRepository
                     $q->with("socialMedias");
                 }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
+            "maritalStatus",
             "marital",
             "guarantor",
             "employments",
-            "patientPrivate",
             "companies",
-            "patientConditionRelated",
             "emergencyContacts",
             "publicNote",
             "privateNotes",
             "insurancePolicies",
-            "injuries" => function ($query) {
-                $query->with([
-                    "diagnosis", "typeDiag", "publicNote"
-                ]);
-            },
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany");
             }
@@ -508,18 +495,11 @@ class PatientRepository
                 "marital",
                 "guarantor",
                 "employments",
-                "patientPrivate",
                 "companies",
-                "patientConditionRelated",
                 "emergencyContacts",
                 "publicNote",
                 "privateNotes",
                 "insurancePolicies",
-                "injuries" => function ($query) {
-                    $query->with([
-                        "diagnosis", "typeDiag", "publicNote"
-                    ]);
-                },
                 "insurancePlans" => function ($query) {
                     $query->with("insuranceCompany");
                 }
@@ -538,18 +518,11 @@ class PatientRepository
                 "marital",
                 "guarantor",
                 "employments",
-                "patientPrivate",
                 "companies",
-                "patientConditionRelated",
                 "emergencyContacts",
                 "publicNote",
                 "privateNotes",
                 "insurancePolicies",
-                "injuries" => function ($query) {
-                    $query->with([
-                        "diagnosis", "typeDiag", "publicNote"
-                    ]);
-                },
                 "insurancePlans" => function ($query) {
                     $query->with("insuranceCompany");
                 }
@@ -890,9 +863,9 @@ class PatientRepository
                 }
             }
 
-            if (isset($data['injuries'])) {
+            /**if (isset($data['injuries'])) {
                 $injuries = $patient->injuries;
-                /** Delete injuries */
+                /** Delete injuries
                 foreach ($injuries as $injury) {
                     $validated = false;
                     foreach ($data["injuries"] as $injuryP) {
@@ -919,7 +892,7 @@ class PatientRepository
                         ]
                     );
                     if (isset($injury['public_note'])) {
-                        /** PublicNote */
+                        /** PublicNote
                         PublicNote::create([
                             'publishable_type' => Injury::class,
                             'publishable_id'   => $patientInjury->id,
@@ -932,7 +905,7 @@ class PatientRepository
                         }
                     }
                 }
-            }
+            }*/
 
             DB::commit();
             return $patient;
@@ -1229,14 +1202,23 @@ class PatientRepository
         $patients = Patient::with([
             "user" => function ($query) {
                 $query->with(["profile" => function ($q) {
-                        $q->with("socialMedias");
-                    },
-                    "roles",
-                    "addresses",
-                    "contacts",
-                    "billingCompanies"
+                    $q->with("socialMedias");
+                }, "roles", "addresses", "contacts", "billingCompanies"]);
+            },
+            "maritalStatus",
+            "marital",
+            "companies",
+            "insurancePolicies",
+            "insurancePlans" => function ($query) {
+                $query->with([
+                    "insuranceCompany"
                 ]);
-            }
+            },
+            "guarantor",
+            "emergencyContacts",
+            "employments",
+            "publicNote",
+            "privateNotes"
         ])->whereHas('user.profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
             $query->whereDateOfBirth($date_of_birth)
                   ->where("first_name", "ilike", "%${first_name}%")

@@ -45,11 +45,10 @@
 | 11 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
 | 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
-| 14  |GET     | `Get list types diags`  | `/injury/get-list-type-diags`     | yes            | Get list type diags |
-| 15  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
-| 16  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
-| 17  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
-| 18|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
+| 14  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
+| 15  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
+| 16  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
+| 17|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
 
 
 
@@ -360,36 +359,6 @@
                 "updated_at": "2022-04-20T21:53:26.000000Z"
             }
         ],
-        "injuries": [
-            {
-                "id": 1,
-                "diag_date": "1990-11-11",
-                "diagnosis_id": 1,
-                "type_diag_id": 1,
-                "created_at": "2022-12-09T13:04:20.000000Z",
-                "updated_at": "2022-12-09T13:04:20.000000Z",
-                "diagnosis": {
-                    "id": 1,
-                    "code": "A000",
-                    "description": "Cholera due to vibrio cholerae 01, biovar cholerae",
-                    "active": true,
-                    "start_date": null,
-                    "end_date": null,
-                    "injury_date_required": false,
-                },
-                "type_diag": {
-                    "id": 1,
-                    "code": "A",
-                    "description": "Allergy",
-                },
-                "public_note": {
-                    "id": 46,
-                    "note": "Note of injury",
-                    "publishable_type": "App\\Models\\Injury",
-                    "publishable_id": 1,
-                }
-            }
-        ],
         "created_at": "2022-03-17T20:45:39.000000Z",
         "updated_at": "2022-03-17T20:45:39.000000Z"
     }
@@ -553,22 +522,6 @@
                     "publishable_id": 1,
                     "created_at": "2022-04-20T21:53:26.000000Z",
                     "updated_at": "2022-04-20T21:53:26.000000Z"
-                }
-            ],
-            "injuries": [
-                {
-                    "id": 1,
-                    "diag_date": "1990-11-11",
-                    "diagnosis_id": 1,
-                    "type_diag_id": 1,
-                    "created_at": "2022-12-09T13:04:20.000000Z",
-                    "updated_at": "2022-12-09T13:04:20.000000Z",
-                    "public_note": {
-                        "id": 46,
-                        "note": "Note of injury",
-                        "publishable_type": "App\\Models\\Injury",
-                        "publishable_id": 1,
-                    }
                 }
             ],
             "created_at": "2022-03-17T20:45:39.000000Z",
@@ -755,36 +708,6 @@
             "publishable_id": 1,
             "created_at": "2022-04-20T21:53:26.000000Z",
             "updated_at": "2022-04-20T21:53:26.000000Z"
-        }
-    ],
-    "injuries": [
-        {
-            "id": 1,
-            "diag_date": "1990-11-11",
-            "diagnosis_id": 1,
-            "type_diag_id": 1,
-            "created_at": "2022-12-09T13:04:20.000000Z",
-            "updated_at": "2022-12-09T13:04:20.000000Z",
-            "diagnosis": {
-                "id": 1,
-                "code": "A000",
-                "description": "Cholera due to vibrio cholerae 01, biovar cholerae",
-                "active": true,
-                "start_date": null,
-                "end_date": null,
-                "injury_date_required": false,
-            },
-            "type_diag": {
-                "id": 1,
-                "code": "A",
-                "description": "Allergy",
-            },
-            "public_note": {
-                "id": 46,
-                "note": "Note of injury",
-                "publishable_type": "App\\Models\\Injury",
-                "publishable_id": 1,
-            }
         }
     ],
     "created_at": "2022-03-17T20:45:39.000000Z",
@@ -983,30 +906,16 @@
 
 ```json
 {
-    "driver_license": "Driver License",
     "billing_company_id": 1, /** Only required by superuser */
-    "public_note": "Note public",
-    "private_note": "Note private",
-    "companies": [1,3],
-    "patient_private":{
-        "reference_num"     : "Ref-0001",
-        "med_num"           : "Med-001",
-        "patient_num"       : "Pat-001"
-    },
-    "patient_condition_related":{
-        "employment":     false,
-        "auto_accident":  false,
-        "place_state":    "placeStatePatient",
-        "other_accident": false
-    },
+    "driver_license": "Driver License", /** Optional */
     "profile": {
-        "ssn":"237891812",
-        "first_name":"Fisrt Name",
-        "last_name":"Last Name",
-        "middle_name":"Middle Name",
-        "sex":"m",
-        "date_of_birth":"1990-11-11",
-        "social_medias": [
+        "ssn":"237891812", /** Optional */
+        "first_name":"Fisrt Name", /** Required */
+        "last_name":"Last Name", /** Required */
+        "middle_name":"Middle Name", /** Optional */
+        "date_of_birth":"1990-11-11", /** Required */
+        "sex":"m", /** Optional */
+        "social_medias": [  /** Optional */
             {
                 "name": "nameSocialMedia1",
                 "link": "URLSocialMedia1"
@@ -1017,102 +926,115 @@
             }
         ]
     },
-    "address": {
-        "address": "Direction address",
-        "city": "city address",
-        "state": "state address",
-        "zip": "123456789"
-    },
-    "contact": {
-        "phone": "04241234321",
-        "fax": "",
-        "mobile": "",
-        "email": "user@gmail.com"
-    },
-    "marital": {
+    "marital_status_id": 1, /** Optional */
+    "marital": { /** required if marital status maried */
         "spuse_name": "Spuse name",
         "spuse_work": "Spuse work",
         "spuse_work_phone": "Spuse phone"
 
     },
-    "guarantor": {
-        "name": "name",
-        "phone": "phone"
-    },
-    "employments": [
+    "companies": [
         {
-            "employer_name": "employer name",
-            "employer_address": "employer address",
-            "employer_phone": "employer phone",
-            "position": "patient position"
-        }
-    ],
-    "emergency_contacts": [
-        {
-            "name": "name emergency contact 1",
-            "cellphone": "cellphone emergency contacts 1",
-            "relationship": "relationship emergency contacts 1"
+            "company_id": 1, /** required */
+            "company_med_num": "0001", /** Optional */
         },
         {
-            "name": "name emergency contact 2",
-            "cellphone": "cellphone emergency contacts 2",
-            "relationship": "relationship emergency contacts 2"
+            "company_id": 2, /** required */
+            "company_med_num": "0002", /** Optional */
+        }
+    ],
+    "language": "en", /** Optional */
+
+    "contact": {
+        "phone": "04241234321", /** Optional */
+        "mobile": "", /** Optional */
+        "fax": "", /** Optional */
+        "email": "user@gmail.com" /** Required */
+    },
+    "addresses": [
+        {
+            "address_type_id": 1, /** Required */
+            "address": "Direction address", /** Required */
+            "city": "city address", /** Required */
+            "state": "state address", /** Required */
+            "zip": "123456789" /** Required */
         }
     ],
     "insurance_policies": [
         {
-            "insurance_company_name": "Name Company",
-            "payer_id": "Code Company",
-            "insurance_company": 1,
-            "insurance_plan": 1,
-            "policy_number": 12344,
-            "group_number": 1234, //optional
-            "eff_date": "2020-01-23",
-            "end_date": "2022-01-23",  //optional
-            "release_info": false,
-            "assign_benefits": false,
-            "own_insurance": true,
-            "subscriber": null
+            "policy_number": 12344, /** Required */
+            "group_number": 1234, /** Optional */
+            "insurance_company": 1, /** Required */
+            "insurance_plan": 1, /** Required */
+            "type_responsibility_id": 1, /** Required */
+            "insurance_policy_type_id": 1, /** Optional */
+            "eff_date": "2020-01-23", /** Optional */
+            "end_date": "2022-01-23", /** Optional */
+            "assign_benefits": false,  /** Required */
+            "release_info": false, /** Required */
+            "own_insurance": true, /** Required */
+            "subscriber": null /** Optional */
         },
         {
-            "insurance_company_name": "Name Company",
-            "payer_id": "Code Company",
-            "insurance_company": 1,
-            "insurance_plan": 2,
-            "policy_number": 12344,
-            "group_number": 1234, //optional
-            "eff_date": "2020-01-23",
-            "end_date": "2022-01-23",  //optional
-            "release_info": false,
-            "assign_benefits": false,
-            "own_insurance": false,
+            "policy_number": 12344, /** Required */
+            "group_number": 1234, /** Optional */
+            "insurance_company": 1, /** Required */
+            "insurance_plan": 1, /** Required */
+            "type_responsibility_id": 1, /** Required */
+            "insurance_policy_type_id": 1, /** Optional */
+            "eff_date": "2020-01-23", /** Optional */
+            "end_date": "2022-01-23", /** Optional */
+            "assign_benefits": false,  /** Required */
+            "release_info": false, /** Required */
+            "own_insurance": true, /** Required */
             "subscriber": {
+                "relationship_id": 1, /** Optional */
                 "ssn": "ssn subscriber",
-                "first_name" : "firstName subscriber",
-                "last_name"  : "lastName subscriber",
+                "date_of_birth":"1990-11-11", /** Optional */
+                "first_name" : "firstName subscriber", /** Required */
+                "last_name"  : "lastName subscriber", /** Required */
                 "address": {
-                    "address": "Direction address subscriber",
-                    "city": "city address subscriber",
-                    "state": "state address subscriber",
-                    "zip": "123456789"
+                    "address": "Direction address subscriber", /** Optional */
+                    "city": "city address subscriber", /** Optional */
+                    "state": "state address subscriber", /** Optional */
+                    "zip": "123456789" /** Optional */
                 },
                 "contact": {
-                    "phone": "04241234321",
-                    "fax": "",
-                    "mobile": "",
-                    "email": "subscriber@gmail.com"
+                    "phone": "04241234321", /** Optional */
+                    "fax": "", /** Optional */
+                    "mobile": "", /** Optional */
+                    "email": "subscriber@gmail.com"  /** Optional */
                 }
             }
         }
     ],
-    "injuries": [
+    "guarantor": {
+        "name": "name", /** Optional */
+        "phone": "phone" /** Optional */
+    },
+    "emergency_contacts": [
         {
-            "diag_date": "2022-07-05",
-            "diagnosis_id": 1,
-            "type_diag_id": 1,
-            "public_note": "Note of injury"
+            "name": "name emergency contact 1", /** Optional */
+            "cellphone": "cellphone emergency contacts 1", /** Optional */
+            "relationship_id": 1 /** Optional */
+        },
+        {
+            "name": "name emergency contact 2", /** Optional */
+            "cellphone": "cellphone emergency contacts 2", /** Optional */
+            "relationship_id": 2 /** Optional */
         }
-    ]
+    ],
+    "employments": [
+        {
+            "employer_name": "employer name", /** Optional */
+            "employer_address": "employer address", /** Optional */
+            "employer_phone": "employer phone", /** Optional */
+            "position": "patient position" /** Optional */
+        }
+    ],
+    "public_note": "Some note publics",
+    "private_note": "Some note privates",
+    "save_as_draft": false
 }
 ```
 
@@ -1829,58 +1751,6 @@
 
 #
 
-<a name="get-list-type-diags"></a>
-## Get list type diags
-
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 200 Type diags of injury found
-
-#
-
-```json
-[
-    {
-        "id": 1,
-        "name": "A - Allergy"
-    },
-    {
-        "id": 2,
-        "name": "C - Chronic"
-    },
-    {
-        "id": 3,
-        "name": "D - Problem List"
-    },
-    {
-        "id": 4,
-        "name": "O - Other"
-    },
-    {
-        "id": 5,
-        "name": "P - Pre Existing Condition"
-    },
-    {
-        "id": 6,
-        "name": "S - Self Limiting"
-    },
-    {
-        "id": 7,
-        "name": "U - Acute"
-    }
-]
-```
-#
-
 <a name="get-list-marital-status"></a>
 ## Get list marital status
 
@@ -2047,26 +1917,6 @@
             "last_login": "2022-03-15 08:59:12",
             "profile_id": 1,
             "billing_company_id": null,
-            "profile": {
-                "ssn":"237891812",
-                "first_name":"Fisrt Name",
-                "last_name":"Last Name",
-                "middle_name":"Middle Name",
-                "sex":"m",
-                "date_of_birth":"1990-11-11",
-                "social_medias": [
-                    {
-                        "name": "nameSocialMedia1",
-                        "link": "URLSocialMedia1"
-                    },
-                    {
-                        "name": "nameSocialMedia2",
-                        "link": "URLSocialMedia2"
-                    }
-                ],
-                "created_at": "2022-04-26T20:50:38.000000Z",
-                "updated_at": "2022-07-20T12:42:12.000000Z",
-            },
             "roles": [
                 {
                     "id": 1,
@@ -2111,10 +1961,94 @@
             ]
 
         },
+        "marital": {
+            "spuse_name": "Spuse name",
+            "spuse_work": "Spuse work",
+            "spuse_work_phone": "Spuse phone",
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        },
+        "guarantor": {
+            "name": "name",
+            "phone": "phone",
+            "created_at": "2022-03-17T20:45:39.000000Z",
+            "updated_at": "2022-03-17T20:45:39.000000Z"
+        },
+        "companies": [
+            {
+                "id": 1,
+                "code": "CO-00001-2022",
+                "name": "company first",
+                "npi": "222CF123",
+                "created_at": "2022-05-02T14:45:27.000000Z",
+                "updated_at": "2022-05-02T14:45:27.000000Z",
+                "status": false,
+                "pivot": {
+                    "patient_id": 1,
+                    "company_id": 1,
+                    "created_at": "2022-05-06T21:21:48.000000Z",
+                    "updated_at": "2022-05-06T21:21:48.000000Z"
+                }
+            },
+            {
+                "id": 3,
+                "code": "CO-00003-2022",
+                "name": "PANAMERICAN INTERNAL MEDICINE INC",
+                "npi": "1396903308",
+                "created_at": "2022-05-04T01:38:14.000000Z",
+                "updated_at": "2022-05-04T01:38:14.000000Z",
+                "status": false,
+                "pivot": {
+                    "patient_id": 1,
+                    "company_id": 3,
+                    "created_at": "2022-05-06T21:21:48.000000Z",
+                    "updated_at": "2022-05-06T21:21:48.000000Z"
+                }
+            }
+        ],
+        "employments": [
+            {
+                "employer_name": "employer name",
+                "employer_address": "employer address",
+                "employer_phone": "employer phone",
+                "position": "patient position",
+                "created_at": "2022-03-17T20:45:39.000000Z",
+                "updated_at": "2022-03-17T20:45:39.000000Z"
+            }
+        ],
+        "emergency_contacts": [
+            {
+                "name": "name emergency contact 1",
+                "cellphone": "cellphone emergency contacts 1",
+                "relationship": "relationship emergency contacts 1",
+                "created_at": "2022-03-17T20:45:39.000000Z",
+                "updated_at": "2022-03-17T20:45:39.000000Z"
+            }
+        ],
+        "public_notes": [
+            {
+                "id": 2,
+                "note": "Note public",
+                "publishable_type": "App\\Models\\Patient",
+                "publishable_id": 1,
+                "created_at": "2022-04-20T21:53:26.000000Z",
+                "updated_at": "2022-04-20T21:53:26.000000Z"
+            }
+        ],
+        "private_notes": [
+            {
+                "id": 1,
+                "note": "Note private",
+                "billing_company_id": 1,
+                "publishable_type": "App\\Models\\Patient",
+                "publishable_id": 1,
+                "created_at": "2022-04-20T21:53:26.000000Z",
+                "updated_at": "2022-04-20T21:53:26.000000Z"
+            }
+        ],
         "created_at": "2022-03-17T20:45:39.000000Z",
         "updated_at": "2022-03-17T20:45:39.000000Z"
-    }
-    
+    }   
 ]
 ```
 #
