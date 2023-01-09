@@ -59,11 +59,21 @@ class Address extends Model implements Auditable
         "city",
         "state",
         "zip",
-        "address_type",
+        "address_type_id",
         "billing_company_id",
         "addressable_type",
         "addressable_id"
     ];
+
+    /**
+     * Address belongs to AddressType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function addressType()
+    {
+        return $this->belongsTo(AddressType::class);
+    }
 
     /**
      * Address belongs to BillingCompany.
@@ -110,18 +120,4 @@ class Address extends Model implements Auditable
             set: fn ($value) => upperCaseWords($value),
         );
     }
-
-    /**
-     * Interact with the user's addressType.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function addressType(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => upperCaseWords($value),
-            set: fn ($value) => upperCaseWords($value),
-        );
-    }
-
 }

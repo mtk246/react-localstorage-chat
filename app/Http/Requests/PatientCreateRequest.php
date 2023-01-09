@@ -54,7 +54,7 @@ class PatientCreateRequest extends FormRequest
             'contact.email'                     => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
 
             'addresses'                           => ['required', 'array'],
-            'addresses.*.address_type_id'         => ['required', 'string'],
+            'addresses.*.address_type_id'         => ['required', 'integer'],
             'addresses.*.address'                 => ['required', 'string'],
             'addresses.*.city'                    => ['required', 'string'],
             'addresses.*.state'                   => ['required', 'string'],
@@ -101,7 +101,7 @@ class PatientCreateRequest extends FormRequest
             'emergency_contacts.*.cellphone'    => ['sometimes', 'required', 'string'],
             'emergency_contacts.*.relationship_id' => ['sometimes', 'required', 'integer'],
 
-            'employments'                       => ['sometimes', 'required', 'array'],
+            'employments'                       => ['nullable', 'array'],
             'employments.*.employer_name'       => ['sometimes', 'required', 'string'],
             'employments.*.position'            => ['sometimes', 'required', 'string'],
             'employments.*.employer_address'    => ['sometimes', 'required', 'string'],

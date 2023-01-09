@@ -90,7 +90,7 @@ class Patient extends Model implements Auditable
      */
     public function billingCompanies(): BelongsToMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)->withPivot(['status', 'save_as_draft'])->withTimestamps();
     }
 
     /**
@@ -231,7 +231,7 @@ class Patient extends Model implements Auditable
      */
     public function companies()
     {
-        return $this->belongsToMany(Company::class)->withTimestamps();
+        return $this->belongsToMany(Company::class)->withTimestamps()->withPivot('med_num');
     }
 
     /**

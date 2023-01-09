@@ -31,12 +31,15 @@ class PatientPolicyRequest extends FormRequest
             'group_number'         => ['nullable', 'numeric'],
             'eff_date'             => ['required', 'date'],
             'end_date'             => ['nullable', 'date'],
+            'type_responsibility_id'      => ['required', 'integer'],
+            'insurance_policy_type_id'    => ['nullable', 'integer'],
             'release_info'         => ['required', 'boolean'],
             'assign_benefits'      => ['required', 'boolean'],
             'own_insurance'        => ['required', 'boolean'],
 
             'subscriber'            => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'subscriber.ssn'        => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.ssn'        => ['required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.date_of_birth'  => ['nullable', 'date'],
             'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.last_name'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
 
@@ -48,6 +51,7 @@ class PatientPolicyRequest extends FormRequest
             
             'subscriber.contact'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
             'subscriber.contact.phone'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.contact.mobile'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.contact.fax'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.contact.email'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'email:rfc'],
         ];

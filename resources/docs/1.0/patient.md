@@ -940,11 +940,11 @@
     "companies": [
         {
             "company_id": 1, /** required */
-            "company_med_num": "0001", /** Optional */
+            "med_num": "0001", /** Optional */
         },
         {
             "company_id": 2, /** required */
-            "company_med_num": "0002", /** Optional */
+            "med_num": "0002", /** Optional */
         }
     ],
     "language": "en", /** Optional */
@@ -1177,46 +1177,53 @@
 
 ```json
 {
-    "insurance_company": 1,
-    "insurance_plan": 1,
-    "policy_number": 12344,
-    "group_number": 1234, //optional
-    "eff_date": "2020-01-23",
-    "end_date": "2022-01-23",  //optional
-    "release_info": false,
-    "assign_benefits": false,
-    "own_insurance": true,
-    "subscriber": null
+    "policy_number": 12344, /** Required */
+        "group_number": 1234, /** Optional */
+        "insurance_company": 1, /** Required */
+        "insurance_plan": 1, /** Required */
+        "type_responsibility_id": 1, /** Required */
+        "insurance_policy_type_id": 1, /** Optional */
+        "eff_date": "2020-01-23", /** Optional */
+        "end_date": "2022-01-23", /** Optional */
+        "assign_benefits": false,  /** Required */
+        "release_info": false, /** Required */
+        "own_insurance": true, /** Required */
+        "subscriber": null /** Optional */
+    }
 }
 ```
 ### Body request example 2
 
 ```json
 {
-    "insurance_company": 1,
-    "insurance_plan": 2,
-    "policy_number": 13442,
-    "group_number": 1234, //optional
-    "eff_date": "2020-01-23",
-    "end_date": "2022-01-23",  //optional
-    "release_info": false,
-    "assign_benefits": false,
-    "own_insurance": false,
+    "policy_number": 12344, /** Required */
+    "group_number": 1234, /** Optional */
+    "insurance_company": 1, /** Required */
+    "insurance_plan": 1, /** Required */
+    "type_responsibility_id": 1, /** Required */
+    "insurance_policy_type_id": 1, /** Optional */
+    "eff_date": "2020-01-23", /** Optional */
+    "end_date": "2022-01-23", /** Optional */
+    "assign_benefits": false,  /** Required */
+    "release_info": false, /** Required */
+    "own_insurance": false, /** Required */
     "subscriber": {
+        "relationship_id": 1, /** Optional */
         "ssn": "ssn subscriber",
-        "first_name" : "firstName subscriber",
-        "last_name"  : "lastName subscriber",
+        "date_of_birth":"1990-11-11", /** Optional */
+        "first_name" : "firstName subscriber", /** Required */
+        "last_name"  : "lastName subscriber", /** Required */
         "address": {
-            "address": "Direction address subscriber",
-            "city": "city address subscriber",
-            "state": "state address subscriber",
-            "zip": "123456789"
+            "address": "Direction address subscriber", /** Optional */
+            "city": "city address subscriber", /** Optional */
+            "state": "state address subscriber", /** Optional */
+            "zip": "123456789" /** Optional */
         },
         "contact": {
-            "phone": "04241234321",
-            "fax": "",
-            "mobile": "",
-            "email": "subscriber@gmail.com"
+            "phone": "04241234321", /** Optional */
+            "fax": "", /** Optional */
+            "mobile": "", /** Optional */
+            "email": "subscriber@gmail.com"  /** Optional */
         }
     }
 }
@@ -1336,15 +1343,17 @@
 
 ```json
 {
-    "insurance_company": 1,
-    "insurance_plan": 1,
-    "policy_number": 12344,
-    "group_number": 1234, //optional
-    "eff_date": "2020-01-23",
-    "end_date": "2022-01-23",  //optional
-    "release_info": false,
-    "assign_benefits": false,
-    "own_insurance": true,
+    "policy_number": 12344, /** Required */
+    "group_number": 1234, /** Optional */
+    "insurance_company": 1, /** Required */
+    "insurance_plan": 1, /** Required */
+    "type_responsibility_id": 1, /** Required */
+    "insurance_policy_type_id": 1, /** Optional */
+    "eff_date": "2020-01-23", /** Optional */
+    "end_date": "2022-01-23", /** Optional */
+    "assign_benefits": false,  /** Required */
+    "release_info": false, /** Required */
+    "own_insurance": false, /** Required */
     "subscriber": null
 }
 ```
@@ -1352,30 +1361,34 @@
 
 ```json
 {
-    "insurance_company": 1,
-    "insurance_plan": 2,
-    "policy_number": 13442,
-    "group_number": 1234, //optional
-    "eff_date": "2020-01-23",
-    "end_date": "2022-01-23",  //optional
-    "release_info": false,
-    "assign_benefits": false,
-    "own_insurance": false,
+    "policy_number": 12344, /** Required */
+    "group_number": 1234, /** Optional */
+    "insurance_company": 1, /** Required */
+    "insurance_plan": 1, /** Required */
+    "type_responsibility_id": 1, /** Required */
+    "insurance_policy_type_id": 1, /** Optional */
+    "eff_date": "2020-01-23", /** Optional */
+    "end_date": "2022-01-23", /** Optional */
+    "assign_benefits": false,  /** Required */
+    "release_info": false, /** Required */
+    "own_insurance": false, /** Required */
     "subscriber": {
+        "relationship_id": 1, /** Optional */
         "ssn": "ssn subscriber",
-        "first_name" : "firstName subscriber",
-        "last_name"  : "lastName subscriber",
+        "date_of_birth":"1990-11-11", /** Optional */
+        "first_name" : "firstName subscriber", /** Required */
+        "last_name"  : "lastName subscriber", /** Required */
         "address": {
-            "address": "Direction address subscriber",
-            "city": "city address subscriber",
-            "state": "state address subscriber",
-            "zip": "123456789"
+            "address": "Direction address subscriber", /** Optional */
+            "city": "city address subscriber", /** Optional */
+            "state": "state address subscriber", /** Optional */
+            "zip": "123456789" /** Optional */
         },
         "contact": {
-            "phone": "04241234321",
-            "fax": "",
-            "mobile": "",
-            "email": "subscriber@gmail.com"
+            "phone": "04241234321", /** Optional */
+            "fax": "", /** Optional */
+            "mobile": "", /** Optional */
+            "email": "subscriber@gmail.com"  /** Optional */
         }
     }
 }

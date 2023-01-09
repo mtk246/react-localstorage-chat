@@ -19,7 +19,19 @@ class Subscriber extends Model implements Auditable
         "member_id",
         "last_name",
         "first_name",
+        "date_of_birth",
+        "relationship_id",
     ];
+
+    /**
+     * Subscriber belongs to Relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function relationship()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'relationship_id');
+    }
 
     /**
      * Subscriber has many claim eligibilities.

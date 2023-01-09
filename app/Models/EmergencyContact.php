@@ -37,7 +37,7 @@ class EmergencyContact extends Model implements Auditable
     protected $fillable = [
         "name",
         "cellphone",
-        "relationship",
+        "relationship_id",
         "patient_id"
     ];
 
@@ -49,6 +49,16 @@ class EmergencyContact extends Model implements Auditable
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    /**
+     * Relationship belongs to patient.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function relationship(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, 'relationship_id');
     }
 
     /**

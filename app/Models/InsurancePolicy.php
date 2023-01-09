@@ -20,6 +20,8 @@ class InsurancePolicy extends Model implements Auditable
         "policy_number",
         "group_number",
         "insurance_plan_id",
+        "insurance_policy_type_id",
+        "type_responsibility_id",
         "payer_responsibility_id",
         "payment_responsibility_level_code",
     ];
@@ -56,6 +58,26 @@ class InsurancePolicy extends Model implements Auditable
     public function insurancePlan()
     {
         return $this->belongsTo(InsurancePlan::class);
+    }
+
+    /**
+     * InsurancePolicy belongs to TypeResponsibility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function typeResponsibility()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'type_responsibility_id');
+    }
+
+    /**
+     * InsurancePolicy belongs to InsurancePolicyType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insurancePolicyType()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'insurance_policy_type_id');
     }
 
     /**
