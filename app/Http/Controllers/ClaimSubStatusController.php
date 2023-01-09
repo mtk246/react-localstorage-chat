@@ -87,17 +87,17 @@ class ClaimSubStatusController extends Controller
         return $rs ? response()->json([], 204) : response()->json(__("Error updating status"), 400);
     }
 
-    public function getList()
+    public function getList(int $status_id, $id = null)
     {
-        $rs = $this->claimSubStatusRepository->getList();
-
-        return $rs ? response()->json($rs) : response()->json(__("Error get list all claim substatus"), 400);
+        return response()->json(
+            $this->claimSubStatusRepository->getList($status_id, $id)
+        );
     }
 
     public function getListStatus()
     {
-        $rs = $this->claimSubStatusRepository->getListStatus();
-
-        return $rs ? response()->json($rs) : response()->json(__("Error get list all base status"), 400);
+        return response()->json(
+            $this->claimSubStatusRepository->getListStatus()
+        );
     }
 }

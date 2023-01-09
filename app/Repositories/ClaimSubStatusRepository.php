@@ -47,9 +47,15 @@ class ClaimSubStatusRepository
     }
 
     
-    public function getList() {
+    public function getList($status_id, $id = null) {
         try {
-            return getList(ClaimSubStatus::class);
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $id;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+            /**return getList(ClaimSubStatus::class, 'name', ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);*/
+            return getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status_id]]);
         } catch (\Exception $e) {
             return [];
         }
