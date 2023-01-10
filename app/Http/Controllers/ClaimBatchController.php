@@ -73,4 +73,15 @@ class ClaimBatchController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__("Error erasing claim batch"), 400);
     }
+
+    /**
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function submitToClearingHouse($id)
+    {
+        $rs = $this->claimBatchRepository->submitToClearingHouse($id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error submitting claim batch"), 400);
+    }
 }

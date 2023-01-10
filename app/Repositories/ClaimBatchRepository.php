@@ -312,4 +312,26 @@ class ClaimBatchRepository
             return null;
         }
     }
+
+    /**
+     * @param int $id
+     * @return claim|Builder|Model|object|null
+     */
+    public function submitToClearingHouse(int $id) {
+        try {
+            DB::beginTransaction();
+
+            $claimBatch = ClaimBatch::find($id);
+            $claimBatch->update([
+                "status"             => 'Submitted',
+                "shipping_date"      => now(),
+            ]);
+
+            DB::commit();
+            return $claimBatch;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
+    }
 }
