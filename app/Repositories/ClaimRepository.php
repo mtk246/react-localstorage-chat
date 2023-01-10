@@ -757,4 +757,30 @@ class ClaimRepository
         }
     }
 
+    public function updateNoteCurrentStatus($data, $id) {
+        try {
+            DB::beginTransaction();
+            $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
+            $statusClaim = $claim->claimStatusClaims()
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "asc")->first() ?? null;
+            
+            if (isset($statusClaim)) {
+                PrivateNote::updateOrCreate([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $statusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null
+                ], [
+                    'note'               => $data['private_note']
+                ]);
+            }
+            DB::commit();
+            return $claim;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
+    }
+
 }
+

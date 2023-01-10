@@ -238,4 +238,19 @@ class ClaimController extends Controller
         $rs = $this->claimRepository->changeStatus($request->validated(), $id);
         return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
     }
+
+    /**
+     * updateNoteCurrentStatus
+     *
+     * @method updateNoteCurrentStatus
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function updateNoteCurrentStatus(Request $request, int $id): JsonResponse
+    {
+        $rs = $this->claimRepository->updateNoteCurrentStatus($request, $id);
+        return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
+    }
 }
