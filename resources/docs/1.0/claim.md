@@ -1475,12 +1475,20 @@
 <a name="change-status-claim"></a>
 ## Change status Claim
 
+## Param in path
+
+```json
+{
+    "id": <integer> /** Claim ID */
+}
+```
 ## Body request example
 
 ```json
 {
-    "status_id": 1,
-    "private_note": "Note Status"
+    "status_id": 1, /** required */
+    "sub_status_id": 1, /** optional */
+    "private_note": "Note Status" /** optional */
 }
 ```
 

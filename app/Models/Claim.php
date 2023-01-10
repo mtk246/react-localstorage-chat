@@ -122,8 +122,6 @@ class Claim extends Model implements Auditable
         return $this->hasMany(ClaimStatusClaim::class);
     }
 
-
-
     /**
      * Interact with the claim's format.
      *
@@ -153,9 +151,18 @@ class Claim extends Model implements Auditable
      */
     public function getStatusAttribute()
     {
-        return $this->claimStatusClaims()
+        $status = $this->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
                     ->orderBy("created_at", "desc")
                     ->orderBy("id", "asc")->first()->claimStatus ?? null;
+        $subStatus = $this->claimStatusClaims()
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "asc")->first()->claimStatus ?? null;
+        if (isset($status)) {
+            $status->claim_sub_status = ($status->id != $subStatus->id) ? $subStatus : null;
+            $status->claim_sub_statuses = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status->id]]);
+        }
+        return $status;
     }
 
     /**
@@ -166,18 +173,30 @@ class Claim extends Model implements Auditable
     public function getStatusHistoryAttribute()
     {
         $records = [];
+        $recordSubstatus = [];
         $history = $this->claimStatusClaims()
                         ->orderBy("created_at", "desc")
                         ->orderBy("id", "asc")->get() ?? [];
         foreach ($history as $status) {
-            $record = [];
-            $record['note']   = $status->privateNotes->note ?? '';
-            $record['status'] = $status->claimStatus->status;
-            $record['status_background_color'] = $status->claimStatus->background_color;
-            $record['status_font_color'] = $status->claimStatus->font_color;
-            $record['status_date'] = $status->created_at;
-            $record['last_modified'] = $status->last_modified ?? '';
-            array_push($records, $record);
+            if ($status->claim_status_type == ClaimSubStatus::class) {
+                $record = [];
+                $record['note'] = $status->privateNotes->note ?? '';
+                $record['code'] = $status->claimStatus->code ?? '';
+                $record['name'] = $status->claimStatus->name ?? '';
+                $record['sub_status_date'] = $status->created_at;
+                $record['last_modified'] = $status->last_modified ?? '';
+                array_push($recordSubstatus, $record);
+            } else if ($status->claim_status_type == ClaimStatus::class) {
+                $record = [];
+                $record['note']   = $status->privateNotes->note ?? '';
+                $record['status'] = $status->claimStatus->status ?? '';
+                $record['status_background_color'] = $status->claimStatus->background_color ?? '';
+                $record['status_font_color'] = $status->claimStatus->font_color ?? '';
+                $record['status_date'] = $status->created_at;
+                $record['sub_status_history'] = $recordSubstatus;
+                $record['last_modified'] = $status->last_modified ?? '';
+                array_push($records, $record);
+            }
         }
         return $records;
     }

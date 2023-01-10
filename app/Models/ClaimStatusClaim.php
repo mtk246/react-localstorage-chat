@@ -16,6 +16,7 @@ class ClaimStatusClaim extends Model implements Auditable
     
     protected $fillable = [
         "claim_id",
+        "claim_status_type",
         "claim_status_id"
     ];
 
@@ -43,7 +44,7 @@ class ClaimStatusClaim extends Model implements Auditable
      */
     public function claimStatus(): BelongsTo
     {
-        return $this->belongsTo(ClaimStatus::class);
+        return $this->morphTo();
     }
 
     /**
