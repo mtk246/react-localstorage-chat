@@ -173,6 +173,16 @@ class BillingCompany extends Model implements Auditable
     }
 
     /**
+     * The keyboard shortcuts that belong to the BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function keyboardShortcuts(): BelongsToMany
+    {
+        return $this->belongsToMany(KeyboardShortcut::class)->withPivot('key')->withTimestamps();
+    }
+
+    /**
      * Interact with the user's name.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
