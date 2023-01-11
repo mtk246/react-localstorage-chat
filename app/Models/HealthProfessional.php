@@ -27,7 +27,7 @@ class HealthProfessional extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['last_modified', 'companies_providers', 'verified_on_nppes'];
+    protected $appends = ['status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
 
     /**
      * HealthProfessional belongs to User.
@@ -102,6 +102,19 @@ class HealthProfessional extends Model implements Auditable
     public function privateNotes()
     {
         return $this->morphMany(PrivateNote::class, 'publishable');
+    }
+
+    /*
+     * Get the healthProfessional's status.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (is_null($billingCompany)) return false;
+        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 
     public function getVerifiedOnNppesAttribute()
