@@ -20,6 +20,13 @@ class PrivateNote extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_modified'];
+
+    /**
      * PublicNote morphs to models in publishable_type.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -40,5 +47,26 @@ class PrivateNote extends Model implements Auditable
             get: fn ($value) => ucfirst(strtolower($value)),
             set: fn ($value) => ucfirst(strtolower($value)),
         );
+    }
+
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user'  => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user'  => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return [
+                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
     }
 }

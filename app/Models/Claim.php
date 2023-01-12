@@ -183,7 +183,14 @@ class Claim extends Model implements Auditable
                 $record = [];
                 $notes = [];
                 foreach ($status->privateNotes as $note) {
-                    array_push($notes, ['note' => $note->note, 'created_at' => $note->created_at]);
+                    array_push(
+                        $notes,
+                        [
+                            'note'          => $note->note,
+                            'created_at'    => $note->created_at,
+                            'last_modified' => $note->last_modified
+                        ]
+                    );
                 }
                 $record['notes_history']  = $notes;
                 $record['code'] = $status->claimStatus->code ?? '';
@@ -195,7 +202,14 @@ class Claim extends Model implements Auditable
                 $record = [];
                 $notes = [];
                 foreach ($status->privateNotes as $note) {
-                    array_push($notes, ['note' => $note->note, 'created_at' => $note->created_at]);
+                    array_push(
+                        $notes,
+                        [
+                            'note'          => $note->note,
+                            'created_at'    => $note->created_at,
+                            'last_modified' => $note->last_modified
+                        ]
+                    );
                 }
                 $record['notes_history']  = $notes;
                 $record['status'] = $status->claimStatus->status ?? '';
