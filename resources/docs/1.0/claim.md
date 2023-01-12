@@ -20,6 +20,7 @@
 - [verify and register claim](#verify-register)
 - [Show claim report preview](#preview-claim)
 - [Change status Claim](#change-status-claim)
+- [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
 
 
@@ -47,7 +48,8 @@
 | 15 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
 | 16 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
 | 17 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
-| 18 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
+| 18 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
+| 19 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
 
 
 <a name="create-claim"></a>
@@ -653,8 +655,33 @@
         "status": "Draft",
         "status_history": [
             {
-                "note": "Nota 1",
+                "notes_history": [
+                    {
+                        "note": "Note",
+                        "created_at": "2022-11-01T17:42:13.000000Z"
+                    }
+                ],
                 "status": "Draft",
+                "status_background_color": "#F2F2F2",
+                "status_font_color": "#707070",
+                "status_date": "2022-11-01T17:42:13.000000Z",
+                "sub_status_history": [
+                    {
+                        "notes_history": [
+                            {
+                                "note": "Note 2",
+                                "created_at": "2023-01-10T06:51:20.000000Z"
+                            },
+                            {
+                                "note": "Note 3",
+                                "created_at": "2023-01-12T00:12:36.000000Z"
+                            }
+                        ],
+                        "code": "CODE1",
+                        "name": "Claim Sub-status First",
+                        "sub_status_date": "2023-01-10T06:51:20.000000Z",
+                    }
+                ],
                 "last_modified": {
                     "user": "Henry Paredes",
                     "roles": [
@@ -787,8 +814,33 @@
     "status": "Draft",
     "status_history": [
         {
-            "note": "Nota 1",
+            "notes_history": [
+                {
+                    "note": "Note",
+                    "created_at": "2022-11-01T17:42:13.000000Z"
+                }
+            ],
             "status": "Draft",
+            "status_background_color": "#F2F2F2",
+            "status_font_color": "#707070",
+            "status_date": "2022-11-01T17:42:13.000000Z",
+            "sub_status_history": [
+                {
+                    "notes_history": [
+                        {
+                            "note": "Note 2",
+                            "created_at": "2023-01-10T06:51:20.000000Z"
+                        },
+                        {
+                            "note": "Note 3",
+                            "created_at": "2023-01-12T00:12:36.000000Z"
+                        }
+                    ],
+                    "code": "CODE1",
+                    "name": "Claim Sub-status First",
+                    "sub_status_date": "2023-01-10T06:51:20.000000Z",
+                }
+            ],
             "last_modified": {
                 "user": "Henry Paredes",
                 "roles": [
@@ -1491,6 +1543,42 @@
     "status_id": 1, /** required */
     "sub_status_id": 1, /** optional */
     "private_note": "Note Status" /** optional */
+}
+```
+
+## Response
+
+> {success} 204 Good response
+
+```json
+{
+    "control_number": "000000001",
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "updated_at": "2022-09-16T13:23:19.000000Z",
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "id": 1
+}
+```
+#
+
+<a name="add-note-current"></a>
+## Add note current status Claim
+
+## Param in path
+
+```json
+{
+    "id": <integer> /** Claim ID */
+}
+```
+## Body request example
+
+```json
+{
+    "private_note": "Note Status New" /** required */
 }
 ```
 

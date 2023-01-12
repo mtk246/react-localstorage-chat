@@ -141,7 +141,8 @@ class Claim extends Model implements Auditable
     {
         return $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first()->privateNotes->note ?? '';
+                    ->orderBy("id", "asc")->first()->privateNotes()->orderBy("created_at", "desc")
+                    ->orderBy("id", "asc")->first();
     }
 
     /**
@@ -180,7 +181,11 @@ class Claim extends Model implements Auditable
         foreach ($history as $status) {
             if ($status->claim_status_type == ClaimSubStatus::class) {
                 $record = [];
-                $record['note'] = $status->privateNotes->note ?? '';
+                $notes = [];
+                foreach ($status->privateNotes as $note) {
+                    array_push($notes, ['note' => $note->note, 'created_at' => $note->created_at]);
+                }
+                $record['notes_history']  = $notes;
                 $record['code'] = $status->claimStatus->code ?? '';
                 $record['name'] = $status->claimStatus->name ?? '';
                 $record['sub_status_date'] = $status->created_at;
@@ -188,7 +193,11 @@ class Claim extends Model implements Auditable
                 array_push($recordSubstatus, $record);
             } else if ($status->claim_status_type == ClaimStatus::class) {
                 $record = [];
-                $record['note']   = $status->privateNotes->note ?? '';
+                $notes = [];
+                foreach ($status->privateNotes as $note) {
+                    array_push($notes, ['note' => $note->note, 'created_at' => $note->created_at]);
+                }
+                $record['notes_history']  = $notes;
                 $record['status'] = $status->claimStatus->status ?? '';
                 $record['status_background_color'] = $status->claimStatus->background_color ?? '';
                 $record['status_font_color'] = $status->claimStatus->font_color ?? '';

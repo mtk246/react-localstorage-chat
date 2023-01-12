@@ -253,4 +253,19 @@ class ClaimController extends Controller
         $rs = $this->claimRepository->updateNoteCurrentStatus($request, $id);
         return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
     }
+
+    /**
+     * addNoteCurrentStatus
+     *
+     * @method addNoteCurrentStatus
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addNoteCurrentStatus(Request $request, int $id): JsonResponse
+    {
+        $rs = $this->claimRepository->addNoteCurrentStatus($request, $id);
+        return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
+    }
 }

@@ -54,7 +54,7 @@ class ClaimStatusClaim extends Model implements Auditable
      */
     public function privateNotes()
     {
-        return $this->morphOne(PrivateNote::class, 'publishable');
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 
     public function getLastModifiedAttribute()
