@@ -164,6 +164,19 @@ class Facility extends Model implements Auditable
         return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
     }
 
+    /**
+     * Interact with the user's name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
+
      /*
      * Get the insuranceCompany's status.
      *
