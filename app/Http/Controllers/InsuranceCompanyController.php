@@ -11,10 +11,10 @@ use Illuminate\Http\Request;
 
 class InsuranceCompanyController extends Controller
 {
-    private $InsuranceRepository;
+    private $insuranceRepository;
 
     public function __construct(){
-        $this->InsuranceRepository = new InsuranceCompanyRepository();
+        $this->insuranceRepository = new InsuranceCompanyRepository();
     }
 
     /**
@@ -23,7 +23,7 @@ class InsuranceCompanyController extends Controller
      */
     public function getByName(string $name): JsonResponse
     {
-        $rs = $this->InsuranceRepository->searchByName($name);
+        $rs = $this->insuranceRepository->searchByName($name);
 
         return count($rs) > 0 ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
     }
@@ -34,7 +34,7 @@ class InsuranceCompanyController extends Controller
      */
     public function createInsurance(CreateInsuranceRequest $request): JsonResponse
     {
-        $rs = $this->InsuranceRepository->createInsurance($request->validated());
+        $rs = $this->insuranceRepository->createInsurance($request->validated());
 
         return $rs ? response()->json($rs,201) : response()->json(__("Error creating insurance company"), 400);
     }
@@ -45,7 +45,7 @@ class InsuranceCompanyController extends Controller
      */
     public function getOneInsurance($id): JsonResponse
     {
-        $rs = $this->InsuranceRepository->getOneInsurance($id);
+        $rs = $this->insuranceRepository->getOneInsurance($id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
     }
@@ -55,7 +55,7 @@ class InsuranceCompanyController extends Controller
      */
     public function getAllInsurance(): JsonResponse
     {
-        $rs = $this->InsuranceRepository->getAllInsurance();
+        $rs = $this->insuranceRepository->getAllInsurance();
 
         return response()->json($rs);
     }
@@ -67,7 +67,7 @@ class InsuranceCompanyController extends Controller
      */
     public function getServerAll(Request $request): JsonResponse
     {
-        return $this->InsuranceRepository->getServerAllInsurance($request);
+        return $this->insuranceRepository->getServerAllInsurance($request);
     }
 
     /**
@@ -77,7 +77,7 @@ class InsuranceCompanyController extends Controller
      */
     public function changeStatus(ChangeStatusInsuraceRequest $request,int $id): JsonResponse
     {
-        $rs = $this->InsuranceRepository->changeStatus($request->input("status"),$id);
+        $rs = $this->insuranceRepository->changeStatus($request->input("status"),$id);
 
         return $rs ? response()->json([], 204) : response()->json(__("Error, insurance company not found"), 404);
     }
@@ -89,7 +89,7 @@ class InsuranceCompanyController extends Controller
      */
     public function updateInsurance(UpdateInsuranceRequest $request,int $id): JsonResponse
     {
-        $rs = $this->InsuranceRepository->updateInsurance($request->validated(),$id);
+        $rs = $this->insuranceRepository->updateInsurance($request->validated(),$id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error updating insurance company"), 400);
     }
@@ -100,14 +100,20 @@ class InsuranceCompanyController extends Controller
      */
     public function addToBillingCompany(int $id): JsonResponse
     {
-        $rs = $this->InsuranceRepository->addToBillingCompany($id);
+        $rs = $this->insuranceRepository->addToBillingCompany($id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error add insurance company to billing company"), 404);
     }
 
     public function getList() {
-        $rs = $this->InsuranceRepository->getList();
+        return response()->json(
+            $this->insuranceRepository->getList();
+        );
+    }
 
-        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    public function getListBillingCompanies(int $insuranceCompanyId = null) {
+        return response()->json(
+            $this->insuranceRepository->getListBillingCompanies($insuranceCompanyId);
+        );
     }
 }

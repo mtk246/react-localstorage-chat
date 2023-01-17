@@ -157,7 +157,7 @@ class BillingCompany extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function insuranceCompany(): BelongsToMany
+    public function insuranceCompanies(): BelongsToMany
     {
         return $this->belongsToMany(InsuranceCompany::class)->withPivot('status')->withTimestamps();
     }

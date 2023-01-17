@@ -178,6 +178,10 @@ class InsuranceCompanyRepository
         return getList(InsuranceCompany::class);
     }
 
+    public function getListBillingCompanies(int $insuranceCompanyId = null) {
+        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+    }
+
     /**
      * @param string $name
      * @return mixed

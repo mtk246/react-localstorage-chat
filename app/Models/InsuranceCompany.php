@@ -100,6 +100,26 @@ class InsuranceCompany extends Model implements Auditable
     }
 
     /**
+     * The billing incomplete reasons that belongs to the InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function billingIncompleteReasons(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeCatalog::class, 'insurance_company_billing_incomplete_reason', 'insurance_company_id', 'billing_incomplete_reason_id')->using(InsuranceCompanyBillingIncompleteReason::class)->withPivot('billing_company_id')->withTimestamps();
+    }
+
+    /**
+     * The billing incomplete reasons that belongs to the InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function appeals(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeCatalog::class, 'insurance_company_appeal', 'insurance_company_id', 'appeal_id')->using(InsuranceCompanyAppeal::class)->withPivot('billing_company_id')->withTimestamps();
+    }
+
+    /**
      * InsuranceCompany morphs many Contact.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

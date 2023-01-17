@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->string('file_method', 50);
-            $table->integer('time_failed')->nullable();
-            $table->integer('day_count')->nullable();
-            $tabe->string('appeal')->nullable();
+            $table->foreignId('payer_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('file_method_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
+            $table->dropColumn('file_method');
         });
     }
 
@@ -29,10 +28,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->dropColumn('file_method');
-            $table->dropColumn('time_failed');
-            $table->dropColumn('day_count');
-            $table->dropColumn('appeal');
+            $table->dropForeign(['payer_id']);
+            $table->dropForeign(['file_method_id']);
+            $table->dropColumn('payer_id');
+            $table->dropColumn('file_method_id');
         });
     }
 };

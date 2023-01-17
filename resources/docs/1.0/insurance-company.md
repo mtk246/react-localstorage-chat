@@ -13,6 +13,7 @@
 - [Change status insurance company](#change-status-insurance-company)
 - [Add to billing company](#add-to-billing-company)
 - [Get list insurance companies](#get-list-insurance-companies)
+- [Get list billing companies](#get-list-billing-companies)
 
 
 <a name="basic-data"></a>
@@ -31,6 +32,7 @@
 | 8 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
 | 9 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
 | 10 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
+| 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies/{insuranceCompanyId?}`        |yes            |Get list billing companies|
 
 
 
@@ -52,11 +54,23 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
+        "payer_id": 12,
         "name":"dsfsdfsfeddsddfg",
         "nickname":"alias insurance",
         "naic":"someNaic",
-        "file_method":"someFileNaic"
+        "file_method_id": 1,
     },
+    "billing_incomplete_reasons": [1,2,3],
+    "time_failed": {
+        "day_count": 30,
+        "from_id": 2,
+    },
+    "appeals": [
+        {
+            "appeal_type_id": 1,
+            "private_note": "Rules"
+        }
+    ],
     "address":{
         "address":"dfsdf",
         "city":"cdfsf",
@@ -65,9 +79,12 @@
     },
     "contact":{
         "phone":"55433",
+        "mobile":"55433",
         "fax":"fsdfs",
         "email":"dsfsd@gdrfg.com"
-    }
+    },
+    "public_note": "Note Public",
+    "private_note": "Note Private"
 }
 ```
 
@@ -808,6 +825,52 @@
     {
         "id": 3,
         "name": "Langosh Ltd"
+    }
+]
+```
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "insurance_company_id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
     }
 ]
 ```
