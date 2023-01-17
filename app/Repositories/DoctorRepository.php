@@ -793,6 +793,10 @@ class DoctorRepository
         return getList(CompanyHealthProfessionalType::class, 'type');
     }
 
+    public function getListBillingCompanies(int $healthProfessionalId = null) {
+        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'healthProfessionals', 'orWhereHas' => ['relationship' => 'healthProfessionals', 'where' => ['health_professional_id' => $healthProfessionalId]]]);
+    }
+
     public function updateCompanies(array $data, int $id) {
         try {
             \DB::beginTransaction();

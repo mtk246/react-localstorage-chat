@@ -235,6 +235,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::get("/get-all-server",[\App\Http\Controllers\InsuranceCompanyController::class,'getServerAll']);
         Route::get("/get-list",[\App\Http\Controllers\InsuranceCompanyController::class,'getList']);
+        Route::get("/get-list-billing-companies/{id?}",[\App\Http\Controllers\InsuranceCompanyController::class,'getListBillingCompanies'])->middleware(['auth:api']);
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);
         Route::post("/",[\App\Http\Controllers\InsuranceCompanyController::class,'createInsurance']);
@@ -266,6 +267,7 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::get("/get-list-health-professional-types",[\App\Http\Controllers\DoctorController::class,'getListTypes']);
         Route::get("/get-list-authorizations",[\App\Http\Controllers\DoctorController::class,'getListAuthorizations']);
+        Route::get("/get-list-billing-companies/{id?}",[\App\Http\Controllers\DoctorController::class,'getListBillingCompanies'])->middleware(['auth:api']);
         Route::get("/get-all-server",[\App\Http\Controllers\DoctorController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);

@@ -108,6 +108,12 @@ class DoctorController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error get all authorizations"), 400);
     }
 
+    public function getListBillingCompanies(int $healthProfessionalId = null) {
+        $rs = $this->doctorRepository->getListBillingCompanies($healthProfessionalId);
+
+        return response()->json($rs);
+    }
+
     /**
      * @param UpdateDoctorRequest $request
      * @param int $id

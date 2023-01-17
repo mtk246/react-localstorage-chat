@@ -12,6 +12,7 @@
 - [Change status health professional](#change-status-health-professional)
 - [Get list health professional types](#get-list-health-professional-types)
 - [Get list doctor authorizations](#get-list-authorization)
+- [Get list billing companies](#get-list-billing-companies)
 - [Update company providers](#update-providers)
 
 
@@ -30,7 +31,8 @@
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 | 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
 | 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
-| 10 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
+| 10 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies/{healthProfessionaId?}`|yes|Get list biling companies|
+| 11 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
 
 
 
@@ -941,6 +943,54 @@
     {
         "id": 3,
         "name": "Referred"
+    }
+]
+```
+
+#
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "health_professional_id": <integer> /** Optional */
+}
+```
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
     }
 ]
 ```
