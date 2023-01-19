@@ -16,29 +16,44 @@ class RolePermissionRepository
     /**
      * @return Collection|Role[]
      */
-    public function getAllRoles(){
-        return Role::all();
+    public function getAllRoles() {
+        if (auth()->user()->hasRole('superuser')) {
+            return Role::all();
+        } else {
+            return Role::where('level', '>=', auth()->user()->level())
+                       ->whereNotIn('level', [5, 6])->get();
+        }
     }
 
     /**
      * @return Collection|Role[]
      */
     public function getAllRolesWithPermissions() {
-        $permissions = Permission::all()->groupBy([
-                'module'
-            ]);
-        $roles = Role::all();
+        $permissions = Permission::all()->groupBy(['module']);
+
+        if (auth()->user()->hasRole('superuser')) {
+            $roles = Role::all();
+        } else {
+            $roles =  Role::where('level', '>=', auth()->user()->level())
+                          ->whereNotIn('level', [5, 6])->get();
+        }
         return [
-            'roles'=> $roles,
-            'permissions'=> $permissions,
+            'roles'       => $roles,
+            'permissions' => $permissions,
         ];
     }
 
     /**
      * @return Collection|Permission[]
      */
-    public function getAllPermission(){
-        return Permission::with('roles')->get();
+    public function getAllPermission(Request $request) {
+        $bC = auth()->user()->billing_company_id ?? null;
+        $billing_company_id = $request->billing_company_id ?? $bC;
+        $role_id = $request->role_id ?? '';
+
+        return ($role_id != '')
+            ? Role::find($role_id)->permissions()->wherePivot('billing_company_id', $billing_company_id)->get()
+            : Permission::all();
     }
 
     /**

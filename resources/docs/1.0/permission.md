@@ -30,7 +30,7 @@
 | : |        |   :-                       |  :                      |               |                    |  
 | 1 |GET     | `Get all roles`            | `/permission/roles`               |yes             |Get all roles  |         
 | 2 |GET     | `Get all roles with permissions`            | `/permission/roles-permissions`               |yes             |Get all roles with permissions |
-| 3 |GET     | `Get all permissions`      | `/permission/permissions`        |yes            |Get all permissions|
+| 3 |GET     | `Get all permissions`      | `/permission/permissions?role_id={roleID}&billing_company_id={BillingCompanyID}`        |yes            |Get all permissions|
 | 4 |GET     | `Get all permissions by role`      | `/permission/permissions-by-role/{role}`        |yes            |Get all permissions by role|
 | 5 |GET     | `Get one role`             | `/permission/role/{role_id}`|yes|Get one role|
 | 6 |GET     | `Get one permission`       | `/permission/permission/{permission_id}` |yes            |Get one permission|
@@ -293,6 +293,16 @@
 }
 ```
 
+### Param in path
+
+`role_id required optional integer>`
+`billing_company_id optional integer`
+
+## Example path
+
+>{primary} ?role_id=1&billing_company_id=2
+>{primary} ?role_id=1
+
 >{success} 200 ok
 
 
@@ -300,25 +310,21 @@
 ```json
 [
     {
-        "id": 1,
-        "name": "edit articles",
-        "guard_name": "api",
-        "created_at": "2022-01-04T01:45:08.000000Z",
-        "updated_at": "2022-01-04T01:45:08.000000Z"
-    },
-    {
-        "id": 2,
-        "name": "edit users",
-        "guard_name": "api",
-        "created_at": "2022-01-04T01:48:19.000000Z",
-        "updated_at": "2022-01-04T01:48:19.000000Z"
-    },
-    {
-        "id": 3,
-        "name": "edit permissions",
-        "guard_name": "api",
-        "created_at": "2022-01-04T01:48:33.000000Z",
-        "updated_at": "2022-01-04T01:48:33.000000Z"
+        "id": 1049,
+        "name": "Manage permissions for each role",
+        "slug": "permission.manage.role",
+        "description": "Manage permissions for each role",
+        "module": "Permission Management",
+        "created_at": "2022-12-30T21:08:51.000000Z",
+        "updated_at": "2022-12-30T21:08:51.000000Z",
+        "constraint": "",
+        "pivot": {
+            "role_id": 1,
+            "permission_id": 1049,
+            "billing_company_id": 2,
+            "created_at": "2022-12-30T21:08:51.000000Z",
+            "updated_at": "2022-12-30T21:08:51.000000Z"
+        }
     }
 ]
 ```
@@ -369,7 +375,6 @@
     }
 ]
 ```
-
 
 <a name="get-one-role"></a>
 ## Get one Role
@@ -465,12 +470,6 @@
 ```
 
 >{warning} 400 bad request, 422 some field is missing in body, 500 some exception
-
-
-
-
-
-
 
 <a name="create-permission"></a>
 ## Create Permission

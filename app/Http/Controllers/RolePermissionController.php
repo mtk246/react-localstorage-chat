@@ -36,9 +36,9 @@ class RolePermissionController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getPermissions(): JsonResponse
+    public function getPermissions(Request $request): JsonResponse
     {
-        return response()->json($this->RolePermissionRepository->getAllPermission());
+        return response()->json($this->RolePermissionRepository->getAllPermission($request));
     }
 
     /**

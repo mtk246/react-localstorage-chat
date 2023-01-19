@@ -20,7 +20,7 @@ trait RoleHasRelations
      */
     public function permissions()
     {
-        return $this->belongsToMany(config('roles.models.permission'))->withTimestamps();
+        return $this->belongsToMany(config('roles.models.permission'))->withPivot('billing_company_id')->withTimestamps();
     }
 
     /**
