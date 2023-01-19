@@ -128,4 +128,16 @@ class InsuranceCompanyController extends Controller
             $this->insuranceRepository->getListFromTheDate()
         );
     }
+
+    public function getListBillingIncompleteReasons() {
+        return response()->json(
+            $this->insuranceRepository->getListBillingIncompleteReasons()
+        );
+    }
+
+    public function getListAppealReasons() {
+        return response()->json(
+            $this->insuranceRepository->getListAppealReasons()
+        );
+    }
 }

@@ -199,6 +199,23 @@ class InsuranceCompanyRepository
         }
     }
 
+    public function getListBillingIncompleteReasons() {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Billing incomplete reasons']]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListAppealReasons() {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Appeal reasons']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+
     /**
      * @param string $name
      * @return mixed

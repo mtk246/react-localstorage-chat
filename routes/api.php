@@ -237,6 +237,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list",[\App\Http\Controllers\InsuranceCompanyController::class,'getList']);
         Route::get("/get-list-file-methods",[\App\Http\Controllers\InsuranceCompanyController::class,'getListFileMethods']);
         Route::get("/get-list-from-the-date",[\App\Http\Controllers\InsuranceCompanyController::class,'getListFromTheDate']);
+        Route::get("/get-list-billing-incomplete-reasons",[\App\Http\Controllers\InsuranceCompanyController::class,'getListBillingIncompleteReasons']);
+        Route::get("/get-list-appeal-reasons",[\App\Http\Controllers\InsuranceCompanyController::class,'getListAppealReasons']);
         Route::get("/get-list-billing-companies/{id?}",[\App\Http\Controllers\InsuranceCompanyController::class,'getListBillingCompanies'])->middleware(['auth:api']);
         Route::get("/{id}",[\App\Http\Controllers\InsuranceCompanyController::class,'getOneInsurance']);
         Route::get("/{name}/get-by-name",[\App\Http\Controllers\InsuranceCompanyController::class,'getByName']);

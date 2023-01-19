@@ -947,5 +947,97 @@
 #
 
 ```json
+[
+    {
+        "id": 58,
+        "name": "Service"
+    },
+    {
+        "id": 59,
+        "name": "Claim generation"
+    }
+]
+```
 
+
+<a name="get-list-billing-incomplete-reasons"></a>
+## Get list billing incomplete reasons
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Billing incomplete reasons found
+
+#
+
+```json
+[
+    {
+        "id": 60,
+        "name": "00001 - Missing patient date of birthday"
+    },
+    {
+        "id": 61,
+        "name": "00002 - Missing hospital admit date"
+    },
+    {
+        "id": 62,
+        "name": "00003 - Missing or deleted diagnosis"
+    },
+    {
+        "id": 63,
+        "name": "00004 - Authorized quantity exceeded"
+    },
+    {
+        "id": 64,
+        "name": "00005 - Missing sex in patient record"
+    }
+]
+```
+
+<a name="get-list-appeal-reasons"></a>
+## Get list appeal reasons
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Appeal reasons found
+
+#
+
+```json
+[
+    {
+        "id": 153,
+        "name": "1 - Any denial that involves a determination that a treatment is experimental or investigational"
+    },
+    {
+        "id": 154,
+        "name": "2 - Any denial that involves medical judgment where you or your provider may disagree with the health insurance plan"
+    },
+    {
+        "id": 155,
+        "name": "3 - The benefit is not offered under your health plan"
+    },
+    {
+        "id": 156,
+        "name": "4 - Your medical problem began before you joined the plan"
+    }
+]
 ```
