@@ -37,7 +37,6 @@
 | 9 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
 | 10 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
 | 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies/{insuranceCompanyId?}`        |yes            |Get list billing companies|
-
 | 12 |GET | `Get one insurance companies by payer ID`| `/insurance-company/get-by-payer-id/{payerID}`        |yes            |Get one insurance company|
 | 13 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
 | 14 |GET | `Get list from the date`| `/insurance-company/get-list-from-date`        |yes            |Get list from the date of|
