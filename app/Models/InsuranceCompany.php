@@ -48,7 +48,8 @@ class InsuranceCompany extends Model implements Auditable
         "code",
         "name",
         "naic",
-        "file_method"
+        "payer_id",
+        "file_method_id"
     ];
 
     /**
@@ -114,9 +115,9 @@ class InsuranceCompany extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function appeals(): BelongsToMany
+    public function appealReasons(): BelongsToMany
     {
-        return $this->belongsToMany(TypeCatalog::class, 'insurance_company_appeal', 'insurance_company_id', 'appeal_id')->using(InsuranceCompanyAppeal::class)->withPivot('billing_company_id')->withTimestamps();
+        return $this->belongsToMany(TypeCatalog::class, 'insurance_company_appeal_reason', 'insurance_company_id', 'appeal_reason_id')->using(InsuranceCompanyAppealReason::class)->withPivot('billing_company_id')->withTimestamps();
     }
 
     /**
@@ -147,6 +148,16 @@ class InsuranceCompany extends Model implements Auditable
     public function nicknames()
     {
         return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
+    /**
+     * InsuranceCompany morphs many EntityAbbreviations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function abbreviations()
+    {
+        return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
     }
 
     /**

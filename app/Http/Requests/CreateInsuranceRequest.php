@@ -29,7 +29,7 @@ class CreateInsuranceRequest extends FormRequest
         return [
             'billing_company_id'       => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'insurance'                => ['required', 'array'],
-            'insurance.payer_id'       => ['required', 'integer'],
+            'insurance.payer_id'       => ['required', 'string', 'max:20'],
             'insurance.name'           => ['required', 'string', new IUnique(InsuranceCompany::class, 'name')],
             'insurance.abbreviation'   => ['required', 'string', 'max:20'],
             'insurance.naic'           => ['nullable', 'string'],

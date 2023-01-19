@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->foreignId('payer_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('payer_id', 20)->nullable()->unique();
             $table->foreignId('file_method_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
             $table->dropColumn('file_method');
             $table->string('naic')->nullable()->change();
@@ -29,10 +29,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->dropForeign(['payer_id']);
+            $table->dropUnique(['payer_id']);
             $table->dropForeign(['file_method_id']);
             $table->dropColumn('payer_id');
             $table->dropColumn('file_method_id');
+            $table->string('file_method')->nullable();
         });
     }
 };

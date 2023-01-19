@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class InsuranceCompanyAppeal extends Pivot
+class InsuranceCompanyAppealReason extends Pivot
 {
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -15,7 +15,7 @@ class InsuranceCompanyAppeal extends Pivot
 
     protected $fillable = [
         "insurance_company_id",
-        "appeal_id"
+        "appeal_reason_id",
         "billing_company_id"
     ];
 }

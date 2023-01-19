@@ -28,6 +28,13 @@ class InsuranceCompanyController extends Controller
         return count($rs) > 0 ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
     }
 
+    public function getByPayer(string $payer): JsonResponse
+    {
+        $rs = $this->insuranceRepository->getByPayer($payer);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error, insurance company not found"), 404);
+    }
+
     /**
      * @param CreateInsuranceRequest $request
      * @return JsonResponse
@@ -111,9 +118,9 @@ class InsuranceCompanyController extends Controller
         );
     }
 
-    public function getListBillingCompanies(int $insuranceCompanyId = null) {
+    public function getListBillingCompanies(Request $request) {
         return response()->json(
-            $this->insuranceRepository->getListBillingCompanies($insuranceCompanyId)
+            $this->insuranceRepository->getListBillingCompanies($request)
         );
     }
 

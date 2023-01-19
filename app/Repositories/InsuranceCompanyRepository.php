@@ -23,10 +23,10 @@ class InsuranceCompanyRepository
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::create([
-                "code"        => generateNewCode(getPrefix($data["insurance"]["name"]), 5, date("y"), InsuranceCompany::class, "code"),
-                "name"        => $data["insurance"]["name"],
-                "naic"        => $data["insurance"]["naic"],
-                "file_method" => $data["insurance"]["file_method"]
+                "code"           => generateNewCode("IC", 5, date("Y"), InsuranceCompany::class, "code"),
+                "name"           => $data["insurance"]["name"],
+                "naic"           => $data["insurance"]["naic"] ?? '',
+                "file_method_id" => $data["insurance"]["file_method"]
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
@@ -103,7 +103,9 @@ class InsuranceCompanyRepository
             $data = InsuranceCompany::with([
                 "addresses",
                 "contacts",
-                "nicknames"
+                "nicknames",
+                "abbreviations"
+
             ]);
         } else {
             $data = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -116,6 +118,9 @@ class InsuranceCompanyRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "nicknames" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "abbreviations" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     }
             ]);
@@ -155,7 +160,10 @@ class InsuranceCompanyRepository
                 "addresses",
                 "contacts",
                 "nicknames",
-                "billingCompanies"
+                "abbreviations",
+                "billingCompanies",
+                "billingIncompleteReasons",
+                "appealReasons"
             ])->first();
         } else {
             $insurance = InsuranceCompany::whereId($id)->with([
@@ -168,10 +176,25 @@ class InsuranceCompanyRepository
                 "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "billingCompanies"
+                "abbreviations" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingIncompleteReasons" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "appealReasons" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "billingCompanies",
             ])->first();
         }
 
+        return !is_null($insurance) ? $insurance : null;
+    }
+
+
+    public function getByPayer(string $payer) {
+        $insurance = InsuranceCompany::wherePayerId($payer)->first();
         return !is_null($insurance) ? $insurance : null;
     }
 
@@ -179,8 +202,19 @@ class InsuranceCompanyRepository
         return getList(InsuranceCompany::class);
     }
 
-    public function getListBillingCompanies(int $insuranceCompanyId = null) {
-        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+    public function getListBillingCompanies(Request $request) {
+        $insuranceCompanyId = $request->insurance_company_id ?? null;
+        $edit = $request->edit ?? false;
+
+        if (is_null($insuranceCompanyId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            if ($edit == true) {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+            }
+        }
     }
 
     public function getListFileMethods() {

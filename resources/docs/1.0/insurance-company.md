@@ -14,6 +14,7 @@
 - [Add to billing company](#add-to-billing-company)
 - [Get list insurance companies](#get-list-insurance-companies)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get one insurance company by payer](#get-one-insurance-company-by-payer)
 - [Get list file methods](#get-list-file-methods)
 - [Get list from the date](#get-list-from-the-date)
 - [Get list billing incomplete reasons](#get-list-billing-incomplete-reasons)
@@ -36,7 +37,7 @@
 | 8 |PATCH | `Change status Insurance Company`           | `/insurance-company/{id}/change-status`|yes|Change status Insurance Company|
 | 9 |PATCH | `Add to billing company`                    | `/insurance-company/add-to-billing-company/{id}`|yes|Add insurance company to billing company|
 | 10 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
-| 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies/{insuranceCompanyId?}`        |yes            |Get list billing companies|
+| 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies?insurance_company_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 12 |GET | `Get one insurance companies by payer ID`| `/insurance-company/get-by-payer-id/{payerID}`        |yes            |Get one insurance company|
 | 13 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
 | 14 |GET | `Get list from the date`| `/insurance-company/get-list-from-date`        |yes            |Get list from the date of|
@@ -862,8 +863,14 @@
 ```json
 {
     "insurance_company_id": <integer>
+    "edit": <boolean>
 }
 ```
+
+## Example path
+
+>{primary} /get-list-billing-companies?insurance_company_id=2&edit=false
+>{primary} /get-list-billing-companies?insurance_company_id=2&edit=true
 
 ## Response
 
@@ -891,6 +898,68 @@
     }
 ]
 ```
+
+<a name="get-one-insurance-company-by-payer"></a>
+## Get One Insurance company by payer ID
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "payer_id": <string>
+}
+```
+
+## Response
+
+> {success} 200 Insurance found
+
+#
+
+
+```json
+{
+    "id": 2,
+    "code": "IC-00002-2022",
+    "name": "Name",
+    "naic": "naic",
+    "created_at": "2022-10-31T12:41:23.000000Z",
+    "updated_at": "2022-10-31T12:41:23.000000Z",
+    "payer_id": "10G",
+    "file_method_id": null,
+    "status": false,
+    "last_modified": {
+        "user": "Henry Paredes",
+        "roles": [
+            {
+                "id": 1,
+                "name": "Super User",
+                "slug": "superuser",
+                "description": "Allows you to administer and manage all the functions of the application",
+                "level": 1,
+                "created_at": "2022-04-20T21:52:51.000000Z",
+                "updated_at": "2022-04-20T21:52:51.000000Z",
+                "pivot": {
+                    "user_id": 14,
+                    "role_id": 1,
+                    "created_at": "2022-07-20T21:04:22.000000Z",
+                    "updated_at": "2022-07-20T21:04:22.000000Z"
+                }
+            }
+        ]
+    }
+}
+```
+
 
 <a name="get-list-file-methods"></a>
 ## Get list file methods
