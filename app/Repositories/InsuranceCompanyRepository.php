@@ -7,6 +7,7 @@ use App\Models\BillingCompany;
 use App\Models\Contact;
 use App\Models\EntityNickname;
 use App\Models\InsuranceCompany;
+use App\Models\TypeCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -180,6 +181,22 @@ class InsuranceCompanyRepository
 
     public function getListBillingCompanies(int $insuranceCompanyId = null) {
         return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+    }
+
+    public function getListFileMethods() {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'File method']]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListFromTheDate() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'From']]);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     /**

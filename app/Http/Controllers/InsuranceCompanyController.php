@@ -107,13 +107,25 @@ class InsuranceCompanyController extends Controller
 
     public function getList() {
         return response()->json(
-            $this->insuranceRepository->getList();
+            $this->insuranceRepository->getList()
         );
     }
 
     public function getListBillingCompanies(int $insuranceCompanyId = null) {
         return response()->json(
-            $this->insuranceRepository->getListBillingCompanies($insuranceCompanyId);
+            $this->insuranceRepository->getListBillingCompanies($insuranceCompanyId)
+        );
+    }
+
+    public function getListFileMethods() {
+        return response()->json(
+            $this->insuranceRepository->getListFileMethods()
+        );
+    }
+
+    public function getListFromTheDate() {
+        return response()->json(
+            $this->insuranceRepository->getListFromTheDate()
         );
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Type;
 use App\Models\TypeCatalog;
+use App\Models\PrivateNote;
 
 class TypeCatalogSeeder extends Seeder
 {
@@ -91,27 +92,27 @@ class TypeCatalogSeeder extends Seeder
                 'type_catalogs' => [
                     [
                         'code' => '7',
-                        'description' => '7 DIAS'
+                        'description' => '7 Dias'
                     ],
                     [
                         'code' => '15',
-                        'description' => '15 DIAS'
+                        'description' => '15 Dias'
                     ],
                     [
                         'code' => '30',
-                        'description' => '30 DIAS'
+                        'description' => '30 Dias'
                     ],
                     [
                         'code' => '45',
-                        'description' => '45 DIAS'
+                        'description' => '45 Dias'
                     ],
                     [
                         'code' => '60',
-                        'description' => '60 DIAS'
+                        'description' => '60 Dias'
                     ],
                     [
                         'code' => '90',
-                        'description' => '90 DIAS'
+                        'description' => '90 Dias'
                     ],
                 ]
             ],
@@ -257,15 +258,15 @@ class TypeCatalogSeeder extends Seeder
                 ]
             ],
             [
-                'description' => 'File method',
+                'description' => 'From',
                 'type_catalogs' => [
                     [
                         'code' => 'service_date',
-                        'description' => 'A partir de la fecha de servicio'
+                        'description' => 'Service'
                     ],
                     [
                         'code' => 'claim_date',
-                        'description' => 'A partir de la generación del claim'
+                        'description' => 'Claim generation'
                     ]
                 ]
             ],
@@ -274,379 +275,480 @@ class TypeCatalogSeeder extends Seeder
                 'type_catalogs' => [
                     [
                         'code' => '00001',
-                        'description' => 'MISSING PATIENT DATE OF BIRTHDAY'
+                        'description' => "Missing patient date of birthday"
                     ],
                     [
                         'code' => '00002',
-                        'description' => 'MISSING HOSPITAL ADMIT DATE'
+                        'description' => "Missing hospital admit date"
                     ],
                     [
                         'code' => '00003',
-                        'description' => 'MISSING OR DELETED DIAGNOSIS'
+                        'description' => "Missing or deleted diagnosis"
                     ],
                     [
                         'code' => '00004',
-                        'description' => 'AUTHORIZED QUANTITY EXCEEDED'
+                        'description' => "Authorized quantity exceeded"
                     ],
                     [
                         'code' => '00005',
-                        'description' => 'MISSING SEX IN PATIENT RECORD'
+                        'description' => "Missing sex in patient record"
                     ],
                     [
                         'code' => '00006',
-                        'description' => 'MISSING LAST NAME IN PATIENT'
+                        'description' => "Missing last name in patient"
                     ],
                     [
                         'code' => '00007',
-                        'description' => 'MISSING ZIP CODE IN PATIENT'
+                        'description' => "Missing zip code in patient"
                     ],
                     [
                         'code' => '00008',
-                        'description' => 'MISSING PLACE OF SERVICE'
+                        'description' => "Missing place of service"
                     ],
                     [
                         'code' => '00009',
-                        'description' => 'MISSING TYPE OF SERVICE'
+                        'description' => "Missing type of service"
                     ],
                     [
                         'code' => '00010',
-                        'description' => 'AUTHORIZATION REQUIRED'
+                        'description' => "Authorization required"
                     ],
                     [
                         'code' => '00011',
-                        'description' => 'MISSING ACCIDENT DATE ON CLAIM'
+                        'description' => "Missing accident date on claim"
                     ],
                     [
                         'code' => '00012',
-                        'description' => 'MISSING PHYSICIAN'S PROVIDER'
+                        'description' => "Missing physician's provider"
                     ],
                     [
                         'code' => '00013',
-                        'description' => 'PENDING INSURANCE INFORMATION'
+                        'description' => "Pending insurance information"
                     ],
                     [
                         'code' => '00014',
-                        'description' => 'CHANGE HELD BY HOLD FLAG'
+                        'description' => "Change held by hold flag"
                     ],
                     [
                         'code' => '00015',
-                        'description' => 'REQUIRED APPLICATION DATA'
+                        'description' => "Required application data"
                     ],
                     [
                         'code' => '00016',
-                        'description' => 'MISSING CLIA NUMBER FOR LAB'
+                        'description' => "Missing clia number for lab"
                     ],
                     [
                         'code' => '00017',
-                        'description' => 'MISSING PATIENT POLICY NUMBER'
+                        'description' => "Missing patient policy number"
                     ],
                     [
                         'code' => '00018',
-                        'description' => 'MISSING PATIENT INSURANACE'
+                        'description' => "Missing patient insuranace"
                     ],
                     [
                         'code' => '00019',
-                        'description' => 'MISSING PLACE OF SERVICE'
+                        'description' => "Missing place of service"
                     ],
                     [
                         'code' => '00020',
-                        'description' => 'MISSING UPIN FOR REFERRING'
+                        'description' => "Missing upin for referring"
                     ],
                     [
                         'code' => '00021',
-                        'description' => 'UNASSIGNED PATIENT'
+                        'description' => "Unassigned patient"
                     ],
                     [
                         'code' => '00022',
-                        'description' => 'DOCTOR IS NOT CONTRACTED'
+                        'description' => "Doctor is not contracted"
                     ],
                     [
                         'code' => '00023',
-                        'description' => 'MISSING ALPHA ON PATIENT POLICY'
+                        'description' => "Missing alpha on patient policy"
                     ],
                     [
                         'code' => '00024',
-                        'description' => 'INVALID PATIENT POLICY'
+                        'description' => "Invalid patient policy"
                     ],
                     [
                         'code' => '00025',
-                        'description' => 'ACCIDENT DIAGNOSIS CODE REQ'
+                        'description' => "Accident diagnosis code req"
                     ],
                     [
                         'code' => '00026',
-                        'description' => 'MISSING INSURED ADDRESS'
+                        'description' => "Missing insured address"
                     ],
                     [
                         'code' => '00027',
-                        'description' => 'DIAGNOSIS SEX DOES NOT MATCH'
+                        'description' => "Diagnosis sex does not match"
                     ],
                     [
                         'code' => '00028',
-                        'description' => 'PROCEDURE SEX DOES NOT MATCH'
+                        'description' => "Procedure sex does not match"
                     ],
                     [
                         'code' => '00029',
-                        'description' => 'MISSING REFERRING THYSICIAN'S'
+                        'description' => "Missing referring thysician's"
                     ],
                     [
                         'code' => '00030',
-                        'description' => 'MISSING CONDITION DATE'
+                        'description' => "Missing condition date"
                     ],
                     [
                         'code' => '00031',
-                        'description' => 'MISSING VALUE CODE/AMOUNT'
+                        'description' => "Missing value code/amount"
                     ],
                     [
                         'code' => '00032',
-                        'description' => 'MISSING UPIN# IN SCHED/OTH'
+                        'description' => "Missing upin# in sched/oth"
                     ],
                     [
                         'code' => '00033',
-                        'description' => 'IMPUT ERRORS'
+                        'description' => "Imput errors"
                     ],
                     [
                         'code' => '00034',
-                        'description' => 'PROCEDURE CODE AGE LIMITATION'
+                        'description' => "Procedure code age limitation"
                     ],
                     [
                         'code' => '00035',
-                        'description' => 'OUT OF NETWORK'
+                        'description' => "Out of network"
                     ],
                     [
                         'code' => '00036',
-                        'description' => 'MISSING INSURED DOB OR SEX'
+                        'description' => "Missing insured dob or sex"
                     ],
                     [
                         'code' => '00037',
-                        'description' => 'MISSING INSURANCE /PLAN'
+                        'description' => "Missing insurance /plan"
                     ],
                     [
                         'code' => '00038',
-                        'description' => 'MISSING SERVICE PHYSICIAN OR'
+                        'description' => "Missing service physician or"
                     ],
                     [
                         'code' => '00039',
-                        'description' => 'MISSING LICENCE NO FOR CERVICE'
+                        'description' => "Missing licence no for cervice"
                     ],
                     [
                         'code' => '00040',
-                        'description' => 'MISSING DOCUMENTATION FOR'
+                        'description' => "Missing documentation for"
                     ],
                     [
                         'code' => '00041',
-                        'description' => 'AUTHORIZATION/ACCESS RESTRICCTIONS'
+                        'description' => "Authorization/access restricctions"
                     ],
                     [
                         'code' => '00042',
-                        'description' => 'UNABLE TO RESPOND AT CURRENT TIME'
+                        'description' => "Unable to respond at current time"
                     ],
                     [
                         'code' => '00043',
-                        'description' => 'INVELID/MISSING PROVIDER IDENTIFICATION'
+                        'description' => "Invelid/missing provider identification"
                     ],
                     [
                         'code' => '00044',
-                        'description' => 'INVALID/MISSING PROVIDER NAME'
+                        'description' => "Invalid/missing provider name"
                     ],
                     [
                         'code' => '00045',
-                        'description' => 'INVALID/MISSING PROVIDER SPECIALTY'
+                        'description' => "Invalid/missing provider specialty"
                     ],
                     [
                         'code' => '00046',
-                        'description' => 'INVALID/MISSING PROVIDER PHONE NUMBER'
+                        'description' => "Invalid/missing provider phone number"
                     ],
                     [
                         'code' => '00047',
-                        'description' => 'INVALID/MISSING PROVIDER STATE'
+                        'description' => "Invalid/missing provider state"
                     ],
                     [
                         'code' => '00048',
-                        'description' => 'INVALID/MISSING REFERRING PROVIDER IDENTIFICATION NUMBER'
+                        'description' => "Invalid/missing referring provider identification number"
                     ],
                     [
                         'code' => '00049',
-                        'description' => 'PROVIDER NOT PRIMARY CARE PHYSICIAN'
+                        'description' => "Provider not primary care physician"
                     ],
                     [
                         'code' => '00050',
-                        'description' => 'PROVIDER INELIGIBLE FOR INQUIRIES'
+                        'description' => "Provider ineligible for inquiries"
                     ],
                     [
                         'code' => '00051',
-                        'description' => 'PROVIDER NOT ON FILE'
+                        'description' => "Provider not on file"
                     ],
                     [
                         'code' => '00052',
-                        'description' => 'SERVICE DATE NOT WITHIN PROVIDER PLAN ENROLLMENT'
+                        'description' => "Service date not within provider plan enrollment"
                     ],
                     [
                         'code' => '00053',
-                        'description' => 'INQUIRED BENEFIT INCONSISTENT WITH PROVIDER TYPE'
+                        'description' => "Inquired benefit inconsistent with provider type"
                     ],
                     [
                         'code' => '00054',
-                        'description' => 'INAPPROPRIATE PRODUCT/SERVICE ID QUALIFIER'
+                        'description' => "Inappropriate product/service id qualifier"
                     ],
                     [
                         'code' => '00055',
-                        'description' => 'INAPPROPRIATE PRODUCT/SERVICE ID '
+                        'description' => "Inappropriate product/service id "
                     ],
                     [
                         'code' => '00056',
-                        'description' => 'INAPPROPRIATE DATE'
+                        'description' => "Inappropriate date"
                     ],
                     [
                         'code' => '00057',
-                        'description' => 'INVALID/MISSING DOS'
+                        'description' => "Invalid/missing dos"
                     ],
                     [
                         'code' => '00058',
-                        'description' => 'INVALID/MISSING DATE-OF-BIRTH (DOB)'
+                        'description' => "Invalid/missing date-of-birth (dob)"
                     ],
                     [
                         'code' => '00059',
-                        'description' => 'INVALID/MISSING DAT OF DEATH'
+                        'description' => "Invalid/missing dat of death"
                     ],
                     [
                         'code' => '00060',
-                        'description' => 'DATE OF BIRTH FOLLOWS DATE(S) OF SERVICE'
+                        'description' => "Date of birth follows date(s) of service"
                     ],
                     [
                         'code' => '00061',
-                        'description' => 'DATE OF DEATH PRECEDES DATE(S) OF SERVICE'
+                        'description' => "Date of death precedes date(s) of service"
                     ],
                     [
                         'code' => '00062',
-                        'description' => 'DOS NOT WITHIN ALLOWABLE INQUIRY PERIOD'
+                        'description' => "Dos not within allowable inquiry period"
                     ],
                     [
                         'code' => '00063',
-                        'description' => 'DOS IN THE FUTURE'
+                        'description' => "Dos in the future"
                     ],
                     [
                         'code' => '00064',
-                        'description' => 'INVALID/MISSING PATIENT ID'
+                        'description' => "Invalid/missing patient id"
                     ],
                     [
                         'code' => '00065',
-                        'description' => 'INVALID/MISSING PATIENT NAME'
+                        'description' => "Invalid/missing patient name"
                     ],
                     [
                         'code' => '00066',
-                        'description' => 'INVALID/MISSING PATIENT GENDER CODE'
+                        'description' => "Invalid/missing patient gender code"
                     ],
                     [
                         'code' => '00067',
-                        'description' => 'PATIENT NOT FOUND'
+                        'description' => "Patient not found"
                     ],
                     [
                         'code' => '00068',
-                        'description' => 'DUPLICATE PATIENT ID NUMBER'
+                        'description' => "Duplicate patient id number"
                     ],
                     [
                         'code' => '00069',
-                        'description' => 'INCONSISTENT WITH PATIENT'S AGE'
+                        'description' => "Inconsistent with patient's age"
                     ],
                     [
                         'code' => '00070',
-                        'description' => 'INCONSISTENT WITH PATIENT'S GENDER'
+                        'description' => "Inconsistent with patient's gender"
                     ],
                     [
                         'code' => '00071',
-                        'description' => 'PATIENT BIRTH DATE DOES NOT MATCH THAT FOR  THE PATIENT ON THE DATABASE'
+                        'description' => "Patient birth date does not match that for  the patient on the database"
                     ],
                     [
                         'code' => '00072',
-                        'description' => 'INVALID/MISSING SUBSCRIBER/INSURED ID'
+                        'description' => "Invalid/missing subscriber/insured id"
                     ],
                     [
                         'code' => '00073',
-                        'description' => 'INVALID/MISSING SUBSCRIBER/INSURED NAME'
+                        'description' => "Invalid/missing subscriber/insured name"
                     ],
                     [
                         'code' => '00074',
-                        'description' => 'INVALID/MISSING SUBSCRIBER/INSURED GENDER CODE'
+                        'description' => "Invalid/missing subscriber/insured gender code"
                     ],
                     [
                         'code' => '00075',
-                        'description' => 'SUBSCRIBER/INSURED NOT FOUND'
+                        'description' => "Subscriber/insured not found"
                     ],
                     [
                         'code' => '00076',
-                        'description' => 'DUPLICATE SUBSCRIBER/INSURED ID NUMBER'
+                        'description' => "Duplicate subscriber/insured id number"
                     ],
                     [
                         'code' => '00077',
-                        'description' => 'SUBSCRIBER FOUND: PATIENT NOT FOUND'
+                        'description' => "Subscriber found: patient not found"
                     ],
                     [
                         'code' => '00078',
-                        'description' => 'SUBSCRIBER /INSURED NOT IN GROUP/PLAN IDENTIFIED'
+                        'description' => "Subscriber /insured not in group/plan identified"
                     ],
                     [
                         'code' => '00079',
-                        'description' => 'INVALID PARTICIPANT IDENTIFICATION'
+                        'description' => "Invalid participant identification"
                     ],
                     [
                         'code' => '00080',
-                        'description' => 'NO RESPONSE RECEIVED - TRANSACTION TERMINATED'
+                        'description' => "No response received - transaction terminated"
                     ],
                     [
                         'code' => 'AF',
-                        'description' => 'INVALID/MISSING DIAGNOSES CODE(S)'
+                        'description' => "Invalid/missing diagnoses code(s)"
                     ],
                     [
                         'code' => 'AG',
-                        'description' => 'INVALID/MISSING PROCEDURE CODE(S)'
+                        'description' => "Invalid/missing procedure code(s)"
                     ],
                     [
                         'code' => 'IA',
-                        'description' => 'INVALID AUTHORIZATION NUMBER FORMAT'
+                        'description' => "Invalid authorization number format"
                     ],
                     [
                         'code' => 'MA',
-                        'description' => 'MISSING AUTHORIZATION NUMBER'
+                        'description' => "Missing authorization number"
                     ],
                     [
                         'code' => 'T4',
-                        'description' => 'PAYER NAME OR IDENTIFIER MISSING'
+                        'description' => "Payer name or identifier missing"
                     ],
                     [
                         'code' => '00081',
-                        'description' => 'MISSING VALUE CODE AND VALUE'
+                        'description' => "Missing value code and value"
                     ],
                     [
                         'code' => '00082',
-                        'description' => 'MISSING ADMISSION HOUR'
+                        'description' => "Missing admission hour"
                     ],
                     [
                         'code' => '00083',
-                        'description' => 'REFERRING PHYSICIAN NAME'
+                        'description' => "Referring physician name"
                     ],
                     [
                         'code' => '00084',
-                        'description' => 'MISSING CLAIM SCRUBBER INFO'
+                        'description' => "Missing claim scrubber info"
                     ],
                     [
                         'code' => '00085',
-                        'description' => 'REFERRING PHYSICIAN PCN'
+                        'description' => "Referring physician pcn"
                     ],
                     [
                         'code' => '00086',
-                        'description' => 'MISSING OR INCORRECT RENDER'
+                        'description' => "Missing or incorrect render"
                     ],
                     [
                         'code' => '00087',
-                        'description' => 'MISSING OR INCORRECT PAYTO'
+                        'description' => "Missing or incorrect payto"
                     ],
                     [
                         'code' => '00088',
-                        'description' => 'MISSING OR INCORRECT REFERRING'
+                        'description' => "Missing or incorrect referring"
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Appeal reasons',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Any denial that involves a determination that a treatment is experimental or investigational'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Any denial that involves medical judgment where you or your provider may disagree with the health insurance plan'
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'The benefit is not offered under your health plan'
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Your medical problem began before you joined the plan'
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'You received health services from a health provider or facility that is not in your plan is approved network'
+                    ],
+                    [
+                        'code' => '6',
+                        'description' => 'The requested service or treatment is not medically necessary'
+                    ],
+                    [
+                        'code' => '7',
+                        'description' => 'The requested service or treatment is an experimental or investigative treatment'
+                    ],
+                    [
+                        'code' => '8',
+                        'description' => 'You are no longer enrolled or eligible to be enrolled in the health plan'
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'It is revoking or canceling your coverage going back to the date you enrolled because the insurance company claims that you gave false or incomplete information when you applied for coverage'
+                    ],
+                    [
+                        'code' => '10',
+                        'description' => 'Any denial that involves medical judgment where you or your provider may disagree with the health insurance plan'
+                    ],
+                    [
+                        'code' => '11',
+                        'description' => 'Any denial that involves a determination that a treatment is experimental or investigational'
+                    ],
+                    [
+                        'code' => '12',
+                        'description' => 'Cancellation of coverage based on your insurer is claim that you gave false or incomplete information when you applied for coverage'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Payer ID',
+                'type_catalogs' => [
+                    [
+                        'code' => '13162',
+                        'description' => '1199 National Benefit Fund'
+                    ],
+                    [
+                        'code' => '36273',
+                        'description' => 'AARP'
+                    ],
+                    [
+                        'code' => '68069',
+                        'description' => 'Absolute Total Care'
+                    ],
+                    [
+                        'code' => '22384',
+                        'description' => 'Administrative Concepts'
+                    ],
+                    [
+                        'code' => '68069',
+                        'description' => 'Advantage By Buckeye'
+                    ],
+                    [
+                        'code' => '60054',
+                        'description' => 'AETNA'
+                    ],
+                    [
+                        'code' => '128CA',
+                        'description' => 'Aetna Better Health of California'
+                    ],
+                    [
+                        'code' => '68024',
+                        'description' => 'Aetna Better Health of Illinois – Medicaid'
+                    ],
+                    [
+                        'code' => '26337',
+                        'description' => 'Aetna Better Health of Illinois – Medicare'
                     ]
                 ]
             ],
         ];
+
+        $appealRules = "5 things to know when filing an appeal
+1. If you decide to file an appeal, ask your doctor, health care provider, or supplier for any information that may help your case.
+2. If you think your health could be seriously harmed by waiting for a decision about a service, ask the plan for a fast decision. If the plan or doctor agrees, the plan must make a decision within 72 hours.
+3. The plan must tell you, in writing, how to appeal. After you file an appeal, the plan will review its decision. Then, if your plan doesn't decide in your favor, the appeal is reviewed by an independent organization that works for Medicare, not for the plan.
+4. If you believe you're being discharged from a hospital too soon, you have a right to immediate review by your Beneficiary And Family Centered Care Quality Improvement Organization (Bfcc-Qio). You'll be able to stay in the hospital at no charge while they review your case. The hospital can't force you to leave before the BFCC-QIO reaches a decision.
+5. You'll have the right to a fast-track appeals process when you disagree with a decision that you no longer need services you're getting from a skilled nursing facility, home health agency, or a comprehensive outpatient rehabilitation facility.";
 
         foreach ($types as $type) {
             $typeC = Type::updateOrCreate(
@@ -656,7 +758,7 @@ class TypeCatalogSeeder extends Seeder
 
             if (isset($type['type_catalogs'])) {
                 foreach ($type['type_catalogs'] as $typeCatalog) {
-                    TypeCatalog::updateOrCreate(
+                    $catalog = TypeCatalog::updateOrCreate(
                         [
                             'code'        => $typeCatalog['code'],
                             'description' => $typeCatalog['description'],
@@ -667,6 +769,16 @@ class TypeCatalogSeeder extends Seeder
                             'description' => $typeCatalog['description']
                         ]
                     );
+
+                    if ($type['description'] == 'Appeal reasons') {
+                        PrivateNote::updateOrCreate([
+                            'publishable_type'   => TypeCatalog::class,
+                            'publishable_id'     => $catalog->id,
+                            "billing_company_id" => null,
+                        ], [
+                            'note'             => $appealRules,
+                        ]);
+                    }
                 }
             }
         }

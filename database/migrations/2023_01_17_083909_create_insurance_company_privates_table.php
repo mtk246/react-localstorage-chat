@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('insurance_company_privates', function (Blueprint $table) {
             $table->id();
-            $table->integer('day_count');
-            $table->foreignId('from_id')->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
+            $table->integer('days')->nullable();
+            $table->foreignId('from_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });

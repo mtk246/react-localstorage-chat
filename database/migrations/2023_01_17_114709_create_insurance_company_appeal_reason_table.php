@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('insurance_company_appeal', function (Blueprint $table) {
+        Schema::create('insurance_company_appeal_reason', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('appeal_id')->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('appeal_reason_id')->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurance_company_appeal');
+        Schema::dropIfExists('insurance_company_appeal_reason');
     }
 };

@@ -14,6 +14,10 @@
 - [Add to billing company](#add-to-billing-company)
 - [Get list insurance companies](#get-list-insurance-companies)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get list file methods](#get-list-file-methods)
+- [Get list from the date](#get-list-from-the-date)
+- [Get list billing incomplete reasons](#get-list-billing-incomplete-reasons)
+- [Get list appeal reasons](#get-list-appeal-reasons)
 
 
 <a name="basic-data"></a>
@@ -34,16 +38,17 @@
 | 10 |GET | `Get list insurance companies`| `/insurance-company/get-list`        |yes            |Get list insurance companies|
 | 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies/{insuranceCompanyId?}`        |yes            |Get list billing companies|
 
+| 12 |GET | `Get one insurance companies by payer ID`| `/insurance-company/get-by-payer-id/{payerID}`        |yes            |Get one insurance company|
+| 13 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
+| 14 |GET | `Get list from the date`| `/insurance-company/get-list-from-date`        |yes            |Get list from the date of|
+| 15 |GET | `Get list billing incomplete reasons`| `/insurance-company/get-list-billing-incomplete-reasons`        |yes            |Get list billing incomplete reasons|
+| 16 |GET | `Get list appeal reasons`| `/insurance-company/get-list-appeal-reasons`        |yes            |Get list appeal reasons|
 
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
 
 
-
-
-
 #
-
 
 <a name="create-insurance-company"></a>
 ## Create Insurance Company
@@ -54,37 +59,36 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
-        "payer_id": 12,
-        "name":"dsfsdfsfeddsddfg",
-        "nickname":"alias insurance",
-        "naic":"someNaic",
-        "file_method_id": 1,
+        "payer_id": 12, /** required */
+        "name":"Name insurance", /** required */
+        "abbreviation":"Abbreviation", /** required */
+        "nickname":"alias insurance", /** optional */
+        "naic":"someNaic",  /** optional */
+        "file_method_id": 1, /** required */
     },
-    "billing_incomplete_reasons": [1,2,3],
     "time_failed": {
-        "day_count": 30,
-        "from_id": 2,
+        "days": 30, /** optional */
+        "from_id": 2, /** optional */
     },
-    "appeals": [
-        {
-            "appeal_type_id": 1,
-            "private_note": "Rules"
-        }
-    ],
-    "address":{
-        "address":"dfsdf",
-        "city":"cdfsf",
-        "state":"sdsfsd",
-        "zip":"3234"
+    "billing_incomplete_reasons": [1,2,3], /** optional */
+    "appeal_reasons": [1,2,3], /** optional */
+    "address": {
+        "address":"Name address", /** required */
+        "city":"Name city", /** required */
+        "state":"Name state", /** required */
+        "zip":"3234", /** required */
+        "country": "Name country", /** consultar monser */
+        "country_subdivision_code": "Code", /** consultar monser */
     },
-    "contact":{
-        "phone":"55433",
-        "mobile":"55433",
-        "fax":"fsdfs",
-        "email":"dsfsd@gdrfg.com"
+    "contact": {
+        "contact_name": "Some name", /** consultar monser */
+        "phone":"55433", /** required */
+        "mobile":"55433", /** optional */
+        "fax":"fsdfs", /** optional */
+        "email":"dsfsd@gdrfg.com" /** required */
     },
-    "public_note": "Note Public",
-    "private_note": "Note Private"
+    "public_note": "Note Public", /** optioanl */
+    "private_note": "Note Private" /** optional */
 }
 ```
 
@@ -554,22 +558,36 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
-        "name":"dsfsdfsfeddsddfg",
-        "nickname":"alias insurance edit",
-        "naic":"someNaic",
-        "file_method":"someFileNaic"
+        "payer_id": 12, /** required */
+        "name":"Name insurance", /** required */
+        "abbreviation":"Abbreviation", /** required */
+        "nickname":"alias insurance", /** optional */
+        "naic":"someNaic",  /** optional */
+        "file_method_id": 1, /** required */
     },
-    "address":{
-        "address":"dfsdf",
-        "city":"cdfsf",
-        "state":"sdsfsd",
-        "zip":"3234"
+    "time_failed": {
+        "days": 30, /** optional */
+        "from_id": 2, /** optional */
     },
-    "contact":{
-        "phone":"55433",
-        "fax":"fsdfs",
-        "email":"dsfsd@gdrfg.com"
-    }
+    "billing_incomplete_reasons": [1,2,3], /** optional */
+    "appeal_reasons": [1,2,3], /** optional */
+    "address": {
+        "address":"Name address", /** required */
+        "city":"Name city", /** required */
+        "state":"Name state", /** required */
+        "zip":"3234", /** required */
+        "country": "Name country", /** consultar monser */
+        "country_subdivision_code": "Code", /** consultar monser */
+    },
+    "contact": {
+        "contact_name": "Some name", /** consultar monser */
+        "phone":"55433", /** required */
+        "mobile":"55433", /** optional */
+        "fax":"fsdfs", /** optional */
+        "email":"dsfsd@gdrfg.com" /** required */
+    },
+    "public_note": "Note Public", /** optioanl */
+    "private_note": "Note Private" /** optional */
 }
 ```
 
@@ -873,4 +891,61 @@
         "name": "Halvorson, Deckow and Bode"
     }
 ]
+```
+
+<a name="get-list-file-methods"></a>
+## Get list file methods
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 File Methods found
+
+#
+
+```json
+[
+    {
+        "id": 55,
+        "name": "P - Paper"
+    },
+    {
+        "id": 56,
+        "name": "E - Electronic"
+    },
+    {
+        "id": 57,
+        "name": "B - Paper & Electronic"
+    }
+]
+```
+
+<a name="get-list-from-the-date"></a>
+## Get list from the date
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 From the date found
+
+#
+
+```json
+
 ```
