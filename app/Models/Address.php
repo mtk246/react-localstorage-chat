@@ -60,6 +60,8 @@ class Address extends Model implements Auditable
         "state",
         "zip",
         "address_type_id",
+        "country",
+        "country_subdivision_code",
         "billing_company_id",
         "addressable_type",
         "addressable_id"

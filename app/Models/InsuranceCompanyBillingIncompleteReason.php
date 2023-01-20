@@ -15,7 +15,7 @@ class InsuranceCompanyBillingIncompleteReason extends Pivot
 
     protected $fillable = [
         "insurance_company_id",
-        "billing_incomplete_reason_id"
+        "billing_incomplete_reason_id",
         "billing_company_id"
     ];
 }

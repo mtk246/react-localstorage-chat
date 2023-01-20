@@ -52,6 +52,7 @@ class Contact extends Model implements Auditable
     use HasFactory, AuditableTrait;
     
     protected $fillable = [
+        "contact_name",
         "phone",
         "fax",
         "email",

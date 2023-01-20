@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('insurance_company_privates', function (Blueprint $table) {
+        Schema::create('insurance_company_time_faileds', function (Blueprint $table) {
             $table->id();
             $table->integer('days')->nullable();
             $table->foreignId('from_id')->nullable()->constrained('type_catalogs')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('insurance_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurance_company_privates');
+        Schema::dropIfExists('insurance_company_time_faileds');
     }
 };

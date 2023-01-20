@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class InsuranceCompanyPrivate extends Model implements Auditable
+class InsuranceCompanyTimeFailed extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "day_count",
+        "days",
         "from_id",
         "billing_company_id",
+        "insurance_company_id",
     ];
 
     /**
-     * InsuranceCompanyPrivate belongs to From.
+     * InsuranceCompanyTimeFailed belongs to From.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -29,12 +30,22 @@ class InsuranceCompanyPrivate extends Model implements Auditable
     }
 
     /**
-     * InsuranceCompanyPrivate belongs to BillingCompany.
+     * InsuranceCompanyTimeFailed belongs to BillingCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    /**
+     * InsuranceCompanyTimeFailed belongs to BillingCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insuranceCompany()
+    {
+        return $this->belongsTo(InsuranceCompany::class);
     }
 }

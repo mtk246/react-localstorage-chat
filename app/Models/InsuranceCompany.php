@@ -59,6 +59,15 @@ class InsuranceCompany extends Model implements Auditable
      */
     protected $appends = ['status', 'last_modified'];
 
+    /**
+     * InsuranceCompany belongs to FileMethod.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function fileMethod()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'file_method_id');
+    }
 
     /**
      * InsuranceCompany has many claim eligibilities.
@@ -78,6 +87,16 @@ class InsuranceCompany extends Model implements Auditable
     public function insurancePlans(): HasMany
     {
         return $this->hasMany(InsurancePlan::class);
+    }
+
+    /**
+     * InsuranceCompany has many InsuranceCompanyTimeFailed.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function insuranceCompanyTimeFaileds()
+    {
+        return $this->hasMany(InsuranceCompanyTimeFailed::class);
     }
 
     /**
@@ -165,7 +184,7 @@ class InsuranceCompany extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function publicNotes()
+    public function publicNote()
     {
         return $this->morphMany(PublicNote::class, 'publishable');
     }
