@@ -870,7 +870,9 @@
 ## Example path
 
 >{primary} /get-list-billing-companies?insurance_company_id=2&edit=false
->{primary} /get-list-billing-companies?insurance_company_id=2&edit=true
+
+
+> /get-list-billing-companies?insurance_company_id=2&edit=true
 
 ## Response
 

@@ -115,8 +115,8 @@ class FacilityController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error, facility not found"), 404);
     }
 
-    public function getListBillingCompanies(int $facilityId = null) {
-        $rs = $this->facilityRepository->getListBillingCompanies($facilityId);
+    public function getListBillingCompanies(Request $request) {
+        $rs = $this->facilityRepository->getListBillingCompanies($request);
 
         return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
     }

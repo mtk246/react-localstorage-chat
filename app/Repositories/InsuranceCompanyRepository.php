@@ -204,15 +204,20 @@ class InsuranceCompanyRepository
 
     public function getListBillingCompanies(Request $request) {
         $insuranceCompanyId = $request->insurance_company_id ?? null;
-        $edit = $request->edit ?? false;
+        $edit = $request->edit ?? 'false';
 
         if (is_null($insuranceCompanyId)) {
             return getList(BillingCompany::class, 'name', ['status' => true]);
         } else {
-            if ($edit == true) {
+            $ids = [];
+            $billingCompanies = InsuranceCompany::find($insuranceCompanyId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ($edit == 'true') {
                 return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }

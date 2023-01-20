@@ -40,7 +40,7 @@
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
 | 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
-| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies/{facilityId?}`        |yes            |Get list billing companies|
+| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
 
 
 
@@ -1186,8 +1186,15 @@
 ```json
 {
     "facility_id": <integer>
+    "edit": <boolean>
 }
 ```
+
+## Example path
+
+>{primary} /get-list-billing-companies?facility_id=2&edit=false
+
+> /get-list-billing-companies?facility_id=2&edit=true
 
 ## Response
 

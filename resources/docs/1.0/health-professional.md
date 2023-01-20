@@ -31,7 +31,7 @@
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 | 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
 | 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
-| 10 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies/{healthProfessionaId?}`|yes|Get list biling companies|
+| 10 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies?health_professional_id={healthProfessionalID?}&edit={edit?}`|yes|Get list biling companies|
 | 11 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
 
 
@@ -964,9 +964,16 @@
 
 ```json
 {
-    "health_professional_id": <integer> /** Optional */
+    "health_professional_id": <integer>
+    "edit": <boolean>
 }
 ```
+
+## Example path
+
+>{primary} /get-list-billing-companies?health_professional_id=2&edit=false
+
+> /get-list-billing-companies?health_professional_id=2&edit=true
 
 ## Response
 

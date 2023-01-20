@@ -793,8 +793,24 @@ class DoctorRepository
         return getList(CompanyHealthProfessionalType::class, 'type');
     }
 
-    public function getListBillingCompanies(int $healthProfessionalId = null) {
-        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'healthProfessionals', 'orWhereHas' => ['relationship' => 'healthProfessionals', 'where' => ['health_professional_id' => $healthProfessionalId]]]);
+    public function getListBillingCompanies(Request $request) {
+        $healthProfessionalId = $request->health_professional_id ?? null;
+        $edit = $request->edit ?? 'false';
+
+        if (is_null($healthProfessionalId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            $ids = [];
+            $billingCompanies = HealthProfessional::find($healthProfessionalId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ($edit == 'true') {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'healthProfessionals', 'whereHas' => ['relationship' => 'healthProfessionals', 'where' => ['health_professional_id' => $healthProfessionalId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'healthProfessionals', 'orWhereHas' => ['relationship' => 'healthProfessionals', 'where' => ['billing_company_id', $ids]]]);
+            }
+        }
     }
 
     public function updateCompanies(array $data, int $id) {

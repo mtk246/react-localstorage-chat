@@ -491,8 +491,24 @@ class FacilityRepository
         return !is_null($facility) ? $facility : null;
     }
 
-    public function getListBillingCompanies(int $facilityId = null) {
-        return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities', 'orWhereHas' => ['relationship' => 'facilities', 'where' => ['facility_id' => $facilityId]]]);
+    public function getListBillingCompanies(Request $request) {
+        $facilityId = $request->facility_id ?? null;
+        $edit = $request->edit ?? 'false';
+
+        if (is_null($facilityId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            $ids = [];
+            $billingCompanies = Facility::find($facilityId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ($edit == 'true') {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'facilities', 'whereHas' => ['relationship' => 'facilities', 'where' => ['facility_id' => $facilityId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities', 'orWhereHas' => ['relationship' => 'facilities', 'where' => ['billing_company_id', $ids]]]);
+            }
+        }
     }
 
     /**
