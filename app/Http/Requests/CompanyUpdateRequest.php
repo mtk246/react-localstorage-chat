@@ -42,7 +42,7 @@ class CompanyUpdateRequest extends FormRequest
                                                               new IUnique(Company::class, 'name', $this->id)
                                                           ],
             'nickname'                                 => ['nullable', 'string'],
-            'name_sufix_id'                            => ['nullable', 'integer'],
+            'name_suffix_id'                           => ['nullable', 'integer'],
             'abbreviation'                             => ['nullable', 'string', 'max:20'],
             
             'taxonomies'                               => ['nullable', 'array'],
