@@ -205,6 +205,16 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * Company morphs many EntityAbbreviations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function abbreviations()
+    {
+        return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
+    }
+
+    /**
      * Company morphs one publicNote.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
