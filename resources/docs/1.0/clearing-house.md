@@ -12,7 +12,7 @@
 - [Change status Clearing house](#change-status-clearing-house)
 - [Add to billing company](#add-to-billing-company)
 - [Get list transmission formats](#get-list-transmission-formats)
-- [Get list transmission formats](#get-list-org-types)
+- [Get list org types](#get-list-org-types)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -46,7 +46,7 @@
 ```json
 {
     "name":"clearing first",
-    "org_type":"222CH123",
+    "org_type_id":1,
     "ack_required":true,
     "nickname":"alias clearingName",
     "abbreviation":"ABBCLEARING",
@@ -85,7 +85,7 @@
 {
     "code": "CH-00001-2022",
     "name": "clearing first",
-    "org_type": "222CH123",
+    "org_type_id": 1,
     "ack_required": true,
     "updated_at": "2022-03-16T11:00:09.000000Z",
     "created_at": "2022-03-16T11:00:09.000000Z",
@@ -140,7 +140,7 @@
         "name": "clearing second",
         "created_at": "2022-03-16T11:02:28.000000Z",
         "updated_at": "2022-03-16T11:02:28.000000Z",
-        "org_type": "222CH123",
+        "org_type_id": 1,
         "ack_required": true,
         "status": true,
         "addresses": [
@@ -206,7 +206,7 @@
         "name": "clearing first",
         "created_at": "2022-03-16T11:00:09.000000Z",
         "updated_at": "2022-03-16T11:00:09.000000Z",
-        "org_type": "222CH123",
+        "org_type_id": 1,
         "ack_required": true,
         "status": true,
         "addresses": [
@@ -308,7 +308,7 @@
             "name": "clearing second",
             "created_at": "2022-03-16T11:02:28.000000Z",
             "updated_at": "2022-03-16T11:02:28.000000Z",
-            "org_type": "222CH123",
+            "org_type_id": 1,
             "ack_required": true,
             "status": true,
             "addresses": [
@@ -374,7 +374,7 @@
             "name": "clearing first",
             "created_at": "2022-03-16T11:00:09.000000Z",
             "updated_at": "2022-03-16T11:00:09.000000Z",
-            "org_type": "222CH123",
+            "org_type_id": 1,
             "ack_required": true,
             "status": true,
             "addresses": [
@@ -468,7 +468,7 @@
     "name": "clearing first",
     "created_at": "2022-03-16T11:00:09.000000Z",
     "updated_at": "2022-03-16T11:00:09.000000Z",
-    "org_type": "222CH123",
+    "org_type_id": 1,
     "ack_required": true,
     "status": true,
     "addresses": [
@@ -550,7 +550,7 @@
 ```json
 {
     "name":"clearing first edited",
-    "org_type":"222CH124",
+    "org_type_id":1,
     "ack_required":true,
     "nickname":"alias clearingName",
     "abbreviation":"ABBCLEARING",
@@ -589,7 +589,7 @@
 {
     "code": "CH-00001-2022",
     "name": "clearing first edited",
-    "org_type": "222CH124",
+    "org_type_id": 1,
     "ack_required": true,
     "updated_at": "2022-03-16T11:00:09.000000Z",
     "created_at": "2022-03-16T11:00:09.000000Z",
@@ -648,7 +648,7 @@
 {
     "code": "CH-00001-2022",
     "name": "clearing first",
-    "org_type": "222CH123",
+    "org_type_id": 1,
     "ack_required": true,
     "updated_at": "2022-03-16T11:00:09.000000Z",
     "created_at": "2022-03-16T11:00:09.000000Z",
@@ -705,7 +705,7 @@
 {
     "code": "CH-00001-2022",
     "name": "clearing first",
-    "org_type": "222CH123",
+    "org_type_id": 1,
     "ack_required": true,
     "updated_at": "2022-03-16T11:00:09.000000Z",
     "created_at": "2022-03-16T11:00:09.000000Z",
