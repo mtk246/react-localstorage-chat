@@ -40,7 +40,7 @@
 | 11 |GET | `Get list billing companies`| `/insurance-company/get-list-billing-companies?insurance_company_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 12 |GET | `Get one insurance companies by payer ID`| `/insurance-company/get-by-payer-id/{payerID}`        |yes            |Get one insurance company|
 | 13 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
-| 14 |GET | `Get list from the date`| `/insurance-company/get-list-from-date`        |yes            |Get list from the date of|
+| 14 |GET | `Get list from the date`| `/insurance-company/get-list-from-the-date`        |yes            |Get list from the date of|
 | 15 |GET | `Get list billing incomplete reasons`| `/insurance-company/get-list-billing-incomplete-reasons`        |yes            |Get list billing incomplete reasons|
 | 16 |GET | `Get list appeal reasons`| `/insurance-company/get-list-appeal-reasons`        |yes            |Get list appeal reasons|
 

@@ -7,11 +7,12 @@
 - [Get all insurance plan](#get-all-insurance-plan)
 - [Get one insurance plan](#get-one-insurance-plan)
 - [Update insurance plan](#update-insurance-plan)
-- [Get one insurance plan by name](#get-one-insurance-plan-by-name)
+- [Get insurance plan by name](#get-insurance-plan-by-name)
 - [Change status plan company](#change-status-plan-company)
 - [Get all insurance plan by insurance company](#get-all-insurance-plan-by-insurance-company)
 - [Get list insurance plans](#get-list-insurance-plans)
 - [Get list insurance plans by insurance company](#get-list-insurance-plans-by-insurance-company)
+- [Get list file methods](#get-list-file-methods)
 
 
 <a name="basic-data"></a>
@@ -29,6 +30,7 @@
 | 7 |GET | `Get all insurance plan by insurance company`           | `/insurance-plan/insurance-company/{id}/get-by-insurance-company`|yes|Get all insurance plan by insurance company|
 | 8 |GET | `Get list insurance plans`| `/insurance-plan/get-list`        |yes            |Get list insurance plans|
 | 9 |GET | `Get list insurance plans by insurance company`| `/insurance-plan/get-list-by-company/{insurance_company}`        |yes            |Get list insurance plans by insurance company|
+| 10 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
 
 
 
@@ -376,8 +378,8 @@
 
 #
 
-<a name="get-one-insurance-plan-by-name"></a>
-## Get One Insurance Plan by name
+<a name="get-insurance-plan-by-name"></a>
+## Get insurance plan by name
 
 
 ### Param in header
@@ -566,6 +568,41 @@
     {
         "id": 3,
         "name": "Langosh Ltd"
+    }
+]
+```
+
+<a name="get-list-file-methods"></a>
+## Get list file methods
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 File Methods found
+
+#
+
+```json
+[
+    {
+        "id": 55,
+        "name": "P - Paper"
+    },
+    {
+        "id": 56,
+        "name": "E - Electronic"
+    },
+    {
+        "id": 57,
+        "name": "B - Paper & Electronic"
     }
 ]
 ```

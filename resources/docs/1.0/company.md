@@ -11,6 +11,11 @@
 - [Get one company by email](#get-one-company-by-email)
 - [Get one company by npi](#get-one-company-by-npi)
 - [Get list company by billing company](#get-list)
+- [Get list name suffix](#get-list-name-suffix)
+- [Get list statement rules](#get-list-statement-rules)
+- [Get list statement when](#get-list-statement-when)
+- [Get list statement apply to](#get-list-statement-apply-to)
+- [Get list billing companies](#get-list-billing-companies)
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
@@ -29,9 +34,14 @@
 | 6 |GET | `Get one company by email`          | `/company/get-by-email/{email}`|yes|Get company by email|
 | 7 |GET | `Get one company by npi`          | `/company/get-by-npi/{npi}`|yes|Get company by npi|
 | 8 |GET | `Get list company by billing company`          | `/company/get-list-by-billing-company/{id?}`|yes|Get all companies by billing company|
-| 9 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 10 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
-| 11 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 9 |GET | `Get list name suffix`          | `/company/get-list-name-suffix`|yes|Get all name suffix|
+| 10 |GET | `Get list statement rules`          | `/company/get-list-statement-rules`|yes|Get all statement rules|
+| 12 |GET | `Get list statement when`          | `/company/get-list-statement-when`|yes|Get all statement when|
+| 13 |GET | `Get list statement apply to`          | `/company/get-list-statement-apply-to`|yes|Get all statement apply to|
+| 14 |GET | `Get list billing companies`| `/company/get-list-billing-companies?company_id={companyID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 14 |PUT | `Update company`          | `/company/{id}`|yes|update company|
+| 15 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 16 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 
 
 
@@ -50,32 +60,64 @@
 
 ```json
 {
-    "name":"company first",
-    "nickname":"alias company first",
-    "npi":"222CF123",
     "billing_company_id": 1, /** Only required by superuser */
+    "npi":"222123", /** required */
+    "ein":"1234321", /** required only number max 9 */
+    "upin":"222CF123", /** optional alfanumeric max 50 */
+    "clia":"222CF123", /** optional alfanumeric max 50 */
+    "name":"company first", /** required */
+    "nickname":"alias company first", /** optional */
+    "name_suffix_id": 1, /** optional */
+    "abbreviation": "ABB", /** optional */
     "taxonomies": [
         {
-            "tax_id": "TAX01213",
-            "name": "NameTaxonomy Company",
-            "primary": true
-        },{
-            "tax_id": "TAX01222",
-            "name": "NameTaxonomy 2 Company",
-            "primary": false
+            "tax_id": "TAX01213", /** required if exist*/
+            "name": "NameTaxonomy Company", /** required if exist */
+            "primary": true /** required if exist */
+        },
+        {
+            "tax_id": "TAX01222", /** required if exist */
+            "name": "NameTaxonomy 2 Company", /** required if exist */
+            "primary": false /** required if exist */
         }
     ],
-    "address": {
-        "address":"address Company",
-        "city":"city Company",
-        "state":"state Company",
-        "zip":234
+    "contact": {
+        "contact_name": "Name Contact", /** optional */
+        "phone":"34324234", /** optional */
+        "mobile":"34324234", /** optional */
+        "fax":"567674576457", /** optional */
+        "email":"company@company.com" /** required */
     },
-    "contact":{
-        "phone":"34324234",
-        "fax":"567674576457",
-        "email":"company@company.com"
-    }
+    "address": {
+        "address":"address Company", /** required */
+        "city":"city Company", /** required */
+        "state":"state Company", /** required */
+        "zip": "123234", /** required */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "code" /** optional */
+    },
+    "payment_address": { /** optional */
+        "address":"address Company", /** required if exist */
+        "city":"city Company", /** required if exist */
+        "state":"state Company", /** required if exist */
+        "zip": "123234", /** required if exist */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "code" /** optional */
+    },
+    "statements": [
+        {
+            "name": "Name Statement", /** required if exist */
+            "rule_id": 1, /** optional */
+            "when_id": 1, /** optional */
+            "apply_to_id": 1, /** optional */
+            "start_date": "2022-02-03", /** required if when content 'period' */
+            "end_date": "2022-02-03", /** required if when content 'period', example 'In a defined period' */
+            "date": "2022-02-03" /** required if when content 'specific', example 'Specific date' */
+        }
+    ],
+    "exception_insurance_companies": [1,2,3], /** optional */
+    "public_note": "Public Note", /** optional */
+    "private_note": "Private Note" /** optional */
 }
 ```
 
@@ -693,7 +735,7 @@
 >{warning} 404 company found not found
 
 <a name="get-one-company-by-npi"></a>
-## Get One Company by npi
+## Get one company by npi
 
 
 ### Param in header
@@ -796,7 +838,7 @@
 >{warning} 404 company found not found
 
 <a name="get-list"></a>
-## Get All Company by billing company
+## Get all company by billing company
 
 
 ### Param in header
@@ -834,6 +876,246 @@
 ]
 ```
 
+<a name="get-list-name-suffix"></a>
+## Get all company name suffix
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Company name suffix found
+
+#
+
+```json
+[
+    {
+        "id": 182,
+        "name": "I"
+    },
+    {
+        "id": 183,
+        "name": "II"
+    },
+    {
+        "id": 184,
+        "name": "III"
+    },
+    {
+        "id": 185,
+        "name": "IV"
+    },
+    {
+        "id": 186,
+        "name": "Jr"
+    },
+    {
+        "id": 187,
+        "name": "Sr"
+    }
+]
+```
+
+<a name="get-list-statement-rules"></a>
+## Get all statement rules
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Statement rules found
+
+#
+
+```json
+[
+    {
+        "id": 174,
+        "name": "Send to all"
+    },
+    {
+        "id": 175,
+        "name": "Send to none"
+    },
+    {
+        "id": 176,
+        "name": "Send if plan is"
+    },
+    {
+        "id": 177,
+        "name": "Do not send if plan is"
+    },
+    {
+        "id": 178,
+        "name": "Send on payment"
+    }
+]
+```
+
+<a name="get-list-statement-when"></a>
+## Get all statement when
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Statement when found
+
+#
+
+```json
+[
+    {
+        "id": 179,
+        "name": "When registering the payment"
+    },
+    {
+        "id": 180,
+        "name": "In a defined period"
+    },
+    {
+        "id": 181,
+        "name": "Specific date"
+    }
+]
+```
+<a name="get-list-statement-apply-to"></a>
+## Get all statement apply to
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 Statement apply to found
+
+#
+
+```json
+[
+    {
+        "id": 188,
+        "name": "Apply to 1"
+    },
+    {
+        "id": 189,
+        "name": "Apply to 2"
+    }
+]
+```
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "company_id": <integer>
+    "edit": <boolean>
+}
+```
+
+## Example path
+
+>{primary} /get-list-billing-companies?company_id=2&edit=false
+
+> /get-list-billing-companies?company_id=2&edit=true
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
 #
 <a name="update-company"></a>
 ## Update Company
@@ -846,31 +1128,65 @@
 
 ```json
 {
-    "name":"company first",
-    "nickname":"alias company first",
-    "npi":"222CF123",
     "billing_company_id": 1, /** Only required by superuser */
+    "npi":"222123", /** required */
+    "ein":"1234321", /** required only number max 9 */
+    "upin":"222CF123", /** optional alfanumeric max 50 */
+    "clia":"222CF123", /** optional alfanumeric max 50 */
+    "name":"company first", /** required */
+    "nickname":"alias company first", /** optional */
+    "name_suffix_id": 1, /** optional */
+    "abbreviation": "ABB", /** optional */
     "taxonomies": [
         {
-            "tax_id": "TAX01213",
-            "name": "NameTaxonomy Company",
-            "primary": true
-        },{
-            "tax_id": "TAX01222",
-            "name": "NameTaxonomy 2 Company",
-            "primary": false
+            "tax_id": "TAX01213", /** required if exist*/
+            "name": "NameTaxonomy Company", /** required if exist */
+            "primary": true /** required if exist */
+        },
+        {
+            "tax_id": "TAX01222", /** required if exist */
+            "name": "NameTaxonomy 2 Company", /** required if exist */
+            "primary": false /** required if exist */
         }
-    ],"address": {
-        "address":"address Company",
-        "city":"city Company",
-        "state":"state Company",
-        "zip":234
+    ],
+    "contact": {
+        "contact_name": "Name Contact", /** optional */
+        "phone":"34324234", /** optional */
+        "mobile":"34324234", /** optional */
+        "fax":"567674576457", /** optional */
+        "email":"company@company.com" /** required */
     },
-    "contact":{
-        "phone":"34324234",
-        "fax":"567674576457",
-        "email":"company@company.com"
-    }
+    "address": {
+        "address":"address Company", /** required */
+        "city":"city Company", /** required */
+        "state":"state Company", /** required */
+        "zip": "123234", /** required */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "code" /** optional */
+    },
+    "payment_address": { /** optional */
+        "address":"address Company", /** required if exist */
+        "city":"city Company", /** required if exist */
+        "state":"state Company", /** required if exist */
+        "zip": "123234", /** required if exist */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "code" /** optional */
+    },
+    "statements": [
+        {
+            "name": "Name Statement", /** required if exist */
+            "rule_id": 1, /** optional */
+            "when_id": 1, /** optional */
+            "apply_to_id": 1, /** optional */
+            "start_date": "2022-02-03", /** required if when content 'period' */
+            "end_date": "2022-02-03", /** required if when content 'period', example 'In a defined period' */
+            "date": "2022-02-03" /** required if when content 'specific', example 'Specific date' */
+        }
+    ],
+    "exception_insurance_companies": [1,2,3], /** optional */
+    "public_note": "Public Note", /** optional */
+    "private_note": "Private Note" /** optional */
+}
 }
 ```
 
