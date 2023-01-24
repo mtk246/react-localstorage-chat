@@ -4,10 +4,17 @@ namespace App\Repositories;
 
 use App\Models\BillingCompany;
 use App\Models\Company;
+use App\Models\CompanyStatement;
+use App\Models\ExceptionInsuranceCompany;
 use App\Models\Address;
+use App\Models\AddressType;
 use App\Models\Contact;
 use App\Models\EntityNickname;
+use App\Models\EntityAbbreviation;
 use App\Models\Taxonomy;
+use App\Models\TypeCatalog;
+use App\Models\PrivateNote;
+use App\Models\PublicNote;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,9 +31,13 @@ class CompanyRepository
         try {
             DB::beginTransaction();
             $company = Company::create([
-                "code" => generateNewCode(getPrefix($data["name"]), 5, date("y"), Company::class, "code"),
-                "name" => $data["name"],
-                "npi"  => $data["npi"],
+                "code"          => generateNewCode("CO", 5, date("Y"), Company::class, "code"),
+                "name"          => $data["name"],
+                "npi"           => $data["npi"],
+                "ein"           => $data["ein"],
+                "upin"          => $data["upin"] ?? null,
+                "clia"          => $data["clia"] ?? null,
+                "name_suffix_id" => $data["name_suffix_id"] ?? null
             ]);
             
             if (isset($data['taxonomies'])) {
@@ -56,17 +67,81 @@ class CompanyRepository
                 ]);
             }
 
+            if (isset($data['abbreviation'])) {
+                EntityAbbreviation::create([
+                    'abbreviation'       => $data['abbreviation'],
+                    'abbreviable_id'     => $company->id,
+                    'abbreviable_type'   => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            }
+
             if (isset($data['address']['address'])) {
                 $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["address"]["addressable_id"]     = $company->id;
                 $data["address"]["addressable_type"]   = Company::class;
                 Address::create($data["address"]);
             }
+
+            if (isset($data['payment_address']['address'])) {
+                $addressType = AddressType::where('name', 'Other')->first();
+                $data["address"]["address_type_id"]    = $addressType->id ?? null;
+                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
+                $data["address"]["addressable_id"]     = $company->id;
+                $data["address"]["addressable_type"]   = Company::class;
+                Address::create($data["address"]);
+            }
+
             if (isset($data["contact"]["email"])) {
                 $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                 $data["contact"]["contactable_id"]     = $company->id;
                 $data["contact"]["contactable_type"]   = Company::class;
                 Contact::create($data["contact"]);
+            }
+
+            if (isset($data['statements'])) {
+                foreach ($data['statements'] as $statement) {
+                    if (isset($statement["name"])) {
+                        CompanyStatement::create([
+                            "name"               => $statement["name"],
+                            "start_date"         => $statement["start_date"] ?? null,
+                            "end_date"           => $statement["end_date"] ?? null,
+                            "date"               => $statement["date"] ?? null,
+                            "rule_id"            => $statement["rule_id"] ?? null,
+                            "when_id"            => $statement["when_id"] ?? null,
+                            "apply_to_id"        => $statement["apply_to_id"] ?? null,
+                            "company_id"         => $company->id,
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany
+                        ]);
+                    }
+                    
+                }
+            }
+            if (isset($data['exception_insurance_companies'])) {
+                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
+                    ExceptionInsuranceCompany::create([
+                        "company_id"           => $company->id,
+                        "billing_company_id"   => $billingCompany->id ?? $billingCompany,
+                        "insurance_company_id" => $exceptionIC
+                    ]);
+                }
+            }
+
+            if (isset($data['private_note'])) {
+                PrivateNote::create([
+                    'publishable_type'   => Company::class,
+                    'publishable_id'     => $company->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'note'               => $data['private_note']
+                ]);
+            }
+
+            if (isset($data['public_note'])) {
+                PublicNote::create([
+                    'publishable_type'   => Company::class,
+                    'publishable_id'     => $company->id,
+                    'note'               => $data['public_note']
+                ]);
             }
 
             DB::commit();
@@ -86,6 +161,62 @@ class CompanyRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
             return getList(Company::class, ['name'], ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListStatementRules() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Statement rule']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListStatementWhen() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Statement when']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListStatementApplyTo() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Statement apply to']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListNameSuffix() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Name suffix']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListBillingCompanies(Request $request) {
+        try {
+            $companyId = $request->company_id ?? null;
+            $edit = $request->edit ?? 'false';
+
+            if (is_null($companyId)) {
+                return getList(BillingCompany::class, 'name', ['status' => true]);
+            } else {
+                $ids = [];
+                $billingCompanies = Company::find($companyId)->billingCompanies;
+                foreach ($billingCompanies as $field) {
+                    array_push($ids, $field->id);
+                }
+                if ($edit == 'true') {
+                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'companies', 'whereHas' => ['relationship' => 'companies', 'where' => ['company_id' => $companyId]]]);
+                } else {
+                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'companies', 'orWhereHas' => ['relationship' => 'companies', 'where' => ['billing_company_id', $ids]]]);
+                }
+            }
         } catch (\Exception $e) {
             return [];
         }
@@ -127,7 +258,8 @@ class CompanyRepository
             $data = Company::with([
                 "addresses",
                 "contacts",
-                "nicknames"
+                "nicknames",
+                "billingCompanies"
             ]);
         } else {
             $data = Company::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -142,6 +274,9 @@ class CompanyRepository
                 "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
+                "billingCompanies" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                }
             ]);
         }
         
@@ -181,15 +316,21 @@ class CompanyRepository
         if (!$bC) {
             $company = Company::whereId($id)->with([
                 "taxonomies",
+                "nameSuffix",
                 "addresses",
                 "contacts",
                 "nicknames",
                 "facilities",
-                "billingCompanies"
+                "companyStatements",
+                "exceptionInsuranceCompanies",
+                "billingCompanies",
+                "publicNote",
+                "privateNotes"
             ])->first();
         } else {
             $company = Company::whereId($id)->with([
                 "taxonomies",
+                "nameSuffix",
                 "addresses" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
@@ -200,7 +341,19 @@ class CompanyRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "facilities",
-                "billingCompanies"
+                "billingCompanies" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "exceptionInsuranceCompanies" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "companyStatements" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                "publicNote",
+                "privateNotes" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                }
             ])->first();
         }
 
@@ -219,8 +372,17 @@ class CompanyRepository
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"];
+                $company->load([
+                    "companyStatements" => function ($query) use ($billingCompany) {
+                        $query->where("billing_company_id", $billingCompany);
+                    },
+                    "exceptionInsuranceCompanies" => function ($query) use ($billingCompany) {
+                        $query->where("billing_company_id", $billingCompany);
+                    },
+                ]);
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
+                $company->load(["companyStatements", "exceptionInsuranceCompanies"]);
             }
             
             /** Attach billing company */
@@ -233,8 +395,10 @@ class CompanyRepository
             }
 
             $company->update([
-                "name"       => $data["name"],
-                "npi"        => $data["npi"]
+                "ein"           => $data["ein"],
+                "upin"          => $data["upin"] ?? null,
+                "clia"          => $data["clia"] ?? null,
+                "name_suffix_id" => $data["name_suffix_id"] ?? null
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -258,6 +422,16 @@ class CompanyRepository
                 ]);
             }
 
+            if (isset($data['abbreviation'])) {
+                EntityAbbreviation::updateOrCreate([
+                    'abbreviable_id'     => $company->id,
+                    'abbreviable_type'   => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'abbreviation'           => $data['abbreviation'],
+                ]);
+            }
+
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
                     "billing_company_id" => $billingCompany->id ?? $billingCompany,
@@ -266,12 +440,94 @@ class CompanyRepository
                 ], $data['contact']);
             }
 
-            if (isset($data['address'])) {
+            if (isset($data['address']['address'])) {
                 Address::updateOrCreate([
                     "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     "addressable_id"     => $company->id,
                     "addressable_type"   => Company::class
                 ], $data["address"]);
+            }
+
+            if (isset($data['payment_address']['address'])) {
+                Address::updateOrCreate([
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                    "addressable_id"     => $company->id,
+                    "addressable_type"   => Company::class
+                ], $data["address"]);
+            }
+
+            if (isset($data['statements'])) {
+                foreach ($company->companyStatement as $statementDB) {
+                    $find = false;
+                    foreach ($data['statements'] as $statement) {
+                        if ($statement['name'] == $statementDB->name) {
+                            $find = true;
+                        }
+                    }
+                    if ($find == false) {
+                        $statementDB->delete();
+                    }
+                }
+
+                foreach ($data['statements'] as $statement) {
+                    if (isset($statement["name"])) {
+                        CompanyStatement::updateOrCreate([
+                            "name"               => $statement["name"],
+                            "company_id"         => $company->id,
+                            "billing_company_id" => $billingCompany->id ?? $billingCompany
+                        ],
+                        [
+                            "start_date"         => $statement["start_date"] ?? null,
+                            "end_date"           => $statement["end_date"] ?? null,
+                            "date"               => $statement["date"] ?? null,
+                            "rule_id"            => $statement["rule_id"] ?? null,
+                            "when_id"            => $statement["when_id"] ?? null,
+                            "apply_to_id"        => $statement["apply_to_id"] ?? null
+                        ]);
+                    }
+                    
+                }
+            }
+            if (isset($data['exception_insurance_companies'])) {
+                foreach ($company->exceptionInsuranceCompany as $exceptionICDB) {
+                    $find = false;
+                    foreach ($data['exception_insurance_companies'] as $exceptionIC) {
+                        if ($exceptionIC == $exceptionICDB->id) {
+                            $find = true;
+                        }
+                    }
+                    if ($find == false) {
+                        $exceptionICDB->delete();
+                    }
+                }
+
+
+                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
+                    ExceptionInsuranceCompany::updateOrCreate([
+                        "company_id"           => $company->id,
+                        "billing_company_id"   => $billingCompany->id ?? $billingCompany,
+                        "insurance_company_id" => $exceptionIC
+                    ],[]);
+                }
+            }
+
+            if (isset($data['private_note'])) {
+                PrivateNote::updateOrCreate([
+                    'publishable_type'   => Company::class,
+                    'publishable_id'     => $company->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'note'               => $data['private_note']
+                ]);
+            }
+
+            if (isset($data['public_note'])) {
+                PublicNote::updateOrCreate([
+                    'publishable_type'   => Company::class,
+                    'publishable_id'     => $company->id,
+                ], [
+                    'note'               => $data['public_note']
+                ]);
             }
 
             DB::commit();
@@ -349,10 +605,8 @@ class CompanyRepository
     public function getOneByNpi(string $npi) {
         $company = Company::whereNpi($npi)->with([
             "taxonomies",
-            "addresses",
-            "contacts",
-            "facilities",
-            "billingCompanies"
+            "nameSuffix",
+            "publicNote"
         ])->first();
         return !is_null($company) ? $company : null;
     }

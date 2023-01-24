@@ -196,6 +196,11 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("company")->group(function() {
         Route::get("/get-all-server",[\App\Http\Controllers\CompanyController::class,'getServerAll'])->middleware(['auth:api']);
         Route::get("/get-list-by-billing-company/{id?}",[\App\Http\Controllers\CompanyController::class,'getList']);
+        Route::get("/get-list-name-suffix",[\App\Http\Controllers\CompanyController::class,'getListNameSuffix']);
+        Route::get("/get-list-statement-rules",[\App\Http\Controllers\CompanyController::class,'getListStatementRules']);
+        Route::get("/get-list-statement-when",[\App\Http\Controllers\CompanyController::class,'getListStatementWhen']);
+        Route::get("/get-list-statement-apply-to",[\App\Http\Controllers\CompanyController::class,'getListStatementApplyTo']);
+        Route::get("/get-list-billing-companies",[\App\Http\Controllers\CompanyController::class,'getListBillingCompanies']);
         Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
             "auth:api",
         ]);

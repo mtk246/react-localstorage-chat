@@ -43,6 +43,52 @@ class CompanyController extends Controller
     /**
      * @return JsonResponse
      */
+    public function getListStatementRules(): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListStatementRules()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListStatementWhen(): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListStatementWhen()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListStatementApplyTo(): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListStatementApplyTo()
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getListNameSuffix(): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListNameSuffix()
+        );
+    }
+
+    public function getListBillingCompanies(Request $request) {
+        return response()->json(
+            $this->companyRepository->getListBillingCompanies($request)
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getAllCompany(): JsonResponse
     {
         return response()->json(

@@ -27,27 +27,60 @@ class CompanyCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', new IUnique(Company::class, 'name')],
-            'npi'                  => ['required', 'integer'],
-            'nickname'             => ['sometimes', 'string'],
+            'billing_company_id'                       => [
+                                                              Rule::requiredIf(auth()->user()->hasRole('superuser')),
+                                                              'integer',
+                                                              'nullable'
+                                                          ],
+            'npi'                                      => ['required', 'integer'],
+            'ein'                                      => ['nullable', 'string', 'max:9'],
+            'upin'                                     => ['nullable', 'string', 'max:50'],
+            'clia'                                     => ['nullable', 'string', 'max:50'],
+            'name'                                     => ['required', 'string', new IUnique(Company::class, 'name')],
+            'nickname'                                 => ['nullable', 'string'],
+            'name_suffix_id'                           => ['nullable', 'integer'],
+            'abbreviation'                             => ['nullable', 'string', 'max:20'],
             
-            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'taxonomies'                               => ['nullable', 'array'],
+            'taxonomies.*.tax_id'                      => ['sometimes', 'string'],
+            'taxonomies.*.name'                        => ['sometimes', 'string'],
+            'taxonomies.*.primary'                     => ['sometimes', 'boolean'],
 
-            'taxonomies'           => ['required', 'array'],
-            'taxonomies.*.tax_id'  => ['required', 'string'],
-            'taxonomies.*.name'    => ['required', 'string'],
-            'taxonomies.*.primary' => ['required', 'boolean'],
+            'contact'                                  => ['required', 'array'],
+            'contact.contact_name'                     => ['nullable', 'string'],
+            'contact.phone'                            => ['nullable', 'string'],
+            'contact.mobile'                           => ['nullable', 'string'],
+            'contact.fax'                              => ['nullable', 'string'],
+            'contact.email'                            => ['required', 'email:rfc'],
 
-            'address'              => ['required', 'array'],
-            'address.address'      => ['required', 'string'],
-            'address.city'         => ['required', 'string'],
-            'address.state'        => ['required', 'string'],
-            'address.zip'          => ['required', 'string'],
-            
-            'contact'              => ['required', 'array'],
-            'contact.phone'        => ['required', 'string'],
-            'contact.fax'          => ['nullable', 'string'],
-            'contact.email'        => ['required', 'email:rfc'],
+            'address'                                  => ['required', 'array'],
+            'address.address'                          => ['required', 'string'],
+            'address.city'                             => ['required', 'string'],
+            'address.state'                            => ['required', 'string'],
+            'address.zip'                              => ['required', 'string'],
+            'address.country'                          => ['nullable', 'string'],
+            'address.country_subdivision_code'         => ['nullable', 'string'],
+
+            'payment_address'                          => ['nullable', 'array'],
+            'payment_address.address'                  => ['sometimes', 'string'],
+            'payment_address.city'                     => ['sometimes', 'string'],
+            'payment_address.state'                    => ['sometimes', 'string'],
+            'payment_address.zip'                      => ['sometimes', 'string'],
+            'payment_address.country'                  => ['nullable', 'string'],
+            'payment_address.country_subdivision_code' => ['nullable', 'string'],
+
+            'statements'                               => ['nullable', 'array'],
+            'statements.*.name'                        => ['nullable', 'string'],
+            'statements.*.rule_id'                     => ['nullable', 'integer'],
+            'statements.*.when_id'                     => ['nullable', 'integer'],
+            'statements.*.apply_to_id'                 => ['nullable', 'integer'],
+            'statements.*.start_date'                  => ['nullable', 'date'],
+            'statements.*.end_date'                    => ['nullable', 'date'],
+
+            'exception_insurance_companies'            => ['nullable', 'array'],
+
+            'public_note'                              => ['nullable', 'string'],
+            'private_note'                             => ['nullable', 'string']
         ];
     }
 }

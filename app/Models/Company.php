@@ -50,7 +50,11 @@ class Company extends Model implements Auditable
     protected $fillable = [
         "code",
         "name",
-        "npi"
+        "npi",
+        "ein",
+        "upin",
+        "clia",
+        "name_suffix_id",
     ];
 
     /**
@@ -59,6 +63,16 @@ class Company extends Model implements Auditable
      * @var array
      */
     protected $appends = ['status', 'edit_name', 'last_modified'];
+
+    /**
+     * Company belongs to NameSuffix.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function nameSuffix()
+    {
+        return $this->belongsTo(TypeCatalog::class, "name_suffix_id");
+    }
 
     /**
      * The billingCompanies that belong to the company.
@@ -141,6 +155,26 @@ class Company extends Model implements Auditable
     }
 
     /**
+     * Company has many CompanyStatements.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function companyStatements()
+    {
+        return $this->hasMany(CompanyStatement::class);
+    }
+
+    /**
+     * Company has many ExceptionInsuranceCompanies.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function exceptionInsuranceCompanies()
+    {
+        return $this->hasMany(ExceptionInsuranceCompany::class);
+    }
+
+    /**
      * Company morphs many Address.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -168,6 +202,26 @@ class Company extends Model implements Auditable
     public function nicknames()
     {
         return $this->morphMany(EntityNickname::class, 'nicknamable');
+    }
+
+    /**
+     * Company morphs one publicNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function publicNote()
+    {
+        return $this->morphOne(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * Company morphs many privateNotes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function privateNotes()
+    {
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 
     /*
