@@ -41,7 +41,7 @@ class ClearingHouse extends Model implements Auditable
         "code",
         "name",
         "ack_required",
-        "org_type",
+        "org_type_id",
         "transmission_format_id"
     ];
 
@@ -59,7 +59,17 @@ class ClearingHouse extends Model implements Auditable
      */
     public function transmissionFormat(): BelongsTo
     {
-        return $this->belongsTo(TransmissionFormat::class);
+        return $this->belongsTo(TypeCatalog::class, "transmission_format_id");
+    }
+
+    /**
+     * ClearingHouse belongs to OrgType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function orgType(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, "orgType_id");
     }
 
     /**

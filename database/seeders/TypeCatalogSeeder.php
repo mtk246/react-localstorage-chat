@@ -825,6 +825,19 @@ class TypeCatalogSeeder extends Seeder
                     ],
                 ]
             ],
+            [
+                'description' => 'Transmission format',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'JSON'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'ANSI X12'
+                    ]
+                ]
+            ],
         ];
     
     

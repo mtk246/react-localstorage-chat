@@ -8,7 +8,7 @@ use App\Models\ClearingHouse;
 use App\Models\Contact;
 use App\Models\EntityNickname;
 use App\Models\EntityAbbreviation;
-use App\Models\TransmissionFormat;
+use App\Models\TypeCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,7 +27,7 @@ class ClearingHouseRepository
             $clearing = ClearingHouse::create([
                 "code"                   => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClearingHouse::class, "code"),
                 "name"                   => $data["name"],
-                "org_type"               => $data["org_type"],
+                "org_type_id"            => $data["org_type_id"],
                 "ack_required"           => $data["ack_required"],
                 "transmission_format_id" => $data["transmission_format_id"]
             ]);
@@ -180,7 +180,8 @@ class ClearingHouseRepository
                 "billingCompanies",
                 "nicknames",
                 "abbreviations",
-                "transmissionFormat"
+                "transmissionFormat",
+                "orgType"
             ])->first();
         } else {
             $clearing = ClearingHouse::whereId($id)->with([
@@ -197,6 +198,7 @@ class ClearingHouseRepository
                     $query->where('billing_company_id', $bC);
                 },
                 "transmissionFormat",
+                "orgType",
                 "billingCompanies"
             ])->first();
         }
@@ -211,7 +213,7 @@ class ClearingHouseRepository
             $clearing = ClearingHouse::find($id);
             $clearing->update([
                 "name"                   => $data["name"],
-                "org_type"               => $data["org_type"],
+                "org_type_id"            => $data["org_type_id"],
                 "ack_required"           => $data["ack_required"],
                 "transmission_format_id" => $data["transmission_format_id"]
             ]);
@@ -319,6 +321,18 @@ class ClearingHouseRepository
     }
 
     public function getListTransmissionFormats() {
-        return getList(TransmissionFormat::class, 'name');
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Transmission format']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListOrgTypes() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Ins type']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

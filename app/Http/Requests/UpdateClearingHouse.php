@@ -28,7 +28,7 @@ class UpdateClearingHouse extends FormRequest
     {
         return [
             'name'               => ['required', 'string', new IUnique(ClearingHouse::class, 'name', $this->clearing_id)],
-            'org_type'           => ['required', 'string'],
+            'org_type_id'        => ['required', 'integer'],
             'ack_required'       => ['required', 'boolean'],
             'nickname'           => ['sometimes', 'string'],
             'transmission_format_id' => ['required', 'integer'],

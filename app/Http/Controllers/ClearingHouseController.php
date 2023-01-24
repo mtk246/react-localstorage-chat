@@ -113,4 +113,11 @@ class ClearingHouseController extends Controller
             $this->clearingRepository->getListTransmissionFormats()
         );
     }
+
+    public function getListOrgTypes(): JsonResponse
+    {
+        return response()->json(
+            $this->clearingRepository->getListOrgTypes()
+        );
+    }
 }

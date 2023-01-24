@@ -12,6 +12,7 @@
 - [Change status Clearing house](#change-status-clearing-house)
 - [Add to billing company](#add-to-billing-company)
 - [Get list transmission formats](#get-list-transmission-formats)
+- [Get list transmission formats](#get-list-org-types)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -28,6 +29,7 @@
 | 7 |PATCH | `Change status Clearing house`           | `/clearing-house/{id}`|yes|Get one Clearing House|
 | 8 |PATCH | `Add to billing company`                 | `/clearing-house/add-to-billing-company/{id}`|yes|Add clearing house to billing company|
 | 9 |GET | `Get list transmission formats`| `/clearing-house/get-list-transmission-formats`        |yes            |Get list transmission formats|
+| 10 |GET | `Get list org types`| `/clearing-house/get-list-org-types`        |yes            |Get list org types|
 
 
 
@@ -737,12 +739,75 @@
 ```json
 [
     {
-        "id": 1,
+        "id": 190,
+        "name": "JSON"
+    },
+    {
+        "id": 191,
         "name": "ANSI X12"
+    }
+]
+```
+
+<a name="get-list-org-types"></a>
+## Get list org types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Transmission formats found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Aetna"
     },
     {
         "id": 2,
-        "name": "JSON"
+        "name": "Automobile Insurance"
+    },
+    {
+        "id": 3,
+        "name": "Blue Cross an Blue Shield"
+    },
+    {
+        "id": 4,
+        "name": "Capitation"
+    },
+    {
+        "id": 5,
+        "name": "Cigna"
+    },
+    {
+        "id": 6,
+        "name": "Commercial Insurance"
+    },
+    {
+        "id": 7,
+        "name": "Medicaid"
+    },
+    {
+        "id": 8,
+        "name": "Medicare"
+    },
+    {
+        "id": 9,
+        "name": "United Health Care"
+    },
+    {
+        "id": 10,
+        "name": "Workers Compensation"
     }
 ]
 ```
