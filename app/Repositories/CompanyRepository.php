@@ -320,6 +320,7 @@ class CompanyRepository
                 "addresses",
                 "contacts",
                 "nicknames",
+                "abbreviations",
                 "facilities",
                 "companyStatements",
                 "exceptionInsuranceCompanies",
@@ -340,6 +341,9 @@ class CompanyRepository
                 "nicknames" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
+                "abbreviations" => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 "facilities",
                 "billingCompanies" => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
@@ -356,7 +360,6 @@ class CompanyRepository
                 }
             ])->first();
         }
-
         return !is_null($company) ? $company : null;
     }
 
