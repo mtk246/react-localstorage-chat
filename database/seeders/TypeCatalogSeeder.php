@@ -741,7 +741,97 @@ class TypeCatalogSeeder extends Seeder
                     ]
                 ]
             ],
+            [
+                'description' => 'Statement rule',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Send to all'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Send to none'
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Send if plan is'
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Do not send if plan is'
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'Send on payment'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Statement when',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'When registering the payment'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'In a defined period'
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Specific date'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Statement apply to',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Apply to 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Apply to 2'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Name suffix',
+                'type_catalogs' => [
+                    [
+                        'code' => 'I',
+                        'description' => 'I'
+                    ],
+                    [
+                        'code' => 'II',
+                        'description' => 'II'
+                    ],
+                    [
+                        'code' => 'III',
+                        'description' => 'III'
+                    ],
+                    [
+                        'code' => 'IV',
+                        'description' => 'IV'
+                    ],
+                    [
+                        'code' => 'Jr',
+                        'description' => 'Jr'
+                    ],
+                    [
+                        'code' => 'Sr',
+                        'description' => 'Sr'
+                    ],
+                ]
+            ],
         ];
+    
+    
+    
+    
+    
+    
 
         $appealRules = "5 things to know when filing an appeal
 1. If you decide to file an appeal, ask your doctor, health care provider, or supplier for any information that may help your case.
