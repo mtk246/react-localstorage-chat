@@ -301,12 +301,12 @@ class InsuranceCompanyRepository
 
 
     public function getByPayer(string $payer) {
-        $insurance = InsuranceCompany::wherePayerId($payer)->first();
+        $insurance = InsuranceCompany::wherePayerId($payer)->with("publicNote")->first();
         return !is_null($insurance) ? $insurance : null;
     }
 
     public function getList() {
-        return getList(InsuranceCompany::class);
+        return getList(InsuranceCompany::class, ['payer_id', '-', 'name']);
     }
 
     public function getListBillingCompanies(Request $request) {

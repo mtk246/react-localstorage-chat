@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -69,7 +70,7 @@ class ClearingHouse extends Model implements Auditable
      */
     public function orgType(): BelongsTo
     {
-        return $this->belongsTo(TypeCatalog::class, "orgType_id");
+        return $this->belongsTo(TypeCatalog::class, "org_type_id");
     }
 
     /**
@@ -145,19 +146,6 @@ class ClearingHouse extends Model implements Auditable
         return Attribute::make(
             get: fn ($value) => upperCaseWords($value),
             set: fn ($value) => upperCaseWords($value),
-        );
-    }
-
-    /**
-     * Interact with the clearingHouse's org_type.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function orgType(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst(strtolower($value)),
-            set: fn ($value) => ucfirst(strtolower($value)),
         );
     }
 
