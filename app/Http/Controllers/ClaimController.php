@@ -212,16 +212,25 @@ class ClaimController extends Controller
     public function showReport(Request $request) {
         $pdf = new ReportRepository();
 
+        if (auth()->user()->hasRole('superuser')) {
+            $billingCompany = $request->billing_company_id;
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
+
         $pdf->setConfig([
             'urlVerify' => 'www.google.com.ve',
             'typeFormat' => ($request->format != '') ? $request->format : null,
             'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
+            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            'insurance_policies' => $request->insurance_policies ?? [],
         ]);
         $pdf->setHeader('');
         //$pdf->setFooter();
         return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
             'pdf'      => $pdf
         ]))[1];
+        /**$pdf->setBody('pdf.837P', true, ['pdf' => $pdf]);*/
     }
 
     /**

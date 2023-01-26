@@ -46,6 +46,9 @@ class ReportRepository implements ReportInterface
 
     private $typeForm;
     private $patient;
+    private $billingCompany;
+    private $policyPrimary;
+    private $subscriber;
 
     public function __construct()
     {
@@ -96,11 +99,71 @@ class ReportRepository implements ReportInterface
         } else {
             $this->typeForm = null;
         }
-        $this->patient = Patient::with([
-            "user" => function ($query) {
-                $query->with(["addresses", "profile", "billingCompanies"]);
+        $bC = $this->billingCompany = $params['billing_company_id'] ?? null;
+        if (isset($bC)) {
+            $this->patient = Patient::with([
+                "user" => function ($query) use ($bC) {
+                    $query->with([
+                        "profile",
+                        "addresses" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        "contacts" => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        "billingCompanies"
+                    ]);
+                },
+                "maritalStatus",
+                "marital",
+                "companies",
+                "insurancePolicies",
+                "insurancePlans" => function ($query) {
+                    $query->with([
+                        "insuranceCompany"
+                    ]);
+                },
+                "billingCompanies",
+                "guarantor",
+                "emergencyContacts",
+                "employments",
+                "publicNote",
+                "privateNotes"
+            ])->find($params['patient_id']);
+        } else {
+            $this->patient = Patient::with([
+                "user" => function ($query) use ($bC) {
+                    $query->with([
+                        "profile", "addresses", "contacts", "billingCompanies"
+                    ]);
+                },
+                "maritalStatus",
+                "marital",
+                "companies",
+                "insurancePolicies",
+                "insurancePlans" => function ($query) {
+                    $query->with([
+                        "insuranceCompany"
+                    ]);
+                },
+                "billingCompanies",
+                "guarantor",
+                "emergencyContacts",
+                "employments",
+                "publicNote",
+                "privateNotes"
+            ])->find($params['patient_id']);
+        }
+        if (isset($this->patient)) {
+            $this->policyPrimary = $this->patient->insurancePolicies
+                                        ->whereIn('id', $params['insurance_policies'])->first();
+            if (isset($this->policyPrimary)) {
+                $this->subscriber =
+                    ($this->policyPrimary->own)
+                        ? $this->patient->user
+                        : $this->policyPrimary->subscriber;
             }
-        ])->find($params['patient_id']);
+        }
     }
 
     public function setHeader(
@@ -146,7 +209,7 @@ class ReportRepository implements ReportInterface
             }
             $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
 
-            /**if ($params->hasQR && !is_null($params->urlVerify)) {
+            if ($params->hasQR && !is_null($params->urlVerify)) {
                 $pdf->write2DBarcode(
                     $params->urlVerify,
                     'QRCODE,H',
@@ -157,7 +220,7 @@ class ReportRepository implements ReportInterface
                     $params->qrCodeStyle,
                     'T'
                 );
-            }*/
+            }
         });
     }
 
@@ -189,14 +252,36 @@ class ReportRepository implements ReportInterface
         /** Agrega las respectivas páginas del reporte */
         $this->pdf->AddPage($this->orientation, $this->format);
 
-        /** Information de paciente */
-        
         /** Título del reporte */
+
+        /** 1. Tipo de Cobertura del segur de salud */
+        $this->pdf->SetFont($this->fontFamily, '', 10);
+        $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 8.5, 40, true, 0, false, true, 0, 'T', true);
+
+        /** 1a. Insured ID number */
+        if (isset($this->subscriber)) {
+            $this->pdf->SetFont($this->fontFamily, '', 9);
+            $ssn = $this->subscriber->ssn ?? $this->subscriber->profile->ssn;
+            $this->pdf->MultiCell(70, 5.8, $ssn, 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
+
+            /** 4. Insured name */
+            $this->pdf->SetFont($this->fontFamily, '', 10);
+            $name = $this->subscriber->last_name ?? $this->subscriber->profile->last_name . ', ' . $this->subscriber->first_name ?? $this->subscriber->profile->first_name . ', ' . substr(($this->subscriber->middle_name ?? $this->subscriber->profile->middle_name) ?? 'M', 0, 1);
+            $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 135, 48, true, 0, false, true, 0, 'T', true);
+        }
+
+
+        /** Information de paciente */
         if (isset($this->patient)) {
             /** Configuración de la fuente  y tamaño en 20 para el título del reporte */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
-                $name = $this->patient->user->profile->last_name . ', ' . $this->patient->user->profile->first_name . ', ' . substr($this->patient->user->profile->middle_name, 0, 1);
+
+                /** 2. Patient full name */
+                $name = ($this->policyPrimary->own) ? '' :($this->patient->user->profile->last_name . ', ' . $this->patient->user->profile->first_name . ', ' . substr($this->patient->user->profile->middle_name, 0, 1));
                 $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 10, 48, true, 0, false, true, 0, 'T', true);
+                
+                /** 3. Patient Birth date and sex */
+
                 $this->pdf->SetFont($this->fontFamily, '', 9);
                 $birthdate = explode('-', $this->patient->user->profile->date_of_birth);
                 $this->pdf->MultiCell(70, 10, $birthdate[2], 0, 'L', false, 1, 92, 48.5, true, 0, false, true, 0, 'T', true);
@@ -209,8 +294,78 @@ class ReportRepository implements ReportInterface
                 } else {
                     $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 123.5, 48.5, true, 0, false, true, 0, 'T', true);
                 }
+
+                /** 5. Patient addres and contact */
                 $address = $this->patient->user->addresses->first();
-                $this->pdf->MultiCell(70, 5.8, $address->address, 0, 'L', false, 1, 10, 56, true, 0, false, true, 0, 'T', true);
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($address->address, 0, 28), 0, 'L', false, 1, 10, 56.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($address->city, 0, 24), 0, 'L', false, 1, 10, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($address->state, 0, 3), 0, 'L', false, 1, 72.5, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->SetFont($this->fontFamily, '', 9);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($address->zip, 0, 12), 0, 'L', false, 1, 10, 74, true, 0, false, true, 0, 'T', true);
+
+                $contact = $this->patient->user->contacts->first();
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($contact->phone, 0, 3), 0, 'L', false, 1, 44.5, 74, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own) ? '' : substr($contact->phone, 3, 10), 0, 'L', false, 1, 53, 74, true, 0, false, true, 0, 'T', true);
+
+                /** 6. Patient relationship to insured */
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                if ($this->policyPrimary->own) {
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 88.5, 57, true, 0, false, true, 0, 'T', true);
+                } else {
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 123.5, 57, true, 0, false, true, 0, 'T', true);
+                }
+
+                /** 7. Insured address and contact */
+                $address = $this->subscriber->addresses->first();
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                $this->pdf->MultiCell(70, 5.8, substr($address->address, 0, 28), 0, 'L', false, 1, 135, 56.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->city, 0, 24), 0, 'L', false, 1, 135, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->state, 0, 3), 0, 'L', false, 1, 191.5, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->SetFont($this->fontFamily, '', 9);
+                $this->pdf->MultiCell(70, 5.8, substr($address->zip, 0, 12), 0, 'L', false, 1, 135, 74, true, 0, false, true, 0, 'T', true);
+
+                $contact = $this->subscriber->contacts->first();
+                $this->pdf->MultiCell(70, 5.8, substr($contact->phone, 0, 3), 0, 'L', false, 1, 170, 74, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($contact->phone, 3, 135), 0, 'L', false, 1, 178.5, 74, true, 0, false, true, 0, 'T', true);
+
+                /** 8. Reservado */
+                /** 9. Reservado para MEDIGAP */
+
+                /** 10. Patient condition related */
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                if (!true) {
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 93.5, 90.8, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 93.5, 99, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 93.5, 107.2, true, 0, false, true, 0, 'T', true);
+                } else {
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 90.8, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 99, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 107.2, true, 0, false, true, 0, 'T', true);
+                }
+                /** 10d. Medicaid number patient */
+
+                /** 11. Policy number or group number insured */
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                $this->pdf->MultiCell(70, 5.8, substr($this->policyPrimary->policy_number, 0, 29), 0, 'L', false, 1, 133, 82, true, 0, false, true, 0, 'T', true);
+
+                /** 11a. Insured date of birth */
+                if (!$this->policyPrimary->own) {
+                    $this->pdf->SetFont($this->fontFamily, '', 9);
+                    $subscriberBirthdate = explode('-', $this->subscriber->date_of_birth);
+                    $this->pdf->MultiCell(70, 10, $birthdate[2], 0, 'L', false, 1, 139.5, 91, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 10, $birthdate[1], 0, 'L', false, 1, 146, 91, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 10, $birthdate[0], 0, 'L', false, 1, 154, 91, true, 0, false, true, 0, 'T', true);
+
+                    $this->pdf->SetFont($this->fontFamily, '', 10);
+                    $sex = $this->subscriber->sex ?? 'M';
+                    if (($sex == 'M') || ($sex == 'm')) {
+                        $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 176, 90.5, true, 0, false, true, 0, 'T', true);
+                    } else {
+                        $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 193.8, 90.5, true, 0, false, true, 0, 'T', true);
+                    }
+                }
+
         }
 
 
