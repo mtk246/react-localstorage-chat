@@ -892,12 +892,16 @@ class TypeCatalogSeeder extends Seeder
                 'description' => '14. Date of current illnes, injury or pregnancy (LMP)',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => '14. Date 1'
+                        'code' => '431',
+                        'description' => 'Onset of current symptoms or illness'
                     ],
                     [
-                        'code' => '2',
-                        'description' => '14. Date 2'
+                        'code' => '439',
+                        'description' => 'Accident'
+                    ],
+                    [
+                        'code' => '454',
+                        'description' => 'Initial treatment'
                     ]
                 ]
             ],
@@ -918,12 +922,12 @@ class TypeCatalogSeeder extends Seeder
                 'description' => '16. Dates patient unable to work in current occupation',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => '16 Date 1'
+                        'code' => '360',
+                        'description' => 'Initial disability period start'
                     ],
                     [
-                        'code' => '2',
-                        'description' => '16 Date 2'
+                        'code' => '361',
+                        'description' => 'Initial disability period end'
                     ]
                 ]
             ],
@@ -931,29 +935,49 @@ class TypeCatalogSeeder extends Seeder
                 'description' => '18. Hospitalization dates related to current services',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => '18. Date 1'
+                        'code' => '096',
+                        'description' => 'Discharge'
                     ],
                     [
-                        'code' => '2',
-                        'description' => '18. Date 2'
+                        'code' => '435',
+                        'description' => 'Admission'
                     ],
-                    [
-                        'code' => '5',
-                        'description' => '19. Additional claim information (Designated by NUCC)'
-                    ]
                 ]
             ],
             [
                 'description' => '19. Additional claim information (Designated by NUCC)',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => '19. Additional 1'
+                        'code' => '090',
+                        'description' => 'Report start'
                     ],
                     [
-                        'code' => '2',
-                        'description' => '19. Additional 2'
+                        'code' => '091',
+                        'description' => 'Report end'
+                    ],
+                    [
+                        'code' => '304',
+                        'description' => 'Latest visit or consultation'
+                    ],
+                    [
+                        'code' => '455',
+                        'description' => 'Last X-Ray'
+                    ],
+                    [
+                        'code' => 'DQ',
+                        'description' => 'Supervising physician'
+                    ],
+                    [
+                        'code' => 'QB',
+                        'description' => 'Purchase service provider'
+                    ],
+                    [
+                        'code' => 'IH',
+                        'description' => 'Insurance history or other coverage'
+                    ],
+                    [
+                        'code' => 'P4',
+                        'description' => 'Project code'
                     ]
                 ]
             ],
