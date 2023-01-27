@@ -113,7 +113,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -121,7 +121,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ]
@@ -1101,7 +1101,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1109,7 +1109,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ]
@@ -1216,7 +1216,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1224,7 +1224,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ],
@@ -1318,7 +1318,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1326,7 +1326,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ],
@@ -1440,7 +1440,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1448,7 +1448,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ],
@@ -1612,7 +1612,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1620,7 +1620,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ]
@@ -1736,7 +1736,7 @@
             "from_service": "2022-07-05",
             "to_service": "2022-07-05",
             "procedure_id": 11,
-            "modifier_id": [1,2,3,4], /** Max 4 */
+            "modifier_ids": [1,2,3,4], /** Max 4 */
             "place_of_service_id": 3,
             "type_of_service_id": 2,
             "diagnostic_pointers": ["A", "B"],
@@ -1744,7 +1744,7 @@
             "price": 200,
             "copay": 200,
             "emg": true,
-            "epsdt": "S2",
+            "epsdt_id": 1,
             "family_planning": true
         }
     ],
