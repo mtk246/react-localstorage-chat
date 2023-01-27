@@ -114,8 +114,8 @@ class DoctorController extends Controller
         return response()->json($rs);
     }
 
-    public function getListByCompany(Request $request) {
-        $rs = $this->doctorRepository->getListByCompany($request);
+    public function getList(Request $request) {
+        $rs = $this->doctorRepository->getList($request);
 
         return response()->json($rs);
     }

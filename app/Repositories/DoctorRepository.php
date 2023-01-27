@@ -813,7 +813,7 @@ class DoctorRepository
         }
     }
 
-    public function getListByCompany(Request $request) {
+    public function getList(Request $request) {
         $billingCompanyId = $request->billing_company_id ?? null;
         $companyId = $request->company_id ?? null;
         $authorization = $request->authorization ?? 'false';
