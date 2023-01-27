@@ -278,7 +278,8 @@ Route::prefix("v1")/*->middleware('audit')*/
     ])->group(function(){
         Route::get("/get-list-health-professional-types",[\App\Http\Controllers\DoctorController::class,'getListTypes']);
         Route::get("/get-list-authorizations",[\App\Http\Controllers\DoctorController::class,'getListAuthorizations']);
-        Route::get("/get-list-billing-companies",[\App\Http\Controllers\DoctorController::class,'getListBillingCompanies'])->middleware(['auth:api']);
+        Route::get("/get-list-billing-companies",[\App\Http\Controllers\DoctorController::class,'getListBillingCompanies']);
+        Route::get("/get-list-by-company",[\App\Http\Controllers\DoctorController::class,'getListByCompany']);
         Route::get("/get-all-server",[\App\Http\Controllers\DoctorController::class,'getServerAll']);
         Route::post("/",[\App\Http\Controllers\DoctorController::class,'createDoctor']);
         Route::put("/{id}",[\App\Http\Controllers\DoctorController::class,'updateDoctor']);
@@ -433,6 +434,8 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-place-of-services",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
         Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);
         Route::get("/get-list-type-formats",[\App\Http\Controllers\ClaimController::class,"getListTypeFormats"]);
+        Route::get("/get-list-claim-field-informations",[\App\Http\Controllers\ClaimController::class,"getListClaimFieldInformations"]);
+        Route::get("/get-list-qualifier-by-field/{field_id}",[\App\Http\Controllers\ClaimController::class,"getListFieldQualifiers"]);
         Route::get("/get-list-status",[\App\Http\Controllers\ClaimController::class,"getListStatus"]);
         Route::post("/show-claim-preview",[\App\Http\Controllers\ClaimController::class,"ShowReport"]);
 

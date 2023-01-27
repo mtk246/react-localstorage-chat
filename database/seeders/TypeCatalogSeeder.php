@@ -838,6 +838,125 @@ class TypeCatalogSeeder extends Seeder
                     ]
                 ]
             ],
+            [
+                'description' => 'Claim field information',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '14. Date of current illnes, injury or pregnancy (LMP)'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '15. Other date'
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => '16. Dates patient unable to work in current occupation'
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => '18. Hospitalization dates related to current services'
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => '19. Additional claim information (Designated by NUCC)'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Claim field information',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '14. Date of current illnes, injury or pregnancy (LMP)'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '15. Other date'
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => '16. Dates patient unable to work in current occupation'
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => '18. Hospitalization dates related to current services'
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => '19. Additional claim information (Designated by NUCC)'
+                    ]
+                ]
+            ],
+            [
+                'description' => '14. Date of current illnes, injury or pregnancy (LMP)',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '14. Date 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '14. Date 2'
+                    ]
+                ]
+            ],
+            [
+                'description' => '15. Other date',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '15 Date 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '15 Date 2'
+                    ]
+                ]
+            ],
+            [
+                'description' => '16. Dates patient unable to work in current occupation',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '16 Date 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '16 Date 2'
+                    ]
+                ]
+            ],
+            [
+                'description' => '18. Hospitalization dates related to current services',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '18. Date 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '18. Date 2'
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => '19. Additional claim information (Designated by NUCC)'
+                    ]
+                ]
+            ],
+            [
+                'description' => '19. Additional claim information (Designated by NUCC)',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => '19. Additional 1'
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => '19. Additional 2'
+                    ]
+                ]
+            ],
         ];
     
     

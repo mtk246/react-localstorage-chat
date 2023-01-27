@@ -813,6 +813,79 @@ class DoctorRepository
         }
     }
 
+    public function getListByCompany(Request $request) {
+        $billingCompanyId = $request->billing_company_id ?? null;
+        $companyId = $request->company_id ?? null;
+        $authorization = $request->authorization ?? 'false';
+
+        if (auth()->user()->hasRole('superuser')) {
+            $billingCompany = $billingCompanyId;
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
+
+        $healthProfessionals = HealthProfessional::with('user.profile', 'companies');
+
+        if (isset($billingCompany)) {
+            $healthProfessionals = $healthProfessionals->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+            });
+        }
+        if (isset($companyId)) {
+            $healthProfessionals = $healthProfessionals->whereHas('companies', function ($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            });
+        }
+        if (!isset($billingCompany) && !isset($companyId)) {
+            $healthProfessionals = HealthProfessional::with('user.profile', 'companies')->get();
+        } else {
+            $healthProfessionals = $healthProfessionals->get();
+        }
+
+        $billing_provider = CompanyHealthProfessionalType::whereType('Billing provider')->first();
+        $service_provider = CompanyHealthProfessionalType::whereType('Service provider')->first();
+        $referred = CompanyHealthProfessionalType::whereType('Referred')->first();
+
+        $record = [];
+        $records = [
+            'billing_provider' => [],
+            'referred' => [],
+            'service_provider' => [],
+        ];
+        foreach ($healthProfessionals as $healthProfessional) {
+            if ($authorization == 'true') {
+                foreach ($healthProfessional->companies_providers as $provider) {
+                    $auth = $provider->authorization ?? [];
+                    if (in_array($billing_provider->id, $auth)) {
+                        array_push($records['billing_provider'], [
+                            'id' => $healthProfessional->id,
+                            'name' => $healthProfessional->user->profile->first_name . ' ' . $healthProfessional->user->profile->last_name
+                        ]);
+                    }
+                    if (in_array($referred->id, $auth)) {
+                        array_push($records['referred'], [
+                            'id' => $healthProfessional->id,
+                            'name' => $healthProfessional->user->profile->first_name . ' ' . $healthProfessional->user->profile->last_name
+                        ]);
+                    }
+                    if (in_array($service_provider->id, $auth)) {
+                        array_push($records['service_provider'], [
+                            'id' => $healthProfessional->id,
+                            'name' => $healthProfessional->user->profile->first_name . ' ' . $healthProfessional->user->profile->last_name
+                        ]);
+                    }
+                }
+            } else {
+                array_push($record, [
+                    'id' => $healthProfessional->id,
+                    'name' => $healthProfessional->user->profile->first_name . ' ' . $healthProfessional->user->profile->last_name
+                ]);
+            }
+        }
+        return ($authorization == 'true') ? $records : $record;
+
+    }
+
     public function updateCompanies(array $data, int $id) {
         try {
             \DB::beginTransaction();

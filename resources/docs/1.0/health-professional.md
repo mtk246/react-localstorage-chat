@@ -12,6 +12,7 @@
 - [Change status health professional](#change-status-health-professional)
 - [Get list health professional types](#get-list-health-professional-types)
 - [Get list doctor authorizations](#get-list-authorization)
+- [Get list health professional by company](#get-list)
 - [Get list billing companies](#get-list-billing-companies)
 - [Update company providers](#update-providers)
 
@@ -31,8 +32,9 @@
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 | 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
 | 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
-| 10 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies?health_professional_id={healthProfessionalID?}&edit={edit?}`|yes|Get list biling companies|
-| 11 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
+| 10 |GET    | `Get list health professionals by company` | `/health-professional/get-list-by-company?billing_company_id={ID?}&company_id={ID?}&authorization={true?}`|yes|Get list health professionals by authorizations|
+| 11 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies?health_professional_id={healthProfessionalID?}&edit={edit?}`|yes|Get list biling companies|
+| 12 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
 
 
 
@@ -949,6 +951,130 @@
 
 #
 
+<a name="get-list"></a>
+## Get list health professionals by company
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "billing_company_id": <integer> /** optional */
+    "company_id": <integer> /** optional */
+    "authorization": <boolean> /** optional */
+}
+```
+
+## Example path 1
+
+>{primary} /get-list-company?billing_company_id=1&company_id=1&authorization=false
+
+## Response
+
+> {success} 200 Health professionals found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+## Example path 2
+
+>{primary} /get-list-company?billing_company_id=1&company_id=1&authorization=true
+
+## Response
+
+> {success} 200 Health professionals found
+
+#
+
+```json
+{
+    "billing_providers": [
+        {
+            "id": 1,
+            "name": "Fay-Hahn"
+        },
+        {
+            "id": 2,
+            "name": "Balistreri-Yost"
+        },
+        {
+            "id": 3,
+            "name": "Langosh Ltd"
+        },
+        {
+            "id": 4,
+            "name": "Halvorson, Deckow and Bode"
+        }
+    ],
+    "referreds": [
+        {
+            "id": 1,
+            "name": "Fay-Hahn"
+        },
+        {
+            "id": 2,
+            "name": "Balistreri-Yost"
+        },
+        {
+            "id": 3,
+            "name": "Langosh Ltd"
+        },
+        {
+            "id": 4,
+            "name": "Halvorson, Deckow and Bode"
+        }
+    ],
+    "service_providers": [
+        {
+            "id": 1,
+            "name": "Fay-Hahn"
+        },
+        {
+            "id": 2,
+            "name": "Balistreri-Yost"
+        },
+        {
+            "id": 3,
+            "name": "Langosh Ltd"
+        },
+        {
+            "id": 4,
+            "name": "Halvorson, Deckow and Bode"
+        }
+    ]
+
+}
+```
+
+
+#
 <a name="get-list-billing-companies"></a>
 ## Get list billing companies
 

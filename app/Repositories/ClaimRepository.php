@@ -29,6 +29,7 @@ use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
 use App\Models\Patient;
 use App\Models\Injury;
+use App\Models\TypeCatalog;
 
 class ClaimRepository
 {
@@ -399,6 +400,23 @@ class ClaimRepository
 
     public function getListTypeFormats() {
         return getList(TypeForm::class, 'form');
+    }
+
+    public function getListClaimFieldInformations() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Claim field information']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListFieldQualifiers($id = null) {
+        try {
+            $claimField = TypeCatalog::find($id);
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => $claimField->description]], null, ['code']);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function getListTypeDiags() {

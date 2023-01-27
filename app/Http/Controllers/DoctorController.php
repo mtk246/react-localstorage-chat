@@ -114,6 +114,12 @@ class DoctorController extends Controller
         return response()->json($rs);
     }
 
+    public function getListByCompany(Request $request) {
+        $rs = $this->doctorRepository->getListByCompany($request);
+
+        return response()->json($rs);
+    }
+
     /**
      * @param UpdateDoctorRequest $request
      * @param int $id
