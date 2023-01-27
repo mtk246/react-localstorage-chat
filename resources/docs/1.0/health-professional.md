@@ -974,7 +974,7 @@
 
 ## Example path 1
 
->{primary} /get-list-company?billing_company_id=1&company_id=1&authorization=false
+>{primary} /get-list?billing_company_id=1&company_id=1&authorization=false
 
 ## Response
 
@@ -1005,7 +1005,7 @@
 
 ## Example path 2
 
->{primary} /get-list-company?billing_company_id=1&company_id=1&authorization=true
+>{primary} /get-list?billing_company_id=1&company_id=1&authorization=true
 
 ## Response
 
