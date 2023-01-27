@@ -9,7 +9,8 @@
 - [Get list type formats](#get-list-type-formats)
 - [Get list type diags](#get-list-type-diags)
 - [Get list status claim](#get-list-status-claim)
-- [Get list claim field information](#get-list-claim-field-information)
+- [Get list claim field information](#get-list-claim-field-informations)
+- [Get list qualifier by field](#get-list-qualifier)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
@@ -39,19 +40,20 @@
 | 5  |GET     | `Get list types diags`  | `/injury/get-list-type-diags`     | yes            | Get list type diags |
 | 6  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
 | 7  |GET     | `Get list claim field information`  | `/claim/get-list-claim-field-informations`     | yes            | Get list claim field informations |
-| 8  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
-| 9  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 10  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
-| 11  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
-| 12 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
-| 13 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
-| 14 |GET     | `check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
-| 15 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
-| 16 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
-| 17 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
-| 18 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
-| 19 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
-| 20 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
+| 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
+| 9  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
+| 10  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 11  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 12  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| 13 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
+| 14 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
+| 15 |GET     | `check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
+| 16 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
+| 17 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 18 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
+| 19 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
+| 20 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
+| 21 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
 
 
 <a name="create-claim"></a>
@@ -566,6 +568,82 @@
     {
         "id": 7,
         "name": "U - Acute"
+    }
+]
+```
+
+<a name="get-list-claim-field-informations"></a>
+## Get list claim field informations
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type diags of injury found
+
+#
+
+```json
+[
+    {
+        "id": 192,
+        "name": "14. Date of current illnes, injury or pregnancy (LMP)"
+    },
+    {
+        "id": 193,
+        "name": "15. Other date"
+    },
+    {
+        "id": 194,
+        "name": "16. Dates patient unable to work in current occupation"
+    },
+    {
+        "id": 195,
+        "name": "18. Hospitalization dates related to current services"
+    },
+    {
+        "id": 196,
+        "name": "19. Additional claim information (Designated by NUCC)"
+    }
+]
+```
+
+<a name="get-list-qualifier"></a>
+## Get list qualifier by field
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Qualifier found
+
+#
+
+```json
+[
+    {
+        "id": 197,
+        "name": "1 - 14. Date 1",
+        "code": "1"
+    },
+    {
+        "id": 198,
+        "name": "2 - 14. Date 2",
+        "code": "2"
     }
 ]
 ```

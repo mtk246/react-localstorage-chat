@@ -18,6 +18,7 @@
 - [Add to company](#add-to-company)
 - [Remove to company](#remove-to-company)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get list facilities](#get-list)
 
 
 <a name="basic-data"></a>
@@ -41,6 +42,7 @@
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
 | 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
 | 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 10 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
 
 
 
@@ -1199,6 +1201,58 @@
 ## Response
 
 > {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+
+<a name="get-list"></a>
+## Get list facilities
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "billing_company_id": <integer> /** optional */
+    "company_id": <integer> /** optional */
+}
+```
+
+## Example path
+
+>{primary} /get-list?billing_company_id=1&company_id=1
+
+## Response
+
+> {success} 200 Facilities found
 
 #
 
