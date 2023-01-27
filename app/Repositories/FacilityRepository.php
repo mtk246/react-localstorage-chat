@@ -125,6 +125,49 @@ class FacilityRepository
         return $options;
     }
 
+
+    public function getList(Request $request) {
+        try {
+            $billingCompanyId = $request->billing_company_id ?? null;
+            $companyId = $request->company_id ?? null;
+
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $billingCompanyId;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            $facilities = Facility::with('facilityType');
+
+            if (isset($billingCompany)) {
+                $facilities = $facilities->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+                });
+            }
+            if (isset($companyId)) {
+                $facilities = $facilities->whereHas('companies', function ($query) use ($companyId) {
+                    $query->where('company_id', $companyId);
+                });
+            }
+            if (!isset($billingCompany) && !isset($companyId)) {
+                $facilities = Facility::with('facilityType')->get();
+            } else {
+                $facilities = $facilities->get();
+            }
+
+            $records = [];
+            foreach ($facilities as $facility) {
+                array_push($records, [
+                    'id'   => $facility->id,
+                    'name' => $facility->name
+                ]);
+            }
+            return $records;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     /**
      * @return Facility[]|Collection
      */

@@ -43,6 +43,16 @@ class FacilityController extends Controller
     /**
      * @return JsonResponse
      */
+    public function getList(Request $request): JsonResponse
+    {
+        return response()->json(
+            $this->facilityRepository->getList($request)
+        );
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getAllFacilities(): JsonResponse
     {
         return response()->json(
