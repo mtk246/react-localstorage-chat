@@ -413,7 +413,21 @@ class ClaimRepository
     public function getListFieldQualifiers($id = null) {
         try {
             $claimField = TypeCatalog::find($id);
-            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => $claimField->description]], null, ['code']);
+            $typeCatalog = getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => $claimField->description]], null, ['code']);
+            foreach ($typeCatalog as $key => $value) {
+                if (($claimField->description == '14. Date of current illnes, injury or pregnancy (LMP)') ||
+                    ($claimField->description == '15. Other date')) {
+                    $typeCatalog[$key]['except'] = ['to_date', 'description'];
+                }
+                if (($claimField->description == '16. Dates patient unable to work in current occupation') || 
+                    ($claimField->description == '18. Hospitalization dates related to current services')) {
+                    $typeCatalog[$key]['except'] = ['description'];
+                }
+                else {
+                    $typeCatalog[$key]['except'] = [];
+                }
+            }
+            return $typeCatalog;
         } catch (\Exception $e) {
             return [];
         }
