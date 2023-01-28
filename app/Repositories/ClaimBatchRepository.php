@@ -199,7 +199,8 @@ class ClaimBatchRepository
                             ]);
                         }
                     ]);
-                }
+                },
+                "billingCompany"
             ])->whereId($id)->first();
         }
         if (isset($claimBatch)) {
