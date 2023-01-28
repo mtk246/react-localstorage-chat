@@ -839,6 +839,36 @@ class TypeCatalogSeeder extends Seeder
                 ]
             ],
             [
+                'description' => 'EPSDT',
+                'type_catalogs' => [
+                    [
+                        'code' => 'S2',
+                        'description' => 'S2'
+                    ],
+                    [
+                        'code' => 'ST',
+                        'description' => 'ST'
+                    ],
+                    [
+                        'code' => 'NU',
+                        'description' => 'NU'
+                    ]
+                ]
+            ],
+            [
+                'description' => 'Family planning',
+                'type_catalogs' => [
+                    [
+                        'code' => 'Y',
+                        'description' => 'Yes'
+                    ],
+                    [
+                        'code' => '',
+                        'description' => 'No'
+                    ]
+                ]
+            ],
+            [
                 'description' => 'Claim field information',
                 'type_catalogs' => [
                     [

@@ -11,6 +11,7 @@
 - [Get list status claim](#get-list-status-claim)
 - [Get list claim field information](#get-list-claim-field-informations)
 - [Get list qualifier by field](#get-list-qualifier)
+- [Get list clam services](#get-list-claim-services)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
@@ -41,19 +42,20 @@
 | 6  |GET     | `Get list status claim`  | `/claim/get-list-status`     | yes            | Get list status claim |
 | 7  |GET     | `Get list claim field information`  | `/claim/get-list-claim-field-informations`     | yes            | Get list claim field informations |
 | 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
-| 9  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
-| 10  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
-| 11  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
-| 12  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
-| 13 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
-| 14 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
-| 15 |GET     | `check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
-| 16 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
-| 17 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
-| 18 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
-| 19 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
-| 20 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
-| 21 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
+| 9  |GET     | `Get list claim services`  | `/claim/get-list-claim-services`     | yes            | Get list claim services |
+| 10  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
+| 11  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
+| 12  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 13  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| 14 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
+| 15 |POST    | `Save as draft and check eligibility claim`  | `/claim/draft-check-eligibility`     | yes            | Save as draft and check eligibility claim |
+| 16 |GET     | `check eligibility claim`  | `/claim/check-eligibility/{claim_id}`     | yes            | Check eligibility claim |
+| 17 |GET     | `Validation claim`  | `/claim/validation/{claimId}`     | yes            | Validation claim |
+| 18 |PUT     | `Verify and register claim`  | `/claim/verify-register/{id}` | yes            | Verify and register claim  |
+| 19 |POST    | `Show claim report preview`  | `/claim/show-claim-preview` | yes            | Show claim report  |
+| 20 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
+| 21 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
+| 22 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
 
 
 <a name="create-claim"></a>
@@ -122,7 +124,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ]
 }
@@ -648,6 +650,97 @@
 ]
 ```
 
+<a name="get-list-claim-services"></a>
+## Get list claim services
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Qualifier found
+
+#
+
+```json
+{
+    "type_of_services": [
+        {
+            "id": 1,
+            "name": "0 - Whole Blood"
+        },
+        {
+            "id": 2,
+            "name": "1 - Medical Care"
+        },
+        {
+            "id": 3,
+            "name": "2 - Surgery"
+        },
+        {
+            "id": 4,
+            "name": "3 - Consultation"
+        }
+    ],
+    "place_of_services": [
+        {
+            "id": 1,
+            "name": "03 - School"
+        },
+        {
+            "id": 2,
+            "name": "04 - Homeless Shelter"
+        },
+        {
+            "id": 3,
+            "name": "05 - Indian Health Service Free-Standing Facility"
+        },
+        {
+            "id": 4,
+            "name": "06 - Indian Health Service Provider-Based Facility"
+        },
+        {
+            "id": 5,
+            "name": "07 - Tribal 638 Free-Standing Facility"
+        },
+        {
+            "id": 6,
+            "name": "08 - Tribal 638 Provider Based-Facility"
+        }
+    ],
+    "epsdts": [
+        {
+            "id": 223,
+            "name": "S2"
+        },
+        {
+            "id": 224,
+            "name": "ST"
+        },
+        {
+            "id": 225,
+            "name": "NU"
+        }
+    ],
+    "family_plannings": [
+        {
+            "id": 226,
+            "name": "Yes"
+        },
+        {
+            "id": 227,
+            "name": "No"
+        }
+    ]
+}
+```
+
 #
 
 <a name="get-list-status-claim"></a>
@@ -1110,7 +1203,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ]
 }
@@ -1225,7 +1318,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ],
     "private_note": "Note claim"
@@ -1327,7 +1420,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ],
     "private_note": "Note claim"
@@ -1449,7 +1542,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ],
     "private_note": "Note claim"
@@ -1621,7 +1714,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ]
 }
@@ -1745,7 +1838,7 @@
             "copay": 200,
             "emg": true,
             "epsdt_id": 1,
-            "family_planning": true
+            "family_planning_id": 1
         }
     ],
     "will_report_any_injury": true,

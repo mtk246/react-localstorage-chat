@@ -433,6 +433,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         });
 
         //Route::get("/get-all-server",[\App\Http\Controllers\ClaimController::class,'getServerAll']);
+        Route::get("/get-list-claim-services",[\App\Http\Controllers\ClaimController::class,"getListClaimServices"]);
         Route::get("/get-list-type-of-services",[\App\Http\Controllers\ClaimController::class,"getListTypeOfServices"]);
         Route::get("/get-list-place-of-services",[\App\Http\Controllers\ClaimController::class,"getListPlaceOfServices"]);
         Route::get("/get-list-rev-centers",[\App\Http\Controllers\ClaimController::class,"getListRevCenters"]);

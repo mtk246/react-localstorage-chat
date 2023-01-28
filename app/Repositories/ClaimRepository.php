@@ -386,6 +386,26 @@ class ClaimRepository
         }
     }
 
+    public function getListClaimServices(Request $request) {
+        $formatId = $request->format_id ?? null;
+
+        try {
+            return [
+                'type_of_services' => getList(TypeOfService::class, ['code', '-', 'name']),
+                'place_of_services' => getList(PlaceOfService::class, ['code', '-', 'name']),
+                'epsdts' => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'EPSDT']], null),
+                'family_plannings' => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Family planning']], null)
+            ];
+        } catch (\Exception $e) {
+            return [
+                'type_of_services'  => [],
+                'place_of_services' => [],
+                'epsdts'            => [],
+                'family_plannings'  => []
+            ];
+        }
+    }
+
     public function getListTypeOfServices() {
         return getList(TypeOfService::class, ['code', '-', 'name']);
     }

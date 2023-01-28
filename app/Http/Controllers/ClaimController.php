@@ -87,6 +87,14 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error, claim not found"), 404);
     }
 
+    public function getListClaimServices(Request $request)
+    {
+        $rs = $this->claimRepository->getListClaimServices($request);
+        //$rs = $this->claimRepository->getListTypeOfServices();
+
+        return response()->json($rs);
+    }
+
     public function getListTypeOfServices()
     {
         $rs = $this->claimRepository->getListTypeOfServices();
