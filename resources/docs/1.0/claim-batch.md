@@ -25,7 +25,7 @@
 | 4 |GET     | `Get one batch`             | `/claim/batch/{id}`                   | yes            | Get one claim batch |
 | 5 |PUT     | `Update batch`              | `/claim/batch/{id}`                   | yes            | Update claim batch  |
 | 8 |DELETE  | `Delete batch`              | `/claim/batch/{id}`                   | yes            | Delete claim batch  |
-| 9 |PATCH   | `Submit to clearing house`  | `/claim/submit-to-clearing-house/{id}`| yes            | Submit batch to clearing house |
+| 9 |PATCH   | `Submit to clearing house`  | `/claim/batch/submit-to-clearing-house/{id}`| yes      | Submit batch to clearing house |
 
 
 <a name="create-batch"></a>
