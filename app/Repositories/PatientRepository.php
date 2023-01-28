@@ -1182,7 +1182,7 @@ class PatientRepository
         if (isset($billingCompany)) {
             $patients = $patients->whereHas('billingCompanies', function ($query) use ($billingCompany) {
                 $query->where('billing_company_id', $billingCompany->id ?? $billingCompany)
-                      ->where('status', true);
+                      ->where('billing_company_patient.status', true);
             });
         }
         if (!isset($billingCompany)) {
