@@ -43,8 +43,8 @@ class PatientRepository
      * @return User|Model|null
      */
     public function createPatient(array $data) {
-        try {
-            DB::beginTransaction();
+//        try {
+            //DB::beginTransaction();
 
             /** Create Profile */
             $profile = Profile::create([
@@ -251,7 +251,7 @@ class PatientRepository
                     ], [
                         'group_number'             => $insurance_policy["group_number"] ?? '',
                         'eff_date'                 => $insurance_policy["eff_date"],
-                        'end_date'                 => $insurance_policy["end_date"] ?? '',
+                        'end_date'                 => $insurance_policy["end_date"] ?? null,
                         'insurance_policy_type_id' => $insurance_policy["insurance_policy_type_id"] ?? null,
                         'type_responsibility_id'   => $insurance_policy["type_responsibility_id"],
                         'release_info'             => $insurance_policy["release_info"],
@@ -282,11 +282,11 @@ class PatientRepository
                             "ssn"         => $insurance_policy["subscriber"]["ssn"],
                             "first_name" => upperCaseWords($insurance_policy["subscriber"]["first_name"]),
                             "last_name" => upperCaseWords($insurance_policy["subscriber"]["last_name"]),
-                            "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"]
+                            "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"] ?? null
                         ], [
                             "first_name" => $insurance_policy["subscriber"]["first_name"],
                             "last_name" => $insurance_policy["subscriber"]["last_name"],
-                            "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"],
+                            "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"] ?? null,
                             "relationship_id" => $insurance_policy["subscriber"]["relationship_id"] ?? null,
                         ]);
 
@@ -373,17 +373,17 @@ class PatientRepository
                     )
                 );
             } else {
-                DB::rollBack();
+                //DB::rollBack();
                 return null;
             }
 
 
-            DB::commit();
+//            DB::commit();
             return $patient;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return null;
-        }
+        //} catch (\Exception $e) {
+            //DB::rollBack();
+            //return $e;
+        //}
     }
 
     /**
@@ -406,6 +406,7 @@ class PatientRepository
                     "insuranceCompany"
                 ]);
             },
+            "billingCompanies",
             "guarantor",
             "emergencyContacts",
             "employments",
@@ -510,9 +511,7 @@ class PatientRepository
                     $query->with(["profile" => function ($q) {
                         $q->with("socialMedias");
                     }, "roles", "addresses", "contacts",
-                    "billingCompanies", function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                        }
+                    "billingCompanies"
                     ]);
                 },
                 "marital",
@@ -1168,21 +1167,40 @@ class PatientRepository
         return $insurancePolicies;
     }
 
-    public function getList($id = null) {
-        //try {
-            if (auth()->user()->hasRole('superuser')) {
-                //$billingCompany = $data["billing_company_id"];
-            } else {
-                //$billingCompany = auth()->user()->billingCompanies->first();
-            }
-            $billingCompany = 1;
-            return Patient::whereHas('billingCompanies', function ($query) use ($billingCompany) {
-                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
-            })->get();
-            //return getList(Patient::class, ['code', '-', 'description'], ['relationship' => 'user.profile', 'where' =>]);
-        //} catch (\Exception $e) {
-            return [];
-        //}
+    public function getList(Request $request) {
+        $records = [];
+        $billingCompanyId = $request->billing_company_id ?? null;
+
+        if (auth()->user()->hasRole('superuser')) {
+            $billingCompany = $billingCompanyId;
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
+
+        $patients = Patient::with('user.profile');
+
+        if (isset($billingCompany)) {
+            $patients = $patients->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                      ->where('status', true);
+            });
+        }
+        if (!isset($billingCompany)) {
+            $patients = Patient::with('user.profile')->get();
+        } else {
+            $patients = $patients->get();
+        }
+
+        foreach ($patients as $patient) {
+            array_push($records, [
+                'id'   => $patient->id,
+                'name' => $patient->code . ' - ' .
+                          $patient->user->profile->first_name . ' ' .
+                          $patient->user->profile->last_name
+            ]);
+        }
+
+        return $records;
     }
 
     public function getListMaritalStatus() {

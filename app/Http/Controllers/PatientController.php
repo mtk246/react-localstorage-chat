@@ -165,10 +165,10 @@ class PatientController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getList(): JsonResponse
+    public function getList(Request $request): JsonResponse
     {
         return response()->json(
-            $this->patientRepository->getList()
+            $this->patientRepository->getList($request)
         );
     }
 

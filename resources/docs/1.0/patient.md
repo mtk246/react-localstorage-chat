@@ -18,6 +18,7 @@
 - [Remove policy to patient](#remove-policy-to-patient)
 - [Get policy to patient](#get-policy-to-patient)
 - [Get all policies to patient](#get-all-policies-to-patient)
+- [Get list patients](#get-list)
 - [Get list type diags](#get-list-type-diags)
 - [Get list marital status](#get-list-marital-status)
 - [Get list address type](#get-list-address-type)
@@ -47,10 +48,11 @@
 | 11 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
 | 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
-| 14  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
-| 15  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
-| 16  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
-| 17  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
+| 14  |GET     | `Get list patients`  | `/patient/get-list?billing_company_id={ID?}`     | yes    | Get list all patients |
+| 15  |GET     | `Get list marital status`  | `/patient/get-list-marital-status`     | yes    | Get list marital status |
+| 16  |GET     | `Get list address type`  | `/patient/get-list-address-type`     | yes    | Get list address type |
+| 17  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
+| 18  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
 | 18  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
 | 19|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
 
@@ -1766,6 +1768,50 @@
 
 >{warning} 404 error get all policies to patient
 
+#
+
+<a name="get-list"></a>
+## Get list all patients
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`billing_company_id optional integer`
+
+## Example path Super user
+
+> {success} /get-list?billing_company_id=1
+
+## Example path Billing manager
+
+> {success} /get-list
+
+## Response
+
+> {success} 200 Patients found
+
+#
+
+```json
+[
+    {
+        "id": 17,
+        "name": "PA-00001-2022 - Fisrt Name Last Name"
+    },
+    {
+        "id": 49,
+        "name": "PA-00010-23 - Johnatan Doe"
+    }
+]
+```
 #
 
 <a name="get-list-marital-status"></a>
