@@ -168,7 +168,8 @@ class ClaimBatchRepository
                             ]);
                         }
                     ]);
-                }
+                },
+                "billingCompany"
             ])->whereId($id)->first();
         } else {
             $claimBatch = ClaimBatch::with([
@@ -201,8 +202,44 @@ class ClaimBatchRepository
                 }
             ])->whereId($id)->first();
         }
+        if (isset($claimBatch)) {
+            $record = [
+                "id" => $claimBatch->id,
+                "code" => $claimBatch->code,
+                "name" => $claimBatch->name,
+                "status" => $claimBatch->status,
+                "shipping_date" => $claimBatch->shipping_date,
+                "fake_transmission" => $claimBatch->fake_transmission,
+                "company_id" => $claimBatch->company_id,
+                "billing_company_id" => $claimBatch->billing_company_id,
+                "created_at" => $claimBatch->created_at,
+                "updated_at" => $claimBatch->updated_at,
+                "claims_reconciled" => $claimBatch->claims_reconciled,
+                "total_processed" => $claimBatch->total_processed,
+                "claim_ids" => $claimBatch->claim_ids,
+                "total_claims" => $claimBatch->total_claims,
+                "total_accepted" => $claimBatch->total_accepted,
+                "total_denied" => $claimBatch->total_denied,
+                "total_accepted_by_clearing_house" => $claimBatch->total_accepted_by_clearing_house,
+                "total_denied_by_clearing_house" => $claimBatch->total_denied_by_clearing_house,
+                "total_accepted_by_payer" => $claimBatch->total_accepted_by_payer,
+                "total_denied_by_payer" => $claimBatch->total_denied_by_payer,
+                "company" => $claimBatch->company,
+                "claims" => $claimBatch->claims,
+                "billing_company" => [
+                    "id" => $claimBatch->billingCompany->id,
+                    "name" => $claimBatch->billingCompany->name,
+                    "created_at" => $claimBatch->billingCompany->created_at,
+                    "updated_at" => $claimBatch->billingCompany->updated_at,
+                    "code" => $claimBatch->billingCompany->code,
+                    "status" => $claimBatch->billingCompany->status,
+                    "logo" => $claimBatch->billingCompany->logo,
+                    "abbreviation" => $claimBatch->billingCompany->abbreviation,
+                ]
+            ];
+        };
 
-        return !is_null($claimBatch) ? $claimBatch : null;
+        return !is_null($record) ? $record : null;
     }
 
     /**
