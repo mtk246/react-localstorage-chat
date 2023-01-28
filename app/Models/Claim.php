@@ -123,6 +123,16 @@ class Claim extends Model implements Auditable
     }
 
     /**
+     * Claim has many ClaimTransmissionResponses.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimTransmissionResponses()
+    {
+        return $this->hasMany(ClaimTransmissionResponse::class);
+    }
+
+    /**
      * Interact with the claim's format.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute

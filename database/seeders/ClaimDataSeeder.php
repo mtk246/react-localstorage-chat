@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\TypeForm;
 use App\Models\TypeDiag;
 use App\Models\ClaimStatus;
+use App\Models\ClaimTransmissionStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
 use App\Models\PayerResponsibility;
@@ -171,6 +172,19 @@ class ClaimDataSeeder extends Seeder
 
         foreach ($typeDiags as $type) {
             TypeDiag::updateOrCreate($type, $type);
+        }
+
+
+        $claimTransmissionStatus = [
+            ['status' => 'Success',    'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
+            ['status' => 'In process', 'background_color' => '#FBECDD', 'font_color' => '#B04D12'],
+            ['status' => 'Error',      'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
+        ];
+
+        foreach ($claimTransmissionStatus as $transmissionStatus) {
+            ClaimTransmissionStatus::updateOrCreate([
+                'status' => $status['status']
+            ], $transmissionStatus);
         }
     }
 }

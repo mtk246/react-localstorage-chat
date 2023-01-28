@@ -204,6 +204,18 @@ class ClaimBatchRepository
             ])->whereId($id)->first();
         }
         if (isset($claimBatch)) {
+            $claims = [];
+            foreach ($claimBatch->claims as $key => $claim) {
+                $claims[$key] = $claim;
+                $transmissionCurrent = $claim->claimTransmissionResponses()
+                                             ->where('claim_batch_id', $claimBatch->id)
+                                             ->orderBy("created_at", "desc")
+                                             ->orderBy("id", "asc")->first();
+
+                $claims[$key]["transmission_status"]   = $transmissionCurrent->claimTransmissionStatus ?? null;
+                $claims[$key]["transmission_response"] = $transmissionCurrent->response_details ?? null;
+            }
+
             $record = [
                 "id" => $claimBatch->id,
                 "code" => $claimBatch->code,
@@ -226,7 +238,7 @@ class ClaimBatchRepository
                 "total_accepted_by_payer" => $claimBatch->total_accepted_by_payer,
                 "total_denied_by_payer" => $claimBatch->total_denied_by_payer,
                 "company" => $claimBatch->company,
-                "claims" => $claimBatch->claims,
+                "claims" => $claims,
                 "billing_company" => [
                     "id" => $claimBatch->billingCompany->id,
                     "name" => $claimBatch->billingCompany->name,
