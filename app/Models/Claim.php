@@ -23,6 +23,7 @@ class Claim extends Model implements Auditable
         "company_id",
         "facility_id",
         "patient_id",
+        "insurance_company_id",
         "billing_provider_id",
         "service_provider_id",
         "referred_id",
@@ -72,6 +73,16 @@ class Claim extends Model implements Auditable
     public function facility()
     {
         return $this->belongsTo(Facility::class);
+    }
+
+    /**
+     * Claim belongs to InsuranceCompany.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insuranceCompany()
+    {
+        return $this->belongsTo(InsuranceCompany::class);
     }
 
     /**
