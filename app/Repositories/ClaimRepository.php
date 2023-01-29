@@ -119,7 +119,7 @@ class ClaimRepository
                 "service_provider_id"    => $data["service_provider_id"] ?? null,
                 "referred_id"            => $data["referred_id"] ?? null,
                 "validate"               => $data["validate"] ?? false,
-                "automatic_eligibility"  => $data["validate"] ?? false,
+                "automatic_eligibility"  => $data["automatic_eligibility"] ?? false,
                 "claim_formattable_type" => $model ?? null,
                 "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
