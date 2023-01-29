@@ -7,12 +7,11 @@ use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Repositories\ClaimRepository;
+use App\Repositories\ReportRepository;
 use App\Models\Claim;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
-use App\Repositories\ReportRepository;
 
 class ClaimController extends Controller
 {
@@ -233,20 +232,43 @@ class ClaimController extends Controller
 
     public function showReport(Request $request) {
         $pdf = new ReportRepository();
+        $id = $request->id ?? null;
+        
+        $claim = Claim::with([
+            "claimFormattable"
+        ])->whereId($id)->first();
 
-        if (auth()->user()->hasRole('superuser')) {
-            $billingCompany = $request->billing_company_id;
+        $claim = Claim::with(["insurancePolicies", "claimFormattable"])->find($id);
+
+        if (isset($claim)) {
+            $insurancePolicies = [];
+
+            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
+                array_push($insurancePolicy, $insurancePolicies);
+            }
+            $pdf->setConfig([
+                'urlVerify' => 'www.google.com.ve',
+                'typeFormat' => $claim->format ?? null,
+                'patient_id' => $claim->patient_id ?? null,
+                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                'insurance_policies' => $insurancePolicies ?? [],
+            ]);
+
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
-        }
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $request->billing_company_id;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+            $pdf->setConfig([
+                'urlVerify' => 'www.google.com.ve',
+                'typeFormat' => ($request->format != '') ? $request->format : null,
+                'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'insurance_policies' => $request->insurance_policies ?? [],
+            ]);
 
-        $pdf->setConfig([
-            'urlVerify' => 'www.google.com.ve',
-            'typeFormat' => ($request->format != '') ? $request->format : null,
-            'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
-            'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            'insurance_policies' => $request->insurance_policies ?? [],
-        ]);
+        }
         $pdf->setHeader('');
         //$pdf->setFooter();
         return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
