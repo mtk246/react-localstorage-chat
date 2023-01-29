@@ -16,10 +16,6 @@ return new class extends Migration
         Schema::table('claims', function (Blueprint $table) {
             $table->dropForeign(['health_professional_id']);
             $table->dropColumn('health_professional_id');
-
-            $table->dropForeign(['insurance_company_id']);
-            $table->dropColumn('insurance_company_id');
-
             
             $table->boolean('validate')->default(true)->change();
             $table->boolean('automatic_eligibility')->default(true);
@@ -49,7 +45,6 @@ return new class extends Migration
             $table->dropColumn('automatic_eligibility');
 
             $table->foreignId('health_professional_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('insurance_company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
         });
     }
 };
