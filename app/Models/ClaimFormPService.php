@@ -42,6 +42,13 @@ class ClaimFormPService extends Model implements Auditable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['modifiers'];
+
+    /**
      * ClaimFormPService belongs to ClaimFormP.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -99,5 +106,15 @@ class ClaimFormPService extends Model implements Auditable
     public function familyPlanning()
     {
         return $this->belongsTo(TypeCatalog::class, 'family_planning_id');
+    }
+
+    public function getModifiersAttribute()
+    {
+        $modifiers = [];
+        foreach ($this->modifier_ids ?? [] as $modId) {
+            $mod = Modifier::find($modId);
+            array_push($modifiers, $mod);
+        }
+        return $modifiers;
     }
 }

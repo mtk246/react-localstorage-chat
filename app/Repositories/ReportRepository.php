@@ -264,7 +264,7 @@ class ReportRepository implements ReportInterface
 
             /** 4. Insured name */
             $this->pdf->SetFont($this->fontFamily, '', 10);
-            $name = $this->subscriber->last_name ?? $this->subscriber->profile->last_name . ', ' . $this->subscriber->first_name ?? $this->subscriber->profile->first_name . ', ' . substr(($this->subscriber->middle_name ?? $this->subscriber->profile->middle_name) ?? 'M', 0, 1);
+            $name = ($this->subscriber->last_name ?? $this->subscriber->profile->last_name) . ', ' . ($this->subscriber->first_name ?? $this->subscriber->profile->first_name) . ', ' . substr(($this->subscriber->middle_name ?? $this->subscriber->profile->middle_name) ?? 'M', 0, 1);
             $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 135, 48, true, 0, false, true, 0, 'T', true);
         }
 

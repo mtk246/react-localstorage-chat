@@ -18,11 +18,7 @@ use App\Models\ClaimSubStatus;
 use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
 use App\Models\ClaimEligibility;
-use App\Models\ClaimEligibilityPlanStatus;
-use App\Models\ClaimEligibilityTraceNumber;
-use App\Models\ClaimEligibilityPayer;
-use App\Models\ClaimEligibilityBenefitsInformation;
-use App\Models\ClaimEligibilityBenefitsInformationOther;
+use App\Models\ClaimEligibilityStatus;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormI;
 use App\Models\ClaimFormPService;
@@ -557,21 +553,20 @@ class ClaimRepository
                     ]
                 ]);
                 $responseData = json_decode($response->body());
-                if (isset($responseData->errors)) {
-                    DB::rollBack();
-                    return $responseData;
-                }
 
+                $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
                 $claimEligibility = ClaimEligibility::updateOrCreate([
                     "control_number"       => $newCode,
                     "company_id"           => $claim->company_id,
                     "patient_id"           => $patient->id,
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
                     "insurance_policy_id"  => $insurancePolicy->id,
+                    "claim_eligibility_status_id"  => $claimEligibilityStatus->id,
+                    "response_details"     => $response->body(),
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
 
-                foreach ($responseData->benefitsInformation as $rData) {
+                /**foreach ($responseData->benefitsInformation as $rData) {
                     $claimEligibilityBenefitsInformation = ClaimEligibilityBenefitsInformation::create([
                         "code" => $rData->code,
                         "name" => $rData->name,
@@ -594,10 +589,8 @@ class ClaimRepository
                         "claim_eligibility_id" => $claimEligibility->id
                     ]);
 
-                }
-                $insurancePolicy['claim_eligibility'] = ClaimEligibility::with([
-                    'claimEligibilityBenefitsInformations', 'claimEligibilityPlanStatus'
-                ])->find($claimEligibility->id) ?? null;
+                }*/
+                $insurancePolicy['claim_eligibility'] = ClaimEligibility::with(['claimEligibilityStatus'])->find($claimEligibility->id) ?? null;
                 array_push($insurancePolicies, $insurancePolicy);
             }
             return [

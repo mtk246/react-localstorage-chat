@@ -12,39 +12,16 @@ class ClaimEligibilityStatus extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "claim_eligibility_id",
-        "eligibility_status_id",
+        "status", "background_color", "font_color"
     ];
 
     /**
-     * The accessors to append to the model's array form.
+     * ClaimTransmissionStatus has many ClaimTransmissionResponses.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected $appends = ['status'];
-
-    /**
-     * ClaimEligibilityStatus belongs to ClaimEligibility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function claimEligibility()
+    public function claimEligibilities()
     {
-        return $this->belongsTo(ClaimEligibility::class);
-    }
-
-    /**
-     * ClaimEligibilityStatus belongs to EligibilityStatus.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function eligibilityStatus()
-    {
-        return $this->belongsTo(EligibilityStatus::class);
-    }
-
-    public function getStatusAttribute()
-    {
-        return $this->eligibilityStatus->description ?? '';
+        return $this->hasMany(ClaimEligibility::class);
     }
 }

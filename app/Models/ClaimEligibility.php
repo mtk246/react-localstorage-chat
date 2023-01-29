@@ -15,12 +15,13 @@ class ClaimEligibility extends Model implements Auditable
 
     protected $fillable = [
         "control_number",
-        "eligibility",
         "company_id",
         "patient_id",
         "subscriber_id",
         "insurance_policy_id",
-        "insurance_company_id"
+        "insurance_company_id",
+        "response_details",
+        "claim_eligibility_status_id",
     ];
 
     /**
@@ -64,62 +65,21 @@ class ClaimEligibility extends Model implements Auditable
     }
 
     /**
-     * ClaimEligibility has many claim eligibility benefits informations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimEligibilityBenefitsInformations(): HasMany
-    {
-        return $this->hasMany(ClaimEligibilityBenefitsInformation::class);
-    }
-
-    /**
-     * ClaimEligibility has many claim eligibility benefits information others.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimEligibilityBenefitsInformationOthers(): HasMany
-    {
-        return $this->hasMany(ClaimEligibilityBenefitsInformationOther::class);
-    }
-
-    /**
-     * ClaimEligibility has many claim eligibility payers.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimEligibilityPayers(): HasMany
-    {
-        return $this->hasMany(ClaimEligibilityPayer::class);
-    }
-
-    /**
-     * ClaimEligibility has many claim eligibility trace numbers.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimEligibilityTraceNumbers(): HasMany
-    {
-        return $this->hasMany(ClaimEligibilityTraceNumber::class);
-    }
-
-    /**
-     * ClaimEligibility has many claim eligibility plan status.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimEligibilityPlanStatus(): HasMany
-    {
-        return $this->hasMany(ClaimEligibilityPlanStatus::class);
-    }
-
-    /**
-     * ClaimEligibility has one ClaimEligibilityStatus.
+     * ClaimEligibility belongs to ClaimEligibilityStatus.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function claimEligibilityStatus()
     {
-        return $this->hasOne(ClaimEligibilityStatus::class);
+        return $this->belongsTo(ClaimEligibilityStatus::class);
     }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'response_details' => 'array',
+    ];
 }

@@ -10,7 +10,7 @@ use App\Models\ClaimTransmissionStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
 use App\Models\PayerResponsibility;
-use App\Models\EligibilityStatus;
+use App\Models\ClaimEligibilityStatus;
 
 class ClaimDataSeeder extends Seeder
 {
@@ -151,13 +151,15 @@ class ClaimDataSeeder extends Seeder
         }
 
         $eligibilityStatuses = [
-            ['description' => 'Eligible policy'],
-            ['description' => 'Ineligible policy'],
-            ['description' => 'Unknow']
+            ['status' => 'Eligible policy',   'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
+            ['status' => 'Ineligible policy', 'background_color' => '#FBECDD', 'font_color' => '#B04D12'],
+            ['status' => 'Unknow',            'background_color' => '#FFF1F1', 'font_color' => '#A72821']
         ];
 
         foreach ($eligibilityStatuses as $eligibilityStatus) {
-            EligibilityStatus::updateOrCreate($eligibilityStatus, $eligibilityStatus);
+            ClaimEligibilityStatus::updateOrCreate([
+                'status' => $eligibilityStatus
+            ], $eligibilityStatus);
         }
 
         $typeDiags = [
