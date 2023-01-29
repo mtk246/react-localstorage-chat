@@ -114,6 +114,7 @@ class ClaimFormPService extends Model implements Auditable
         foreach ($this->modifier_ids ?? [] as $modId) {
             $mod = Modifier::find($modId);
             array_push($modifiers, [
+                "id"                          => $mod["id"] ?? '',
                 "name"                        => $mod["modifier"] ?? '',
                 "start_date"                  => $mod["start_date"] ?? '',
                 "end_date"                    => $mod["end_date"] ?? '',
