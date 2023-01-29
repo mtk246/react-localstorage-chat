@@ -24,7 +24,7 @@ class ClaimFormP extends Model implements Auditable
         "billing_company_id"
     ];
 
-    protected $with = ["claimFormServices"];
+    protected $with = ["claimFormServices", "physicianOrSupplierInformation", "patientOrInsuredInformation"];
 
     /**
      * TypeForm belongs to ClaimFormP.
@@ -94,6 +94,26 @@ class ClaimFormP extends Model implements Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    /**
+     * ClaimFormP has one PhysicianOrSupplierInformation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function physicianOrSupplierInformation()
+    {
+        return $this->hasOne(PhysicianOrSupplierInformation::class);
+    }
+
+    /**
+     * ClaimFormP has one PatientOrInsuredInformation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function patientOrInsuredInformation()
+    {
+        return $this->hasOne(PatientOrInsuredInformation::class);
     }
 
     /**

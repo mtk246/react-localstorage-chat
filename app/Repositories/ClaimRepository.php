@@ -28,6 +28,9 @@ use App\Models\ClaimFormI;
 use App\Models\ClaimFormPService;
 use App\Models\PrivateNote;
 use App\Models\Patient;
+use App\Models\PatientOrInsuredInformation;
+use App\Models\PhysicianOrSupplierInformation;
+use App\Models\ClaimDateInformation;
 use App\Models\Injury;
 use App\Models\TypeCatalog;
 
@@ -68,6 +71,24 @@ class ClaimRepository
                                 ClaimFormPService::create($service);
                             }
                         }
+                        if (isset($data['patient_or_insured_information'])) {
+                            PatientOrInsuredInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id
+                            ], $data['patient_or_insured_information']);
+                        }
+                        if (isset($data['physician_or_supplier_information'])) {
+                            $physician = PhysicianOrSupplierInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id
+                            ], $data['physician_or_supplier_information']);
+
+                            if (isset($data['physician_or_supplier_information']['claim_date_informations'])) {
+                                foreach ($data['physician_or_supplier_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    ClaimDateInformation::updateOrCreate([
+                                        'physician_or_supplier_information_id' => $physician->id
+                                    ], $dateInf);
+                                }
+                            }
+                        }
                     } else {
                         $model = ClaimFormI::class;
                         $claimForm = ClaimFormI::create([
@@ -94,43 +115,14 @@ class ClaimRepository
                 "company_id"             => $data["company_id"] ?? null,
                 "facility_id"            => $data["facility_id"] ?? null,
                 "patient_id"             => $data["patient_id"] ?? null,
-                "health_professional_id" => $data["health_professional_id"] ?? null,
+                "billing_provider_id"    => $data["billing_provider_id"] ?? null,
+                "service_provider_id"    => $data["service_provider_id"] ?? null,
+                "referred_id"            => $data["referred_id"] ?? null,
                 "validate"               => $data["validate"] ?? false,
+                "automatic_eligibility"  => $data["validate"] ?? false,
                 "claim_formattable_type" => $model ?? null,
                 "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
-
-            if (isset($data['will_report_injuries'])) {
-                if (isset($data['injuries'])) {
-                    foreach ($data['injuries'] as $injury) {
-                        $claimInjury = Injury::updateOrCreate(
-                            [
-                                'diag_date'    => $injury['diag_date'],
-                                'diagnosis_id' => $injury['diagnosis_id'],
-                                'type_diag_id' => $injury['type_diag_id'],
-                            ],
-                            [
-                                'diag_date'    => $injury['diag_date'],
-                                'diagnosis_id' => $injury['diagnosis_id'],
-                                'type_diag_id' => $injury['type_diag_id'],
-                            ]
-                        );
-                        if (isset($injury['public_note'])) {
-                            /** PublicNote */
-                            PublicNote::create([
-                                'publishable_type' => Injury::class,
-                                'publishable_id'   => $claimInjury->id,
-                                'note'             => $injury['public_note'],
-                            ]);
-                        }
-                        if (isset($claimInjury)) {
-                            if (is_null($claim->injuries()->find($claimInjury->id))) {
-                                $claim->injuries()->attach($claimInjury->id);
-                            }
-                        }
-                    }
-                }
-            }
 
             if (isset($data['diagnoses'])) {
                 $claim->diagnoses()->detach();

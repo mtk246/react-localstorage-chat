@@ -23,9 +23,11 @@ class Claim extends Model implements Auditable
         "company_id",
         "facility_id",
         "patient_id",
-        "health_professional_id",
-        "insurance_company_id",
+        "billing_provider_id",
+        "service_provider_id",
+        "referred_id",
         "validate",
+        "automatic_eligibility",
         "claim_formattable_type",
         "claim_formattable_id"
     ];
@@ -53,16 +55,6 @@ class Claim extends Model implements Auditable
     }
 
     /**
-     * Claim belongs to InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function insuranceCompany()
-    {
-        return $this->belongsTo(InsuranceCompany::class);
-    }
-
-    /**
      * Claim belongs to Patient.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -70,6 +62,46 @@ class Claim extends Model implements Auditable
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    /**
+     * Claim belongs to Facility.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class);
+    }
+
+    /**
+     * Claim belongs to BillingProvider.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingProvider()
+    {
+        return $this->belongsTo(BillingProvider::class);
+    }
+
+    /**
+     * Claim belongs to ServiceProvider.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function serviceProvider()
+    {
+        return $this->belongsTo(ServiceProvider::class);
+    }
+
+    /**
+     * Claim belongs to Referred.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function referred()
+    {
+        return $this->belongsTo(Referred::class);
     }
 
     /**
@@ -149,10 +181,14 @@ class Claim extends Model implements Auditable
      */
     public function getPrivateNoteAttribute()
     {
-        return $this->claimStatusClaims()
+        $status = $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first()->privateNotes()->orderBy("created_at", "desc")
                     ->orderBy("id", "asc")->first();
+        if (isset($status)) {
+            $note = $status->privateNotes()->orderBy("created_at", "desc")
+                           ->orderBy("id", "asc")->first();
+        }
+        return (isset($note)) ? $note : null;
     }
 
     /**

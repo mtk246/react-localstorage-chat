@@ -17,15 +17,18 @@ class ClaimFormPService extends Model implements Auditable
     protected $fillable = [
         "from_service",
         "to_service",
-        "price",
-        "claim_form_p_id",
-        "epstd",
-        "modifier_id",
         "procedure_id",
-        "rev",
+        "modifier_ids",
         "place_of_service_id",
         "type_of_service_id",
-        "diagnostic_pointers"
+        "diagnostic_pointers",
+        "days_or_units",
+        "price",
+        "copay",
+        "emg",
+        "epsdt_id",
+        "family_planning_id",
+        "claim_form_p_id",
     ];
 
     /**
@@ -34,7 +37,8 @@ class ClaimFormPService extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'diagnostic_pointers' => 'array',
+        'modifier_ids'        => 'array',
+        'diagnostic_pointers' => 'array'
     ];
 
     /**
@@ -45,16 +49,6 @@ class ClaimFormPService extends Model implements Auditable
     public function claimFormP()
     {
         return $this->belongsTo(ClaimFormP::class);
-    }
-
-    /**
-     * ClaimService belongs to Modifier.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function modifier()
-    {
-        return $this->belongsTo(Modifier::class);
     }
 
     /**
@@ -85,5 +79,25 @@ class ClaimFormPService extends Model implements Auditable
     public function typeOfService()
     {
         return $this->belongsTo(TypeOfService::class);
+    }
+
+    /**
+     * ClaimFormPService belongs to Epsdt.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function epsdt()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'epsdt_id');
+    }
+
+    /**
+     * ClaimFormPService belongs to FamilyPlanning.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function familyPlanning()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'family_planning_id');
     }
 }

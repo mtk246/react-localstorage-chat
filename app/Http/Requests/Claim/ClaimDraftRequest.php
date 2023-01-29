@@ -27,68 +27,61 @@ class ClaimDraftRequest extends FormRequest
     {
         $typeFormat = TypeForm::find($this->input('format'));
         return [
+            'billing_company_id'             => ['nullable', 'integer'],
             'format'                         => ['nullable', 'integer'],
+            'validate'                       => ['nullable', 'boolean'],
+            'automatic_eligibility'          => ['nullable', 'boolean'],
             'company_id'                     => ['nullable', 'integer'],
             'facility_id'                    => ['nullable', 'integer'],
             'patient_id'                     => ['nullable', 'integer'],
-            'health_professional_id'         => ['nullable', 'integer'],
-            'control_number'                 => ['nullable', 'string'],
-            'validate'                       => ['nullable', 'boolean'],
+            'billing_provider_id'            => ['nullable', 'integer'],
+            'service_provider_id'            => ['nullable', 'integer'],
+            'referred_id'                    => ['nullable', 'integer'],
 
-            "type_of_bill"           => [
-                                            Rule::requiredIf(function () use ($typeFormat)
-                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
-                                            'string', 'max:3'
-                                        ],
-            "federal_tax_number"     => [
-                                            Rule::requiredIf(function () use ($typeFormat)
-                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
-                                            'string', 'max:50'
-                                        ],
-            "start_date_service"     => ['nullable', 'date'],
-            "end_date_service"       => ['nullable', 'date'],
-            "admission_date"         => ['nullable', 'date'],
-            "admission_hour"         => ['nullable', 'integer'],
-            "type_of_admission"      => [
-                                            Rule::requiredIf(function () use ($typeFormat)
-                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
-                                            'string', 'max:1'
-                                        ],
-            "source_admission"       => [
-                                            Rule::requiredIf(function () use ($typeFormat)
-                                                { return ($typeFormat->form == 'UB-04 / 837I'); }),
-                                            'string', 'max:1'
-                                        ],
-            "discharge_hour"         => ['nullable', 'integer'],
-            "patient_discharge_stat" => ['nullable', 'integer'],
-            "admit_dx"               => ['nullable', 'integer'],
+            'patient_or_insured_information'                                  => ['nullable', 'array'],
+            'patient_or_insured_information.employment_related_condition'     => ['nullable', 'boolean'],
+            'patient_or_insured_information.auto_accident_related_condition'  => ['nullable', 'boolean'],
+            'patient_or_insured_information.auto_accident_place_state'        => ['nullable', 'string', 'max:2'],
+            'patient_or_insured_information.other_accident_related_condition' => ['nullable', 'boolean'],
+            'patient_or_insured_information.patient_signature'                => ['nullable', 'boolean'],
+            'patient_or_insured_information.insured_signature'                => ['nullable', 'boolean'],
+
+            "physician_or_supplier_information"                            => ['nullable', 'array'],
+            "physician_or_supplier_information.prior_authorization_number" => ['nullable', 'string'],
+            "physician_or_supplier_information.outside_lab"                => ['nullable', 'boolean'],
+            "physician_or_supplier_information.charges"                    => ['nullable', 'numeric'],
+            "physician_or_supplier_information.patient_account_num"        => ['nullable', 'string'],
+            "physician_or_supplier_information.accept_assignment"          => ['nullable', 'boolean'],
+
+            "physician_or_supplier_information.claim_date_informations"                        => ['nullable', 'array'],
+            "physician_or_supplier_information.claim_date_informations.*.field_id"             => ['nullable', 'integer'],
+            "physician_or_supplier_information.claim_date_informations.*.qualifier_id"         => ['nullable', 'array'],
+            "physician_or_supplier_information.claim_date_informations.*.from_date_or_current" => ['nullable', 'date'],
+            "physician_or_supplier_information.claim_date_informations.*.to_date"              => ['nullable', 'date'],
+            "physician_or_supplier_information.claim_date_informations.*.description"          => ['nullable', 'string'],
             
-            'diagnoses'                      => ['array', 'nullable'],
-            'diagnoses.*.item'               => ['string', 'nullable'],
-            'diagnoses.*.diagnosis_id'       => ['integer', 'nullable'],
+            'diagnoses'                      => ['nullable', 'array'],
+            'diagnoses.*.item'               => ['nullable', 'string'],
+            'diagnoses.*.diagnosis_id'       => ['nullable', 'integer'],
 
-            'insurance_policies'             => ['array', 'nullable'],
+            'insurance_policies'             => ['nullable', 'array'],
 
-            'claim_services'                       => ['array', 'nullable'],
-            'claim_services.*.from_service'        => ['sometimes', 'nullable', 'date'],
-            'claim_services.*.to_service'          => ['sometimes', 'nullable', 'date'],
-            'claim_services.*.procedure_id'        => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.modifier_id'         => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.rev'                 => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.place_of_service_id' => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.type_of_service_id'  => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.diagnostic_pointers' => ['sometimes', 'nullable', 'array'],
-            'claim_services.*.epstd'               => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.price'               => ['sometimes', 'nullable', 'numeric'],
+            'claim_services'                       => ['nullable', 'array'],
+            'claim_services.*.from_service'        => ['nullable', 'date'],
+            'claim_services.*.to_service'          => ['nullable', 'date'],
+            'claim_services.*.procedure_id'        => ['nullable', 'integer'],
+            'claim_services.*.modifier_ids'        => ['nullable', 'array'],
+            'claim_services.*.place_of_service_id' => ['nullable', 'integer'],
+            'claim_services.*.type_of_service_id'  => ['nullable', 'integer'],
+            'claim_services.*.diagnostic_pointers' => ['nullable', 'array'],
+            'claim_services.*.days_or_units'       => ['nullable', 'numeric'],
+            'claim_services.*.price'               => ['nullable', 'numeric'],
+            'claim_services.*.copay'               => ['nullable', 'numeric'],
+            'claim_services.*.emg'                 => ['nullable', 'boolean'],
+            'claim_services.*.epsdt_id'            => ['nullable', 'integer'],
+            'claim_services.*.family_planning_id'  => ['nullable', 'integer'],
 
             'private_note'                         => ['string', 'nullable'],
-
-            'will_report_injuries'                 => ['nullable', 'boolean'],
-            'injuries'                             => ['nullable', 'array'],
-            'injuries.*.diag_date'                 => ['nullable', 'date'],
-            'injuries.*.diagnosis_id'              => ['nullable', 'integer'],
-            'injuries.*.type_diag_id'              => ['nullable', 'integer'],
-            'injuries.*.note'                      => ['nullable', 'string']
         ];
     }
 }

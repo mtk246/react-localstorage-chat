@@ -92,7 +92,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1171,7 +1171,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1286,7 +1286,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1388,7 +1388,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1511,7 +1511,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1682,7 +1682,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
@@ -1806,7 +1806,7 @@
         "claim_date_informations": [
             {
                 "field_id": 1,
-                "qualifer_id": 1,
+                "qualifier_id": 1,
                 "from_date_or_current": "2022-07-05",
                 "to_date": "2022-07-05",
                 "description": "Lorem ipsum"
