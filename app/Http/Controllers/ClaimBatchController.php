@@ -101,7 +101,7 @@ class ClaimBatchController extends Controller
             $insurancePolicies = [];
 
             foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($insurancePolicy, $insurancePolicies);
+                array_push($insurancePolicies, $insurancePolicy->id);
             }
             $pdf->setConfig([
                 'urlVerify' => 'www.google.com.ve',
