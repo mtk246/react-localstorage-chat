@@ -425,6 +425,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         ])->group(function(){
             Route::get("/get-all-server", [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get("/get-all-server-claims", [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
+            Route::get("show-batch-preview/{id}",[\App\Http\Controllers\ClaimBatchController::class,"showReport"]);
             Route::get("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"getOneClaimBatch"]);
             Route::post("/",[\App\Http\Controllers\ClaimBatchController::class,"createBatch"]);
             Route::put("/{id}",[\App\Http\Controllers\ClaimBatchController::class,"updateBatch"]);

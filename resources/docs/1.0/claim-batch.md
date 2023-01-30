@@ -10,6 +10,7 @@
 - [Update batch](#update-batch)
 - [Delete batch](#delete-batch)
 - [Submit batch to clearing house](#submit-batch)
+- [Show batch report preview](#preview-batch)
 
 
 
@@ -17,15 +18,16 @@
 ## Basic data to make request
 
 
-| # | METHOD | Name                        | URL                                   | Token required | Description     |
-| : |        |                             |                                       |                |                 |  
-| 1 |POST    | `Create batch`              | `claim/batch/`                        | yes            | Create claim batch  |         
-| 2 |GET     | `Get all batch from server` | `/claim/batch/get-all-server`         | yes            | Get all claim batch from server|
-| 3 |GET     | `Get all claim from server` | `/claim/batch/get-all-server-claims`  | yes            | Get all claim from server|
-| 4 |GET     | `Get one batch`             | `/claim/batch/{id}`                   | yes            | Get one claim batch |
-| 5 |PUT     | `Update batch`              | `/claim/batch/{id}`                   | yes            | Update claim batch  |
-| 8 |DELETE  | `Delete batch`              | `/claim/batch/{id}`                   | yes            | Delete claim batch  |
-| 9 |PATCH   | `Submit to clearing house`  | `/claim/batch/submit-to-clearing-house/{id}`| yes      | Submit batch to clearing house |
+| #  | METHOD | Name                        | URL                                   | Token required | Description     |
+| :  |        |                             |                                       |                |                 |  
+| 1  | POST   | `Create batch`              | `claim/batch/`                        | yes            | Create claim batch  |         
+| 2  | GET    | `Get all batch from server` | `/claim/batch/get-all-server`         | yes            | Get all claim batch from server|
+| 3  | GET    | `Get all claim from server` | `/claim/batch/get-all-server-claims`  | yes            | Get all claim from server|
+| 4  | GET    | `Get one batch`             | `/claim/batch/{id}`                   | yes            | Get one claim batch |
+| 5  | PUT    | `Update batch`              | `/claim/batch/{id}`                   | yes            | Update claim batch  |
+| 8  | DELETE | `Delete batch`              | `/claim/batch/{id}`                   | yes            | Delete claim batch  |
+| 9  | PATCH  | `Submit to clearing house`  | `/claim/batch/submit-to-clearing-house/{id}`| yes      | Submit batch to clearing house |
+| 10 | GET    | `Show batch report preview` | `/claim/batch/show-batch-preview/{id}` | yes           | Show batch report  |
 
 
 <a name="create-batch"></a>
@@ -539,3 +541,30 @@
     ]
 }
 ```
+
+<a name="preview-batch"></a>
+## Show batch report preview
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": required  <integer>
+}
+```
+
+## Response
+
+```json
+"..." Base_64(report) <string>
+```
+
+> {success} 200 Batch found

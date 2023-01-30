@@ -260,12 +260,8 @@ class ClaimController extends Controller
     public function showReport(Request $request) {
         $pdf = new ReportRepository();
         $id = $request->id ?? null;
-        
-        $claim = Claim::with([
-            "claimFormattable"
-        ])->whereId($id)->first();
 
-        $claim = Claim::with(["insurancePolicies", "claimFormattable"])->find($id);
+        $claim = Claim::with(["claimFormattable", "insurancePolicies", "claimFormattable"])->find($id);
 
         if (isset($claim)) {
             $insurancePolicies = [];
