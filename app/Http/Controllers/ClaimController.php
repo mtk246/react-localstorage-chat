@@ -227,13 +227,13 @@ class ClaimController extends Controller
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
         $claim = Claim::find($id);
+        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
         if (($request->validate ?? false) == true) {
             if (isset($request->insurance_policies)) {
                 $claim->insurancePolicies()->sync($request->insurance_policies);
             }
 
             $rs = $this->claimValidation($claim->id);
-            $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
             $this->claimRepository->changeStatus([
                 "status_id"    => $statusVerify->id,
                 "private_note" => "API verification"
