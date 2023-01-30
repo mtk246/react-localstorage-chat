@@ -267,7 +267,7 @@ class ClaimController extends Controller
             $insurancePolicies = [];
 
             foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($insurancePolicy, $insurancePolicies);
+                array_push($insurancePolicies, $insurancePolicy);
             }
             $pdf->setConfig([
                 'urlVerify' => 'www.google.com.ve',
