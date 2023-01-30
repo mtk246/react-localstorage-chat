@@ -15,6 +15,7 @@ class ClaimEligibility extends Model implements Auditable
 
     protected $fillable = [
         "control_number",
+        "claim_id",
         "company_id",
         "patient_id",
         "subscriber_id",

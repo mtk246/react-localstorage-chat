@@ -237,7 +237,19 @@ class ClaimRepository
                                                            ->orderBy("created_at", "desc")
                                                            ->orderBy("id", "asc")->first();
 
-                $insurancePolicies[$key]["claim_eligibility"] = $claimEligibilityCurrent ?? null;
+                if (isset($claimEligibilityCurrent)) {
+                    $insurancePolicies[$key]["claim_eligibility"] = [
+                        "control_number"              => $claimEligibilityCurrent->control_number ?? null,
+                        "claim_id"                    => $claimEligibilityCurrent->claim_id ?? null,
+                        "insurance_policy"            => $claimEligibilityCurrent->insurancePolicy ?? null,
+                        "insurance_policy_id"         => $claimEligibilityCurrent->insurance_policy_id ?? null,
+                        "response_details"            => json_decode($claimEligibilityCurrent->response_details ?? null),
+                        "claim_eligibility_status"    => $claimEligibilityCurrent->claimEligibilityStatus ?? null,
+                        "claim_eligibility_status_id" => $claimEligibilityCurrent->claim_eligibility_status_id ?? null,
+                    ];
+                } else {
+                    $insurancePolicies[$key]["claim_eligibility"] = null;
+                }
             }
         }
 
@@ -577,6 +589,7 @@ class ClaimRepository
                 $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
                 $claimEligibility = ClaimEligibility::updateOrCreate([
                     "control_number"       => $newCode,
+                    "claim_id"             => $claim->id,
                     "company_id"           => $claim->company_id,
                     "patient_id"           => $patient->id,
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
@@ -610,7 +623,21 @@ class ClaimRepository
                     ]);
 
                 }*/
-                $insurancePolicy['claim_eligibility'] = ClaimEligibility::with(['claimEligibilityStatus'])->find($claimEligibility->id) ?? null;
+                $claimEligibilityCurrent = ClaimEligibility::with(['claimEligibilityStatus'])->find($claimEligibility->id) ?? null;
+                if (isset($claimEligibilityCurrent)) {
+                    $insurancePolicy['claim_eligibility'] = [
+                        "control_number"              => $claimEligibilityCurrent->control_number ?? null,
+                        "claim_id"                    => $claimEligibilityCurrent->claim_id ?? null,
+                        "insurance_policy"            => $claimEligibilityCurrent->insurancePolicy ?? null,
+                        "insurance_policy_id"         => $claimEligibilityCurrent->insurance_policy_id ?? null,
+                        "response_details"            => json_decode($claimEligibilityCurrent->response_details ?? null),
+                        "claim_eligibility_status"    => $claimEligibilityCurrent->claimEligibilityStatus ?? null,
+                        "claim_eligibility_status_id" => $claimEligibilityCurrent->claim_eligibility_status_id ?? null,
+                    ];
+                } else {
+                    $insurancePolicy['claim_eligibility'] = null;
+                }
+                
                 array_push($insurancePolicies, $insurancePolicy);
             }
             return [
