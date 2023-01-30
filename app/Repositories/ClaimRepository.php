@@ -897,7 +897,7 @@ class ClaimRepository
                             "paymentResponsibilityLevelCode" => $insurancePolicy->payment_responsibility_level_code ?? "P",
                             "firstName" => $patient->user->profile->first_name ?? null,
                             "lastName" => $patient->user->profile->last_name ?? null,
-                            "gender" => => strtoupper($patient->user->profile->sex ?? "M"),
+                            "gender" => strtoupper($patient->user->profile->sex ?? "M"),
                             "dateOfBirth" => str_replace("-", "", $patient->user->profile->date_of_birth),
                             "policyNumber" => $insurancePolicy->policy_number ?? null,
                             "relationshipToSubscriberCode" => $subscriber->relationship->code ?? "21", /** Si no existe, descococido */
@@ -956,7 +956,7 @@ class ClaimRepository
                     $dataReal = [
                         "controlNumber" => $newCode,
                         "tradingPartnerServiceId" => "9496", /** Caso de prueba */
-                        "usageIndicator" => "T"  /** Caso de prueba */
+                        "usageIndicator" => "T",  /** Caso de prueba */
                         "tradingPartnerName" => "BEGENTOOS",
                         "submitter" => [ /** Billing Company*/
                             "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
