@@ -89,7 +89,6 @@ class ClaimController extends Controller
     public function getListClaimServices(Request $request)
     {
         $rs = $this->claimRepository->getListClaimServices($request);
-        //$rs = $this->claimRepository->getListTypeOfServices();
 
         return response()->json($rs);
     }
@@ -183,7 +182,7 @@ class ClaimController extends Controller
         
         $rs = $this->claimRepository->checkEligibility($token->access_token ?? '', $id);
 
-        return response()->json($rs);
+        return $rs ? response()->json($rs) : response()->json(__("Error claim eligibility"), 400);
     }
 
     /**
@@ -203,7 +202,7 @@ class ClaimController extends Controller
         
         $rs = $this->claimRepository->claimValidation($token->access_token ?? '', $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get claim validation"), 400);
+        return $rs ? response()->json($rs) : response()->json(__("Error claim validation"), 400);
     }
 
 
@@ -226,11 +225,30 @@ class ClaimController extends Controller
      */
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
-        $rs = Claim::find($id);
-        if (isset($request->insurance_policies)) {
-            $claim->insurancePolicies()->sync($request->insurance_policies);
+        $claim = Claim::find($id);
+        if (($request->validate ?? false) == true) {
+            if (isset($request->insurance_policies)) {
+                $claim->insurancePolicies()->sync($request->insurance_policies);
+            }
+
+            $rs = $this->claimValidation($claim->id);
+            $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+            $this->claimRepository->changeStatus([
+                "status_id"    => $statusVerify->id,
+                "private_note" => "API verification"
+            ], $claim->id);
+        } else {
+            if (isset($request->insurance_policies)) {
+                $claim->insurancePolicies()->sync($request->insurance_policies);
+            }
+
+            $this->claimRepository->changeStatus([
+                "status_id"    => $statusVerify->id,
+                "private_note" => "Manual verification"
+            ], $claim->id);
         }
-        return $rs ? response()->json($rs) : response()->json(__("Error verify claim"), 400);
+
+        return $claim ? response()->json($claim) : response()->json(__("Error save claim"), 400);
     }
 
     public function showReport(Request $request) {

@@ -100,7 +100,7 @@ class ClaimVerifyRequest extends FormRequest
             'diagnoses.*.item'               => ['string', 'nullable'],
             'diagnoses.*.diagnosis_id'       => ['integer', 'nullable'],
 
-            'insurance_policies'             => ['array', 'nullable'],
+            'insurance_policies'             => ['array', 'required'],
 
             'claim_services'                       => ['nullable', 'array'],
             'claim_services.*.from_service'        => ['sometimes', 'nullable', 'date'],
