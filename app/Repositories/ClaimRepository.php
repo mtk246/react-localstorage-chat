@@ -611,7 +611,10 @@ class ClaimRepository
                         'encounter' => $encounter
                     ];
 
-                    $response = Http::withToken($token)->acceptJson()->post($data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"], $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal);
+                    $response = Http::withToken($token)->acceptJson()->post(
+                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+                    );
                     $responseData = json_decode($response->body());
 
                     if ($response->successful()) {
@@ -1023,7 +1026,10 @@ class ClaimRepository
                         ]
                     ];
 
-                    $response = Http::withToken($token)->acceptJson()->post($data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"], $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal);
+                    $response = Http::withToken($token)->acceptJson()->post(
+                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+                    );
                     $responseData = json_decode($response->body());
                 }
 
@@ -1055,6 +1061,361 @@ class ClaimRepository
         } catch (\Exception $e) {
             DB::rollBack();
             return $e;
+        }
+    }
+
+    public function claimSubmit($token, $claimId, $batchId) {
+        try {
+            $data = [
+                "sandbox" => [
+                    "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission",
+                    "body" => [
+                        "controlNumber" => "000000001",
+                        "tradingPartnerServiceId" => "9496",
+                        "submitter" => [
+                            "organizationName" => "REGIONAL PPO NETWORK",
+                            "contactInformation" => [
+                                "name" => "SUBMITTER CONTACT INFO",
+                                "phoneNumber" => "123456789"
+                            ]
+                        ],
+                        "receiver" => [
+                            "organizationName" => "EXTRA HEALTHY INSURANCE"
+                        ],
+                        "subscriber" => [
+                            "memberId" => "0000000001",
+                            "paymentResponsibilityLevelCode" => "P",
+                            "firstName" => "johnone",
+                            "lastName" => "doeOne",
+                            "gender" => "M",
+                            "dateOfBirth" => "19800102",
+                            "policyNumber" => "00001",
+                            "address" => [
+                                "address1" => "123 address1",
+                                "city" => "city1",
+                                "state" => "wa",
+                                "postalCode" => "981010000"
+                            ]
+                        ],
+                        "dependent" => [
+                            "memberId" => "0000000002",
+                            "paymentResponsibilityLevelCode" => "P",
+                            "firstName" => "janeone",
+                            "lastName" => "doeOne",
+                            "gender" => "F",
+                            "dateOfBirth" => "19800102",
+                            "policyNumber" => "00002",
+                            "relationshipToSubscriberCode" => "01",
+                            "address" => [
+                                "address1" => "123 address1",
+                                "city" => "city1",
+                                "state" => "wa",
+                                "postalCode" => "981010000"
+                            ]
+                        ],
+
+                        "providers" => [
+                            [
+                                "providerType" => "BillingProvider",
+                                "npi" => "1760854442",
+                                "employerId" => "123456789",
+                                "organizationName" => "HAPPY DOCTORS GROUPPRACTICE",
+                                "address" => [
+                                    "address1" => "000 address1",
+                                    "city" => "city2",
+                                    "state" => "tn",
+                                    "postalCode" => "372030000"
+                                ],
+                                "contactInformation" => [
+                                    "name" => "janetwo doetwo",
+                                    "phoneNumber" => "0000000001"
+                                ]
+                            ],
+                            [
+                                "providerType" => "ReferringProvider",
+                                "npi" => "1942788757",
+                                "firstName" => "johntwo",
+                                "lastName" => "doetwo",
+                                "employerId" => "123456"
+                            ],
+                            [
+                                "providerType" => "RenderingProvider",
+                                "npi" => "1942788757",
+                                "firstName" => "janetwo",
+                                "lastName" => "doetwo",
+                                "middleName" => "middletwo",
+                                "ssn" => "000000000"
+                            ]
+                        ],
+                        "claimInformation" => [
+                            "claimFilingCode" => "CI",
+                            "patientControlNumber" => "12345",
+                            "claimChargeAmount" => "28.75",
+                            "placeOfServiceCode" => "11",
+                            "claimFrequencyCode" => "1",
+                            "signatureIndicator" => "Y",
+                            "planParticipationCode" => "A",
+                            "benefitsAssignmentCertificationIndicator" => "Y",
+                            "releaseInformationCode" => "Y",
+                            "claimSupplementalInformation" => [
+                                "repricedClaimNumber" => "00001",
+                                "claimNumber" => "12345"
+                            ],
+                            "healthCareCodeInformation" => [
+                                [
+                                    "diagnosisTypeCode" => "BK",
+                                    "diagnosisCode" => "496"
+                                ],
+                                [
+                                    "diagnosisTypeCode" => "BF",
+                                    "diagnosisCode" => "25000"
+                                ]
+                            ],
+                            "serviceFacilityLocation" => [
+                                "organizationName" => "HAPPY DOCTORS GROUP",
+                                "address" => [
+                                    "address1" => "000 address1",
+                                    "city" => "city2",
+                                    "state" => "tn",
+                                    "postalCode" => "372030000"
+                                ]
+                            ],
+                            "serviceLines" => [
+                                [
+                                    "serviceDate" => "20050514",
+                                    "professionalService" => [
+                                        "procedureIdentifier" => "HC",
+                                        "lineItemChargeAmount" => "25",
+                                        "procedureCode" => "E0570",
+                                        "measurementUnit" => "UN",
+                                        "serviceUnitCount" => "1",
+                                        "compositeDiagnosisCodePointers" => [
+                                            "diagnosisCodePointers" => ["1","2"]
+                                        ]
+                                    ]
+                                ],
+                                [
+                                    "serviceDate" => "20050514",
+                                    "professionalService" => [
+                                        "procedureIdentifier" => "HC",
+                                        "lineItemChargeAmount" => "3.75",
+                                        "procedureCode" => "A7003",
+                                        "measurementUnit" => "UN",
+                                        "serviceUnitCount" => "1",
+                                        "compositeDiagnosisCodePointers" => [
+                                            "diagnosisCodePointers" => ["1" ]
+                                        ]
+                                    ]
+
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                "production" => [
+                    "url"  => "https://apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission",
+                    "body" => null
+                ]
+            ];
+
+            $claim = Claim::with([
+                "company",
+                "diagnoses",
+                "insuranceCompany",
+                "insurancePolicies",
+                "claimFormattable" => function ($query) {
+                    $query->with([
+                        "billingCompany" => function ($q) {
+                            $q->with("contacts", "addresses");
+                        },
+                        "claimFormServices" => function ($q) {
+                            $q->with("typeOfService");
+                        }
+                    ]);
+                }
+            ])->find($claimId);
+            
+            $patient = Patient::with([
+                "insurancePolicies" => function ($query) {
+                    $query->with('typeResponsibility');
+                },
+                "user.profile"
+            ])->find($claim->patient_id);
+            $insurancePolicies = [];
+            $claimInsurancePolicies = [];
+
+            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
+                array_push($claimInsurancePolicies, $insurancePolicy->id);
+            }
+
+            foreach ($patient->insurancePolicies()->whereIn('insurance_policies.id', $claimInsurancePolicies)->get() ?? [] as $insurancePolicy) {
+
+                $subscriber =
+                    (($insurancePolicy->own ?? true) == true)
+                        ? $patient->user
+                        : $insurancePolicy->subscriber;
+                $addressSubscriber = $subscriber->addresses->first();
+                $addressPatient = $patient->user->addresses->first();
+                $addressCompany = $claim->company->addresses->first();
+                $contactCompany = $claim->company->contacts->first();
+
+                $dependent = (($insurancePolicy->own ?? true) == true)
+                    ? null
+                    : [
+                        "memberId" => $patient->code ?? null,
+                        "paymentResponsibilityLevelCode" => $insurancePolicy->payment_responsibility_level_code ?? "P",
+                        "firstName" => $patient->user->profile->first_name ?? null,
+                        "lastName" => $patient->user->profile->last_name ?? null,
+                        "gender" => strtoupper($patient->user->profile->sex ?? "M"),
+                        "dateOfBirth" => str_replace("-", "", $patient->user->profile->date_of_birth),
+                        "policyNumber" => $insurancePolicy->policy_number ?? null,
+                        "relationshipToSubscriberCode" => $subscriber->relationship->code ?? "21", /** Si no existe, descococido */
+                        "address" => [
+                            "address1" => $addressPatient->address ?? null,
+                            "city" => $addressPatient->city ?? null,
+                            "state" => substr(($addressPatient->state ?? ''), 0, 3) ?? null,
+                            "postalCode" => $addressPatient->zip
+                        ]
+                    ];
+                $claimServiceLinePrincipal = $claim->claimFormattable->claimFormServices->first();
+                $claimDiagnoses = [];
+
+                foreach ($claim->diagnoses ?? [] as $diagnosis) {
+                    if (count($claimDiagnoses) == 0) {
+                        array_push($claimDiagnoses, [
+                            "diagnosisTypeCode" => "BK",
+                            "diagnosisCode" => $diagnosis->code
+                        ]);
+                    } else {
+                        array_push($claimDiagnoses, [
+                            "diagnosisTypeCode" => "BF",
+                            "diagnosisCode" => $diagnosis->code
+                        ]);
+                    }
+                }
+
+                $serviceFacilityLocation = [
+                    "organizationName" => "HAPPY DOCTORS GROUP",
+                    "address" => [
+                        "address1" => "000 address1",
+                        "city" => "city2",
+                        "state" => "tn",
+                        "postalCode" => "372030000"
+                    ]
+                ];
+
+                $serviceLines = [];
+
+                foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                    array_push($serviceLines, [
+                        "serviceDate" => str_replace("-", "", $claim->date_of_service,),
+                        "professionalService" => [
+                            "procedureIdentifier" => "HC" /** No esta, Loop2400 SV101-01 **/,
+                            "lineItemChargeAmount" => $service->price,
+                            "procedureCode" => "E0570",
+                            "measurementUnit" => "UN",
+                            "serviceUnitCount" => "1",
+                            "compositeDiagnosisCodePointers" => [
+                                "diagnosisCodePointers" => $service->diagnostic_pointers ?? []
+                            ]
+                        ]
+                    ]);
+                }
+
+                $dataReal = [
+                    "controlNumber" => $claim->control_number,
+                    "tradingPartnerServiceId" => "9496", /** Caso de prueba */
+                    "usageIndicator" => "T",  /** Caso de prueba */
+                    "tradingPartnerName" => "BEGENTOOS",
+                    "submitter" => [ /** Billing Company*/
+                        "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
+                        "contactInformation" => [
+                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? null,
+                            "phoneNumber" => $claim->claimFormattable->billingCompany->contact->phone ?? null
+                        ]
+                    ],
+                    "receiver" => [ /**Insurance Company */
+                        "organizationName" => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
+                    ],
+                    "subscriber" => [
+                        "memberId"    => $subscriber->member_id ?? null,
+                        "paymentResponsibilityLevelCode" => $insurancePolicy->payment_responsibility_level_code ?? "P",
+                        "firstName"    => $subscriber->first_name ?? $subscriber->profile->first_name,
+                        "lastName"     => $subscriber->last_name ?? $subscriber->profile->last_name,
+                        "gender"       => strtoupper(($subscriber->profile->sex ?? "M")), /**Agregar*/
+                        "dateOfBirth"  => str_replace("-", "", ($subscriber->profile->date_of_birth ?? $subscriber->date_of_birth)),
+                        "policyNumber" => $insurancePolicy->policy_number ?? null,
+                        "address" => [
+                            "address1" => $addressSubscriber->address ?? null,
+                            "city" => $addressSubscriber->city ?? null,
+                            "state" => substr(($addressSubscriber->state ?? ''), 0, 3) ?? null,
+                            "postalCode" => $addressSubscriber->zip
+                        ]
+                    ],
+                    "dependent" => $dependent ?? null,
+                    "providers" => [ /** Company */
+                        [
+                            "providerType" => "BillingProvider",
+                            "npi" => $claim->company->npi ?? null,
+                            "employerId" => $claim->company->ein ?? null,
+                            "organizationName" => $claim->company->name ?? null,
+                            "address" => [
+                                "address1" => $addressCompany->address ?? null,
+                                "city" => $addressCompany->city ?? null,
+                                "state" => substr(($addressCompany->state ?? ''), 0, 3),
+                                "postalCode" => $addressCompany->zip ?? null
+                            ],
+                            "contactInformation" => [
+                                "name" => $contactCompany->contact_name ?? null,
+                                "phoneNumber" => $contactCompany->phone ?? null
+                            ]
+                        ],
+                    ],
+                    "claimInformation" => [
+                        "claimFilingCode" => "CI",
+                        "patientControlNumber" => $claim->control_number, /**Preguntar xq no el el codePAtient Loop2300*/
+                        "claimChargeAmount" => $claim->amount_paid ?? "28.75",
+                        "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
+                        "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
+                        "signatureIndicator" => $claim->claimFormattable->patientOrInsuredInformation->insured_signature ? "Y" : "N",
+                        "planParticipationCode" => "A",
+                        "benefitsAssignmentCertificationIndicator" => "Y",
+                        "releaseInformationCode" => "Y",
+                        "claimSupplementalInformation" => [
+                            "repricedClaimNumber" => "00001", /** Type 45 Donde lo guardo?. Los códigos del catálogo son diferentes */
+                            "claimNumber" => "12345"/** ?? */
+                        ],
+                        "healthCareCodeInformation" => $claimDiagnoses ?? null,
+                        "serviceFacilityLocation" => null,
+                        "serviceLines" => $serviceLines
+                    ]
+                ];
+
+                $response = Http::withToken($token)->acceptJson()->post(
+                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+                );
+                $responseData = json_decode($response->body());
+
+                if ($response->successful()) {
+                    $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Success')->first();
+                } else if ($response->serverError()) {
+                    $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Error')->first();
+                } else if ($response->failed()) {
+                    $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Error')->first();
+                }
+
+                $claimTransmissionResponse = ClaimTransmissionResponse::updateOrCreate([
+                    "claim_id"                     => $claim->id,
+                    "claim_batch_id"               => $batchId,
+                    "claim_transmission_status_id" => $claimTransmissionStatus,
+                    "response_details"             => isset($response) ? $response->body() : null,
+                ]);
+            }
+            return $claim;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
         }
     }
 

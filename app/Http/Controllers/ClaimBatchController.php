@@ -9,16 +9,19 @@ use GuzzleHttp\Client;
 
 use App\Http\Requests\Claim\ClaimBatchRequest;
 use App\Repositories\ClaimBatchRepository;
+use App\Repositories\ClaimRepository;
 use App\Repositories\ReportRepository;
 use App\Models\ClaimBatch;
 
 class ClaimBatchController extends Controller
 {
     private $claimBatchRepository;
+    private $claimRepository;
 
     public function __construct()
     {
         $this->claimBatchRepository = new ClaimBatchRepository();
+        $this->claimRepository = new ClaimRepository();
     }
 
     /**
@@ -82,7 +85,11 @@ class ClaimBatchController extends Controller
      */
     public function submitToClearingHouse($id)
     {
-        $rs = $this->claimBatchRepository->submitToClearingHouse($id);
+        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+
+        if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
+
+        $rs = $this->claimBatchRepository->submitToClearingHouse($token, $id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error submitting claim batch"), 400);
     }

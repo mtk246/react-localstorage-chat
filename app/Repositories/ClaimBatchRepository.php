@@ -13,6 +13,8 @@ use App\Models\Claim;
 use App\Models\ClaimBatch;
 use App\Models\ClaimStatus;
 
+use App\Repositories\ClaimRepository;
+
 class ClaimBatchRepository
 {
     /**
@@ -367,15 +369,19 @@ class ClaimBatchRepository
      * @param int $id
      * @return claim|Builder|Model|object|null
      */
-    public function submitToClearingHouse(int $id) {
+    public function submitToClearingHouse($token, int $id) {
         try {
             DB::beginTransaction();
 
+            $claimRepository = new ClaimRepository();
             $claimBatch = ClaimBatch::find($id);
             $claimBatch->update([
                 "status"             => 'Submitted',
                 "shipping_date"      => now(),
             ]);
+            foreach ($claimBatch->claims as $claim) {
+                $claimRepository->claimSubmit($token, $claim->id, $claimBatch->id)
+            }
 
             DB::commit();
             return $claimBatch;
