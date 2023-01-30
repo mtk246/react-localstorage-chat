@@ -1196,6 +1196,7 @@ class PatientRepository
                 'id'   => $patient->id,
                 'name' => $patient->code . ' - ' .
                           $patient->user->profile->first_name . ' ' .
+                          substr($patient->user->profile->middle_name, 0, 1) . ' ' .
                           $patient->user->profile->last_name
             ]);
         }

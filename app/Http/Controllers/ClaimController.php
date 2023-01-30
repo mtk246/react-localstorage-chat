@@ -213,9 +213,14 @@ class ClaimController extends Controller
      */
     public function saveAsDraftAndEligibility(ClaimDraftRequest $request)
     {
-        $claim = $this->claimRepository->createClaim($request->validated());
-
-        if (!isset($claim)) return response()->json(__("Error save claim"), 400);
+        if (isset($request->claim_id)) {
+            $claim = Claim::find($request->claim_id);
+            //$claim = $this->claimRepository->updateClaim($request->validated(), $claim->id);
+            //if (!isset($claim)) return response()->json(__("Error save claim"), 400);
+        } else {
+            $claim = $this->claimRepository->createClaim($request->validated());
+            if (!isset($claim)) return response()->json(__("Error save claim"), 400);
+        }
 
         return $this->checkEligibility($claim->id);
     }

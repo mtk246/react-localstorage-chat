@@ -28,6 +28,7 @@ class ClaimDraftRequest extends FormRequest
         $typeFormat = TypeForm::find($this->input('format'));
         return [
             'billing_company_id'             => ['nullable', 'integer'],
+            'claim_id'                       => ['nullable', 'integer'],
             'format'                         => ['nullable', 'integer'],
             'validate'                       => ['nullable', 'boolean'],
             'automatic_eligibility'          => ['nullable', 'boolean'],

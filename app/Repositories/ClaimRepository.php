@@ -508,85 +508,90 @@ class ClaimRepository
                 $newCode += ($targetModel) ? (int)$targetModel->control_number : 0;
                 $newCode = str_pad($newCode, 9, "0", STR_PAD_LEFT);
 
-                $encounter = [];
-                $serviceCodes = [];
+                if ($claim->automatic_eligibility) {
+                    $encounter = [];
+                    $serviceCodes = [];
 
-                foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
-                    $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
-                    $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
-                    array_push($serviceCodes, $service->typeOfService->code);
+                    foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                        $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
+                        $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
+                        array_push($serviceCodes, $service->typeOfService->code);
+                    }
+                    $encounter["serviceTypeCodes"] = $serviceCodes;
+
+                    $data = [
+                        'controlNumber'           => $newCode,
+                        'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->code ?? null,
+                        'provider' => [
+                            'organizationName'        => $claim->company->name ?? null,
+                            'npi'                     => $claim->company->npi ?? null,
+                            'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
+                            'providerCode'            => $claim->company->code ?? null,
+                            'referenceIdentification' => $claim->company->reference_identification ?? null
+                        ],
+                        'subscriber' => [
+                            'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
+                            'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
+                            'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
+                            'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
+                            'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
+                            'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
+                            'idCard'      => $insurancePolicy->subscriber->id_card ?? null
+                        ],
+                        'dependents' => [
+                            [
+                                'firstName'   => $patient->user->profile->first_name,
+                                'lastName'    => $patient->user->profile->last_name,
+                                'gender'      => strtoupper($patient->user->profile->sex),
+                                'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
+                                'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
+                            ]
+                        ],
+                        'encounter' => $encounter
+                    ];
+                    $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', [
+                        'controlNumber'           => "123456789",
+                        'tradingPartnerServiceId' => "CMSMED",
+                        'provider' => [
+                            'organizationName'        => "provider_name",
+                            'npi'                     => "0123456789",
+                            'serviceProviderNumber'   => "54321",
+                            'providerCode'            => "AD",
+                            'referenceIdentification' => "54321g"
+                        ],
+                        'subscriber' => [
+                            'memberId'    => "0000000000",
+                            'firstName'   => "johnOne",
+                            'lastName'    => "doeOne",
+                            'gender'      => "M",
+                            'dateOfBirth' => "18800102",
+                            'ssn'         => "555443333",
+                            'idCard'      => "card123"
+                        ],
+                        'dependents' => [
+                            [
+                                'firstName'   => "janeOne",
+                                'lastName'    => "doeone",
+                                'gender'      => "F",
+                                'dateOfBirth' => "18160421",
+                                'groupNumber' => "1111111111"
+                            ]
+                        ],
+                        'encounter' => [
+                            "beginningDateOfService" => "20100102",
+                            "endDateOfService"       => "20100102",
+                            "serviceTypeCodes"       => [
+                              "98"
+                            ]
+                        ]
+                    ]);
+                    $responseData = json_decode($response->body());
+
+                    $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
+                } else {
+                    $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Unknow')->first();
                 }
-                $encounter["serviceTypeCodes"] = $serviceCodes;
-
-                $data = [
-                    'controlNumber'           => $newCode,
-                    'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->code ?? null,
-                    'provider' => [
-                        'organizationName'        => $claim->company->name ?? null,
-                        'npi'                     => $claim->company->npi ?? null,
-                        'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
-                        'providerCode'            => $claim->company->code ?? null,
-                        'referenceIdentification' => $claim->company->reference_identification ?? null
-                    ],
-                    'subscriber' => [
-                        'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
-                        'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
-                        'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
-                        'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
-                        'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
-                        'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
-                        'idCard'      => $insurancePolicy->subscriber->id_card ?? null
-                    ],
-                    'dependents' => [
-                        [
-                            'firstName'   => $patient->user->profile->first_name,
-                            'lastName'    => $patient->user->profile->last_name,
-                            'gender'      => strtoupper($patient->user->profile->sex),
-                            'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
-                            'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
-                        ]
-                    ],
-                    'encounter' => $encounter
-                ];
-                $response = Http::withToken($token)->acceptJson()->post('https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3', [
-                    'controlNumber'           => "123456789",
-                    'tradingPartnerServiceId' => "CMSMED",
-                    'provider' => [
-                        'organizationName'        => "provider_name",
-                        'npi'                     => "0123456789",
-                        'serviceProviderNumber'   => "54321",
-                        'providerCode'            => "AD",
-                        'referenceIdentification' => "54321g"
-                    ],
-                    'subscriber' => [
-                        'memberId'    => "0000000000",
-                        'firstName'   => "johnOne",
-                        'lastName'    => "doeOne",
-                        'gender'      => "M",
-                        'dateOfBirth' => "18800102",
-                        'ssn'         => "555443333",
-                        'idCard'      => "card123"
-                    ],
-                    'dependents' => [
-                        [
-                            'firstName'   => "janeOne",
-                            'lastName'    => "doeone",
-                            'gender'      => "F",
-                            'dateOfBirth' => "18160421",
-                            'groupNumber' => "1111111111"
-                        ]
-                    ],
-                    'encounter' => [
-                        "beginningDateOfService" => "20100102",
-                        "endDateOfService"       => "20100102",
-                        "serviceTypeCodes"       => [
-                          "98"
-                        ]
-                    ]
-                ]);
-                $responseData = json_decode($response->body());
-
-                $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
+                
                 $claimEligibility = ClaimEligibility::updateOrCreate([
                     "control_number"       => $newCode,
                     "claim_id"             => $claim->id,
@@ -595,7 +600,7 @@ class ClaimRepository
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
                     "insurance_policy_id"  => $insurancePolicy->id,
                     "claim_eligibility_status_id"  => $claimEligibilityStatus->id,
-                    "response_details"     => $response->body(),
+                    "response_details"     => $response->body() ?? null,
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
 
@@ -640,6 +645,7 @@ class ClaimRepository
                 
                 array_push($insurancePolicies, $insurancePolicy);
             }
+
             return [
                 "claim_id" => $claim->id,
                 "insurance_policies" => $insurancePolicies

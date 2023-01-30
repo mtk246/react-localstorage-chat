@@ -1485,6 +1485,7 @@
 ```json
 {
     "billing_company_id": 1, /** Only by superuser */
+    "claim_id": 1, /** Only if send eligibility previus */
     "format": 1,
     "validate": false,
     "automatic_eligibility": false,
