@@ -231,12 +231,20 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Responsibility type',
                 'type_catalogs' => [
                     [
-                        'code' => 'R1',
-                        'description' => 'Responsibility type 1'
+                        'code' => 'P',
+                        'description' => 'Primary'
                     ],
                     [
-                        'code' => 'R2',
-                        'description' => 'Responsibility type 2'
+                        'code' => 'S',
+                        'description' => 'Secundary'
+                    ],
+                    [
+                        'code' => 'T',
+                        'description' => 'Tertiary'
+                    ],
+                    [
+                        'code' => 'U',
+                        'description' => 'Unknow'
                     ]
                 ]
             ],

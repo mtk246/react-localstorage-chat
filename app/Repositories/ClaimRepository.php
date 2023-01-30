@@ -222,7 +222,9 @@ class ClaimRepository
     public function getOneclaim(int $id) {
         $claim = Claim::with([
             "diagnoses",
-            "insurancePolicies",
+            "insurancePolicies" => function () {
+                $query->with('typeResponsibility');
+            },
             "claimFormattable"
         ])->whereId($id)->first();
 
@@ -466,7 +468,12 @@ class ClaimRepository
     public function checkEligibility($token, $id) {
         try {
             $claim = Claim::with(["patient", "company", "claimFormattable", "claimFormattable.claimFormServices.typeOfService"])->find($id);
-            $patient = Patient::with(["insurancePolicies", "user.profile"])->find($claim->patient_id);
+            $patient = Patient::with([
+                "insurancePolicies" => function () {
+                    $query->with('typeResponsibility');
+                },
+                "user.profile"
+            ])->find($claim->patient_id);
             $insurancePolicies = [];
 
             foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {

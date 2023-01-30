@@ -227,6 +227,9 @@ class ClaimController extends Controller
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
         $rs = Claim::find($id);
+        if (isset($request->insurance_policies)) {
+            $claim->insurancePolicies()->sync($request->insurance_policies);
+        }
         return $rs ? response()->json($rs) : response()->json(__("Error verify claim"), 400);
     }
 
