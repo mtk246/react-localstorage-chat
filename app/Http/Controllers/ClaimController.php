@@ -9,6 +9,7 @@ use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ReportRepository;
 use App\Models\Claim;
+use App\Models\ClaimStatus;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
