@@ -492,9 +492,9 @@ class ClaimRepository
                 ]
             ];
 
-            $response = Http::acceptJson()->post($data["sandbox"]["url"], [
-                'client_id'     => $data["sandbox"]["client_id"],
-                'client_secret' => $data["sandbox"]["client_secret"],
+            $response = Http::acceptJson()->post($data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"], [
+                'client_id'     => $data[env('CHANGEHC_CONNECTION', 'sandbox')]["client_id"],
+                'client_secret' => $data[env('CHANGEHC_CONNECTION', 'sandbox')]["client_secret"],
                 'grant_type'    => 'client_credentials'
             ]);
             $responseData = json_decode($response->body());
@@ -611,7 +611,7 @@ class ClaimRepository
                         'encounter' => $encounter
                     ];
 
-                    $response = Http::withToken($token)->acceptJson()->post($data["sandbox"]["url"], $data["sandbox"]["body"] ?? $dataReal);
+                    $response = Http::withToken($token)->acceptJson()->post($data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"], $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal);
                     $responseData = json_decode($response->body());
 
                     if ($response->successful()) {
@@ -844,7 +844,6 @@ class ClaimRepository
                 ]
             ];
 
-
             $claim = Claim::with([
                 "company",
                 "diagnoses",
@@ -986,7 +985,7 @@ class ClaimRepository
                             ]
                         ],
                         "dependent" => $dependent ?? null,
-                       "providers" => [ /** Company */
+                        "providers" => [ /** Company */
                             [
                                 "providerType" => "BillingProvider",
                                 "npi" => $claim->company->npi ?? null,
@@ -1024,7 +1023,7 @@ class ClaimRepository
                         ]
                     ];
 
-                    $response = Http::withToken($token)->acceptJson()->post($data["sandbox"]["url"], $data["sandbox"]["body"] ?? $dataReal);
+                    $response = Http::withToken($token)->acceptJson()->post($data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"], $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal);
                     $responseData = json_decode($response->body());
                 }
 
