@@ -41,6 +41,16 @@ class InsurancePolicy extends Model implements Auditable
     }
 
     /**
+     * InsurancePolicy has many ClaimValidations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimValidations()
+    {
+        return $this->hasMany(ClaimValidation::class);
+    }
+
+    /**
      * The patients that belong to the insurancePolicy.
      *
      * @return BelongsToMany
