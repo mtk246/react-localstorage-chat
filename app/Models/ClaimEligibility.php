@@ -24,6 +24,8 @@ class ClaimEligibility extends Model implements Auditable
         "claim_eligibility_status_id",
     ];
 
+    protected $with = ['claimEligibilityStatus'];
+
     /**
      * ClaimEligibility belongs to Company.
      *

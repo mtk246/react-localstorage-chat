@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dropColumn('eligibility');
             $table->longText('response_details')->nullable();
 
+            $table->foreignId('claim_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('claim_eligibility_status_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
         });
     }
@@ -31,6 +32,9 @@ return new class extends Migration
         Schema::table('claim_eligibilities', function (Blueprint $table) {
             $table->dropColumn('response_details');
             $table->string('eligibility', 50)->nullable();
+
+            $table->dropForeign(['claim_id']);
+            $table->dropColumn(['claim_id']);
 
             $table->dropForeign(['claim_eligibility_status_id']);
             $table->dropColumn('claim_eligibility_status_id');

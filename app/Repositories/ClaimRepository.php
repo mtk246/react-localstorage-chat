@@ -228,6 +228,19 @@ class ClaimRepository
             "claimFormattable"
         ])->whereId($id)->first();
 
+        if (isset($claim)) {
+            $insurancePolicies = [];
+            foreach ($claim->insurancePolicies as $key => $insurancePolicy) {
+                $insurancePolicies[$key] = $insurancePolicy;
+                $claimEligibilityCurrent = $insurancePolicy->claimEligibilities()
+                                                           ->where('claim_id', $claim->id)
+                                                           ->orderBy("created_at", "desc")
+                                                           ->orderBy("id", "asc")->first();
+
+                $insurancePolicies[$key]["claim_eligibility"] = $claimEligibilityCurrent ?? null;
+            }
+        }
+
         return !is_null($claim) ? $claim : null;
     }
 

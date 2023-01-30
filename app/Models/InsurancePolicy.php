@@ -31,6 +31,16 @@ class InsurancePolicy extends Model implements Auditable
     protected $appends = ['insurance_company_name', 'insurance_company_id', 'subscriber', 'payer_id', 'own'];
 
     /**
+     * InsurancePolicy has many ClaimEligibilities.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimEligibilities()
+    {
+        return $this->hasMany(ClaimEligibility::class);
+    }
+
+    /**
      * The patients that belong to the insurancePolicy.
      *
      * @return BelongsToMany
