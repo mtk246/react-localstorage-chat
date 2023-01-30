@@ -18,6 +18,7 @@ use App\Models\ClaimSubStatus;
 use App\Models\ClaimStatusClaim;
 use App\Models\Claim;
 use App\Models\ClaimEligibility;
+use App\Models\ClaimValidation;
 use App\Models\ClaimEligibilityStatus;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormI;
@@ -843,6 +844,7 @@ class ClaimRepository
                 ]
             ];
 
+
             $claim = Claim::with([
                 "company",
                 "diagnoses",
@@ -870,10 +872,10 @@ class ClaimRepository
             $claimInsurancePolicies = [];
 
             foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($claimInsurancePolicies, $insurancePolicy);
+                array_push($claimInsurancePolicies, $insurancePolicy->id);
             }
 
-            foreach ($patient->insurancePolicies->whereIn('id', $claimInsurancePolicies)->get() ?? [] as $insurancePolicy) {
+            foreach ($patient->insurancePolicies()->whereIn('insurance_policies.id', $claimInsurancePolicies)->get() ?? [] as $insurancePolicy) {
                 $newCode = 1;
                 $targetModel = ClaimValidation::select("id", "control_number")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
                 
@@ -889,7 +891,7 @@ class ClaimRepository
                     $addressPatient = $patient->user->addresses->first();
                     $addressCompany = $claim->company->addresses->first();
                     $contactCompany = $claim->company->contacts->first();
-                    
+
                     $dependent = (($insurancePolicy->own ?? true) == true)
                         ? null
                         : [
@@ -984,21 +986,21 @@ class ClaimRepository
                             ]
                         ],
                         "dependent" => $dependent ?? null,
-                        "providers" => [ /** Company */
+                       "providers" => [ /** Company */
                             [
                                 "providerType" => "BillingProvider",
                                 "npi" => $claim->company->npi ?? null,
                                 "employerId" => $claim->company->ein ?? null,
                                 "organizationName" => $claim->company->name ?? null,
                                 "address" => [
-                                    "address1" => $addressCompany->address,
-                                    "city" => $addressCompany->city,
-                                    "state" => substr(($addressCompany->state ?? ''), 0, 3) ?? null,
-                                    "postalCode" => $addressCompany->zip
+                                    "address1" => $addressCompany->address ?? null,
+                                    "city" => $addressCompany->city ?? null,
+                                    "state" => substr(($addressCompany->state ?? ''), 0, 3),
+                                    "postalCode" => $addressCompany->zip ?? null
                                 ],
                                 "contactInformation" => [
-                                    "name" => $contactCompany->contact_name,
-                                    "phoneNumber" => $contactCompany->phone
+                                    "name" => $contactCompany->contact_name ?? null,
+                                    "phoneNumber" => $contactCompany->phone ?? null
                                 ]
                             ],
                         ],
@@ -1053,7 +1055,7 @@ class ClaimRepository
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            return null;
+            return $e;
         }
     }
 

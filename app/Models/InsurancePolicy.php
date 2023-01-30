@@ -127,7 +127,7 @@ class InsurancePolicy extends Model implements Auditable
 
     public function getOwnAttribute()
     {
-        return $this->pivot['own_insurance'];
+        return $this->pivot['own_insurance'] ?? null;
     }
 
     public function getSubscriberAttribute()
