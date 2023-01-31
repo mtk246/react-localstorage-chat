@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
             ProcedureDataSeeder::class,
             SocialNetworkSeeder::class,
             MaritalStatusSeeder::class,
-            HealthProfessionalType::class,
-            InsurancePolicyType::class,
-            ClearingHouse::class,
-            TypeCatalog::class,
+            HealthProfessionalTypeSeeder::class,
+            InsurancePolicyTypeSeeder::class,
+            ClearingHouseDataSeeder::class,
+            TypeCatalogSeeder::class,
             ClaimDataSeeder::class,
         ]);
     }
