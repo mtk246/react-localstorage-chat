@@ -89,7 +89,7 @@ class ClaimBatchController extends Controller
 
         if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
 
-        $rs = $this->claimBatchRepository->submitToClearingHouse($token, $id);
+        $rs = $this->claimBatchRepository->submitToClearingHouse($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error submitting claim batch"), 400);
     }

@@ -380,7 +380,7 @@ class ClaimBatchRepository
                 "shipping_date"      => now(),
             ]);
             foreach ($claimBatch->claims as $claim) {
-                $claimRepository->claimSubmit($token, $claim->id, $claimBatch->id)
+                $claimRepository->claimSubmit($token, $claim->id, $claimBatch->id);
             }
 
             DB::commit();

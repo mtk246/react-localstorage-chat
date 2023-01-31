@@ -1012,7 +1012,11 @@ class ClaimRepository
                             "claimChargeAmount" => $claim->amount_paid ?? "28.75",
                             "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                             "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
-                            "signatureIndicator" => $claim->claimFormattable->patientOrInsuredInformation->insured_signature ? "Y" : "N",
+                            "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)
+                                                    ? ($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
+                                                        ? "Y"
+                                                        : "N"
+                                                    : "N",
                             "planParticipationCode" => "A",
                             "benefitsAssignmentCertificationIndicator" => "Y",
                             "releaseInformationCode" => "Y",
@@ -1377,7 +1381,11 @@ class ClaimRepository
                         "claimChargeAmount" => $claim->amount_paid ?? "28.75",
                         "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                         "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
-                        "signatureIndicator" => $claim->claimFormattable->patientOrInsuredInformation->insured_signature ? "Y" : "N",
+                        "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)
+                                                    ? ($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
+                                                        ? "Y"
+                                                        : "N"
+                                                    : "N",
                         "planParticipationCode" => "A",
                         "benefitsAssignmentCertificationIndicator" => "Y",
                         "releaseInformationCode" => "Y",
