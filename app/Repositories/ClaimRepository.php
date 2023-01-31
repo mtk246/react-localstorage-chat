@@ -1409,10 +1409,26 @@ class ClaimRepository
 
                 if ($response->successful()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Success')->first();
+                    $statusSubmitted = ClaimStatus::whereStatus('Submitted')->first();
+
+                    $this->changeStatus([
+                        "status_id"    => $statusSubmitted->id,
+                        "private_note" => "Submitted to ClearingHouse"
+                    ], $claim->id);
                 } else if ($response->serverError()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Error')->first();
+                    
+                    $this->AddNoteCurrentStatus([
+                        "private_note" => "Error in transmission"
+                    ], $claim->id);
                 } else if ($response->failed()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Error')->first();
+                    $statusDenied = ClaimStatus::whereStatus('Denied')->first();
+
+                    $this->changeStatus([
+                        "status_id"    => $statusDenied->id,
+                        "private_note" => "Submitted to ClearingHouse"
+                    ], $claim->id);
                 }
 
                 $claimTransmissionResponse = ClaimTransmissionResponse::updateOrCreate([
@@ -1492,8 +1508,8 @@ class ClaimRepository
             DB::beginTransaction();
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
-                    ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first() ?? null;
+                                 ->orderBy("created_at", "desc")
+                                 ->orderBy("id", "asc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 PrivateNote::create([
