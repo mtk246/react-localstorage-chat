@@ -22,10 +22,15 @@ class DatabaseSeeder extends Seeder
             ModifierSeeder::class,
             DiagnosisSeeder::class,
             //DataTestSeeder::class,
-            ServiceDataSeeder::class,
+            //ServiceDataSeeder::class,
             ProcedureDataSeeder::class,
-            ClaimDataSeeder::class,
             SocialNetworkSeeder::class,
+            MaritalStatusSeeder::class,
+            HealthProfessionalType::class,
+            InsurancePolicyType::class,
+            ClearingHouse::class,
+            TypeCatalog::class,
+            ClaimDataSeeder::class,
         ]);
     }
 }
