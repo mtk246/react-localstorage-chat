@@ -34,7 +34,7 @@ class CompanyRepository
                 "code"          => generateNewCode("CO", 5, date("Y"), Company::class, "code"),
                 "name"          => $data["name"],
                 "npi"           => $data["npi"],
-                "ein"           => $data["ein"],
+                "ein"           => $data["ein"] ?? null,
                 "upin"          => $data["upin"] ?? null,
                 "clia"          => $data["clia"] ?? null,
                 "name_suffix_id" => $data["name_suffix_id"] ?? null
@@ -398,7 +398,7 @@ class CompanyRepository
             }
 
             $company->update([
-                "ein"           => $data["ein"],
+                "ein"           => $data["ein"] ?? null,
                 "upin"          => $data["upin"] ?? null,
                 "clia"          => $data["clia"] ?? null,
                 "name_suffix_id" => $data["name_suffix_id"] ?? null
