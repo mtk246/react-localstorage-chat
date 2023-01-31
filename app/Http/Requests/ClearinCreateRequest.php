@@ -29,7 +29,7 @@ class ClearinCreateRequest extends FormRequest
         return [
             'name'               => ['required', 'string', new IUnique(ClearingHouse::class, 'name')],
             'org_type_id'        => ['required', 'integer'],
-            'ack_required'       => ['required', 'boolean'],
+            'ack_required'       => ['nullable', 'boolean'],
             'nickname'           => ['nullable', 'string'],
             'transmission_format_id' => ['required', 'integer'],
             'abbreviation'         => ['required', 'string', 'max:20'],
