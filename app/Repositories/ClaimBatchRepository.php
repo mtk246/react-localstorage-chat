@@ -215,7 +215,7 @@ class ClaimBatchRepository
                                              ->orderBy("id", "asc")->first();
 
                 $claims[$key]["transmission_status"]   = $transmissionCurrent->claimTransmissionStatus ?? null;
-                $claims[$key]["transmission_response"] = $transmissionCurrent->response_details ?? null;
+                $claims[$key]["transmission_response"] = json_decode($transmissionCurrent->response_details ?? null);
             }
 
             $record = [

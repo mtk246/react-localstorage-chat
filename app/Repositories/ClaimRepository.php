@@ -20,6 +20,8 @@ use App\Models\Claim;
 use App\Models\ClaimEligibility;
 use App\Models\ClaimValidation;
 use App\Models\ClaimEligibilityStatus;
+use App\Models\ClaimTransmissionStatus;
+use App\Models\ClaimTransmissionResponse;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormI;
 use App\Models\ClaimFormPService;
@@ -1416,7 +1418,7 @@ class ClaimRepository
                 $claimTransmissionResponse = ClaimTransmissionResponse::updateOrCreate([
                     "claim_id"                     => $claim->id,
                     "claim_batch_id"               => $batchId,
-                    "claim_transmission_status_id" => $claimTransmissionStatus,
+                    "claim_transmission_status_id" => $claimTransmissionStatus->id,
                     "response_details"             => isset($response) ? $response->body() : null,
                 ]);
             }

@@ -832,8 +832,11 @@ class DoctorRepository
             });
         }
         if (isset($companyId)) {
-            $healthProfessionals = $healthProfessionals->whereHas('companies', function ($query) use ($companyId) {
+            $healthProfessionals = $healthProfessionals->whereHas('companies', function ($query) use ($companyId, $billingCompany) {
                 $query->where('company_id', $companyId);
+		if (isset($billingCompany)) {
+		    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+		}
             });
         }
         if (!isset($billingCompany) && !isset($companyId)) {
