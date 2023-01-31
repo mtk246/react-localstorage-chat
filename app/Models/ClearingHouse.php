@@ -41,7 +41,6 @@ class ClearingHouse extends Model implements Auditable
     protected $fillable = [
         "code",
         "name",
-        "ack_required",
         "org_type_id",
         "transmission_format_id"
     ];

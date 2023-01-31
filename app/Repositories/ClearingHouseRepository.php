@@ -28,7 +28,6 @@ class ClearingHouseRepository
                 "code"                   => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClearingHouse::class, "code"),
                 "name"                   => $data["name"],
                 "org_type_id"            => $data["org_type_id"],
-                "ack_required"           => $data["ack_required"] ?? false,
                 "transmission_format_id" => $data["transmission_format_id"]
             ]);
             
@@ -214,7 +213,6 @@ class ClearingHouseRepository
             $clearing->update([
                 "name"                   => $data["name"],
                 "org_type_id"            => $data["org_type_id"],
-                "ack_required"           => $data["ack_required"] ?? false,
                 "transmission_format_id" => $data["transmission_format_id"]
             ]);
 
