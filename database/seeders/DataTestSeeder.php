@@ -56,6 +56,7 @@ class DataTestSeeder extends Seeder
             $billingCompanies = [
                 [
                     'name'         => 'Medical Claims Consultants',
+                    'logo'         => 'http://31.220.55.211:81/img-billing-company/1675262605.png',
                     'abbreviation' => 'MCC',
                     'address' => [
                         'address' => '780 Northwest Le Jeune Road',
@@ -72,6 +73,7 @@ class DataTestSeeder extends Seeder
                 ],
                 [
                     'name'         => 'Billing Paradise Revenue Cyde Master',
+                    'logo'         => null,
                     'abbreviation' => 'BillingP',
                     'address' => [
                         'address' => '23441 Golden Springs Drive',
@@ -88,6 +90,7 @@ class DataTestSeeder extends Seeder
                 ],
                 [
                     'name'         => 'Advanced Pacific Medical, Llc',
+                    'logo'         => null,
                     'abbreviation' => 'AdvancedMD',
                     'address' => [
                         'address' => 'San Diego Street',
@@ -111,6 +114,7 @@ class DataTestSeeder extends Seeder
                 ], [
                     'code'         => generateNewCode('BC', 5, date('Y'), BillingCompany::class, 'code'),
                     'status'       => true,
+                    'logo'         => $bcompany['logo'],
                     'abbreviation' => $bcompany['abbreviation']
                 ]);
                 if ($bcompany['address']['address'] != '') {
@@ -1786,6 +1790,7 @@ class DataTestSeeder extends Seeder
                 'profile'                      => [
                     'sex'                  => 'M',
                     'first_name'           => 'Leonard',
+                    'avatar'               => 'http://31.220.55.211:81/img-profile/1675264136png',
                     'last_name'            => 'Berkowitz',
                     'middle_name'          => 'Kyle',
                     'ssn'                  => '158865935',
@@ -1838,6 +1843,7 @@ class DataTestSeeder extends Seeder
 
                 'profile'                      => [
                     'sex'                  => 'M',
+                    'avatar'               => 'http://31.220.55.211:81/img-profile/1675264136png',
                     'first_name'           => 'Rafael',
                     'last_name'            => 'Botta',
                     'middle_name'          => 'Jesse',
@@ -1895,6 +1901,7 @@ class DataTestSeeder extends Seeder
 
                 'profile'                      => [
                     'sex'                  => 'F',
+                    'avatar'               => 'http://31.220.55.211:81/img-profile/1675263673png',
                     'first_name'           => 'Aliuska',
                     'last_name'            => 'Carmenate',
                     'middle_name'          => null,
@@ -1930,6 +1937,7 @@ class DataTestSeeder extends Seeder
                     'ssn'           => $dataHP['profile']['ssn']
                 ], [
                     'ssn'           => $dataHP['profile']['ssn'],
+                    'avatar'        => $dataHP['profile']['avatar'] ?? null,
                     'first_name'    => $dataHP['profile']['first_name'],
                     'middle_name'   => $dataHP['profile']['middle_name'] ?? '',
                     'last_name'     => $dataHP['profile']['last_name'],
@@ -1943,6 +1951,7 @@ class DataTestSeeder extends Seeder
                     'date_of_birth' => $dataHP['profile']['date_of_birth'],
                 ], [
                     'ssn'           => $dataHP['profile']['ssn'],
+                    'avatar'        => $dataHP['profile']['avatar'] ?? null,
                     'first_name'    => $dataHP['profile']['first_name'],
                     'middle_name'   => $dataHP['profile']['middle_name'] ?? '',
                     'last_name'     => $dataHP['profile']['last_name'],
@@ -2174,6 +2183,7 @@ class DataTestSeeder extends Seeder
 
                 'profile'                       => [
                     'ssn'                       => '100322476',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
                     'first_name'                => 'Leonela',
                     'last_name'                 => 'Fonseca',
                     'middle_name'               => null,
@@ -2308,7 +2318,7 @@ class DataTestSeeder extends Seeder
 
         foreach ($patients as $dataP) {
             /** Create Profile */
-            if (isset($dataHP['profile']['ssn'])) {
+            if (isset($dataP['profile']['ssn'])) {
                 $profile = Profile::updateOrCreate([
                     'first_name'    => $dataP['profile']['first_name'],
                     'last_name'     => $dataP['profile']['last_name'],
@@ -2316,6 +2326,7 @@ class DataTestSeeder extends Seeder
                     'ssn'           => $dataP['profile']['ssn']
                 ], [
                     'ssn'           => $dataP['profile']['ssn'],
+                    'avatar'        => $dataP['profile']['avatar'] ?? null,
                     'first_name'    => $dataP['profile']['first_name'],
                     'middle_name'   => $dataP['profile']['middle_name'] ?? '',
                     'last_name'     => $dataP['profile']['last_name'],
