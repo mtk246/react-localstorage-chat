@@ -259,7 +259,7 @@ class ReportRepository implements ReportInterface
         /** 1a. Insured ID number */
         if (isset($this->subscriber)) {
             $this->pdf->SetFont($this->fontFamily, '', 9);
-            $ssn = $this->subscriber->ssn ?? ($this->subscriber->profile->ssn ?? '');
+            $ssn = isset($this->subscriber->ssn) ? $this->subscriber->ssn : (isset($this->subscriber->profile->ssn) ? $this->subscriber->profile->ssn : '');
             $this->pdf->MultiCell(70, 5.8, $ssn, 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
 
             /** 4. Insured name */
@@ -275,7 +275,7 @@ class ReportRepository implements ReportInterface
                 $this->pdf->SetFont($this->fontFamily, '', 10);
 
                 /** 2. Patient full name */
-                $name = ($this->policyPrimary->own ?? true) ? '' :($this->patient->user->profile->last_name . ', ' . $this->patient->user->profile->first_name . ', ' . substr($this->patient->user->profile->middle_name, 0, 1));
+                $name = ($this->patient->user->profile->last_name . ', ' . $this->patient->user->profile->first_name . ', ' . substr($this->patient->user->profile->middle_name, 0, 1));
                 $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 10, 48, true, 0, false, true, 0, 'T', true);
                 
                 /** 3. Patient Birth date and sex */
@@ -296,15 +296,15 @@ class ReportRepository implements ReportInterface
                 /** 5. Patient addres and contact */
                 $address = $this->patient->user->addresses->first();
                 $this->pdf->SetFont($this->fontFamily, '', 10);
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($address->address ?? '', 0, 28), 0, 'L', false, 1, 10, 56.5, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($address->city ?? '', 0, 24), 0, 'L', false, 1, 10, 64.5, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($address->state ?? '', 0, 3), 0, 'L', false, 1, 72.5, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->address ?? '', 0, 28), 0, 'L', false, 1, 10, 56.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->city ?? '', 0, 24), 0, 'L', false, 1, 10, 64.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->state ?? '', 0, 3), 0, 'L', false, 1, 72.5, 64.5, true, 0, false, true, 0, 'T', true);
                 $this->pdf->SetFont($this->fontFamily, '', 9);
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($address->zip ?? '', 0, 12), 0, 'L', false, 1, 10, 74, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($address->zip ?? '', 0, 12), 0, 'L', false, 1, 10, 74, true, 0, false, true, 0, 'T', true);
 
                 $contact = $this->patient->user->contacts->first();
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($contact->phone ?? '', 0, 3), 0, 'L', false, 1, 44.5, 74, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->own ?? true) ? '' : substr($contact->phone ?? '', 3, 10), 0, 'L', false, 1, 53, 74, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($contact->phone ?? '', 0, 3), 0, 'L', false, 1, 44.5, 74, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, substr($contact->phone ?? '', 3, 10), 0, 'L', false, 1, 53, 74, true, 0, false, true, 0, 'T', true);
 
                 /** 6. Patient relationship to insured */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
