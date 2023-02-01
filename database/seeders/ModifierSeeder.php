@@ -2074,5 +2074,23 @@ Note: If only one patient is seen at a particular location, report code R0070 wi
                 "invalid_combinations" => []
             ]
         ];
+
+        foreach ($modifiers as $modifier) {
+            $mod = Modifier::firstOrCreate([
+                'modifier'                    => $modifier['modifier'],
+                'special_coding_instructions' => $modifier['special_coding_instructions'],
+                'start_date'                  => '1990-05-04',
+                'active'                      => true,                
+            ]);
+
+            if (isset($modifier['invalid_combinations'])) {
+                foreach ($modifier['invalid_combinations'] as $invalid) {
+                    ModifierInvalidCombination::firstOrcreate([
+                        "modifier_id"  => $mod->id,
+                        "invalid_combination" =>  $invalid
+                    ]);
+                }
+            }
+        }
     }
 }
