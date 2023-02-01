@@ -308,7 +308,7 @@ class Claim extends Model implements Auditable
         $claimForm = $this->claimFormattable;
         if ($this->claim_formattable_type == ClaimFormP::class) {
             foreach ($claimForm->claimFormServices  ?? [] as $service) {
-                $billed += ($service->price ?? 0) - ($service->copay ?? 0)
+                $billed += (($service->price ?? 0) - ($service->copay ?? 0));
             }
         }
         return $billed;
