@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ClearingHouseDataSeeder::class,
             TypeCatalogSeeder::class,
             ClaimDataSeeder::class,
+            //DataTestSeeder::class
         ]);
     }
 }
