@@ -519,7 +519,7 @@ class DataTestSeeder extends Seeder
                             'contactable_id'     => $facility->id,
                             'contactable_type'   => Facility::class,
                             'billing_company_id' => $billingCompany->id ?? $billingCompany
-                        ], $dataF['address']);
+                        ], $dataF['contact']);
                     }
                 }
 
