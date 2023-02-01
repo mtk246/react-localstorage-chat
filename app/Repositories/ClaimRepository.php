@@ -1423,7 +1423,7 @@ class ClaimRepository
                     ], $claim->id);
                 } else if ($response->failed()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Error')->first();
-                    $statusDenied = ClaimStatus::whereStatus('Denied')->first();
+                    $statusDenied = ClaimStatus::whereStatus('Rejected')->first();
 
                     $this->changeStatus([
                         "status_id"    => $statusDenied->id,

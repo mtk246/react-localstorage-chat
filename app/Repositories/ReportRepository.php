@@ -259,7 +259,7 @@ class ReportRepository implements ReportInterface
         /** 1a. Insured ID number */
         if (isset($this->subscriber)) {
             $this->pdf->SetFont($this->fontFamily, '', 9);
-            $ssn = $this->subscriber->ssn ?? $this->subscriber->profile->ssn;
+            $ssn = $this->subscriber->ssn ?? ($this->subscriber->profile->ssn ?? '');
             $this->pdf->MultiCell(70, 5.8, $ssn, 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
 
             /** 4. Insured name */
