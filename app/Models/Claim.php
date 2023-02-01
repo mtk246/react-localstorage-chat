@@ -304,6 +304,14 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
+        $billed = 0;
+        $claimForm = $this->claimFormattable;
+        if ($this->claim_formattable_type == ClaimFormP::class) {
+            foreach ($claimForm->claimFormServices  ?? [] as $service) {
+                $billed += ($service->price ?? 0) - ($service->copay ?? 0)
+            }
+        }
+        return $billed;
         return '0.00';
     }
 
