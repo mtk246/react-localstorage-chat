@@ -2312,7 +2312,853 @@ class DataTestSeeder extends Seeder
                 ],
                 'public_note'                       => 'Generate seeder patient',
                 'private_note'                      => 'Generate seeder patient',
-            ],
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '155555',
+
+                'profile'                       => [
+                    'ssn'                       => '767121246',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Maria del Carmen',
+                    'last_name'                 => 'Alfonso',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1934-09-02',
+                    'sex'                       => 'F',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Andres Rosales',
+                    'spuse_work'                    => 'Doctor',
+                    'spuse_work_phone'              => '04241233245',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => 'MDALFMA',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '16000 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571768'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '7863188984',
+                    'phone'  => '7863188984',
+                    'fax'    => '7863188984',
+                    'email'  => 'mariac@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '767121246M',
+                        'group_number'        => 'B1436',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2012-07-25',
+                        'end_date'            => '2025-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1999-04-11',
+                            'first_name'       => 'Davidd',
+                            'last_name'        => 'Ochoaa',
+                            'address' => [
+                                'address'         => '13004 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089222',
+                                'phone'  => '7862089222',
+                                'fax'    => '8003341000',
+                                'email'  => 'memows@davidochoa.net',
+                            ]
+                        ],
+                    ],
+                    [
+                        'policy_number'       => '8183745890',
+                        'group_number'        => '818374',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => 6,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'S', 'description' => 'Secundary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2010-07-25',
+                        'end_date'            => '2028-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Other')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '2020-04-11',
+                            'first_name'       => 'Josefa',
+                            'last_name'        => 'Gonza',
+                            'address' => [
+                                'address'         => 'Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089999',
+                                'phone'  => '7862089999',
+                                'fax'    => '8003341046',
+                                'email'  => 'josefa@gonzales.net',
+                            ]
+                        ],
+                    ]
+                ],
+                'guarantor'                   => [
+                    'name'                    => 'Carlos Cardenas',
+                    'phone'                   => '7862089222',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Dioshila Cardenas',
+                        'cellphone'       => '7862089999',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Kevin Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300455 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089235',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '1666666',
+
+                'profile'                       => [
+                    'ssn'                       => '777121246',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Wendy',
+                    'last_name'                 => 'Barrueto',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1979-09-02',
+                    'sex'                       => 'F',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Carlos Rosales',
+                    'spuse_work'                    => 'Engineer',
+                    'spuse_work_phone'              => '04241235555',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => '441',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '1571 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571700'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '3053188984',
+                    'phone'  => '7863188984',
+                    'fax'    => '7863188984',
+                    'email'  => 'wendy@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => 'XJGH60100767',
+                        'group_number'        => 'A1436',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2018-07-25',
+                        'end_date'            => '2028-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1998-04-11',
+                            'first_name'       => 'Carlos',
+                            'last_name'        => 'Ochoa',
+                            'address' => [
+                                'address'         => '13000 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089555',
+                                'phone'  => '7862089555',
+                                'fax'    => '8003341000',
+                                'email'  => 'carlos@davidochoa.net',
+                            ]
+                        ],
+                    ],
+                 ], 
+                'guarantor'                   => [
+                    'name'                    => 'Andres Cardenas',
+                    'phone'                   => '7862089999',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Carlos Cardenas',
+                        'cellphone'       => '7862089888',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Andres Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300400 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089200',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '1777777',
+
+                'profile'                       => [
+                    'ssn'                       => '777121255',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Sara',
+                    'last_name'                 => 'Barrueto',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1955-09-02',
+                    'sex'                       => 'F',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Antonio contreras',
+                    'spuse_work'                    => 'Engineer',
+                    'spuse_work_phone'              => '04241237777',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => '451',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '1570 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571700'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '7863188984',
+                    'phone'  => '7863188984',
+                    'fax'    => '7863188984',
+                    'email'  => 'sara@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '917114965',
+                        'group_number'        => 'Y1436',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2017-07-25',
+                        'end_date'            => '2027-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1950-04-11',
+                            'first_name'       => 'Antonio',
+                            'last_name'        => 'Contretas',
+                            'address' => [
+                                'address'         => '13111 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089898',
+                                'phone'  => '7862089898',
+                                'fax'    => '8003341011',
+                                'email'  => 'antonio@contreras.net',
+                            ]
+                        ],
+                    ],
+                 ], 
+                'guarantor'                   => [
+                    'name'                    => 'Antonio Contreras Cardenas',
+                    'phone'                   => '7862089999',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Antonio Cardenas',
+                        'cellphone'       => '7862089444',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Andres Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300400 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089200',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '17777798',
+
+                'profile'                       => [
+                    'ssn'                       => '563612988',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'George',
+                    'last_name'                 => 'Borg',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1957-09-02',
+                    'sex'                       => 'M',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Carla Contreras',
+                    'spuse_work'                    => 'Engineer',
+                    'spuse_work_phone'              => '04241237722',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => '9311',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '3600 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571700'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '3863188984',
+                    'phone'  => '3863188984',
+                    'fax'    => '3863188984',
+                    'email'  => 'george@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '942794810',
+                        'group_number'        => '3W0885',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2016-07-25',
+                        'end_date'            => '2027-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1940-04-11',
+                            'first_name'       => 'Carla',
+                            'last_name'        => 'Contreras',
+                            'address' => [
+                                'address'         => '13121 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089844',
+                                'phone'  => '78620898948',
+                                'fax'    => '8003341011',
+                                'email'  => 'carla@contreras.net',
+                            ]
+                        ],
+                    ],
+                 ], 
+                'guarantor'                   => [
+                    'name'                    => 'Carla Contreras Cardenas',
+                    'phone'                   => '7562089999',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Carla Cardenas',
+                        'cellphone'       => '7867089444',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Andres Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300400 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089200',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '1898989',
+
+                'profile'                       => [
+                    'ssn'                       => '592490688',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Laura',
+                    'last_name'                 => 'Diaz',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1985-09-02',
+                    'sex'                       => 'F',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Fabricio Rosales',
+                    'spuse_work'                    => 'Doctor',
+                    'spuse_work_phone'              => '04241234565',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => 'MDDELMA',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '16089 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571768'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '7864488984',
+                    'phone'  => '7864488984',
+                    'fax'    => '7864488984',
+                    'email'  => 'laura@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '8251957729',
+                        'group_number'        => '589658',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2018-07-25',
+                        'end_date'            => '2029-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1996-04-11',
+                            'first_name'       => 'Car',
+                            'last_name'        => 'Diaz',
+                            'address' => [
+                                'address'         => '13044 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862077222',
+                                'phone'  => '7862077222',
+                                'fax'    => '80033471000',
+                                'email'  => 'Car@ads.net',
+                            ]
+                        ],
+                    ],
+                    [
+                        'policy_number'       => '592490688A',
+                        'group_number'        => '8183747',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => 6,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'S', 'description' => 'Secundary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2012-07-25',
+                        'end_date'            => '2026-07-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Other')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '2020-04-11',
+                            'first_name'       => 'Car',
+                            'last_name'        => 'Gonza',
+                            'address' => [
+                                'address'         => 'Southwest 688th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089925',
+                                'phone'  => '7862089925',
+                                'fax'    => '8003341025',
+                                'email'  => 'car@gonzales.net',
+                            ]
+                        ],
+                    ]
+                ],
+                'guarantor'                   => [
+                    'name'                    => 'Car Cardenas',
+                    'phone'                   => '7862089722',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Car Cardenas',
+                        'cellphone'       => '7862879999',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Kevin Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300455 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089235',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '17896325',
+
+                'profile'                       => [
+                    'ssn'                       => '593470117',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Juan',
+                    'last_name'                 => 'Diaz',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '1975-09-02',
+                    'sex'                       => 'M',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Fabiana Rosales',
+                    'spuse_work'                    => 'Doctor',
+                    'spuse_work_phone'              => '04241234565',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => 'MDDELMAR',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '160879 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571768'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '7864488912',
+                    'phone'  => '7864488912',
+                    'fax'    => '7864488912',
+                    'email'  => 'juan@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '8251533376',
+                        'group_number'        => '5896588',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2018-07-01',
+                        'end_date'            => '2029-07-01',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1965-04-11',
+                            'first_name'       => 'Fab',
+                            'last_name'        => 'Diaz',
+                            'address' => [
+                                'address'         => '13044 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '7861077222',
+                                'phone'  => '7861077222',
+                                'fax'    => '80013471000',
+                                'email'  => 'fab@ads.net',
+                            ]
+                        ],
+                    ],
+                    [
+                        'policy_number'       => 'XJMH93116737',
+                        'group_number'        => '81837475',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => 6,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'S', 'description' => 'Secundary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2012-08-25',
+                        'end_date'            => '2026-08-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Other')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '2020-04-11',
+                            'first_name'       => 'Fab',
+                            'last_name'        => 'Gonza',
+                            'address' => [
+                                'address'         => 'Southwest 688th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861744'
+                            ],
+                            'contact' => [
+                                'mobile' => '7862089933',
+                                'phone'  => '7862089933',
+                                'fax'    => '8003341033',
+                                'email'  => 'fab@gonzales.net',
+                            ]
+                        ],
+                    ]
+                ],
+                'guarantor'                   => [
+                    'name'                    => 'Fab Cardenas',
+                    'phone'                   => '7862089422',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Fab Cardenas',
+                        'cellphone'       => '7862879933',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Kevin Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300455 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089235',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ], [
+                'billing_company'                   => 'MCC',
+                'driver_license'                    => '17846325',
+
+                'profile'                       => [
+                    'ssn'                       => '267687061',
+                    'avatar'                    => 'http://31.220.55.211:81/img-profile/1675263673png',
+                    'first_name'                => 'Diego',
+                    'last_name'                 => 'Medina',
+                    'middle_name'               => null,
+                    'date_of_birth'             => '2020-09-02',
+                    'sex'                       => 'M',
+                    'social_medias'             => null
+                ],
+                
+                'marital_status_id'                 => MaritalStatus::whereName('Married')->first()->id,
+                'marital'                           => [
+                    'spuse_name'                    => 'Yesenia Diaz',
+                    'spuse_work'                    => 'Student',
+                    'spuse_work_phone'              => '04241234585',
+                ],
+
+                'company_id'                        => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
+                'company_med_num'                   => '2445',
+
+                'language'                          => 'en',
+
+                'addresses' => [
+                    [
+                        //'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address'         => '1760879 SW 103 PL',
+                        'city'            => 'Miami',
+                        'state'           => 'FL - Florida',
+                        'zip'             => '331571768'
+                    ]
+                ],
+                'contact' => [
+                    'mobile' => '3058649949',
+                    'phone'  => '3058649949',
+                    'fax'    => '3058649949',
+                    'email'  => 'diego@mail.net',
+                ],
+                'insurance_policies'                       => [
+                    [
+                        'policy_number'       => '267687061A',
+                        'group_number'        => '5896111',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => InsurancePlan::where([
+                            'name'             => 'Connect 1500 Gold',
+                            'insurance_company_id' => InsuranceCompany::wherePayerId('PAS01')->first()->id])->first()->id,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'P', 'description' => 'Primary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2015-07-01',
+                        'end_date'            => '2025-07-01',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Self/Patient is Insured')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '1975-04-11',
+                            'first_name'       => 'Mary',
+                            'last_name'        => 'Dante',
+                            'address' => [
+                                'address'         => '13044 Southwest 88th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861768'
+                            ],
+                            'contact' => [
+                                'mobile' => '8881077222',
+                                'phone'  => '8881077222',
+                                'fax'    => '88813471000',
+                                'email'  => 'mary@ads.net',
+                            ]
+                        ],
+                    ],
+                    [
+                        'policy_number'       => 'XJNH12299113',
+                        'group_number'        => '818374785',
+                        'insurance_company'   => InsuranceCompany::wherePayerId('PAS01')->first()->id,
+                        'insurance_plan'      => 6,
+                        'type_responsibility_id'      => TypeCatalog::where(['code' => 'S', 'description' => 'Secundary'])->first()->id,
+                        'insurance_policy_type_id'      => TypeCatalog::where(['code' => '1', 'description' => 'Health'])->first()->id,
+                        'eff_date'            => '2012-08-25',
+                        'end_date'            => '2026-08-25',
+                        'assign_benefits'     => true,
+                        'release_info'        => true,
+                        'own_insurance'       => false,
+
+                        'subscriber'            => [
+                            'relationship_id'  => TypeCatalog::whereDescription('Other')->first()->id,
+                            'ssn'              => null,
+                            'date_of_birth'    => '2020-04-11',
+                            'first_name'       => 'Jesus',
+                            'last_name'        => 'Medina',
+                            'address' => [
+                                'address'         => 'Southwest 688th Terrace North',
+                                'city'            => 'Miami',
+                                'state'           => 'FL - Florida',
+                                'zip'             => '331861744'
+                            ],
+                            'contact' => [
+                                'mobile' => '7882089933',
+                                'phone'  => '7882089933',
+                                'fax'    => '8083341033',
+                                'email'  => 'jesus@gonzales.net',
+                            ]
+                        ],
+                    ]
+                ],
+                'guarantor'                   => [
+                    'name'                    => 'Jesus Medina',
+                    'phone'                   => '7862089482',
+                ],
+
+                'emergency_contacts'                => [
+                    [
+                        'name'            => 'Jesus Medina',
+                        'cellphone'       => '7862878883',
+                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id
+                    ]
+                ],
+
+                'employments'                       => [
+                    [
+                        'employer_name'       => 'Kevin Per',
+                        'position'            => 'Development',
+                        'employer_address'    => '1300455 Southwest 88th Terrace North',
+                        'employer_phone'      => '7862089235',
+                    ]
+                ],
+                'public_note'                       => 'Generate seeder patient',
+                'private_note'                      => 'Generate seeder patient',
+            ]
         ];
 
 
