@@ -101,20 +101,15 @@ class CompanyRepository
 
             if (isset($data['statements'])) {
                 foreach ($data['statements'] as $statement) {
-                    if (isset($statement["name"])) {
-                        CompanyStatement::create([
-                            "name"               => $statement["name"],
-                            "start_date"         => $statement["start_date"] ?? null,
-                            "end_date"           => $statement["end_date"] ?? null,
-                            "date"               => $statement["date"] ?? null,
-                            "rule_id"            => $statement["rule_id"] ?? null,
-                            "when_id"            => $statement["when_id"] ?? null,
-                            "apply_to_id"        => $statement["apply_to_id"] ?? null,
-                            "company_id"         => $company->id,
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany
-                        ]);
-                    }
-                    
+                    CompanyStatement::create([
+                        "start_date"         => $statement["start_date"] ?? null,
+                        "end_date"           => $statement["end_date"] ?? null,
+                        "rule_id"            => $statement["rule_id"] ?? null,
+                        "when_id"            => $statement["when_id"] ?? null,
+                        "apply_to_ids"       => $statement["apply_to_ids"] ?? null,
+                        "company_id"         => $company->id,
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany
+                    ]);
                 }
             }
             if (isset($data['exception_insurance_companies'])) {
@@ -261,6 +256,7 @@ class CompanyRepository
                 "nicknames",
                 "billingCompanies"
             ]);
+            
         } else {
             $data = Company::whereHas("billingCompanies", function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
@@ -360,6 +356,148 @@ class CompanyRepository
                 }
             ])->first();
         }
+        
+        $record = [
+            "id"             => $company->id,
+            "code"           => $company->code,
+            "name"           => $company->name,
+            "npi"            => $company->npi,
+            "ein"            => $company->ein,
+            "upin"           => $company->upin,
+            "clia"           => $company->clia,
+            "name_suffix_id" => $company->name_suffix_id,
+            "name_suffix"    => $company->nameSuffix->description ?? null,
+            "created_at"     => $company->created_at,
+            "updated_at"     => $company->updated_at,
+            "last_modified"  => $company->last_modified,
+            "public_note"    => isset($company->publicNote) ? $company->publicNote->note : null,
+            "taxonomies"     => $company->taxonomies,
+            "facilities"     => $company->facilities
+        ];
+        $record['billing_companies'] = [];
+
+        foreach ($company->billingCompanies as $billingCompany) {
+            $abbreviation = EntityAbbreviation::where([
+                'abbreviable_id'     => $company->id,
+                'abbreviable_type'   => Company::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $nickname = EntityNickname::where([
+                'nicknamable_id'     => $company->id,
+                'nicknamable_type'   => Company::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $address = Address::where([
+                "address_type_id"    => null,
+                "addressable_id"     => $company->id,
+                "addressable_type"   => Company::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $addressType = AddressType::where('name', 'Other')->first();
+            if (isset($addressType)) {
+                $payment_address = Address::where([
+                    "address_type_id"    => $addressType->id,
+                    "addressable_id"     => $company->id,
+                    "addressable_type"   => Company::class,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany
+                ])->first();
+            }
+            $contact = Contact::where([
+                "contactable_id"     => $company->id,
+                "contactable_type"   => Company::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $private_note = PrivateNote::where([
+                "publishable_id"     => $company->id,
+                "publishable_type"   => Company::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+
+            $exception_insurance_companies = $company->exceptionInsuranceCompanies()
+                                                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                                                     ->get();
+            $company_statements = $company->companyStatements()
+                                          ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+
+            $exceptionIC = [];
+            foreach ($exception_insurance_companies as $exception) {
+                array_push($exceptionIC, [
+                    'id' => $exception->insuranceCompany->id,
+                    'code' => $exception->insuranceCompany->code,
+                    'name' => $exception->insuranceCompany->name,
+                    'payer_id' => $exception->insuranceCompany->payer_id,
+                ]);
+            }
+
+            $statements = [];
+            foreach ($company_statements as $statement) {
+                array_push($statements, [
+                    "id"           => $statement->id,
+                    "start_date"   => $statement->start_date,
+                    "end_date"     => $statement->end_date,
+                    "rule_id"      => $statement->rule_id,
+                    "rule"         => $statement->rule->description ?? null,
+                    "when_id"      => $statement->when_id,
+                    "when"         => $statement->when->description ?? null,
+                    "apply_to_ids" => $statement->apply_to_ids,
+                ]);
+            }
+            
+
+            if (isset($address)) {
+                $company_address = [
+                    "zip"                      => $address->zip,
+                    "city"                     => $address->city,
+                    "state"                    => $address->state,
+                    "address"                  => $address->address,
+                    "country"                  => $address->country,
+                    "address_type_id"          => $address->address_type_id,
+                    "country_subdivision_code" => $address->country_subdivision_code,
+                ];
+            };
+
+            if (isset($payment_address)) {
+                $company_payment_address = [
+                    "zip"                      => $payment_address->zip,
+                    "city"                     => $payment_address->city,
+                    "state"                    => $payment_address->state,
+                    "address"                  => $payment_address->address,
+                    "country"                  => $payment_address->country,
+                    "address_type_id"          => $payment_address->address_type_id,
+                    "country_subdivision_code" => $payment_address->country_subdivision_code,
+                ];
+            };
+
+            if (isset($contact)) {
+                $company_contact = [
+                    "fax"          => $contact->fax,
+                    "email"        => $contact->email,
+                    "phone"        => $contact->phone,
+                    "mobile"       => $contact->mobile,
+                    "contact_name" => $contact->contact_name,
+                ];
+            };
+            array_push($record['billing_companies'], [
+                "id"   => $billingCompany->id,
+                "name" => $billingCompany->name,
+                "code" => $billingCompany->code,
+                "abbreviation" => $billingCompany->abbreviation,
+                "private_company" => [
+                    "status"       => $billingCompany->pivot->status ?? false,
+                    "edit_name"    => isset($nickname->nickname) ? true : false,
+                    "nickname"     => $nickname->nickname ?? '',
+                    "abbreviation" => $abbreviation->abbreviation ?? '',
+                    "private_note" => $private_note->note ?? '',
+                    "address"         => isset($company_address) ? $company_address : null,
+                    "payment_address" => isset($company_payment_address) ? $company_payment_address : null,
+                    "contact"         => isset($company_contact) ? $company_contact : null,
+                    "exception_insurance_companies" => $exceptionIC ?? [],
+                    "company_statements"            => $statements ?? []
+                ]
+            ]);
+        }
+
+        return !is_null($record) ? $record : null;
         return !is_null($company) ? $company : null;
     }
 
@@ -460,35 +598,17 @@ class CompanyRepository
             }
 
             if (isset($data['statements'])) {
-                foreach ($company->companyStatement as $statementDB) {
-                    $find = false;
-                    foreach ($data['statements'] as $statement) {
-                        if ($statement['name'] == $statementDB->name) {
-                            $find = true;
-                        }
-                    }
-                    if ($find == false) {
-                        $statementDB->delete();
-                    }
-                }
-
+                $company->companyStatement()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
                 foreach ($data['statements'] as $statement) {
-                    if (isset($statement["name"])) {
-                        CompanyStatement::updateOrCreate([
-                            "name"               => $statement["name"],
-                            "company_id"         => $company->id,
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany
-                        ],
-                        [
-                            "start_date"         => $statement["start_date"] ?? null,
-                            "end_date"           => $statement["end_date"] ?? null,
-                            "date"               => $statement["date"] ?? null,
-                            "rule_id"            => $statement["rule_id"] ?? null,
-                            "when_id"            => $statement["when_id"] ?? null,
-                            "apply_to_id"        => $statement["apply_to_id"] ?? null
-                        ]);
-                    }
-                    
+                    CompanyStatement::create([
+                        "start_date"         => $statement["start_date"] ?? null,
+                        "end_date"           => $statement["end_date"] ?? null,
+                        "rule_id"            => $statement["rule_id"] ?? null,
+                        "when_id"            => $statement["when_id"] ?? null,
+                        "apply_to_ids"       => $statement["apply_to_ids"] ?? null,
+                        "company_id"         => $company->id,
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany
+                    ]);
                 }
             }
             if (isset($data['exception_insurance_companies'])) {
@@ -534,7 +654,7 @@ class CompanyRepository
             }
 
             DB::commit();
-            return Company::whereId($id)->first();
+            return $this->getOneCompany($id);
         } catch (\Exception $e) {
             DB::rollBack();
             return null;

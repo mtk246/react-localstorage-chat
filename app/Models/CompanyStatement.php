@@ -13,13 +13,11 @@ class CompanyStatement extends Model implements Auditable
     use HasFactory, AuditableTrait;
     
     protected $fillable = [
-        "name",
         "start_date",
         "end_date",
-        "date",
         "rule_id",
         "when_id",
-        "apply_to_id",
+        "apply_to_ids",
         "company_id",
         "billing_company_id"
     ];
@@ -45,16 +43,6 @@ class CompanyStatement extends Model implements Auditable
     }
 
     /**
-     * CompanyStatement belongs to ApplyTo.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function applyTo()
-    {
-        return $this->belongsTo(TypeCatalog::class, 'apply_to_id');
-    }
-
-    /**
      * CompanyStatement belongs to BillingCompanny.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -75,15 +63,12 @@ class CompanyStatement extends Model implements Auditable
     }
 
     /**
-     * Interact with the companyStatement's name.
+     * The attributes that should be cast.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     * @var array
      */
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst(strtolower($value)),
-            set: fn ($value) => ucfirst(strtolower($value)),
-        );
-    }
+    protected $casts = [
+        'apply_to_ids' => 'array'
+    ];
+
 }

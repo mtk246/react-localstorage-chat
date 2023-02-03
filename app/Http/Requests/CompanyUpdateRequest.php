@@ -74,10 +74,9 @@ class CompanyUpdateRequest extends FormRequest
             'payment_address.country_subdivision_code' => ['nullable', 'string'],
 
             'statements'                               => ['nullable', 'array'],
-            'statements.*.name'                        => ['nullable', 'string'],
             'statements.*.rule_id'                     => ['nullable', 'integer'],
             'statements.*.when_id'                     => ['nullable', 'integer'],
-            'statements.*.apply_to_id'                 => ['nullable', 'integer'],
+            'statements.*.apply_to_ids'                => ['nullable', 'array'],
             'statements.*.start_date'                  => ['nullable', 'date'],
             'statements.*.end_date'                    => ['nullable', 'date'],
 

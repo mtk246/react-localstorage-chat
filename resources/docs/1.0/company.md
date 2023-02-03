@@ -105,14 +105,11 @@
         "country_subdivision_code": "code" /** optional */
     },
     "statements": [
-        {
-            "name": "Name Statement", /** required if exist */
             "rule_id": 1, /** optional */
             "when_id": 1, /** optional */
-            "apply_to_id": 1, /** optional */
+            "apply_to_ids": [1,2,3], /** optional */
             "start_date": "2022-02-03", /** required if when content 'period' */
             "end_date": "2022-02-03", /** required if when content 'period', example 'In a defined period' */
-            "date": "2022-02-03" /** required if when content 'specific', example 'Specific date' */
         }
     ],
     "exception_insurance_companies": [1,2,3], /** optional */
@@ -430,97 +427,137 @@
 
 ```json
 {
-    "id": 1,
-    "code": "CO-00001-2022",
-    "name": "company first",
-    "npi": "222CF123",
-    "created_at": "2022-03-16T10:06:31.000000Z",
-    "updated_at": "2022-03-16T10:06:31.000000Z",
-    "status": false,
+    "id": 6,
+    "code": "CO-00006-2023",
+    "name": "Company Four",
+    "npi": "22212312",
+    "ein": "1234321",
+    "upin": "222CF123",
+    "clia": "222CF123",
+    "name_suffix_id": 1,
+    "name_suffix": "Aetna",
+    "created_at": "2023-02-03T16:35:34.000000Z",
+    "updated_at": "2023-02-03T16:35:34.000000Z",
+    "last_modified": {
+        "user": "Henry Paredes",
+        "roles": [
+            {
+                "id": 1,
+                "name": "Super User",
+                "slug": "superuser",
+                "description": "Allows you to administer and manage all the functions of the application",
+                "level": 1,
+                "created_at": "2023-02-01T14:25:01.000000Z",
+                "updated_at": "2023-02-01T14:25:01.000000Z",
+                "pivot": {
+                    "user_id": 12,
+                    "role_id": 1,
+                    "created_at": "2023-02-01T14:25:35.000000Z",
+                    "updated_at": "2023-02-01T14:25:35.000000Z"
+                }
+            }
+        ]
+    },
+    "public_note": "Public note",
     "taxonomies": [
         {
-            "id": 1,
-            "name": "NameTaxonomy Company",
-            "created_at": "2022-03-16T10:03:40.000000Z",
-            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "id": 8,
+            "name": "Nametaxonomy Company",
+            "created_at": "2023-02-03T16:11:53.000000Z",
+            "updated_at": "2023-02-03T16:11:53.000000Z",
             "tax_id": "TAX01213",
             "primary": true,
             "pivot": {
-                "company_id": 1,
-                "taxonomy_id": 1,
-                "created_at": "2022-03-16T10:06:31.000000Z",
-                "updated_at": "2022-03-16T10:06:31.000000Z"
+                "company_id": 6,
+                "taxonomy_id": 8,
+                "created_at": "2023-02-03T16:35:34.000000Z",
+                "updated_at": "2023-02-03T16:35:34.000000Z"
             }
         },
         {
-            "id": 2,
-            "name": "NameTaxonomy 2 Company",
-            "created_at": "2022-03-16T10:06:31.000000Z",
-            "updated_at": "2022-03-16T10:06:31.000000Z",
+            "id": 9,
+            "name": "Nametaxonomy 2 Company",
+            "created_at": "2023-02-03T16:11:53.000000Z",
+            "updated_at": "2023-02-03T16:11:53.000000Z",
             "tax_id": "TAX01222",
             "primary": false,
             "pivot": {
-                "company_id": 1,
-                "taxonomy_id": 2,
-                "created_at": "2022-03-16T10:06:31.000000Z",
-                "updated_at": "2022-03-16T10:06:31.000000Z"
+                "company_id": 6,
+                "taxonomy_id": 9,
+                "created_at": "2023-02-03T16:35:34.000000Z",
+                "updated_at": "2023-02-03T16:35:34.000000Z"
             }
         }
     ],
-    "addresses": [
-        {
-            "id": 5,
-            "address": "address Company",
-            "city": "city Company",
-            "state": "state Company",
-            "zip": "234",
-            "billing_company_id": 1,
-            "created_at": "2022-03-16T10:06:31.000000Z",
-            "updated_at": "2022-03-16T10:06:31.000000Z",
-            "addressable_type": "App\\Models\\Company",
-            "addressable_id": 1
-        }
-    ],
-    "contacts": [
-        {
-            "id": 6,
-            "phone": "34324234",
-            "fax": "567674576457",
-            "email": "company@company.com",
-            "billing_company_id": 1,
-            "created_at": "2022-03-16T10:06:31.000000Z",
-            "updated_at": "2022-03-16T10:06:31.000000Z",
-            "mobile": null,
-            "contactable_type": "App\\Models\\Company",
-            "contactable_id": 1
-        }
-    ],
-    "nicknames": [
+    "facilities": [],
+    "billing_companies": [
         {
             "id": 1,
-            "nickname": "alias company first",
-            "nicknamable_type": "App\\Models\\Company",
-            "nicknamable_id": 6,
-            "billing_company_id": 1,
-            "created_at": "2022-04-04T12:55:15.000000Z",
-            "updated_at": "2022-04-04T12:55:15.000000Z"
+            "name": "Medical Claims Consultants",
+            "code": "BC-00001-2023",
+            "abbreviation": "MCC",
+            "private_company": {
+                "status": true,
+                "edit_name": true,
+                "nickname": "Alias Company First",
+                "abbreviation": "ABB212",
+                "private_note": "Private note",
+                "address": {
+                    "zip": "123234",
+                    "city": "City Company",
+                    "state": "state Company",
+                    "address": "Address Company",
+                    "country": "Name country",
+                    "address_type_id": null,
+                    "country_subdivision_code": "code"
+                },
+                "payment_address": {
+                    "zip": "123234",
+                    "city": "City Company",
+                    "state": "state Company",
+                    "address": "Address Company",
+                    "country": "Name country",
+                    "address_type_id": 3,
+                    "country_subdivision_code": "code"
+                },
+                "contact": {
+                    "fax": "567674576457",
+                    "email": "company33221@company.com",
+                    "phone": "34324234",
+                    "mobile": "34324234",
+                    "contact_name": "Name Contact"
+                },
+                "exception_insurance_companies": [
+                    {
+                        "id": 1,
+                        "code": "IC-00001-2023",
+                        "name": "Providence Administrative Services",
+                        "payer_id": "PAS01"
+                    },
+                    {
+                        "id": 2,
+                        "code": "IC-00002-2023",
+                        "name": "Kg Administrative Services",
+                        "payer_id": "KGA15"
+                    }
+                ],
+                "company_statements": [
+                    {
+                        "id": 1,
+                        "start_date": "2022-02-03",
+                        "end_date": "2022-02-03",
+                        "rule_id": 1,
+                        "rule": "Aetna",
+                        "when_id": 1,
+                        "when": "Aetna",
+                        "apply_to_ids": [
+                            1
+                        ]
+                    }
+                ]
+            }
         }
-    ],
-    "facilities": [
-        {
-            "id": 1,
-            "type": 1,
-            "name": "facilityName",
-            "npi": "123fac321",
-            "created_at": "2022-03-16T10:03:40.000000Z",
-            "updated_at": "2022-03-16T10:03:40.000000Z",
-            "company_id": 1,
-            "code": "FA-00001-2022",
-            "status": false,
-            "billing_companies": []
-        }
-    ],
-    "billing_companies": []
+    ]
 }
 ```
 #
@@ -1174,13 +1211,11 @@
     },
     "statements": [
         {
-            "name": "Name Statement", /** required if exist */
             "rule_id": 1, /** optional */
             "when_id": 1, /** optional */
-            "apply_to_id": 1, /** optional */
+            "apply_to_ids": [1,2,3], /** optional */
             "start_date": "2022-02-03", /** required if when content 'period' */
             "end_date": "2022-02-03", /** required if when content 'period', example 'In a defined period' */
-            "date": "2022-02-03" /** required if when content 'specific', example 'Specific date' */
         }
     ],
     "exception_insurance_companies": [1,2,3], /** optional */
