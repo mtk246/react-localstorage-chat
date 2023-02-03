@@ -598,7 +598,7 @@ class CompanyRepository
             }
 
             if (isset($data['statements'])) {
-                $company->companyStatement()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
+                $company->companyStatements()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
                 foreach ($data['statements'] as $statement) {
                     CompanyStatement::create([
                         "start_date"         => $statement["start_date"] ?? null,
@@ -612,7 +612,7 @@ class CompanyRepository
                 }
             }
             if (isset($data['exception_insurance_companies'])) {
-                foreach ($company->exceptionInsuranceCompany as $exceptionICDB) {
+                foreach ($company->exceptionInsuranceCompanies ?? [] as $exceptionICDB) {
                     $find = false;
                     foreach ($data['exception_insurance_companies'] as $exceptionIC) {
                         if ($exceptionIC == $exceptionICDB->id) {
