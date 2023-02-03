@@ -186,7 +186,7 @@ class InsuranceCompany extends Model implements Auditable
      */
     public function publicNote()
     {
-        return $this->morphMany(PublicNote::class, 'publishable');
+        return $this->morphOne(PublicNote::class, 'publishable');
     }
 
     /**

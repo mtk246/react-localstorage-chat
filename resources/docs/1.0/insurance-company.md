@@ -495,51 +495,153 @@
 
 ```json
 {
-    "name": "dsfsdfsfffeddsddfg",
-    "naic": "someNffaic",
-    "file_method": "soffmeFileNaic",
-    "code": "389245",
-    "updated_at": "2022-02-03T21:30:51.000000Z",
-    "created_at": "2022-02-03T21:30:51.000000Z",
-    "id": 3,
-    "address": {
-        "id": 23,
-        "address": "dfsdf",
-        "city": "cdfsf",
-        "state": "sdsfsd",
-        "zip": "3234",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-03T21:30:51.000000Z",
-        "updated_at": "2022-02-03T21:30:51.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null,
-        "insurance_company_id": 3
+    "id": 4,
+    "code": "IC-00004-2023",
+    "name": "Name Insurance",
+    "naic": "someNaic",
+    "payer_id": "12",
+    "file_method_id": 1,
+    "file_method": "AETNA - Aetna",
+    "created_at": "2023-02-03T14:13:36.000000Z",
+    "updated_at": "2023-02-03T14:13:36.000000Z",
+    "last_modified": {
+        "user": "Henry Paredes",
+        "roles": [
+            {
+                "id": 1,
+                "name": "Super User",
+                "slug": "superuser",
+                "description": "Allows you to administer and manage all the functions of the application",
+                "level": 1,
+                "created_at": "2023-02-01T14:25:01.000000Z",
+                "updated_at": "2023-02-01T14:25:01.000000Z",
+            }
+        ]
     },
-    "contact": {
-        "id": 21,
-        "phone": "55433",
-        "fax": "fsdfs",
-        "email": "dsfsd@gdrfg.com",
-        "user_id": null,
-        "billing_company_id": null,
-        "created_at": "2022-02-03T21:30:51.000000Z",
-        "updated_at": "2022-02-03T21:30:51.000000Z",
-        "clearing_house_id": null,
-        "facility_id": null,
-        "company_id": null,
-        "insurance_company_id": 3
-    },
-    "nicknames": [
+    "public_note": "Note public",
+    "billing_companies": [
         {
             "id": 1,
-            "nickname": "alias insurance",
-            "nicknamable_type": "App\\Models\\InsuranceCompany",
-            "nicknamable_id": 6,
-            "billing_company_id": 1,
-            "created_at": "2022-04-04T12:55:15.000000Z",
-            "updated_at": "2022-04-04T12:55:15.000000Z"
+            "name": "Medical Claims Consultants",
+            "code": "BC-00001-2023",
+            "abbreviation": "MCC",
+            "private_insurance": {
+                "status": true,
+                "edit_name": true,
+                "nickname": "Alias Insurance",
+                "abbreviation": "Abbreviation",
+                "private_note": "Note private",
+                "address": {
+                    "zip": "3234",
+                    "city": "Name City",
+                    "state": "Name state",
+                    "address": "Name Address",
+                    "country": "Name country",
+                    "address_type_id": null,
+                    "country_subdivision_code": "Code"
+                },
+                "contact": {
+                    "fax": "fsdfs",
+                    "email": "dsfsd@gdrfg.com",
+                    "phone": "55433",
+                    "mobile": "55433",
+                    "contact_name": "Some name"
+                },
+                "insurance_company_time_failed": {
+                    "id": 1,
+                    "days": 30,
+                    "from_id": 2,
+                    "billing_company_id": 1,
+                    "insurance_company_id": 4,
+                    "created_at": "2023-02-03T14:13:36.000000Z",
+                    "updated_at": "2023-02-03T14:13:36.000000Z",
+                    "from": {
+                        "id": 2,
+                        "code": "AUTO",
+                        "description": "Automobile Insurance",
+                        "status": true,
+                        "type_id": 1
+                    }
+                },
+                "billing_incomplete_reasons": [
+                    {
+                        "id": 1,
+                        "code": "AETNA",
+                        "description": "Aetna",
+                        "status": true,
+                        "type_id": 1
+                    },
+                    {
+                        "id": 2,
+                        "code": "AUTO",
+                        "description": "Automobile Insurance",
+                        "status": true,
+                        "type_id": 1
+                    },
+                    {
+                        "id": 3,
+                        "code": "BCBS",
+                        "description": "Blue Cross an Blue Shield",
+                        "status": true,
+                        "type_id": 1
+                    }
+                ],
+                "appeal_reasons": [
+                    {
+                        "id": 1,
+                        "code": "AETNA",
+                        "description": "Aetna",
+                        "status": true,
+                        "type_id": 1
+                    },
+                    {
+                        "id": 2,
+                        "code": "AUTO",
+                        "description": "Automobile Insurance",
+                        "status": true,
+                        "type_id": 1
+                    },
+                    {
+                        "id": 3,
+                        "code": "BCBS",
+                        "description": "Blue Cross an Blue Shield",
+                        "status": true,
+                        "type_id": 1
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "name": "Billing Paradise Revenue Cyde Master",
+            "code": "BC-00002-2023",
+            "abbreviation": "BillingP",
+            "private_insurance": {
+                "status": true,
+                "edit_name": false,
+                "nickname": "",
+                "abbreviation": "",
+                "private_note": "",
+                "address": {
+                    "zip": "3234",
+                    "city": "Name City",
+                    "state": "Name state",
+                    "address": "Name Address",
+                    "country": "Name country",
+                    "address_type_id": null,
+                    "country_subdivision_code": "Code"
+                },
+                "contact": {
+                    "fax": "fsdfs",
+                    "email": "dsfsd@gdrfg.com",
+                    "phone": "55433",
+                    "mobile": "55433",
+                    "contact_name": "Some name"
+                },
+                "insurance_company_time_failed": null,
+                "billing_incomplete_reasons": [],
+                "appeal_reasons": []
+            }
         }
     ]
 }

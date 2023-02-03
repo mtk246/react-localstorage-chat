@@ -288,15 +288,115 @@ class InsuranceCompanyRepository
                 },
             ])->first();
         }
-        foreach ($insurance->appealReasons as $key => $field) {
-            $insurance->appealReasons[$key]['rules_for_appeal'] = PrivateNote::where([
-                "billing_company_id" => null,
-                "publishable_type"   => TypeCatalog::class,
-                "publishable_id"     => $field->id
-            ])->first()->note ?? null;
+
+        $record = [
+            "id" => $insurance->id,
+            "code" => $insurance->code,
+            "name" => $insurance->name,
+            "naic" => $insurance->naic,
+            "payer_id" => $insurance->payer_id,
+            "file_method_id" => $insurance->file_method_id,
+            "file_method" => isset($insurance->fileMethod) ? $insurance->fileMethod->code . ' - ' . $insurance->fileMethod->description : null,
+            "created_at" => $insurance->created_at,
+            "updated_at" => $insurance->updated_at,
+            "last_modified" => $insurance->last_modified,
+            "public_note" => isset($insurance->publicNote) ? $insurance->publicNote->note : null
+        ];
+        $record['billing_companies'] = [];
+
+        foreach ($insurance->billingCompanies as $billingCompany) {
+            $abbreviation = EntityAbbreviation::where([
+                'abbreviable_id'     => $insurance->id,
+                'abbreviable_type'   => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $nickname = EntityNickname::where([
+                'nicknamable_id'     => $insurance->id,
+                'nicknamable_type'   => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $address = Address::where([
+                "addressable_id"     => $insurance->id,
+                "addressable_type"   => InsuranceCompany::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $contact = Contact::where([
+                "contactable_id"     => $insurance->id,
+                "contactable_type"   => InsuranceCompany::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $time_failed = InsuranceCompanyTimeFailed::where([
+                "insurance_company_id" => $insurance->id,
+                "billing_company_id"   => $billingCompany->id ?? $billingCompany
+            ])->first();
+            $private_note = PrivateNote::where([
+                "publishable_id"     => $insurance->id,
+                "publishable_type"   => InsuranceCompany::class,
+                "billing_company_id" => $billingCompany->id ?? $billingCompany
+            ])->first();
+
+            $billing_incomplete_reasons = $insurance->billingIncompleteReasons()
+                                                    ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+            $appeal_reasons = $insurance->appealReasons()
+                                        ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+            foreach ($appeal_reasons as $key => $field) {
+                $appeal_reasons[$key]['rules_for_appeal'] = PrivateNote::where([
+                    "billing_company_id" => null,
+                    "publishable_type"   => TypeCatalog::class,
+                    "publishable_id"     => $field->id
+                ])->first()->note ?? null;
+            }
+
+            if (isset($address)) {
+                $insurance_address = [
+                    "zip"                      => $address->zip,
+                    "city"                     => $address->city,
+                    "state"                    => $address->state,
+                    "address"                  => $address->address,
+                    "country"                  => $address->country,
+                    "address_type_id"          => $address->address_type_id,
+                    "country_subdivision_code" => $address->country_subdivision_code,
+                ];
+            };
+
+            if (isset($contact)) {
+                $insurance_contact = [
+                    "fax"          => $contact->fax,
+                    "email"        => $contact->email,
+                    "phone"        => $contact->phone,
+                    "mobile"       => $contact->mobile,
+                    "contact_name" => $contact->contact_name,
+                ];
+            };
+            if (isset($time_failed)) {
+                $insurance_company_time_failed = [
+                    "days"    => $time_failed->days,
+                    "from_id" => $time_failed->from,
+                    "from_id" => $time_failed->from_id,
+                ];
+            }
+            array_push($record['billing_companies'], [
+                "id"   => $billingCompany->id,
+                "name" => $billingCompany->name,
+                "code" => $billingCompany->code,
+                "abbreviation" => $billingCompany->abbreviation,
+                "private_insurance" => [
+                    "status"       => $billingCompany->pivot->status ?? false,
+                    "edit_name"    => isset($nickname->nickname) ? true : false,
+                    "nickname"     => $nickname->nickname ?? '',
+                    "abbreviation" => $abbreviation->abbreviation ?? '',
+                    "private_note" => $private_note->note ?? '',
+                    "address" => isset($insurance_address) ? $insurance_address : null,
+                    "contact" => isset($insurance_contact) ? $insurance_contact : null,
+
+                    "insurance_company_time_failed" => $time_failed ?? null,
+                    "billing_incomplete_reasons" => $billing_incomplete_reasons ?? [],
+                    "appeal_reasons" => $appeal_reasons ?? [],
+                ]
+            ]);
         }
 
-        return !is_null($insurance) ? $insurance : null;
+        return !is_null($insurance) ? $record : null;
     }
 
 
@@ -502,7 +602,7 @@ class InsuranceCompanyRepository
                 ]);
             }
             DB::commit();
-            return $insurance;
+            return $this->getOneInsurance($id);
         } catch (\Exception $e) {
             DB::rollBack();
             return $e;
