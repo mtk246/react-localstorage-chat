@@ -492,7 +492,7 @@ class CompanyRepository
                     "payment_address" => isset($company_payment_address) ? $company_payment_address : null,
                     "contact"         => isset($company_contact) ? $company_contact : null,
                     "exception_insurance_companies" => $exceptionIC ?? [],
-                    "company_statements"            => $statements ?? []
+                    "statements"            => $statements ?? []
                 ]
             ]);
         }

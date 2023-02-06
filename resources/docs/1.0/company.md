@@ -105,6 +105,7 @@
         "country_subdivision_code": "code" /** optional */
     },
     "statements": [
+        {
             "rule_id": 1, /** optional */
             "when_id": 1, /** optional */
             "apply_to_ids": [1,2,3], /** optional */
@@ -541,7 +542,7 @@
                         "payer_id": "KGA15"
                     }
                 ],
-                "company_statements": [
+                "statements": [
                     {
                         "id": 1,
                         "start_date": "2022-02-03",
