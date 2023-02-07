@@ -31,7 +31,7 @@ class ClaimBatch extends Model implements Auditable
     protected $appends = [
         'total_processed', 'claim_ids', 'total_claims', 'total_accepted',
         'total_denied', 'total_accepted_by_clearing_house', 'total_denied_by_clearing_house',
-        'total_accepted_by_payer', 'total_denied_by_payer'
+        'total_accepted_by_payer', 'total_denied_by_payer', 'last_modified'
     ];
 
     /**

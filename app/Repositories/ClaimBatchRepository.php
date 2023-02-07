@@ -229,6 +229,7 @@ class ClaimBatchRepository
                 "billing_company_id" => $claimBatch->billing_company_id,
                 "created_at" => $claimBatch->created_at,
                 "updated_at" => $claimBatch->updated_at,
+                "last_modified" => $claimBatch->last_modified,
                 "claims_reconciled" => $claimBatch->claims_reconciled,
                 "total_processed" => $claimBatch->total_processed,
                 "claim_ids" => $claimBatch->claim_ids,
