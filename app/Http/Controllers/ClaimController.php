@@ -276,6 +276,7 @@ class ClaimController extends Controller
             }
             $pdf->setConfig([
                 'urlVerify' => 'www.google.com.ve',
+                'print' => $request->print ?? false,
                 'typeFormat' => $claim->format ?? null,
                 'patient_id' => $claim->patient_id ?? null,
                 'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
@@ -290,6 +291,7 @@ class ClaimController extends Controller
             }
             $pdf->setConfig([
                 'urlVerify' => 'www.google.com.ve',
+                'print' => $request->print ?? false,
                 'typeFormat' => ($request->format != '') ? $request->format : null,
                 'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,

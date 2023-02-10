@@ -21,7 +21,7 @@
 - [Check eligibility](#check-eligibility-claim)
 - [Validation claim](#validation-claim)
 - [verify and register claim](#verify-register)
-- [Show claim report preview](#preview-claim)
+- [Show claim report preview or print ](#preview-claim)
 - [Change status Claim](#change-status-claim)
 - [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
@@ -1765,7 +1765,7 @@
 #
 
 <a name="preview-claim"></a>
-## Show claim report preview
+## Show claim report preview or print
 
 ### Param in header
 
@@ -1782,6 +1782,7 @@
     "id": "",
     "billing_company_id": 1, /** Only by superuser */
     "format": 1,
+    "print": false,
     "validate": false,
     "automatic_eligibility": false,
     "company_id": 1,

@@ -44,6 +44,7 @@ class ReportRepository implements ReportInterface
     /** @var object Crea y gestiona el objeto PDF */
     private $pdf;
 
+    private $print;
     private $typeForm;
     private $patient;
     private $billingCompany;
@@ -89,6 +90,8 @@ class ReportRepository implements ReportInterface
         $this->headerTextY = 26.5;
         $this->filename = $params['filename'] ?? uniqid() . 'pdf';
         $this->subject = '';
+        $this->print = $params['print'] ?? false;
+
         $typeForm = TypeForm::find($params['typeFormat']);
         if (isset($typeForm)) {
             if ($typeForm->form == 'CMS-1500 / 837P') {
@@ -188,7 +191,8 @@ class ReportRepository implements ReportInterface
             'reportDate' => $this->reportDate,
             'headerY' => $this->headerY,
             'headerTextY' => $this->headerTextY,
-            'typeFormat' => $typeFormat
+            'typeFormat' => $typeFormat,
+            'print' => $this->print
         ];
         $this->title = $title ?? '';
         $this->pdf->setHeaderCallback(function ($pdf) use ($params) {
@@ -200,24 +204,26 @@ class ReportRepository implements ReportInterface
             // disable auto-page-break
             $pdf->SetAutoPageBreak(false, 0);
             // set bacground image
-            if (isset($this->typeForm)) {
-                $img_file = storage_path('pictures') . '/' . $this->typeForm . '.png';
-            } else {
-                $img_file = storage_path('pictures') . '/CMS-1500_837P_1.png';
-            }
-            $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+            if ($params->print == false) {
+                if (isset($this->typeForm)) {
+                    $img_file = storage_path('pictures') . '/' . $this->typeForm . '.png';
+                } else {
+                    $img_file = storage_path('pictures') . '/CMS-1500_837P_1.png';
+                }
+                $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
 
-            if ($params->hasQR && !is_null($params->urlVerify)) {
-                $pdf->write2DBarcode(
-                    $params->urlVerify,
-                    'QRCODE,H',
-                    8.5,
-                    6,
-                    13,
-                    13,
-                    $params->qrCodeStyle,
-                    'T'
-                );
+                if ($params->hasQR && !is_null($params->urlVerify)) {
+                    $pdf->write2DBarcode(
+                        $params->urlVerify,
+                        'QRCODE,H',
+                        8.5,
+                        6,
+                        13,
+                        13,
+                        $params->qrCodeStyle,
+                        'T'
+                    );
+                }
             }
         });
     }
