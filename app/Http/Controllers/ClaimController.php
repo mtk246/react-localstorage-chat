@@ -76,6 +76,11 @@ class ClaimController extends Controller
         );
     }
 
+    public function getServerAll(Request $request)
+    {
+        return $this->claimRepository->getServerAll($request);
+    }
+
     /**
      * @param int $id
      * @return JsonResponse

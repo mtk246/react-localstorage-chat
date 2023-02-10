@@ -446,6 +446,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-claim-field-informations",[\App\Http\Controllers\ClaimController::class,"getListClaimFieldInformations"]);
         Route::get("/get-list-qualifier-by-field/{field_id}",[\App\Http\Controllers\ClaimController::class,"getListFieldQualifiers"]);
         Route::get("/get-list-status",[\App\Http\Controllers\ClaimController::class,"getListStatus"]);
+        Route::get("/get-all-server", [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
         Route::post("/show-claim-preview",[\App\Http\Controllers\ClaimController::class,"ShowReport"]);
 
         Route::get("/get-access-token",[\App\Http\Controllers\ClaimController::class,"getSecurityAuthorizationAccessToken"]);

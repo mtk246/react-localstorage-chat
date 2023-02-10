@@ -147,7 +147,7 @@ class InsurancePlanRepository
             return $insurancePlan;
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e;
+            return null;
         }
     }
 

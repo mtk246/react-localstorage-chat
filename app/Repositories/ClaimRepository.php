@@ -215,7 +215,108 @@ class ClaimRepository
                 }
             ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
         }
-        return is_null($claims) ? null : $claims;
+        $records = [];
+        foreach ($claims as $claim) {
+            if (count($status) == 1) {
+                if (isset($claim->status->claim_sub_status)) {
+                    if (in_array($claim->status->claim_sub_status->id, $subStatus)) {
+                        array_push($records, $claim);
+                    }    
+                } elseif (in_array($claim->status->id, $status) && count($subStatus) == 0) {
+                    array_push($records, $claim);
+                }
+            } else if (count($status) > 1) {
+                if (in_array($claim->status->id, $status)) {
+                    array_push($records, $claim);
+                }
+            } else {
+                array_push($records, $claim);
+            }
+        }
+
+        return is_null($claims) ? null : $records;
+    }
+
+    public function getServerAll(Request $request) {
+        $status = ((is_array($request->status)) ? $request->status : json_decode($request->status)) ?? [];
+        $subStatus = ((is_array($request->subStatus)) ? $request->subStatus : json_decode($request->subStatus)) ?? [];
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $data = Claim::whereHas("claimStatusClaims", function ($query) use ($status, $subStatus) {
+                if (count($status) == 1) {
+                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
+                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
+                } else if (count($status) > 1) {
+                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
+                }
+            })->with([
+                "company" => function ($query) {
+                    $query->with('nicknames');
+                },
+                "patient" => function ($query) {
+                    $query->with([
+                        "user" => function ($q) {
+                            $q->with(["profile", "addresses", "contacts"]);
+                        }
+                    ]);
+                }
+            ]);
+        } else {
+            $data = Claim::whereHas("claimStatusClaims", function ($query) use ($status, $subStatus) {
+                if (count($status) == 1) {
+                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
+                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
+                } else if (count($status) > 1) {
+                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
+                }
+            })->with([
+                "company" => function ($query) {
+                    $query->with([
+                        "nicknames" => function ($q) use ($bC) {
+                            $q->where('billing_company_id', $bC);
+                        }
+                    ]);
+                },
+                "patient" => function ($query) use ($bC) {
+                    $query->with([
+                        "user" => function ($q) use ($bC) {
+                            $q->with([
+                                "profile",
+                                "addresses" => function ($qq) use ($bC) {
+                                    $qq->where('billing_company_id', $bC);
+                                },
+                                "contacts" => function ($qq) use ($bC) {
+                                    $qq->where('billing_company_id', $bC);
+                                },
+                            ]);
+                        }
+                    ]);
+                }
+            ]);
+        }
+
+        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+            $data = $data->search($request->query('query'));
+        }
+        
+        if ($request->sortBy) {
+            if (str_contains($request->sortBy, 'billingcompany')) {
+                $data = $data->orderBy(
+                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'claims.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } else {
+                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            }
+        } else {
+            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+        }
+
+        $data = $data->paginate($request->itemsPerPage ?? 5);
+
+        return response()->json([
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
+        ], 200);
     }
 
     /**
