@@ -17,6 +17,7 @@ use App\Models\FacilityType;
 use App\Models\User;
 use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
+use App\Models\InsurancePlanPrivate;
 use App\Models\InsurancePolicy;
 use App\Models\Patient;
 use App\Models\MaritalStatus;
@@ -677,12 +678,12 @@ class DataTestSeeder extends Seeder
                     [
                         'name'                 => 'Connect 1500 Gold',
                         'nickname'             => 'Gold',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -723,12 +724,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Connect 5000 Silver',
                         'nickname'             => 'Silver',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -769,12 +770,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Connect Direct 5000 Silver',
                         'nickname'             => 'Direct Silver',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -815,12 +816,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Connect 9000 Bronze',
                         'nickname'             => 'Bronze',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -861,12 +862,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Qualified 7050 Bronze - Choice Network',
                         'nickname'             => 'Choice Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -907,12 +908,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Qualified 7050 Bronze - Signature Network',
                         'nickname'             => 'Signature Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -992,12 +993,12 @@ class DataTestSeeder extends Seeder
                     [
                         'name'                 => 'Oregon Standard Gold - Choice Network',
                         'nickname'             => 'Gold Choice Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1038,12 +1039,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Oregon Standard Silver - Choice Network',
                         'nickname'             => 'Silver Choice Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1084,12 +1085,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Oregon Direct Silver - Choice Network',
                         'nickname'             => 'Direct Silver Choice Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1130,12 +1131,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Oregon Standard Bronze - Choice Network',
                         'nickname'             => 'Bronze Choice Network',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1176,12 +1177,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Columbia 1500 Gold',
                         'nickname'             => 'Columbia Gold',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1222,12 +1223,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Columbia 8700 Bronze',
                         'nickname'             => 'Columbia Bronze',
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1307,12 +1308,12 @@ class DataTestSeeder extends Seeder
                     [
                         'name'                 => 'High Option - Self Only',
                         'nickname'             => null,
-                        'ins_type'             => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'             => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1353,12 +1354,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'High Option - Self And Family',
                         'nickname'             => null,
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1399,12 +1400,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Standard Option - Self Plus One',
                         'nickname'             => null,
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1445,12 +1446,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Standard Option - Self And Family',
                         'nickname'             => null,
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1491,12 +1492,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Basic Option - Self Only',
                         'nickname'             => null,
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1537,12 +1538,12 @@ class DataTestSeeder extends Seeder
                     ], [
                         'name'                 => 'Basic Option - Self Plus One',
                         'nickname'             => null,
-                        'ins_type'          => TypeCatalog::whereDescription('Medicare')->first()->description,
+                        'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
                         'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
-                        'charge_using'         => 'Using 1',
+                        'charge_using_id'         => null,
 
                         'accept_assign'        => true,
                         'pre_authorization'    => true,
@@ -1711,7 +1712,7 @@ class DataTestSeeder extends Seeder
                         'name'                 => $dataIP['name']
                     ], [
                         'code'                 => generateNewCode('IP', 5, date('Y'), InsurancePlan::class, 'code'),
-                        'ins_type'             => $dataIP['ins_type'],
+                        'ins_type_id'          => $dataIP['ins_type_id'],
                         'cap_group'            => $dataIP['cap_group'],
                         'accept_assign'        => $dataIP['accept_assign'],
                         'pre_authorization'    => $dataIP['pre_authorization'],
@@ -1722,11 +1723,18 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => $dataIP['pqrs_eligible'],
                         'allow_attached_files' => $dataIP['allow_attached_files'],
                         'eff_date'             => $dataIP['eff_date'],
-                        'charge_using'         => $dataIP['charge_using'],
-                        'format'               => $dataIP['format'],
-                        'method'               => $dataIP['method'],
-                        'naic'                 => $dataIP['naic'],
+                        'charge_using_id'      => $dataIP['charge_using_id'],
                         'insurance_company_id' => $insurance->id
+                    ]);
+
+                    InsurancePlanPrivate::updateOrCreate([
+                        'insurance_plan_id'  => $insurancePlan->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ], [
+                        'naic'               => $dataIP['naic'] ?? null,
+                        'format_id'          => $dataIP['format_id'] ?? null,
+                        'file_method_id'     => $dataIP['file_method_id'] ?? null,
+                        'file_capitated'     => $dataIP['file_capitated'],
                     ]);
 
                     /** Attach billing company */
