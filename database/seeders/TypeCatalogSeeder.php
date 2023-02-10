@@ -1019,10 +1019,44 @@ class TypeCatalogSeeder extends Seeder
                     ]
                 ]
             ],
+            [
+                'description' => 'Report form claim',
+                'type_catalogs' => [
+                    [
+                        'code' => 'HCFA',
+                        'description' => 'HCFA'
+                    ],
+                    [
+                        'code' => 'UB92',
+                        'description' => 'UB92'
+                    ],
+                    [
+                        'code' => 'MASS5',
+                        'description' => 'MASS5'
+                    ],
+                    [
+                        'code' => 'IGENERIC',
+                        'description' => 'IGENERIC'
+                    ],
+                    [
+                        'code' => 'ILTRHEAD',
+                        'description' => 'ILTRHEAD'
+                    ],
+                    [
+                        'code' => 'IPGPERPT',
+                        'description' => 'IPGPERPT'
+                    ],
+                    [
+                        'code' => 'WCOMP',
+                        'description' => 'WCOMP'
+                    ],
+                    [
+                        'code' => 'IL333',
+                        'description' => 'IL333'
+                    ],
+                ]
+            ],
         ];
-    
-    
-    
     
     
     

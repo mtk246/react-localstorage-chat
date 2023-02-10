@@ -194,7 +194,8 @@ class InsuranceCompanyRepository
                 "contacts",
                 "nicknames",
                 "abbreviations",
-                "fileMethod"
+                "fileMethod",
+                "billingCompanies"
             ]);
         } else {
             $data = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
@@ -210,6 +211,9 @@ class InsuranceCompanyRepository
                         $query->where('billing_company_id', $bC);
                     },
                     "abbreviations" => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    "billingCompanies" => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
                     "fileMethod"
@@ -371,7 +375,7 @@ class InsuranceCompanyRepository
             if (isset($time_failed)) {
                 $insurance_company_time_failed = [
                     "days"    => $time_failed->days,
-                    "from_id" => $time_failed->from,
+                    "from"    => $time_failed->from,
                     "from_id" => $time_failed->from_id,
                 ];
             }
@@ -389,7 +393,7 @@ class InsuranceCompanyRepository
                     "address" => isset($insurance_address) ? $insurance_address : null,
                     "contact" => isset($insurance_contact) ? $insurance_contact : null,
 
-                    "insurance_company_time_failed" => $time_failed ?? null,
+                    "insurance_company_time_failed" => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null
                     "billing_incomplete_reasons" => $billing_incomplete_reasons ?? [],
                     "appeal_reasons" => $appeal_reasons ?? [],
                 ]

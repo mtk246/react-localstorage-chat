@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 
 class InsurancePlanController extends Controller
 {
-    private $InsurancePlanRepository;
+    private $insurancePlanRepository;
 
     public function __construct()
     {
-        $this->InsurancePlanRepository = new InsurancePlanRepository();
+        $this->insurancePlanRepository = new InsurancePlanRepository();
     }
 
     /**
@@ -24,7 +24,7 @@ class InsurancePlanController extends Controller
      */
     public function createInsurancePlan(CreateInsurancePlanRequest $request): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->createInsurancePlan($request->validated());
+        $rs = $this->insurancePlanRepository->createInsurancePlan($request->validated());
 
         return $rs ? response()->json($rs,201) : response()->json(__("Error creating insurance plan"), 400);
     }
@@ -36,7 +36,7 @@ class InsurancePlanController extends Controller
      */
     public function updateInsurancePlan(UpdateInsurancePlanRequest $request,int $id): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->updateInsurancePlan($request->validated(),$id);
+        $rs = $this->insurancePlanRepository->updateInsurancePlan($request->validated(),$id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error update insurance plan"), 400);
     }
@@ -47,7 +47,7 @@ class InsurancePlanController extends Controller
      */
     public function getOneInsurancePlan(int $id): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->getOneInsurancePlan($id);
+        $rs = $this->insurancePlanRepository->getOneInsurancePlan($id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
@@ -58,7 +58,7 @@ class InsurancePlanController extends Controller
      */
     public function getByName(string $name): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->getByName($name);
+        $rs = $this->insurancePlanRepository->getByName($name);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
@@ -68,7 +68,17 @@ class InsurancePlanController extends Controller
      */
     public function getAllInsurancePlans(): JsonResponse
     {
-        return response()->json($this->InsurancePlanRepository->getAllInsurancePlan());
+        return response()->json($this->insurancePlanRepository->getAllInsurancePlan());
+    }
+
+    /**
+     *
+     * @param Illuminate\Http\Request $request
+     * @return JsonResponse
+     */
+    public function getServerAll(Request $request): JsonResponse
+    {
+        return $this->insurancePlanRepository->getServerAllInsurancePlan($request);
     }
 
     /**
@@ -78,7 +88,7 @@ class InsurancePlanController extends Controller
      */
     public function changeStatus(ChangeStatusInsurancePlanRequest $request,int $id): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->changeStatus($request->input("status"),$id);
+        $rs = $this->insurancePlanRepository->changeStatus($request->input("status"),$id);
 
         return $rs ? response()->json([],204) : response()->json(__("Error, insurance plan not found"), 404);
     }
@@ -89,7 +99,7 @@ class InsurancePlanController extends Controller
      */
     public function getByCompany(string $companyName): JsonResponse
     {
-        $rs = $this->InsurancePlanRepository->getByCompany($companyName);
+        $rs = $this->insurancePlanRepository->getByCompany($companyName);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, insurance plan not found"), 404);
     }
@@ -101,19 +111,43 @@ class InsurancePlanController extends Controller
     public function getAllPlanByInsuranceCompany(int $id): JsonResponse
     {
         return response()->json(
-            $this->InsurancePlanRepository->getAllPlanByInsurancePlan($id)
+            $this->insurancePlanRepository->getAllPlanByInsurancePlan($id)
         );
     }
 
     public function getList() {
-        $rs = $this->InsurancePlanRepository->getList();
-
-        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+        return response()->json(
+            $this->insurancePlanRepository->getList()
+        );
     }
 
     public function getListByCompany(int $id) {
-        $rs = $this->InsurancePlanRepository->getListByCompany($id);
+        return response()->json(
+            $this->insurancePlanRepository->getListByCompany($id)
+        );
+    }
 
-        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    public function getListFormats() {
+        return response()->json(
+            $this->insurancePlanRepository->getListFormats()
+        );
+    }
+
+    public function getListInsTypes() {
+        return response()->json(
+            $this->insurancePlanRepository->getListInsTypes()
+        );
+    }
+
+    public function getListPlanTypes() {
+        return response()->json(
+            $this->insurancePlanRepository->getListPlanTypes()
+        );
+    }
+
+    public function getListChargeUsings() {
+        return response()->json(
+            $this->insurancePlanRepository->getListChargeUsings()
+        );
     }
 }

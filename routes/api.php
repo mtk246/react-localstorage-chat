@@ -262,9 +262,13 @@ Route::prefix("v1")/*->middleware('audit')*/
     Route::prefix("insurance-plan")->middleware([
         "auth:api",
         'role:superuser|biller|billingmanager',
-    ])->group(function(){
+    ])->group(function() {
+        Route::get("/get-all-server",[\App\Http\Controllers\InsurancePlanController::class,'getServerAll']);
         Route::get("/get-list",[\App\Http\Controllers\InsurancePlanController::class,'getList']);
-        Route::get("/get-list-by-company/{company}",[\App\Http\Controllers\InsurancePlanController::class,'getListByCompany']);
+        Route::get("/get-list-formats",[\App\Http\Controllers\InsurancePlanController::class,'getListFormats']);
+        Route::get("/get-list-ins-types",[\App\Http\Controllers\InsurancePlanController::class,'getListInsTypes']);
+        Route::get("/get-list-plan-types",[\App\Http\Controllers\InsurancePlanController::class,'getListPlanTypes']);
+        Route::get("/get-list-charge-usings",[\App\Http\Controllers\InsurancePlanController::class,'getListChargeUsings']);
         Route::post("/",[\App\Http\Controllers\InsurancePlanController::class,'createInsurancePlan']);
         Route::put("/{id}",[\App\Http\Controllers\InsurancePlanController::class,'updateInsurancePlan']);
         Route::get("/",[\App\Http\Controllers\InsurancePlanController::class,'getAllInsurancePlans']);

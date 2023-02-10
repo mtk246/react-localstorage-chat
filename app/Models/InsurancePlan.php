@@ -75,7 +75,6 @@ class InsurancePlan extends Model implements Auditable
     protected $fillable = [
         "code",
         "name",
-        "ins_type",
         "cap_group",
         "accept_assign",
         "pre_authorization",
@@ -86,10 +85,9 @@ class InsurancePlan extends Model implements Auditable
         "pqrs_eligible",
         "allow_attached_files",
         "eff_date",
-        "charge_using",
-        "format",
-        "method",
-        "naic",
+        "ins_type_id",
+        "plan_type_id",
+        "charge_using_id",
         "insurance_company_id"
     ];
 
@@ -111,6 +109,46 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * InsurancePlan belongs to InsType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function insType()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'ins_type_id');
+    }
+
+    /**
+     * InsurancePlan belongs to PlanType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function planType()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
+    }
+
+    /**
+     * InsurancePlan belongs to ChargeUsing.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function chargeUsing()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'charge_using_id');
+    }
+
+    /**
+     * InsurancePlan has many InsurancePlanPrivate.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function insurancePlanPrivate()
+    {
+        return $this->hasMany(InsurancePlanPrivate::class);
+    }
+
+    /**
      * InsurancePlan has many InsurePlanServices.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -128,6 +166,16 @@ class InsurancePlan extends Model implements Auditable
     public function insurancePolicies()
     {
         return $this->hasMany(InsurancePolicy::class);
+    }
+
+    /**
+     * InsurancePlan has many EntityTimeFailed.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeFaileds()
+    {
+        return $this->morphMany(EntityTimeFailed::class, 'time_failable');
     }
 
     /**
@@ -171,13 +219,13 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
-     * InsurancePlan morphs many PublicNote.
+     * InsurancePlan morphs one PublicNote.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function publicNotes()
+    public function publicNote()
     {
-        return $this->morphMany(PublicNote::class, 'publishable');
+        return $this->morphOne(PublicNote::class, 'publishable');
     }
 
     /**
@@ -201,24 +249,41 @@ class InsurancePlan extends Model implements Auditable
     }
 
     /**
+     * InsurancePlan morphs many EntityAbbreviations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function abbreviations()
+    {
+        return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
+    }
+
+    /**
+     * InsurancePlan morphs many Contact.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts()
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
+    /**
+     * InsurancePlan morphs many Address.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
+    /**
      * Interact with the insurancePlan's name.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => upperCaseWords($value),
-            set: fn ($value) => upperCaseWords($value),
-        );
-    }
-
-    /**
-     * Interact with the insurancePlan's ins_type.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function insType(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => upperCaseWords($value),

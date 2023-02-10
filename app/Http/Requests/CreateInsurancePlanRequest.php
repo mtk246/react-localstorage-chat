@@ -27,10 +27,17 @@ class CreateInsurancePlanRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', new IUnique(InsurancePlan::class, 'name')],
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            'ins_type'             => ['required', 'string'],
-            'cap_group'            => ['required', 'string'],
+            'insurance_company_id' => ['required', 'integer'],
+            'name'                 => ['required', 'string', new IUnique(InsurancePlan::class, 'name')],
+            'nickname'             => ['nullable', 'string'],
+            'ins_type_id'          => ['required', 'integer'],
+            'plan_type_id'         => ['nullable', 'integer'],
+            'abbreviation'         => ['nullable', 'string'],
+            'cap_group'            => ['nullable', 'string'],
+            'eff_date'             => ['required', 'date'],
+            'charge_using_id'      => ['nullable', 'integer'],
+
             'accept_assign'        => ['required', 'boolean'],
             'pre_authorization'    => ['required', 'boolean'],
             'file_zero_changes'    => ['required', 'boolean'],
@@ -39,15 +46,34 @@ class CreateInsurancePlanRequest extends FormRequest
             'require_abn'          => ['required', 'boolean'],
             'pqrs_eligible'        => ['required', 'boolean'],
             'allow_attached_files' => ['required', 'boolean'],
-            'eff_date'             => ['required', 'date'],
-            'charge_using'         => ['required', 'string'],
-            'format'               => ['required', 'string'],
-            'method'               => ['required', 'string'],
-            'naic'                 => ['required', 'string'],
-            'insurance_company_id' => ['required', 'integer'],
-            'nickname'             => ['sometimes', 'string'],
 
-            'note'                 => ['nullable', 'string'],
+            'format_id'            => ['nullable', 'integer'],
+            'file_method_id'       => ['nullable', 'integer'],
+            'naic'                 => ['nullable', 'string'],
+
+            'time_failed'              => ['nullable', 'array'],
+            'time_failed.days'         => ['nullable', 'integer'],
+            'time_failed.from_id'      => ['nullable', 'integer'],
+
+            'file_capitated'           => ['required', 'boolean'],
+
+            'address'               => ['nullable', 'array'],
+            'address.address'       => ['nullable', 'string'],
+            'address.city'          => ['nullable', 'string'],
+            'address.state'         => ['nullable', 'string'],
+            'address.zip'           => ['nullable', 'string'],
+            'address.country'       => ['nullable', 'string'],
+            'address.country_subdivision_code' => ['nullable', 'string'],
+
+            'contact'               => ['nullable', 'array'],
+            'contact.phone'         => ['nullable', 'string'],
+            'contact.mobile'        => ['nullable', 'string'],
+            'contact.fax'           => ['nullable', 'string'],
+            'contact.email'         => ['nullable', 'email:rfc'],
+            'contact.contact_name'  => ['nullable', 'string'],
+
+            'private_note'          => ['nullable', 'string'],
+            'public_note'           => ['nullable', 'string']
         ];
     }
 }

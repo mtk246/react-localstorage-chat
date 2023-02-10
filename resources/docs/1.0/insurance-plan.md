@@ -4,15 +4,18 @@
 
 - [Basic data](#basic-data)
 - [Create insurance plan](#create-insurance-plan)
-- [Get all insurance plan](#get-all-insurance-plan)
+- [Get all insurance plan from server](#get-all-insurance-plan-from-server)
 - [Get one insurance plan](#get-one-insurance-plan)
 - [Update insurance plan](#update-insurance-plan)
 - [Get insurance plan by name](#get-insurance-plan-by-name)
 - [Change status plan company](#change-status-plan-company)
-- [Get all insurance plan by insurance company](#get-all-insurance-plan-by-insurance-company)
 - [Get list insurance plans](#get-list-insurance-plans)
-- [Get list insurance plans by insurance company](#get-list-insurance-plans-by-insurance-company)
+- [Get list format](#get-list-formats)
+- [Get list ins type](#get-list-ins-types)
+- [Get list plan type](#get-list-plan-types)
+- [Get list charge using](#get-list-charge-usings)
 - [Get list file methods](#get-list-file-methods)
+- [Get list from the date](#get-list-from-the-date)
 
 
 <a name="basic-data"></a>
@@ -21,16 +24,19 @@
 
 | # | METHOD   | Name             | URL                     | Token required|Description|
 | : ||   :-                 |  :                      |               |                    |  
-| 1 |POST| `Create Insurance plan`                    | `/insurance-plan/`               |yes             |Create Insurance Plan|         
-| 2 |GET | `Get all Insurance plan`                   | `/insurance-plan/`        |yes            |Get all Insurance Plan|
-| 3 |GET | `Get one Insurance plan`                   | `/insurance-plan/{id}`|yes|Get one Insurance Plan|
-| 4 |PUT | `Update Insurance plan`                | `/insurance-plan/{id}`|yes|Update Insurance Plan|
-| 5 |GET | `Get Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get all Insurance Plan by name|
-| 6 |PATCH | `Change status plan Company`           | `/insurance-plan/{id}/change-status`|yes|Change status Insurance Plan|
-| 7 |GET | `Get all insurance plan by insurance company`           | `/insurance-plan/insurance-company/{id}/get-by-insurance-company`|yes|Get all insurance plan by insurance company|
-| 8 |GET | `Get list insurance plans`| `/insurance-plan/get-list`        |yes            |Get list insurance plans|
-| 9 |GET | `Get list insurance plans by insurance company`| `/insurance-plan/get-list-by-company/{insurance_company}`        |yes            |Get list insurance plans by insurance company|
-| 10 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
+| 1 |POST| `Create Insurance plan`                    | `/insurance-plan/`               |yes             |Create insurance plan|         
+| 2 |GET | `Get all Insurance plan`                   | `/insurance-plan/get-all-server`        |yes      |Get all insurance plan from server|
+| 3 |GET | `Get one Insurance plan`                   | `/insurance-plan/{id}`|yes|Get one insurance plan|
+| 4 |PUT | `Update Insurance plan`                | `/insurance-plan/{id}`|yes|Update insurance plan|
+| 5 |GET | `Get Insurance plan by name`           | `/insurance-plan/{name}/get-by-name`|yes|Get all insurance plan by name|
+| 6 |PATCH | `Change status plan Company`           | `/insurance-plan/{id}/change-status`|yes|Change status insurance plan|
+| 7 |GET | `Get list insurance plans`| `/insurance-plan/get-list`        |yes            |Get list insurance plans|
+| 8 |GET | `Get list formats`| `/insurance-plan/get-list-formats`        |yes            |Get list formats|
+| 9 |GET | `Get list ins types`| `/insurance-plan/get-list-ins-types`        |yes            |Get list ins types|
+| 10 |GET | `Get list plan types`| `/insurance-plan/get-list-plan-types`        |yes            |Get list plan types|
+| 11 |GET | `Get list charge usings`| `/insurance-plan/get-list-charge-usings`        |yes            |Get list charge usings|
+| 12 |GET | `Get list file methods`| `/insurance-company/get-list-file-methods`        |yes            |Get list file methods|
+| 13 |GET | `Get list from the date`| `/insurance-company/get-list-from-the-date`        |yes            |Get list from the date of|
 
 
 
@@ -51,25 +57,50 @@
 ```json
 {
     "billing_company_id": 1, /** Only required by superuser */
-    "ins_type":"some ins_type",
-    "name":"someName",
-    "nickname":"nickname plan someName",
-    "note":"someNote",
-    "cap_group":"someCapGroup",
-    "accept_assign":true,
-    "pre_authorization":true,
-    "file_zero_changes":true,
-    "referral_required":true,
-    "accrue_patient_resp":true,
-    "require_abn":true,
-    "pqrs_eligible":true,
-    "allow_attached_files":true,
-    "eff_date":"2022-01-23",
-    "charge_using":"someCharge",
-    "format":"y-m-d",
-    "method":"someMethod",
-    "naic":"someNaic",
-    "insurance_company_id":1
+    "insurance_company_id":1, /** required */
+    "name":"Name insurance", /** required */
+    "nickname":"alias insurance plan", /** optional */
+    "ins_type_id": 1, /** required */
+    "plan_type_id": 1,  /** optional */
+    "abbreviation":"Abbreviation", /** optional */
+    "cap_group":"someCapGroup", /** optional */
+    "eff_date":"2022-01-23", /** required */
+    "charge_using_id": 1, /** optional */
+    
+    "accept_assign":true, /** required */
+    "pre_authorization":true, /** required */
+    "file_zero_changes":true, /** required */
+    "referral_required":true, /** required */
+    "accrue_patient_resp":true, /** required */
+    "require_abn":true, /** required */
+    "pqrs_eligible":true, /** required */
+    "allow_attached_files":true, /** required */
+    
+    "format_id": 1, /** optional */
+    "file_method_id": 1, /** optional */
+    "naic":"someNaic", /** optional */
+    "time_failed": {
+        "days": 30, /** optional */
+        "from_id": 2, /** optional */
+    },
+    "file_capitated": true, /** required */
+    "address": { /** optional */
+        "address":"Name address", /** optional */
+        "city":"Name city", /** optional */
+        "state":"Name state", /** optional */
+        "zip":"3234", /** optional */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "Code", /** optional */
+    },
+    "contact": { /** optional */
+        "contact_name": "Some name", /** optional */
+        "phone":"55433", /** optional */
+        "mobile":"55433", /** optional */
+        "fax":"fsdfs", /** optional */
+        "email":"dsfsd@gdrfg.com" /** optional */
+    },
+    "public_note": "Note Public", /** optioanl */
+    "private_note": "Note Private" /** optional */
 }
 ```
 
@@ -121,7 +152,6 @@
 
 <a name="get-all-insurance-plan"></a>
 ## Get All Insurance plan
-
 
 ### Param in header
 
@@ -212,6 +242,111 @@
 ]
 ```
 
+
+<a name="get-all-insurance-plan-server"></a>
+## Get all insurance company from server
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`query <string>`
+`itemsPerPage <string>`
+`page <integer>`
+`sortBy <string>`
+`sortDesc <boolean>`
+`insurance_company_id <integer>`
+
+## Example path
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName&insurnce_company_id=1
+
+## Response
+
+> {success} 200 data returned
+
+#
+```json
+{
+    "data": [
+        {
+            "id": 5,
+            "code": "IP-00002-2022",
+            "name": "Name 2",
+            "ins_type": "ins_type 2",
+            "cap_group": "CapGroup 2",
+            "accept_assign": true,
+            "pre_authorization": true,
+            "file_zero_changes": true,
+            "referral_required": true,
+            "accrue_patient_resp": true,
+            "require_abn": true,
+            "pqrs_eligible": true,
+            "allow_attached_files": true,
+            "eff_date": "2022-01-23",
+            "charge_using": "Charge 2",
+            "format": "y-m-d",
+            "method": "Method 2",
+            "naic": "Naic 2",
+            "insurance_company_id": 1,
+            "created_at": "2022-03-18T15:28:30.000000Z",
+            "updated_at": "2022-03-18T15:28:30.000000Z",
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias Name2",
+                    "nicknamable_type": "App\\Models\\InsurancePlan",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        },
+        {
+            "id": 4,
+            "code": "IP-00001-2022",
+            "name": "someName",
+            "ins_type": "some ins_type",
+            "cap_group": "someCapGroup",
+            "accept_assign": true,
+            "pre_authorization": true,
+            "file_zero_changes": true,
+            "referral_required": true,
+            "accrue_patient_resp": true,
+            "require_abn": true,
+            "pqrs_eligible": true,
+            "allow_attached_files": true,
+            "eff_date": "2022-01-23",
+            "charge_using": "someCharge",
+            "format": "y-m-d",
+            "method": "someMethod",
+            "naic": "someNaic",
+            "insurance_company_id": 1,
+            "created_at": "2022-03-18T15:26:42.000000Z",
+            "updated_at": "2022-03-18T15:26:42.000000Z",
+            "nicknames": [
+                {
+                    "id": 1,
+                    "nickname": "alias someName",
+                    "nicknamable_type": "App\\Models\\InsurancePlan",
+                    "nicknamable_id": 6,
+                    "billing_company_id": 1,
+                    "created_at": "2022-04-04T12:55:15.000000Z",
+                    "updated_at": "2022-04-04T12:55:15.000000Z"
+                }
+            ],
+        }
+    ],
+    "count": 10
+}
+```
 
 #
 
@@ -311,25 +446,50 @@
 ```json
 {
     "billing_company_id": 1, /** Only required by superuser */
-    "ins_type":"some ins_type edited",
-    "name":"someName",
-    "nickname":"nickname plan someName edit",
-    "note":"someNote",
-    "cap_group":"someCapGroup",
-    "accept_assign":true,
-    "pre_authorization":true,
-    "file_zero_changes":true,
-    "referral_required":true,
-    "accrue_patient_resp":true,
-    "require_abn":true,
-    "pqrs_eligible":true,
-    "allow_attached_files":true,
-    "eff_date":"2022-01-23",
-    "charge_using":"someCharge",
-    "format":"y-m-d",
-    "method":"someMethod",
-    "naic":"someNaic",
-    "insurance_company_id":1
+    "insurance_company_id":1, /** required */
+    "name":"Name insurance", /** required */
+    "nickname":"alias insurance plan", /** optional */
+    "ins_type_id": 1, /** required */
+    "plan_type_id": 1,  /** optional */
+    "abbreviation":"Abbreviation", /** optional */
+    "cap_group":"someCapGroup", /** optional */
+    "eff_date":"2022-01-23", /** required */
+    "charge_using_id": 1, /** optional */
+    
+    "accept_assign":true, /** required */
+    "pre_authorization":true, /** required */
+    "file_zero_changes":true, /** required */
+    "referral_required":true, /** required */
+    "accrue_patient_resp":true, /** required */
+    "require_abn":true, /** required */
+    "pqrs_eligible":true, /** required */
+    "allow_attached_files":true, /** required */
+    
+    "format_id": 1, /** optional */
+    "file_method_id": 1, /** optional */
+    "naic":"someNaic", /** optional */
+    "time_failed": {
+        "days": 30, /** optional */
+        "from_id": 2, /** optional */
+    },
+    "file_capitated": true, /** required */
+    "address": { /** optional */
+        "address":"Name address", /** optional */
+        "city":"Name city", /** optional */
+        "state":"Name state", /** optional */
+        "zip":"3234", /** optional */
+        "country": "Name country", /** optional */
+        "country_subdivision_code": "Code", /** optional */
+    },
+    "contact": { /** optional */
+        "contact_name": "Some name", /** optional */
+        "phone":"55433", /** optional */
+        "mobile":"55433", /** optional */
+        "fax":"fsdfs", /** optional */
+        "email":"dsfsd@gdrfg.com" /** optional */
+    },
+    "public_note": "Note Public", /** optioanl */
+    "private_note": "Note Private" /** optional */
 }
 ```
 
@@ -456,10 +616,7 @@
 ]
 ```
 
-
-
 #
-
 
 
 <a name="change-status-plan-company"></a>
@@ -530,8 +687,9 @@
 ]
 ```
 
-<a name="get-list-insurance-plans-by-insurance-company"></a>
-## Get list insurance plans by insurance company
+<a name="get-list-formats"></a>
+## Get list formats
+
 
 ### Param in header
 
@@ -541,17 +699,64 @@
 }
 ```
 
-### Param in path
+## Response
+
+> {success} 200 Insurance plan formats found
+
+#
+
+```json
+[
+    {
+        "id": 215,
+        "name": "HCFA"
+    },
+    {
+        "id": 216,
+        "name": "UB92"
+    },
+    {
+        "id": 217,
+        "name": "MASS5"
+    },
+    {
+        "id": 218,
+        "name": "IGENERIC"
+    },
+    {
+        "id": 219,
+        "name": "ILTRHEAD"
+    },
+    {
+        "id": 220,
+        "name": "IPGPERPT"
+    },
+    {
+        "id": 221,
+        "name": "WCOMP"
+    },
+    {
+        "id": 222,
+        "name": "IL333"
+    }
+]
+```
+
+<a name="get-list-ins-types"></a>
+## Get list ins types
+
+
+### Param in header
 
 ```json
 {
-    "insurance_company_id": required <integer>
+    "Authorization": bearer <token>
 }
 ```
 
 ## Response
 
-> {success} 200 Insurance Plans found
+> {success} 200 Insurance plan ins types found
 
 #
 
@@ -559,17 +764,110 @@
 [
     {
         "id": 1,
-        "name": "Fay-Hahn"
+        "name": "AETNA - Aetna"
     },
     {
         "id": 2,
-        "name": "Balistreri-Yost"
+        "name": "AUTO - Automobile Insurance"
     },
     {
         "id": 3,
-        "name": "Langosh Ltd"
+        "name": "BCBS - Blue Cross an Blue Shield"
+    },
+    {
+        "id": 4,
+        "name": "CA - Capitation"
+    },
+    {
+        "id": 5,
+        "name": "CIGNA - Cigna"
+    },
+    {
+        "id": 6,
+        "name": "COMMERCIAL - Commercial Insurance"
+    },
+    {
+        "id": 7,
+        "name": "MEDICAID - Medicaid"
+    },
+    {
+        "id": 8,
+        "name": "MEDICARE - Medicare"
+    },
+    {
+        "id": 9,
+        "name": "UHC - United Health Care"
+    },
+    {
+        "id": 10,
+        "name": "WORKCOMP - Workers Compensation"
     }
 ]
+```
+
+<a name="get-list-plan-types"></a>
+## Get list insurance plan types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance plan types found
+
+#
+
+```json
+[
+    {
+        "id": 11,
+        "name": "HMO - Health Maintenance Organization"
+    },
+    {
+        "id": 12,
+        "name": "PPO - Preferred Provider Organization"
+    },
+    {
+        "id": 13,
+        "name": "EPO - Exclusive Provider Organization"
+    },
+    {
+        "id": 14,
+        "name": "HDHP - High Deductible Health Plan"
+    },
+    {
+        "id": 15,
+        "name": "HSA - Health Savings Accounts"
+    }
+]
+```
+
+<a name="get-list-charge-usings"></a>
+## Get list charge usings
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Insurance plan charge usings found
+
+#
+
+```json
+[]
 ```
 
 <a name="get-list-file-methods"></a>
@@ -603,6 +901,37 @@
     {
         "id": 57,
         "name": "B - Paper & Electronic"
+    }
+]
+```
+
+<a name="get-list-from-the-date"></a>
+## Get list from the date
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 From the date found
+
+#
+
+```json
+[
+    {
+        "id": 58,
+        "name": "Service"
+    },
+    {
+        "id": 59,
+        "name": "Claim generation"
     }
 ]
 ```
