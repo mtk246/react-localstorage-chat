@@ -4,7 +4,7 @@
 
 - [Basic data](#basic-data)
 - [Create insurance plan](#create-insurance-plan)
-- [Get all insurance plan from server](#get-all-insurance-plan-from-server)
+- [Get all insurance plan from server](#get-all-insurance-plan-server)
 - [Get one insurance plan](#get-one-insurance-plan)
 - [Update insurance plan](#update-insurance-plan)
 - [Get insurance plan by name](#get-insurance-plan-by-name)
@@ -265,7 +265,7 @@
 
 ## Example path
 
->{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName&insurnce_company_id=1
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName&insurance_company_id=1
 
 ## Response
 

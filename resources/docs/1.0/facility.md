@@ -259,10 +259,11 @@
 `page <integer>`
 `sortBy <string>`
 `sortDesc <boolean>`
+`company_id <integer>`
 
 ## Example path
 
->{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName&company_id=1
 
 ## Response
 
