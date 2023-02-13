@@ -393,7 +393,7 @@ class InsuranceCompanyRepository
                     "address" => isset($insurance_address) ? $insurance_address : null,
                     "contact" => isset($insurance_contact) ? $insurance_contact : null,
 
-                    "insurance_company_time_failed" => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null
+                    "insurance_company_time_failed" => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null,
                     "billing_incomplete_reasons" => $billing_incomplete_reasons ?? [],
                     "appeal_reasons" => $appeal_reasons ?? [],
                 ]
