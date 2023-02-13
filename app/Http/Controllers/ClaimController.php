@@ -279,7 +279,13 @@ class ClaimController extends Controller
                 'print' => $request->print ?? false,
                 'typeFormat' => $claim->format ?? null,
                 'patient_id' => $claim->patient_id ?? null,
+                'claim_form_services' => $claim->claimFormattable->claimFormServices ?? [],
+                'patient_or_insured_information' => $claim->claimFormattable->patientOrInsuredInformation ?? null,
+                'physician_or_supplier_information' => $claim->claimFormattable->physicianOrSupplierInformation ?? null,
                 'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                'billing_provider_id' => $claim->billing_provider_id ?? null,
+                'service_provider_id' => $claim->service_provider_id ?? null,
+                'referred_id' => $claim->referred_id ?? null,
                 'insurance_policies' => $insurancePolicies ?? [],
             ]);
 
@@ -294,7 +300,13 @@ class ClaimController extends Controller
                 'print' => $request->print ?? false,
                 'typeFormat' => ($request->format != '') ? $request->format : null,
                 'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
+                'claim_form_services' => $request->claim_services ?? [],
+                'patient_or_insured_information' => $request->patient_or_insured_information ?? null,
+                'physician_or_supplier_information' => $request->physician_or_supplier_information ?? null,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'billing_provider_id' => $request->billing_provider_id ?? null,
+                'service_provider_id' => $request->service_provider_id ?? null,
+                'referred_id' => $request->referred_id ?? null,
                 'insurance_policies' => $request->insurance_policies ?? [],
             ]);
 
