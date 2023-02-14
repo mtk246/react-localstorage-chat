@@ -61,7 +61,9 @@ class ReportRepository implements ReportInterface
     private $provider;
     private $providerCode;
     private $policyPrimary;
+    private $policyOther;
     private $subscriber;
+    private $subscriberOther;
     private $patientOrInsuredInfo;
     private $physicianOrSupplierInfo;
     private $dateOfCurrent;
@@ -188,6 +190,8 @@ class ReportRepository implements ReportInterface
         if (isset($this->patient)) {
             $this->policyPrimary = $this->patient->insurancePolicies
                                         ->whereIn('id', $params['insurance_policies'])->first();
+            $this->policyOther = $this->patient->insurancePolicies
+                                        ->whereIn('id', $params['insurance_policies'])->skip(1)->first();
             if ($this->policyPrimary) {
                 $this->insuranceCompany = $this->policyPrimary->insurancePlan->insuranceCompany;
             }
@@ -195,6 +199,11 @@ class ReportRepository implements ReportInterface
                 ($this->policyPrimary->own ?? true)
                     ? $this->patient->user
                     : $this->policyPrimary->subscriber;
+
+            $this->subscriberOther =
+                ($this->policyOther->own ?? true)
+                    ? $this->patient->user
+                    : $this->policyOther->subscriber;
         }
 
         $this->patientOrInsuredInfo = $params['patient_or_insured_information'] ?? null;
@@ -447,6 +456,21 @@ class ReportRepository implements ReportInterface
 
                 /** 8. Reservado */
                 /** 9. Reservado para MEDIGAP */
+                $this->pdf->SetFont($this->fontFamily, '', 10);
+                if ($this->policyOther && $this->policyPrimary && $this->policyOther->id != $this->policyPrimary->id) {
+                    if ($this->subscriberOther && $this->subscriberOther->id == $this->subscriber->id) {
+                        $name = ($this->subscriberOther->last_name ?? $this->subscriberOther->profile->last_name) . ', ' . ($this->subscriberOther->first_name ?? $this->subscriberOther->profile->first_name) . ', ' . substr((isset($this->subscriberOther->middle_name) ? $this->subscriberOther->middle_name : (isset($this->subscriberOther->profile->middle_name) ? $this->subscriberOther->profile->middle_name : '')), 0, 1);
+                        $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 10, 81.5, true, 0, false, true, 0, 'T', true);
+                    }
+                    /** 9a. Other insurance policy group */
+                    $this->pdf->MultiCell(70, 5.8, substr($this->policyOther->policy_number ?? '', 0, 29), 0, 'L', false, 1, 10, 90, true, 0, false, true, 0, 'T', true);
+                    
+                    /** 9d. Other insurance plan name */
+                    $this->pdf->MultiCell(70, 5.8, ($this->policyOther->insurancePlan->name ?? ''), 0, 'L', false, 1, 10, 115.5, true, 0, false, true, 0, 'T', true);
+
+
+
+                }
 
                 /** 10. Patient condition related */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
@@ -471,7 +495,7 @@ class ReportRepository implements ReportInterface
                 /** 11. Policy number or group number insured */
                 if ($this->policyPrimary && ($this->policyPrimary->typeResponsibility->code == 'P')) {
                     $this->pdf->SetFont($this->fontFamily, '', 10);
-                    $this->pdf->MultiCell(70, 5.8, 'NINGUNO', 0, 'L', false, 1, 133, 82, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, 'NONE', 0, 'L', false, 1, 133, 82, true, 0, false, true, 0, 'T', true);
 
                 } else {
                     $this->pdf->SetFont($this->fontFamily, '', 10);
