@@ -286,7 +286,10 @@ class ClaimController extends Controller
                 'billing_provider_id' => $claim->billing_provider_id ?? null,
                 'service_provider_id' => $claim->service_provider_id ?? null,
                 'referred_id' => $claim->referred_id ?? null,
+                'company_id' => $claim->company_id ?? null,
+                'facility_id' => $claim->facility_id ?? null,
                 'insurance_policies' => $insurancePolicies ?? [],
+                'diagnoses' => $claim->diagnoses ?? [],
             ]);
 
         } else {
@@ -307,7 +310,10 @@ class ClaimController extends Controller
                 'billing_provider_id' => $request->billing_provider_id ?? null,
                 'service_provider_id' => $request->service_provider_id ?? null,
                 'referred_id' => $request->referred_id ?? null,
+                'company_id' => $request->company_id ?? null,
+                'facility_id' => $request->facility_id ?? null,
                 'insurance_policies' => $request->insurance_policies ?? [],
+                'diagnoses' => $request->diagnoses ?? [],
             ]);
 
         }

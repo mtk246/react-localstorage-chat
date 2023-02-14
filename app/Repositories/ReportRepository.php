@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use App\Models\Parameter;
 use App\Models\TypeForm;
 use App\Models\Patient;
+use App\Models\Company;
+use App\Models\Facility;
+use App\Models\Diagnosis;
 use App\Models\PlaceOfService;
 use App\Models\Procedure;
 use App\Models\TypeCatalog;
@@ -52,7 +55,9 @@ class ReportRepository implements ReportInterface
     private $typeForm;
     private $insuranceCompany;
     private $patient;
+    private $company;
     private $billingCompany;
+    private $billingProvider;
     private $provider;
     private $providerCode;
     private $policyPrimary;
@@ -71,6 +76,8 @@ class ReportRepository implements ReportInterface
     private $additionalField;
 
     private $claimServices;
+    private $diagnoses;
+    private $facility;
 
     public function __construct()
     {
@@ -190,11 +197,11 @@ class ReportRepository implements ReportInterface
                     : $this->policyPrimary->subscriber;
         }
 
-        $this->patientOrInsuredInfo = $params['patient_or_insured_information'];
-        $this->physicianOrSupplierInfo = $params['physician_or_supplier_information'];
+        $this->patientOrInsuredInfo = $params['patient_or_insured_information'] ?? null;
+        $this->physicianOrSupplierInfo = $params['physician_or_supplier_information'] ?? null;
 
         
-        if ($this->physicianOrSupplierInfo->claimDateInformations) {
+        if (isset($this->physicianOrSupplierInfo->claimDateInformations)) {
             $this->otherField = null;
             $this->currentField = null;
             $this->currentOccupationField = null;
@@ -231,12 +238,20 @@ class ReportRepository implements ReportInterface
         } elseif (isset($params['referred_id'])) {
             $this->provider = HealthProfessional::find($params['referred_id']);
             $this->providerCode = 'DK';
-        } elseif (isset($params['billing_provider_id'])) {
-            $this->provider = HealthProfessional::find($params['billing_provider_id']);
-            $this->providerCode = 'DQ';
+        }
+
+        if (isset($params['billing_provider_id'])) {
+            $this->billingProvider = HealthProfessional::find($params['billing_provider_id']);
         }
 
         $this->claimServices = $params['claim_form_services'];
+
+        foreach ($params['diagnoses'] ?? [] as $diagnosis) {
+            $diag = Diagnosis::find($diagnosis->pivot->diagnosis_id ?? $diagnosis['diagnosis_id']);
+            $this->diagnoses[$diagnosis->pivot->item ?? $diagnosis['item']] = $diag->code;
+        }
+        $this->company = Company::find($params['company_id'] ?? null);
+        $this->facility = Facility::find($params['facility_id'] ?? null);
     }
 
     public function setHeader(
@@ -351,7 +366,7 @@ class ReportRepository implements ReportInterface
         /** 1a. Insured ID number */
         if (isset($this->subscriber)) {
             $this->pdf->SetFont($this->fontFamily, '', 9);
-            $ssn = isset($this->subscriber->ssn) ? $this->subscriber->ssn : (isset($this->subscriber->profile->ssn) ? $this->subscriber->profile->ssn : '');
+            $ssn = $this->subscriber->ssn ?? $this->subscriber->profile->ssn;
             $this->pdf->MultiCell(70, 5.8, $ssn, 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
 
             /** 4. Insured name */
@@ -483,13 +498,13 @@ class ReportRepository implements ReportInterface
                 $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 148.5, 115.5, true, 0, false, true, 0, 'T', true);
                 
                 /** 12. Patient authorization */
-                if ($this->patientOrInsuredInfo->patient_signature) {
+                if ($this->patientOrInsuredInfo->patient_signature ?? false) {
                     $this->pdf->MultiCell(70, 10, 'Signature on File', 0, 'L', false, 1, 27, 131.5, true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(70, 10, now()->format('m/d/Y'), 0, 'L', false, 1, 100, 131.5, true, 0, false, true, 0, 'T', true);
                 }
 
                 /** 13. Insured authorization */
-                if ($this->patientOrInsuredInfo->insured_signature) {
+                if ($this->patientOrInsuredInfo->insured_signature ?? false) {
                     $this->pdf->MultiCell(70, 10, 'Signature on File', 0, 'L', false, 1, 148.5, 131.5, true, 0, false, true, 0, 'T', true);
                 }
 
@@ -524,12 +539,12 @@ class ReportRepository implements ReportInterface
 
                 /** 17. Provider */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
-                $providerName = $this->provider->user->profile->first_name;
+                $providerName = $this->provider->user->profile->first_name ?? null;
                 $providerName .= isset($this->provider->user->profile->middle_name)
                     ? ' ' . substr($this->provider->user->profile->middle_name, 0, 1) . ' '
                     : ' ';
-                $providerName .= $this->provider->user->profile->last_name;
-                $providerName .= ' ' . $this->provider->user->profile->suffix_name ?? '';
+                $providerName .= $this->provider->user->profile->last_name ?? '';
+                $providerName .= ' ' . ($this->provider->user->profile->suffix_name ?? '');
 
                 $this->pdf->MultiCell(70, 10, $this->providerCode ?? '', 0, 'L', false, 1, 9, 149, true, 0, false, true, 0, 'T', true);
                 $this->pdf->MultiCell(70, 10, $providerName ?? '', 0, 'L', false, 1, 15.5, 149, true, 0, false, true, 0, 'T', true);
@@ -566,7 +581,7 @@ class ReportRepository implements ReportInterface
 
                 /** 20. Outaide LAB */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
-                if ($this->physicianOrSupplierInfo->outside_lab) {
+                if ($this->physicianOrSupplierInfo->outside_lab ?? false) {
                     $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 136, 157.2, true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(25, 10, $this->physicianOrSupplierInfo->charges ?? '', 0, 'R', false, 1, 160, 157.2, true, 0, false, true, 0, 'T', true);
                 } else {
@@ -577,20 +592,23 @@ class ReportRepository implements ReportInterface
                 $this->pdf->MultiCell(8, 10, '0', 0, 'L', false, 1, 111.5, 162, true, 0, false, true, 0, 'T', true);
                 //$this->pdf->MultiCell(8, 10, '9', 0, 'L', false, 1, 111.5, 162, true, 0, false, true, 0, 'T', true);
 
-                $this->pdf->MultiCell(20, 10, 'DiagnosA', 0, 'L', false, 1, 12.5, 166, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosB', 0, 'L', false, 1, 45, 166, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosC', 0, 'L', false, 1, 77.9, 166, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosD', 0, 'L', false, 1, 110.4, 166.3, true, 0, false, true, 0, 'T', true);
 
-                $this->pdf->MultiCell(20, 10, 'DiagnosE', 0, 'L', false, 1, 12.5, 170, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosF', 0, 'L', false, 1, 45, 170.1, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosG', 0, 'L', false, 1, 77.9, 170, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosH', 0, 'L', false, 1, 110.4, 170.5, true, 0, false, true, 0, 'T', true);
 
-                $this->pdf->MultiCell(20, 10, 'DiagnosI', 0, 'L', false, 1, 12.5, 174.2, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosJ', 0, 'L', false, 1, 45, 174.2, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosK', 0, 'L', false, 1, 77.9, 174.2, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(20, 10, 'DiagnosL', 0, 'L', false, 1, 110.4, 174.2, true, 0, false, true, 0, 'T', true);
+
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['A'] ?? '', 0, 'L', false, 1, 12.5, 166, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['B'] ?? '', 0, 'L', false, 1, 45, 166, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['C'] ?? '', 0, 'L', false, 1, 77.9, 166, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['D'] ?? '', 0, 'L', false, 1, 110.4, 166.3, true, 0, false, true, 0, 'T', true);
+
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['E'] ?? '', 0, 'L', false, 1, 12.5, 170, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['F'] ?? '', 0, 'L', false, 1, 45, 170.1, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['G'] ?? '', 0, 'L', false, 1, 77.9, 170, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['H'] ?? '', 0, 'L', false, 1, 110.4, 170.5, true, 0, false, true, 0, 'T', true);
+
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['I'] ?? '', 0, 'L', false, 1, 12.5, 174.2, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['J'] ?? '', 0, 'L', false, 1, 45, 174.2, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['K'] ?? '', 0, 'L', false, 1, 77.9, 174.2, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(20, 10, $this->diagnoses['L'] ?? '', 0, 'L', false, 1, 110.4, 174.2, true, 0, false, true, 0, 'T', true);
 
                 /** 22. Resubmision Code */
                 /** Sustitución del reclamo anteriror */
@@ -602,11 +620,12 @@ class ReportRepository implements ReportInterface
                 $this->pdf->MultiCell(20, 10, '', 0, 'L', false, 1, 160, 166.3, true, 0, false, true, 0, 'T', true);
 
                 /** 23. Authorization number */
-                $this->pdf->MultiCell(70, 10, 'Por asignar', 0, 'L', false, 1, 132, 174.2, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 10, $this->physicianOrSupplierInfo->prior_authorization_number ?? '', 0, 'L', false, 1, 132, 174.2, true, 0, false, true, 0, 'T', true);
 
                 $this->pdf->SetFont($this->fontFamily, '', 10);
                 $lineSpaceY = 8.6;
                 $totalCharge = 0;
+                $totalCopay = 0;
                 foreach ($this->claimServices as $index => $claimService) {
                     /** 24a. Dates of services */
                     $fromDate = explode('-', $claimService->from_service ?? '');
@@ -622,31 +641,32 @@ class ReportRepository implements ReportInterface
 
 
                     /** 24b. Places of services */
-                    $pos = PlaceOfService::find($claimService->place_of_service_id);
+                    $pos = PlaceOfService::find($claimService->place_of_service_id ?? null);
                     $this->pdf->MultiCell(70, 10, $pos->code ?? '', 0, 'L', false, 1, 52.5, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     /** 24c. Places of services */
-                    if ($claimService->emg) {
+                    if ($claimService->emg ?? false) {
                         $this->pdf->MultiCell(70, 10, 'Y', 0, 'L', false, 1, 61, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     }
 
                     /** 24d. Procedures services or suppliers */
-                    $cpt = Procedure::find($claimService->place_of_service_id);
+                    $cpt = Procedure::find($claimService->place_of_service_id ?? null);
                     $this->pdf->MultiCell(70, 10, $cpt->code ?? '', 0, 'L' , false, 1, 70, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     $lineSpaceX = 8;
-                    foreach ($claimService->modifiers as $key => $mod) {
+                    foreach ($claimService->modifiers ?? [] as $key => $mod) {
                         $this->pdf->MultiCell(70, 10, $mod['name'] ?? '', 0, 'L' , false, 1, (87.5 + ($lineSpaceX*$key) - (0.3*$key)), (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     }
 
                     /** 24e. Diagnosis pointer */
                     $diagPointers = '';
-                    foreach ($claimService->diagnostic_pointers as $key => $pointer) {
+                    foreach ($claimService->diagnostic_pointers ?? [] as $key => $pointer) {
                         $diagPointers .= $pointer;
                     }
                     $this->pdf->MultiCell(70, 10, $diagPointers ?? '', 0, 'L' , false, 1, 118, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
 
                     /** 24f. Charges */
                     $arrayPrice = explode('.', $claimService->price ?? '');
-                    $totalCharge += $claimService->price;
+                    $totalCharge += $claimService->price ?? 0;
+                    $totalCopay += $claimService->copay ?? 0;
                     $this->pdf->MultiCell(15, 10, $arrayPrice[0] ?? '', 0, 'R', false, 1, 132, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(15, 10, $arrayPrice[1] ?? '', 0, 'L', false, 1, 147, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
 
@@ -658,11 +678,11 @@ class ReportRepository implements ReportInterface
                     }
 
                     /** 24h. EPSDT/Plan familiar */
-                    $epsdt = TypeCatalog::find($claimService->epsdt_id);
+                    $epsdt = TypeCatalog::find($claimService->epsdt_id ?? null);
                     $this->pdf->SetFont($this->fontFamily, '', 9);
                     $this->pdf->MultiCell(70, 10, $epsdt->code ?? '', 0, 'L' , false, 1, 163, (187 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     
-                    $planFamily = TypeCatalog::find($claimService->family_planning_id);
+                    $planFamily = TypeCatalog::find($claimService->family_planning_id ?? null);
                     $this->pdf->SetFont($this->fontFamily, '', 10);
                     $this->pdf->MultiCell(70, 10, $planFamily->code ?? '', 0, 'L' , false, 1, 163, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
 
@@ -677,12 +697,82 @@ class ReportRepository implements ReportInterface
                     $this->pdf->MultiCell(70, 10, '', 0, 'L' , false, 1, 176, (187 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
 
                     $this->pdf->SetFont($this->fontFamily, '', 10);
-                    $this->pdf->MultiCell(70, 10, $this->provider->npi, 0, 'L' , false, 1, 176, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 10, $this->provider->npi ?? null, 0, 'L' , false, 1, 176, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                 }
 
+                /** 25. FederalTax */
+                if (isset($this->company->ein)) {
+                    $this->pdf->MultiCell(35, 10, $this->company->ein ?? '', 0, 'L', false, 1, 10, 240.8, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(35, 10, 'X', 0, 'L', false, 1, 48.5, 240.8, true, 0, false, true, 0, 'T', true);
+                }
+
+                //$this->pdf->MultiCell(35, 10, 'SSN', 0, 'L', false, 1, 10, 240.8, true, 0, false, true, 0, 'T', true);
+                //$this->pdf->MultiCell(35, 10, 'X', 0, 'L', false, 1, 53.5, 240.8, true, 0, false, true, 0, 'T', true);
+                
+                /** 26. NumAccount */
+                $this->pdf->MultiCell(35, 10, $this->physicianOrSupplierInfo->patient_account_num ?? '', 0, 'L', false, 1, 65, 240.8, true, 0, false, true, 0, 'T', true);
+
+                /** 27. Accept Assignment */
+                if ($this->physicianOrSupplierInfo->accept_assignment ?? false) {
+                    $this->pdf->MultiCell(35, 10, 'X', 0, 'L', false, 1, 101.2, 240.8, true, 0, false, true, 0, 'T', true);
+                } else {
+                    $this->pdf->MultiCell(35, 10, 'X', 0, 'L', false, 1, 113.5, 240.8, true, 0, false, true, 0, 'T', true);
+                }
+                
+
+                /** 28. Total charge */
                 $arrayPrice = explode('.', $totalCharge ?? '');
-                $this->pdf->MultiCell(15, 10, $arrayPrice[0] ?? '', 0, 'R', false, 1, 132, 240.8, true, 0, false, true, 0, 'T', true);
-                $this->pdf->MultiCell(15, 10, $arrayPrice[1] ?? '', 0, 'L', false, 1, 147, 240.8, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(18, 10, $arrayPrice[0] ?? '', 0, 'R', false, 1, 134, 240.8, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(6, 10, ($arrayPrice[0] != '') ? (str_pad($arrayPrice[1] ?? '', 2, "0", STR_PAD_RIGHT) ?? '00') : '', 0, 'L', false, 1, 152, 240.8, true, 0, false, true, 0, 'T', true);
+
+                /** 29. Amount paid */
+                $arrayPrice = explode('.', $totalCopay ?? '');
+                $this->pdf->MultiCell(15, 10, $arrayPrice[0] ?? '', 0, 'R', false, 1, 162, 240.8, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(6, 10, ($arrayPrice[0] != '') ? (str_pad($arrayPrice[1] ?? '', 2, "0", STR_PAD_RIGHT) ?? '00') : '', 0, 'L', false, 1, 177, 240.8, true, 0, false, true, 0, 'T', true);
+
+                /** 31. Signature physician */
+
+                $this->pdf->MultiCell(70, 10, 'Signature on File', 0, 'L', false, 1, 15, 258, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 10, now()->format('m/d/y'), 0, 'L', false, 1, 45, 258, true, 0, false, true, 0, 'T', true);
+
+                /** 32. Facility */
+
+                $address = ($this->facility) ? $this->facility->addresses->first() : null;
+
+                $this->pdf->SetFont($this->fontFamily, '', 9);
+                $this->pdf->MultiCell(70, 5.8, ($this->facility->name ?? ''), 0, 'L', false, 1, 65, 248, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($address->address ?? ''), 0, 'L', false, 1, 65, 252, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8,
+                    (substr($address->city ?? '', 0, 24) . ' ' . substr($address->state ?? '', 0, 3) . substr($address->zip ?? '', 0, 12)),
+                    0, 'L', false, 1, 65, 256, true, 0, false, true, 0, 'T', true);
+
+                /** 32a. Facility NPI */
+                $this->pdf->MultiCell(70, 5.8, ($this->facility->npi ?? ''), 0, 'L', false, 1, 65, 262, true, 0, false, true, 0, 'T', true);
+
+                /** 32b. Facility Other */
+                //$this->pdf->MultiCell(70, 5.8, ($this->facility->npi ?? ''), 0, 'L', false, 1, 93.5, 262, true, 0, false, true, 0, 'T', true);
+
+                /** 33. Billing providerInfo */
+
+                $address = ($this->billingProvider && $this->billingProvider->user->addresses) ? $this->billingProvider->user->addresses->first() : null;
+
+                $this->pdf->SetFont($this->fontFamily, '', 9);
+                $name = ($this->billingProvider->user->profile->last_name . ', ' . $this->billingProvider->user->profile->first_name . ', ' . substr($this->billingProvider->user->profile->middle_name, 0, 1));
+
+                $this->pdf->MultiCell(70, 5.8, $name ?? '', 0, 'L', false, 1, 134, 248, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($address->address ?? ''), 0, 'L', false, 1, 134, 252, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8,
+                    (substr($address->city ?? '', 0, 24) . ' ' . substr($address->state ?? '', 0, 3) . substr($address->zip ?? '', 0, 12)),
+                    0, 'L', false, 1, 134, 256, true, 0, false, true, 0, 'T', true);
+
+                /** 32a. billingProvider NPI */
+                $this->pdf->MultiCell(70, 5.8, ($this->billingProvider->npi ?? ''), 0, 'L', false, 1, 134, 262, true, 0, false, true, 0, 'T', true);
+
+                /** 32b. billingProvider Other */
+                //$this->pdf->MultiCell(70, 5.8, ($this->billingProvider->npi ?? ''), 0, 'L', false, 1, 93.5, 262, true, 0, false, true, 0, 'T', true);
+
+
+
 
 
         }
