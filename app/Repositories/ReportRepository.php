@@ -366,12 +366,12 @@ class ReportRepository implements ReportInterface
         /** 1a. Insured ID number */
         if (isset($this->subscriber)) {
             $this->pdf->SetFont($this->fontFamily, '', 9);
-            $ssn = (isset($this->subscriber->ssn)
+            /**$ssn = (isset($this->subscriber->ssn)
                 ? $this->subscriber->ssn
                 : (isset($this->subscriber->profile->ssn)
                     ? $this->subscriber->profile->ssn
-                    : ''));
-            $this->pdf->MultiCell(70, 5.8, $ssn, 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
+                    : ''));*/
+            $this->pdf->MultiCell(70, 5.8, $this->policyPrimary->policy_number ?? '', 0, 'L', false, 1, 135, 40, true, 0, false, true, 0, 'T', true);
 
             /** 4. Insured name */
             $this->pdf->SetFont($this->fontFamily, '', 10);
@@ -475,7 +475,7 @@ class ReportRepository implements ReportInterface
 
                 } else {
                     $this->pdf->SetFont($this->fontFamily, '', 10);
-                    $this->pdf->MultiCell(70, 5.8, substr($this->policyPrimary->policy_number ?? '', 0, 29), 0, 'L', false, 1, 133, 82, true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 5.8, substr($this->policyPrimary->group_number ?? '', 0, 29), 0, 'L', false, 1, 133, 82, true, 0, false, true, 0, 'T', true);
                 }
 
                 /** 11a. Insured date of birth */
@@ -496,7 +496,7 @@ class ReportRepository implements ReportInterface
                 }
                 /** 11c. Insurance plan name */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
-                $this->pdf->MultiCell(70, 5.8, ($this->insuranceCompany->payer_id ?? ''), 0, 'L', false, 1, 135, 107.5, true, 0, false, true, 0, 'T', true);
+                $this->pdf->MultiCell(70, 5.8, ($this->policyPrimary->insurancePlan->name ?? ''), 0, 'L', false, 1, 135, 107.5, true, 0, false, true, 0, 'T', true);
                 /** 11d. Other benefit insurance plan */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
                 $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 148.5, 115.5, true, 0, false, true, 0, 'T', true);
