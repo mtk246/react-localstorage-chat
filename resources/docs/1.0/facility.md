@@ -42,7 +42,7 @@
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
 | 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
 | 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
-| 10 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
+| 16 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
 
 
 

@@ -92,7 +92,7 @@ class Facility extends Model implements Auditable
      */
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class)->withTimestamps();
+        return $this->belongsToMany(Company::class)->withPivot('billing_company_id')->withTimestamps();
     }
 
     /**

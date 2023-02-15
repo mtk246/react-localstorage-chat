@@ -770,4 +770,44 @@ class CompanyRepository
         }
         return $company;
     }
+
+    public function addFacilities(array $data, int $id) {
+        $company = Company::find($id);
+        $records = [];
+        if (is_null($company)) return null;
+
+        $billingCompany = auth()->user()->billingCompanies->first();
+
+        if (!auth()->user()->hasRole('superuser')) {
+            if (is_null($billingCompany)) return null;
+        }
+
+        /** Detach all facilities to company */
+        $company->facilities()->detach();
+
+        /** Attach new facilities to company */
+        foreach ($data['facilities'] as $facility) {
+            $company->facilities()->attach($facility['facility_id'], [
+                'billing_company_id' => $facility['billing_company_id'] ?? $billingCompany
+            ]);
+        }
+        if (auth()->user()->hasRole('superuser')) {
+            $facilities = $company->facilities;
+        } else {
+            $facilities = $company->facilities()->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+        }
+
+        foreach ($facilities as $facility) {
+            array_push($records, [
+                "billing_company_id" => $facility->pivot->billing_company_id,
+                "facility_id" => $facility->id,
+                "facility_type_id" => $facility->facility_type_id,
+                "billing_company" => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name,
+                "facility" => $facility->name,
+                "facility_type" => $facility->facilityType->type,
+
+            ]);
+        }
+        return $records;
+    }
 }

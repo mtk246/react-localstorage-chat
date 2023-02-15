@@ -19,6 +19,7 @@
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
+- [Add facilities](#add-facilities)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -42,6 +43,7 @@
 | 14 |PUT | `Update company`          | `/company/{id}`|yes|update company|
 | 15 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 16 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 17 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
 
 
 
@@ -1314,3 +1316,58 @@
 #
 
 >{warning} 404 error add company to billing company
+
+
+<a name="add-facilities"></a>
+## Add facilities to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required integer`
+
+## Param in body
+
+```json
+{
+    "facilities": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "facility_id": 1,
+        },
+        {
+            "billing_company_id": 1,
+            "facility_id": 2,
+        }
+    ]
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+[
+    {
+        "billing_company_id": 1,
+        "facility_id": 2,
+        "facility_type_id": 6,
+        "billing_company": "Medical Claims Consultants",
+        "facility": "Isa Home Corp.",
+        "facility_type": "AL - Assisted Living Facility"
+    }
+]
+```
+
+#
+
+>{warning} 404 error add facilities to company

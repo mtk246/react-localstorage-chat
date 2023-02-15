@@ -232,6 +232,9 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/add-to-billing-company/{id}",[\App\Http\Controllers\CompanyController::class,'addToBillingCompany'])->middleware([
             "auth:api",
         ]);
+        Route::patch("/add-facilities-to-company/{id}",[\App\Http\Controllers\CompanyController::class,'addFacilities'])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("device")->group(function(){
