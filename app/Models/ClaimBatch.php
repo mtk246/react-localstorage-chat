@@ -15,12 +15,12 @@ class ClaimBatch extends Model implements Auditable
     protected $fillable = [
         "code",
         "name",
-        "status",
         "shipping_date",
         "fake_transmission",
         "claims_reconciled",
         "company_id",
         "billing_company_id",
+        "claim_batch_status_id",
     ];
 
     /**
@@ -52,6 +52,16 @@ class ClaimBatch extends Model implements Auditable
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    /**
+     * ClaimBatch belongs to ClaimBatchStatus.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function claimBatchStatus()
+    {
+        return $this->belongsTo(ClaimBatchStatus::class);
     }
 
     /**

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Claim;
 use App\Models\ClaimBatch;
 use App\Models\ClaimStatus;
+use App\Models\ClaimBatchStatus;
 
 use App\Repositories\ClaimRepository;
 
@@ -22,9 +23,10 @@ class ClaimBatchRepository
      * @return claim|Model
      */
     public function createBatch(array $data) {
-        try {
-            DB::beginTransaction();
-            $status = 'Not submitted';
+        /**try {
+            DB::beginTransaction();*/
+            $claimBatchSubmitted = ClaimBatchStatus::whereStatus('Submitted')->first();
+            $claimBatchNotSubmitted = ClaimBatchStatus::whereStatus('Not submitted')->first();
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
@@ -32,31 +34,29 @@ class ClaimBatchRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data["send"])) {
-                $status = ($data["send"] == true) ? 'Submitted' : 'Not submitted';
-            }
+            $status = (isset($data["send"]) && $data["send"] == true) ? $claimBatchSubmitted : $claimBatchNotSubmitted;
 
             $claimBatch = ClaimBatch::create([
-                "code"               => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClaimBatch::class, "code"),
-                "name"               => $data["name"],
-                "status"             => $status,
-                "shipping_date"      => ($status == 'Not submitted') ? null : now(),
-                "claims_reconciled"  => $data["claims_reconciled"] ?? false,
-                "fake_transmission"  => $data["fake_transmission"] ?? false,
-                "company_id"         => $data["company_id"],
-                "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                "code"                  => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClaimBatch::class, "code"),
+                "name"                  => $data["name"],
+                "claim_batch_status_id" => $status->id,
+                "shipping_date"         => ($status->status == 'Not submitted') ? null : now(),
+                "claims_reconciled"     => $data["claims_reconciled"] ?? false,
+                "fake_transmission"     => $data["fake_transmission"] ?? false,
+                "company_id"            => $data["company_id"],
+                "billing_company_id"    => $billingCompany->id ?? $billingCompany,
             ]);
 
             if (isset($data['claim_ids'])) {
                 $claimBatch->claims()->sync($data['claim_ids']);
             }
 
-            DB::commit();
+            //DB::commit();
             return $claimBatch;
-        } catch (\Exception $e) {
+        /**} catch (\Exception $e) {
             DB::rollBack();
             return $e;
-        }
+        }*/
     }
 
     /**
@@ -222,7 +222,8 @@ class ClaimBatchRepository
                 "id" => $claimBatch->id,
                 "code" => $claimBatch->code,
                 "name" => $claimBatch->name,
-                "status" => $claimBatch->status,
+                "claim_batch_status" => $claimBatch->claimBatchStatus,
+                "claim_batch_status_id" => $claimBatch->claim_batch_status_id,
                 "shipping_date" => $claimBatch->shipping_date,
                 "fake_transmission" => $claimBatch->fake_transmission,
                 "company_id" => $claimBatch->company_id,
@@ -268,7 +269,8 @@ class ClaimBatchRepository
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
-                "claims"
+                "claims",
+                "claimBatchStatus"
             ]);
         } else {
             $data = ClaimBatch::with([
@@ -279,7 +281,8 @@ class ClaimBatchRepository
                         }
                     ]);
                 },
-                "claims"
+                "claims",
+                "claimBatchStatus"
             ]);
         }
 
@@ -315,7 +318,8 @@ class ClaimBatchRepository
     public function updateBatch(array $data, int $id) {
         try {
             DB::beginTransaction();
-            $status = 'Not submitted';
+            $claimBatchSubmitted = ClaimBatchStatus::whereStatus('Submitted')->first();
+            $claimBatchNotSubmitted = ClaimBatchStatus::whereStatus('Not submitted')->first();
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
@@ -324,15 +328,15 @@ class ClaimBatchRepository
             }
 
             if (isset($data["send"])) {
-                $status = ($data["send"] == true) ? 'Submitted' : 'Not submitted';
+                $status = ($data["send"] == true) ? $claimBatchSubmitted : $claimBatchNotSubmitted;
             }
 
             $claimBatch = ClaimBatch::find($id);
 
             $claimBatch->update([
                 "name"               => $data["name"],
-                "status"             => $status,
-                "shipping_date"      => ($status == 'Not submitted') ? null : now(),
+                "claim_status_id"    => $status->id,
+                "shipping_date"      => ($status->status == 'Not submitted') ? null : now(),
                 "claims_reconciled"  => $data["claims_reconciled"] ?? false,
                 "fake_transmission"  => $data["fake_transmission"] ?? false,
                 "company_id"         => $data["company_id"],
@@ -376,9 +380,10 @@ class ClaimBatchRepository
 
             $claimRepository = new ClaimRepository();
             $claimBatch = ClaimBatch::find($id);
+            $claimBatchStatus = ClaimBatchStatus::whereStatus('Submitted')->first();
             $claimBatch->update([
-                "status"             => 'Submitted',
-                "shipping_date"      => now(),
+                "claim_status_id" => $claimBatchStatus->id,
+                "shipping_date"   => now(),
             ]);
             foreach ($claimBatch->claims as $claim) {
                 $claimRepository->claimSubmit($token, $claim->id, $claimBatch->id);

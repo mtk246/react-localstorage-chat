@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\TypeForm;
 use App\Models\TypeDiag;
 use App\Models\ClaimStatus;
+use App\Models\ClaimBatchStatus;
 use App\Models\ClaimTransmissionStatus;
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
@@ -187,6 +188,18 @@ class ClaimDataSeeder extends Seeder
             ClaimTransmissionStatus::updateOrCreate([
                 'status' => $status['status']
             ], $transmissionStatus);
+        }
+
+        $claimBatchStatus = [
+            ['status' => 'Completed',     'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
+            ['status' => 'Submitted',     'background_color' => '#FFFAEC', 'font_color' => '#B04D12'],
+            ['status' => 'Not submitted', 'background_color' => '#FFF1F1', 'font_color' => '#A72821']
+        ];
+
+        foreach ($claimBatchStatus as $batchStatus) {
+            ClaimBatchStatus::updateOrCreate([
+                'status' => $status['status']
+            ], $batchStatus);
         }
     }
 }
