@@ -458,7 +458,7 @@ class ReportRepository implements ReportInterface
                 /** 9. Reservado para MEDIGAP */
                 $this->pdf->SetFont($this->fontFamily, '', 10);
                 if ($this->policyOther && $this->policyPrimary && $this->policyOther->id != $this->policyPrimary->id) {
-                    if ($this->subscriberOther && $this->subscriberOther->id == $this->subscriber->id) {
+                    if ($this->subscriberOther && $this->subscriberOther->id != $this->subscriber->id) {
                         $name = ($this->subscriberOther->last_name ?? $this->subscriberOther->profile->last_name) . ', ' . ($this->subscriberOther->first_name ?? $this->subscriberOther->profile->first_name) . ', ' . substr((isset($this->subscriberOther->middle_name) ? $this->subscriberOther->middle_name : (isset($this->subscriberOther->profile->middle_name) ? $this->subscriberOther->profile->middle_name : '')), 0, 1);
                         $this->pdf->MultiCell(70, 5.8, $name, 0, 'L', false, 1, 10, 81.5, true, 0, false, true, 0, 'T', true);
                     }

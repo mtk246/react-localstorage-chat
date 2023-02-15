@@ -543,7 +543,7 @@
 ```
 
 <a name="preview-batch"></a>
-## Show batch report preview
+## Show batch report preview or print
 
 ### Param in header
 
@@ -558,8 +558,19 @@
 ```json
 {
     "id": required  <integer>
+    "print": optional <boolean>
 }
 ```
+`company_id <integer>`
+
+## Example path print
+
+>{primary} /show-batch-preview/1?print=true
+
+## Example path preview
+
+>{primary} /show-batch-preview/1
+
 
 ## Response
 

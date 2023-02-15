@@ -94,7 +94,7 @@ class ClaimBatchController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error submitting claim batch"), 400);
     }
 
-    public function showReport($id) {
+    public function showReport(Request $request, int $id) {
         $pdf = new ReportRepository();
         $batch = ClaimBatch::with([
             'claims' => function ($query) {
@@ -112,24 +112,20 @@ class ClaimBatchController extends Controller
             }
             $pdf->setConfig([
                 'urlVerify' => 'www.google.com.ve',
+                'print' => $request->print ?? false,
                 'typeFormat' => $claim->format ?? null,
                 'patient_id' => $claim->patient_id ?? null,
+                'claim_form_services' => $claim->claimFormattable->claimFormServices ?? [],
+                'patient_or_insured_information' => $claim->claimFormattable->patientOrInsuredInformation ?? null,
+                'physician_or_supplier_information' => $claim->claimFormattable->physicianOrSupplierInformation ?? null,
                 'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                'billing_provider_id' => $claim->billing_provider_id ?? null,
+                'service_provider_id' => $claim->service_provider_id ?? null,
+                'referred_id' => $claim->referred_id ?? null,
+                'company_id' => $claim->company_id ?? null,
+                'facility_id' => $claim->facility_id ?? null,
                 'insurance_policies' => $insurancePolicies ?? [],
-            ]);
-
-        } else {
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $request->billing_company_id;
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'typeFormat' => ($request->format != '') ? $request->format : null,
-                'patient_id' => ($request->patient_id != '') ? $request->patient_id : null,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                'insurance_policies' => $request->insurance_policies ?? [],
+                'diagnoses' => $claim->diagnoses ?? [],
             ]);
 
         }
