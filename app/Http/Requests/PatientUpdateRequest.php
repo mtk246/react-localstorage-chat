@@ -58,7 +58,7 @@ class PatientUpdateRequest extends FormRequest
             'contact.email'                     => ['required', Rule::unique('users', 'email')->ignore($patient->user_id), 'string', 'email:rfc'],
 
             'addresses'                           => ['required', 'array'],
-            'addresses.*.address_type_id'         => ['required', 'string'],
+            'addresses.*.address_type_id'         => ['required', 'integer'],
             'addresses.*.address'                 => ['required', 'string'],
             'addresses.*.city'                    => ['required', 'string'],
             'addresses.*.state'                   => ['required', 'string'],
