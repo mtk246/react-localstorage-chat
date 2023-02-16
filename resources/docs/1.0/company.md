@@ -19,7 +19,10 @@
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
-- [Add facilities](#add-facilities)
+- [Add facilities to company](#add-facilities)
+- [Add service to company](#add-services)
+- [Add service to company](#add-copay)
+- [Add service to contract fee](#add-contracts-fee)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -44,6 +47,9 @@
 | 15 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 16 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 | 17 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
+| 18 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
+| 19 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
+| 20 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
 
 
@@ -1371,3 +1377,249 @@
 #
 
 >{warning} 404 error add facilities to company
+
+
+<a name="add-services"></a>
+## Add services to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required integer`
+
+## Param in body
+
+```json
+{
+    "services": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "procedure_id": 1,
+            "description": "Description procedure",
+            "modifier_id": 2,
+            "price": 20.2,
+            "mac": "02102",
+            "locality_number":"01",
+            "state": "ALASKA",
+            "fsa": "STATEWIDE",
+            "counties": "ALL COUNTIES",
+            "insurance_label_fee_id": 1,
+            "price_percentage": "70",
+            "clia": "00001A",
+            "medication_application": true,
+            "medications": [
+                {
+                    "date": "2022-03-16",
+                    "drug_code": "001A23X",
+                    "batch": "0101AS",
+                    "quantity": 2,
+                    "frequency": 3
+                },
+                {
+                    "date": "2022-03-16",
+                    "drug_code": "002A23X",
+                    "batch": "0201AS",
+                    "quantity": 2,
+                    "frequency": 3
+                }
+            ]
+
+        }
+    ]
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+[
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "procedure_id": 1,
+            "description": "Description procedure",
+            "modifier_id": 2,
+            "price": 20.2,
+            "mac": "02102",
+            "locality_number":"01",
+            "state": "ALASKA",
+            "fsa": "STATEWIDE",
+            "counties": "ALL COUNTIES",
+            "insurance_label_fee_id": 1,
+            "price_percentage": "70",
+            "clia": "00001A",
+            "medication_application": true,
+            "medications": [
+                {
+                    "code": "000001",
+                    "date": "2022-03-16",
+                    "drug_code": "001A23X",
+                    "batch": "0101AS",
+                    "quantity": 2,
+                    "frequency": 3
+                },
+                {
+                    "code": "000002",
+                    "date": "2022-03-16",
+                    "drug_code": "002A23X",
+                    "batch": "0201AS",
+                    "quantity": 2,
+                    "frequency": 3
+                }
+            ]
+
+        }
+    ]
+```
+
+#
+
+>{warning} 404 error add services to company
+
+
+<a name="add-copay"></a>
+## Add copays to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required integer`
+
+## Param in body
+
+```json
+{
+    "copays": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "procedure_id": 1,
+            "insurance_plan_id": 1,
+            "insurance_company_id": 1,
+            "copay": 150.2,
+            "private_note": "Note private by billing_company"
+        }
+    ]
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+[
+    {
+        "billing_company_id": 1, /** Only required by superuser */
+        "procedure_id": 1,
+        "insurance_plan_id": 1,
+        "insurance_company_id": 1,
+        "copay": 150.2,
+        "private_note": "Note private by billing_company"
+    }
+]
+```
+
+#
+
+>{warning} 404 error add copays to company
+
+
+<a name="add-contracts-fee"></a>
+## Add contracts fee to company
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`company_id required integer`
+
+## Param in body
+
+```json
+{
+    "contract_fees": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "insurance_company_id": 1,
+            "insurance_plan_id": 1,
+            "type_id": 1,
+            "start_date": "2022-03-16",
+            "end_date": "2022-03-16",
+            "procedure_id": 2,
+            "modifier_id": 1,
+            "contract": 120.5,
+            "mac": "02102",
+            "locality_number":"01",
+            "state": "ALASKA",
+            "fsa": "STATEWIDE",
+            "counties": "ALL COUNTIES",
+            "insurance_label_fee_id": 1,
+            "price_percentage": "70",
+            "private_note": "Note private by billing_company"
+        }
+    ]
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+[
+    {
+        "billing_company_id": 1,
+        "insurance_company_id": 1,
+        "insurance_plan_id": 1,
+        "type_id": 1,
+        "start_date": "2022-03-16",
+        "end_date": "2022-03-16",
+        "procedure_id": 2,
+        "modifier_id": 1,
+        "contract": 120.5,
+        "mac": "02102",
+        "locality_number":"01",
+        "state": "ALASKA",
+        "fsa": "STATEWIDE",
+        "counties": "ALL COUNTIES",
+        "insurance_label_fee_id": 1,
+        "price_percentage": "70",
+        "private_note": "Note private by billing_company",
+        "patients": [
+            {
+                "patient_id": 1,
+                "start_date": "2022-03-16",
+                "end_date": "2022-03-16",
+            }
+        ]
+    }
+]
+```
+
+#
+
+>{warning} 404 error add contracts fee to company
