@@ -817,6 +817,7 @@ class DoctorRepository
         $billingCompanyId = $request->billing_company_id ?? null;
         $companyId = $request->company_id ?? null;
         $authorization = $request->authorization ?? 'false';
+        $only = $request->only ?? null;
 
         if (auth()->user()->hasRole('superuser')) {
             $billingCompany = $billingCompanyId;
@@ -885,8 +886,11 @@ class DoctorRepository
                 ]);
             }
         }
-        return ($authorization == 'true') ? $records : $record;
-
+        if ($authorization == 'true') {
+            return (!isset($only)) ? $records : $records[$only] ?? [];
+        } else {
+            return $record;
+        }
     }
 
     public function updateCompanies(array $data, int $id) {

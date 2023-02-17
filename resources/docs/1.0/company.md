@@ -1508,7 +1508,7 @@
     "copays": [
         {
             "billing_company_id": 1, /** Only required by superuser */
-            "procedure_id": 1,
+            "procedure_ids": [1,2,3],
             "insurance_plan_id": 1,
             "insurance_company_id": 1,
             "copay": 150.2,

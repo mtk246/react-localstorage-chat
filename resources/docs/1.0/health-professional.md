@@ -32,7 +32,7 @@
 | 7 | PATCH | `change status health professional`  | `/health-professional/{id}/change-status`|yes|change status health professional|
 | 8 |GET    | `Get list health professional types` | `/health-professional/get-list-health-professional-types`|yes|Get list health professional types|
 | 9 |GET    | `Get list doctor authorizations` | `/health-professional/get-list-authorizations`|yes|Get list authorizations|
-| 10 |GET   | `Get list health professionals`  | `/health-professional/get-list?billing_company_id={ID?}&company_id={ID?}&authorization={true?}`|yes|Get list health professionals by authorizations|
+| 10 |GET   | `Get list health professionals`  | `/health-professional/get-list?billing_company_id={ID?}&company_id={ID?}&authorization={true?}&only={billing_provider?}`|yes|Get list health professionals by authorizations|
 | 11 |GET    | `Get list billing companies` | `/health-professional/get-list-billing-companies?health_professional_id={healthProfessionalID?}&edit={edit?}`|yes|Get list biling companies|
 | 12 | PUT   | `Update company providers`         | `/health-professional/{id}/update-companies`              |yes|Update health professional|
 
@@ -969,6 +969,7 @@
     "billing_company_id": <integer> /** optional */
     "company_id": <integer> /** optional */
     "authorization": <boolean> /** optional */
+    "only": <string> /** optional */
 }
 ```
 
@@ -1015,7 +1016,7 @@
 
 ```json
 {
-    "billing_providers": [
+    "billing_provider": [
         {
             "id": 1,
             "name": "Fay-Hahn"
@@ -1033,7 +1034,7 @@
             "name": "Halvorson, Deckow and Bode"
         }
     ],
-    "referreds": [
+    "referred": [
         {
             "id": 1,
             "name": "Fay-Hahn"
@@ -1051,7 +1052,7 @@
             "name": "Halvorson, Deckow and Bode"
         }
     ],
-    "service_providers": [
+    "service_provider": [
         {
             "id": 1,
             "name": "Fay-Hahn"
@@ -1071,6 +1072,37 @@
     ]
 
 }
+```
+
+## Example path 2
+
+>{primary} /get-list?billing_company_id=1&company_id=1&authorization=true&only=billing_provider
+
+## Response
+
+> {success} 200 Health professionals found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
 ```
 
 
