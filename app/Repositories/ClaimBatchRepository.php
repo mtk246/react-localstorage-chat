@@ -70,6 +70,9 @@ class ClaimBatchRepository
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status) {
                 $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
             })->with([
+                "insuranceCompany" => function ($query) {
+                    $query->with('nicknames');
+                },
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
@@ -85,6 +88,7 @@ class ClaimBatchRepository
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $bC) {
                 $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
             })->with([
+                "insuranceCompany",
                 "company" => function ($query) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
