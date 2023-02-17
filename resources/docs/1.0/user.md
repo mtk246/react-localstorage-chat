@@ -21,6 +21,7 @@
 - [Search](#search)
 - [New token](#new-token)
 - [Update language](#update-lang)
+- [Get list users](#get-list)
 
 
 <a name="basic-data"></a>
@@ -46,6 +47,7 @@
 | 16|GET | `search`   | `/user/search/{date_of_birth?}/{last_name?}/{first_name?}/{ssn?}` |yes|Get users |
 | 17 |POST | `new token`   | `/user/new-token` |no|generate new token user|
 | 18|PATCH | `update language`   | `/setting/lang` |yes|update language|
+| 19|GET | `get list users`   | `/user/get-list?biling_company_id={ID?}&authorization={NameAuth?}` |yes|Get list users |
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -1203,3 +1205,54 @@
 #
 
 >{warning} 404 user not found, 500 some exception
+
+
+<a name="get-list"></a>
+## Get list all users
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`billing_company_id optional integer`
+`authorization optional string`
+
+>{primary} the parameter "authorization" can have the values "claim", "all".
+
+## Example path Super user with authorization claim
+
+> {success} /get-list?billing_company_id=1&authorization=claim
+
+## Example path Billing manager with authorization claim
+
+> {success} /get-list?authorization=claim
+
+## Response
+
+> {success} 200 Users found
+
+#
+
+```json
+[
+    {
+        "id": 2,
+        "name": "Maxime T Camden"
+    },
+    {
+        "id": 22,
+        "name": "Leonela  Fonseca"
+    },
+    {
+        "id": 19,
+        "name": "Leonard K Berkowitz"
+    }
+]
+```

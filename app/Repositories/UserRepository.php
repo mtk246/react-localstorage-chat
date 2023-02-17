@@ -490,6 +490,46 @@ class UserRepository{
     }
 
     /**
+     * @return Builder[]|Collection
+     */
+    public function getList(Request $request) {
+        $records = [];
+        $billingCompanyId = $request->billing_company_id ?? null;
+        $authorization = $request->authorization ?? null;
+
+        if (auth()->user()->hasRole('superuser')) {
+            $billingCompany = $billingCompanyId;
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
+
+        $users = User::with('profile');
+
+        if (isset($billingCompany)) {
+            $users = $users->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                      ->where('billing_company_user.status', true);
+            });
+        }
+        if (!isset($billingCompany)) {
+            $users = User::with('profile')->get();
+        } else {
+            $users = $users->get();
+        }
+
+        foreach ($users as $user) {
+            array_push($records, [
+                'id'   => $user->id,
+                'name' => $user->profile->first_name . ' ' .
+                          substr($user->profile->middle_name, 0, 1) . ' ' .
+                          $user->profile->last_name
+            ]);
+        }
+
+        return $records;
+    }
+
+    /**
      * @param EditUserRequest $request
      * @param int $id
      * @return User|User[]|Collection|Model|null
