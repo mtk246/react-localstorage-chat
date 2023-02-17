@@ -1074,7 +1074,7 @@
 }
 ```
 
-## Example path 2
+## Example path 3
 
 >{primary} /get-list?billing_company_id=1&company_id=1&authorization=true&only=billing_provider
 
