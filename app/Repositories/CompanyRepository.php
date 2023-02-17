@@ -356,6 +356,25 @@ class CompanyRepository
                 }
             ])->first();
         }
+
+        $fields = [];
+
+        if (auth()->user()->hasRole('superuser')) {
+            $facilities = $company->facilities;
+        } else {
+            $facilities = $company->facilities()->wherePivot('billing_company_id', $bC)->get();
+        }
+
+        foreach ($facilities as $facility) {
+            array_push($fields, [
+                "billing_company_id" => $facility->pivot->billing_company_id,
+                "facility_id" => $facility->id,
+                "facility_type_id" => $facility->facility_type_id,
+                "billing_company" => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name,
+                "facility" => $facility->name,
+                "facility_type" => $facility->facilityType->type,
+            ]);
+        }
         
         $record = [
             "id"             => $company->id,
@@ -372,7 +391,7 @@ class CompanyRepository
             "last_modified"  => $company->last_modified,
             "public_note"    => isset($company->publicNote) ? $company->publicNote->note : null,
             "taxonomies"     => $company->taxonomies,
-            "facilities"     => $company->facilities
+            "facilities"     => $fields
         ];
         $record['billing_companies'] = [];
 
