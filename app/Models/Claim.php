@@ -42,7 +42,7 @@ class Claim extends Model implements Auditable
     protected $appends = [
         'format', 'last_modified', 'private_note', 'status', 'status_history',
         'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
-        'insurance_company_id'
+        'insurance_company_id', 'billing_provider_name', 'user_created'
     ];
     
     /**
@@ -92,7 +92,7 @@ class Claim extends Model implements Auditable
      */
     public function billingProvider()
     {
-        return $this->belongsTo(BillingProvider::class);
+        return $this->belongsTo(HealthProfessional::class);
     }
 
     /**
@@ -102,7 +102,7 @@ class Claim extends Model implements Auditable
      */
     public function serviceProvider()
     {
-        return $this->belongsTo(ServiceProvider::class);
+        return $this->belongsTo(HealthProfessional::class);
     }
 
     /**
@@ -112,7 +112,7 @@ class Claim extends Model implements Auditable
      */
     public function referred()
     {
-        return $this->belongsTo(Referred::class);
+        return $this->belongsTo(HealthProfessional::class);
     }
 
     /**
@@ -199,6 +199,33 @@ class Claim extends Model implements Auditable
     {
         $policyPrimary = $this->insurancePolicies()->first();
         return $policyPrimary->insurance_company_id ?? '';
+    }
+
+    /**
+     * Interact with the claim's bilingProviderName.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getBillingProviderNameAttribute()
+    {
+        $billingProvider = $this->billingProvider->user->profile ?? null;
+        return (isset($billingProvider)) ? ($billingProvider->first_name . ' ' . $billingProvider->last_name) : '';
+    }
+
+    /**
+     * Interact with the claim's userCreated.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getUserCreatedAttribute()
+    {
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return 'Console';
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            return $user->profile->first_name . ' ' . $user->profile->last_name;
+        }
     }
 
     /**
