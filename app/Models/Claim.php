@@ -23,7 +23,6 @@ class Claim extends Model implements Auditable
         "company_id",
         "facility_id",
         "patient_id",
-        "insurance_company_id",
         "billing_provider_id",
         "service_provider_id",
         "referred_id",
@@ -42,7 +41,8 @@ class Claim extends Model implements Auditable
      */
     protected $appends = [
         'format', 'last_modified', 'private_note', 'status', 'status_history',
-        'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date'
+        'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
+        'insurance_company_id'
     ];
     
     /**
@@ -188,6 +188,17 @@ class Claim extends Model implements Auditable
     public function getFormatAttribute()
     {
         return $this->claimFormattable->type_form_id ?? '';
+    }
+
+    /**
+     * Interact with the claim's insuranceCompanyId.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getInsuranceCompanyIdAttribute()
+    {
+        $policyPrimary = $this->insurancePolicies()->first();
+        return $policyPrimary->insurance_company_id ?? '';
     }
 
     /**
