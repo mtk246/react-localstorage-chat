@@ -242,7 +242,7 @@ class ClaimRepository
         $subStatus = ((is_array($request->subStatus)) ? $request->subStatus : json_decode($request->subStatus)) ?? [];
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $data = Claim::whereHas("claimStatusClaims", function ($query) use ($status, $subStatus) {
+            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
                 if (count($status) == 1) {
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
                           ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
@@ -262,7 +262,7 @@ class ClaimRepository
                 }
             ]);
         } else {
-            $data = Claim::whereHas("claimStatusClaims", function ($query) use ($status, $subStatus) {
+            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
                 if (count($status) == 1) {
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
                           ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);

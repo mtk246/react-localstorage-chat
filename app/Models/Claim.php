@@ -165,6 +165,11 @@ class Claim extends Model implements Auditable
         return $this->hasMany(ClaimStatusClaim::class);
     }
 
+    public function claimLastStatusClaim()
+    {
+        return $this->hasOne(ClaimStatusClaim::class)->latestOfMAny();
+    }
+
     /**
      * Claim has many ClaimTransmissionResponses.
      *
