@@ -569,155 +569,182 @@
 
 `````json
 {
-    "id": 1,
-    "driver_license": "driver license",
-    "user_id": 1,
-    "user": {
-        "id": 1,
-        "email": "user@billing.com",
-        "email_verified_at": null,
-        "created_at": "2022-03-14T20:49:19.000000Z",
-        "updated_at": "2022-03-15T08:59:12.000000Z",
-        "token": null,
-        "isLogged": true,
-        "isBlocked": false,
-        "usercode": "US-00001-2022",
-        "userkey": null,
-        "status": false,
-        "last_login": "2022-03-15 08:59:12",
-        "profile_id": 1,
-        "billing_company_id": null,
-        "roles": [
-            {
-                "id": 1,
-                "name": "PATIENT",
-                "guard_name": "api",
-                "created_at": "2022-03-14T20:49:19.000000Z",
-                "updated_at": "2022-03-14T20:49:19.000000Z",
-                "pivot": {
-                    "model_id": 1,
-                    "role_id": 1,
-                    "model_type": "App\\Models\\User"
+    "id": 8,
+    "code": "PA-00008-2023",
+    "profile": {
+        "ssn": "267687061",
+        "first_name": "Diego",
+        "middle_name": "",
+        "last_name": "Medina",
+        "date_of_birth": "2020-09-02",
+        "sex": "M"
+    },
+    "driver_license": "17846325",
+    "language": "en",
+    "created_at": "2023-02-10T11:49:07.000000Z",
+    "updated_at": "2023-02-10T11:49:07.000000Z",
+    "last_modified": {
+        "user": "Console",
+        "roles": []
+    },
+    "public_note": "Generate seeder patient",
+    "billing_companies": [
+        {
+            "id": 1,
+            "name": "Medical Claims Consultants",
+            "code": "BC-00001-2023",
+            "abbreviation": "MCC",
+            "private_patient": {
+                "marital_status_id": 2,
+                "marital_status": "Married",
+                "marital": {
+                    "spuse_name": "Yesenia Diaz",
+                    "spuse_work": "Student",
+                    "spuse_work_phone": "04241234585"
+                },
+                "companies": [
+                    {
+                        "company_id": 2,
+                        "company": "Isle Of Palms Recovery Center, Llc",
+                        "med_num": "2445"
+                    }
+                ],
+                "insurance_policies": [
+                    {
+                        "policy_number": "267687061A",
+                        "group_number": "5896111",
+                        "insurance_company_id": 1,
+                        "insurance_company": "PAS01 - Providence Administrative Services",
+                        "insurance_plan_id": 1,
+                        "insurance_plan": "Connect 1500 Gold",
+                        "type_responsibility_id": 47,
+                        "type_responsibility": "P",
+                        "insurance_policy_type_id": 22,
+                        "insurance_policy_type": "Health",
+                        "eff_date": "2015-07-01",
+                        "end_date": "2025-07-01",
+                        "assign_benefits": true,
+                        "release_info": true,
+                        "own_insurance": false,
+                        "subscriber": [
+                            {
+                                "ssn": null,
+                                "first_name": "Mary",
+                                "last_name": "Dante",
+                                "date_of_birth": "1975-04-11",
+                                "relationship_id": 28,
+                                "relationship": "Self/Patient is Insured",
+                                "address": {
+                                    "zip": "331861768",
+                                    "city": "Miami",
+                                    "state": "FL - Florida",
+                                    "address": "13044 Southwest 88th Terrace North",
+                                    "country": null,
+                                    "address_type_id": null,
+                                    "address_type": "",
+                                    "country_subdivision_code": null
+                                },
+                                "contact": {
+                                    "fax": "88813471000",
+                                    "email": "mary@ads.net",
+                                    "phone": "8881077222",
+                                    "mobile": "8881077222",
+                                    "contact_name": null
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "policy_number": "XJNH12299113",
+                        "group_number": "818374785",
+                        "insurance_company_id": 1,
+                        "insurance_company": "PAS01 - Providence Administrative Services",
+                        "insurance_plan_id": 6,
+                        "insurance_plan": "Qualified 7050 Bronze - Signature Network",
+                        "type_responsibility_id": 48,
+                        "type_responsibility": "S",
+                        "insurance_policy_type_id": 22,
+                        "insurance_policy_type": "Health",
+                        "eff_date": "2012-08-25",
+                        "end_date": "2026-08-25",
+                        "assign_benefits": true,
+                        "release_info": true,
+                        "own_insurance": false,
+                        "subscriber": [
+                            {
+                                "ssn": null,
+                                "first_name": "Jesus",
+                                "last_name": "Medina",
+                                "date_of_birth": "2020-04-11",
+                                "relationship_id": 27,
+                                "relationship": "Other",
+                                "address": {
+                                    "zip": "331861744",
+                                    "city": "Miami",
+                                    "state": "FL - Florida",
+                                    "address": "Southwest 688th Terrace North",
+                                    "country": null,
+                                    "address_type_id": null,
+                                    "address_type": "",
+                                    "country_subdivision_code": null
+                                },
+                                "contact": {
+                                    "fax": "8083341033",
+                                    "email": "jesus@gonzales.net",
+                                    "phone": "7882089933",
+                                    "mobile": "7882089933",
+                                    "contact_name": null
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "need_guardian": true,
+                "guarantor": {
+                    "name": "Jesus Medina",
+                    "phone": "7862089482"
+                },
+                "emergency_contacts": [
+                    {
+                        "name": "Jesus Medina",
+                        "cellphone": "7862878883",
+                        "relationship_id": 45,
+                        "relationship": "Parent"
+                    }
+                ],
+                "employments": [
+                    {
+                        "employer_name": "Kevin Per",
+                        "employer_address": "1300455 Southwest 88th Terrace North",
+                        "employer_phone": "7862089235",
+                        "position": "Development"
+                    }
+                ],
+                "social_medias": [],
+                "status": true,
+                "private_note": "Generate seeder patient",
+                "addresses": [
+                    {
+                        "zip": "331571768",
+                        "city": "Miami",
+                        "state": "FL - Florida",
+                        "address": "1760879 Sw 103 Pl",
+                        "country": null,
+                        "address_type_id": null,
+                        "address_type": "",
+                        "country_subdivision_code": null
+                    }
+                ],
+                "contact": {
+                    "fax": "3058649949",
+                    "email": "diego@mail.net",
+                    "phone": "3058649949",
+                    "mobile": "3058649949",
+                    "contact_name": null
                 }
             }
-        ],
-        "addresses": [
-            {
-                "id": 1,
-                "address": "Singleton Rd",
-                "city": "Calimesa",
-                "state": "California",
-                "zip": "923202207",
-                "billing_company_id": null,
-                "created_at": "2022-03-14T20:49:20.000000Z",
-                "updated_at": "2022-03-14T20:49:20.000000Z",
-                "addressable_type": "App\\Models\\User",
-                "addressable_id": 1
-            }
-        ],
-        "contacts": [
-            {
-                "id": 1,
-                "phone": "(740) 208-8506",
-                "fax": "(918) 534-7718",
-                "email": "dach.leopold@nikolaus.com",
-                "billing_company_id": null,
-                "created_at": "2022-03-14T20:49:20.000000Z",
-                "updated_at": "2022-03-14T20:49:20.000000Z",
-                "mobile": "218-885-3211",
-                "contactable_type": "App\\Models\\User",
-                "contactable_id": 1
-            }
-        ]
-
-    },
-    "marital": {
-        "spuse_name": "Spuse name",
-        "spuse_work": "Spuse work",
-        "spuse_work_phone": "Spuse phone",
-        "created_at": "2022-03-17T20:45:39.000000Z",
-        "updated_at": "2022-03-17T20:45:39.000000Z"
-    },
-    "guarantor": {
-        "name": "name",
-        "phone": "phone",
-        "created_at": "2022-03-17T20:45:39.000000Z",
-        "updated_at": "2022-03-17T20:45:39.000000Z"
-    },
-    "companies": [
-        {
-            "id": 1,
-            "code": "CO-00001-2022",
-            "name": "company first",
-            "npi": "222CF123",
-            "created_at": "2022-05-02T14:45:27.000000Z",
-            "updated_at": "2022-05-02T14:45:27.000000Z",
-            "status": false,
-            "pivot": {
-                "patient_id": 1,
-                "company_id": 1,
-                "created_at": "2022-05-06T21:21:48.000000Z",
-                "updated_at": "2022-05-06T21:21:48.000000Z"
-            }
-        },
-        {
-            "id": 3,
-            "code": "CO-00003-2022",
-            "name": "PANAMERICAN INTERNAL MEDICINE INC",
-            "npi": "1396903308",
-            "created_at": "2022-05-04T01:38:14.000000Z",
-            "updated_at": "2022-05-04T01:38:14.000000Z",
-            "status": false,
-            "pivot": {
-                "patient_id": 1,
-                "company_id": 3,
-                "created_at": "2022-05-06T21:21:48.000000Z",
-                "updated_at": "2022-05-06T21:21:48.000000Z"
-            }
         }
-    ],
-    "employments": [
-        {
-            "employer_name": "employer name",
-            "employer_address": "employer address",
-            "employer_phone": "employer phone",
-            "position": "patient position",
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
-        }
-    ],
-    "emergency_contacts": [
-        {
-            "name": "name emergency contact 1",
-            "cellphone": "cellphone emergency contacts 1",
-            "relationship": "relationship emergency contacts 1",
-            "created_at": "2022-03-17T20:45:39.000000Z",
-            "updated_at": "2022-03-17T20:45:39.000000Z"
-        }
-    ],
-    "public_notes": [
-        {
-            "id": 2,
-            "note": "Note public",
-            "publishable_type": "App\\Models\\Patient",
-            "publishable_id": 1,
-            "created_at": "2022-04-20T21:53:26.000000Z",
-            "updated_at": "2022-04-20T21:53:26.000000Z"
-        }
-    ],
-    "private_notes": [
-        {
-            "id": 1,
-            "note": "Note private",
-            "billing_company_id": 1,
-            "publishable_type": "App\\Models\\Patient",
-            "publishable_id": 1,
-            "created_at": "2022-04-20T21:53:26.000000Z",
-            "updated_at": "2022-04-20T21:53:26.000000Z"
-        }
-    ],
-    "created_at": "2022-03-17T20:45:39.000000Z",
-    "updated_at": "2022-03-17T20:45:39.000000Z"
+    ]
 }
 `````
 
