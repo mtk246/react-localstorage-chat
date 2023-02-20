@@ -611,50 +611,6 @@
                 ],
                 "insurance_policies": [
                     {
-                        "policy_number": "267687061A",
-                        "group_number": "5896111",
-                        "insurance_company_id": 1,
-                        "insurance_company": "PAS01 - Providence Administrative Services",
-                        "insurance_plan_id": 1,
-                        "insurance_plan": "Connect 1500 Gold",
-                        "type_responsibility_id": 47,
-                        "type_responsibility": "P",
-                        "insurance_policy_type_id": 22,
-                        "insurance_policy_type": "Health",
-                        "eff_date": "2015-07-01",
-                        "end_date": "2025-07-01",
-                        "assign_benefits": true,
-                        "release_info": true,
-                        "own_insurance": false,
-                        "subscriber": [
-                            {
-                                "ssn": null,
-                                "first_name": "Mary",
-                                "last_name": "Dante",
-                                "date_of_birth": "1975-04-11",
-                                "relationship_id": 28,
-                                "relationship": "Self/Patient is Insured",
-                                "address": {
-                                    "zip": "331861768",
-                                    "city": "Miami",
-                                    "state": "FL - Florida",
-                                    "address": "13044 Southwest 88th Terrace North",
-                                    "country": null,
-                                    "address_type_id": null,
-                                    "address_type": "",
-                                    "country_subdivision_code": null
-                                },
-                                "contact": {
-                                    "fax": "88813471000",
-                                    "email": "mary@ads.net",
-                                    "phone": "8881077222",
-                                    "mobile": "8881077222",
-                                    "contact_name": null
-                                }
-                            }
-                        ]
-                    },
-                    {
                         "policy_number": "XJNH12299113",
                         "group_number": "818374785",
                         "insurance_company_id": 1,
