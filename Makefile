@@ -17,3 +17,15 @@ prepare: ## Prepare client containers and enviroment
 		laravelsail/php80-composer:latest \
 		composer install --ignore-platform-reqs \
 		&& cp ./.env.example .env
+build: ## Build client containers and enviroment
+	./vendor/bin/sail build
+up: ## Start client containers
+	./vendor/bin/sail up -d
+install: ## Install dependencies
+	./vendor/bin/sail composer install
+migrate: ## Run migrations
+	./vendor/bin/sail artisan migrate:fresh
+seed: ## Build client containers and enviroment with seeders
+	./vendor/bin/sail artisan db:seed
+
+aio: prepare build up install migrate seed ## Build, install and migrate client containers and enviroment
