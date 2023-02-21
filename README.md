@@ -30,7 +30,7 @@ finally use [sail](https://laravel.com/docs/8.x/sail) commands to operate the pr
 ## pure sail instalation
 
 After cloning the repository, create the wrapper for Laravel sail by opening a console in the root directory of the project and run
-```shell
+```bash
 docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
