@@ -23,6 +23,7 @@ up: ## Start client containers
 	./vendor/bin/sail up -d
 install: ## Install dependencies
 	./vendor/bin/sail composer install
+	./vendor/bin/sail artisan key:generate
 migrate: ## Run migrations
 	./vendor/bin/sail artisan migrate:fresh
 seed: ## Build client containers and enviroment with seeders
