@@ -9,8 +9,8 @@
 
 # Develop instalation
 ## Requirements
-* [Docker](https://docs.docker.com/engine/install) ^V 20.10.18, build b40c2f6+
-* [Docker-compose](https://docs.docker.com/compose/install) ^V v2.10.2+ compatible with installed docker version
+* [Docker](https://docs.docker.com/engine/install) v20.10.18+
+* [Docker-compose](https://docs.docker.com/compose/install) v2.10.2+ compatible with installed docker version
 * [Make](https://linuxhint.com/install-make-ubuntu) linux distribution compatible with make.  **OPTIONAL:** only if you want to install sail in an easy way
 
 ## sail + make instalation
