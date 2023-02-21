@@ -21,9 +21,9 @@ services:
         networks:
             - sail
         depends_on:
-            - database
-            - cache
-    database:
+            - pgsql
+            - redis
+    pgsql:
         image: 'postgres:13-alpine'
         ports:
             - '${DB_PORT:-5432}:5432'
@@ -48,7 +48,7 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
-    cache:
+    redis:
         image: 'redis:6-alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
