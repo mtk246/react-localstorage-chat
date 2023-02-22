@@ -106,14 +106,14 @@ class AuthController extends Controller
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
 
-        if ($this->checkIsLogged($request->input("email"), $request->ip(), $request->userAgent())) {
-            return response()->json(['error' => __('This user has a session active in other device')], 401);
-        }
-
         $user = User::where('email', $dataValidated["email"])->first();
         if (!isset($user)) {
             return response()->json(['error' => __('Bad Credentials')], 401);
         }
+        if ($this->checkIsLogged($request->input("email"), $request->ip(), $request->userAgent())) {
+            return response()->json(['error' => __('This user has a session active in other device')], 401);
+        }
+
         if ($user !== null && ($user->isBlocked == true)) {
             return $this->sendLockoutResponse();
         }
