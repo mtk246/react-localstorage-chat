@@ -3,6 +3,7 @@
 ---
 
 - [Basic data](#basic-data)
+- [Data from another module](#data-another-module)
 - [Create company](#create-company)
 - [Get all company](#get-all-company)
 - [Get all company from server](#get-all-company-server)
@@ -55,8 +56,54 @@
 
 
 
->{primary} when url params have this symbol "?" mean not required, so you must to send null
+<a name="data-another-module"></a>
+## Data from another module to make request
 
+| # | METHOD | Name                     | URL                                 | Token required | Description             |
+| : |        | :-                       | :                                   | :-             | :-                      |
+| 6 | GET    | `Get price of procedure` | `/procedure/get-price-of-procedure` | yes            | Get prices of procedure |
+
+
+<a name="get-price-of-procedure"></a>
+## Get price of procedure
+
+### Param in header
+
+```json
+"Authorization": bearer <token>
+```
+## Param in path
+
+```json
+"procedure_id" <integer> required
+"mac" <string> required
+"locality_number" <string> required
+"state" <string> required
+"fsa" <string> required
+"counties" <string> required
+"insurance_label_fee_id" <integer> required
+```
+
+## Example path
+
+> {primary} /get-price-of-procedure?
+        procedure_id=ID &
+        mac=fieldMac &
+        locality_number=fieldLocalityNumber &
+        state=fieldState &
+        fsa=fieldFsa &
+        counties=fieldCounties &
+        insurance_label_fee_id=ID
+
+## Response
+
+> {success} 200 Mac locality with fees found
+
+#
+
+```json
+
+```
 
 # 
 

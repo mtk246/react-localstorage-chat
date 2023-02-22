@@ -137,6 +137,32 @@ class UserSeeder extends Seeder
                                 ],
             ],
             [
+                "email"      => "vh@ciph3r.co",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "superuser",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => "Valentin",
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => "Herrera",
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+            ],
+            [
+                "email"      => "mb@ciph3r.co",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "superuser",
+                "profile"    => [
+                                    "ssn"           => randomNumber(9),
+                                    "first_name"    => "Maikel",
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => "Bello",
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+            ],
+            [
                 "email"      => "js@ciph3r.co",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "superuser",
