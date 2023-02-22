@@ -193,6 +193,14 @@ class CompanyRepository
         }
     }
 
+    public function getListContractFeeTypes() {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Contract fee type']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getListBillingCompanies(Request $request) {
         try {
             $companyId = $request->company_id ?? null;

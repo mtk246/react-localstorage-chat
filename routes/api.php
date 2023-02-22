@@ -205,6 +205,7 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::get("/get-list-statement-rules",[\App\Http\Controllers\CompanyController::class,'getListStatementRules']);
         Route::get("/get-list-statement-when",[\App\Http\Controllers\CompanyController::class,'getListStatementWhen']);
         Route::get("/get-list-statement-apply-to",[\App\Http\Controllers\CompanyController::class,'getListStatementApplyTo']);
+        Route::get("/get-list-contract-fee-types",[\App\Http\Controllers\CompanyController::class,'getListContractFeeTypes']);
         Route::get("/get-list-billing-companies",[\App\Http\Controllers\CompanyController::class,'getListBillingCompanies']);
         Route::post("/",[\App\Http\Controllers\CompanyController::class,'createCompany'])->middleware([
             "auth:api",

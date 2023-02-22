@@ -16,6 +16,7 @@
 - [Get list statement when](#get-list-statement-when)
 - [Get list statement apply to](#get-list-statement-apply-to)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get list contract fee type](#get-list-contract-fee-types)
 - [Update company](#update-company)
 - [Change status company](#change-status-company)
 - [Add to billing company](#add-to-billing-company)
@@ -43,13 +44,14 @@
 | 12 |GET | `Get list statement when`          | `/company/get-list-statement-when`|yes|Get all statement when|
 | 13 |GET | `Get list statement apply to`          | `/company/get-list-statement-apply-to`|yes|Get all statement apply to|
 | 14 |GET | `Get list billing companies`| `/company/get-list-billing-companies?company_id={companyID?}&edit={edit?}`        |yes            |Get list billing companies|
-| 14 |PUT | `Update company`          | `/company/{id}`|yes|update company|
-| 15 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
-| 16 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
-| 17 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
-| 18 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
-| 19 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
-| 20 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
+| 15 |GET | `Get list contract fee type`| `/company/get-list-contract-fee-types`        |yes            |Get list contract fee types|
+| 16 |PUT | `Update company`          | `/company/{id}`|yes|update company|
+| 17 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
+| 18 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
+| 19 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
+| 20 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
+| 21 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
+| 22 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
 
 
@@ -1158,6 +1160,41 @@
     {
         "id": 4,
         "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+<a name="get-list-contract-fee-types"></a>
+## Get list contract fee types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Contract fee types found
+
+#
+
+```json
+[
+    {
+        "id": 223,
+        "name": "AUT"
+    },
+    {
+        "id": 224,
+        "name": "CAP"
+    },
+    {
+        "id": 225,
+        "name": "RVU"
     }
 ]
 ```

@@ -88,6 +88,23 @@ class TypeCatalogSeeder extends Seeder
                 ]
             ],
             [
+                'description' => 'Contract fee type',
+                'type_catalogs' => [
+                    [
+                        'code' => 'AUT',
+                        'description' => 'AUT'
+                    ],
+                    [
+                        'code' => 'CAP',
+                        'description' => 'CAP'
+                    ],
+                    [
+                        'code' => 'RVU',
+                        'description' => 'RVU'
+                    ]
+                ]
+            ],
+            [
                 'description' => 'Time failed',
                 'type_catalogs' => [
                     [

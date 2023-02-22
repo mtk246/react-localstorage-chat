@@ -81,6 +81,16 @@ class CompanyController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function getListContractFeeTypes(): JsonResponse
+    {
+        return response()->json(
+            $this->companyRepository->getListContractFeeTypes()
+        );
+    }
+
     public function getListBillingCompanies(Request $request) {
         return response()->json(
             $this->companyRepository->getListBillingCompanies($request)
