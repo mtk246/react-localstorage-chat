@@ -76,11 +76,11 @@
 
 ```json
 "procedure_id" <integer> required
-"mac" <string> required
-"locality_number" <string> required
-"state" <string> required
-"fsa" <string> required
-"counties" <string> required
+"mac" <string> optional
+"locality_number" <string> optional
+"state" <string> optional
+"fsa" <string> optional
+"counties" <string> optional
 "insurance_label_fee_id" <integer> required
 ```
 
@@ -102,7 +102,13 @@
 #
 
 ```json
-
+{
+    "fee": "100",
+    "insurance_label_fee_id": 1,
+    "insurance_label_fee": "Non facility price",
+    "created_at": "2023-02-22T18:51:25.000000Z",
+    "updated_at": "2023-02-22T18:51:25.000000Z"
+}
 ```
 
 # 

@@ -218,6 +218,9 @@ class ProcedureRepository
             if (isset($request->counties)) {
                 $filters['counties'] = $request->counties;
             }
+            if (isset($request->insurance_label_fee_id)) {
+                $label_fee = InsuranceLabelFee::find($request->insurance_label_fee_id);
+            }
             $procedure = Procedure::whereId($id)->with([
                 "macLocalities" => function ($query) use ($id, $filters) {
                     $query->where($filters)->with(['procedureFees' => function ($q) use ($id) {
@@ -226,9 +229,15 @@ class ProcedureRepository
                 }
             ])->first();
             if (isset($procedure->macLocalities)) {
-                if (count($procedure->macLocalities) == 1) {
-                    return $procedure->macLocalities->first();
-                }
+                $macLocality = $procedure->macLocalities->first();
+                $labelFee = $macLocality->procedureFees()->where('insurance_label_fee_id', $label_fee->id)->first();
+                return [
+                    "fee" => $labelFee->fee ?? '',
+                    "insurance_label_fee_id" => $labelFee->insurance_label_fee_id ?? null,
+                    "insurance_label_fee" => $labelFee->insuranceLabelFee->description ?? '',
+                    "created_at" => $labelFee->created_at ?? null,
+                    "updated_at" => $labelFee->updated_at ?? null,
+                ];
             }
         }
 
