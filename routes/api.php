@@ -237,6 +237,15 @@ Route::prefix("v1")/*->middleware('audit')*/
         Route::patch("/add-facilities-to-company/{id}",[\App\Http\Controllers\CompanyController::class,'addFacilities'])->middleware([
             "auth:api",
         ]);
+        Route::patch("/add-services-to-company/{id}",[\App\Http\Controllers\CompanyController::class,'addServices'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/add-copays-to-company/{id}",[\App\Http\Controllers\CompanyController::class,'addCopays'])->middleware([
+            "auth:api",
+        ]);
+        Route::patch("/add-contract-fees-to-company/{id}",[\App\Http\Controllers\CompanyController::class,'addContractFees'])->middleware([
+            "auth:api",
+        ]);
     });
 
     Route::prefix("device")->group(function(){
