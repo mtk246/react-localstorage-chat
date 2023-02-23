@@ -575,7 +575,7 @@ class InsurancePlanRepository
 
     public function getListFormats() {
         try {
-            return getList(TypeCatalog::class, ['code'], ['relationship' => 'type', 'where' => ['description' => 'Report form claim']]);
+            return getList(TypeCatalog::class, ['code'], ['relationship' => 'type', 'where' => ['description' => 'Insurance plan formats']]);
         } catch (\Exception $e) {
             return [];
         }

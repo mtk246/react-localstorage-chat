@@ -370,10 +370,9 @@
 
 ```json
 {
-    "id": 5,
-    "code": "IP-00002-2022",
-    "name": "Name 2",
-    "ins_type": "ins_type 2",
+    "id": 19,
+    "code": "IP-00019-2023",
+    "name": "Name Insurance",
     "accept_assign": true,
     "pre_authorization": true,
     "file_zero_changes": true,
@@ -383,44 +382,92 @@
     "pqrs_eligible": true,
     "allow_attached_files": true,
     "eff_date": "2022-01-23",
-    "charge_using": "Charge 2",
-    "method": "Method 2",
-    "naic": "Naic 2",
+    "ins_type_id": 1,
+    "ins_type": "AETNA - Aetna",
+    "plan_type_id": 2,
+    "plan_type": "AUTO - Automobile Insurance",
+    "charge_using_id": 3,
+    "charge_using": "BCBS - Blue Cross an Blue Shield",
     "insurance_company_id": 1,
-    "created_at": "2022-03-18T15:28:30.000000Z",
-    "updated_at": "2022-03-18T15:28:30.000000Z",
-    "public_notes": [
-        {
-            "id": 2,
-            "note": "Note 2",
-            "publishable_type": "App\\Models\\InsurancePlan",
-            "publishable_id": 5,
-            "created_at": "2022-03-18T15:28:30.000000Z",
-            "updated_at": "2022-03-18T15:28:30.000000Z"
-        }
-    ],
-    "nicknames": [
+    "insurance_company": "Providence Administrative Services",
+    "created_at": "2023-02-23T20:00:08.000000Z",
+    "updated_at": "2023-02-23T20:00:08.000000Z",
+    "last_modified": {
+        "user": "Henry Paredes",
+        "roles": [
+            {
+                "id": 1,
+                "name": "Super User",
+                "slug": "superuser",
+                "description": "Allows you to administer and manage all the functions of the application",
+                "level": 1,
+                "created_at": "2023-02-10T09:47:23.000000Z",
+                "updated_at": "2023-02-10T09:47:23.000000Z",
+                "pivot": {
+                    "user_id": 12,
+                    "role_id": 1,
+                    "created_at": "2023-02-10T09:47:56.000000Z",
+                    "updated_at": "2023-02-10T09:47:56.000000Z"
+                }
+            }
+        ]
+    },
+    "public_note": "Note public",
+    "billing_companies": [
         {
             "id": 1,
-            "nickname": "alias Name2",
-            "nicknamable_type": "App\\Models\\InsurancePlan",
-            "nicknamable_id": 6,
-            "billing_company_id": 1,
-            "created_at": "2022-04-04T12:55:15.000000Z",
-            "updated_at": "2022-04-04T12:55:15.000000Z"
+            "name": "Medical Claims Consultants",
+            "code": "BC-00001-2023",
+            "abbreviation": "MCC",
+            "private_insurance_plan": {
+                "naic": "someNaic",
+                "format_professional_id": 226,
+                "format_professional": "Standart",
+                "format_institutional_id": 226,
+                "format_institutional": "Standart",
+                "format_cms_id": 226,
+                "format_cms": "Standart",
+                "format_ub_id": 226,
+                "format_ub": "Standart",
+                "file_method_id": 5,
+                "file_method": "CIGNA - Cigna",
+                "status": true,
+                "edit_name": true,
+                "nickname": "Alias Insurance Plan",
+                "abbreviation": "Abbreviation",
+                "private_note": "Note private",
+                "address": {
+                    "zip": "3234",
+                    "city": "Name City",
+                    "state": "Name state",
+                    "address": "Name Address",
+                    "country": "Name country",
+                    "address_type_id": null,
+                    "country_subdivision_code": "Code"
+                },
+                "contact": {
+                    "fax": "fsdfs",
+                    "email": "dsfsd@gdrfg.com",
+                    "phone": "55433",
+                    "mobile": "55433",
+                    "contact_name": "Some name"
+                },
+                "insurance_plan_time_failed": {
+                    "days": 30,
+                    "from": {
+                        "id": 2,
+                        "code": "AUTO",
+                        "description": "Automobile Insurance",
+                        "status": true,
+                        "type_id": 1,
+                        "created_at": "2023-02-10T09:52:04.000000Z",
+                        "updated_at": "2023-02-10T09:52:04.000000Z"
+                    },
+                    "from_id": 2
+                }
+            }
         }
-    ],
-    "insurance_company": {
-        "id": 1,
-        "code": "IC-00001-2022",
-        "name": "Insurance",
-        "file_method": "second",
-        "naic": "AX2131",
-        "created_at": "2022-03-16T23:28:29.000000Z",
-        "updated_at": "2022-03-16T23:28:29.000000Z",
-        "status": false
-    },
-    "billing_companies": []
+    ]
 }
 ```
 
