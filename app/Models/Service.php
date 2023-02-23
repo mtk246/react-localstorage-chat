@@ -7,6 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\Service
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany $billingCompany
+ * @property-read \App\Models\Company $company
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
+ * @property-read int|null $insurance_plan_services_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read int|null $insurance_plans_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read int|null $private_notes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
+ * @property-read int|null $public_note_count
+ * @property-read \App\Models\ServiceApplicableTo|null $serviceApplicableTo
+ * @property-read \App\Models\ServiceGroup|null $serviceGroup1
+ * @property-read \App\Models\ServiceGroup|null $serviceGroup2
+ * @property-read \App\Models\ServiceRevCenter|null $serviceRevCenter
+ * @property-read \App\Models\ServiceSpecialInstruction|null $serviceSpecialInstruction
+ * @property-read \App\Models\ServiceStmtDescription|null $serviceStmtDescription
+ * @property-read \App\Models\ServiceType|null $serviceType
+ * @property-read \App\Models\ServiceTypeOfService|null $serviceTypeOfService
+ * @method static \Illuminate\Database\Eloquent\Builder|Service newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Service newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Service query()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
+ * @mixin \Eloquent
+ */
 class Service extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

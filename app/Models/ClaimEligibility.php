@@ -9,6 +9,47 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimEligibility
+ *
+ * @property int $id
+ * @property string $control_number
+ * @property int $patient_id
+ * @property int $company_id
+ * @property int|null $subscriber_id
+ * @property int $insurance_policy_id
+ * @property int $insurance_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array|null $response_details
+ * @property int|null $claim_id
+ * @property int|null $claim_eligibility_status_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\ClaimEligibilityStatus|null $claimEligibilityStatus
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\InsuranceCompany $insuranceCompany
+ * @property-read \App\Models\Patient $patient
+ * @property-read \App\Models\Subscriber|null $subscriber
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereClaimEligibilityStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereClaimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereControlNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereInsurancePolicyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereResponseDetails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereSubscriberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class ClaimEligibility extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

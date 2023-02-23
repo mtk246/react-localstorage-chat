@@ -42,6 +42,43 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
+ * @property int $facility_type_id
+ * @property string $code
+ * @property string|null $nppes_verified_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read int|null $abbreviations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read int|null $contacts_count
+ * @property-read \App\Models\FacilityType $facilityType
+ * @property-read mixed $last_modified
+ * @property-read mixed $verified_on_nppes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read int|null $health_professionals_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read int|null $nicknames_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property-read int|null $place_of_services_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property-read int|null $taxonomies_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereFacilityTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNppesVerifiedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @mixin \Eloquent
  */
 class Facility extends Model implements Auditable

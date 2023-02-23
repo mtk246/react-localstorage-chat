@@ -8,6 +8,41 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\Diagnosis
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $description
+ * @property bool $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property bool $injury_date_required
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read mixed $last_modified
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property-read int|null $procedures_count
+ * @property-read \App\Models\PublicNote $publicNote
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereInjuryDateRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @mixin \Eloquent
+ */
 class Diagnosis extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

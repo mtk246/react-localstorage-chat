@@ -48,6 +48,22 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereZip($value)
+ * @property string $addressable_type
+ * @property int $addressable_id
+ * @property int|null $address_type_id
+ * @property string|null $country
+ * @property string|null $country_subdivision_code
+ * @property-read \App\Models\AddressType|null $addressType
+ * @property-read Model|\Eloquent $addressable
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereAddressTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereAddressableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereAddressableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereCountrySubdivisionCode($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class Address extends Model implements Auditable

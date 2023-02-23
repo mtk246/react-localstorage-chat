@@ -8,6 +8,57 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimBatch
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property string|null $shipping_date
+ * @property bool $fake_transmission
+ * @property int $company_id
+ * @property int|null $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $claims_reconciled
+ * @property int|null $claim_batch_status_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @property-read \App\Models\ClaimBatchStatus|null $claimBatchStatus
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
+ * @property-read int|null $claims_count
+ * @property-read \App\Models\Company $company
+ * @property-read mixed $last_modified
+ * @property-read mixed $total_accepted
+ * @property-read mixed $total_accepted_by_clearing_house
+ * @property-read mixed $total_accepted_by_payer
+ * @property-read mixed $total_claims
+ * @property-read mixed $total_denied
+ * @property-read mixed $total_denied_by_clearing_house
+ * @property-read mixed $total_denied_by_payer
+ * @property-read mixed $total_processed
+ * @property-read mixed $claim_ids
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimBatchStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimsReconciled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereFakeTransmission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
+ * @mixin \Eloquent
+ */
 class ClaimBatch extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

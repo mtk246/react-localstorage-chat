@@ -8,6 +8,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimDateInformation
+ *
+ * @property int $id
+ * @property string|null $from_date_or_current
+ * @property string|null $to_date
+ * @property string|null $description
+ * @property int|null $field_id
+ * @property int|null $qualifier_id
+ * @property int $physician_or_supplier_information_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\TypeCatalog|null $field
+ * @property-read \App\Models\PhysicianOrSupplierInformation $physicianOrSupplierInformation
+ * @property-read \App\Models\TypeCatalog|null $qualifier
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereFieldId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereFromDateOrCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation wherePhysicianOrSupplierInformationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereQualifierId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereToDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class ClaimDateInformation extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

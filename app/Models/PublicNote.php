@@ -8,6 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\PublicNote
+ *
+ * @property int $id
+ * @property string $note
+ * @property string $publishable_type
+ * @property int $publishable_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read mixed $last_modified
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote wherePublishableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote wherePublishableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PublicNote whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class PublicNote extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

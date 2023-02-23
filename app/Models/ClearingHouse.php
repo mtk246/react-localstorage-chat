@@ -32,6 +32,29 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
+ * @property int|null $org_type_id
+ * @property int|null $transmission_format_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read int|null $abbreviations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read int|null $contacts_count
+ * @property-read mixed $last_modified
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read int|null $nicknames_count
+ * @property-read \App\Models\TypeCatalog|null $orgType
+ * @property-read \App\Models\TypeCatalog|null $transmissionFormat
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereOrgTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereTransmissionFormatId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
  * @mixin \Eloquent
  */
 class ClearingHouse extends Model implements Auditable

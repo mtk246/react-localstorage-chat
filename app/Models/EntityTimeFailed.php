@@ -8,6 +8,35 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\EntityTimeFailed
+ *
+ * @property int $id
+ * @property int|null $days
+ * @property int|null $from_id
+ * @property int $billing_company_id
+ * @property string $time_failable_type
+ * @property int $time_failable_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany $billingCompany
+ * @property-read \App\Models\TypeCatalog|null $from
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereFromId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereTimeFailableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereTimeFailableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class EntityTimeFailed extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

@@ -45,6 +45,18 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
+ * @property string|null $mobile
+ * @property string $contactable_type
+ * @property int $contactable_id
+ * @property string|null $contact_name
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read Model|\Eloquent $contactable
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereMobile($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class Contact extends Model implements Auditable

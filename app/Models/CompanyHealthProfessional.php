@@ -4,6 +4,28 @@ namespace App\Models;
  
 use Illuminate\Database\Eloquent\Relations\Pivot;
  
+/**
+ * App\Models\CompanyHealthProfessional
+ *
+ * @property int $id
+ * @property int $company_id
+ * @property int $health_professional_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array|null $authorization
+ * @property int|null $billing_company_id
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereAuthorization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereHealthProfessionalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class CompanyHealthProfessional extends Pivot
 {
     /**

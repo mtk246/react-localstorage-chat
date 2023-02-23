@@ -8,6 +8,30 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\KeyboardShortcut
+ *
+ * @property int $id
+ * @property string $description
+ * @property string $shortcut_type
+ * @property string|null $module
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read mixed $key
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut query()
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereModule($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereShortcutType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class KeyboardShortcut extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

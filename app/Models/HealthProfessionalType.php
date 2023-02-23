@@ -9,6 +9,28 @@ use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
 
+/**
+ * App\Models\HealthProfessionalType
+ *
+ * @property int $id
+ * @property string $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read int|null $health_professionals_count
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @mixin \Eloquent
+ */
 class HealthProfessionalType extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

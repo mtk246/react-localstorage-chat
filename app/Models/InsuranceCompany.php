@@ -38,6 +38,50 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereNaic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereUpdatedAt($value)
+ * @property string|null $payer_id
+ * @property int|null $file_method_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read int|null $abbreviations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
+ * @property-read int|null $appeal_reasons_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
+ * @property-read int|null $billing_incomplete_reasons_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read int|null $claim_eligibilities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read int|null $contacts_count
+ * @property-read \App\Models\TypeCatalog|null $fileMethod
+ * @property-read mixed $last_modified
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
+ * @property-read int|null $insurance_company_time_faileds_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read int|null $insurance_plans_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read int|null $nicknames_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read int|null $private_notes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property-read int|null $procedures_count
+ * @property-read \App\Models\PublicNote $publicNote
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereFileMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany wherePayerId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @mixin \Eloquent
  */
 class InsuranceCompany extends Model implements Auditable

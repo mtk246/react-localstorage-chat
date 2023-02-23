@@ -9,6 +9,35 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimEligibilityPlanStatus
+ *
+ * @property int $id
+ * @property string $status_code
+ * @property string $status
+ * @property int $claim_eligibility_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read int|null $claim_eligibilities_count
+ * @property-read \App\Models\ClaimEligibility $claimEligibility
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereClaimEligibilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereStatusCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPlanStatus whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @mixin \Eloquent
+ */
 class ClaimEligibilityPlanStatus extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

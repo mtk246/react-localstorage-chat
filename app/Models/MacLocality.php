@@ -8,6 +8,40 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\MacLocality
+ *
+ * @property int $id
+ * @property string $mac
+ * @property string $state
+ * @property string $fsa
+ * @property string $counties
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $locality_number
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read Attribute $modifier
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property-read int|null $procedure_fees_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property-read int|null $procedures_count
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereCounties($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereFsa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereLocalityNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereMac($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @mixin \Eloquent
+ */
 class MacLocality extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

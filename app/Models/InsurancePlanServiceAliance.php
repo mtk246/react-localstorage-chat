@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\InsurancePlanServiceAliance
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\InsurancePlanService|null $insurancePlanService
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanServiceAliance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanServiceAliance newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanServiceAliance query()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class InsurancePlanServiceAliance extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
