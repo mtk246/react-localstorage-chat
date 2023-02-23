@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class CompanyController extends Controller
 {
     public function __construct(
-        private readonly CompanyRepository $companyRepository,
+        private CompanyRepository $companyRepository,
     ) { }
 
     /**
@@ -106,7 +106,7 @@ class CompanyController extends Controller
 
     /**
      *
-     * @param Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return JsonResponse
      */
     public function getServerAll(Request $request): JsonResponse
