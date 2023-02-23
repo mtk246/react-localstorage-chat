@@ -12,12 +12,9 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    private $companyRepository;
-
-    public function __construct()
-    {
-        $this->companyRepository = new CompanyRepository();
-    }
+    public function __construct(
+        private readonly CompanyRepository $companyRepository,
+    ) { }
 
     /**
      * @param CompanyCreateRequest $request
