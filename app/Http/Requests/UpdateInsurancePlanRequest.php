@@ -34,7 +34,6 @@ class UpdateInsurancePlanRequest extends FormRequest
             'ins_type_id'          => ['required', 'integer'],
             'plan_type_id'         => ['nullable', 'integer'],
             'abbreviation'         => ['nullable', 'string'],
-            'cap_group'            => ['nullable', 'string'],
             'eff_date'             => ['required', 'date'],
             'charge_using_id'      => ['nullable', 'integer'],
 
@@ -47,15 +46,16 @@ class UpdateInsurancePlanRequest extends FormRequest
             'pqrs_eligible'        => ['required', 'boolean'],
             'allow_attached_files' => ['required', 'boolean'],
 
-            'format_id'            => ['nullable', 'integer'],
-            'file_method_id'       => ['nullable', 'integer'],
-            'naic'                 => ['nullable', 'string'],
+            'format_professional_id'  => ['required', 'integer'],
+            'format_cms_id'           => ['required', 'integer'],
+            'format_institutional_id' => ['required', 'integer'],
+            'format_ub_id'            => ['required', 'integer'],
+            'file_method_id'          => ['nullable', 'integer'],
+            'naic'                    => ['nullable', 'string'],
 
             'time_failed'              => ['nullable', 'array'],
             'time_failed.days'         => ['nullable', 'integer'],
             'time_failed.from_id'      => ['nullable', 'integer'],
-
-            'file_capitated'           => ['required', 'boolean'],
 
             'address'               => ['nullable', 'array'],
             'address.address'       => ['nullable', 'string'],

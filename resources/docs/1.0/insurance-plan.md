@@ -63,7 +63,6 @@
     "ins_type_id": 1, /** required */
     "plan_type_id": 1,  /** optional */
     "abbreviation":"Abbreviation", /** optional */
-    "cap_group":"someCapGroup", /** optional */
     "eff_date":"2022-01-23", /** required */
     "charge_using_id": 1, /** optional */
     
@@ -76,14 +75,16 @@
     "pqrs_eligible":true, /** required */
     "allow_attached_files":true, /** required */
     
-    "format_id": 1, /** optional */
+    "format_professional_id": 1, /** required */
+    "format_cms_id": 1, /** required */
+    "format_institutional_id": 1, /** required */
+    "format_ub_id": 1, /** required */
     "file_method_id": 1, /** optional */
     "naic":"someNaic", /** optional */
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
     },
-    "file_capitated": true, /** required */
     "address": { /** optional */
         "address":"Name address", /** optional */
         "city":"Name city", /** optional */
@@ -126,7 +127,6 @@
     "code": "IP-00001-2022",
     "name": "someName",
     "ins_type": "some ins_type",
-    "cap_group": "someCapGroup",
     "accept_assign": true,
     "pre_authorization": true,
     "file_zero_changes": true,
@@ -137,7 +137,6 @@
     "allow_attached_files": true,
     "eff_date": "2022-01-23",
     "charge_using": "someCharge",
-    "format": "y-m-d",
     "method": "someMethod",
     "naic": "someNaic",
     "insurance_company_id": 1,
@@ -176,7 +175,6 @@
         "code": "IP-00002-2022",
         "name": "Name 2",
         "ins_type": "ins_type 2",
-        "cap_group": "CapGroup 2",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -187,7 +185,6 @@
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
         "charge_using": "Charge 2",
-        "format": "y-m-d",
         "method": "Method 2",
         "naic": "Naic 2",
         "insurance_company_id": 1,
@@ -210,7 +207,6 @@
         "code": "IP-00001-2022",
         "name": "someName",
         "ins_type": "some ins_type",
-        "cap_group": "someCapGroup",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -221,7 +217,6 @@
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
         "charge_using": "someCharge",
-        "format": "y-m-d",
         "method": "someMethod",
         "naic": "someNaic",
         "insurance_company_id": 1,
@@ -280,7 +275,6 @@
             "code": "IP-00002-2022",
             "name": "Name 2",
             "ins_type": "ins_type 2",
-            "cap_group": "CapGroup 2",
             "accept_assign": true,
             "pre_authorization": true,
             "file_zero_changes": true,
@@ -291,7 +285,6 @@
             "allow_attached_files": true,
             "eff_date": "2022-01-23",
             "charge_using": "Charge 2",
-            "format": "y-m-d",
             "method": "Method 2",
             "naic": "Naic 2",
             "insurance_company_id": 1,
@@ -314,7 +307,6 @@
             "code": "IP-00001-2022",
             "name": "someName",
             "ins_type": "some ins_type",
-            "cap_group": "someCapGroup",
             "accept_assign": true,
             "pre_authorization": true,
             "file_zero_changes": true,
@@ -325,7 +317,6 @@
             "allow_attached_files": true,
             "eff_date": "2022-01-23",
             "charge_using": "someCharge",
-            "format": "y-m-d",
             "method": "someMethod",
             "naic": "someNaic",
             "insurance_company_id": 1,
@@ -383,7 +374,6 @@
     "code": "IP-00002-2022",
     "name": "Name 2",
     "ins_type": "ins_type 2",
-    "cap_group": "CapGroup 2",
     "accept_assign": true,
     "pre_authorization": true,
     "file_zero_changes": true,
@@ -394,7 +384,6 @@
     "allow_attached_files": true,
     "eff_date": "2022-01-23",
     "charge_using": "Charge 2",
-    "format": "y-m-d",
     "method": "Method 2",
     "naic": "Naic 2",
     "insurance_company_id": 1,
@@ -452,7 +441,6 @@
     "ins_type_id": 1, /** required */
     "plan_type_id": 1,  /** optional */
     "abbreviation":"Abbreviation", /** optional */
-    "cap_group":"someCapGroup", /** optional */
     "eff_date":"2022-01-23", /** required */
     "charge_using_id": 1, /** optional */
     
@@ -465,14 +453,16 @@
     "pqrs_eligible":true, /** required */
     "allow_attached_files":true, /** required */
     
-    "format_id": 1, /** optional */
+    "format_professional_id": 1, /** required */
+    "format_cms_id": 1, /** required */
+    "format_institutional_id": 1, /** required */
+    "format_ub_id": 1, /** required */
     "file_method_id": 1, /** optional */
     "naic":"someNaic", /** optional */
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
     },
-    "file_capitated": true, /** required */
     "address": { /** optional */
         "address":"Name address", /** optional */
         "city":"Name city", /** optional */
@@ -516,7 +506,6 @@
     "code": "IP-00001-2022",
     "name": "someName",
     "ins_type": "some ins_type edited",
-    "cap_group": "someCapGroup",
     "accept_assign": true,
     "pre_authorization": true,
     "file_zero_changes": true,
@@ -527,7 +516,6 @@
     "allow_attached_files": true,
     "eff_date": "2022-01-23",
     "charge_using": "someCharge",
-    "format": "y-m-d",
     "method": "someMethod",
     "naic": "someNaic",
     "insurance_company_id": 1,
@@ -572,7 +560,6 @@
         "code": "IP-00002-2022",
         "name": "Name 2",
         "ins_type": "ins_type 2",
-        "cap_group": "CapGroup 2",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -583,7 +570,6 @@
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
         "charge_using": "Charge 2",
-        "format": "y-m-d",
         "method": "Method 2",
         "naic": "Naic 2",
         "insurance_company_id": 1,
@@ -595,7 +581,6 @@
         "code": "IP-00001-2022",
         "name": "someName",
         "ins_type": "some ins_type edite",
-        "cap_group": "someCapGroup",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -606,7 +591,6 @@
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
         "charge_using": "someCharge",
-        "format": "y-m-d",
         "method": "someMethod",
         "naic": "someNaic",
         "insurance_company_id": 1,

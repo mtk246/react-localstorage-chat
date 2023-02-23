@@ -13,8 +13,10 @@ class InsurancePlanPrivate extends Model implements Auditable
 
     protected $fillable = [
         "naic",
-        "file_capitated",
-        "format_id",
+        "format_professional_id",
+        "format_institutional_id",
+        "format_cms_id",
+        "format_ub_id",
         "file_method_id",
         "billing_company_id",
         "insurance_plan_id"
@@ -41,13 +43,41 @@ class InsurancePlanPrivate extends Model implements Auditable
     }
 
     /**
-     * InsurancePlanPrivate belongs to Format.
+     * InsurancePlanPrivate belongs to FormatProfessional.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function format()
+    public function formatProfessional()
     {
-        return $this->belongsTo(TypeCatalog::class, 'format_id');
+        return $this->belongsTo(TypeCatalog::class, 'format_professional_id');
+    }
+    
+    /**
+     * InsurancePlanPrivate belongs to FormatInstitutional.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function formatInstitutional()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'format_institutional_id');
+    }
+    /**
+     * InsurancePlanPrivate belongs to FormatCMS.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function formatCMS()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'format_cms_id');
+    }
+    /**
+     * InsurancePlanPrivate belongs to FormatUB.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function formatUB()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'format_ub_id');
     }
 
     /**

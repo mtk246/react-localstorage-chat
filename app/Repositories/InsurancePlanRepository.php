@@ -35,7 +35,6 @@ class InsurancePlanRepository
                 $insurancePlan->update([
                     'ins_type_id'          => $data['ins_type_id'],
                     'plan_type_id'         => $data['plan_type_id'] ?? null,
-                    'cap_group'            => $data['cap_group'] ?? null,
                     'accept_assign'        => $data['accept_assign'],
                     'pre_authorization'    => $data['pre_authorization'],
                     'file_zero_changes'    => $data['file_zero_changes'],
@@ -53,7 +52,6 @@ class InsurancePlanRepository
                     'name'                 => $data['name'],
                     'ins_type_id'          => $data['ins_type_id'],
                     'plan_type_id'         => $data['plan_type_id'] ?? null,
-                    'cap_group'            => $data['cap_group'] ?? null,
                     'accept_assign'        => $data['accept_assign'],
                     'pre_authorization'    => $data['pre_authorization'],
                     'file_zero_changes'    => $data['file_zero_changes'],
@@ -78,12 +76,14 @@ class InsurancePlanRepository
             $insurancePlan->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             InsurancePlanPrivate::create([
-                'naic'               => $data['naic'] ?? null,
-                'format_id'          => $data['format_id'] ?? null,
-                'file_method_id'     => $data['file_method_id'] ?? null,
-                'file_capitated'     => $data['file_capitated'],
-                'insurance_plan_id'  => $insurancePlan->id,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'naic'                    => $data['naic'] ?? null,
+                'format_professional_id'  => $data['format_professional_id'] ?? null,
+                'format_cms_id'           => $data['format_cms_id'] ?? null,
+                'format_institutional_id' => $data['format_institutional_id'] ?? null,
+                'format_ub_id'            => $data['format_ub_id'] ?? null,
+                'file_method_id'          => $data['file_method_id'] ?? null,
+                'insurance_plan_id'       => $insurancePlan->id,
+                'billing_company_id'      => $billingCompany->id ?? $billingCompany,
             ]);
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
@@ -166,7 +166,6 @@ class InsurancePlanRepository
                 'name'                 => $data['name'],
                 'ins_type_id'          => $data['ins_type_id'],
                 'plan_type_id'         => $data['plan_type_id'],
-                'cap_group'            => $data['cap_group'],
                 'accept_assign'        => $data['accept_assign'],
                 'pre_authorization'    => $data['pre_authorization'],
                 'file_zero_changes'    => $data['file_zero_changes'],
@@ -183,10 +182,14 @@ class InsurancePlanRepository
                 'insurance_plan_id'  => $insurancePlan->id,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ], [
-                'naic'               => $data['naic'] ?? null,
-                'format_id'          => $data['format_id'] ?? null,
-                'file_method_id'     => $data['file_method_id'] ?? null,
-                'file_capitated'     => $data['file_capitated'],
+                'naic'                    => $data['naic'] ?? null,
+                'format_professional_id'  => $data['format_professional_id'] ?? null,
+                'format_cms_id'           => $data['format_cms_id'] ?? null,
+                'format_institutional_id' => $data['format_institutional_id'] ?? null,
+                'format_ub_id'            => $data['format_ub_id'] ?? null,
+                'file_method_id'          => $data['file_method_id'] ?? null,
+                'insurance_plan_id'       => $insurancePlan->id,
+                'billing_company_id'      => $billingCompany->id ?? $billingCompany,
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
@@ -315,7 +318,6 @@ class InsurancePlanRepository
             "id" => $insurance->id,
             "code" => $insurance->code,
             "name" => $insurance->name,
-            "cap_group" => $insurance->cap_group,
             "accept_assign" => $insurance->accept_assign,
             "pre_authorization" => $insurance->pre_authorization,
             "file_zero_changes" => $insurance->file_zero_changes,
@@ -411,9 +413,19 @@ class InsurancePlanRepository
                 "abbreviation" => $billingCompany->abbreviation,
                 "private_insurance_plan" => [
                     "naic"    => isset($private_insurance_plan) ? $private_insurance_plan->naic : '',
-                    "file_capitated" => isset($private_insurance_plan) ? $private_insurance_plan->file_capitated : false,
-                    "format_id"    => isset($private_insurance_plan) ? $private_insurance_plan->format_id : '',
-                    "format"       => isset($private_insurance_plan->format) ? $private_insurance_plan->format->code : '',
+                    "format_professional_id"    => isset($private_insurance_plan) ? $private_insurance_plan->format_professional_id : '',
+                    "format_professional"       => isset($private_insurance_plan->formatProfessional) ? $private_insurance_plan->formatProfessional->code : '',
+
+                    "format_institutional_id"    => isset($private_insurance_plan) ? $private_insurance_plan->format_institutional_id : '',
+                    "format_institutional"       => isset($private_insurance_plan->formatInstitutional) ? $private_insurance_plan->formatInstitutional->code : '',
+
+                    "format_cms_id"    => isset($private_insurance_plan) ? $private_insurance_plan->format_cms_id : '',
+                    "format_cms"       => isset($private_insurance_plan->formatCMS) ? $private_insurance_plan->formatCMS->code : '',
+                    
+
+                    "format_ub_id"    => isset($private_insurance_plan) ? $private_insurance_plan->format_ub_id : '',
+                    "format_ub"       => isset($private_insurance_plan->formatUB) ? $private_insurance_plan->formatUB->code : '',
+
                     "file_method_id"    => isset($private_insurance_plan) ? $private_insurance_plan->file_method_id : '',
                     "file_method"       => isset($private_insurance_plan->fileMethod) ? ($private_insurance_plan->fileMethod->code . ' - ' . $private_insurance_plan->fileMethod->description) : '',
                     "status"       => $billingCompany->pivot->status ?? false,

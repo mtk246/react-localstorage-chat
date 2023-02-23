@@ -19,7 +19,6 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string $note
  * @property string $ins_type
  * @property string $plan_type
- * @property string $cap_group
  * @property bool $accept_assign
  * @property bool $pre_authorization
  * @property bool $file_zero
@@ -75,7 +74,6 @@ class InsurancePlan extends Model implements Auditable
     protected $fillable = [
         "code",
         "name",
-        "cap_group",
         "accept_assign",
         "pre_authorization",
         "file_zero_changes",
@@ -284,19 +282,6 @@ class InsurancePlan extends Model implements Auditable
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => upperCaseWords($value),
-            set: fn ($value) => upperCaseWords($value),
-        );
-    }
-
-    /**
-     * Interact with the insurancePlan's cap_group.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function capGroup(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => upperCaseWords($value),
