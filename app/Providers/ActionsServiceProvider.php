@@ -9,6 +9,6 @@ class ActionsServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->app->singleton(fn() => new CompanyRepository());
+        $this->app->singleton(abstract: CompanyRepository::class, concrete: fn() => new CompanyRepository());
     }
 }
