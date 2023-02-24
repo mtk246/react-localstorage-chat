@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dropColumn('procedure_id');
         });
 
-        Schema::create('copays_procedures', function (Blueprint $table) {
+        Schema::create('copay_procedure', function (Blueprint $table) {
             $table->id();
             $table->foreignId('copay_id')
                 ->nullable()
@@ -48,6 +48,6 @@ return new class extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
         });
-        Schema::dropIfExists('copays_procedures');
+        Schema::dropIfExists('copay_procedure');
     }
 };
