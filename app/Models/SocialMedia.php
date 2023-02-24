@@ -7,6 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\SocialMedia
+ *
+ * @property int $id
+ * @property string $link
+ * @property int $profile_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $social_network_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Profile $profile
+ * @property-read \App\Models\SocialNetwork|null $socialNetwork
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereSocialNetworkId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class SocialMedia extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

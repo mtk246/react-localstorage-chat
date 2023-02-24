@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Company\AddServices;
+use App\Models\Company;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
@@ -14,7 +16,7 @@ use Illuminate\Http\Request;
 class CompanyController extends Controller
 {
     public function __construct(
-        private readonly CompanyRepository $companyRepository,
+        private CompanyRepository $companyRepository,
     ) { }
 
     /**
@@ -107,7 +109,7 @@ class CompanyController extends Controller
 
     /**
      *
-     * @param Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return JsonResponse
      */
     public function getServerAll(Request $request): JsonResponse
@@ -205,13 +207,14 @@ class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error add facilities to company"), 404);
     }
 
-    /**
-     * @param  int $id
-     * @return JsonResponse
-     */
-    public function addServices(AddServicesRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->companyRepository->addServices($request->validated(), $id);
+    public function addServices(
+        AddServices $addServices,
+        AddServicesRequest $request,
+        Company $company
+    ): JsonResponse {
+        $request->validate();
+
+        $rs = $addServices->invoke(user: $request->user(), company: $company, services: $request->getservices());
 
         return $rs ? response()->json($rs) : response()->json(__("Error add services to company"), 404);
     }

@@ -9,6 +9,39 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimSubStatus
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read int|null $billing_companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ * @property-read int|null $claim_statuses_count
+ * @property-read mixed $last_modified
+ * @property-read mixed $specific_billing_company
+ * @property-read mixed $status
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ * @mixin \Eloquent
+ */
 class ClaimSubStatus extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

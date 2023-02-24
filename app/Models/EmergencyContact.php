@@ -28,6 +28,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationship($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereUpdatedAt($value)
+ * @property int $patient_id
+ * @property int|null $relationship_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationshipId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class EmergencyContact extends Model implements Auditable

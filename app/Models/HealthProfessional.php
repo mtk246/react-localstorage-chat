@@ -7,6 +7,60 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\HealthProfessional
+ *
+ * @property int $id
+ * @property string $npi
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $code
+ * @property bool $is_provider
+ * @property string|null $npi_company
+ * @property int|null $health_professional_type_id
+ * @property int|null $company_id
+ * @property string|null $nppes_verified_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read int|null $billing_companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read \App\Models\Company|null $company
+ * @property-read mixed $companies_providers
+ * @property-read mixed $last_modified
+ * @property-read mixed $status
+ * @property-read mixed $verified_on_nppes
+ * @property-read \App\Models\HealthProfessionalType|null $healthProfessionalType
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read int|null $private_notes_count
+ * @property-read \App\Models\PublicNote|null $publicNote
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property-read int|null $taxonomies_count
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereHealthProfessionalTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereIsProvider($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @mixin \Eloquent
+ */
 class HealthProfessional extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

@@ -53,6 +53,48 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseWorkPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUserId($value)
+ * @property string|null $driver_license
+ * @property string|null $code
+ * @property int|null $marital_status_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read int|null $billing_companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
+ * @property-read int|null $employments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
+ * @property-read int|null $encounters_count
+ * @property-read mixed $last_modified
+ * @property-read mixed $status
+ * @property-read \App\Models\Guarantor|null $guarantor
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
+ * @property-read int|null $injuries_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property-read int|null $insurance_policies_count
+ * @property-read \App\Models\Marital|null $marital
+ * @property-read \App\Models\MaritalStatus|null $maritalStatus
+ * @property-read \App\Models\PatientConditionRelated|null $patientConditionRelated
+ * @property-read \App\Models\PatientPrivate|null $patientPrivate
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read int|null $private_notes_count
+ * @property-read \App\Models\PublicNote $publicNote
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
+ * @property-read int|null $subscribers_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @mixin \Eloquent
  */
 class Patient extends Model implements Auditable

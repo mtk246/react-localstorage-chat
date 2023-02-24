@@ -31,6 +31,15 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereUserId($value)
+ * @property string|null $ip_address
+ * @property string|null $user_agent
+ * @property string|null $last_login
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereIpAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereLastLogin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUserAgent($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class Device extends Model implements Auditable

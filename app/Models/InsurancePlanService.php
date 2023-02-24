@@ -5,6 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\InsurancePlanService
+ *
+ * @property-read \App\Models\InsurancePlan $insurancePlan
+ * @property-read \App\Models\InsurancePlanServiceAliance|null $insurancePlanServiceAliance
+ * @property-read \App\Models\Service|null $service
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanService newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanService newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanService query()
+ * @mixin \Eloquent
+ */
 class InsurancePlanService extends Model
 {
     use HasFactory;

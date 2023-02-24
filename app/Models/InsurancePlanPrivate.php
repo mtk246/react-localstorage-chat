@@ -7,6 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\InsurancePlanPrivate
+ *
+ * @property int $id
+ * @property string|null $naic
+ * @property bool $file_capitated
+ * @property int|null $format_id
+ * @property int|null $file_method_id
+ * @property int|null $insurance_plan_id
+ * @property int|null $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @property-read \App\Models\TypeCatalog|null $fileMethod
+ * @property-read \App\Models\TypeCatalog|null $format
+ * @property-read \App\Models\InsurancePlan|null $insurancePlan
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFileCapitated($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFileMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereInsurancePlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class InsurancePlanPrivate extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

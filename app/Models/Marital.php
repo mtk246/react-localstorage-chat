@@ -8,6 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\Marital
+ *
+ * @property int $id
+ * @property string $spuse_name
+ * @property string|null $spuse_work
+ * @property string|null $spuse_work_phone
+ * @property int $patient_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Patient $patient
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereSpuseName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereSpuseWork($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereSpuseWorkPhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class Marital extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

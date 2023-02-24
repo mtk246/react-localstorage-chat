@@ -10,6 +10,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimServiceLine
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Claim $claim
+ * @property-read \App\Models\PlaceOfService $placeOfService
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine query()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class ClaimServiceLine extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

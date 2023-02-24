@@ -8,6 +8,60 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\Procedure
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $description
+ * @property bool $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property-read int|null $diagnoses_count
+ * @property-read mixed $last_modified
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property-read int|null $insurance_companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read int|null $insurance_plans_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property-read int|null $mac_localities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property-read int|null $modifiers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property-read int|null $procedure_cosiderations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property-read int|null $procedure_fees_count
+ * @property-read \App\Models\PublicNote|null $publicNote
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @mixin \Eloquent
+ */
 class Procedure extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

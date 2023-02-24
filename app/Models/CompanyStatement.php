@@ -8,6 +8,40 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\CompanyStatement
+ *
+ * @property int $id
+ * @property int|null $rule_id
+ * @property int|null $when_id
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property int $company_id
+ * @property int $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array|null $apply_to_ids
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\TypeCatalog|null $rule
+ * @property-read \App\Models\TypeCatalog|null $when
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereApplyToIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereRuleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereWhenId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class CompanyStatement extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

@@ -83,6 +83,47 @@ use App\Models\Audit;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @property string|null $usercode
+ * @property string|null $userkey
+ * @property bool $status
+ * @property string|null $last_login
+ * @property int|null $profile_id
+ * @property string $language
+ * @property string|null $last_activity
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read int|null $addresses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read int|null $billing_companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read int|null $contacts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
+ * @property-read int|null $failed_login_attempts_count
+ * @property-read mixed $billing_company
+ * @property-read mixed $billing_company_id
+ * @property-read mixed $last_modified
+ * @property-read \App\Models\HealthProfessional|null $healthProfessional
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property-read int|null $ip_restrictions_count
+ * @property-read \App\Models\Profile|null $profile
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
+ * @property-read int|null $user_permissions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastActivity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLogin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements JWTSubject, Auditable

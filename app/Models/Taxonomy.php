@@ -28,6 +28,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUserId($value)
+ * @property string $tax_id
+ * @property bool $primary
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy wherePrimary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereTaxId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class Taxonomy extends Model implements Auditable

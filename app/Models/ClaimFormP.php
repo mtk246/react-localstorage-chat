@@ -8,6 +8,49 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\ClaimFormP
+ *
+ * @property int $id
+ * @property bool $head_benefit_plan_other
+ * @property string|null $date_of_current
+ * @property string|null $total_charge
+ * @property int|null $type_form_id
+ * @property int|null $type_insurance_id
+ * @property int|null $relationship_to_insured_id
+ * @property int|null $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ * @property-read int|null $claim_form_services_count
+ * @property-read \App\Models\Facility $facility
+ * @property-read \App\Models\InsurancePolicy $insurancePolicy
+ * @property-read \App\Models\Patient $patient
+ * @property-read \App\Models\PatientOrInsuredInformation|null $patientOrInsuredInformation
+ * @property-read \App\Models\PhysicianOrSupplierInformation|null $physicianOrSupplierInformation
+ * @property-read \App\Models\RelationshipToInsured|null $relationshipToInsured
+ * @property-read \App\Models\TypeForm|null $typeForm
+ * @property-read \App\Models\TypeInsurance|null $typeInsurance
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereDateOfCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereHeadBenefitPlanOther($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereRelationshipToInsuredId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTotalCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeFormId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeInsuranceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ * @mixin \Eloquent
+ */
 class ClaimFormP extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;

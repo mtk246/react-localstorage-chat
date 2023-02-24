@@ -8,6 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
+/**
+ * App\Models\EntityNickname
+ *
+ * @property int $id
+ * @property string $nickname
+ * @property string $nicknamable_type
+ * @property int $nicknamable_id
+ * @property int|null $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\BillingCompany|null $billingCompany
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNicknamableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNicknamableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNickname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @mixin \Eloquent
+ */
 class EntityNickname extends Model implements Auditable
 {
     use HasFactory, AuditableTrait;
