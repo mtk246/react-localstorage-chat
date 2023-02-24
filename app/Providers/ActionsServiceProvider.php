@@ -2,13 +2,15 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Actions\Company\AddServices;
 use App\Repositories\CompanyRepository;
+use Illuminate\Support\ServiceProvider;
 
 class ActionsServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->app->singleton(abstract: CompanyRepository::class, concrete: fn() => new CompanyRepository());
+        $this->app->singleton(AddServices::class, fn() => new AddServices());
+        $this->app->singleton(CompanyRepository::class, fn() => new CompanyRepository());
     }
 }
