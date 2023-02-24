@@ -59,9 +59,13 @@
 <a name="data-another-module"></a>
 ## Data from another module to make request
 
-| # | METHOD | Name                     | URL                                 | Token required | Description             |
-| : |        | :-                       | :                                   | :-             | :-                      |
-| 6 | GET    | `Get price of procedure` | `/procedure/get-price-of-procedure` | yes            | Get prices of procedure |
+| #  | METHOD | Name                         | URL                                    | Token required | Description                |
+| :  |        | :-                           | :                                      | :-             | :-                         |
+| 6  | GET    | `Get price of procedure`     | `/procedure/get-price-of-procedure`    | yes            | Get prices of procedure    |
+| 7  | GET    | `Get list mac localities`    | `/procedure/get-list-mac-localities`   | yes            | Get list mac localities    |
+| 14 | GET    | `Get list procedure`         | `/procedure/get-list/{company_id?}`    | yes            | Get list procedure         |
+| 15 | GET    | `Get list billing companies` | `/facility/get-list-billing-companies` | yes            | Get list billing companies |
+| 16 | GET    | `Get list facilities`        | `/facility/get-list`                   | yes            | Get list facilities        |
 
 
 <a name="get-price-of-procedure"></a>
@@ -109,6 +113,223 @@
     "created_at": "2023-02-22T18:51:25.000000Z",
     "updated_at": "2023-02-22T18:51:25.000000Z"
 }
+```
+
+<a name="get-list-mac-localities"></a>
+## Get list mac localities
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+## Param in path
+
+```json
+"mac" <string> optional
+"locality_number" <string> optional
+"state" <string> optional
+"fsa" <string> optional
+"counties" <string> optional
+```
+
+## Example path
+
+>{primary} get-list-mac-localities? mac=fieldMac &
+                                    locality_number=fieldLocalityNumber &
+                                    state=fieldState &
+                                    fsa=fieldFsa &
+                                    counties=fieldCounties
+
+## Response
+
+> {success} 200 Mac localities found
+
+#
+
+```json
+{
+    "mac": [
+        {
+            "id": "03302",
+            "name": "03302"
+        },
+        {
+            "id": "01182",
+            "name": "01182"
+        },
+        {
+            "id": "03502",
+            "name": "03502"
+        },
+        {
+            "id": "05302",
+            "name": "05302"
+        }
+    ],
+    "state": [
+        {
+            "id": "SOUTH DAKOTA",
+            "name": "SOUTH DAKOTA"
+        },
+        {
+            "id": "SOUTH CAROLINA",
+            "name": "SOUTH CAROLINA"
+        },
+        {
+            "id": "MAINE",
+            "name": "MAINE"
+        },
+        {
+            "id": "PUERTO RICO",
+            "name": "PUERTO RICO"
+        }
+    ],
+    "fsa": [
+        {
+            "id": "REST OF STATE*",
+            "name": "REST OF STATE*"
+        },
+        {
+            "id": "EAST ST. LOUIS",
+            "name": "EAST ST. LOUIS"
+        },
+        {
+            "id": "NYC SUBURBS/LONG ISLAND",
+            "name": "NYC SUBURBS/LONG ISLAND"
+        },
+        {
+            "id": "SALINAS",
+            "name": "SALINAS"
+        }
+    ],
+    "counties": [
+        {
+            "id": "BROWARD, COLLIER, INDIAN RIVER, LEE, MARTIN, PALM BEACH, AND ST. LUCIE",
+            "name": "BROWARD, COLLIER, INDIAN RIVER, LEE, MARTIN, PALM BEACH, AND ST. LUCIE"
+        },
+        {
+            "id": "ALL OTHER COUNTIES",
+            "name": "ALL OTHER COUNTIES"
+        },
+        {
+            "id": "SAN LUIS OBISPO",
+            "name": "SAN LUIS OBISPO"
+        },
+        {
+            "id": "BERGEN, ESSEX, HUDSON, HUNTERDON, MIDDLESEX, MORRIS, PASSAIC, SOMERSET, SUSSEX, UNION AND WARREN",
+            "name": "BERGEN, ESSEX, HUDSON, HUNTERDON, MIDDLESEX, MORRIS, PASSAIC, SOMERSET, SUSSEX, UNION AND WARREN"
+        },
+        {
+            "id": "CLAY, JACKSON AND PLATTE",
+            "name": "CLAY, JACKSON AND PLATTE"
+        },
+        {
+            "id": "STANISLAUS",
+            "name": "STANISLAUS"
+        }
+    ]
+}
+```
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+"facility_id" <integer> required
+```
+
+## Example path
+
+>{primary} /get-list-billing-companies?facility_id=ID
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+
+<a name="get-list"></a>
+## Get list facilities
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+"billing_company_id" <integer> required by super user
+"company_id" <integer> required
+```
+
+## Example path
+
+>{primary} /get-list?billing_company_id=1&company_id=1
+
+## Response
+
+> {success} 200 Facilities found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
 ```
 
 # 

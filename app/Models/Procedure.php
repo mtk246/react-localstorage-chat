@@ -108,7 +108,7 @@ class Procedure extends Model implements Auditable
      */
     public function companies()
     {
-        return $this->belongsToMany(Company::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id')->withTimestamps();
+        return $this->belongsToMany(Company::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id', 'billing_company_id', 'modifier_id', 'clia', 'mac_locality_id')->withTimestamps();
     }
 
     /**

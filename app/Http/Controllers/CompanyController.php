@@ -6,6 +6,7 @@ use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
+use App\Http\Requests\Company\AddServicesRequest;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -202,5 +203,38 @@ class CompanyController extends Controller
         $rs = $this->companyRepository->addFacilities($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error add facilities to company"), 404);
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addServices(AddServicesRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->addServices($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add services to company"), 404);
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->addCopays($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add copays to company"), 404);
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->companyRepository->addContractFees($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add contract fees to company"), 404);
     }
 }

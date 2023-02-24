@@ -15,6 +15,7 @@ use App\Models\Taxonomy;
 use App\Models\TypeCatalog;
 use App\Models\PrivateNote;
 use App\Models\PublicNote;
+use App\Models\MacLocality;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -365,22 +366,50 @@ class CompanyRepository
             ])->first();
         }
 
-        $fields = [];
+        $facilityFields = [];
+        $servicesFields = [];
+        $copaysFields = [];
+        $contractFeesFields = [];
 
         if (auth()->user()->hasRole('superuser')) {
             $facilities = $company->facilities;
+            $companyProcedures = $company->procedures;
         } else {
             $facilities = $company->facilities()->wherePivot('billing_company_id', $bC)->get();
+            $companyProcedures = $company->procedures()->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
         }
 
+        /** Get response facilities */
         foreach ($facilities as $facility) {
-            array_push($fields, [
+            array_push($facilityFields, [
                 "billing_company_id" => $facility->pivot->billing_company_id,
                 "facility_id" => $facility->id,
                 "facility_type_id" => $facility->facility_type_id,
                 "billing_company" => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name ?? null,
                 "facility" => $facility->name,
                 "facility_type" => $facility->facilityType->type,
+            ]);
+        }
+
+        /** Get response services */
+        foreach ($companyProcedures as $companyProcedure) {
+            $macLocality = MacLocality::find($companyProcedure->pivot->mac_locality_id ?? null);
+            array_push($servicesFields, [
+                "billing_company_id" => $companyProcedure->pivot->billing_company_id ?? null,
+                "procedure_id" => $companyProcedure->id ?? null,
+                "description" => $companyProcedure->description ?? '',
+                "modifier_id" => $companyProcedure->pivot->modifier_id ?? null,
+                "price" => $companyProcedure->pivot->price ?? null,
+                "mac" => isset($macLocality) ? $macLocality->mac : '',
+                "locality_number" => isset($macLocality) ? $macLocality->locality_number : '',
+                "state" => isset($macLocality) ? $macLocality->state : '',
+                "fsa" => isset($macLocality) ? $macLocality->fsa : '',
+                "counties" => isset($macLocality) ? $macLocality->counties : '',
+                "insurance_label_fee_id" => $companyProcedure->pivot->insurance_label_fee_id ?? null,
+                "price_percentage" => $companyProcedure->pivot->price_percentage ?? null,
+                "clia" => $companyProcedure->pivot->clia ?? null,
+                "medication_application" => false,
+                "medications" => null
             ]);
         }
         
@@ -399,7 +428,10 @@ class CompanyRepository
             "last_modified"  => $company->last_modified,
             "public_note"    => isset($company->publicNote) ? $company->publicNote->note : null,
             "taxonomies"     => $company->taxonomies,
-            "facilities"     => $fields
+            "facilities"     => $facilityFields,
+            "services"       => $servicesFields,
+            "copays"         => $copaysFields,
+            "contract_fees"  => $contractFeesFields,
         ];
         $record['billing_companies'] = [];
 
@@ -836,5 +868,80 @@ class CompanyRepository
             ]);
         }
         return $records;
+    }
+
+    public function addServices(array $data, int $id) {
+        try {
+            DB::beginTransaction();
+            $company = Company::find($id);
+            $records = [];
+            if (is_null($company)) return null;
+            
+            $billingCompany = auth()->user()->billingCompanies->first();
+            if (!auth()->user()->hasRole('superuser')) {
+                if (is_null($billingCompany)) return null;
+            }
+
+            /** Detach all procedures to company */
+            if (auth()->user()->hasRole('superuser')) {
+                $company->procedures()->detach();
+            } else {
+                $company->procedures()->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
+            }
+
+            /** Attach new services to company */
+            foreach ($data['services'] as $service) {
+                $macLocality = MacLocality::where([
+                    "mac"             => $service['mac'],
+                    "locality_number" => $service['locality_number'],
+                    "state"           => $service['state'],
+                    "fsa"             => $service['fsa'],
+                    "counties"        => $service['counties']
+                ])->first();
+
+                $company->procedures()->attach($service['procedure_id'], [
+                    'billing_company_id'     => $service['billing_company_id'] ?? $billingCompany,
+                    'mac_locality_id'        => $macLocality->id ?? null,
+                    'price'                  => $service['price'] ?? null,
+                    'price_percentage'       => $service['price_percentage'] ?? null,
+                    'modifier_id'            => $service['modifier_id'] ?? null,
+                    'insurance_label_fee_id' => $service['insurance_label_fee_id'] ?? null,
+                    'clia'                   => $service['clia'] ?? null,
+                ]);
+            }
+
+            /** Get data response */
+            if (auth()->user()->hasRole('superuser')) {
+                $companyProcedures = $company->procedures;
+            } else {
+                $companyProcedures = $company->procedures()->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+            }
+
+            foreach ($companyProcedures as $companyProcedure) {
+                $macLocality = MacLocality::find($companyProcedure->pivot->mac_locality_id ?? null);
+                array_push($records, [
+                    "billing_company_id" => $companyProcedure->pivot->billing_company_id ?? null,
+                    "procedure_id" => $companyProcedure->id ?? null,
+                    "description" => $companyProcedure->description ?? '',
+                    "modifier_id" => $companyProcedure->pivot->modifier_id ?? null,
+                    "price" => $companyProcedure->pivot->price ?? null,
+                    "mac" => isset($macLocality) ? $macLocality->mac : '',
+                    "locality_number" => isset($macLocality) ? $macLocality->locality_number : '',
+                    "state" => isset($macLocality) ? $macLocality->state : '',
+                    "fsa" => isset($macLocality) ? $macLocality->fsa : '',
+                    "counties" => isset($macLocality) ? $macLocality->counties : '',
+                    "insurance_label_fee_id" => $companyProcedure->pivot->insurance_label_fee_id ?? null,
+                    "price_percentage" => $companyProcedure->pivot->price_percentage ?? null,
+                    "clia" => $companyProcedure->pivot->clia ?? null,
+                    "medication_application" => false,
+                    "medications" => null
+                ]);
+            }
+            DB::commit();
+            return $records;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 }
