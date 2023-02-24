@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Http\Requests\Models\Company\Service;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Collection;
 
 class AddServicesRequest extends FormRequest
 {
@@ -40,5 +42,10 @@ class AddServicesRequest extends FormRequest
             'services.*.medication_application' => ['nullable', 'boolean'],
             'services.*.medications'            => ['nullable', 'array'],
         ];
+    }
+
+    public function getservices(): Collection {
+        return collect($this->list)
+            ->map(fn(array $item) => new Service($item));
     }
 }
