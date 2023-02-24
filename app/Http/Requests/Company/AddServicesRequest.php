@@ -39,8 +39,12 @@ class AddServicesRequest extends FormRequest
             'services.*.insurance_label_fee_id' => ['nullable', 'integer'],
             'services.*.price_percentage'       => ['nullable', 'numeric'],
             'services.*.clia'                   => ['nullable', 'string'],
-            'services.*.medication_application' => ['nullable', 'boolean'],
             'services.*.medications'            => ['nullable', 'array'],
+            'services.*.medications.*.date'     => ['required_with:services.*.medications', 'date'],
+            'services.*.medications.*.drug_code'=> ['required_with:services.*.medications', 'string'],
+            'services.*.medications.*.batch'    => ['required_with:services.*.medications', 'string'],
+            'services.*.medications.*.quantity' => ['required_with:services.*.medications', 'integer'],
+            'services.*.medications.*.frequency'=> ['required_with:services.*.medications', 'integer'],
         ];
     }
 
