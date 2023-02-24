@@ -588,9 +588,7 @@
 ## Param in path
 
 ```json
-{
-    "name": <string>
-}
+"name": <string> required
 ```
 
 ## Response
@@ -603,10 +601,9 @@
 ```json
 [
     {
-        "id": 5,
-        "code": "IP-00002-2022",
-        "name": "Name 2",
-        "ins_type": "ins_type 2",
+        "id": 19,
+        "code": "IP-00019-2023",
+        "name": "Name Insurance",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -616,18 +613,22 @@
         "pqrs_eligible": true,
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
-        "charge_using": "Charge 2",
-        "method": "Method 2",
-        "naic": "Naic 2",
+        "ins_type_id": 1,
+        "ins_type": "AETNA - Aetna",
+        "plan_type_id": 2,
+        "plan_type": "AUTO - Automobile Insurance",
+        "charge_using_id": 3,
+        "charge_using": "BCBS - Blue Cross an Blue Shield",
         "insurance_company_id": 1,
-        "created_at": "2022-03-18T15:28:30.000000Z",
-        "updated_at": "2022-03-18T15:28:30.000000Z"
+        "insurance_company": "Providence Administrative Services",
+        "created_at": "2023-02-23T20:00:08.000000Z",
+        "updated_at": "2023-02-23T20:00:08.000000Z",
+        "public_note": "Note public"
     },
     {
-        "id": 4,
-        "code": "IP-00001-2022",
-        "name": "someName",
-        "ins_type": "some ins_type edite",
+        "id": 20,
+        "code": "IP-00020-2023",
+        "name": "Name Insurance 2",
         "accept_assign": true,
         "pre_authorization": true,
         "file_zero_changes": true,
@@ -637,12 +638,17 @@
         "pqrs_eligible": true,
         "allow_attached_files": true,
         "eff_date": "2022-01-23",
-        "charge_using": "someCharge",
-        "method": "someMethod",
-        "naic": "someNaic",
+        "ins_type_id": 1,
+        "ins_type": "AETNA - Aetna",
+        "plan_type_id": 2,
+        "plan_type": "AUTO - Automobile Insurance",
+        "charge_using_id": 3,
+        "charge_using": "BCBS - Blue Cross an Blue Shield",
         "insurance_company_id": 1,
-        "created_at": "2022-03-18T15:26:42.000000Z",
-        "updated_at": "2022-03-18T15:38:58.000000Z"
+        "insurance_company": "Providence Administrative Services",
+        "created_at": "2023-02-23T20:00:08.000000Z",
+        "updated_at": "2023-02-23T20:00:08.000000Z",
+        "public_note": "Note public"
     }
 ]
 ```
