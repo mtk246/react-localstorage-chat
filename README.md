@@ -59,3 +59,29 @@ sail artisan migrate:fresh
 sail artisan db:seed
 ```
 finally use [sail](https://laravel.com/docs/8.x/sail) commands to operate the project
+
+# Testing commands
+
+## Syntax check
+
+Run the following command in the console to perform a complete syntax test of the code
+´´´bash
+make syntax_test_php
+´´´
+this command should run all the tests in sequence and display the result
+
+it is also possible to run idividual test by its corresponding command
+
+| Command       | description                       |
+| ------------- |:---------------------------------:|
+| make pint_test| run laravel pint in test mode     |
+| make phpcs    | run phpcs syntax check            |
+| left phpstan  | run phpstan syntax check - pending|
+
+## Syntax fix
+
+some of the most common syntax errors can be self-fixed by running the command
+´´´bash
+make syntax_fix_php
+´´´
+However, some errors must be solved by hand since they do not have a simple solution.
