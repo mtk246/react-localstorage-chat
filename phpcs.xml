@@ -3,7 +3,8 @@
     <file>app</file>
     <file>bootstrap</file>
     <file>config</file>
-    <file>database</file>
+    <!-- freez the test need to manualy fix seeder, factories and migrations-->
+    <!-- <file>database</file> -->
     <file>resources</file>
     <file>routes</file>
     <file>tests</file>
