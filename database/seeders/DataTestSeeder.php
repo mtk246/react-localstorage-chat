@@ -681,7 +681,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -694,13 +693,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -727,7 +727,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -740,13 +739,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -773,7 +773,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -786,13 +785,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -819,7 +819,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -832,13 +831,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -865,7 +865,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -878,13 +877,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -911,7 +911,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -924,13 +923,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -996,7 +996,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1009,13 +1008,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1042,7 +1042,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1055,13 +1054,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1088,7 +1088,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1101,13 +1100,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1134,7 +1134,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1147,13 +1146,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1180,7 +1180,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1193,13 +1192,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1226,7 +1226,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1239,13 +1238,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '11023',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'Box-T Drive',
@@ -1311,7 +1311,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'             => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1324,13 +1323,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '751',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1357,7 +1357,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1370,13 +1369,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '752',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1403,7 +1403,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1416,13 +1415,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '756',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1449,7 +1449,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1462,13 +1461,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => '755',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1495,7 +1495,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1508,13 +1507,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => 'RW1',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1541,7 +1541,6 @@ class DataTestSeeder extends Seeder
                         'ins_type_id'          => TypeCatalog::whereDescription('Medicare')->first()->id,
                         'plan_type_id'         => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation'         => null,
-                        'cap_group'            => null,
                         'eff_date'             => '2020-10-09',
                         'charge_using_id'         => null,
 
@@ -1554,13 +1553,14 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible'        => true,
                         'allow_attached_files' => false,
 
-                        'format'            => 'JSON',
+                        'format_professional_id'  => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_institutional_id' => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_cms_id'           => TypeCatalog::whereCode('Standard')->first()->id,
+                        'format_ub_id'            => TypeCatalog::whereCode('Standard')->first()->id,
                         'method'       => 'Deducible Max',
                         'naic'                 => 'RW3',
 
                         'time_failed'              => null,
-
-                        'file_capitated'           => true,
 
                         'address' => [
                             'address'                  => 'North Flag City Boulevard',
@@ -1713,7 +1713,6 @@ class DataTestSeeder extends Seeder
                     ], [
                         'code'                 => generateNewCode('IP', 5, date('Y'), InsurancePlan::class, 'code'),
                         'ins_type_id'          => $dataIP['ins_type_id'],
-                        'cap_group'            => $dataIP['cap_group'],
                         'accept_assign'        => $dataIP['accept_assign'],
                         'pre_authorization'    => $dataIP['pre_authorization'],
                         'file_zero_changes'    => $dataIP['file_zero_changes'],
@@ -1731,10 +1730,12 @@ class DataTestSeeder extends Seeder
                         'insurance_plan_id'  => $insurancePlan->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        'naic'               => $dataIP['naic'] ?? null,
-                        'format_id'          => $dataIP['format_id'] ?? null,
-                        'file_method_id'     => $dataIP['file_method_id'] ?? null,
-                        'file_capitated'     => $dataIP['file_capitated'],
+                        'naic'                    => $dataIP['naic'] ?? null,
+                        'format_professional_id'  => $dataIP['format_professional_id'] ?? null,
+                        'format_institutional_id' => $dataIP['format_institutional_id'] ?? null,
+                        'format_cms_id'           => $dataIP['format_cms_id'] ?? null,
+                        'format_ub_id'            => $dataIP['format_ub_id'] ?? null,
+                        'file_method_id'          => $dataIP['file_method_id'] ?? null,
                     ]);
 
                     /** Attach billing company */
