@@ -20,7 +20,7 @@ phpcs: ## Run phpcs
 	./vendor/bin/sail php ./vendor/bin/phpcs
 phpcbf: ## Run auto-fixing phpcs errors
 	./vendor/bin/sail php ./vendor/bin/phpcbf
-syntax_check_php: cache pint_test phpcs ## Run all php syntax check test
+syntax_test_php: cache pint_test phpcs ## Run all php syntax check test
 syntax_fix_php: pint phpcbf ## Run all auto syntax fixing comands
 
 ##@ Manage client containers
