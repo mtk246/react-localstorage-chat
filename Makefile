@@ -14,7 +14,9 @@ cache: ## warm laravel cache
 	./vendor/bin/sail artisan view:cache
 pint: ## Run laravel pint in test mode
 	./vendor/bin/sail php ./vendor/bin/pint --test
-syntax_check_php: cache pint ## Run all php syntax check test
+phpcs: ## Run phpcs
+	./vendor/bin/sail php ./vendor/bin/phpcs
+syntax_check_php: cache pint phpcs ## Run all php syntax check test
 
 ##@ Manage client containers
 prepare: ## Prepare client containers and enviroment
