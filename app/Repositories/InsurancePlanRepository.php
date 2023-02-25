@@ -552,7 +552,66 @@ class InsurancePlanRepository
     }
 
     public function getByName(string $name) {
-        return InsurancePlan::where('name','ILIKE','%${name}%')->get();
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $insurance_plans = InsurancePlan::search($name)->with([
+                'nicknames',
+                'abbreviations',
+                'insType',
+                'planType',
+                'insuranceCompany',
+                'billingCompanies'
+            ])->get();
+        } else {
+            $insurance_plans = InsurancePlan::search($name)->whereHas('billingCompanies', function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    'nicknames' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'abbreviations' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'billingCompanies' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'insType',
+                    'planType',
+                    'insuranceCompany'
+            ])->get();
+        }
+        $records = [];
+        foreach ($insurance_plans as $insurance) {
+            array_push(
+                $records,
+                [
+                    "id" => $insurance->id,
+                    "code" => $insurance->code,
+                    "name" => $insurance->name,
+                    "accept_assign" => $insurance->accept_assign,
+                    "pre_authorization" => $insurance->pre_authorization,
+                    "file_zero_changes" => $insurance->file_zero_changes,
+                    "referral_required" => $insurance->referral_required,
+                    "accrue_patient_resp" => $insurance->accrue_patient_resp,
+                    "require_abn" => $insurance->require_abn,
+                    "pqrs_eligible" => $insurance->pqrs_eligible,
+                    "allow_attached_files" => $insurance->allow_attached_files,
+                    "eff_date" => $insurance->eff_date,
+                    "ins_type_id" => $insurance->ins_type_id ?? '',
+                    "ins_type" => isset($insurance->insType) ? ($insurance->insType->code . ' - ' . $insurance->insType->description) : '',
+                    "plan_type_id" => $insurance->plan_type_id ?? '',
+                    "plan_type"    => isset($insurance->planType) ? ($insurance->planType->code . ' - ' . $insurance->planType->description) : '',
+                    "charge_using_id" => $insurance->charge_using_id ?? '',
+                    "charge_using"    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
+                    "insurance_company_id" => $insurance->insurance_company_id,
+                    "insurance_company" => $insurance->insuranceCompany->name,
+                    "created_at" => $insurance->created_at,
+                    "updated_at" => $insurance->updated_at,
+                    "public_note" => isset($insurance->publicNote) ? $insurance->publicNote->note : ''
+                ]
+            );
+        }
+        return $records;
     }
 
     public function getByCompany(string $nameCompany) {
