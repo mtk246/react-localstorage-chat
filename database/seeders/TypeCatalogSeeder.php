@@ -91,8 +91,8 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Insurance plan formats',
                 'type_catalogs' => [
                     [
-                        'code' => 'Standart',
-                        'description' => 'Standart'
+                        'code' => 'Standard',
+                        'description' => 'Standard'
                     ],
                 ]
             ],
