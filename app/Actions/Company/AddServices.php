@@ -7,41 +7,39 @@ namespace App\Actions\Company;
 use App\Exceptions\User\NotHaveBillingCompany;
 use App\Http\Requests\Models\Company\Service;
 use App\Models\BillingCompany;
-use App\Models\User;
 use App\Models\Company;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class AddServices
 {
-    public function invoke(Collection $services, Company $company, User $user)
+    public function invoke(Collection $services, Company $company, User $user): Collection
     {
-        return DB::transaction(function() use (&$company, $services, $user){
+        return DB::transaction(function () use ($company, $services, $user) {
             $billingCompany = $this->getBillingCompany($user);
 
             $this->detachProcedures($user, $company, $billingCompany);
 
             $procedures = $company->procedures();
 
-            $services->each(fn(Service $service)  => $procedures
+            $services->each(fn (Service $service) => $procedures
                 ->attach($service->getProcedureId(), [
-                    'billing_company_id'     => $service->getBillingCompanyId() ?? $billingCompany->id,
-                    'mac_locality_id'        => $service->getMacLocality(),
-                    'price'                  => $service['price'] ?? null,
-                    'price_percentage'       => $service['price_percentage'] ?? null,
-                    'modifier_id'            => $service['modifier_id'] ?? null,
+                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
+                    'mac_locality_id' => $service->getMacLocality(),
+                    'price' => $service['price'] ?? null,
+                    'price_percentage' => $service['price_percentage'] ?? null,
+                    'modifier_id' => $service['modifier_id'] ?? null,
                     'insurance_label_fee_id' => $service['insurance_label_fee_id'] ?? null,
-                    'clia'                   => $service['clia'] ?? null,
-                ])
-            );
+                    'clia' => $service['clia'] ?? null,
+                ]));
 
-            if($user->cannot('super')) {
+            if ($user->cannot('super')) {
                 $procedures = $procedures->wherePivot('billing_company_id', $billingCompany->id);
             }
 
             return $procedures->get();
         });
-
     }
 
     /** @todo move to model */
@@ -49,7 +47,7 @@ final class AddServices
     {
         $billingCompany = $user->billingCompanies->first();
 
-        if($user->cannot('super') && is_null($billingCompany)) {
+        if ($user->cannot('super') && is_null($billingCompany)) {
             throw new NotHaveBillingCompany();
         }
 
