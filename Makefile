@@ -8,6 +8,14 @@ CURRENT_GID := $(shell id -g)
 help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make command [...argumets] \033[36m\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
+##@ syntax checks
+cache: ## warm laravel cache
+	./vendor/bin/sail artisan route:cache
+	./vendor/bin/sail artisan view:cache
+pint: ## Run laravel pint in test mode
+	./vendor/bin/sail php ./vendor/bin/pint --test
+syntax_check_php: cache pint ## Run all php syntax check test
+
 ##@ Manage client containers
 prepare: ## Prepare client containers and enviroment
 	docker run --rm \
