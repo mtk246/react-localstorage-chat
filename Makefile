@@ -12,11 +12,16 @@ help:  ## Display this help
 cache: ## warm laravel cache
 	./vendor/bin/sail artisan route:cache
 	./vendor/bin/sail artisan view:cache
-pint: ## Run laravel pint in test mode
+pint_test: ## Run laravel pint in test mode
 	./vendor/bin/sail php ./vendor/bin/pint --test
+pint: ## Run laravel pint in test mode
+	./vendor/bin/sail php ./vendor/bin/pint
 phpcs: ## Run phpcs
 	./vendor/bin/sail php ./vendor/bin/phpcs
-syntax_check_php: cache pint phpcs ## Run all php syntax check test
+phpcbf: ## Run auto-fixing phpcs errors
+	./vendor/bin/sail php ./vendor/bin/phpcbf
+syntax_check_php: cache pint_test phpcs ## Run all php syntax check test
+syntax_fix_php: pint phpcbf ## Run all auto syntax fixing comands
 
 ##@ Manage client containers
 prepare: ## Prepare client containers and enviroment
