@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusInsurancePlanRequest;
-use App\Http\Requests\CreateInsurancePlanRequest;
-use App\Http\Requests\UpdateInsurancePlanRequest;
+use App\Http\Requests\InsurancePlan\CreateRequest;
+use App\Http\Requests\InsurancePlan\UpdateRequest;
+use App\Http\Requests\InsurancePlan\AddCopaysRequest;
+use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
 use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,10 +21,10 @@ class InsurancePlanController extends Controller
     }
 
     /**
-     * @param CreateInsurancePlanRequest $request
+     * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function createInsurancePlan(CreateInsurancePlanRequest $request): JsonResponse
+    public function createInsurancePlan(CreateRequest $request): JsonResponse
     {
         $rs = $this->insurancePlanRepository->createInsurancePlan($request->validated());
 
@@ -30,11 +32,11 @@ class InsurancePlanController extends Controller
     }
 
     /**
-     * @param UpdateInsurancePlanRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function updateInsurancePlan(UpdateInsurancePlanRequest $request,int $id): JsonResponse
+    public function updateInsurancePlan(UpdateRequest $request,int $id): JsonResponse
     {
         $rs = $this->insurancePlanRepository->updateInsurancePlan($request->validated(),$id);
 
@@ -149,5 +151,27 @@ class InsurancePlanController extends Controller
         return response()->json(
             $this->insurancePlanRepository->getListChargeUsings()
         );
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->insurancePlanRepository->addCopays($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add copays to company"), 404);
+    }
+
+    /**
+     * @param  int $id
+     * @return JsonResponse
+     */
+    public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->insurancePlanRepository->addContractFees($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add contract fees to company"), 404);
     }
 }
