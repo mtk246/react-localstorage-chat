@@ -203,16 +203,6 @@ class Claim extends Model implements Auditable
     }
 
     /**
-     * Claim has many ClaimService.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimServices()
-    {
-        return $this->hasMany(ClaimService::class);
-    }
-
-    /**
      * Claim morphs to models in claimFormattable_type.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

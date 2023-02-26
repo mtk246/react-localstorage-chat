@@ -60,21 +60,11 @@ class PlaceOfService extends Model implements Auditable
     }
 
     /**
-     * PlaceOfService has many ClaimInformation.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function claimInformations()
-    {
-        return $this->hasMany(ClaimInformation::class);
-    }
-
-    /**
      * PlaceOfService has many ClaimServiceLine.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function claimServiceLines()
+    public function claimServiceLines(): HasMany
     {
         return $this->hasMany(ClaimServiceLine::class);
     }

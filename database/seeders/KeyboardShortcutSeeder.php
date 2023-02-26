@@ -272,97 +272,145 @@ class KeyboardShortcutSeeder extends Seeder
                 "key"           => "ALT + V",
                 "description"   => "View",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Billing Company Management", "User Management", "Company Management",
+                    "Facility Management", "Clearing House Management", "Insurance Company Management",
+                    "Insurance Plan Management", "Health Care Professional Management",
+                    "Patient Management", "Modifier Management", "Diagnosis Management",
+                    "Procedure Management", "Claims Management", "Batch Management"
+                ],
             ],
             [
                 "key"           => "ALT + X",
                 "description"   => "Edit",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Billing Company Management", "User Management", "Company Management",
+                    "Facility Management", "Clearing House Management", "Insurance Company Management",
+                    "Insurance Plan Management", "Health Care Professional Management",
+                    "Patient Management", "Modifier Management", "Diagnosis Management",
+                    "Procedure Management", "Claims Management", "Batch Management"
+                ],
             ],
             [
                 "key"           => "ALT + A",
                 "description"   => "Disable/Enable",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Billing Company Management", "User Management", "Company Management",
+                    "Facility Management", "Clearing House Management", "Insurance Company Management",
+                    "Insurance Plan Management", "Health Care Professional Management",
+                    "Patient Management", "Modifier Management", "Diagnosis Management",
+                    "Procedure Management",
+                ],
             ],
             [
                 "key"           => "ALT + R",
                 "description"   => "Record",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Billing Company Management", "User Management", "Company Management",
+                    "Facility Management", "Clearing House Management", "Insurance Company Management",
+                    "Insurance Plan Management", "Health Care Professional Management",
+                    "Patient Management", "Modifier Management", "Diagnosis Management",
+                    "Procedure Management", "Claims Management", "Batch Management"
+                ],
             ],
             [
                 "key"           => "ALT + B",
                 "description"   => "Event",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "User Management"
+                ],
             ],
             [
                 "key"           => "ALT + Z",
                 "description"   => "Facilities",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Company Management"
+                ],
             ],
             [
                 "key"           => "ALT + S",
                 "description"   => "Services",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Company Management"
+                ],
             ],
             [
                 "key"           => "ALT + O",
                 "description"   => "Copay",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Company Management", "Insurance Plan Management"
+                ],
             ],
             [
                 "key"           => "ALT + Q",
                 "description"   => "Contract fee",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Company Management", "Insurance Plan Management"
+                ],
             ],
             [
                 "key"           => "ALT + G",
                 "description"   => "Plans",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Insurance Company Management"
+                ],
             ],
             [
                 "key"           => "ALT + W",
                 "description"   => "Companies",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Health Care Professional Management", "Patient Management"
+                ],
             ],
             [
                 "key"           => "ALT + C",
                 "description"   => "Claim",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Patient Management"
+                ],
             ],
             [
                 "key"           => "ALT + P",
                 "description"   => "Policies",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Patient Management"
+                ],
             ],
             [
                 "key"           => "ALT + I",
                 "description"   => "Preview Claim",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Claims Management"
+                ],
             ],
             [
                 "key"           => "ALT + J",
                 "description"   => "Status",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Claims Management"
+                ],
             ],
             [
                 "key"           => "ALT + K",
                 "description"   => "Delete",
                 "shortcut_type" => "Module level actions",
-                "module"        => ""
+                "module"        => [
+                    "Batch Management"
+                ],
             ],
 
             [
