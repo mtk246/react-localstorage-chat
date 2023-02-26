@@ -26,8 +26,7 @@ class AddContractFeesRequest extends FormRequest
         return [
             'contract_fees'                          => ['required', 'array'],
             'contract_fees.*.billing_company_id'     => ['nullable', 'integer'],
-            'contract_fees.*.insurance_company_id'   => ['nullable', 'integer'],
-            'contract_fees.*.insurance_plan_id'      => ['nullable', 'integer'],
+            'contract_fees.*.company_id'             => ['nullable', 'integer'],
             'contract_fees.*.type_id'                => ['nullable', 'integer'],
             'contract_fees.*.start_date'             => ['nullable', 'date'],
             'contract_fees.*.end_date'               => ['nullable', 'date'],

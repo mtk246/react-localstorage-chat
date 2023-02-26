@@ -27,21 +27,21 @@
 <a name="basic-data"></a>
 ## Basic data to make request
 
-| #  | METHOD | Name                            | URL                                                  | Token required | Description                        |
-| :  | :-     |  :                              | :                                                    | :-             | :-                                 |
-| 1  | POST   | `Create Insurance plan`         | `/insurance-plan/`                                   | yes            | Create insurance plan              |
-| 2  | PUT    | `Update Insurance plan`         | `/insurance-plan/{id}`                               | yes            | Update insurance plan              |
-| 3  | PATCH  | `Change status insurance plan`  | `/insurance-plan/{id}/change-status`                 | yes            | Change status insurance plan       |
-| 4  | PATCH  | `Add copays to insurance`       | `/insurance-plan/add-copays-to-insurance/{id}`       | yes            | Add copays to insurance plan       |
-| 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/add-contract-fee-to-insurance/{id}` | yes            | Add contract fee to insurance plan |
-| 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                     | yes            | Get all insurance plan from server |
-| 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                               | yes            | Get one insurance plan             |
-| 8  | GET    | `Get Insurance plan by name`    | `/insurance-plan/{name}/get-by-name`                 | yes            | Get all insurance plan by name     |
-| 9  | GET    | `Get list insurance plans`      | `/insurance-plan/get-list`                           | yes            | Get list insurance plans           |
-| 10 | GET    | `Get list formats`              | `/insurance-plan/get-list-formats`                   | yes            | Get list formats                   |
-| 11 | GET    | `Get list ins types`            | `/insurance-plan/get-list-ins-types`                 | yes            | Get list ins types                 |
-| 12 | GET    | `Get list plan types`           | `/insurance-plan/get-list-plan-types`                | yes            | Get list plan types                |
-| 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`             | yes            | Get list charge usings             |
+| #  | METHOD | Name                            | URL                                                        | Token required | Description                        |
+| :  | :-     |  :                              | :                                                          | :-             | :-                                 |
+| 1  | POST   | `Create Insurance plan`         | `/insurance-plan/`                                         | yes            | Create insurance plan              |
+| 2  | PUT    | `Update Insurance plan`         | `/insurance-plan/{id}`                                     | yes            | Update insurance plan              |
+| 3  | PATCH  | `Change status insurance plan`  | `/insurance-plan/{id}/change-status`                       | yes            | Change status insurance plan       |
+| 4  | PATCH  | `Add copays to insurance`       | `/insurance-plan/add-copays-to-insurance-plan/{id}`        | yes            | Add copays to insurance plan       |
+| 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/add-contract-fees-to-insurance-plan/{id}` | yes            | Add contract fee to insurance plan |
+| 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                           | yes            | Get all insurance plan from server |
+| 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                                     | yes            | Get one insurance plan             |
+| 8  | GET    | `Get Insurance plan by name`    | `/insurance-plan/{name}/get-by-name`                       | yes            | Get all insurance plan by name     |
+| 9  | GET    | `Get list insurance plans`      | `/insurance-plan/get-list`                                 | yes            | Get list insurance plans           |
+| 10 | GET    | `Get list formats`              | `/insurance-plan/get-list-formats`                         | yes            | Get list formats                   |
+| 11 | GET    | `Get list ins types`            | `/insurance-plan/get-list-ins-types`                       | yes            | Get list ins types                 |
+| 12 | GET    | `Get list plan types`           | `/insurance-plan/get-list-plan-types`                      | yes            | Get list plan types                |
+| 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`                   | yes            | Get list charge usings             |
 
 > {primary} when url params have this symbol "?" mean not required, so you must to send null....
 
@@ -307,10 +307,10 @@ insurance_plan_id required <integer>
     "copays": [
         {
             "billing_company_id": 1, /** Only required by superuser */
-            "procedure_ids": [1,2,3],
-            "company_id": 1,
-            "copay": 150.2,
-            "private_note": "Note private by billing_company"
+            "procedure_ids": [1,2,3], /** required */
+            "company_id": 1, /** optional */
+            "copay": 150.2, /** required */
+            "private_note": "Note private by billing_company"  /** optional */
         }
     ]
 }
@@ -324,7 +324,7 @@ insurance_plan_id required <integer>
 ```json
 [
     {
-        "billing_company_id": 1, /** Only required by superuser */
+        "billing_company_id": 1,
         "procedure_ids": [1,2,3],
         "company_id": 1,
         "copay": 150.2,
@@ -362,22 +362,22 @@ insurance_plan_id required <integer>
     "contract_fees": [
         {
             "billing_company_id": 1, /** Only required by superuser */
-            "company_id": 1,
-            "type_id": 1,
-            "start_date": "2022-03-16",
-            "end_date": "2022-03-16",
-            "procedure_ids": [2,1,3],
-            "modifier_id": 1,
-            "contract": 120.5,
-            "mac": "02102",
-            "locality_number":"01",
-            "state": "ALASKA",
-            "fsa": "STATEWIDE",
-            "counties": "ALL COUNTIES",
-            "insurance_label_fee_id": 1,
-            "price_percentage": 70,
-            "private_note": "Note private by billing_company",
-            "patients": [
+            "company_id": 1, /** optional */
+            "type_id": 1, /** optional */
+            "start_date": "2022-03-16", /** optional */
+            "end_date": "2022-03-16", /** optional */
+            "procedure_ids": [2,1,3], /** required */
+            "modifier_id": 1, /** optional */
+            "contract": 120.5, /** required */
+            "mac": "02102", /** optional */
+            "locality_number":"01", /** optional */
+            "state": "ALASKA", /** optional */
+            "fsa": "STATEWIDE", /** optional */
+            "counties": "ALL COUNTIES", /** optional */
+            "insurance_label_fee_id": 1, /** optional */
+            "price_percentage": 70, /** optional */
+            "private_note": "Note private by billing_company", /** optional */
+            "patients": [ /** optional */
             {
                 "patient_id": 1,
                 "start_date": "2022-03-16",

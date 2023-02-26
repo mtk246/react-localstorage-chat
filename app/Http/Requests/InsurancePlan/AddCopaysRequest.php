@@ -24,13 +24,12 @@ class AddCopaysRequest extends FormRequest
     public function rules()
     {
         return [
-            'copays'                        => ['required', 'array'],
-            'copays.*.billing_company_id'   => ['nullable', 'integer'],
-            'copays.*.procedure_ids'        => ['required', 'array'],
-            'copays.*.insurance_company_id' => ['nullable', 'integer'],
-            'copays.*.insurance_plan_id'    => ['nullable', 'integer'],
-            'copays.*.copay'                => ['nullable', 'numeric'],
-            'copays.*.private_note'         => ['nullable', 'string'],
+            'copays'                      => ['required', 'array'],
+            'copays.*.billing_company_id' => ['nullable', 'integer'],
+            'copays.*.procedure_ids'      => ['required', 'array'],
+            'copays.*.company_id'         => ['nullable', 'integer'],
+            'copays.*.copay'              => ['nullable', 'numeric'],
+            'copays.*.private_note'       => ['nullable', 'string'],
         ];
     }
 }
