@@ -320,11 +320,11 @@ class InsurancePlanRepository
         $contractFeesFields = [];
 
         if (auth()->user()->hasRole('superuser')) {
-            $insurancePlanCopays = $insurancePlan->copays;
-            $insurancePlanCopays = $insurancePlan->contractFees;
+            $insurancePlanCopays = $insurance->copays;
+            $insurancePlanContractFees = $insurance->contractFees;
         } else {
-            $insurancePlanCopays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
-            $insurancePlanCopays = $insurancePlan->contractFees->where('billing_company_id', $billingCompany->id)->get();
+            $insurancePlanCopays = $insurance->copays->where('billing_company_id', $billingCompany->id)->get();
+            $insurancePlanContractFees = $insurance->contractFees->where('billing_company_id', $billingCompany->id)->get();
         }
 
         foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
