@@ -17,6 +17,8 @@ use App\Models\EntityTimeFailed;
 use App\Models\EntityNickname;
 use App\Models\Address;
 use App\Models\Contact;
+use App\Models\Copay;
+use App\Models\ContractFee;
 
 class InsurancePlanRepository
 {
@@ -314,6 +316,37 @@ class InsurancePlanRepository
             ])->first();
         }
 
+        $copaysFields = [];
+        $contractFeesFields = [];
+
+        if (auth()->user()->hasRole('superuser')) {
+            $insurancePlanCopays = $insurancePlan->copays;
+            $insurancePlanCopays = $insurancePlan->contractFees;
+        } else {
+            $insurancePlanCopays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
+            $insurancePlanCopays = $insurancePlan->contractFees->where('billing_company_id', $billingCompany->id)->get();
+        }
+
+        foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
+            $procedure_ids = [];
+            foreach ($insurancePlanCopay->procedures ?? [] as $procedure) {
+                array_push($procedure_ids, $procedure->id);
+            };
+            $private_note = PrivateNote::where([
+                "publishable_id"     => $insurancePlanCopay->id,
+                "publishable_type"   => Copay::class,
+                "billing_company_id" => $insurancePlanCopay->billing_company_id
+            ])->first();
+
+            array_push($copaysFields, [
+                "billing_company_id" => $insurancePlanCopay->billing_company_id ?? null,
+                "company_id"         => $insurancePlanCopay->company_id ?? null,
+                "procedure_ids"      => $procedure_ids,
+                "copay"              => (float)$insurancePlanCopay->copay ?? null,
+                "private_note"       => $private_note->note ?? '',
+            ]);
+        }
+
         $record = [
             "id" => $insurance->id,
             "code" => $insurance->code,
@@ -338,7 +371,9 @@ class InsurancePlanRepository
             "created_at" => $insurance->created_at,
             "updated_at" => $insurance->updated_at,
             "last_modified" => $insurance->last_modified,
-            "public_note" => isset($insurance->publicNote) ? $insurance->publicNote->note : ''
+            "public_note" => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
+            "copays" => $copaysFields,
+            "contract_fees" => $contractFeesFields,
         ];
         $record['billing_companies'] = [];
 
@@ -662,6 +697,86 @@ class InsurancePlanRepository
             return getList(TypeCatalog::class, ['code'], ['relationship' => 'type', 'where' => ['description' => 'Charge using']]);
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    public function addCopays(array $data, int $id) {
+        try {
+            DB::beginTransaction();
+            $insurancePlan = InsurancePlan::find($id);
+            $records = [];
+            if (is_null($insurancePlan)) return null;
+            
+            $billingCompany = auth()->user()->billingCompanies->first();
+            if (!auth()->user()->hasRole('superuser')) {
+                if (is_null($billingCompany)) return null;
+            }
+
+            if (isset($data["copays"])) {
+                if (auth()->user()->hasRole('superuser')) {
+                    $copays = $insurancePlan->copays;
+                } else {
+                    $copays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
+                }
+                
+                /** Delete Copays */
+                foreach ($copays ?? [] as $copayDB) {
+                    $validated = false;
+                    foreach ($data["copays"] as $copay) {
+                        if (($copayDB['copay'] == $copay['copay']) && ($copayDB['company_id'] == $copay['company_id'])) {
+                            $validated = true;
+                            break;
+                        }
+                    }
+                    if (!$validated) {
+                        $copayDB->procedures()->detach();
+                        $copayDB->delete();
+                    }
+                }
+
+                /** update or create new copay */
+                foreach ($data["copays"] as $copay) {
+                    $copayDB = Copay::firstOrCreate([
+                        "copay"              => $copay["copay"],
+                        "company_id"         => $copay["company_id"] ?? null,
+                        "insurance_plan_id"  => $insurancePlan->id,
+                        "billing_company_id" => $billingCompany->id ?? $copay["billing_company_id"],
+                    ]);
+                    $copayDB->procedures()->sync($copay["procedure_ids"]);
+                }
+            }
+
+            /** Get data response */
+            if (auth()->user()->hasRole('superuser')) {
+                $insurancePlanCopays = $insurancePlan->copays;
+            } else {
+                $insurancePlanCopays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
+            }
+
+            foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
+                $procedure_ids = [];
+                foreach ($insurancePlanCopay->procedures ?? [] as $procedure) {
+                    array_push($procedure_ids, $procedure->id);
+                };
+                $private_note = PrivateNote::where([
+                    "publishable_id"     => $insurancePlanCopay->id,
+                    "publishable_type"   => Copay::class,
+                    "billing_company_id" => $insurancePlanCopay->billing_company_id
+                ])->first();
+
+                array_push($records, [
+                    "billing_company_id" => $insurancePlanCopay->billing_company_id ?? null,
+                    "company_id"         => $insurancePlanCopay->company_id ?? null,
+                    "procedure_ids"      => $procedure_ids,
+                    "copay"              => (float)$insurancePlanCopay->copay ?? null,
+                    "private_note"       => $private_note->note ?? '',
+                ]);
+            }
+            DB::commit();
+            return $records;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
         }
     }
 }

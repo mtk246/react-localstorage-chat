@@ -198,6 +198,17 @@ class InsurancePlan extends Model implements Auditable
     {
         return $this->hasMany(Copay::class);
     }
+
+    /**
+     * InsurancePlan has many ContracFees.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contractFees() : HasMany
+    {
+        return $this->hasMany(ContractFee::class);
+    }
+
     /**
      * InsurancePlan has many InsurancePlanPrivate.
      *
