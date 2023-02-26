@@ -18,14 +18,4 @@ class Std extends Model
     use HasFactory;
 
     protected $fillable = ['std'];
-
-    /**
-     * DiagnosticPointer has many claimServices.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function claimServices()
-    {
-        return $this->hasMany(ClaimService::class);
-    }
 }

@@ -102,7 +102,7 @@ class Subscriber extends Model implements Auditable
      */
     public function insurancePolicies(): BelongsToMany
     {
-        return $this->belongsToMany(InsurancePolicies::class)->withTimestamps();
+        return $this->belongsToMany(InsurancePolicy::class)->withTimestamps();
     }
 
     /**
