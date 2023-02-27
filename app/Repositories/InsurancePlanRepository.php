@@ -180,6 +180,12 @@ class InsurancePlanRepository
                 'charge_using_id'      => $data['charge_using_id']
             ]);
 
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+            
             InsurancePlanPrivate::updateOrCreate([
                 'insurance_plan_id'  => $insurancePlan->id,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -193,12 +199,6 @@ class InsurancePlanRepository
                 'insurance_plan_id'       => $insurancePlan->id,
                 'billing_company_id'      => $billingCompany->id ?? $billingCompany,
             ]);
-
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
 
             /** Attach billing company */
             if (is_null($insurancePlan->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
@@ -276,7 +276,7 @@ class InsurancePlanRepository
             }
 
             DB::commit();
-            return $this->getOneInsurance($id);
+            return $this->getOneInsurancePlan($id);
         } catch (\Exception $e) {
             DB::rollBack();
             return null;
