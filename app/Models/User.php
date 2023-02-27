@@ -325,7 +325,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         ];
         $lastModified = $this->audits()->latest()->first();
 
-        if ('' === $lastModified->user_id) {
+        if (!isset($lastModified->user_id)) {
             return [
                 'user' => 'Console',
                 'roles' => [],
