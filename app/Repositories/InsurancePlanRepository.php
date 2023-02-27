@@ -323,8 +323,8 @@ class InsurancePlanRepository
             $insurancePlanCopays = $insurance->copays;
             $insurancePlanContractFees = $insurance->contractFees;
         } else {
-            $insurancePlanCopays = $insurance->copays->where('billing_company_id', $billingCompany->id)->get();
-            $insurancePlanContractFees = $insurance->contractFees->where('billing_company_id', $billingCompany->id)->get();
+            $insurancePlanCopays = $insurance->copays()->where('billing_company_id', $bC)->get();
+            $insurancePlanContractFees = $insurance->contractFees()->where('billing_company_id', $bC)->get();
         }
 
         foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
@@ -716,7 +716,7 @@ class InsurancePlanRepository
                 if (auth()->user()->hasRole('superuser')) {
                     $copays = $insurancePlan->copays;
                 } else {
-                    $copays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
+                    $copays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
                 }
                 
                 /** Delete Copays */
@@ -750,7 +750,7 @@ class InsurancePlanRepository
             if (auth()->user()->hasRole('superuser')) {
                 $insurancePlanCopays = $insurancePlan->copays;
             } else {
-                $insurancePlanCopays = $insurancePlan->copays->where('billing_company_id', $billingCompany->id)->get();
+                $insurancePlanCopays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
             }
 
             foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
