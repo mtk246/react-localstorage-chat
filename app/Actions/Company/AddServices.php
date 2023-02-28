@@ -13,6 +13,7 @@ use App\Models\CompanyProcedure;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 final class AddServices
 {
@@ -21,14 +22,16 @@ final class AddServices
         return DB::transaction(function () use ($company, $services, $user) {
             $billingCompany = $this->getBillingCompany($user);
 
-            $this->detachProcedures($user, $company, $billingCompany);
+            $this->detachProcedures($company, $billingCompany?->id);
 
             $procedures = $company->procedures();
 
             $services->each(fn (Service $service) => tap(
                 CompanyProcedure::create([
+                    'company_id' => $company->id,
+                    'procedure_id' => $service->getProcedureId(),
                     'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
-                    'mac_locality_id' => $service->getMacLocality(),
+                    'mac_locality_id' => $service->getMacLocality()?->id,
                     'price' => $service->getPrice(),
                     'price_percentage' => $service->getPricePercentage(),
                     'modifier_id' => $service->getModifierId(),
@@ -41,7 +44,7 @@ final class AddServices
                 )
             ));
 
-            if ($user->cannot('super')) {
+            if (Gate::denies('is-admin')) {
                 $procedures = $procedures->wherePivot('billing_company_id', $billingCompany->id);
             }
 
@@ -50,11 +53,11 @@ final class AddServices
     }
 
     /** @todo move to model */
-    private function getBillingCompany(User $user): BillingCompany
+    private function getBillingCompany(User $user): ?BillingCompany
     {
         $billingCompany = $user->billingCompanies->first();
 
-        if ($user->cannot('super') && is_null($billingCompany)) {
+        if (Gate::denies('is-admin') && is_null($billingCompany)) {
             throw new NotHaveBillingCompany();
         }
 
@@ -62,12 +65,12 @@ final class AddServices
     }
 
     /** @todo move to model */
-    private function detachProcedures(User $user, Company $company, BillingCompany $billingCompany): void
+    private function detachProcedures(Company $company, ?int $billingCompanyId): void
     {
         $query = $company->procedures();
 
-        if ($user->cannot('super')) {
-            $query = $query->wherePivot('billing_company_id', $billingCompany->id);
+        if (Gate::denies('is-admin')) {
+            $query = $query->wherePivot('billing_company_id', $billingCompanyId);
         }
 
         $query->detach();
