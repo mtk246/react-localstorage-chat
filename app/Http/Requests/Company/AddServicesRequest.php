@@ -25,7 +25,11 @@ final class AddServicesRequest extends FormRequest
         return [
             'services' => ['required', 'array'],
             'services.*.billing_company_id' => ['nullable', 'integer'],
-            'services.*.procedure_id' => ['required', 'integer'],
+            'services.*.procedure_id' => [
+                'required',
+                'integer',
+                'exists:App\Models\Procedure,id',
+            ],
             'services.*.modifier_id' => ['nullable', 'integer'],
             'services.*.price' => ['required', 'numeric'],
             'services.*.mac' => ['nullable', 'string'],
