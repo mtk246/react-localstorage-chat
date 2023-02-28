@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Models\Company;
 
+use App\Models\Medication as MedicationModel;
+
 final class Medication
 {
     /** @param array<key, string|int|null> $medication*/
@@ -13,7 +15,7 @@ final class Medication
 
     public function getCode(): string
     {
-        return '';
+        return generateNewCode(prefix: 'test', code_length: 5, model: MedicationModel::class);
     }
 
     public function getDate(): string
