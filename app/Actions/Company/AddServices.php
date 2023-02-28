@@ -48,7 +48,7 @@ final class AddServices
                 $procedures = $procedures->wherePivot('billing_company_id', $billingCompany->id);
             }
 
-            return $procedures->get();
+            return $services;
         });
     }
 
