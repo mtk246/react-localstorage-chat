@@ -53,11 +53,11 @@ final class CompanyProcedure extends Pivot
      * @var array<string, string>
      */
     protected $casts = [
-        'price' => MoneyStringCast::class,
+        // 'price' => MoneyStringCast::class,
     ];
 
     public function medications(): ?HasMany
     {
-        return $this->hasMany(Medication::class);
+        return $this->hasMany(Medication::class, 'company_procedure_id');
     }
 }
