@@ -1,17 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Http\Requests\Models\Company;
 
-use Illuminate\Support\Collection;
 use App\Models\MacLocality;
+use Illuminate\Support\Collection;
 
 final class Service
 {
-    public function __construct(
-        private array $service,
-    ){ }
+    /** @param array<key, string|int|array|null> $service */
+    public function __construct(private array $service)
+    {
+    }
 
     public function getBillingCompanyId(): ?int
     {
@@ -75,22 +76,24 @@ final class Service
 
     /**
      * @return \Illuminate\Support\Collection<TKey, TValue>
+     *
      * @template TKey of array-key
      * @template TValue of \App\Http\Requests\Models\Medicament
      */
-    public function getMedications(): Collection {
+    public function getMedications(): Collection
+    {
         return collect($this->service['medications'])
-            ->map(fn(array $item) => new Medicament($item));
+            ->map(fn (array $item) => new Medication($item));
     }
 
     public function getMacLocality(): ?MacLocality
     {
         return MacLocality::where([
-                "mac"             => $this->service['mac'],
-                "locality_number" => $this->service['locality_number'],
-                "state"           => $this->service['state'],
-                "fsa"             => $this->service['fsa'],
-                "counties"        => $this->service['counties']
-            ])->first() ?? Null;
+                'mac' => $this->service['mac'],
+                'locality_number' => $this->service['locality_number'],
+                'state' => $this->service['state'],
+                'fsa' => $this->service['fsa'],
+                'counties' => $this->service['counties'],
+            ])->first() ?? null;
     }
 }
