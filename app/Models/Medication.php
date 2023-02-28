@@ -26,6 +26,12 @@ final class Medication extends Model
         'frequency',
     ];
 
+    /** @var string[] */
+    protected $hidden = [
+        'id',
+        'company_procedure_id',
+    ];
+
     public function companyProcedure(): BelongsTo
     {
         return $this->belongsTo(CompanyProcedure::class);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cknow\Money\Casts\MoneyStringCast;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -55,6 +56,21 @@ final class CompanyProcedure extends Pivot
     protected $casts = [
         // 'price' => MoneyStringCast::class,
     ];
+
+    /** @var string[] */
+    protected $appends = [
+        'medications',
+    ];
+
+    /** @var string[] */
+    protected $hidden = [
+        'id',
+    ];
+
+    public function getMedicationsAttribute(): Collection
+    {
+        return $this->medications()->get();
+    }
 
     public function medications(): ?HasMany
     {
