@@ -29,32 +29,32 @@ final class Service
         return $this->service['modifier_id'];
     }
 
-    public function getPrice(): int
+    public function getPrice(): float
     {
-        return $this->service['price'];
+        return (float) $this->service['price'];
     }
 
-    public function getMac(): string
+    public function getMac(): ?string
     {
         return $this->service['mac'];
     }
 
-    public function getLocalityNumber(): int
+    public function getLocalityNumber(): ?string
     {
         return $this->service['locality_number'];
     }
 
-    public function getState(): string
+    public function getState(): ?string
     {
         return $this->service['state'];
     }
 
-    public function getFsa(): string
+    public function getFsa(): ?string
     {
         return $this->service['fsa'];
     }
 
-    public function getCounties(): string
+    public function getCounties(): ?string
     {
         return $this->service['counties'];
     }
@@ -66,7 +66,7 @@ final class Service
 
     public function getPricePercentage(): int
     {
-        return $this->service['price_percentage'];
+        return (int) $this->service['price_percentage'];
     }
 
     public function getClia(): string
@@ -88,12 +88,28 @@ final class Service
 
     public function getMacLocality(): ?MacLocality
     {
-        return MacLocality::where([
-                'mac' => $this->service['mac'],
-                'locality_number' => $this->service['locality_number'],
-                'state' => $this->service['state'],
-                'fsa' => $this->service['fsa'],
-                'counties' => $this->service['counties'],
-            ])->first() ?? null;
+        $query = MacLocality::query();
+
+        if ($this->getMac()) {
+            $query = $query->where('mac', $this->getMac());
+        }
+
+        if ($this->getLocalityNumber()) {
+            $query = $query->where('locality_number', $this->getLocalityNumber());
+        }
+
+        if ($this->getState()) {
+            $query = $query->where('state', $this->getState());
+        }
+
+        if ($this->getFsa()) {
+            $query = $query->where('fsa', $this->getFsa());
+        }
+
+        if ($this->getCounties()) {
+            $query = $query->where('counties', $this->getCounties());
+        }
+
+        return $query->first() ?? null;
     }
 }
