@@ -77,13 +77,13 @@ class CompanyStatement extends Model implements Auditable
     }
 
     /**
-     * CompanyStatement belongs to BillingCompanny.
+     * CompanyStatement belongs to BillingCompany.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function billingCompanny()
+    public function billingCompany()
     {
-        return $this->belongsTo(BillingCompanny::class);
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**

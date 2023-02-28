@@ -565,19 +565,38 @@ class ProcedureRepository
         }
     }
 
-    public function getList($company_id = null) {
+    public function getList($company_id = null, $search = '') {
         try {
             if ($company_id == null) {
-                return getList(Procedure::class, 'code', [], null, ['description']);
+                if ($search == '') {
+                    return getList(Procedure::class, 'code', [], null, ['description']);
+                } else {
+                    return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
+                }
             } else {
-                return getList(
-                    Procedure::class,
-                    'code',
-                    ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
-                    null,
-                    ['description'],
-                    ['price']
-                );
+                if ($code == '') {
+                    return getList(
+                        Procedure::class,
+                        'code',
+                        ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
+                        null,
+                        ['description'],
+                        ['price']
+                    );
+                } else {
+                    return getList(
+                        Procedure::class,
+                        'code',
+                        [
+                            'whereRaw' => ['search' => $search],
+                            'relationship' => 'companies',
+                            'where' => ['company_id' => $company_id]
+                        ],
+                        null,
+                        ['description'],
+                        ['price']
+                    );
+                }
             }
         } catch (\Exception $e) {
             return [];

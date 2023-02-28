@@ -39,6 +39,7 @@ up: ## Start client containers
 install: ## Install dependencies
 	./vendor/bin/sail composer install
 	./vendor/bin/sail artisan key:generate
+	./vendor/bin/sail artisan jwt:secret
 migrate: ## Run migrations
 	./vendor/bin/sail artisan migrate:fresh
 seed: ## Build client containers and enviroment with seeders

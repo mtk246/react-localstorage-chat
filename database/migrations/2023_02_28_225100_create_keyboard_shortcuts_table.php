@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('keyboard_shortcuts', function (Blueprint $table) {
-            $tble->id();
+            $table->id();
             $table->string('description');
             $table->string('shortcut_type', 20);
-            $table->string('module', 20)->nullable();
+            $table->longText('module')->nullable();
             $table->timestamps();
         });
     }
