@@ -35,11 +35,11 @@ final class Medication
 
     public function getQuantity(): int
     {
-        return $this->medication['quantity'];
+        return (int) $this->medication['quantity'];
     }
 
     public function getFrequency(): int
     {
-        return $this->medication['frequency'];
+        return (int) $this->medication['frequency'];
     }
 }

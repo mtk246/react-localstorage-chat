@@ -24,14 +24,12 @@ final class AddServices
 
             $this->detachProcedures($company, $billingCompany?->id);
 
-            $procedures = $company->procedures();
-
             $services->each(fn (Service $service) => tap(
                 CompanyProcedure::create([
                     'company_id' => $company->id,
                     'procedure_id' => $service->getProcedureId(),
-                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
                     'mac_locality_id' => $service->getMacLocality()?->id,
+                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
                     'price' => $service->getPrice(),
                     'price_percentage' => $service->getPricePercentage(),
                     'modifier_id' => $service->getModifierId(),
@@ -44,24 +42,15 @@ final class AddServices
                 )
             ));
 
+            $procedures = CompanyProcedure::query();
+
             if (Gate::denies('is-admin')) {
-                $procedures = $procedures->wherePivot('billing_company_id', $billingCompany->id);
+                $procedures = $procedures->where('billing_company_id', $billingCompany->id)
+                    ->with('medications');
             }
 
-            return $services;
+            return $procedures->get();
         });
-    }
-
-    /** @todo move to model */
-    private function getBillingCompany(User $user): ?BillingCompany
-    {
-        $billingCompany = $user->billingCompanies->first();
-
-        if (Gate::denies('is-admin') && is_null($billingCompany)) {
-            throw new NotHaveBillingCompany();
-        }
-
-        return $billingCompany;
     }
 
     /** @todo move to model */
@@ -74,6 +63,18 @@ final class AddServices
         }
 
         $query->detach();
+    }
+
+    /** @todo move to model */
+    private function getBillingCompany(User $user): ?BillingCompany
+    {
+        $billingCompany = $user->billingCompanies->first();
+
+        if (Gate::denies('is-admin') && is_null($billingCompany)) {
+            throw new NotHaveBillingCompany();
+        }
+
+        return $billingCompany;
     }
 
     private function setMedications(CompanyProcedure $cProcedure, Collection $medications): void

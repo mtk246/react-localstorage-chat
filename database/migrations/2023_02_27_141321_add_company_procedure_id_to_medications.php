@@ -18,7 +18,7 @@ return new class() extends Migration {
             $table->foreignId('company_procedure_id')
                 ->nullable()
                 ->constrained('company_procedure')
-                ->onDelete('restrict')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
     }
