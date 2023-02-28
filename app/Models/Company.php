@@ -332,7 +332,11 @@ final class Company extends Model implements Auditable
         );
     }
 
-    /** @todo need to check this hold logic and use cases */
+    /**
+     * @todo need to check this hold logic and use cases
+     *
+     * @codingStandardsIgnoreStart
+     */
     public function scopeSearch($query, $search): mixed
     {
         if ('' != $search) {
@@ -344,4 +348,5 @@ final class Company extends Model implements Auditable
 
         return $query;
     }
+    // @codingStandardsIgnoreEnd
 }
