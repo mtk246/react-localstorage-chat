@@ -33,6 +33,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote wherePublishableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read Model|\Eloquent $publishable
  * @mixin \Eloquent
  */
 class PrivateNote extends Model implements Auditable

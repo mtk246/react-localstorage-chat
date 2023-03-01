@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @mixin \Eloquent
  */
 class FacilityType extends Model

@@ -95,6 +95,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
  * @mixin \Eloquent
  */
 class Claim extends Model implements Auditable

@@ -16,62 +16,86 @@ final class Service
 
     public function getBillingCompanyId(): ?int
     {
-        return $this->service['billing_company_id'] ?? null;
+        return array_key_exists('billing_company_id', $this->service)
+            ? $this->service['billing_company_id']
+            : null;
     }
 
-    public function getProcedureId(): int
+    public function getProcedureId(): ?int
     {
-        return $this->service['procedure_id'];
+        return array_key_exists('procedure_id', $this->service)
+            ? $this->service['procedure_id']
+            : null;
     }
 
-    public function getModifierId(): int
+    public function getModifierId(): ?int
     {
-        return $this->service['modifier_id'];
+        return array_key_exists('modifier_id', $this->service)
+            ? $this->service['modifier_id']
+            : null;
     }
 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
-        return (float) $this->service['price'];
+        return array_key_exists('price', $this->service)
+            ? (float) $this->service['price']
+            : null;
     }
 
     public function getMac(): ?string
     {
-        return $this->service['mac'];
+        return array_key_exists('state', $this->service)
+            ? $this->service['mac']
+            : null;
     }
 
     public function getLocalityNumber(): ?string
     {
-        return $this->service['locality_number'];
+        return array_key_exists('fsa', $this->service)
+            ? $this->service['locality_number']
+            : null;
     }
 
     public function getState(): ?string
     {
-        return $this->service['state'];
+        return array_key_exists('state', $this->service)
+            ? $this->service['state']
+            : null;
     }
 
     public function getFsa(): ?string
     {
-        return $this->service['fsa'];
+        return array_key_exists('fsa', $this->service)
+            ? $this->service['fsa']
+            : null;
     }
 
     public function getCounties(): ?string
     {
-        return $this->service['counties'];
+        return array_key_exists('counties', $this->service)
+            ? $this->service['counties']
+            : null;
     }
 
-    public function getInsuranceLabelFeeId(): int
+    public function getInsuranceLabelFeeId(): ?int
     {
-        return $this->service['insurance_label_fee_id'];
+        return array_key_exists('insurance_label_fee_id', $this->service)
+            ? (int) $this->service['insurance_label_fee_id']
+            : null;
     }
 
-    public function getPricePercentage(): int
+    public function getPricePercentage(): ?int
     {
-        return (int) $this->service['price_percentage'];
+        return array_key_exists('price_percentage', $this->service)
+            ? (int) $this->service['price_percentage']
+            : null;
     }
 
-    public function getClia(): string
+    public function getClia(): ?string
     {
-        return $this->service['clia'];
+        return array_key_exists('clia', $this->service)
+            ? $this->service['clia']
+            : null;
     }
 
     /**
@@ -82,7 +106,7 @@ final class Service
      */
     public function getMedications(): Collection
     {
-        return collect($this->service['medications'])
+        return collect($this->service['medications'] ?? [])
             ->map(fn (array $item) => new Medication($item));
     }
 

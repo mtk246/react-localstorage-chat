@@ -30,6 +30,9 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureConsiderations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureConsiderations
  * @mixin \Eloquent
  */
 class Discriminatory extends Model implements Auditable

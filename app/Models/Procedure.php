@@ -61,6 +61,17 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
+ * @property-read int|null $copays_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
  * @mixin \Eloquent
  */
 class Procedure extends Model implements Auditable

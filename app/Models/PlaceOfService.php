@@ -37,6 +37,9 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimServiceLine> $claimServiceLines
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimServiceLine> $claimServiceLines
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @mixin \Eloquent
  */
 class PlaceOfService extends Model implements Auditable

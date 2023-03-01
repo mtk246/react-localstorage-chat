@@ -45,6 +45,9 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $user
  * @mixin \Eloquent
  */
 class Profile extends Model implements Auditable
