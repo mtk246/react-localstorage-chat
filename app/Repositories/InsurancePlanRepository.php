@@ -700,6 +700,7 @@ class InsurancePlanRepository
         }
     }
 
+    /** @todo Cambiar relacion entre copays y company muchos a muchos */
     public function addCopays(array $data, int $id) {
         try {
             DB::beginTransaction();
@@ -742,6 +743,15 @@ class InsurancePlanRepository
                         "insurance_plan_id"  => $insurancePlan->id,
                         "billing_company_id" => $billingCompany->id ?? $copay["billing_company_id"],
                     ]);
+                    if (isset($copay['private_note'])) {
+                        PrivateNote::updateOrCreate([
+                            'publishable_type'   => Copay::class,
+                            'publishable_id'     => $copayDB['id'],
+                            'billing_company_id' => $billingCompany->id ?? $copay["billing_company_id"],
+                        ], [
+                            'note'               => $copay['private_note']
+                        ]);
+                    }
                     $copayDB->procedures()->sync($copay["procedure_ids"]);
                 }
             }
