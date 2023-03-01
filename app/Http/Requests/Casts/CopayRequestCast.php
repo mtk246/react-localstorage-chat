@@ -17,33 +17,41 @@ final class CopayRequestCast
 
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && $this->copays['billing_company_id']
+        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->copays)
             ? (int) $this->copays['billing_company_id']
             : $this->user->billingCompanies->first()?->id;
     }
 
     public function getProceduresIds(): Collection
     {
-        return collect($this->copays['procedure_id']);
+        return collect($this->copays['procedure_id'] ?? []);
     }
 
-    public function getInsurancePlanId(): int
+    public function getInsurancePlanId(): ?int
     {
-        return (int) $this->copays['insurance_plan_id'];
+        return array_key_exists('insurance_plan_id', $this->copays)
+            ? (int) $this->copays['insurance_plan_id']
+            : null;
     }
 
-    public function getInsuranceCompanyId(): int
+    public function getInsuranceCompanyId(): ?int
     {
-        return (int) $this->copays['insurance_company_id'];
+        return array_key_exists('insurance_company_id', $this->copays)
+            ? (int) $this->copays['insurance_company_id']
+            : null;
     }
 
-    public function getCopay(): int
+    public function getCopay(): ?int
     {
-        return (int) $this->copays['copay'];
+        return array_key_exists('copay', $this->copays)
+            ? (int) $this->copays['copay']
+            : null;
     }
 
     public function getPrivateNote(): ?string
     {
-        return $this->copays['private_note'];
+        return array_key_exists('private_note', $this->copays)
+            ? $this->copays['private_note']
+            : null;
     }
 }

@@ -31,17 +31,17 @@ final class AddCompanyCopaysRequest extends FormRequest
                 new IntegerOrArrayKeyExists(Procedure::class),
             ],
             '*.insurance_plan_id' => [
-                'required',
+                'nullable',
                 'integer',
                 'exists:\App\Models\InsurancePlan,id',
             ],
             '*.insurance_company_id' => [
-                'required',
+                'nullable',
                 'integer',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
             '*.copay' => [
-                'required',
+                'nullable',
                 'numeric',
                 'between:0,999999.99',
             ],
