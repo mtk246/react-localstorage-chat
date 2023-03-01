@@ -283,7 +283,7 @@ final class Company extends Model implements Auditable
     /*
      * Get the company's status.
      */
-    public function getStatusAttribute(): ?string
+    public function getStatusAttribute(): ?bool
     {
         $billingCompany = auth()->user()->billingCompanies->first();
 
