@@ -31,6 +31,8 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table('medications', function (Blueprint $table) {
+            $table->dropForeign(['company_procedure_id']);
+            $table->dropColumn('company_procedure_id');
         });
     }
 };
