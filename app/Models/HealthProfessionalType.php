@@ -29,6 +29,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  * @mixin \Eloquent
  */
 class HealthProfessionalType extends Model implements Auditable

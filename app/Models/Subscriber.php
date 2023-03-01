@@ -50,6 +50,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property-read int|null $insurance_policies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @mixin \Eloquent
  */
 class Subscriber extends Model implements Auditable

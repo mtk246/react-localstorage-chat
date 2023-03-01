@@ -95,6 +95,15 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @mixin \Eloquent
  */
 class Patient extends Model implements Auditable

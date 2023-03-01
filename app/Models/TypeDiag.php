@@ -29,6 +29,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|TypeDiag whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
  * @mixin \Eloquent
  */
 class TypeDiag extends Model implements Auditable

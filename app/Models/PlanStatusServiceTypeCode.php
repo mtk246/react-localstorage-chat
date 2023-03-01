@@ -28,6 +28,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode whereServiceTypeCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class PlanStatusServiceTypeCode extends Model implements Auditable

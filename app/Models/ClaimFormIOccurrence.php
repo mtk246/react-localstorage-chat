@@ -32,6 +32,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIOccurrence whereThrough($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIOccurrence whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimFormIOccurrence extends Model implements Auditable

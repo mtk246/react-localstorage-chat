@@ -21,6 +21,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine query()
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimServiceLine extends Model implements Auditable

@@ -33,6 +33,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ExceptionInsuranceCompany extends Model implements Auditable

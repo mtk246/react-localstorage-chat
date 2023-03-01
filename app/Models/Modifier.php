@@ -45,6 +45,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @mixin \Eloquent
  */
 class Modifier extends Model implements Auditable

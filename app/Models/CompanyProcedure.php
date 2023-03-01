@@ -13,11 +13,35 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * App\Models\CondoMembership.
  *
  * @property mixed $roles
- *
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership query()
- *
+ * @property int $id
+ * @property int $company_id
+ * @property int $procedure_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property float|null $price
+ * @property float|null $price_percentage
+ * @property int|null $insurance_label_fee_id
+ * @property int|null $billing_company_id
+ * @property int|null $modifier_id
+ * @property int|null $mac_locality_id
+ * @property string|null $clia
+ * @property-read Collection<int, \App\Models\Medication> $medications
+ * @property-read int|null $medications_count
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereClia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereInsuranceLabelFeeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereMacLocalityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereModifierId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure wherePricePercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 final class CompanyProcedure extends Pivot

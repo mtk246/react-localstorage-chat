@@ -46,6 +46,10 @@ use App\Roles\Traits\Slugable;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @mixin \Eloquent
  */
 class Role extends Model implements RoleHasRelationsContract, Auditable

@@ -28,6 +28,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereTreatmentAuthorizationCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimFormITreatmentAuthorizationCode extends Model implements Auditable

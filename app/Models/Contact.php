@@ -57,6 +57,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereMobile($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class Contact extends Model implements Auditable

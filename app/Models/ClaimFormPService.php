@@ -60,6 +60,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService whereTypeOfServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimFormPService extends Model implements Auditable

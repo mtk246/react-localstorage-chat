@@ -79,6 +79,15 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @mixin \Eloquent
  */
 class Facility extends Model implements Auditable

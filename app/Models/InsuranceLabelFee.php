@@ -31,6 +31,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
  * @mixin \Eloquent
  */
 class InsuranceLabelFee extends Model implements Auditable

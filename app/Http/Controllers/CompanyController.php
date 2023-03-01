@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Http\Requests\ChangeStatusCompanyRequest;
+use App\Http\Requests\Company\AddCompanyCopaysRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
 use App\Http\Requests\Company\AddServicesRequest;
 use App\Http\Requests\CompanyCreateRequest;
@@ -158,9 +160,14 @@ class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error add services to company'), 404);
     }
 
-    public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->companyRepository->addCopays($request->validated(), $id);
+    public function addCompanyCopays(
+        AddCopays $addCopays,
+        AddCompanyCopaysRequest $request,
+        Company $company,
+    ): JsonResponse {
+        $request->validated();
+
+        $rs = $addCopays->invoke($request->getCopays(), $company);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }

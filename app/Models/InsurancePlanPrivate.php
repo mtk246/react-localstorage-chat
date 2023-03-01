@@ -38,6 +38,19 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $format_professional_id
+ * @property int|null $format_cms_id
+ * @property int|null $format_institutional_id
+ * @property int|null $format_ub_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \App\Models\TypeCatalog|null $formatCMS
+ * @property-read \App\Models\TypeCatalog|null $formatInstitutional
+ * @property-read \App\Models\TypeCatalog|null $formatProfessional
+ * @property-read \App\Models\TypeCatalog|null $formatUB
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatCmsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatInstitutionalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatProfessionalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatUbId($value)
  * @mixin \Eloquent
  */
 class InsurancePlanPrivate extends Model implements Auditable

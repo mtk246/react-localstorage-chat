@@ -38,6 +38,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
  * @mixin \Eloquent
  */
 class Service extends Model implements Auditable

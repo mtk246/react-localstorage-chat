@@ -59,6 +59,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @mixin \Eloquent
  */
 class HealthProfessional extends Model implements Auditable

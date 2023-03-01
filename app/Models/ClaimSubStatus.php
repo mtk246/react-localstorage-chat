@@ -40,6 +40,9 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
  * @mixin \Eloquent
  */
 class ClaimSubStatus extends Model implements Auditable

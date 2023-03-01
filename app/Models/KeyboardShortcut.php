@@ -31,6 +31,9 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereShortcutType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property-read int|null $billing_companies_count
  * @mixin \Eloquent
  */
 class KeyboardShortcut extends Model implements Auditable

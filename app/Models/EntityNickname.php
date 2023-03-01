@@ -34,6 +34,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read Model|\Eloquent $nicknamable
  * @mixin \Eloquent
  */
 class EntityNickname extends Model implements Auditable

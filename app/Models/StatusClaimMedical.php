@@ -56,6 +56,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical whereTradingPartnerClaimNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class StatusClaimMedical extends Model implements Auditable

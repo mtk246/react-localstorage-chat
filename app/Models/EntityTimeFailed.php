@@ -37,6 +37,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereTimeFailableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read Model|\Eloquent $timeFailable
  * @mixin \Eloquent
  */
 class EntityTimeFailed extends Model implements Auditable

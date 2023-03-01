@@ -40,6 +40,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIRevenue whereTotalCharges($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIRevenue whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimFormIRevenue extends Model implements Auditable
