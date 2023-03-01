@@ -1836,14 +1836,21 @@
 
 ```json
 [
-    {
-        "billing_company_id": 1, /** Only required by superuser */
-        "procedure_id": 1,
-        "insurance_plan_id": 1,
-        "insurance_company_id": 1,
-        "copay": 150.2,
-        "private_note": "Note private by billing_company"
-    }
+  {
+    "billing_company_id": 1,
+    "insurance_plan_id": 1,
+    "company_id": 1,
+    "copay": "150.00",
+    "procedures": [
+      {
+        "id": 1,
+        "code": "CO-00001-2022",
+        "description": "test description",
+        "start_date": "2023-04-01",
+        "end_date": "2023-04-08",
+      }
+    ]
+  }
 ]
 ```
 
