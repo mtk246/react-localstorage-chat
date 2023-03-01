@@ -37,6 +37,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ProcedureFee extends Model implements Auditable

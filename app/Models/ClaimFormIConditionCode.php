@@ -28,6 +28,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIConditionCode whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormIConditionCode whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class ClaimFormIConditionCode extends Model implements Auditable

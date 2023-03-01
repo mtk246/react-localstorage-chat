@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
  * @mixin \Eloquent
  */
 class ClaimStatus extends Model

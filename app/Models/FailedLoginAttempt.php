@@ -27,6 +27,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|FailedLoginAttempt whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FailedLoginAttempt whereUserId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class FailedLoginAttempt extends Model implements Auditable

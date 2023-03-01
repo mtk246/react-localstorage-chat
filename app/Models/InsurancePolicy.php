@@ -66,6 +66,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @mixin \Eloquent
  */
 class InsurancePolicy extends Model implements Auditable

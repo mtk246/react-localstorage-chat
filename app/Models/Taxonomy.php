@@ -36,6 +36,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy wherePrimary($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereTaxId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property-read int|null $companies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property-read int|null $facilities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read int|null $health_professionals_count
  * @mixin \Eloquent
  */
 class Taxonomy extends Model implements Auditable

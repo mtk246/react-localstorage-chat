@@ -83,6 +83,15 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @mixin \Eloquent
  */
 class BillingCompany extends Model implements Auditable

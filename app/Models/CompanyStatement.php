@@ -40,6 +40,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereWhenId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \App\Models\BillingCompany $billingCompany
  * @mixin \Eloquent
  */
 class CompanyStatement extends Model implements Auditable

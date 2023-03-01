@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Type whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Type whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $typeCatalogs
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $typeCatalogs
  * @mixin \Eloquent
  */
 class Type extends Model

@@ -34,6 +34,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|PatientConditionRelated wherePlaceState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PatientConditionRelated whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @mixin \Eloquent
  */
 class PatientConditionRelated extends Model implements Auditable
