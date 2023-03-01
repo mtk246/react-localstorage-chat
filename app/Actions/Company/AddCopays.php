@@ -29,7 +29,7 @@ final class AddCopays
                 fn (Copay $copay) => $this->afterCreate($copay, $copayData->getProceduresIds())
             ));
 
-            return $company->copays()->get();
+            return $company->copays()->with('procedures')->get();
         });
     }
 
