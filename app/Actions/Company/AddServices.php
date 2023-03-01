@@ -5,66 +5,91 @@ declare(strict_types=1);
 namespace App\Actions\Company;
 
 use App\Exceptions\User\NotHaveBillingCompany;
+use App\Http\Requests\Models\Company\Medication;
 use App\Http\Requests\Models\Company\Service;
 use App\Models\BillingCompany;
-use App\Models\User;
 use App\Models\Company;
-use Illuminate\Support\Facades\DB;
+use App\Models\CompanyProcedure;
+use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 final class AddServices
 {
-    public function invoke(Collection $services, Company $company, User $user)
+    public function invoke(Collection $services, Company $company, User $user): Collection
     {
-        return DB::transaction(function() use (&$company, $services, $user){
+        return DB::transaction(function () use ($company, $services, $user) {
             $billingCompany = $this->getBillingCompany($user);
 
-            $this->detachProcedures($user, $company, $billingCompany);
+            $this->detachProcedures($company, $billingCompany?->id);
 
-            $procedures = $company->procedures();
+            $services->each(fn (Service $service) => tap(
+                CompanyProcedure::create([
+                    'company_id' => $company->id,
+                    'procedure_id' => $service->getProcedureId(),
+                    'mac_locality_id' => $service->getMacLocality()?->id,
+                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
+                    'price' => $service->getPrice(),
+                    'price_percentage' => $service->getPricePercentage(),
+                    'modifier_id' => $service->getModifierId(),
+                    'insurance_label_fee_id' => $service->getInsuranceLabelFeeId(),
+                    'clia' => $service->getClia(),
+                ]),
+                fn (CompanyProcedure $cProcedure) => $this->setMedications(
+                    $cProcedure,
+                    $service->getMedications(),
+                )
+            ));
 
-            $services->each(fn(Service $service)  => $procedures
-                ->attach($service->getProcedureId(), [
-                    'billing_company_id'     => $service->getBillingCompanyId() ?? $billingCompany->id,
-                    'mac_locality_id'        => $service->getMacLocality(),
-                    'price'                  => $service['price'] ?? null,
-                    'price_percentage'       => $service['price_percentage'] ?? null,
-                    'modifier_id'            => $service['modifier_id'] ?? null,
-                    'insurance_label_fee_id' => $service['insurance_label_fee_id'] ?? null,
-                    'clia'                   => $service['clia'] ?? null,
-                ])
-            );
+            $procedures = CompanyProcedure::query();
 
-            if($user->cannot('super')) {
-                $procedures = $procedures->wherePivot('billing_company_id', $billingCompany->id);
+            if (Gate::denies('is-admin')) {
+                $procedures = $procedures->where('billing_company_id', $billingCompany->id)
+                    ->with('medications');
             }
 
             return $procedures->get();
         });
-
     }
 
     /** @todo move to model */
-    private function getBillingCompany(User $user): BillingCompany
+    private function detachProcedures(Company $company, ?int $billingCompanyId): void
+    {
+        $query = $company->procedures();
+
+        if (Gate::denies('is-admin')) {
+            $query = $query->wherePivot('billing_company_id', $billingCompanyId);
+        }
+
+        $query->detach();
+    }
+
+    /** @todo move to model */
+    private function getBillingCompany(User $user): ?BillingCompany
     {
         $billingCompany = $user->billingCompanies->first();
 
-        if($user->cannot('super') && is_null($billingCompany)) {
+        if (Gate::denies('is-admin') && is_null($billingCompany)) {
             throw new NotHaveBillingCompany();
         }
 
         return $billingCompany;
     }
 
-    /** @todo move to model */
-    private function detachProcedures(User $user, Company $company, BillingCompany $billingCompany): void
+    private function setMedications(CompanyProcedure $cProcedure, Collection $medications): void
     {
-        $query = $company->procedures();
-
-        if ($user->cannot('super')) {
-            $query = $query->wherePivot('billing_company_id', $billingCompany->id);
-        }
-
-        $query->detach();
+        $medications->each(
+            fn (Medication $medication) => $cProcedure->medications()->updateOrCreate(
+                [
+                    'date' => $medication->getDate(),
+                    'drug_code' => $medication->getDrugCode(),
+                    'batch' => $medication->getBatch(),
+                    'quantity' => $medication->getQuantity(),
+                    'frequency' => $medication->getFrequency(),
+                ],
+                ['code' => $medication->getCode()],
+            )
+        );
     }
 }

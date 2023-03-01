@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 function randomNumber($length): string
 {
     $result = '';
 
-    for($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; ++$i) {
         $result .= mt_rand(0, 9);
     }
 
@@ -13,7 +15,7 @@ function randomNumber($length): string
 
 function in_array_any($needles, $haystack)
 {
-   return !empty(array_intersect($needles, $haystack));
+    return !empty(array_intersect($needles, $haystack));
 }
 
 function middleRedactor($string, $char)
@@ -25,25 +27,32 @@ function middleRedactor($string, $char)
     // Make sure single character strings get redacted
     $length = ($total > $tenth) ? ($total - $tenth) : 1;
 
-    return substr($string, 0, 1) . str_pad(substr($substring, $length), $total, $char, STR_PAD_LEFT);
+    return substr($string, 0, 1).str_pad(substr($substring, $length), $total, $char, STR_PAD_LEFT);
 }
 
 if (!function_exists('generateNewCode')) {
-    function generateNewCode($prefix, $code_length, $year, $model, $field)
-    {
-        $newCode = 1;
+    function generateNewCode(
+        ?string $prefix = null,
+        int $code_length,
+        ?string $suffix = null,
+        string $model,
+        string $field = 'code',
+    ): string {
+        $codeFormat = implode('-', array_filter([$prefix, '%', $suffix]));
 
-        $targetModel = $model::select($field)->where($field, 'like', "%-%-{$year}")
-            ->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
-        
-        $newCode += ($targetModel) ? (int)explode('-', $targetModel->$field)[1] : 0;
+        $codeCount = $model::select($field)
+            ->where($field, 'like', $codeFormat)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->count() + 1;
 
-        if (strlen((string)$newCode) > $code_length) {
-            return ["error" => "The new code exceeds the allowed length"];
+        if (strlen((string) $codeCount) > $code_length) {
+            return ['error' => 'The new code exceeds the allowed length'];
         }
-        $newCode = str_pad($newCode, $code_length, "0", STR_PAD_LEFT);
-        
-        return "{$prefix}-{$newCode}-{$year}";
+
+        $codeCount = str_pad((string) $codeCount, $code_length, '0', STR_PAD_LEFT);
+
+        return str_replace('%', $codeCount, $codeFormat);
     }
 }
 
@@ -51,14 +60,13 @@ if (!function_exists('getPrefix')) {
     function getPrefix($name)
     {
         $prefix = '';
-        $stringName = explode(" ", trim(str_replace([",", ".", "-"], "", strtoupper($name))));
+        $stringName = explode(' ', trim(str_replace([',', '.', '-'], '', strtoupper($name))));
         if (count($stringName) > 1) {
-
-            $prefix = ((strlen($stringName[0]) == 1) ? $stringName[0] : substr($stringName[0], 0, 2)) . ((strlen($stringName[1]) == 1) ? $stringName[1] : substr($stringName[1], 0, 2));
+            $prefix = ((1 == strlen($stringName[0])) ? $stringName[0] : substr($stringName[0], 0, 2)).((1 == strlen($stringName[1])) ? $stringName[1] : substr($stringName[1], 0, 2));
         } else {
             $prefix = (strlen($stringName[0]) <= 4) ? $stringName[0] : substr($stringName[0], -4, 4);
         }
-        
+
         return trim($prefix);
     }
 }
@@ -71,7 +79,7 @@ if (!function_exists('getList')) {
             if (isset($filters['whereRaw'])) {
                 $search = $filters['whereRaw']['search'];
                 $records = $model::whereRaw("LOWER($fields) LIKE (?)", [strtolower("%$search%")])->get();
-            } else if (isset($filters['not_exists'])) {
+            } elseif (isset($filters['not_exists'])) {
                 /** Filtra la información a obtener mediante relaciones */
                 $exists = $filters['not_exists'];
                 if (isset($filters['orWhereHas'])) {
@@ -83,18 +91,18 @@ if (!function_exists('getList')) {
                 } else {
                     $records = $model::has($exists, 0)->where($filters['where'])->get();
                 }
-            } else if (isset($filters['exists'])) {
+            } elseif (isset($filters['exists'])) {
                 /** Filtra la información a obtener mediante relaciones */
                 $exists = $filters['exists'];
                 if (isset($filters['whereHas'])) {
                     $relationship = $filters['whereHas']['relationship'];
                     $records = $model::whereHas($relationship, function ($q) use ($filters) {
-                                         $q->where($filters['whereHas']['where']);
-                                     })->where($filters['where'])->get();
+                        $q->where($filters['whereHas']['where']);
+                    })->where($filters['where'])->get();
                 } else {
                     $records = $model::has($exists, 0)->where($filters['where'])->get();
                 }
-            } else if (!isset($filters['relationship'])) {
+            } elseif (!isset($filters['relationship'])) {
                 $records = $model::where($filters)->get();
             } else {
                 /** Filtra la información a obtener mediante relaciones */
@@ -110,9 +118,9 @@ if (!function_exists('getList')) {
             if (is_array($fields)) {
                 $text = '';
                 foreach ($fields as $field) {
-                    $text .= ($field !== "-" && $field !== " ")
+                    $text .= ('-' !== $field && ' ' !== $field)
                         ? $rec->$field
-                        : (($field === " ") ? $field : " {$field} ");
+                        : ((' ' === $field) ? $field : " {$field} ");
                 }
             } else {
                 $text = $rec->$fields;
@@ -132,18 +140,21 @@ if (!function_exists('getList')) {
                 array_push($options, $fieldPush);
             }
         }
+
         return $options;
     }
 }
 
 if (!function_exists('toModel')) {
-    function toModel($entity, $namespace = '\App\Models') {
-        return $namespace . '\\' . implode('', array_map('ucfirst', explode('-', $entity)));
+    function toModel($entity, $namespace = '\App\Models')
+    {
+        return $namespace.'\\'.implode('', array_map('ucfirst', explode('-', $entity)));
     }
 }
 
 if (!function_exists('upperCaseWords')) {
-    function upperCaseWords($string) {
+    function upperCaseWords($string)
+    {
         return ucwords(strtolower($string));
     }
 }
@@ -153,6 +164,7 @@ if (!function_exists('has_foreign_key')) {
     {
         /** @var object Objeto con información detallada de las propiedades de la tabla */
         $detailTable = Schema::getConnection()->getDoctrineSchemaManager()->listTableDetails($table);
+
         return $detailTable->hasForeignKey($foreignKey);
     }
 }
