@@ -105,6 +105,11 @@ class InsurancePolicy extends Model implements Auditable
         return $this->hasMany(ClaimEligibility::class);
     }
 
+    public function claimLastEligibility()
+    {
+        return $this->hasOne(ClaimEligibility::class)->latestOfMany();
+    }
+
     /**
      * InsurancePolicy has many ClaimValidations.
      *

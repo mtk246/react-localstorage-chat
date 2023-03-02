@@ -602,6 +602,8 @@ class PatientRepository
                         "type_responsibility"    => $patient_policy->typeResponsibility->code ?? '',
                         "insurance_policy_type_id"  => $patient_policy->insurance_policy_type_id ?? '',
                         "insurance_policy_type"  => $patient_policy->insurancePolicyType->description ?? '',
+                        "eligibility" => $patient_policy->claimLastEligibility->response_details ?? '',
+                        "eligibility_status" => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? '',
                         "eff_date"  => $patient_policy->eff_date,
                         "end_date"  => $patient_policy->end_date,
                         "assign_benefits"   => $patient_policy->assign_benefits ?? false,
@@ -992,7 +994,7 @@ class PatientRepository
                             ]);
                         } else {
                             $patient->companies()->updateExistingPivot($company->id, [
-                                'med_num' => $company["med_num"],
+                                'med_num' => $dataCompany["med_num"],
                                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
                             ]);
                         }
