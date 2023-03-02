@@ -697,14 +697,15 @@ class PatientRepository
                 }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
             "maritalStatus",
-            "marital",
-            "guarantor",
+            //"marital",
+            //"guarantor",
             "employments",
             "companies",
             "emergencyContacts",
-            "publicNote",
+            //"publicNote",
             "privateNotes",
             "insurancePolicies",
+            "billingCompanies",
             "insurancePlans" => function ($query) {
                 $query->with("insuranceCompany");
             }
@@ -749,6 +750,7 @@ class PatientRepository
                 "publicNote",
                 "privateNotes",
                 "insurancePolicies",
+                "billingCompanies",
                 "insurancePlans" => function ($query) {
                     $query->with("insuranceCompany");
                 }
@@ -1196,16 +1198,16 @@ class PatientRepository
             $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
 
             $insurancePolicy = InsurancePolicy::updateOrCreate([
-                'policy_number'     => $insurance_policy["policy_number"],
+                'policy_number'     => $data["policy_number"],
                 'insurance_plan_id' => $insurancePlan->id
             ], [
-                'group_number'             => $insurance_policy["group_number"] ?? '',
-                'eff_date'                 => $insurance_policy["eff_date"],
-                'end_date'                 => $insurance_policy["end_date"] ?? '',
-                'insurance_policy_type_id' => $insurance_policy["insurance_policy_type_id"] ?? null,
-                'type_responsibility_id'   => $insurance_policy["type_responsibility_id"],
-                'release_info'             => $insurance_policy["release_info"],
-                'assign_benefits'          => $insurance_policy["assign_benefits"]
+                'group_number'             => $data["group_number"] ?? '',
+                'eff_date'                 => $data["eff_date"],
+                'end_date'                 => $data["end_date"] ?? '',
+                'insurance_policy_type_id' => $data["insurance_policy_type_id"] ?? null,
+                'type_responsibility_id'   => $data["type_responsibility_id"],
+                'release_info'             => $data["release_info"],
+                'assign_benefits'          => $data["assign_benefits"]
 
             ]);
 
@@ -1224,15 +1226,15 @@ class PatientRepository
 
                 /** The subscriber is searched for each billing company */
                 $subscriber = Subscriber::firstOrCreate([
-                    "ssn"         => $insurance_policy["subscriber"]["ssn"],
-                    "first_name" => upperCaseWords($insurance_policy["subscriber"]["first_name"]),
-                    "last_name" => upperCaseWords($insurance_policy["subscriber"]["last_name"]),
-                    "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"]
+                    "ssn"         => $data["subscriber"]["ssn"],
+                    "first_name" => upperCaseWords($data["subscriber"]["first_name"]),
+                    "last_name" => upperCaseWords($data["subscriber"]["last_name"]),
+                    "date_of_birth" => $data["subscriber"]["date_of_birth"]
                 ], [
-                    "first_name" => $insurance_policy["subscriber"]["first_name"],
-                    "last_name" => $insurance_policy["subscriber"]["last_name"],
-                    "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"],
-                    "relationship_id" => $insurance_policy["subscriber"]["relationship_id"],
+                    "first_name" => $data["subscriber"]["first_name"],
+                    "last_name" => $data["subscriber"]["last_name"],
+                    "date_of_birth" => $data["subscriber"]["date_of_birth"],
+                    "relationship_id" => $data["subscriber"]["relationship_id"],
                 ]);
 
                 if (isset($subscriber)) {
@@ -1331,15 +1333,15 @@ class PatientRepository
 
             /** The subscriber is searched for each billing company */
             $subscriber = Subscriber::firstOrCreate([
-                "ssn"         => $insurance_policy["subscriber"]["ssn"],
-                "first_name" => upperCaseWords($insurance_policy["subscriber"]["first_name"]),
-                "last_name" => upperCaseWords($insurance_policy["subscriber"]["last_name"]),
-                "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"]
+                "ssn"         => $data["subscriber"]["ssn"],
+                "first_name" => upperCaseWords($data["subscriber"]["first_name"]),
+                "last_name" => upperCaseWords($data["subscriber"]["last_name"]),
+                "date_of_birth" => $data["subscriber"]["date_of_birth"]
             ], [
-                "first_name" => $insurance_policy["subscriber"]["first_name"],
-                "last_name" => $insurance_policy["subscriber"]["last_name"],
-                "date_of_birth" => $insurance_policy["subscriber"]["date_of_birth"],
-                "relationship_id" => $insurance_policy["subscriber"]["relationship_id"],
+                "first_name" => $data["subscriber"]["first_name"],
+                "last_name" => $data["subscriber"]["last_name"],
+                "date_of_birth" => $data["subscriber"]["date_of_birth"],
+                "relationship_id" => $data["subscriber"]["relationship_id"],
             ]);
 
             if (isset($subscriber)) {
@@ -1500,10 +1502,10 @@ class PatientRepository
             "privateNotes"
         ])->whereHas('user.profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
             $query->whereDateOfBirth($date_of_birth)
-                  ->where("first_name", "ilike", "%${first_name}%")
-                  ->where("last_name", "ilike", "%${last_name}%")
-                  ->where("ssn", "ilike", "%${ssn}")
-                  ->orWhere("ssn", "ilike", "%${ssnFormated}");
+                  ->where("first_name", "ilike", "%{$first_name}%")
+                  ->where("last_name", "ilike", "%{$last_name}%")
+                  ->where("ssn", "ilike", "%{$ssn}")
+                  ->orWhere("ssn", "ilike", "%{$ssnFormated}");
         })->get();
 
         return (count($patients) == 0) ? null : $patients;

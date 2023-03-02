@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
+use App\Models\Billingcompany;
 use App\Models\Claim;
 use App\Models\ClaimBatch;
 use App\Models\ClaimStatus;
@@ -23,8 +23,8 @@ class ClaimBatchRepository
      * @return claim|Model
      */
     public function createBatch(array $data) {
-        /**try {
-            DB::beginTransaction();*/
+        try {
+            DB::beginTransaction();
             $claimBatchSubmitted = ClaimBatchStatus::whereStatus('Submitted')->first();
             $claimBatchNotSubmitted = ClaimBatchStatus::whereStatus('Not submitted')->first();
 
@@ -51,12 +51,12 @@ class ClaimBatchRepository
                 $claimBatch->claims()->sync($data['claim_ids']);
             }
 
-            //DB::commit();
+            DB::commit();
             return $claimBatch;
-        /**} catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return $e;
-        }*/
+        }
     }
 
     /**
@@ -119,17 +119,15 @@ class ClaimBatchRepository
                 }
             ]);
         }
-        if ($request->filterBy) {
-            if ($request->billing_company_id) {
-                $data = $data->whereHas("company", function ($query) use ($request) {
-                    $query->whereHas("billingCompanies", function ($q) use ($request) {
-                        $q->where('billing_company_id', $request->billing_company_id);
-                    });    
-                });
-            }
-            if ($request->company_id) {
-                $data = $data->where('company_id', $request->company_id);
-            }
+        if ($request->billing_company_id) {
+            $data = $data->whereHas("company", function ($query) use ($request) {
+                $query->whereHas("billingCompanies", function ($q) use ($request) {
+                    $q->where('billing_company_id', $request->billing_company_id);
+                });    
+            });
+        }
+        if ($request->company_id) {
+            $data = $data->where('company_id', $request->company_id);
         }
 
         if (!empty($request->query('query')) && $request->query('query')!=="{}") {

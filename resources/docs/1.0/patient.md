@@ -26,6 +26,7 @@
 - [Get list responsibility type](#get-list-responsibility-type)
 - [Get list insurance policy type](#get-list-insurance-policy-type)
 - [Search](#search)
+- [Add companies to patient](#add-company)
 
 
 
@@ -55,6 +56,7 @@
 | 18  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
 | 18  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
 | 19|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
+| 20 |PATCH | `Add company to patient`           | `/patient/add-companies-to-patient/{patient_id}`|yes|add company to patient|
 
 
 
@@ -2232,3 +2234,57 @@
 ]
 ```
 #
+
+<a name="add-company"></a>
+## Add companies to patient
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`patient_id required integer`
+
+## Param in body
+
+```json
+{
+    "companies": [
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "company_id": 1, /** required */
+            "med_num": "0001", /** Optional */
+        },
+        {
+            "billing_company_id": 1, /** Only required by superuser */
+            "company_id": 2, /** required */
+            "med_num": "0002", /** Optional */
+        }
+    ]
+}
+```
+
+
+## Response
+
+> {success} 200 Good response
+
+```json
+[
+    {
+        "billing_company_id": 1,
+        "company_id": 1,
+        "med_num": "0001",
+    },
+    {
+        "billing_company_id": 1,
+        "company_id": 2,
+        "med_num": "0002",
+    }
+]
+```
