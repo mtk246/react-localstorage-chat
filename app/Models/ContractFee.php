@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\ContractFee
+ * App\Models\ContractFee.
  *
  * @property int $id
  * @property int|null $company_id
@@ -22,6 +26,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $price_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Models\Company|null $company
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property int|null $procedures_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee query()
@@ -39,9 +47,42 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePricePercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
-class ContractFee extends Model
+final class ContractFee extends Model
 {
     use HasFactory;
+
+    /** @var string[] */
+    protected $fillable = [
+        'company_id',
+        'modifier_id',
+        'mac_locality_id',
+        'insurance_plan_id',
+        'billing_company_id',
+        'insurance_label_fee_id',
+        'contract_fee_type_id',
+        'start_date',
+        'end_date',
+        'price',
+        'price_percentage',
+    ];
+
+    /** @var string[] */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'pivot',
+    ];
+
+    public function procedures(): BelongsToMany
+    {
+        return $this->belongsToMany(Procedure::class)->withTimestamps();
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

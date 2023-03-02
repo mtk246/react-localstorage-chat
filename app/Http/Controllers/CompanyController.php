@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\Company\AddCompanyCopaysRequest;
+use App\Http\Requests\Company\AddContractFeesRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
 use App\Http\Requests\Company\AddServicesRequest;
 use App\Http\Requests\CompanyCreateRequest;
@@ -17,11 +19,10 @@ use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+final class CompanyController extends Controller
 {
-    public function __construct(
-        private CompanyRepository $companyRepository,
-    ) {
+    public function __construct(private CompanyRepository $companyRepository)
+    {
     }
 
     public function createCompany(CompanyCreateRequest $request): JsonResponse
@@ -31,59 +32,59 @@ class CompanyController extends Controller
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating company'), 400);
     }
 
-    public function getList($id = null): JsonResponse
+    public function getList(?int $id = null): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListCompanies($id)
+            $this->companyRepository->getListCompanies($id),
         );
     }
 
     public function getListStatementRules(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListStatementRules()
+            $this->companyRepository->getListStatementRules(),
         );
     }
 
     public function getListStatementWhen(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListStatementWhen()
+            $this->companyRepository->getListStatementWhen(),
         );
     }
 
     public function getListStatementApplyTo(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListStatementApplyTo()
+            $this->companyRepository->getListStatementApplyTo(),
         );
     }
 
     public function getListNameSuffix(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListNameSuffix()
+            $this->companyRepository->getListNameSuffix(),
         );
     }
 
     public function getListContractFeeTypes(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListContractFeeTypes()
+            $this->companyRepository->getListContractFeeTypes(),
         );
     }
 
-    public function getListBillingCompanies(Request $request)
+    public function getListBillingCompanies(Request $request): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListBillingCompanies($request)
+            $this->companyRepository->getListBillingCompanies($request),
         );
     }
 
     public function getAllCompany(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getAllCompanies()
+            $this->companyRepository->getAllCompanies(),
         );
     }
 
@@ -172,9 +173,14 @@ class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }
 
-    public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->companyRepository->addContractFees($request->validated(), $id);
+    public function addCompanyContractFees(
+        AddContractFees $addContractFees,
+        AddContractFeesRequest $request,
+        Company $company,
+    ): JsonResponse {
+        $request->validated();
+
+        $rs = $addContractFees->invoke($request->castedCollect(), $company);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }

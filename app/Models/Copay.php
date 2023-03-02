@@ -58,6 +58,9 @@ final class Copay extends Model implements Auditable
     /** @var string[] */
     protected $hidden = [
         'id',
+        'created_at',
+        'updated_at',
+        'pivot',
     ];
 
     public function procedures(): BelongsToMany
