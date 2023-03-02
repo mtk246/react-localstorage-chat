@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Models\TypeOfService;
 use App\Models\PlaceOfService;
+use App\Models\BillingCompany;
 use App\Models\TypeForm;
 use App\Models\TypeDiag;
 use App\Models\ClaimStatus;
@@ -29,6 +30,7 @@ use App\Models\PrivateNote;
 use App\Models\Patient;
 use App\Models\PatientOrInsuredInformation;
 use App\Models\PhysicianOrSupplierInformation;
+use App\Models\PublicNote;
 use App\Models\ClaimDateInformation;
 use App\Models\Injury;
 use App\Models\TypeCatalog;
