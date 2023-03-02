@@ -249,7 +249,7 @@ class Claim extends Model implements Auditable
 
     public function claimLastStatusClaim()
     {
-        return $this->hasOne(ClaimStatusClaim::class)->latestOfMAny();
+        return $this->hasOne(ClaimStatusClaim::class)->latestOfMany();
     }
 
     /**
