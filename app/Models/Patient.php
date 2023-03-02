@@ -272,7 +272,7 @@ class Patient extends Model implements Auditable
      */
     public function companies()
     {
-        return $this->belongsToMany(Company::class)->withTimestamps()->withPivot('med_num');
+        return $this->belongsToMany(Company::class)->withPivot('billing_company_id', 'med_num')->withTimestamps();
     }
 
     /**

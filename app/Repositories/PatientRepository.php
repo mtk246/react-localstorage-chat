@@ -43,8 +43,8 @@ class PatientRepository
      * @return User|Model|null
      */
     public function createPatient(array $data) {
-//        try {
-            //DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
             /** Create Profile */
             $profile = Profile::create([
@@ -373,17 +373,17 @@ class PatientRepository
                     )
                 );
             } else {
-                //DB::rollBack();
+                DB::rollBack();
                 return null;
             }
 
 
-//            DB::commit();
+            DB::commit();
             return $patient;
-        //} catch (\Exception $e) {
-            //DB::rollBack();
-            //return $e;
-        //}
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 
     /**
@@ -451,9 +451,7 @@ class PatientRepository
                 "publishable_type"   => Patient::class,
                 "billing_company_id" => $billingCompany->id ?? $billingCompany
             ])->first();
-            $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
-                $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
-            })->get();
+            $companies = $patient->companies()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
 
             $insurance_policies = $patient->insurancePolicies()->whereHas('insurancePlan.billingCompanies', function ($query) use ($billingCompany) {
                 $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
@@ -965,15 +963,16 @@ class PatientRepository
 
             /** Company */
             if (isset($data["companies"])) {
-                $companies = $patient->companies()->whereHas('billingCompanies', function ($query) use ($billingCompany) {
-                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
-                })->get();
+                $companies = $patient->companies()
+                                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                                     ->get();
                 
                 /** Detach Company */
                 foreach ($companies as $company) {
                     $validated = false;
                     foreach ($data["companies"] as $dataCompany) {
-                        if ($dataCompany == $company->id) {
+                        if (($dataCompany["company_id"] == $company->id) &&
+                            ($company->pivot->billing_company_id == ($billingCompany->id ?? $billingCompany))) {
                             $validated = true;
                             break;
                         }
@@ -983,12 +982,20 @@ class PatientRepository
 
                 /** Attached patient to company */
                 foreach ($data["companies"] as $dataCompany) {
-                    $company = Company::find($dataCompany);
+                    $company = Company::find($dataCompany["company_id"]);
 
-                    if (is_null($patient->companies()->find($company->id))) {
-                        $patient->companies()->attach($company->id, [
-                            'med_num' => $dataCompany["med_num"] ?? ''
-                        ]);
+                    if (isset($company)) {
+                        if (is_null($patient->companies()->find($company->id))) {
+                            $patient->companies()->attach($company->id, [
+                                'med_num' => $dataCompany["med_num"] ?? '',
+                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            ]);
+                        } else {
+                            $patient->companies()->updateExistingPivot($company->id, [
+                                'med_num' => $company["med_num"],
+                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            ]);
+                        }
                     }
                 }
             }
@@ -1139,7 +1146,7 @@ class PatientRepository
             }*/
 
             DB::commit();
-            return $patient;
+            return $this->getOnePatient($id);
         } catch (\Exception $e) {
             DB::rollBack();
             return null;

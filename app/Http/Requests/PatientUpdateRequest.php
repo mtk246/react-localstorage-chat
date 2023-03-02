@@ -46,8 +46,8 @@ class PatientUpdateRequest extends FormRequest
             'marital.spuse_work_phone'          => ['nullable', 'string'],
 
             'companies'                         => ['nullable', 'array'],
-            'companies.company_id'              => ['nullable', 'integer'],
-            'companies.med_num'                 => ['nullable', 'string'],
+            'companies.*.company_id'            => ['nullable', 'integer'],
+            'companies.*.med_num'               => ['nullable', 'string'],
 
             'language'                          => ['nullable', 'string'],
 
