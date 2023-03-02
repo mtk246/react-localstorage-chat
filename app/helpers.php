@@ -153,9 +153,9 @@ if (!function_exists('toModel')) {
 }
 
 if (!function_exists('upperCaseWords')) {
-    function upperCaseWords($string)
+    function upperCaseWords($string): string
     {
-        return ucwords(strtolower($string));
+        return ucwords(strtolower($string ?? ''));
     }
 }
 
