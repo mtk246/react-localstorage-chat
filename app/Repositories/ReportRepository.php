@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
-use App\Models\Parameter;
 use App\Models\TypeForm;
 use App\Models\Patient;
 use App\Models\Company;
@@ -476,15 +475,15 @@ class ReportRepository implements ReportInterface
                 $this->pdf->SetFont($this->fontFamily, '', 10);
                 if ($this->patientOrInsuredInfo) {
                     $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1,
-                        ($this->patientOrInsuredInfo->employment_related_condition ? 93.5 : 108.5), 90.8, true, 0, false, true, 0, 'T', true);
-                    if ($this->patientOrInsuredInfo->auto_accident_related_condition) {
+                        ($this->patientOrInsuredInfo['employment_related_condition'] ? 93.5 : 108.5), 90.8, true, 0, false, true, 0, 'T', true);
+                    if ($this->patientOrInsuredInfo['auto_accident_related_condition']) {
                         $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 93.5, 99, true, 0, false, true, 0, 'T', true);
                     } else {
                         $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 99, true, 0, false, true, 0, 'T', true);
-                        $this->pdf->MultiCell(70, 5.8, substr($this->patientOrInsuredInfo->auto_accident_place_state ?? '', 0, 2), 0, 'L', false, 1, 120, 99, true, 0, false, true, 0, 'T', true);
+                        $this->pdf->MultiCell(70, 5.8, substr($this->patientOrInsuredInfo['auto_accident_place_state'] ?? '', 0, 2), 0, 'L', false, 1, 120, 99, true, 0, false, true, 0, 'T', true);
                     }
                     $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1,
-                        ($this->patientOrInsuredInfo->other_accident_related_condition ? 93.5 : 108.5), 107.2, true, 0, false, true, 0, 'T', true);
+                        ($this->patientOrInsuredInfo['other_accident_related_condition'] ? 93.5 : 108.5), 107.2, true, 0, false, true, 0, 'T', true);
                 } else {
                     $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 90.8, true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(70, 5.8, 'X', 0, 'L', false, 1, 108.5, 99, true, 0, false, true, 0, 'T', true);
@@ -526,13 +525,13 @@ class ReportRepository implements ReportInterface
                 $this->pdf->MultiCell(70, 10, 'X', 0, 'L', false, 1, 148.5, 115.5, true, 0, false, true, 0, 'T', true);
                 
                 /** 12. Patient authorization */
-                if ($this->patientOrInsuredInfo->patient_signature ?? false) {
+                if ($this->patientOrInsuredInfo['patient_signature'] ?? false) {
                     $this->pdf->MultiCell(70, 10, 'Signature on File', 0, 'L', false, 1, 27, 131.5, true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(70, 10, now()->format('m/d/Y'), 0, 'L', false, 1, 100, 131.5, true, 0, false, true, 0, 'T', true);
                 }
 
                 /** 13. Insured authorization */
-                if ($this->patientOrInsuredInfo->insured_signature ?? false) {
+                if ($this->patientOrInsuredInfo['insured_signature'] ?? false) {
                     $this->pdf->MultiCell(70, 10, 'Signature on File', 0, 'L', false, 1, 148.5, 131.5, true, 0, false, true, 0, 'T', true);
                 }
 
