@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Repositories\CompanyRepository;
@@ -16,5 +17,6 @@ final class ActionsServiceProvider extends ServiceProvider
         $this->app->singleton(AddServices::class, fn () => new AddServices());
         $this->app->singleton(CompanyRepository::class, fn () => new CompanyRepository());
         $this->app->singleton(AddCopays::class, fn () => new AddCopays());
+        $this->app->singleton(AddContractFees::class, fn () => new AddContractFees());
     }
 }
