@@ -342,6 +342,11 @@ final class Company extends Model implements Auditable
         return $this->hasMany(Copay::class);
     }
 
+    public function contracFees(): HasMany
+    {
+        return $this->hasMany(ContractFee::class);
+    }
+
     /**
      * Interact with the company's name.
      */
