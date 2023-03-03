@@ -43,7 +43,7 @@
 | 7  |GET     | `Get list claim field information`  | `/claim/get-list-claim-field-informations`     | yes            | Get list claim field informations |
 | 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
 | 9  |GET     | `Get list claim services`  | `/claim/get-list-claim-services`     | yes            | Get list claim services |
-| 10  |GET     | `Get all claims` | `/claim/{status?}/{subStatus?}`     | yes            | Get all claims |
+| 10  |GET     | `Get all claims server` | `/claim/get-all-server`     | yes            | Get all claims from server |
 | 11  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 12  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
 | 13  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
@@ -819,145 +819,137 @@
 }
 ```
 
+## Example path
+
+>{primary} ?status[1]&substatus[1,2]
+
+## Example path 2
+
+>{primary} ?status[]=1&substatus[]=1&substatus[]=2
+
 ## Response
 
-> {success} 200 claim found
+> {success} 200 claims found
 
 #
 
-
 ```json
-[
-    {
-        "id": 1,
-        "qr_claim": null,
-        "control_number": "000000001",
-        "submitter_name": null,
-        "submitter_contact": null,
-        "submitter_phone": null,
-        "company_id": 1,
-        "facility_id": 1,
-        "patient_id": 2,
-        "health_professional_id": 1,
-        "insurance_company_id": null,
-        "claim_formattable_type": null,
-        "claim_formattable_id": null,
-        "created_at": "2022-09-16T13:23:19.000000Z",
-        "updated_at": "2022-09-16T13:23:19.000000Z",
-        "private_note": "Nota 1",
-        "status": "Draft",
-        "status_history": [
-            {
-                "notes_history": [
-                    {
-                        "note": "Note",
-                        "created_at": "2022-11-01T17:42:13.000000Z"
-                    }
-                ],
-                "status": "Draft",
-                "status_background_color": "#F2F2F2",
-                "status_font_color": "#707070",
-                "status_date": "2022-11-01T17:42:13.000000Z",
-                "sub_status_history": [
-                    {
-                        "notes_history": [
-                            {
-                                "note": "Note 2",
-                                "created_at": "2023-01-10T06:51:20.000000Z"
-                            },
-                            {
-                                "note": "Note 3",
-                                "created_at": "2023-01-12T00:12:36.000000Z"
-                            }
-                        ],
-                        "code": "CODE1",
-                        "name": "Claim Sub-status First",
-                        "sub_status_date": "2023-01-10T06:51:20.000000Z",
-                    }
-                ],
-                "last_modified": {
-                    "user": "Henry Paredes",
-                    "roles": [
-                        {
-                            "id": 2,
-                            "name": "Billing Manager",
-                            "slug": "billingmanager",
-                            "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
-                            "level": 2,
-                            "created_at": "2022-04-20T21:52:51.000000Z",
-                            "updated_at": "2022-04-20T21:52:51.000000Z",
-                            "pivot": {
-                                "user_id": 14,
-                                "role_id": 2,
-                                "created_at": "2022-07-20T21:04:22.000000Z",
-                                "updated_at": "2022-07-20T21:04:22.000000Z"
-                            }
-                        }
-                    ]
-                }
-            }
-        ],
-        "claim_services": [
-            {
-                "id": 1,
-                "from_service": "2022-07-05",
-                "to_service": "2022-07-05",
-                "price": "200.00",
-                "std_id": null,
-                "claim_id": 1,
-                "modifier_id": 1,
-                "procedure_id": 11,
-                "rev_center_id": 2,
-                "place_of_service_id": null,
-                "type_of_service_id": 2,
-                "diagnostic_pointer_id": null,
-                "created_at": "2022-09-16T13:23:19.000000Z",
-                "updated_at": "2022-09-16T13:23:19.000000Z"
-            }
-        ],
-        "company": {
-            "id": 1,
-            "code": "CO-00001-2022",
-            "name": "Company First",
-            "npi": "2222222222",
-            "created_at": "2022-05-02T14:45:27.000000Z",
-            "updated_at": "2022-08-28T23:16:16.000000Z",
-            "status": false,
-            "billing_companies": []
-        },
-        "patient": {
-            "id": 2,
-            "driver_license": "A123",
-            "user_id": 21,
-            "created_at": "2022-04-25T20:36:51.000000Z",
-            "updated_at": "2022-04-25T20:36:51.000000Z",
-            "credit_score": false,
-            "code": null,
-            "status": false,
+{
+    "data": [
+        {
+            "id": 4,
+            "qr_claim": null,
+            "control_number": "000000004",
+            "submitter_name": null,
+            "submitter_contact": null,
+            "submitter_phone": null,
+            "company_id": 1,
+            "facility_id": 1,
+            "patient_id": 30,
+            "health_professional_id": 1,
+            "insurance_company_id": null,
+            "claim_formattable_type": "App\\Models\\ClaimFormI",
+            "claim_formattable_id": 1,
+            "created_at": "2022-11-01T23:44:23.000000Z",
+            "updated_at": "2022-11-01T23:44:23.000000Z",
+            "validate": false,
+            "format": 6,
             "last_modified": {
-                "user": "Johan Julian",
+                "user": "Henry Paredes",
                 "roles": [
                     {
-                        "id": 2,
-                        "name": "Billing Manager",
-                        "slug": "billingmanager",
-                        "description": "Allows you to administer and manage all the functions of the application associated with a billing company",
-                        "level": 2,
+                        "id": 1,
+                        "name": "Super User",
+                        "slug": "superuser",
+                        "description": "Allows you to administer and manage all the functions of the application",
+                        "level": 1,
                         "created_at": "2022-04-20T21:52:51.000000Z",
                         "updated_at": "2022-04-20T21:52:51.000000Z",
                         "pivot": {
-                            "user_id": 2,
-                            "role_id": 2,
-                            "created_at": "2022-07-20T21:03:58.000000Z",
-                            "updated_at": "2022-07-20T21:03:58.000000Z"
+                            "user_id": 14,
+                            "role_id": 1,
+                            "created_at": "2022-07-20T21:04:22.000000Z",
+                            "updated_at": "2022-07-20T21:04:22.000000Z"
                         }
                     }
                 ]
             },
-            "billing_companies": []
+            "private_note": "Nota 2 de guardado en draft",
+            "status": "Verified - Not submitted",
+            "status_history": [
+                {
+                    "note": "Nota 2 de guardado en draft",
+                    "status": "Verified - Not submitted",
+                    "status_date": "2022-11-01T23:44:23.000000Z",
+                    "last_modified": {
+                        "user": "Henry Paredes",
+                        "roles": [
+                            {
+                                "id": 1,
+                                "name": "Super User",
+                                "slug": "superuser",
+                                "description": "Allows you to administer and manage all the functions of the application",
+                                "level": 1,
+                                "created_at": "2022-04-20T21:52:51.000000Z",
+                                "updated_at": "2022-04-20T21:52:51.000000Z",
+                                "pivot": {
+                                    "user_id": 14,
+                                    "role_id": 1,
+                                    "created_at": "2022-07-20T21:04:22.000000Z",
+                                    "updated_at": "2022-07-20T21:04:22.000000Z"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "billed_amount": "0.00",
+            "amount_paid": "0.00",
+            "past_due_date": "",
+            "date_of_service": "",
+            "status_date": "2022-11-01T23:44:23.000000Z",
+            "claim_formattable": {
+                "id": 1,
+                "type_of_bill": "122",
+                "federal_tax_number": "federal_tax_number",
+                "start_date_service": null,
+                "end_date_service": null,
+                "admission_date": null,
+                "admission_hour": null,
+                "type_of_admission": "1",
+                "source_admission": "2",
+                "discharge_hour": null,
+                "patient_discharge_stat": null,
+                "admit_dx": null,
+                "type_form_id": 6,
+                "created_at": "2022-11-01T23:44:23.000000Z",
+                "updated_at": "2022-11-01T23:44:23.000000Z"
+            },
+            "company": {
+                "id": 1,
+                "code": "CO-00001-2022",
+                "name": "Company First",
+                "npi": "2222222222",
+                "created_at": "2022-05-02T14:45:27.000000Z",
+                "updated_at": "2022-08-28T23:16:16.000000Z",
+                "status": false,
+                "nicknames": [
+                    {
+                        "id": 9,
+                        "nickname": "Name New",
+                        "nicknamable_type": "App\\Models\\Company",
+                        "nicknamable_id": 1,
+                        "billing_company_id": 10,
+                        "created_at": "2022-10-25T11:32:37.000000Z",
+                        "updated_at": "2022-10-25T11:32:37.000000Z"
+                    }
+                ]
+            },
         }
-    }
-]
+    ],
+    "numberOfPages": 1,
+    "count": 2
+}
 ```
 
 <a name="get-one-claim"></a>
