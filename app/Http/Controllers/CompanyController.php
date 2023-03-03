@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
+use App\Actions\Company\GetCompany;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\Company\AddCompanyCopaysRequest;
 use App\Http\Requests\Company\AddContractFeesRequest;
@@ -93,9 +94,9 @@ final class CompanyController extends Controller
         return $this->companyRepository->getServerAllCompanies($request);
     }
 
-    public function getOneCompany(int $id): JsonResponse
+    public function getOneCompany(Request $request, GetCompany $getOne, int $id): JsonResponse
     {
-        $rs = $this->companyRepository->getOneCompany($id);
+        $rs = $getOne->getOne($id, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
