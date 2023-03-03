@@ -57,6 +57,10 @@ final class AddContractFeesRequest extends FormRequest
             '*.insurance_label_fee_id' => ['nullable', 'integer'],
             '*.price_percentage' => ['nullable', 'numeric'],
             '*.private_note' => ['nullable', 'string'],
+            '*.patien.*' => ['required_if:*.type_id,18', 'array'],
+            '*.patien.*.user_id' => ['required', 'integer'],
+            '*.patien.*.start_date' => ['nullable', 'date'],
+            '*.patien.*.end_date' => ['nullable', 'date'],
         ];
     }
 
