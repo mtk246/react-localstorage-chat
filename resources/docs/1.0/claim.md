@@ -800,7 +800,7 @@
 #
 
 <a name="get-all-claim"></a>
-## Get all claim
+## Get all claim from server
 
 ### Param in header
 
@@ -813,10 +813,14 @@
 ## Param in path
 
 ```json
-{
-    "status": optional <array>       //[1,2]
-    "subStatus": optional <array>    //[1,2]
-}
+query <string>`
+itemsPerPage <string>`
+page <integer>`
+sortBy <string>`
+sortDesc <boolean>`
+filterBy <string>`
+status optional <array>       //[1,2]
+subStatus optional <array>    //[1,2]
 ```
 
 ## Example path
@@ -826,6 +830,10 @@
 ## Example path 2
 
 >{primary} ?status[]=1&substatus[]=1&substatus[]=2
+
+## Example path 2 Paginate
+
+>{primary} ?query=fieldSearch&itemsPerPage=5&sortDesc=1&page=1&sortBy=fieldName&status[]=1&substatus[]=1&substatus[]=2
 
 ## Response
 
