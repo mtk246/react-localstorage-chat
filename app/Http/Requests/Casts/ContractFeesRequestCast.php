@@ -159,4 +159,16 @@ final class ContractFeesRequestCast
 
         return $query->first() ?? null;
     }
+
+    /**
+     * @return \Illuminate\Support\Collection<TKey, TValue>
+     *
+     * @template TKey of array-key
+     * @template TValue of \App\Http\Requests\Models\Medicament
+     */
+    public function getPatiens(): Collection
+    {
+        return collect($this->items['patiens'] ?? [])
+            ->map(fn (array $item) => new ContractFeePatiensCast($item, $this->user));
+    }
 }
