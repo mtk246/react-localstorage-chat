@@ -193,7 +193,7 @@ class ClaimRepository
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
-                "company" => function ($query) {
+                "company" => function ($query) use ($bC) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
                             $q->where('billing_company_id', $bC);
