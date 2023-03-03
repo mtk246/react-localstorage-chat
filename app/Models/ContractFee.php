@@ -85,4 +85,12 @@ final class ContractFee extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function patiens(): BelongsToMany
+    {
+        return $this->belongsToMany(Patient::class)
+            ->using(ContractFeePatient::class)
+            ->withPivot('start_date', 'end_date')
+            ->withTimestamps();
+    }
 }
