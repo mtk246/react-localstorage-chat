@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Company;
 
+use App\Http\Requests\Casts\ContractFeePatiensCast;
 use App\Http\Requests\Casts\ContractFeesRequestCast;
 use App\Models\Company;
 use App\Models\ContractFee;
@@ -33,18 +34,27 @@ final class AddContractFees
                 ]),
                 fn (ContractFee $model) => $this->afterCreate(
                     $model,
-                    $contractFee->getProceduresIds(),
+                    $contractFee,
                 )
             ));
 
-            return $company->contracFees()->with('procedures')->get();
+            return $company->contracFees()->with(['procedures', 'patiens'])->get();
         });
     }
 
-    private function afterCreate(ContractFee $copay, Collection $proceduresIds): void
+    private function afterCreate(ContractFee $contractFee, ContractFeesRequestCast $contractFeesRequest): void
     {
-        $proceduresIds->each(
-            fn (int $procedureId) => $copay->procedures()->attach($procedureId)
+        $contractFeesRequest->getProceduresIds()->each(
+            fn (int $procedureId) => $contractFee->procedures()->attach($procedureId)
+        );
+
+        $contractFeesRequest->getPatiens()->each(
+            fn (ContractFeePatiensCast $patien) => $contractFee->patiens()->attach($patien->getId(), [
+                'start_date' => $patien->getStartDate(),
+                'end_date' => $patien->getEndDate(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ])
         );
     }
 }
