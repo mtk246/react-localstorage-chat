@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Facades\Pagination;
 use App\Mail\GenerateNewPassword;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePolicy;
@@ -399,7 +400,6 @@ class PatientRepository
             },
             "maritalStatus",
             "marital",
-            "companies",
             "insurancePolicies",
             "insurancePlans" => function ($query) {
                 $query->with([
@@ -413,20 +413,74 @@ class PatientRepository
             "publicNote",
             "privateNotes"
         ])->find($id);
+        
+        if (auth()->user()->hasRole('superuser')) {
+            $dataCompany = $patient->companies()
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+            $dataClaim = $patient->claims()->with(
+                [
+                    "company" => function ($query) {
+                        $query->with('nicknames');
+                    },
+                ])->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+            $dataCompany = $patient->companies()
+                ->wherePivot('billing_company_id', $billingCompany->id)
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+            $dataClaim = $patient->claims()
+                ->with([
+                    "company" => function ($query) use ($billingCompany){
+                        $query->with([
+                            "nicknames" => function ($q) use ($billingCompany) {
+                                $q->where('billing_company_id', $billingCompany->id);
+                            }
+                        ]);
+                    },
+                ])->whereHas('claimFormattable', function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany->id);
+                })->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+        }
+
+        $dataCompany->getCollection()->transform(fn ($company) => [
+            'billing_company_id' => $company->pivot->billing_company_id,
+            'company_id'         => $company->id,
+            'med_num'            => $company->pivot->med_num,
+            'company'            => $company->name,
+            'billing_company'    => $company->billingCompanies()
+                ->find($company->pivot->billing_company_id)->name ?? null,
+        ]);
+        $companyRecords = [
+            'data'          => $dataCompany->items(),
+            'numberOfPages' => $dataCompany->lastPage(),
+            'count'         => $dataCompany->total()
+        ];
+
+        $claimRecords = [
+            'data'          => $dataClaim->items(),
+            'numberOfPages' => $dataClaim->lastPage(),
+            'count'         => $dataClaim->total()
+        ];
 
         $record = [
             "id"                => $patient->id,
             "code"              => $patient->code,
             "profile"           => [
-                "ssn"            => $patient->user->profile->ssn ?? '',
-                "first_name"     => $patient->user->profile->first_name ?? '',
-                "middle_name"    => $patient->user->profile->middle_name ?? '',
-                "last_name"      => $patient->user->profile->last_name ?? '',
-                "date_of_birth"  => $patient->user->profile->date_of_birth ?? '',
-                "sex"            => $patient->user->profile->sex ?? '',
+                "ssn"           => $patient->user->profile->ssn ?? '',
+                "first_name"    => $patient->user->profile->first_name ?? '',
+                "middle_name"   => $patient->user->profile->middle_name ?? '',
+                "last_name"     => $patient->user->profile->last_name ?? '',
+                "date_of_birth" => $patient->user->profile->date_of_birth ?? '',
+                "sex"           => $patient->user->profile->sex ?? '',
             ],
             "driver_license"    => $patient->driver_license ?? '',
             "language"          => $patient->user->language ?? '',
+            "companies"         => $companyRecords ?? null,
+            "claims"            => $claimRecords ?? null,
 
             "created_at"        => $patient->created_at,
             "updated_at"        => $patient->updated_at,
@@ -592,24 +646,24 @@ class PatientRepository
                     }
 
                     array_push($patient_policies, [
-                        "policy_number" => $patient_policy->policy_number,
-                        "group_number"  => $patient_policy->group_number,
-                        "insurance_company_id" => $patient_policy->insurancePlan->insurance_company_id ?? '',
-                        "insurance_company" => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '') . ' - ' . $patient_policy->insurancePlan->insuranceCompany->name ?? '',
-                        "insurance_plan_id"    => $patient_policy->insurance_plan_id ?? '',
-                        "insurance_plan"    => $patient_policy->insurancePlan->name ?? '',
-                        "type_responsibility_id"    => $patient_policy->type_responsibility_id ?? '',
-                        "type_responsibility"    => $patient_policy->typeResponsibility->code ?? '',
-                        "insurance_policy_type_id"  => $patient_policy->insurance_policy_type_id ?? '',
-                        "insurance_policy_type"  => $patient_policy->insurancePolicyType->description ?? '',
-                        "eligibility" => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
-                        "status" => isset($patient_policy->claimLastEligibility) ? 'Enabled' : 'Disabled',
-                        "eff_date"  => $patient_policy->eff_date,
-                        "end_date"  => $patient_policy->end_date,
-                        "assign_benefits"   => $patient_policy->assign_benefits ?? false,
-                        "release_info"  => $patient_policy->release_info ?? false,
-                        "own_insurance" => $patient_policy->pivot->own_insurance ?? false,
-                        "subscriber"    => $patient_policy_subscriber ?? null,
+                        "policy_number"            => $patient_policy->policy_number,
+                        "group_number"             => $patient_policy->group_number,
+                        "insurance_company_id"     => $patient_policy->insurancePlan->insurance_company_id ?? '',
+                        "insurance_company"        => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '') . ' - ' . $patient_policy->insurancePlan->insuranceCompany->name ?? '',
+                        "insurance_plan_id"        => $patient_policy->insurance_plan_id ?? '',
+                        "insurance_plan"           => $patient_policy->insurancePlan->name ?? '',
+                        "type_responsibility_id"   => $patient_policy->type_responsibility_id ?? '',
+                        "type_responsibility"      => $patient_policy->typeResponsibility->code ?? '',
+                        "insurance_policy_type_id" => $patient_policy->insurance_policy_type_id ?? '',
+                        "insurance_policy_type"    => $patient_policy->insurancePolicyType->description ?? '',
+                        "eligibility"              => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
+                        "status"                   => $patient_policy->pivot->status ?? false,
+                        "eff_date"                 => $patient_policy->eff_date,
+                        "end_date"                 => $patient_policy->end_date,
+                        "assign_benefits"          => $patient_policy->assign_benefits ?? false,
+                        "release_info"             => $patient_policy->release_info ?? false,
+                        "own_insurance"            => $patient_policy->pivot->own_insurance ?? false,
+                        "subscriber"               => $patient_policy_subscriber ?? null,
                     ]);
                 }
             }
@@ -963,45 +1017,6 @@ class PatientRepository
                 }
             }
 
-            /** Company */
-            if (isset($data["companies"])) {
-                $companies = $patient->companies()
-                                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
-                                     ->get();
-                
-                /** Detach Company */
-                foreach ($companies as $company) {
-                    $validated = false;
-                    foreach ($data["companies"] as $dataCompany) {
-                        if (($dataCompany["company_id"] == $company->id) &&
-                            ($company->pivot->billing_company_id == ($billingCompany->id ?? $billingCompany))) {
-                            $validated = true;
-                            break;
-                        }
-                    }
-                    if (!$validated) $patient->companies()->detach($company->id);
-                }
-
-                /** Attached patient to company */
-                foreach ($data["companies"] as $dataCompany) {
-                    $company = Company::find($dataCompany["company_id"]);
-
-                    if (isset($company)) {
-                        if (is_null($patient->companies()->find($company->id))) {
-                            $patient->companies()->attach($company->id, [
-                                'med_num' => $dataCompany["med_num"] ?? '',
-                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                            ]);
-                        } else {
-                            $patient->companies()->updateExistingPivot($company->id, [
-                                'med_num' => $dataCompany["med_num"],
-                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                            ]);
-                        }
-                    }
-                }
-            }
-
             /** Insurance Policies */
             if (isset($data["insurance_policies"])) {
                 $insurancePlans = $patient->insurancePlans;
@@ -1201,7 +1216,9 @@ class PatientRepository
             DB::beginTransaction();
 
             $patient = Patient::find($id);
-            $billingCompany = $patient->user->billingCompanies->first();
+            if (!auth()->user()->hasRole('superuser')) {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
 
             /** Attached patient to insurance plan */
             $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
@@ -1221,9 +1238,12 @@ class PatientRepository
             ]);
 
             /** Attach insurance policy to patient */
-            if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+            if (is_null($patient->insurancePolicies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $data['billing_company_id'])
+                ->find($insurancePolicy->id))) {
                 $patient->insurancePolicies()->attach($insurancePolicy->id, [
-                    'own_insurance' => $data["own_insurance"]
+                    'own_insurance'      => $data["own_insurance"],
+                    'billing_company_id' => $billingCompany->id ?? $data['billing_company_id'],
                 ]);
             }
             
@@ -1250,7 +1270,7 @@ class PatientRepository
                     /** Create Contact */
                     if (isset($data["subscriber"]['contact'])) {
                         Contact::updateOrCreate([
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                            "billing_company_id" => $billingCompany->id ?? $data['billing_company_id'],
                             "contactable_id"     => $subscriber->id,
                             "contactable_type"   => Subscriber::class
                         ], $data["subscriber"]["contact"]);
@@ -1259,7 +1279,7 @@ class PatientRepository
                     /** Create Address */
                     if (isset($data["subscriber"]['address'])) {
                         Address::updateOrCreate([
-                            "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                            "billing_company_id" => $billingCompany->id ?? $data['billing_company_id'],
                             "addressable_id"     => $subscriber->id,
                             "addressable_type"   => Subscriber::class
                         ], $data["subscriber"]["address"]);
@@ -1274,7 +1294,7 @@ class PatientRepository
                         $subscriber->insurancePlans()->attach($data["insurance_plan"]);
                     }*/
 
-                    /** Attached patient to subscriber */
+                    /** Attached insurance policy to subscriber */
                     if (is_null($insurancePolicy->subscribers()->find($subscriber->id))) {
                         $insurancePolicy->subscribers()->attach($subscriber->id);
                     }
@@ -1308,12 +1328,34 @@ class PatientRepository
         return $patient->insurancePolicies ?? [];
     }
 
+    public function changeStatusPolicy(array $data, int $insurance_policy_id, int $patient_id)
+    {
+        $patient = Patient::find($patient_id);
+        if (!auth()->user()->hasRole('superuser')) {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
+        if (!is_null($patient->insurancePolicies()
+            ->wherePivot('billing_company_id', $billingCompany->id ?? $data['billing_company_id'])
+            ->find($insurance_policy_id))) {
+            return $patient->insurancePolicies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $data['billing_company_id'])
+                ->updateExistingPivot($insurance_policy_id, [
+                'status' => $data['status'] ?? false,
+            ]);
+        } else {
+            return null;
+        }
+    }
+
     public function editPolicy(array $data, int $insurance_policy_id, int $patient_id)
     {
         $patient = Patient::find($patient_id);
-        $billingCompany = $patient->user->billingCompanies->first();
         $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
         $insurancePlan = InsurancePlan::find($data["insurance_plan"]);
+
+        if (!auth()->user()->hasRole('superuser')) {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        }
 
         $insurancePolicy->update([
             'policy_number'     => $data["policy_number"],
@@ -1328,13 +1370,18 @@ class PatientRepository
         ]);
 
         /** Attach insurance policy to patient */
-        if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
+        if (is_null($patient->insurancePolicies()
+            ->wherePivot('billing_company_id', $billingCompany->id ?? $data['billing_company_id'])
+            ->find($insurancePolicy->id))) {
             $patient->insurancePolicies()->attach($insurancePolicy->id, [
-                'own_insurance' => $data["own_insurance"]
+                'own_insurance'      => $data["own_insurance"],
+                'billing_company_id' => $billingCompany->id ?? $data['billing_company_id'],
             ]);
         } else {
-            $patient->insurancePolicies()->updateExistingPivot($insurancePolicy->id, [
-                'own_insurance' => $data["own_insurance"]
+            $patient->insurancePolicies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $data['billing_company_id'])
+                ->updateExistingPivot($insurancePolicy->id, [
+                    'own_insurance' => $data["own_insurance"],
             ]);
         }
 
@@ -1357,7 +1404,7 @@ class PatientRepository
                 /** Create Contact */
                 if (isset($data["subscriber"]['contact'])) {
                     Contact::updateOrCreate([
-                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                        "billing_company_id" => $billingCompany->id ?? $data['billing_company_id'],
                         "contactable_id"     => $subscriber->id,
                         "contactable_type"   => Subscriber::class
                     ], $data["subscriber"]["contact"]);
@@ -1366,7 +1413,7 @@ class PatientRepository
                 /** Create Address */
                 if (isset($data["subscriber"]['address'])) {
                     Address::updateOrCreate([
-                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                        "billing_company_id" => $billingCompany->id ?? $data['billing_company_id'],
                         "addressable_id"     => $subscriber->id,
                         "addressable_type"   => Subscriber::class
                     ], $data["subscriber"]['address']);
@@ -1518,5 +1565,85 @@ class PatientRepository
         })->get();
 
         return (count($patients) == 0) ? null : $patients;
+    }
+
+    public function addCompanies(array $data, int $id)
+    {
+        try {
+            DB::beginTransaction();
+            $patient = Patient::find($id);
+            
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+                $companies = $patient->companies()->get();
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+                $companies = $patient->companies()
+                                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                                     ->get();
+            }
+
+            /** Detach Company */
+            foreach ($companies as $company) {
+                $validated = false;
+                foreach ($data["companies"] as $dataCompany) {
+                    if (($dataCompany["company_id"] == $company->id) &&
+                        ($company->pivot->billing_company_id == ($billingCompany->id ?? $dataCompany["billing_company_id"]))) {
+                        $validated = true;
+                        break;
+                    }
+                }
+                if (!$validated) $patient->companies()->detach($company->id);
+            }
+
+            /** Attached patient to company */
+            foreach ($data["companies"] as $dataCompany) {
+                $company = Company::find($dataCompany["company_id"]);
+
+                if (isset($company)) {
+                    if (is_null($patient->companies()->find($company->id))) {
+                        $patient->companies()->attach($company->id, [
+                            'med_num' => $dataCompany["med_num"] ?? '',
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        ]);
+                    } else {
+                        $patient->companies()->updateExistingPivot($company->id, [
+                            'med_num' => $dataCompany["med_num"],
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        ]);
+                    }
+                }
+            }
+            
+            if (auth()->user()->hasRole('superuser')) {
+                $data = $patient->companies()
+                    ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                    ->paginate(Pagination::itemsPerPage());
+            } else {
+                $data = $patient->companies()
+                    ->wherePivot('billing_company_id', $billingCompany->id)
+                    ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                    ->paginate(Pagination::itemsPerPage());
+            }
+
+            $data->getCollection()->transform(fn ($company) => [
+                'billing_company_id' => $company->pivot->billing_company_id,
+                'company_id'         => $company->id,
+                'med_num'            => $company->pivot->med_num,
+                'billing_company'    => $company->billingCompanies()
+                    ->find($company->pivot->billing_company_id)->name ?? null,
+                'company'            => $company->name,
+            ]);
+
+            DB::commit();
+            return [
+                'data'          => $data->items(),
+                'numberOfPages' => $data->lastPage(),
+                'count'         => $data->total()
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
     }
 }

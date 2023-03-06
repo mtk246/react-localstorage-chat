@@ -237,6 +237,16 @@ class Patient extends Model implements Auditable
     }
 
     /**
+     * Get all of the claims for the Patient
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claims(): HasMany
+    {
+        return $this->hasMany(Claim::class);
+    }
+
+    /**
      * Patient morphs many publicNotes.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -293,7 +303,7 @@ class Patient extends Model implements Auditable
      */
     public function insurancePolicies()
     {
-        return $this->belongsToMany(InsurancePolicy::class)->withPivot('own_insurance')->withTimestamps();
+        return $this->belongsToMany(InsurancePolicy::class)->withPivot('billing_company_id', 'own_insurance', 'status')->withTimestamps();
     }
 
     /*

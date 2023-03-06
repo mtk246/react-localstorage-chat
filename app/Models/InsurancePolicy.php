@@ -127,7 +127,7 @@ class InsurancePolicy extends Model implements Auditable
      */
     public function patients(): BelongsToMany
     {
-        return $this->belongsToMany(Patient::class)->withPivot('own_insurance')->withTimestamps();
+        return $this->belongsToMany(Patient::class)->withPivot('billing_company_id', 'own_insurance', 'status')->withTimestamps();
     }
 
     /**
