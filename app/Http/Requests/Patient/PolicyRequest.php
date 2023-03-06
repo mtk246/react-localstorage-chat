@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Patient;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class PatientPolicyRequest extends FormRequest
+class PolicyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +25,7 @@ class PatientPolicyRequest extends FormRequest
     public function rules()
     {
         return [
+            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
             'insurance_company'    => ['required', 'numeric'],
             'policy_number'        => ['required', 'numeric'],
             'insurance_plan'       => ['required', 'numeric'],

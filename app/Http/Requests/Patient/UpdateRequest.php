@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Patient;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Patient;
 
-class PatientUpdateRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,10 +44,6 @@ class PatientUpdateRequest extends FormRequest
             'marital.spuse_name'                => ['nullable', 'string'],
             'marital.spuse_work'                => ['nullable', 'string'],
             'marital.spuse_work_phone'          => ['nullable', 'string'],
-
-            'companies'                         => ['nullable', 'array'],
-            'companies.*.company_id'            => ['nullable', 'integer'],
-            'companies.*.med_num'               => ['nullable', 'string'],
 
             'language'                          => ['nullable', 'string'],
 
@@ -118,7 +114,8 @@ class PatientUpdateRequest extends FormRequest
 
             'public_note'                       => ['sometimes', 'required', 'string'],
             'private_note'                      => ['sometimes', 'required', 'string'],
-            'save_as_draft' => ['nullable', 'boolean']
+            'save_as_draft'                     => ['nullable', 'boolean'],
+            'draft_note'                        => ['nullable', 'string']
         ];
     }
 }
