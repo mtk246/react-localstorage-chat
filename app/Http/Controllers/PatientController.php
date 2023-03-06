@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatientCreateRequest;
-use App\Http\Requests\PatientUpdateRequest;
+use App\Http\Requests\Patient\AddCompaniesRequest;
+use App\Http\Requests\Patient\CreateRequest;
+use App\Http\Requests\Patient\UpdateRequest;
+use App\Http\Requests\Patient\PolicyRequest;
+use App\Http\Requests\Patient\ChangeStatusPolicyRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\ValidateSearchRequest;
-use App\Http\Requests\Patient\PatientPolicyRequest;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,10 +23,10 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientCreateRequest $request
+     * @param CreateRequest $request
      * @return JsonResponse
      */
-    public function createPatient(PatientCreateRequest $request): JsonResponse
+    public function createPatient(CreateRequest $request): JsonResponse
     {
         $rs = $this->patientRepository->createPatient($request->validated());
 
@@ -74,11 +76,11 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientUpdateRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function updatePatient(PatientUpdateRequest $request, int $id): JsonResponse
+    public function updatePatient(UpdateRequest $request, int $id): JsonResponse
     {
         $rs = $this->patientRepository->updatePatient($request->validated(),$id);
 
@@ -108,11 +110,11 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientUpdateRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function addPolicy(PatientPolicyRequest $request, int $patient_id): JsonResponse
+    public function addPolicy(PolicyRequest $request, int $patient_id): JsonResponse
     {
         $rs = $this->patientRepository->addPolicy($request->validated(), $patient_id);
 
@@ -120,7 +122,7 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientUpdateRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
@@ -132,7 +134,7 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientUpdateRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
@@ -151,15 +153,27 @@ class PatientController extends Controller
     }
 
     /**
-     * @param PatientUpdateRequest $request
+     * @param UpdateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function editPolicy(PatientPolicyRequest $request, int $patient_id, int $insurance_policy_id)
+    public function editPolicy(PolicyRequest $request, int $patient_id, int $insurance_policy_id)
     {
         $rs = $this->patientRepository->editPolicy($request->validated(), $insurance_policy_id, $patient_id);
 
         return $rs ? response()->json($rs) : response()->json(__("Error, edit policy to patient"), 400);
+    }
+
+    /**
+     * @param ChangeStatusPolicyRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function changeStatusPolicy(ChangeStatusPolicyRequest $request, int $patient_id, int $insurance_policy_id)
+    {
+        $rs = $this->patientRepository->changeStatusPolicy($request->validated(), $insurance_policy_id, $patient_id);
+
+        return $rs ? response()->json([],204) : response()->json(__("Error updating status policy"), 404);
     }
 
     /**
@@ -224,5 +238,12 @@ class PatientController extends Controller
     {
         $rs = $this->patientRepository->search($request);
         return ($rs) ? response()->json($rs) : response()->json(__("Error, patient not found"), 404);
+    }
+
+    public function addCompanies(AddCompaniesRequest $request, int $patient_id): JsonResponse
+    {
+        $rs = $this->patientRepository->addCompanies($request->validated(), $patient_id);
+
+        return $rs ? response()->json($rs) : response()->json(__("Error add companies to patient"), 400);
     }
 }

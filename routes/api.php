@@ -332,7 +332,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::put('/{id}', [\App\Http\Controllers\PatientController::class, 'updatePatient']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\PatientController::class, 'changeStatus']);
         Route::patch('/add-policy-to-patient/{id}', [\App\Http\Controllers\PatientController::class, 'addPolicy']);
-        Route::patch('/{patient_id}/remove-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'removePolicy']);
+        Route::patch('/{patient_id}/change-status-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'changeStatusPolicy']);
         Route::patch('/{patient_id}/edit-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'editPolicy']);
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
