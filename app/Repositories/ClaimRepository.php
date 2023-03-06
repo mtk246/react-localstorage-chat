@@ -512,17 +512,34 @@ class ClaimRepository
 
         try {
             return [
-                'type_of_services' => getList(TypeOfService::class, ['code', '-', 'name']),
-                'place_of_services' => getList(PlaceOfService::class, ['code', '-', 'name']),
-                'epsdts' => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'EPSDT']], null),
-                'family_plannings' => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Family planning']], null)
+                'type_of_services'        => getList(TypeOfService::class, ['code', '-', 'name']),
+                'place_of_services'       => getList(PlaceOfService::class, ['code', '-', 'name']),
+                'epsdts'                  => getList(
+                    TypeCatalog::class,
+                    ['description'],
+                    ['relationship' => 'type', 'where' => ['description' => 'EPSDT']],
+                    null
+                ),
+                'family_plannings'        => getList(
+                    TypeCatalog::class,
+                    ['description'],
+                    ['relationship' => 'type', 'where' => ['description' => 'Family planning']],
+                    null
+                ),
+                'referred_provider_roles' => getList(
+                    TypeCatalog::class,
+                    ['description'],
+                    ['relationship' => 'type', 'where' => ['description' => 'Referred or ordered provider roles']],
+                    null
+                ),
             ];
         } catch (\Exception $e) {
             return [
-                'type_of_services'  => [],
-                'place_of_services' => [],
-                'epsdts'            => [],
-                'family_plannings'  => []
+                'type_of_services'        => [],
+                'place_of_services'       => [],
+                'epsdts'                  => [],
+                'family_plannings'        => [],
+                'referred_provider_roles' => [],
             ];
         }
     }

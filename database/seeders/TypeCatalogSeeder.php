@@ -1082,6 +1082,23 @@ class TypeCatalogSeeder extends Seeder
                     ],
                 ]
             ],
+            [
+                'description' => 'Referred or ordered provider roles',
+                'type_catalogs' => [
+                    [
+                        'code' => 'DN',
+                        'description' => 'Referring provider'
+                    ],
+                    [
+                        'code' => 'DK',
+                        'description' => 'Ordering provider'
+                    ],
+                    [
+                        'code' => 'DQ',
+                        'description' => 'Supervising provider'
+                    ],
+                ]
+            ],
         ];
     
     
