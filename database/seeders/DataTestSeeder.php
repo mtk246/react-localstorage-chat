@@ -16,10 +16,13 @@ use App\Models\Facility;
 use App\Models\FacilityType;
 use App\Models\User;
 use App\Models\InsuranceCompany;
+use App\Models\InsuranceCompanyTimeFailed;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePlanPrivate;
 use App\Models\InsurancePolicy;
 use App\Models\Patient;
+use App\Models\SocialMedia;
+use App\Models\SocialNetwork;
 use App\Models\MaritalStatus;
 use App\Models\Marital;
 use App\Models\Profile;
@@ -1976,7 +1979,7 @@ class DataTestSeeder extends Seeder
                     $validated = false;
                     $socialNetwork = $socialMedia->SocialNetwork;
                     if (isset($socialNetwork)) {
-                        foreach ($dataHP['profile']['social_medias'] as $socialM) {
+                        foreach ($dataHP['profile']['social_medias'] ?? [] as $socialM) {
                             if ($socialM['name'] == $socialNetwork->name) {
                                 $validated = true;
                                 break;
@@ -1987,7 +1990,7 @@ class DataTestSeeder extends Seeder
                 }
 
                 /** update or create new social medias */
-                foreach ($dataHP['profile']['social_medias'] as $socialMedia) {
+                foreach ($dataHP['profile']['social_medias'] ?? [] as $socialMedia) {
                     $socialNetwork = SocialNetwork::whereName($socialMedia['name'])->first();
                     if (isset($socialNetwork)) {
                         SocialMedia::updateOrCreate([
