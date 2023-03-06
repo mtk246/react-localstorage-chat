@@ -1445,11 +1445,27 @@ class PatientRepository
         return $insurancePolicy;
     }
 
-    public function getPolicies(int $patient_id)
+    public function getPolicies(Request $request, int $patient_id)
     {
         $patient = Patient::with("insurancePolicies")->find($patient_id);
-        $insurancePolicies = $patient->insurancePolicies ?? [];
-        return $insurancePolicies;
+        
+        $bC = auth()->user()->billing_company_id ?? null;
+        if (!$bC) {
+            $data = $patient->insurancePolicies()
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+        } else {
+            $data = $patient->insurancePolicies()
+                ->wherePivot('billing_company_id', $bC)
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+        }
+
+        return response()->json([
+            'data'          => $data->items(),
+            'numberOfPages' => $data->lastPage(),
+            'count'         => $data->total()
+        ], 200);
     }
 
     public function getList(Request $request) {
