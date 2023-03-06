@@ -145,11 +145,9 @@ class PatientController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error, policy to patient not found"), 400);
     }
 
-    public function getPolicies(int $patient_id): JsonResponse
+    public function getPolicies(Request $request, int $patient_id): JsonResponse
     {
-        return response()->json(
-            $this->patientRepository->getPolicies($patient_id)
-        );
+        return $this->patientRepository->getPolicies($request, $patient_id);
     }
 
     /**
