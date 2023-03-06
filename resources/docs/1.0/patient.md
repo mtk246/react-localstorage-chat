@@ -15,7 +15,7 @@
 - [Get all patient subscribers](#get-all-patient-subscribers)
 - [Add policy to patient](#add-policy-to-patient)
 - [Edit policy to patient](#edit-policy-to-patient)
-- [Remove policy to patient](#remove-policy-to-patient)
+- [Change status policy to patient](#change-status-policy-to-patient)
 - [Get policy to patient](#get-policy-to-patient)
 - [Get all policies to patient](#get-all-policies-to-patient)
 - [Get list patients](#get-list)
@@ -46,7 +46,7 @@
 | 8 |GET | `Get all patient subscribers`| `/patient/get-subscribers/{ssn_patient}`        |yes            |Get all patient subscribers|
 | 9 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
 | 10 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
-| 11 |PATCH | `Remove policy to patient`           | `/patient/{patient_id}/remove-policy/{policy_id}`|yes|remove policy to patient|
+| 11 |PATCH | `Change status policy to patient`           | `/patient/{patient_id}/change-status-policy/{policy_id}`|yes|change status policy to patient|
 | 12 |GET | `Get policy to patient`           | `/patient/get-policy/{policy_id}`|yes|get policy to patient|
 | 13 |GET | `Get all policies to patient`           | `/patient/{patient_id}/get-policies`|yes|get all policies to patient|
 | 14  |GET     | `Get list patients`  | `/patient/get-list?billing_company_id={ID?}`     | yes    | Get list all patients |
@@ -189,7 +189,8 @@
     ],
     "public_note": "Some note publics",
     "private_note": "Some note privates",
-    "save_as_draft": false
+    "save_as_draft": false,
+    "draft_note": "Some note with draft",
 }
 ```
 
@@ -924,16 +925,6 @@
         "spuse_work_phone": "Spuse phone"
 
     },
-    "companies": [
-        {
-            "company_id": 1, /** required */
-            "med_num": "0001", /** Optional */
-        },
-        {
-            "company_id": 2, /** required */
-            "med_num": "0002", /** Optional */
-        }
-    ],
     "language": "en", /** Optional */
 
     "contact": {
@@ -1025,7 +1016,8 @@
     ],
     "public_note": "Some note publics",
     "private_note": "Some note privates",
-    "save_as_draft": false
+    "save_as_draft": false,
+    "draft_note": "Some note with draft",
 }
 ```
 
@@ -1164,25 +1156,26 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "policy_number": 12344, /** Required */
-        "group_number": 1234, /** Optional */
-        "insurance_company": 1, /** Required */
-        "insurance_plan": 1, /** Required */
-        "type_responsibility_id": 1, /** Required */
-        "insurance_policy_type_id": 1, /** Optional */
-        "eff_date": "2020-01-23", /** Optional */
-        "end_date": "2022-01-23", /** Optional */
-        "assign_benefits": false,  /** Required */
-        "release_info": false, /** Required */
-        "own_insurance": true, /** Required */
-        "subscriber": null /** Optional */
-    }
+    "group_number": 1234, /** Optional */
+    "insurance_company": 1, /** Required */
+    "insurance_plan": 1, /** Required */
+    "type_responsibility_id": 1, /** Required */
+    "insurance_policy_type_id": 1, /** Optional */
+    "eff_date": "2020-01-23", /** Optional */
+    "end_date": "2022-01-23", /** Optional */
+    "assign_benefits": false,  /** Required */
+    "release_info": false, /** Required */
+    "own_insurance": true, /** Required */
+    "subscriber": null /** Optional */
 }
 ```
 ### Body request example 2
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "policy_number": 12344, /** Required */
     "group_number": 1234, /** Optional */
     "insurance_company": 1, /** Required */
@@ -1330,6 +1323,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "policy_number": 12344, /** Required */
     "group_number": 1234, /** Optional */
     "insurance_company": 1, /** Required */
@@ -1348,6 +1342,7 @@
 
 ```json
 {
+    "billing_company_id": 1, /** Only required by superuser */
     "policy_number": 12344, /** Required */
     "group_number": 1234, /** Optional */
     "insurance_company": 1, /** Required */
@@ -1461,8 +1456,8 @@
 
 #
 
-<a name="remove-policy-to-patient"></a>
-## Remove policy to patient
+<a name="change-status-policy-to-patient"></a>
+## Change status policy to patient
 
 ## Param in header
 
@@ -1477,6 +1472,14 @@
 `patient_id required integer`
 `policy_id  required integer`
 
+### Body request example
+
+```json
+{
+    "billing_company_id": 1, /** Only required by superuser */
+    "status": true
+}
+```
 
 ## Response
 
@@ -2253,20 +2256,18 @@
 ## Param in body
 
 ```json
-{
-    "companies": [
-        {
-            "billing_company_id": 1, /** Only required by superuser */
-            "company_id": 1, /** required */
-            "med_num": "0001", /** Optional */
-        },
-        {
-            "billing_company_id": 1, /** Only required by superuser */
-            "company_id": 2, /** required */
-            "med_num": "0002", /** Optional */
-        }
-    ]
-}
+[
+    {
+        "billing_company_id": 1, /** Only required by superuser */
+        "company_id": 1, /** required */
+        "med_num": "0001", /** Optional */
+    },
+    {
+        "billing_company_id": 1, /** Only required by superuser */
+        "company_id": 2, /** required */
+        "med_num": "0002", /** Optional */
+    }
+]
 ```
 
 
