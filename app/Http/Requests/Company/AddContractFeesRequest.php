@@ -21,52 +21,53 @@ final class AddContractFeesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.billing_company_id' => [
+            'contract_fees' => 'nullable|array',
+            'contract_fees.*.billing_company_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
-            '*.insurance_company_id' => [
+            'contract_fees.*.insurance_company_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
-            '*.insurance_plan_id' => [
+            'contract_fees.*.insurance_plan_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\InsurancePlan,id',
             ],
-            '*.procedure_id' => [
+            'contract_fees.*.procedure_id' => [
                 'nullable',
                 new IntegerOrArrayKeyExists(Procedure::class),
             ],
-            '*.modifier_id' => [
+            'contract_fees.*.modifier_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\Modifier,id',
             ],
-            '*.price' => ['nullable', 'numeric'],
-            '*.type_id' => ['nullable', 'integer'],
-            '*.start_date' => ['nullable', 'date'],
-            '*.end_date' => ['nullable', 'date'],
-            '*.mac' => ['nullable', 'string'],
-            '*.locality_number' => ['nullable', 'numeric'],
-            '*.state' => ['nullable', 'string'],
-            '*.fsa' => ['nullable', 'string'],
-            '*.counties' => ['nullable', 'string'],
-            '*.insurance_label_fee_id' => ['nullable', 'integer'],
-            '*.price_percentage' => ['nullable', 'numeric'],
-            '*.private_note' => ['nullable', 'string'],
-            '*.patien.*' => ['required_if:*.type_id,18', 'array'],
-            '*.patien.*.user_id' => ['required', 'integer'],
-            '*.patien.*.start_date' => ['nullable', 'date'],
-            '*.patien.*.end_date' => ['nullable', 'date'],
+            'contract_fees.*.price' => ['nullable', 'numeric'],
+            'contract_fees.*.type_id' => ['nullable', 'integer'],
+            'contract_fees.*.start_date' => ['nullable', 'date'],
+            'contract_fees.*.end_date' => ['nullable', 'date'],
+            'contract_fees.*.mac' => ['nullable', 'string'],
+            'contract_fees.*.locality_number' => ['nullable', 'numeric'],
+            'contract_fees.*.state' => ['nullable', 'string'],
+            'contract_fees.*.fsa' => ['nullable', 'string'],
+            'contract_fees.*.counties' => ['nullable', 'string'],
+            'contract_fees.*.insurance_label_fee_id' => ['nullable', 'integer'],
+            'contract_fees.*.price_percentage' => ['nullable', 'numeric'],
+            'contract_fees.*.private_note' => ['nullable', 'string'],
+            'contract_fees.*.patien.*' => ['required_if:*.type_id,18', 'array'],
+            'contract_fees.*.patien.*.user_id' => ['required', 'integer'],
+            'contract_fees.*.patien.*.start_date' => ['nullable', 'date'],
+            'contract_fees.*.patien.*.end_date' => ['nullable', 'date'],
         ];
     }
 
     public function castedCollect(): Collection
     {
-        return collect($this->all())
+        return collect($this->input('contract_fees'))
             ->map(fn (array $item) => new ContractFeesRequestCast($item, $this->user()));
     }
 }

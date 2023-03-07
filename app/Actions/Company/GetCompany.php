@@ -80,6 +80,7 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
+                    ->with('procedures')
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
@@ -92,6 +93,7 @@ final class GetCompany
                     ->paginate(Pagination::itemsPerPage());
                 $companyProcedures = $company->procedures()
                     ->wherePivot('billing_company_id', $bC)
+                    ->with('procedures')
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()

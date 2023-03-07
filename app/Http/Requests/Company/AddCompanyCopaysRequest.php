@@ -21,37 +21,38 @@ final class AddCompanyCopaysRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.billing_company_id' => [
+            'copays' => 'nullable|array',
+            'copays.*.billing_company_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
-            '*.procedure_id' => [
+            'copays.*.procedure_ids' => [
                 'nullable',
                 new IntegerOrArrayKeyExists(Procedure::class),
             ],
-            '*.insurance_plan_id' => [
+            'copays.*.insurance_plan_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\InsurancePlan,id',
             ],
-            '*.insurance_company_id' => [
+            'copays.*.insurance_company_id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
-            '*.copay' => [
+            'copays.*.copay' => [
                 'nullable',
                 'numeric',
                 'between:0,999999.99',
             ],
-            '*.private_note' => ['nullable', 'string'],
+            'copays.*.private_note' => ['nullable', 'string'],
         ];
     }
 
     public function getCopays(): Collection
     {
-        return collect($this->all())
+        return collect($this->input('copays'))
             ->map(fn (array $item) => new CopayRequestCast($item, $this->user()));
     }
 }
