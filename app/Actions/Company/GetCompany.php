@@ -134,8 +134,8 @@ final class GetCompany
                     'insurance_label_fee_id' => $companyProcedure->pivot->insurance_label_fee_id ?? null,
                     'price_percentage' => $companyProcedure->pivot->price_percentage ?? null,
                     'clia' => $companyProcedure->pivot->clia ?? null,
-                    'medication_application' => false,
-                    'medications' => null,
+                    'medication_application' => $companyProcedure->pivot->medications()->exists(),
+                    'medications' => $companyProcedure->pivot->medications,
                 ];
             });
 
