@@ -312,6 +312,10 @@ class ClaimRepository
             $data = $data->search($request->query('query'));
         }
         
+        if ($request->patient_id) {
+            $data = $data->where("patient_id", $request->patient_id);
+        }
+        
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'billingcompany')) {
                 $data = $data->orderBy(
