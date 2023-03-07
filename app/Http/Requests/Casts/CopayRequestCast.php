@@ -24,7 +24,7 @@ final class CopayRequestCast
 
     public function getProceduresIds(): Collection
     {
-        return collect($this->copays['procedure_id'] ?? []);
+        return collect($this->copays['procedure_ids'] ?? []);
     }
 
     public function getInsurancePlanId(): ?int
