@@ -74,6 +74,7 @@
     "patient_id": 2,
     "billing_provider_id": 1,
     "referred_id": 1,
+    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
     "service_provider_id": 1,
     "patient_or_insured_information": {
         "employment_related_condition": true,
@@ -1153,6 +1154,7 @@ subStatus optional <array>    //[1,2]
     "patient_id": 2,
     "billing_provider_id": 1,
     "referred_id": 1,
+    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
     "service_provider_id": 1,
     "patient_or_insured_information": {
         "employment_related_condition": true,
