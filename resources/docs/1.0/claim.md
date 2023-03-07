@@ -25,6 +25,7 @@
 - [Change status Claim](#change-status-claim)
 - [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
+- [Get list diagnoses](#get-list-diagnoses)
 
 
 
@@ -56,6 +57,14 @@
 | 20 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
 | 21 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
 | 22 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
+
+
+<a name="data-another-module"></a>
+## Data from another module to make request
+
+| #  | METHOD | Name                         | URL                                    | Token required | Description                |
+| :  |        | :-                           | :                                      | :-             | :-                         |
+| 11 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
 
 
 <a name="create-claim"></a>
@@ -1972,3 +1981,59 @@ subStatus optional <array>    //[1,2]
 }
 ```
 #
+
+<a name="get-list-diagnoses"></a>
+## Get list diagnoses
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+## Param in path
+
+```json
+code optional <string>
+except_ids optional <array>    //[1,2] Array with ids diagnoses selected
+```
+
+## Example path 1
+
+>{primary} get-list-diagnoses/M4?except_ids[]=1&except_ids[]=2
+
+## Example path 2
+
+>{primary} get-list-diagnoses?except_ids[]=1&except_ids[]=2
+
+## Response
+
+> {success} 200 Diagnoses found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "A000"
+    },
+    {
+        "id": 2,
+        "name": "A001"
+    },
+    {
+        "id": 3,
+        "name": "A009"
+    },
+    {
+        "id": 4,
+        "name": "A0100"
+    }
+]
+```
