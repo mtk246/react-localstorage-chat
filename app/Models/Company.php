@@ -173,6 +173,7 @@ final class Company extends Model implements Auditable
         return $this->belongsToMany(Procedure::class)
             ->using(CompanyProcedure::class)
             ->withPivot(
+                'id',
                 'price',
                 'price_percentage',
                 'insurance_label_fee_id',
