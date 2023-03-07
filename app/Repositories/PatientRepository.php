@@ -222,7 +222,8 @@ class PatientRepository
                 $company = Company::find($data["company_id"]);
                 if (is_null($patient->companies()->find($company->id))) {
                     $patient->companies()->attach($company->id, [
-                        'med_num' => $data["company_med_num"] ?? ''
+                        'med_num' => $data["company_med_num"] ?? '',
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]);
                 }
             }
