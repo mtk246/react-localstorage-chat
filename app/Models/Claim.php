@@ -118,6 +118,7 @@ class Claim extends Model implements Auditable
         "billing_provider_id",
         "service_provider_id",
         "referred_id",
+        "referred_provider_role_id",
         "validate",
         "automatic_eligibility",
         "claim_formattable_type",
@@ -205,6 +206,16 @@ class Claim extends Model implements Auditable
     public function referred()
     {
         return $this->belongsTo(HealthProfessional::class);
+    }
+
+    /**
+     * Get the referredProviderRole that owns the Claim
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function referredProviderRole(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, 'referred_provider_role_id');
     }
 
     /**
