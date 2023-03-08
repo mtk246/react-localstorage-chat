@@ -37,6 +37,8 @@ use App\Models\Injury;
 use App\Roles\Models\Role;
 use App\Models\TypeCatalog;
 
+use function PHPSTORM_META\map;
+
 class PatientRepository
 {
     /**
@@ -220,7 +222,8 @@ class PatientRepository
                 $company = Company::find($data["company_id"]);
                 if (is_null($patient->companies()->find($company->id))) {
                     $patient->companies()->attach($company->id, [
-                        'med_num' => $data["company_med_num"] ?? ''
+                        'med_num' => $data["company_med_num"] ?? '',
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]);
                 }
             }
@@ -415,9 +418,7 @@ class PatientRepository
         ])->find($id);
         
         if (auth()->user()->hasRole('superuser')) {
-            $dataCompany = $patient->companies()
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-                ->paginate(Pagination::itemsPerPage());
+            $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
                     "company" => function ($query) {
@@ -429,8 +430,7 @@ class PatientRepository
             $billingCompany = auth()->user()->billingCompanies->first();
             $dataCompany = $patient->companies()
                 ->wherePivot('billing_company_id', $billingCompany->id)
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-                ->paginate(Pagination::itemsPerPage());
+                ->get();
             $dataClaim = $patient->claims()
                 ->with([
                     "company" => function ($query) use ($billingCompany){
@@ -446,19 +446,17 @@ class PatientRepository
                 ->paginate(Pagination::itemsPerPage());
         }
 
-        $dataCompany->getCollection()->transform(fn ($company) => [
-            'billing_company_id' => $company->pivot->billing_company_id,
-            'company_id'         => $company->id,
-            'med_num'            => $company->pivot->med_num,
-            'company'            => $company->name,
-            'billing_company'    => $company->billingCompanies()
-                ->find($company->pivot->billing_company_id)->name ?? null,
-        ]);
-        $companyRecords = [
-            'data'          => $dataCompany->items(),
-            'numberOfPages' => $dataCompany->lastPage(),
-            'count'         => $dataCompany->total()
-        ];
+        $companyRecords = [];
+        foreach ($dataCompany as $company) {
+            array_push($companyRecords, [
+                'billing_company_id' => $company->pivot->billing_company_id,
+                'company_id'         => $company->id,
+                'med_num'            => $company->pivot->med_num,
+                'company'            => $company->name,
+                'billing_company'    => $company->billingCompanies()
+                    ->find($company->pivot->billing_company_id)->name ?? null,
+            ]);
+        }
 
         $claimRecords = [
             'data'          => $dataClaim->items(),
@@ -646,6 +644,7 @@ class PatientRepository
                     }
 
                     array_push($patient_policies, [
+                        "id"                       => $patient_policy->id,
                         "policy_number"            => $patient_policy->policy_number,
                         "group_number"             => $patient_policy->group_number,
                         "insurance_company_id"     => $patient_policy->insurancePlan->insurance_company_id ?? '',
@@ -1471,6 +1470,7 @@ class PatientRepository
     public function getList(Request $request) {
         $records = [];
         $billingCompanyId = $request->billing_company_id ?? null;
+        $companyId = $request->company_id ?? null;
 
         if (auth()->user()->hasRole('superuser')) {
             $billingCompany = $billingCompanyId;
@@ -1486,11 +1486,12 @@ class PatientRepository
                       ->where('billing_company_patient.status', true);
             });
         }
-        if (!isset($billingCompany)) {
-            $patients = Patient::with('user.profile')->get();
-        } else {
-            $patients = $patients->get();
+        if (isset($companyId)) {
+            $patients = $patients->whereHas('companies', function ($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            });
         }
+        $patients = $patients->get();
 
         foreach ($patients as $patient) {
             array_push($records, [
@@ -1590,7 +1591,6 @@ class PatientRepository
             $patient = Patient::find($id);
             
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
                 $companies = $patient->companies()->get();
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -1602,7 +1602,7 @@ class PatientRepository
             /** Detach Company */
             foreach ($companies as $company) {
                 $validated = false;
-                foreach ($data["companies"] as $dataCompany) {
+                foreach ($data as $dataCompany) {
                     if (($dataCompany["company_id"] == $company->id) &&
                         ($company->pivot->billing_company_id == ($billingCompany->id ?? $dataCompany["billing_company_id"]))) {
                         $validated = true;
@@ -1613,50 +1613,47 @@ class PatientRepository
             }
 
             /** Attached patient to company */
-            foreach ($data["companies"] as $dataCompany) {
+            foreach ($data as $dataCompany) {
                 $company = Company::find($dataCompany["company_id"]);
 
                 if (isset($company)) {
                     if (is_null($patient->companies()->find($company->id))) {
                         $patient->companies()->attach($company->id, [
                             'med_num' => $dataCompany["med_num"] ?? '',
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany->id ?? $dataCompany["billing_company_id"],
                         ]);
                     } else {
                         $patient->companies()->updateExistingPivot($company->id, [
                             'med_num' => $dataCompany["med_num"],
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany->id ?? $dataCompany["billing_company_id"],
                         ]);
                     }
                 }
             }
-            
+
             if (auth()->user()->hasRole('superuser')) {
-                $data = $patient->companies()
-                    ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-                    ->paginate(Pagination::itemsPerPage());
+                $dataCompany = $patient->companies;
             } else {
-                $data = $patient->companies()
+                $billingCompany = auth()->user()->billingCompanies->first();
+                $dataCompany = $patient->companies()
                     ->wherePivot('billing_company_id', $billingCompany->id)
-                    ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-                    ->paginate(Pagination::itemsPerPage());
+                    ->get();
+            }
+    
+            $companyRecords = [];
+            foreach ($dataCompany as $company) {
+                array_push($companyRecords, [
+                    'billing_company_id' => $company->pivot->billing_company_id,
+                    'company_id'         => $company->id,
+                    'med_num'            => $company->pivot->med_num,
+                    'company'            => $company->name,
+                    'billing_company'    => $company->billingCompanies()
+                        ->find($company->pivot->billing_company_id)->name ?? null,
+                ]);
             }
 
-            $data->getCollection()->transform(fn ($company) => [
-                'billing_company_id' => $company->pivot->billing_company_id,
-                'company_id'         => $company->id,
-                'med_num'            => $company->pivot->med_num,
-                'billing_company'    => $company->billingCompanies()
-                    ->find($company->pivot->billing_company_id)->name ?? null,
-                'company'            => $company->name,
-            ]);
-
             DB::commit();
-            return [
-                'data'          => $data->items(),
-                'numberOfPages' => $data->lastPage(),
-                'count'         => $data->total()
-            ];
+            return $companyRecords;
         } catch (\Exception $e) {
             DB::rollBack();
             return null;

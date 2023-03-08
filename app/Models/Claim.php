@@ -118,6 +118,7 @@ class Claim extends Model implements Auditable
         "billing_provider_id",
         "service_provider_id",
         "referred_id",
+        "referred_provider_role_id",
         "validate",
         "automatic_eligibility",
         "claim_formattable_type",
@@ -134,7 +135,8 @@ class Claim extends Model implements Auditable
     protected $appends = [
         'format', 'last_modified', 'private_note', 'status', 'status_history',
         'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
-        'insurance_company_id', 'billing_provider_name', 'user_created'
+        'insurance_company_id', 'insurance_plan', 'billing_provider_name', 'user_created',
+        'type_responsibility'
     ];
     
     /**
@@ -205,6 +207,16 @@ class Claim extends Model implements Auditable
     public function referred()
     {
         return $this->belongsTo(HealthProfessional::class);
+    }
+
+    /**
+     * Get the referredProviderRole that owns the Claim
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function referredProviderRole(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, 'referred_provider_role_id');
     }
 
     /**
@@ -281,6 +293,28 @@ class Claim extends Model implements Auditable
     {
         $policyPrimary = $this->insurancePolicies()->first();
         return $policyPrimary->insurance_company_id ?? '';
+    }
+
+    /**
+     * Interact with the claim's insurancePlan.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getInsurancePlanAttribute()
+    {
+        $policyPrimary = $this->insurancePolicies()->first();
+        return $policyPrimary->insurancePlan->name ?? '';
+    }
+    
+    /**
+     * Interact with the claim's typeResponsibility.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getTypeResponsibilityAttribute()
+    {
+        $policyPrimary = $this->insurancePolicies()->first();
+        return $policyPrimary->typeResponsibility->code ?? '';
     }
 
     /**

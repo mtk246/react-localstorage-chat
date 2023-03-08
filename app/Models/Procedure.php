@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Procedure
+ * App\Models\Procedure.
  *
  * @property int $id
  * @property string $code
@@ -20,26 +22,27 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read int|null $companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read int|null $diagnoses_count
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read int|null $insurance_companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read int|null $insurance_plans_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
- * @property-read int|null $mac_localities_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
- * @property-read int|null $modifiers_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
- * @property-read int|null $procedure_cosiderations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read int|null $procedure_fees_count
- * @property-read \App\Models\PublicNote|null $publicNote
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property int|null $diagnoses_count
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property int|null $insurance_companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property int|null $mac_localities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property int|null $modifiers_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property int|null $procedure_cosiderations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property int|null $procedure_fees_count
+ * @property \App\Models\PublicNote|null $publicNote
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure query()
@@ -52,38 +55,46 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
- * @property-read int|null $copays_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
+ * @property int|null $copays_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ *
  * @mixin \Eloquent
  */
 class Procedure extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "code",
-        "start_date",
-        "end_date",
-        "description",
-        "active",
+        'code',
+        'start_date',
+        'end_date',
+        'description',
+        'active',
+    ];
+
+    /** @var string[] */
+    protected $hidden = [
+        'pivot',
     ];
 
     /**
@@ -114,7 +125,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The companies that belong to the Procedure. 
+     * The companies that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -124,7 +135,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The diagnoses that belong to the Procedure. 
+     * The diagnoses that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -134,7 +145,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The modifiers that belong to the Procedure. 
+     * The modifiers that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -144,7 +155,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The mac localities that belong to the Procedure. 
+     * The mac localities that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -154,7 +165,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The insuranceCompany that belong to the Procedure. 
+     * The insuranceCompany that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -164,7 +175,7 @@ class Procedure extends Model implements Auditable
     }
 
     /**
-     * The insurancePlan that belong to the Procedure. 
+     * The insurancePlan that belong to the Procedure.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -185,8 +196,6 @@ class Procedure extends Model implements Auditable
 
     /**
      * Interact with the procedure's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function description(): Attribute
     {
@@ -199,19 +208,20 @@ class Procedure extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -219,7 +229,7 @@ class Procedure extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
                          ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
         }

@@ -39,6 +39,7 @@ class ClaimVerifyRequest extends FormRequest
             'billing_provider_id'         => ['required', 'integer'],
             'service_provider_id'         => ['nullable', 'integer'],
             'referred_id'                 => ['nullable', 'integer'],
+            "referred_provider_role_id"   => ['nullable', 'integer'],
 
             'patient_or_insured_information'                                  => ['nullable', 'array'],
             'patient_or_insured_information.employment_related_condition'     => ['nullable', 'boolean'],

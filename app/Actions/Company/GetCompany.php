@@ -80,6 +80,7 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
+                    ->with('procedures')
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
@@ -92,6 +93,7 @@ final class GetCompany
                     ->paginate(Pagination::itemsPerPage());
                 $companyProcedures = $company->procedures()
                     ->wherePivot('billing_company_id', $bC)
+                    ->with('procedures')
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
@@ -132,8 +134,8 @@ final class GetCompany
                     'insurance_label_fee_id' => $companyProcedure->pivot->insurance_label_fee_id ?? null,
                     'price_percentage' => $companyProcedure->pivot->price_percentage ?? null,
                     'clia' => $companyProcedure->pivot->clia ?? null,
-                    'medication_application' => false,
-                    'medications' => null,
+                    'medication_application' => $companyProcedure->pivot->medications()->exists(),
+                    'medications' => $companyProcedure->pivot->medications,
                 ];
             });
 

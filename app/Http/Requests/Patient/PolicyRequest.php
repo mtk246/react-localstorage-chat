@@ -38,7 +38,8 @@ class PolicyRequest extends FormRequest
             'assign_benefits'      => ['required', 'boolean'],
             'own_insurance'        => ['required', 'boolean'],
 
-            'subscriber'            => ['sometimes', 'required_if:own_insurance,false', 'array'],
+            'subscriber'            => ['nullable', 'required_if:own_insurance,false', 'array'],
+            'subscriber.relationship_id'  => ['nullable', 'integer'],
             'subscriber.ssn'        => ['required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.date_of_birth'  => ['nullable', 'date'],
             'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],

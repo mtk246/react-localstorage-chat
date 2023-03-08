@@ -119,6 +119,7 @@ class ClaimRepository
                 "billing_provider_id"    => $data["billing_provider_id"] ?? null,
                 "service_provider_id"    => $data["service_provider_id"] ?? null,
                 "referred_id"            => $data["referred_id"] ?? null,
+                "referred_provider_role_id" => $data["referred_provider_role_id"] ?? null,
                 "validate"               => $data["validate"] ?? false,
                 "automatic_eligibility"  => $data["automatic_eligibility"] ?? false,
                 "claim_formattable_type" => $model ?? null,
@@ -252,6 +253,9 @@ class ClaimRepository
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
+                "insuranceCompany" => function ($query) {
+                    $query->with('nicknames');
+                },
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
@@ -272,6 +276,13 @@ class ClaimRepository
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
+                "insuranceCompany" => function ($query) use ($bC){
+                    $query->with([
+                        "nicknames" => function ($q) use ($bC) {
+                            $q->where('billing_company_id', $bC);
+                        }
+                    ]);
+                },
                 "company" => function ($query) use ($bC){
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
@@ -299,6 +310,10 @@ class ClaimRepository
 
         if (!empty($request->query('query')) && $request->query('query')!=="{}") {
             $data = $data->search($request->query('query'));
+        }
+        
+        if ($request->patient_id) {
+            $data = $data->where("patient_id", $request->patient_id);
         }
         
         if ($request->sortBy) {
@@ -373,8 +388,8 @@ class ClaimRepository
             $claim = Claim::find($id);
 
             $claimForm = $claim->claimFormattable;
-            $claimForm->claimFormServices()->delete();
-            $claimForm->delete();
+            //$claimForm->claimFormServices()->delete();
+            //$claimForm->delete();
 
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data["billing_company_id"] ?? null;
@@ -422,7 +437,10 @@ class ClaimRepository
                 "company_id"             => $data["company_id"] ?? null,
                 "facility_id"            => $data["facility_id"] ?? null,
                 "patient_id"             => $data["patient_id"] ?? null,
-                "health_professional_id" => $data["health_professional_id"] ?? null,
+                "billing_provider_id"    => $data["billing_provider_id"] ?? null,
+                "service_provider_id"    => $data["service_provider_id"] ?? null,
+                "referred_id"            => $data["referred_id"] ?? null,
+                "referred_provider_role_id" => $data["referred_provider_role_id"] ?? null,
                 "claim_formattable_type" => $model ?? null,
                 "claim_formattable_id"   => $claimForm->id ?? null,
             ]);
@@ -499,7 +517,7 @@ class ClaimRepository
                     }
                 }
             }
-            DB::commit();
+           DB::commit();
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -1135,10 +1153,10 @@ class ClaimRepository
                             "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                             "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
                             "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)
-                                                    ? ($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
-                                                        ? "Y"
-                                                        : "N"
-                                                    : "N",
+                                ? (($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
+                                    ? "Y"
+                                    : "N")
+                                : "N",
                             "planParticipationCode" => "A",
                             "benefitsAssignmentCertificationIndicator" => "Y",
                             "releaseInformationCode" => "Y",
@@ -1504,10 +1522,10 @@ class ClaimRepository
                         "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                         "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
                         "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)
-                                                    ? ($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
-                                                        ? "Y"
-                                                        : "N"
-                                                    : "N",
+                            ? (($claim->claimFormattable->patientOrInsuredInformation->insured_signature == true)
+                                ? "Y"
+                                : "N")
+                            : "N",
                         "planParticipationCode" => "A",
                         "benefitsAssignmentCertificationIndicator" => "Y",
                         "releaseInformationCode" => "Y",
