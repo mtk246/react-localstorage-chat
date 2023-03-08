@@ -157,7 +157,7 @@ final class CompanyController extends Controller
     ): JsonResponse {
         $request->validated();
 
-        $rs = $addServices->invoke(user: $request->user(), company: $company, services: $request->getservices());
+        $rs = $addServices->invoke($request->castedCollect('services'), $company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add services to company'), 404);
     }
@@ -169,7 +169,7 @@ final class CompanyController extends Controller
     ): JsonResponse {
         $request->validated();
 
-        $rs = $addCopays->invoke($request->getCopays(), $company);
+        $rs = $addCopays->invoke($request->castedCollect('copays'), $company);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }
@@ -181,7 +181,7 @@ final class CompanyController extends Controller
     ): JsonResponse {
         $request->validated();
 
-        $rs = $addContractFees->invoke($request->castedCollect(), $company);
+        $rs = $addContractFees->invoke($request->castedCollect('contract_fees'), $company);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }
