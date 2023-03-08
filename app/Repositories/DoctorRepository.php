@@ -739,6 +739,7 @@ class DoctorRepository
                         'addresses',
                         'contacts',
                         'billingCompanies',
+                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
@@ -758,6 +759,7 @@ class DoctorRepository
                             $query->where('billing_company_id', $bC);
                         },
                         'billingCompanies',
+                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
