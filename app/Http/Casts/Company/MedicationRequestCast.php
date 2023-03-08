@@ -2,17 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Models\Company;
+namespace App\Http\Casts\Company;
 
+use App\http\Casts\CastsRequest;
 use App\Models\Medication as MedicationModel;
 
-final class Medication
+final class MedicationRequestCast extends CastsRequest
 {
-    /** @param array<key, string|int|null> $medication*/
-    public function __construct(private array $medication)
-    {
-    }
-
     public function getCode(): string
     {
         return generateNewCode(prefix: 'test', code_length: 5, model: MedicationModel::class);
@@ -20,26 +16,26 @@ final class Medication
 
     public function getDate(): string
     {
-        return $this->medication['date'];
+        return $this->inputs['date'];
     }
 
     public function getDrugCode(): string
     {
-        return $this->medication['drug_code'];
+        return $this->inputs['drug_code'];
     }
 
     public function getBatch(): string
     {
-        return $this->medication['batch'];
+        return $this->inputs['batch'];
     }
 
     public function getQuantity(): int
     {
-        return (int) $this->medication['quantity'];
+        return (int) $this->inputs['quantity'];
     }
 
     public function getFrequency(): int
     {
-        return (int) $this->medication['frequency'];
+        return (int) $this->inputs['frequency'];
     }
 }
