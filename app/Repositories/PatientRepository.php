@@ -644,6 +644,7 @@ class PatientRepository
                     }
 
                     array_push($patient_policies, [
+                        "id"                       => $patient_policy->id,
                         "policy_number"            => $patient_policy->policy_number,
                         "group_number"             => $patient_policy->group_number,
                         "insurance_company_id"     => $patient_policy->insurancePlan->insurance_company_id ?? '',
@@ -1469,6 +1470,7 @@ class PatientRepository
     public function getList(Request $request) {
         $records = [];
         $billingCompanyId = $request->billing_company_id ?? null;
+        $companyId = $request->company_id ?? null;
 
         if (auth()->user()->hasRole('superuser')) {
             $billingCompany = $billingCompanyId;
@@ -1484,11 +1486,12 @@ class PatientRepository
                       ->where('billing_company_patient.status', true);
             });
         }
-        if (!isset($billingCompany)) {
-            $patients = Patient::with('user.profile')->get();
-        } else {
-            $patients = $patients->get();
+        if (isset($companyId)) {
+            $patients = $patients->whereHas('companies', function ($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            });
         }
+        $patients = $patients->get();
 
         foreach ($patients as $patient) {
             array_push($records, [
