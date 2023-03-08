@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Actions\Company;
 
-use App\Http\Requests\Casts\ContractFeePatiensCast;
-use App\Http\Requests\Casts\ContractFeesRequestCast;
+use App\Http\Casts\Company\ContractFeePatiensCast;
+use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Models\Company;
 use App\Models\ContractFee;
 use Illuminate\Support\Collection;
