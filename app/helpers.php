@@ -131,10 +131,18 @@ if (!function_exists('getList')) {
                 foreach ($others as $other) {
                     $fieldPush[$other] = $rec->$other;
                 }
-                foreach ($pivotOthers as $pivotOther) {
-                    $object = $rec->$relationship()->where($filters['where'])->first();
-                    if (isset($object)) {
-                        $fieldPush[$pivotOther] = $object->pivot[$pivotOther];
+                foreach ($pivotOthers as $name => $pivotOther) {
+                    if (is_array($pivotOther)) {
+                        $relationship = $pivotOther['relationship'];
+                        $rec->load($relationship);
+                        $object = $rec->$relationship()->where($pivotOther['where'])->first();
+                        $fieldPush[$name] = $object->pivot[$name] ?? '';
+
+                    } else {
+                        $object = $rec->$relationship()->where($filters['where'])->first();
+                        if (isset($object)) {
+                            $fieldPush[$pivotOther] = $object->pivot[$pivotOther];
+                        }
                     }
                 }
                 array_push($options, $fieldPush);
