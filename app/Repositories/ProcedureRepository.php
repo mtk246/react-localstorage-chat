@@ -520,9 +520,9 @@ class ProcedureRepository
     public function getListDiagnoses($code = '') {
         try {
             if ($code == '') {
-                return getList(Diagnosis::class, 'code');
+                return getList(Diagnosis::class, 'code', [], null, ['description']);
             } else {
-                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]]);
+                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]], null, ['description']);
             }
         } catch (\Exception $e) {
             return [];
