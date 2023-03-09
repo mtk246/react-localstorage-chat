@@ -93,4 +93,9 @@ final class ContractFee extends Model
             ->withPivot('start_date', 'end_date')
             ->withTimestamps();
     }
+
+    public function macLocality(): BelongsTo
+    {
+        return $this->belongsTo(MacLocality::class);
+    }
 }
