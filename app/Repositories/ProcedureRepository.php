@@ -574,7 +574,7 @@ class ProcedureRepository
                     return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
-                if ($code == '') {
+                if ($search == '') {
                     return getList(
                         Procedure::class,
                         'code',
