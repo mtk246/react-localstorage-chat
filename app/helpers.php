@@ -126,7 +126,7 @@ if (!function_exists('getList')) {
                 $text = $rec->$fields;
             }
 
-            if (is_null($except_id) || $except_id !== $rec->id) {
+            if (is_null($except_id) || ((!is_array($except_id)) &&$except_id !== $rec->id) || (is_array($except_id) && (!in_array($rec->id, $except_id)))) {
                 $fieldPush = ['id' => $rec->id, 'name' => $text];
                 foreach ($others as $other) {
                     $fieldPush[$other] = $rec->$other;
