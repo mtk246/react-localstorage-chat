@@ -28,6 +28,7 @@ final class AddContractFees
                     'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
                     'contract_fee_type_id' => $contractFee->getTypeId(),
                     'start_date' => $contractFee->getStartDate(),
+                    'private_note' => $contractFee->getPrivateNote(),
                     'end_date' => $contractFee->getEndDate(),
                     'price' => $contractFee->getPrice(),
                     'price_percentage' => $contractFee->getPricePercentage(),

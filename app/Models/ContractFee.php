@@ -67,6 +67,7 @@ final class ContractFee extends Model
         'end_date',
         'price',
         'price_percentage',
+        'private_note',
     ];
 
     /** @var string[] */
