@@ -59,6 +59,7 @@ final class ContractFee extends Model
         'company_id',
         'modifier_id',
         'mac_locality_id',
+        'insurance_company_id',
         'insurance_plan_id',
         'billing_company_id',
         'insurance_label_fee_id',
@@ -98,5 +99,10 @@ final class ContractFee extends Model
     public function macLocality(): BelongsTo
     {
         return $this->belongsTo(MacLocality::class);
+    }
+
+    public function insuranceCompany(): BelongsTo
+    {
+        return $this->belongsTo(InsuranceCompany::class);
     }
 }

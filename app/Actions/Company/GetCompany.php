@@ -84,7 +84,12 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
-                    ->with(['procedures', 'patiens', 'macLocality'])
+                    ->with([
+                        'procedures',
+                        'patiens',
+                        'macLocality',
+                        'insuranceCompany',
+                    ])
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
             } else {
@@ -102,7 +107,12 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
-                    ->with(['procedures', 'patiens', 'macLocality'])
+                    ->with([
+                        'procedures',
+                        'patiens',
+                        'macLocality',
+                        'insuranceCompany',
+                    ])
                     ->wherePivot('billing_company_id', $bC)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
