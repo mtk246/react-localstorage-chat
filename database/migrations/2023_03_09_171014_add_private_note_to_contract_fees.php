@@ -15,6 +15,11 @@ return new class() extends Migration {
     public function up()
     {
         Schema::table('contract_fees', function (Blueprint $table) {
+            $table->foreignId('insurance_company_id')
+                ->nullable()
+                ->constrained()
+                ->restrictOnDelete()
+                ->restrictOnUpdate();
             $table->string('private_note')->nullable();
         });
     }
@@ -27,6 +32,8 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table('contract_fees', function (Blueprint $table) {
+            $table->dropForeign(['insurance_company_id']);
+            $table->dropColumn('insurance_company_id');
             $table->dropColumn('private_note');
         });
     }
