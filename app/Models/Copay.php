@@ -54,6 +54,7 @@ final class Copay extends Model implements Auditable
         'insurance_company_id',
         'insurance_plan_id',
         'billing_company_id',
+        'private_note',
     ];
 
     /** @var string[] */
