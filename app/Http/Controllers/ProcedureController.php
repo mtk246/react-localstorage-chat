@@ -197,8 +197,9 @@ class ProcedureController extends Controller
      */
     public function getListDiagnoses(Request $request, string $code = ''): JsonResponse
     {
+        $except_ids = ((is_array($request->except_ids)) ? $request->except_ids : json_decode($request->except_ids)) ?? null;
         return response()->json(
-            $this->procedureRepository->getListDiagnoses($request->code ?? $code)
+            $this->procedureRepository->getListDiagnoses($request->code ?? $code, $except_ids)
         );
     }
 
