@@ -38,7 +38,7 @@ final class AddContractFees
                 )
             ));
 
-            return $company->contracFees()->with(['procedures', 'patiens'])->get();
+            return $company->contracFees()->with(['procedures', 'patiens', 'macLocality'])->get();
         });
     }
 

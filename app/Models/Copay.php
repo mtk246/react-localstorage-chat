@@ -51,6 +51,7 @@ final class Copay extends Model implements Auditable
     protected $fillable = [
         'copay',
         'company_id',
+        'insurance_company_id',
         'insurance_plan_id',
         'billing_company_id',
     ];

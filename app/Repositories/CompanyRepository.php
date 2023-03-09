@@ -149,14 +149,29 @@ class CompanyRepository
     }
 
     
-    public function getListCompanies($id = null) {
+    public function getListCompanies(Request $request, $id = null) {
         try {
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $id;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
-            return getList(Company::class, ['name'], ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);
+            if (isset($request->patient_id)) {
+                return getList(
+                    Company::class,
+                    ['name'],
+                    ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+                    null,
+                    [],
+                    ['med_num' => ['relationship' => 'patients', 'where' => ['patients.id' => $request->patient_id]]]
+                );
+            } else {
+                return getList(
+                    Company::class,
+                    ['name'],
+                    ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+                );
+            }
         } catch (\Exception $e) {
             return [];
         }
