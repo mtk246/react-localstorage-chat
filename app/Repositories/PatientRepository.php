@@ -1460,6 +1460,30 @@ class PatientRepository
                 ->paginate(Pagination::itemsPerPage());
         }
 
+        $data->getCollection()->transform(fn ($policy) => [
+            'billing_company_id' => $policy->pivot->billing_company_id,
+            'billing_company' => $policy->billingCompany->name ?? '',
+            "id"                       => $policy->id,
+            "policy_number"            => $policy->policy_number,
+            "group_number"             => $policy->group_number,
+            "insurance_company_id"     => $policy->insurancePlan->insurance_company_id ?? '',
+            "insurance_company"        => ($policy->insurancePlan->insuranceCompany->payer_id ?? '') . ' - ' . $policy->insurancePlan->insuranceCompany->name ?? '',
+            "insurance_plan_id"        => $policy->insurance_plan_id ?? '',
+            "insurance_plan"           => $policy->insurancePlan->name ?? '',
+            "type_responsibility_id"   => $policy->type_responsibility_id ?? '',
+            "type_responsibility"      => $policy->typeResponsibility->code ?? '',
+            "insurance_policy_type_id" => $policy->insurance_policy_type_id ?? '',
+            "insurance_policy_type"    => $policy->insurancePolicyType->description ?? '',
+            "eligibility"              => $policy->claimLastEligibility->claimEligibilityStatus ?? null,
+            "status"                   => $policy->pivot->status ?? false,
+            "eff_date"                 => $policy->eff_date,
+            "end_date"                 => $policy->end_date,
+            "assign_benefits"          => $policy->assign_benefits ?? false,
+            "release_info"             => $policy->release_info ?? false,
+            "own_insurance"            => $policy->pivot->own_insurance ?? false,
+            "subscriber"               => $policy_subscriber ?? null,
+        ]);
+
         return response()->json([
             'data'          => $data->items(),
             'numberOfPages' => $data->lastPage(),
