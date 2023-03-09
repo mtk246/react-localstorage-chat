@@ -19,6 +19,7 @@ use App\Models\PublicNote;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\Taxonomy;
+use App\Models\TypeCatalog;
 use App\Models\User;
 use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
@@ -887,6 +888,12 @@ class DoctorRepository
             'billing_provider' => [],
             'referred' => [],
             'service_provider' => [],
+            'referred_provider_roles' => getList(
+                TypeCatalog::class,
+                ['description'],
+                ['relationship' => 'type', 'where' => ['description' => 'Referred or ordered provider roles']],
+                null
+            ),
         ];
         foreach ($healthProfessionals as $healthProfessional) {
             if ('true' == $authorization) {
