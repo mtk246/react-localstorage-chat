@@ -84,6 +84,7 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
+                    ->with('procedures')
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
             } else {
