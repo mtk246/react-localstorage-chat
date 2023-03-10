@@ -98,17 +98,20 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/lang', [\App\Http\Controllers\UserController::class, 'updateLang']);
     });
 
-    Route::prefix('billing-company')->middleware(['auth:api'])->group(function (): void {
-        Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
-        Route::post('create', [BillingCompanyController::class, 'createCompany']);
-        Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
-        Route::put('/{billing_company_id}', [BillingCompanyController::class, 'update']);
-        Route::get('/get-list', [BillingCompanyController::class, 'getList']);
-        Route::get('/{billing_company_id}', [BillingCompanyController::class, 'getBillingCompany']);
-        Route::get('/', [BillingCompanyController::class, 'getAllBillingCompany']);
-        Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
-        Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
-        Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
+    Route::middleware([
+            'auth:api',
+    ])->group(function (): void {
+        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+
+        Route::prefix('billing-company')->group(function (): void {
+            Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
+            Route::post('create', [BillingCompanyController::class, 'createCompany']);
+            Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
+            Route::get('/get-list', [BillingCompanyController::class, 'getList']);
+            Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
+            Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
+            Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
+        });
     });
 
     Route::prefix('clearing-house')->group(function () {
