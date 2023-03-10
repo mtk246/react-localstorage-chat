@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\BillingCompany\BillingCompanyController;
+use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,6 +102,8 @@ Route::prefix('v1')/* ->middleware('audit') */
             'auth:api',
     ])->group(function (): void {
         Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+        Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
+            ->only(['index', 'show', 'update']);
 
         Route::prefix('billing-company')->group(function (): void {
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
