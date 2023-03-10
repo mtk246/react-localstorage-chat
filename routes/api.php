@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -96,34 +98,17 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/lang', [\App\Http\Controllers\UserController::class, 'updateLang']);
     });
 
-    Route::prefix('billing-company')->group(function () {
-        Route::get('/get-all-server', [\App\Http\Controllers\BillingCompanyController::class, 'getServerAllBillingCompanies'])->middleware(['auth:api']);
-        Route::post('create',
-            [\App\Http\Controllers\BillingCompanyController::class, 'createCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::post('/upload-image', [\App\Http\Controllers\BillingCompanyController::class, 'uploadImage'])->middleware(['auth:api']);
-        Route::put('/{billing_company_id}', [\App\Http\Controllers\BillingCompanyController::class, 'update'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/get-list', [\App\Http\Controllers\BillingCompanyController::class, 'getList'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/{billing_company_id}', [\App\Http\Controllers\BillingCompanyController::class, 'getBillingCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/', [\App\Http\Controllers\BillingCompanyController::class, 'getAllBillingCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('get-by-code/{code}', [\App\Http\Controllers\BillingCompanyController::class, 'getByCode'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('get-by-name/{name}', [\App\Http\Controllers\BillingCompanyController::class, 'getByName'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/change-status/{billing_company_id}', [\App\Http\Controllers\BillingCompanyController::class, 'changeStatus'])->middleware([
-            'auth:api',
-        ]);
+    Route::prefix('billing-company')->middleware(['auth:api'])->group(function (): void {
+        Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
+        Route::post('create', [BillingCompanyController::class, 'createCompany']);
+        Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
+        Route::put('/{billing_company_id}', [BillingCompanyController::class, 'update']);
+        Route::get('/get-list', [BillingCompanyController::class, 'getList']);
+        Route::get('/{billing_company_id}', [BillingCompanyController::class, 'getBillingCompany']);
+        Route::get('/', [BillingCompanyController::class, 'getAllBillingCompany']);
+        Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
+        Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
+        Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
     });
 
     Route::prefix('clearing-house')->group(function () {
