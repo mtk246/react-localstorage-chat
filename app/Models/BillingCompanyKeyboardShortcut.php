@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\BillingCompanyKeyboardShortcut
+ * App\Models\BillingCompanyKeyboardShortcut.
  *
  * @property int $id
  * @property string $key
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $keyboard_shortcut_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut query()
@@ -22,20 +25,24 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut whereKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut whereKeyboardShortcutId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyKeyboardShortcut whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
-class BillingCompanyKeyboardShortcut extends Pivot
+final class BillingCompanyKeyboardShortcut extends Pivot
 {
     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
+     *
+     * @phpcs:disable SlevomatCodingStandard.Classes.ForbiddenPublicProperty
      */
     public $incrementing = true;
 
+    /** @var string[] */
     protected $fillable = [
-        "key",
-        "billing_company_id",
-        "keyboard_shortcut_id"
+        'key',
+        'billing_company_id',
+        'keyboard_shortcut_id',
     ];
 }
