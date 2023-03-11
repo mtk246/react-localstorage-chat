@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -45,4 +46,14 @@ final class BillingCompanyKeyboardShortcut extends Pivot
         'billing_company_id',
         'keyboard_shortcut_id',
     ];
+
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
+    }
+
+    public function keyboardShortcut(): BelongsTo
+    {
+        return $this->belongsTo(KeyboardShortcut::class);
+    }
 }
