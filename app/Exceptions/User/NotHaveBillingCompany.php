@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions\User;
 
-use Exception;
-
-class NotHaveBillingCompany extends Exception
+final class NotHaveBillingCompany extends \Exception
 {
-    //
 }

@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Requests\Company;
 
 use App\Http\Requests\Casts\ContractFeesRequestCast;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Collection;
 
 final class AddContractFeesRequest extends FormRequest
 {
+    use HasCastedClass;
+
+    protected string $castedClass = ContractFeesRequestCast::class;
+
     public function authorize(): bool
     {
         return true;
@@ -63,11 +67,5 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.patien.*.start_date' => ['nullable', 'date'],
             'contract_fees.*.patien.*.end_date' => ['nullable', 'date'],
         ];
-    }
-
-    public function castedCollect(): Collection
-    {
-        return collect($this->input('contract_fees'))
-            ->map(fn (array $item) => new ContractFeesRequestCast($item, $this->user()));
     }
 }

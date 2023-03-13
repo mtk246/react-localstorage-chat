@@ -2,134 +2,129 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Casts;
+namespace App\Http\Casts\Company;
 
+use App\http\Casts\CastsRequest;
 use App\Models\MacLocality;
-use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
-final class ContractFeesRequestCast
+final class ContractFeesRequestCast extends CastsRequest
 {
-    /** @param array<key, string|int|null> $items*/
-    public function __construct(private array $items, private User $user)
-    {
-    }
-
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->items)
-            ? (int) $this->items['billing_company_id']
+        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
+            ? (int) $this->inputs['billing_company_id']
             : $this->user->billingCompanies->first()?->id;
     }
 
     public function getInsurancePlanId(): ?int
     {
-        return array_key_exists('insurance_plan_id', $this->items)
-            ? (int) $this->items['insurance_plan_id']
+        return array_key_exists('insurance_plan_id', $this->inputs)
+            ? (int) $this->inputs['insurance_plan_id']
             : null;
     }
 
     public function getInsuranceCompanyId(): ?int
     {
-        return array_key_exists('insurance_company_id', $this->items)
-            ? (int) $this->items['insurance_company_id']
+        return array_key_exists('insurance_company_id', $this->inputs)
+            ? (int) $this->inputs['insurance_company_id']
             : null;
     }
 
     public function getTypeId(): ?int
     {
-        return array_key_exists('type_id', $this->items)
-            ? (int) $this->items['type_id']
+        return array_key_exists('type_id', $this->inputs)
+            ? (int) $this->inputs['type_id']
             : null;
     }
 
     public function getStartDate(): ?string
     {
-        return array_key_exists('start_date', $this->items)
-            ? $this->items['start_date']
+        return array_key_exists('start_date', $this->inputs)
+            ? $this->inputs['start_date']
             : null;
     }
 
     public function getEndDate(): ?string
     {
-        return array_key_exists('end_date', $this->items)
-            ? $this->items['end_date']
+        return array_key_exists('end_date', $this->inputs)
+            ? $this->inputs['end_date']
             : null;
     }
 
     public function getProceduresIds(): Collection
     {
-        return collect($this->items['procedure_id'] ?? []);
+        return collect($this->inputs['procedure_id'] ?? []);
     }
 
     public function getModifierId(): ?int
     {
-        return array_key_exists('modifier_id', $this->items)
-            ? (int) $this->items['modifier_id']
+        return array_key_exists('modifier_id', $this->inputs)
+            ? (int) $this->inputs['modifier_id']
             : null;
     }
 
     public function getPrice(): ?int
     {
-        return array_key_exists('price', $this->items)
-            ? (int) $this->items['price']
+        return array_key_exists('price', $this->inputs)
+            ? (int) $this->inputs['price']
             : null;
     }
 
     public function getMac(): ?string
     {
-        return array_key_exists('state', $this->items)
-            ? $this->items['mac']
+        return array_key_exists('state', $this->inputs)
+            ? $this->inputs['mac']
             : null;
     }
 
     public function getLocalityNumber(): ?string
     {
-        return array_key_exists('fsa', $this->items)
-            ? $this->items['locality_number']
+        return array_key_exists('fsa', $this->inputs)
+            ? $this->inputs['locality_number']
             : null;
     }
 
     public function getState(): ?string
     {
-        return array_key_exists('state', $this->items)
-            ? $this->items['state']
+        return array_key_exists('state', $this->inputs)
+            ? $this->inputs['state']
             : null;
     }
 
     public function getFsa(): ?string
     {
-        return array_key_exists('fsa', $this->items)
-            ? $this->items['fsa']
+        return array_key_exists('fsa', $this->inputs)
+            ? $this->inputs['fsa']
             : null;
     }
 
     public function getCounties(): ?string
     {
-        return array_key_exists('counties', $this->items)
-            ? $this->items['counties']
+        return array_key_exists('counties', $this->inputs)
+            ? $this->inputs['counties']
             : null;
     }
 
     public function getInsuranceLabelFeeId(): ?int
     {
-        return array_key_exists('insurance_label_fee_id', $this->items)
-            ? (int) $this->items['insurance_label_fee_id']
+        return array_key_exists('insurance_label_fee_id', $this->inputs)
+            ? (int) $this->inputs['insurance_label_fee_id']
             : null;
     }
 
     public function getPricePercentage(): ?int
     {
-        return array_key_exists('price_percentage', $this->items)
-            ? (int) $this->items['price_percentage']
+        return array_key_exists('price_percentage', $this->inputs)
+            ? (int) $this->inputs['price_percentage']
             : null;
     }
 
     public function getPrivateNote(): ?string
     {
-        return array_key_exists('private_note', $this->items)
-            ? $this->items['private_note']
+        return array_key_exists('private_note', $this->inputs)
+            ? $this->inputs['private_note']
             : null;
     }
 
@@ -168,7 +163,7 @@ final class ContractFeesRequestCast
      */
     public function getPatiens(): Collection
     {
-        return collect($this->items['patiens'] ?? [])
-            ->map(fn (array $item) => new ContractFeePatiensCast($item, $this->user));
+        return collect($this->inputs['patiens'] ?? [])
+            ->map(fn (array $inputs) => new ContractFeePatiensCast($inputs, $this->querys, $this->user));
     }
 }
