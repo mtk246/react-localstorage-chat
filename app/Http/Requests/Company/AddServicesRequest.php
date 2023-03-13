@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Http\Requests\Models\Company\Service;
+use App\Http\Casts\Company\ServiceRequestCast;
+use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Collection;
 
 final class AddServicesRequest extends FormRequest
 {
+    use HasCastedClass;
+
+    protected string $castedClass = ServiceRequestCast::class;
+
     public function authorize(): bool
     {
         return true;
@@ -47,11 +51,5 @@ final class AddServicesRequest extends FormRequest
             'services.*.medications.*.quantity' => ['required_with:services.*.medications', 'integer'],
             'services.*.medications.*.frequency' => ['required_with:services.*.medications', 'integer'],
         ];
-    }
-
-    public function getservices(): Collection
-    {
-        return collect($this->input('services'))
-            ->map(fn (array $item) => new Service($item));
     }
 }

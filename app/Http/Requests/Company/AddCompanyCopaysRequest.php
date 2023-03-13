@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Http\Requests\Casts\CopayRequestCast;
+use App\Http\Casts\Company\CopayRequestCast;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Collection;
 
 final class AddCompanyCopaysRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
+    use HasCastedClass;
+
+    protected string $castedClass = CopayRequestCast::class;
 
     /** @return array<string, mixed> */
     public function rules(): array
@@ -48,11 +47,5 @@ final class AddCompanyCopaysRequest extends FormRequest
             ],
             'copays.*.private_note' => ['nullable', 'string'],
         ];
-    }
-
-    public function getCopays(): Collection
-    {
-        return collect($this->input('copays'))
-            ->map(fn (array $item) => new CopayRequestCast($item, $this->user()));
     }
 }
