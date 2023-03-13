@@ -23,11 +23,13 @@ final class AddContractFees
                     'company_id' => $company->id,
                     'modifier_id' => $contractFee->getModifierId(),
                     'mac_locality_id' => $contractFee->getMacLocality()->id,
+                    'insurance_company_id' => $contractFee->getInsuranceCompanyId(),
                     'insurance_plan_id' => $contractFee->getInsurancePlanId(),
                     'billing_company_id' => $contractFee->getBillingCompanyId(),
                     'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
                     'contract_fee_type_id' => $contractFee->getTypeId(),
                     'start_date' => $contractFee->getStartDate(),
+                    'private_note' => $contractFee->getPrivateNote(),
                     'end_date' => $contractFee->getEndDate(),
                     'price' => $contractFee->getPrice(),
                     'price_percentage' => $contractFee->getPricePercentage(),
@@ -38,7 +40,12 @@ final class AddContractFees
                 )
             ));
 
-            return $company->contracFees()->with(['procedures', 'patiens', 'macLocality'])->get();
+            return $company->contracFees()->with([
+                'procedures',
+                'patiens',
+                'macLocality',
+                'insuranceCompany',
+            ])->get();
         });
     }
 

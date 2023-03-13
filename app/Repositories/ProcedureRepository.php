@@ -517,12 +517,12 @@ class ProcedureRepository
         return getList(Discriminatory::class, 'description');
     }
 
-    public function getListDiagnoses($code = '') {
+    public function getListDiagnoses($code = '', $except_ids = null) {
         try {
             if ($code == '') {
                 return getList(Diagnosis::class, 'code', [], null, ['description']);
             } else {
-                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]], null, ['description']);
+                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]], $except_ids, ['description']);
             }
         } catch (\Exception $e) {
             return [];
@@ -574,7 +574,7 @@ class ProcedureRepository
                     return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
-                if ($code == '') {
+                if ($search == '') {
                     return getList(
                         Procedure::class,
                         'code',

@@ -1462,7 +1462,7 @@ class PatientRepository
 
         $data->getCollection()->transform(fn ($policy) => [
             'billing_company_id' => $policy->pivot->billing_company_id,
-            'billing_company' => $policy->billingCompany->name ?? '',
+            'billing_company' => BillingCompany::find($policy->pivot->billing_company_id)->name ?? '',
             "id"                       => $policy->id,
             "policy_number"            => $policy->policy_number,
             "group_number"             => $policy->group_number,
