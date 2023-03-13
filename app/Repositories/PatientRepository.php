@@ -1441,7 +1441,76 @@ class PatientRepository
     {
         $patient = Patient::find($patient_id);
         $insurancePolicy = $patient->insurancePolicies()->find($insurance_policy_id);
-        return $insurancePolicy;
+        $subscriber = $insurancePolicy->subscribers->first();
+        if (isset($subscriber)) {
+            $address = Address::where([
+                "addressable_id"     => $subscriber->id,
+                "addressable_type"   => Subscriber::class,
+                "billing_company_id" => $insurancePolicy->pivot->billing_company_id
+            ])->first();
+            $contact = Contact::where([
+                "contactable_id"     => $subscriber->id,
+                "contactable_type"   => Subscriber::class,
+                "billing_company_id" => $insurancePolicy->pivot->billing_company_id
+            ])->first();
+            if (isset($address)) {
+                $subscriber_address = [
+                    "zip"                      => $address->zip,
+                    "city"                     => $address->city,
+                    "state"                    => $address->state,
+                    "address"                  => $address->address,
+                    "country"                  => $address->country,
+                    "address_type_id"          => $address->address_type_id,
+                    "address_type"             => $address->addressType->name ?? '',
+                    "country_subdivision_code" => $address->country_subdivision_code
+                ];
+            };
+
+            if (isset($contact)) {
+                $subscriber_contact = [
+                    "fax"          => $contact->fax,
+                    "email"        => $contact->email,
+                    "phone"        => $contact->phone,
+                    "mobile"       => $contact->mobile,
+                    "contact_name" => $contact->contact_name,
+                ];
+            };
+        }
+        $record = [
+            'billing_company_id' => $insurancePolicy->pivot->billing_company_id,
+            'billing_company' => BillingCompany::find($insurancePolicy->pivot->billing_company_id)->name ?? '',
+            "id"                       => $insurancePolicy->id,
+            "policy_number"            => $insurancePolicy->policy_number,
+            "group_number"             => $insurancePolicy->group_number,
+            "insurance_company_id"     => $insurancePolicy->insurancePlan->insurance_company_id ?? '',
+            "insurance_company"        => ($insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? '') . ' - ' . $insurancePolicy->insurancePlan->insuranceCompany->name ?? '',
+            "insurance_plan_id"        => $insurancePolicy->insurance_plan_id ?? '',
+            "insurance_plan"           => $insurancePolicy->insurancePlan->name ?? '',
+            "type_responsibility_id"   => $insurancePolicy->type_responsibility_id ?? '',
+            "type_responsibility"      => $insurancePolicy->typeResponsibility->code ?? '',
+            "insurance_policy_type_id" => $insurancePolicy->insurance_policy_type_id ?? '',
+            "insurance_policy_type"    => $insurancePolicy->insurancePolicyType->description ?? '',
+            "claim_last_eligibility"   => $insurancePolicy->claimLastEligibility->claimEligibilityStatus ?? null,
+            "status"                   => $insurancePolicy->pivot->status ?? false,
+            "eff_date"                 => $insurancePolicy->eff_date,
+            "end_date"                 => $insurancePolicy->end_date,
+            "assign_benefits"          => $insurancePolicy->assign_benefits ?? false,
+            "release_info"             => $insurancePolicy->release_info ?? false,
+            "own_insurance"            => $insurancePolicy->pivot->own_insurance ?? false,
+            "subscriber"               => isset($subscriber) ? [
+                "ssn" => $subscriber->ssn,
+                "first_name" => $subscriber->first_name,
+                "last_name"  => $subscriber->last_name,
+                "date_of_birth" => $subscriber->date_of_birth,
+                "relationship_id" => $subscriber->relationship_id,
+                "relationship" => $subscriber->relationship->description ?? '',
+                "address"         => isset($subscriber_address) ? $subscriber_address : null,
+                "contact"           => isset($subscriber_contact) ? $subscriber_contact : null,
+            ] : null,
+        ];
+        return !is_null($record)
+                ? $record
+                : null;
     }
 
     public function getPolicies(Request $request, int $patient_id)

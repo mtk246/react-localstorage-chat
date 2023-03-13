@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Actions\Company;
 
 use App\Exceptions\User\NotHaveBillingCompany;
-use App\Http\Requests\Models\Company\Medication;
-use App\Http\Requests\Models\Company\Service;
+use App\Http\Casts\Company\MedicationRequestCast;
+use App\Http\Casts\Company\ServiceRequestCast;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\CompanyProcedure;
@@ -24,7 +24,7 @@ final class AddServices
 
             $this->detachProcedures($company, $billingCompany?->id);
 
-            $services->each(fn (Service $service) => tap(
+            $services->each(fn (ServiceRequestCast $service) => tap(
                 CompanyProcedure::create([
                     'company_id' => $company->id,
                     'procedure_id' => $service->getProcedureId(),
@@ -80,7 +80,7 @@ final class AddServices
     private function setMedications(CompanyProcedure $cProcedure, Collection $medications): void
     {
         $medications->each(
-            fn (Medication $medication) => $cProcedure->medications()->updateOrCreate(
+            fn (MedicationRequestCast $medication) => $cProcedure->medications()->updateOrCreate(
                 [
                     'date' => $medication->getDate(),
                     'drug_code' => $medication->getDrugCode(),

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Company;
 
-use App\Http\Requests\Casts\CopayRequestCast;
+use App\Http\Casts\Company\CopayRequestCast;
 use App\Models\Company;
 use App\Models\Copay;
 use Illuminate\Support\Collection;

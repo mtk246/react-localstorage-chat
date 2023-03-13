@@ -14,7 +14,9 @@ use App\Models\EntityNickname;
 use App\Models\MacLocality;
 use App\Models\PrivateNote;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 /** @todo finish the refactoring, only a partial refactoring was done */
 final class GetCompany
@@ -24,53 +26,7 @@ final class GetCompany
         return DB::transaction(function () use ($id, $user) {
             $bC = $user->billing_company_id ?? null;
 
-            if (!$bC) {
-                $company = Company::whereId($id)->with([
-                    'taxonomies',
-                    'nameSuffix',
-                    'addresses',
-                    'contacts',
-                    'nicknames',
-                    'abbreviations',
-                    'facilities',
-                    'companyStatements',
-                    'exceptionInsuranceCompanies',
-                    'billingCompanies',
-                    'publicNote',
-                    'privateNotes',
-                ])->first();
-            } else {
-                $company = Company::whereId($id)->with([
-                    'addresses' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'contacts' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'nicknames' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'abbreviations' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'billingCompanies' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'exceptionInsuranceCompanies' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'companyStatements' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'privateNotes' => function ($query) use ($bC): void {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'taxonomies',
-                    'nameSuffix',
-                    'facilities',
-                    'publicNote',
-                ])->first();
-            }
+            $company = $this->getCompanyInstance($id, $user);
 
             if ($user->hasRole('superuser')) {
                 $facilities = $company->facilities()
@@ -302,5 +258,59 @@ final class GetCompany
                 ? $record
                 : null;
         });
+    }
+
+    public function getCompanyInstance(int $id, User $user): Company
+    {
+        return Company::whereId($id)
+            ->when(Gate::allows('is-admin'), function (Builder $query): void {
+                $query->with([
+                    'taxonomies',
+                    'nameSuffix',
+                    'addresses',
+                    'contacts',
+                    'nicknames',
+                    'abbreviations',
+                    'facilities',
+                    'companyStatements',
+                    'exceptionInsuranceCompanies',
+                    'billingCompanies',
+                    'publicNote',
+                    'privateNotes',
+                ]);
+            }, function (Builder $query) use ($user): void {
+                $bC = $user->billing_company_id;
+
+                $query->with([
+                    'addresses' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'contacts' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'nicknames' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'abbreviations' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'billingCompanies' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'exceptionInsuranceCompanies' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'companyStatements' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'privateNotes' => function ($query) use ($bC): void {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'taxonomies',
+                    'nameSuffix',
+                    'facilities',
+                    'publicNote',
+                ]);
+            })->first();
     }
 }
