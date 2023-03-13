@@ -61,7 +61,7 @@ class CreateRequest extends FormRequest
             'addresses.*.zip'                     => ['required', 'string'],
 
             'insurance_policies'                       => ['required', 'array'],
-            'insurance_policies.*.policy_number'       => ['required', 'numeric'],
+            'insurance_policies.*.policy_number'       => ['required', 'string'],
             'insurance_policies.*.group_number'        => ['nullable', 'numeric'],
             'insurance_policies.*.insurance_company'   => ['required', 'integer'],
             'insurance_policies.*.insurance_plan'      => ['required', 'integer'],
