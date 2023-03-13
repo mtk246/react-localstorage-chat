@@ -16,6 +16,8 @@ final class IntegerOrArrayKeyExists implements Rule
     /**
      * Determine if the validation rule passes.
      *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     *
      * @param string $attribute
      * @param mixed $value
      */
