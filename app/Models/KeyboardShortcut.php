@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\KeyboardShortcut
+ * App\Models\KeyboardShortcut.
  *
  * @property int $id
  * @property string $description
@@ -18,9 +20,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string|null $module
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read mixed $key
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property mixed $key
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut query()
@@ -30,64 +33,51 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereModule($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereShortcutType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property-read int|null $billing_companies_count
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
+ *
  * @mixin \Eloquent
  */
-class KeyboardShortcut extends Model implements Auditable
+final class KeyboardShortcut extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
+    /** @var string[] */
     protected $fillable = [
-        "description",
-        "shortcut_type",
-        "module"
+        'description',
+        'shortcut_type',
+        'module',
+        'default_key',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['key'];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
+    /** @var array<key, string> */
     protected $casts = [
         'module' => 'array',
     ];
 
-    /**
-     * The billingCompanies that belong to the insurancePlan.
-     *
-     * @return BelongsToMany
-     */
-    public function billingCompanies(): BelongsToMany
+    public function keys(): HasMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('key')->withTimestamps();
+        return $this->hasMany(BillingCompanyKeyboardShortcut::class);
     }
 
-    /**
-     * Interact with the keyboardShortcut's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
+    public function billingCompanyKey(?int $billingCompanyId): string
+    {
+        return $billingCompanyId
+            ? $this->keys()
+                ->where('billing_company_id', $billingCompanyId)
+                ->first()?->key ?? $this->default_key
+            : $this->default_key;
+    }
+
     protected function description(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => ucfirst(strtolower($value)),
             set: fn ($value) => ucfirst(strtolower($value)),
         );
-    }
-
-    public function getKeyAttribute()
-    {
-        $billingCompany = $this->billingCompanies->first();
-        return $billingCompany->pivot->key ?? null;
     }
 }

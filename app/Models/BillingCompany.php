@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\BillingCompany
+ * App\Models\BillingCompany.
  *
  * @property int $id
  * @property string $name
@@ -20,18 +21,19 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
  * @property bool $status
- * @property-read \App\Models\Address|null $address
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ClearingHouse[] $clearingHouses
- * @property-read int|null $clearing_houses_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
- * @property-read int|null $companies_count
- * @property-read \App\Models\Contact|null $contact
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
- * @property-read int|null $facilities_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\InsuranceCompany[] $insuranceCompany
- * @property-read int|null $insurance_company_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property-read int|null $users_count
+ * @property \App\Models\Address|null $address
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\ClearingHouse[] $clearingHouses
+ * @property int|null $clearing_houses_count
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
+ * @property int|null $companies_count
+ * @property \App\Models\Contact|null $contact
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
+ * @property int|null $facilities_count
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsuranceCompany[] $insuranceCompany
+ * @property int|null $insurance_company_count
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany query()
@@ -41,69 +43,74 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereUpdatedAt($value)
+ *
  * @property string|null $logo
  * @property string|null $abbreviation
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read int|null $addresses_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read int|null $contacts_count
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read int|null $health_professionals_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read int|null $insurance_companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read int|null $insurance_plans_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read int|null $ip_restrictions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property-read int|null $keyboard_shortcuts_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property-read int|null $patients_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property int|null $addresses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property int|null $contacts_count
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property int|null $health_professionals_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property int|null $insurance_companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property int|null $ip_restrictions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
+ * @property int|null $keyboard_shortcuts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property int|null $patients_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereAbbreviation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereLogo($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ *
  * @mixin \Eloquent
  */
 class BillingCompany extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "name",
-        "code",
-        "status",
-        "logo",
-        "abbreviation"
+        'name',
+        'code',
+        'status',
+        'logo',
+        'abbreviation',
     ];
 
     /**
@@ -145,8 +152,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The users that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users(): BelongsToMany
     {
@@ -155,8 +160,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The companies that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function companies(): BelongsToMany
     {
@@ -165,8 +168,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The facilities that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilities(): BelongsToMany
     {
@@ -175,8 +176,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The clearingHouses that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function clearingHouses(): BelongsToMany
     {
@@ -185,8 +184,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The healthProfessionals that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function healthProfessionals(): BelongsToMany
     {
@@ -195,8 +192,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The patients that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function patients(): BelongsToMany
     {
@@ -205,8 +200,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The insuranceCompany that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function insuranceCompanies(): BelongsToMany
     {
@@ -215,8 +208,6 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The insurancePlan that belong to the BillingCompany.
-     *
-     * @return BelongsToMany
      */
     public function insurancePlans(): BelongsToMany
     {
@@ -225,18 +216,14 @@ class BillingCompany extends Model implements Auditable
 
     /**
      * The keyboard shortcuts that belong to the BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function keyboardShortcuts(): BelongsToMany
+    public function customKeyboardShortcuts(): HasMany
     {
-        return $this->belongsToMany(KeyboardShortcut::class)->withPivot('key')->withTimestamps();
+        return $this->hasMany(BillingCompanyKeyboardShortcut::class);
     }
 
     /**
      * Interact with the user's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {
@@ -248,10 +235,10 @@ class BillingCompany extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereHas('contact', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
                           ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 
@@ -261,20 +248,21 @@ class BillingCompany extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
-            'roles' => []
+            'user' => '',
+            'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'       => 'Console',
-                'roles'      => []
+                'user' => 'Console',
+                'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'       => $user->profile->first_name . ' ' . $user->profile->last_name,
-                'roles'      => $user->roles
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'roles' => $user->roles,
             ];
         }
     }
