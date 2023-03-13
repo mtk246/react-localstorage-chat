@@ -23,6 +23,8 @@ final class ActionsServiceProvider extends ServiceProvider
         $this->app->singleton(AddContractFees::class, fn () => new AddContractFees());
         $this->app->singleton(GetCompany::class, fn () => new GetCompany());
         $this->app->singleton(GetKeyboardShortcut::class, fn () => new GetKeyboardShortcut());
-        $this->app->singleton(StoreKeyboardShortcut::class, fn () => new StoreKeyboardShortcut());
+        $this->app->singleton(StoreKeyboardShortcut::class, fn () => new StoreKeyboardShortcut(
+            $this->app->get(GetKeyboardShortcut::class),
+        ));
     }
 }
