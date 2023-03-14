@@ -27,7 +27,7 @@ class PolicyRequest extends FormRequest
         return [
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
             'insurance_company'    => ['required', 'numeric'],
-            'policy_number'        => ['required', 'numeric'],
+            'policy_number'        => ['required', 'string'],
             'insurance_plan'       => ['required', 'numeric'],
             'group_number'         => ['nullable', 'numeric'],
             'eff_date'             => ['required', 'date'],
