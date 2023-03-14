@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e98c7d2bbbbe961766f471be94b099e7",
+    "content-hash": "df32e2e991a82cb75e6253749edaa3fb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3485,10 +3485,7 @@
             "autoload": {
                 "psr-4": {
                     "Masterminds\\": "src"
-                },
-                "classmap": [
-                    "src/MobileDetect.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
