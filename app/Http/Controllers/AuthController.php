@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 /**
+ * @todo change to protective programing pattern
+ *
  * @OA\Info(title="Api Medical billing",version="1.0")
  *
  *  * @OA\Server(
