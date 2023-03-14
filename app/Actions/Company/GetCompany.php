@@ -116,7 +116,6 @@ final class GetCompany
                 'upin' => $company->upin,
                 'clia' => $company->clia,
                 'name_suffix_id' => $company->name_suffix_id,
-                'name_suffix' => $company->nameSuffix->description ?? null,
                 'created_at' => $company->created_at,
                 'updated_at' => $company->updated_at,
                 'last_modified' => $company->last_modified,
@@ -266,7 +265,6 @@ final class GetCompany
             ->when(Gate::allows('is-admin'), function (Builder $query): void {
                 $query->with([
                     'taxonomies',
-                    'nameSuffix',
                     'addresses',
                     'contacts',
                     'nicknames',
@@ -307,7 +305,6 @@ final class GetCompany
                         $query->where('billing_company_id', $bC);
                     },
                     'taxonomies',
-                    'nameSuffix',
                     'facilities',
                     'publicNote',
                 ]);
