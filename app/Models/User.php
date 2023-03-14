@@ -55,6 +55,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property int|null $tokens_count
+ *
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -80,6 +81,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ *
  * @property string|null $usercode
  * @property string|null $userkey
  * @property bool $status
@@ -106,6 +108,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Profile|null $profile
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  * @property int|null $user_permissions_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastActivity($value)
@@ -114,6 +117,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
+ *
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property \Illuminate\Database\Eloquent\Collection<int, Audit> $audits
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -121,13 +125,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
+ *
  * @mixin \Eloquent
  */
 final class User extends Authenticatable implements JWTSubject, Auditable
@@ -175,6 +180,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'isLogged' => 'boolean',
     ];
 
     /**
