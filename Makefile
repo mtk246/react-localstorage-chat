@@ -44,5 +44,13 @@ migrate: ## Run migrations
 	./vendor/bin/sail artisan migrate:fresh
 seed: ## Build client containers and enviroment with seeders
 	./vendor/bin/sail artisan db:seed
+upgrade: ## Upgrade client containers and enviroment
+	./vendor/bin/sail down
+	./vendor/bin/sail build --no-cache
+	./vendor/bin/sail up -d
+	./vendor/bin/sail composer update
+	./vendor/bin/sail composer upgrade
+	./vendor/bin/sail artisan migrate
+	./vendor/bin/sail artisan db:seed
 
 aio: prepare build up install migrate seed ## Build, install and migrate client containers and enviroment
