@@ -7,7 +7,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -139,7 +138,6 @@ final class Company extends Model implements Auditable
         'ein',
         'upin',
         'clia',
-        'name_suffix_id',
     ];
 
     /**
@@ -148,14 +146,6 @@ final class Company extends Model implements Auditable
      * @var string[]
      */
     protected $appends = ['status', 'edit_name', 'last_modified'];
-
-    /**
-     * Company belongs to NameSuffix.
-     */
-    public function nameSuffix(): BelongsTo
-    {
-        return $this->belongsTo(TypeCatalog::class, 'name_suffix_id');
-    }
 
     /**
      * The billingCompanies that belong to the company.
