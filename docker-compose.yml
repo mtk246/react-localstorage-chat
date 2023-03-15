@@ -2,11 +2,11 @@ version: '3.8'
 services:
     app:
         build:
-            context: ./.docker/8.0
+            context: ./.docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
+        image: sail-8.2/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -14,8 +14,8 @@ services:
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
-            ASUSER: "${KOOL_ASUSER:-0}"
-            UID: "${UID:-0}"
+            ASUSER: '${KOOL_ASUSER:-0}'
+            UID: '${UID:-0}'
         volumes:
             - '.:/var/www/html'
         networks:
@@ -66,7 +66,7 @@ services:
     mailhog:
         image: 'mailhog/mailhog:latest'
         logging:
-            driver: 'none' # disable saving logs
+            driver: none
         ports:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
