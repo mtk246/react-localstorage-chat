@@ -1,31 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Actions\User\Recovery;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\RecoveryUserRequest;
-use App\Http\Requests\UnlockUserRequest;
-use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Requests\SendRescuePassRequest;
-use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\SocialMediaProfileRequest;
-use App\Mail\RecoveryUserMail;
+use App\Http\Requests\UnlockUserRequest;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\ValidateSearchRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- *
  * @OA\Tag(
  *     name="Users",
  *     description="API Endpoints of Users",
  * )
  */
-
 class UserController extends Controller
 {
     private $userRepository;
@@ -36,21 +36,20 @@ class UserController extends Controller
     }
 
     /**
-     * @param UserCreateRequest $request
-     * @return JsonResponse
-     */
-
-    /**
      * @OA\Post(
      *     path="/api/v1/user",
      *     summary="Create Users, endpoint to create users",
      *     description="Create User",
      *     tags={"Users"},
      *     security={{"bearer_token":{}}},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="name",
      *                     type="string"
@@ -92,6 +91,7 @@ class UserController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *        response="201",
      *        description="Model User with roles and permission",
@@ -105,13 +105,9 @@ class UserController extends Controller
     public function createUser(UserCreateRequest $request): JsonResponse
     {
         $rs = $this->userRepository->create($request->validated());
-        return $rs ? response()->json($rs, 201) : response()->json(__("Error creating user"), 400);
-    }
 
-    /**
-     * @param SendRescuePassRequest $request
-     * @return JsonResponse
-     */
+        return $rs ? response()->json($rs, 201) : response()->json(__('Error creating user'), 400);
+    }
 
     /**
      * @OA\Post(
@@ -119,10 +115,14 @@ class UserController extends Controller
      *     summary="Rescue password,Solicitude email to rescue password",
      *     description="Solicitude email to rescue password",
      *     tags={"Users"},
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="string"
@@ -131,6 +131,7 @@ class UserController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *        response="201",
      *        description="Rescue Email was sent",
@@ -147,22 +148,17 @@ class UserController extends Controller
     public function sendEmailRescuePass(SendRescuePassRequest $request): JsonResponse
     {
         try {
+            $rs = $this->userRepository->sendEmailToRescuePassword($request->input('email'));
 
-            $rs = $this->userRepository->sendEmailToRescuePassword($request->input("email"));
+            if (is_null($rs)) {
+                return response()->json(__('Error, user not found'), 403);
+            }
 
-            if(is_null($rs)) return response()->json(__("Error, user not found"), 403);
-
-            return ($rs) ? response()->json([],204) : response()->json(__("Error, a error have occurred"), 404);
-        }catch (\Exception $exception){
-            return response()->json($exception->getMessage(),500);
+            return ($rs) ? response()->json([], 204) : response()->json(__('Error, a error have occurred'), 404);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 500);
         }
     }
-
-    /**
-     * @param ChangePasswordRequest $request
-     * @param $token
-     * @return JsonResponse
-     */
 
     /**
      * @OA\Post(
@@ -170,18 +166,24 @@ class UserController extends Controller
      *     summary="Change Password, endpoint to change password to users",
      *     description="Change password users",
      *     tags={"Users"},
+     *
      *     @OA\Parameter(
      *          name="token",
      *          required=true,
      *          in="path",
+     *
      *          @OA\Schema(
      *              type="string"
      *          )
      *      ),
+     *
      *     @OA\RequestBody(
+     *
      *         @OA\MediaType(
      *             mediaType="application/json",
+     *
      *             @OA\Schema(
+     *
      *                 @OA\Property(
      *                     property="password",
      *                     type="string"
@@ -190,6 +192,7 @@ class UserController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *        response="200",
      *        description="password changed",
@@ -200,22 +203,24 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function changePassword(ChangePasswordRequest $request,$token): JsonResponse
+    public function changePassword(ChangePasswordRequest $request, $token): JsonResponse
     {
         try {
             $user = $this->getInfoToken($token);
 
-            if(!$user) {
-                return response()->json(__("Token is Expired"), 403);
+            if (!$user) {
+                return response()->json(__('Token is Expired'), 403);
             }
 
-            $rs = $this->userRepository->changePassword($request,$token);
+            $rs = $this->userRepository->changePassword($request, $token);
 
-            if(is_null($rs)) return response()->json(__("Token is Invalid"), 403);
+            if (is_null($rs)) {
+                return response()->json(__('Token is Invalid'), 403);
+            }
 
-            return ($rs) ? response()->json([],204) : response()->json(__("Error, a error have occurred"), 403);
-        }catch (\Exception $exception){
-            return response()->json($exception->getMessage(),500);
+            return ($rs) ? response()->json([], 204) : response()->json(__('Error, a error have occurred'), 403);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 500);
         }
     }
 
@@ -223,186 +228,157 @@ class UserController extends Controller
     {
         try {
             $rs = $this->userRepository->newToken($request->token_old);
-            return ($rs) ? response()->json([], 204) : response()->json(__("Error, a error have occurred"), 403);
-        }catch (\Exception $exception){
-            return response()->json($exception->getMessage(),500);
+
+            return ($rs) ? response()->json([], 204) : response()->json(__('Error, a error have occurred'), 403);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 500);
         }
     }
 
-    public function getInfoToken(string $token){
-        try{
+    public function getInfoToken(string $token)
+    {
+        try {
             $strData = \Crypt::decrypt($token);
-            $dataSplit = explode("@#@#$",$strData);
-            return User::where("token",$token)->where("email",$dataSplit[1])->first();
-        }catch(\Exception $exception){
+            $dataSplit = explode('@#@#$', $strData);
+
+            return User::where('token', $token)->where('email', $dataSplit[1])->first();
+        } catch (\Exception $exception) {
             return false;
         }
     }
 
     /**
-     * @param EditUserRequest $request
      * @param null $id
-     * @return JsonResponse
      */
     public function editUser(EditUserRequest $request, $id): JsonResponse
     {
         $rs = $this->userRepository->editUser($request->validated(), $id);
-        return $rs ? response()->json($rs) : response()->json(__("Error updating user"), 400);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error updating user'), 400);
     }
 
     /**
-     * @param ChangeStatusRequest $request
      * @param null $id
-     * @return JsonResponse
      */
-    public function changeStatus(ChangeStatusRequest $request,$id=null): JsonResponse
+    public function changeStatus(ChangeStatusRequest $request, $id = null): JsonResponse
     {
         try {
-            if(is_null($id)) $id = auth()->id();
+            if (is_null($id)) {
+                $id = auth()->id();
+            }
 
-            $rs = $this->userRepository->changeStatus($request->input("status"),$id);
+            $rs = $this->userRepository->changeStatus($request->input('status'), $id);
 
-            return $rs ? response()->json([],204) : response()->json(__("Error changing status"), 400);
-        }catch (\Exception $exception){
-            return response()->json($exception->getMessage(),500);
+            return $rs ? response()->json([], 204) : response()->json(__('Error changing status'), 400);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 500);
         }
     }
 
     /**
-     *
      * @param Illuminate\Http\Request $request
-     * @return JsonResponse
      */
     public function getAllUsers(Request $request): JsonResponse
     {
         $rs = $this->userRepository->getAllUsers();
+
         return response()->json($rs);
     }
 
     /**
-     *
      * @param Illuminate\Http\Request $request
-     * @return JsonResponse
      */
     public function getServerAllUsers(Request $request): JsonResponse
     {
         return $this->userRepository->getServerAllUsers($request);
     }
 
-    /**
-     * @param int $id
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getOneUser(Request $request,int $id): JsonResponse
+    public function getOneUser(Request $request, int $id): JsonResponse
     {
         $rs = $this->userRepository->getOneUser($id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }
 
-    /**
-     * @param ImgProfileRequest $request
-     * @return JsonResponse
-     */
     public function updateImgProfile(ImgProfileRequest $request): JsonResponse
     {
         $rs = $this->userRepository->updateImgProfile($request);
 
-        return ($rs) ? response()->json($rs) : response()->json(__("Error updating image profile"), 400);
+        return ($rs) ? response()->json($rs) : response()->json(__('Error updating image profile'), 400);
     }
 
     /**
-     *
      * @param Illuminate\Http\Request $request
-     * @return JsonResponse
      */
     public function getListSocialNetworks(): JsonResponse
     {
         $rs = $this->userRepository->getListSocialNetworks();
+
         return response()->json($rs);
     }
 
     /**
-     *
      * @param Illuminate\Http\Request $request
-     * @return JsonResponse
      */
     public function getList(Request $request): JsonResponse
     {
         $rs = $this->userRepository->getList($request);
+
         return response()->json($rs);
     }
 
-    /**
-     * @param SocialMediaProfileRequest $request
-     * @return JsonResponse
-     */
     public function updateSocialMediaProfile(SocialMediaProfileRequest $request, int $id): JsonResponse
     {
         $rs = $this->userRepository->updateSocialMediaProfile($request->validated(), $id);
 
-        return ($rs) ? response()->json($rs) : response()->json(__("Error updating social media profile"), 400);
+        return ($rs) ? response()->json($rs) : response()->json(__('Error updating social media profile'), 400);
     }
 
-    /**
-     * @param RecoveryUserRequest $request
-     * @return JsonResponse
-     */
-    public function recoveryUser(RecoveryUserRequest $request): JsonResponse
+    public function recoveryUser(RecoveryUserRequest $request, Recovery $recovery): JsonResponse
     {
-        $rs = $this->userRepository->recoveryUser($request);
+        $rs = $recovery->user($request->casted());
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }
 
-    /**
-     * @param ChangePasswordRequest $request
-     * @return JsonResponse
-     */
     public function changePasswordForm(ChangePasswordRequest $request): JsonResponse
     {
-        $rs = $this->userRepository->changePasswordForm($request->input("password"));
+        $rs = $this->userRepository->changePasswordForm($request->input('password'));
 
-        return $rs ? response()->json([],204) : response()->json(__("Error updating password"), 400);
+        return $rs ? response()->json([], 204) : response()->json(__('Error updating password'), 400);
     }
 
     /**
      * @param string $usercode
-     * @return JsonResponse
      */
     public function unlockUser(UnlockUserRequest $request): JsonResponse
     {
         $rs = $this->userRepository->unlockUser($request);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, wrong otp code"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, wrong otp code'), 404);
     }
 
-    /**
-     * @param string $ssn
-     * @return JsonResponse
-     */
     public function searchBySsn(string $ssn): JsonResponse
     {
         $rs = $this->userRepository->searchBySsn($ssn);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }
 
     /**
      * @param string $ssn
-     * @return JsonResponse
      */
     public function search(ValidateSearchRequest $request): JsonResponse
     {
         $rs = $this->userRepository->search($request);
-        return ($rs) ? response()->json($rs) : response()->json(__("Error, user not found"), 404);
+
+        return ($rs) ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }
 
     public function updateLang(Request $request)
     {
-        $rs = $this->userRepository->updateLang($request->input("language"));
+        $rs = $this->userRepository->updateLang($request->input('language'));
 
-        return $rs ? response()->json($rs) : response()->json(__("Error updating language"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error updating language'), 400);
     }
 }
