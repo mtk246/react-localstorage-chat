@@ -50,7 +50,9 @@ class PatientRepository
             DB::beginTransaction();
 
             /** Create Profile */
-            $profile = Profile::create([
+            $profile = Profile::firstOrCreate([
+                "ssn"           => $data["profile"]["ssn"] ?? '',
+            ], [
                 "ssn"           => $data["profile"]["ssn"] ?? '',
                 "first_name"    => $data["profile"]["first_name"],
                 "middle_name"   => $data["profile"]["middle_name"] ?? '',
@@ -91,7 +93,9 @@ class PatientRepository
             }
 
             /** Create User */
-            $user = User::create([
+            $user = User::firstOrCreate([
+                "email"      => $data['contact']['email'],
+            ], [
                 "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
                 "email"      => $data['contact']['email'],
                 "language"   => $data['language'] ?? 'en',
@@ -113,7 +117,11 @@ class PatientRepository
                 $data["contact"]["contactable_id"]     = $user->id;
                 $data["contact"]["contactable_type"]   = User::class;
                 $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                Contact::create($data["contact"]);
+                Contact::firstOrCreate([
+                    "contactable_id"     => $user->id,
+                    "contactable_type"   => User::class,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                ], $data["contact"]);
             }
 
             /** Create Address */
@@ -122,12 +130,18 @@ class PatientRepository
                     $address["addressable_id"]     = $user->id;
                     $address["addressable_type"]   = User::class;
                     $address["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                    Address::create($address);
+                    Address::firstOrCreate([
+                        "addressable_id"     => $user->id,
+                        "addressable_type"  => User::class,
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                    ], $address);
                 }
             }
 
             /** Create Patient */
-            $patient = Patient::create([
+            $patient = Patient::firstOrCreate([
+                "user_id"           => $user->id
+            ], [
                 "code"              => generateNewCode("PA", 5, date("y"), Patient::class, "code"),
                 "driver_license"    => $data["driver_license"] ?? '',
                 "marital_status_id" => $data["marital_status_id"] ?? null,
@@ -150,16 +164,21 @@ class PatientRepository
 
             if (isset($data['public_note'])) {
                 /** PublicNote */
-                PublicNote::create([
+                PublicNote::updateOrCreate([
                     'publishable_type' => Patient::class,
                     'publishable_id'   => $patient->id,
+                ], [
                     'note'             => $data['public_note'],
                 ]);
             }
 
             if (isset($data['private_note'])) {
                 /** PrivateNote */
-                PrivateNote::create([
+                PrivateNote::firstOrCreate([
+                    'publishable_type'   => Patient::class,
+                    'publishable_id'     => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
                     'publishable_type'   => Patient::class,
                     'publishable_id'     => $patient->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -170,20 +189,26 @@ class PatientRepository
             /** Create Marital */
             if (isset($data['marital']['spuse_name'])) {
                 $data["marital"]["patient_id"] = $patient->id;
-                $marital = Marital::create($data["marital"]);
+                $marital = Marital::firstOrCreate([
+                    "patient_id" => $patient->id,
+                ], $data["marital"]);
             }
 
             /** Create Guarantor */
             if (isset($data['guarantor']['name'])) {
                 $data["guarantor"]["patient_id"] = $patient->id;
-                $guarantor = Guarantor::create($data["guarantor"]);
+                $guarantor = Guarantor::firstOrCreate([
+                    "patient_id" => $patient->id,
+                ], $data["guarantor"]);
             }
 
             /** Create Employment */
             if (isset($data["employments"])) {
                 foreach ($data["employments"] as $employment) {
                     $employment["patient_id"] = $patient->id;
-                    Employment::create($employment);
+                    Employment::firstOrCreate([
+                        "patient_id" => $patient->id,
+                    ], $employment);
                 }
             }
 
@@ -364,9 +389,13 @@ class PatientRepository
                 $rolePatient = Role::where('slug', 'patient')->first();
                 $user->attachRole($rolePatient);
                 
-                $token = encrypt($user->id . "@#@#$" . $user->email);
-                $user->token = $token;
-                $user->save();
+                if ($user->token == '') {
+                    $token = encrypt($user->id . "@#@#$" . $user->email);
+                    $user->token = $token;
+                    $user->save();
+                } else {
+                    $token = $user->token;
+                }
 
                 \Mail::to($user->email)->send(
                     new GenerateNewPassword(
