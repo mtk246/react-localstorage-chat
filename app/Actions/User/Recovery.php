@@ -29,7 +29,7 @@ final class Recovery
 
             $profile = $query->with('user')->first(['id']);
 
-            if (is_null($profile->user)) {
+            if (is_null($profile?->user)) {
                 return null;
             }
 
