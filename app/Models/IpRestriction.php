@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Roles\Models\Role;
-
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\IpRestriction
+ * App\Models\IpRestriction.
  *
  * @property int $id
  * @property int|null $billing_company_id
@@ -18,16 +19,17 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property string|null $entity
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property-read int|null $ip_restriction_mults_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\BillingCompany|null $billingCompany
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property-read int|null $roles_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property-read int|null $users_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
+ * @property int|null $ip_restriction_mults_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property int|null $roles_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction query()
@@ -38,19 +40,26 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereEntity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $ipRestrictionMults
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ *
  * @mixin \Eloquent
  */
-class IpRestriction extends Model implements Auditable
+final class IpRestriction extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = ['entity', 'billing_company_id'];
 
@@ -76,7 +85,7 @@ class IpRestriction extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function IpRestrictionMults()
+    public function ipRestrictionMults()
     {
         return $this->hasMany(IpRestrictionMult::class);
     }
@@ -104,19 +113,20 @@ class IpRestriction extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -124,14 +134,14 @@ class IpRestriction extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereHas('billingCompany', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereHas('IpRestrictionMults', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(ip_beginning) LIKE (?)', [strtolower("%$search%")])
-                            ->orWhereRaw('LOWER(ip_finish) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereRaw('LOWER(entity) LIKE (?)', [strtolower("%$search%")]);
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('IpRestrictionMults', function ($q) use ($search) {
+                $q->whereRaw('LOWER(ip_beginning) LIKE (?)', [strtolower("%$search%")])
+                ->orWhereRaw('LOWER(ip_finish) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereRaw('LOWER(entity) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;

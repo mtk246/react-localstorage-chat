@@ -50,7 +50,9 @@ class PatientRepository
             DB::beginTransaction();
 
             /** Create Profile */
-            $profile = Profile::create([
+            $profile = Profile::firstOrCreate([
+                "ssn"           => $data["profile"]["ssn"] ?? '',
+            ], [
                 "ssn"           => $data["profile"]["ssn"] ?? '',
                 "first_name"    => $data["profile"]["first_name"],
                 "middle_name"   => $data["profile"]["middle_name"] ?? '',
@@ -91,7 +93,9 @@ class PatientRepository
             }
 
             /** Create User */
-            $user = User::create([
+            $user = User::firstOrCreate([
+                "email"      => $data['contact']['email'],
+            ], [
                 "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
                 "email"      => $data['contact']['email'],
                 "language"   => $data['language'] ?? 'en',
@@ -113,7 +117,11 @@ class PatientRepository
                 $data["contact"]["contactable_id"]     = $user->id;
                 $data["contact"]["contactable_type"]   = User::class;
                 $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                Contact::create($data["contact"]);
+                Contact::firstOrCreate([
+                    "contactable_id"     => $user->id,
+                    "contactable_type"   => User::class,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                ], $data["contact"]);
             }
 
             /** Create Address */
@@ -122,12 +130,18 @@ class PatientRepository
                     $address["addressable_id"]     = $user->id;
                     $address["addressable_type"]   = User::class;
                     $address["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                    Address::create($address);
+                    Address::firstOrCreate([
+                        "addressable_id"     => $user->id,
+                        "addressable_type"  => User::class,
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                    ], $address);
                 }
             }
 
             /** Create Patient */
-            $patient = Patient::create([
+            $patient = Patient::firstOrCreate([
+                "user_id"           => $user->id
+            ], [
                 "code"              => generateNewCode("PA", 5, date("y"), Patient::class, "code"),
                 "driver_license"    => $data["driver_license"] ?? '',
                 "marital_status_id" => $data["marital_status_id"] ?? null,
@@ -150,16 +164,21 @@ class PatientRepository
 
             if (isset($data['public_note'])) {
                 /** PublicNote */
-                PublicNote::create([
+                PublicNote::updateOrCreate([
                     'publishable_type' => Patient::class,
                     'publishable_id'   => $patient->id,
+                ], [
                     'note'             => $data['public_note'],
                 ]);
             }
 
             if (isset($data['private_note'])) {
                 /** PrivateNote */
-                PrivateNote::create([
+                PrivateNote::firstOrCreate([
+                    'publishable_type'   => Patient::class,
+                    'publishable_id'     => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
                     'publishable_type'   => Patient::class,
                     'publishable_id'     => $patient->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -170,20 +189,26 @@ class PatientRepository
             /** Create Marital */
             if (isset($data['marital']['spuse_name'])) {
                 $data["marital"]["patient_id"] = $patient->id;
-                $marital = Marital::create($data["marital"]);
+                $marital = Marital::firstOrCreate([
+                    "patient_id" => $patient->id,
+                ], $data["marital"]);
             }
 
             /** Create Guarantor */
             if (isset($data['guarantor']['name'])) {
                 $data["guarantor"]["patient_id"] = $patient->id;
-                $guarantor = Guarantor::create($data["guarantor"]);
+                $guarantor = Guarantor::firstOrCreate([
+                    "patient_id" => $patient->id,
+                ], $data["guarantor"]);
             }
 
             /** Create Employment */
             if (isset($data["employments"])) {
                 foreach ($data["employments"] as $employment) {
                     $employment["patient_id"] = $patient->id;
-                    Employment::create($employment);
+                    Employment::firstOrCreate([
+                        "patient_id" => $patient->id,
+                    ], $employment);
                 }
             }
 
@@ -364,9 +389,13 @@ class PatientRepository
                 $rolePatient = Role::where('slug', 'patient')->first();
                 $user->attachRole($rolePatient);
                 
-                $token = encrypt($user->id . "@#@#$" . $user->email);
-                $user->token = $token;
-                $user->save();
+                if ($user->token == '') {
+                    $token = encrypt($user->id . "@#@#$" . $user->email);
+                    $user->token = $token;
+                    $user->save();
+                } else {
+                    $token = $user->token;
+                }
 
                 \Mail::to($user->email)->send(
                     new GenerateNewPassword(
@@ -426,6 +455,9 @@ class PatientRepository
                     },
                 ])->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
+            $dataPolicies = $patient->insurancePolicies()
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
         } else {
             $billingCompany = auth()->user()->billingCompanies->first();
             $dataCompany = $patient->companies()
@@ -442,6 +474,11 @@ class PatientRepository
                     },
                 ])->whereHas('claimFormattable', function ($query) use ($billingCompany) {
                     $query->where('billing_company_id', $billingCompany->id);
+                })->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage());
+            $dataPolicies = $patient->insurancePolicies()
+                ->whereHas('insurancePlan.billingCompanies', function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
                 })->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         }
@@ -464,6 +501,37 @@ class PatientRepository
             'count'         => $dataClaim->total()
         ];
 
+        $dataPolicies->getCollection()->transform(function ($patient_policy) {
+            return [
+                'billing_company_id' => $patient_policy->pivot->billing_company_id,
+                'billing_company' => BillingCompany::find($patient_policy->pivot->billing_company_id)->name ?? '',
+                "id"                       => $patient_policy->id,
+                "policy_number"            => $patient_policy->policy_number,
+                "group_number"             => $patient_policy->group_number,
+                "insurance_company_id"     => $patient_policy->insurancePlan->insurance_company_id ?? '',
+                "insurance_company"        => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '') . ' - ' . $patient_policy->insurancePlan->insuranceCompany->name ?? '',
+                "insurance_plan_id"        => $patient_policy->insurance_plan_id ?? '',
+                "insurance_plan"           => $patient_policy->insurancePlan->name ?? '',
+                "type_responsibility_id"   => $patient_policy->type_responsibility_id ?? '',
+                "type_responsibility"      => $patient_policy->typeResponsibility->code ?? '',
+                "insurance_policy_type_id" => $patient_policy->insurance_policy_type_id ?? '',
+                "insurance_policy_type"    => $patient_policy->insurancePolicyType->description ?? '',
+                "eligibility"              => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
+                "status"                   => $patient_policy->pivot->status ?? false,
+                "eff_date"                 => $patient_policy->eff_date,
+                "end_date"                 => $patient_policy->end_date,
+                "assign_benefits"          => $patient_policy->assign_benefits ?? false,
+                "release_info"             => $patient_policy->release_info ?? false,
+                "own_insurance"            => $patient_policy->pivot->own_insurance ?? false,
+                "subscriber"               => $patient_policy_subscriber ?? null,
+            ];
+        });
+        $policiesRecords = [
+            'data'          => $dataPolicies->items(),
+            'numberOfPages' => $dataPolicies->lastPage(),
+            'count'         => $dataPolicies->total()
+        ];
+
         $record = [
             "id"                => $patient->id,
             "code"              => $patient->code,
@@ -479,6 +547,7 @@ class PatientRepository
             "language"          => $patient->user->language ?? '',
             "companies"         => $companyRecords ?? null,
             "claims"            => $claimRecords ?? null,
+            "insurance_policies" => $policiesRecords ?? null,
 
             "created_at"        => $patient->created_at,
             "updated_at"        => $patient->updated_at,
