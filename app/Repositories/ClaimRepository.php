@@ -137,13 +137,13 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($data['insurance_policies']);
             }
 
+            $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+            $claimStatusClaim = ClaimStatusClaim::create([
+                'claim_id'          => $claim->id,
+                'claim_status_type' => ClaimStatus::class,
+                'claim_status_id'   => $claimStatus->id,
+            ]);
             if (isset($data['private_note'])) {
-                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
-                $claimStatusClaim = ClaimStatusClaim::create([
-                    'claim_id'          => $claim->id,
-                    'claim_status_type' => ClaimStatus::class,
-                    'claim_status_id'   => $claimStatus->id,
-                ]);
                 PrivateNote::create([
                     'publishable_type'   => ClaimStatusClaim::class,
                     'publishable_id'     => $claimStatusClaim->id,
@@ -456,13 +456,13 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($data['insurance_policies']);
             }
 
+            $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+            $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
+                'claim_id'          => $claim->id,
+                'claim_status_type' => ClaimStatus::class,
+                'claim_status_id'   => $claimStatus->id,
+            ]);
             if (isset($data['private_note'])) {
-                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
-                $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
-                    'claim_id'          => $claim->id,
-                    'claim_status_type' => ClaimStatus::class,
-                    'claim_status_id'   => $claimStatus->id,
-                ]);
                 PrivateNote::updateOrCreate([
                     'publishable_type'   => ClaimStatusClaim::class,
                     'publishable_id'     => $claimStatusClaim->id,
