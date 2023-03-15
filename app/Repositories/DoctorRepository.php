@@ -643,7 +643,7 @@ class DoctorRepository
             $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
         }
 
-        $data = $data->paginate($request->itemsPerPage ?? 5);
+        $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
             'data' => $data->items(),
