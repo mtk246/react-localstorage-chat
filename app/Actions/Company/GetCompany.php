@@ -28,7 +28,7 @@ final class GetCompany
 
             $company = $this->getCompanyInstance($id, $user);
 
-            if ($user->hasRole('superuser')) {
+            if (!$user->hasRole('superuser')) {
                 $facilities = $company->facilities()
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
@@ -58,8 +58,8 @@ final class GetCompany
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
-                    ->wherePivot('billing_company_id', $bC)
                     ->with('procedures')
+                    ->where('billing_company_id', $bC)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $contracFees = $company->contracFees()
@@ -69,7 +69,7 @@ final class GetCompany
                         'macLocality',
                         'insuranceCompany',
                     ])
-                    ->wherePivot('billing_company_id', $bC)
+                    ->where('billing_company_id', $bC)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
             }
@@ -115,7 +115,6 @@ final class GetCompany
                 'ein' => $company->ein,
                 'upin' => $company->upin,
                 'clia' => $company->clia,
-                'name_suffix_id' => $company->name_suffix_id,
                 'created_at' => $company->created_at,
                 'updated_at' => $company->updated_at,
                 'last_modified' => $company->last_modified,
