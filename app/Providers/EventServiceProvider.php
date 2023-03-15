@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Events\User\ChangePassword;
+use App\Listeners\Notifications\User\SendChangePasswordNotification;
 use App\Models\User;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -19,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        ChangePassword::class => [
+            SendChangePasswordNotification::class,
         ],
     ];
 
