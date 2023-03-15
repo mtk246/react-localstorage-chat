@@ -446,7 +446,6 @@ class CompanyRepository
             'ein' => $company->ein,
             'upin' => $company->upin,
             'clia' => $company->clia,
-            'name_suffix_id' => $company->name_suffix_id,
             'name_suffix' => $company->nameSuffix->description ?? null,
             'created_at' => $company->created_at,
             'updated_at' => $company->updated_at,
@@ -621,8 +620,7 @@ class CompanyRepository
             $company->update([
                 'ein' => $data['ein'] ?? null,
                 'upin' => $data['upin'] ?? null,
-                'clia' => $data['clia'] ?? null,
-                'name_suffix_id' => $data['name_suffix_id'] ?? null,
+                'clia' => $data['clia'] ?? null
             ]);
 
             if (isset($data['taxonomies'])) {
