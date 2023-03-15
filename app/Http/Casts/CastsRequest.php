@@ -15,7 +15,7 @@ abstract class CastsRequest
     public function __construct(
         protected array $inputs,
         protected array $querys,
-        protected User $user,
+        protected ?User $user,
     ) {
     }
 }
