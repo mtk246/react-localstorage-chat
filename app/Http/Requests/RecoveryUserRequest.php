@@ -1,31 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use App\Http\Casts\User\RecoveryUserRequestCast;
+use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RecoveryUserRequest extends FormRequest
+final class RecoveryUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    use HasCastedClass;
+
+    protected string $castedClass = RecoveryUserRequestCast::class;
+
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    /** @return array<key, string> */
+    public function rules(): array
     {
         return [
-            'ssn'         => ["required", "string"],
-            'dateOfBirth' => ["required", "date"]
+            'last_name' => 'required|string',
+            'first_name' => 'required|string',
+            'birth_date' => 'required|date',
+            'ssn' => 'nullable|string',
         ];
     }
 }
