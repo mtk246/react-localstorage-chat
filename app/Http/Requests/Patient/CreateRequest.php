@@ -51,7 +51,7 @@ class CreateRequest extends FormRequest
             'contact.phone'                     => ['nullable', 'string'],
             'contact.mobile'                    => ['nullable', 'string'],
             'contact.fax'                       => ['nullable', 'string'],
-            'contact.email'                     => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'contact.email'                     => ['required', 'string', 'email:rfc'],
 
             'addresses'                           => ['required', 'array'],
             'addresses.*.address_type_id'         => ['required', 'integer'],

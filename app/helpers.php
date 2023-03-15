@@ -22,7 +22,7 @@ function middleRedactor($string, $char)
 {
     $substring = substr($string, 1, strlen($string));
     $total = strlen($substring);
-    $tenth = ceil($total / 10);
+    $tenth = (int) ceil($total / 10);
 
     // Make sure single character strings get redacted
     $length = ($total > $tenth) ? ($total - $tenth) : 1;
@@ -126,7 +126,7 @@ if (!function_exists('getList')) {
                 $text = $rec->$fields;
             }
 
-            if (is_null($except_id) || ((!is_array($except_id)) &&$except_id !== $rec->id) || (is_array($except_id) && (!in_array($rec->id, $except_id)))) {
+            if (is_null($except_id) || ((!is_array($except_id)) && $except_id !== $rec->id) || (is_array($except_id) && (!in_array($rec->id, $except_id)))) {
                 $fieldPush = ['id' => $rec->id, 'name' => $text];
                 foreach ($others as $other) {
                     $fieldPush[$other] = $rec->$other;
@@ -137,7 +137,6 @@ if (!function_exists('getList')) {
                         $rec->load($relationship);
                         $object = $rec->$relationship()->where($pivotOther['where'])->first();
                         $fieldPush[$name] = $object->pivot[$name] ?? '';
-
                     } else {
                         $object = $rec->$relationship()->where($filters['where'])->first();
                         if (isset($object)) {

@@ -8,6 +8,8 @@ use App\Http\Requests\LoginRequest;
 use App\Mail\LogNewDevice;
 use App\Models\Device;
 use App\Models\FailedLoginAttempt;
+use App\Models\IpRestriction;
+use App\Models\IpRestrictionMult;
 use App\Models\User;
 use Carbon\Carbon;
 use Detection\MobileDetect;
@@ -107,10 +109,15 @@ class AuthController extends Controller
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
 
+        /** @var User */
         $user = User::where('email', $dataValidated['email'])->first();
 
         if (!isset($user)) {
             return response()->json(['error' => __('Bad Credentials')], 401);
+        }
+
+        if ($this->checkIpIsRestricted($request->ip(), $user->billing_company_id)) {
+            return response()->json(['error' => __('You are not allowed to access this application')], 401);
         }
 
         if ($this->checkIsLogged($request, $deviceDetect)) {
@@ -403,6 +410,33 @@ class AuthController extends Controller
     public function refresh(Request $request): JsonResponse
     {
         return response()->json(auth()->refresh());
+    }
+
+    protected function checkIpIsRestricted(string $ip, ?int $billingCompanyId): bool
+    {
+        /** @var IpRestriction|null */
+        $ipRestriction = IpRestriction::query()
+            ->where('billing_company_id', $billingCompanyId)
+            ->with('ipRestrictionMults')
+            ->first();
+
+        if (is_null($ipRestriction)) {
+            return false;
+        }
+
+        return !$ipRestriction
+            ->ipRestrictionMults
+            ->reduce(function (bool $carry, IpRestrictionMult $item) use ($ip) {
+                if ($carry) {
+                    return true;
+                }
+
+                $beginRange = ip2long($item->begin_range);
+                $endRange = ip2long($item->end_range);
+                $ip = ip2long($ip);
+
+                return $ip >= $beginRange && $ip <= $endRange;
+            }, false);
     }
 
     protected function respondWithToken(string $token, string $ip, string $os): JsonResponse

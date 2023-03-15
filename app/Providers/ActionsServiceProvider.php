@@ -10,6 +10,7 @@ use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
+use App\Actions\User\Recovery;
 use App\Repositories\CompanyRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +27,6 @@ final class ActionsServiceProvider extends ServiceProvider
         $this->app->singleton(StoreKeyboardShortcut::class, fn () => new StoreKeyboardShortcut(
             $this->app->get(GetKeyboardShortcut::class),
         ));
+        $this->app->singleton(Recovery::class, fn () => new Recovery());
     }
 }
