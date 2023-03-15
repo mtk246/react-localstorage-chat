@@ -8,7 +8,7 @@ final class Pagination
 {
     private const SORT_BY = 'id';
     private const SORT_DESC = false;
-    private const ITEMS_PER_PAGE = 5;
+    private const ITEMS_PER_PAGE = 10;
 
     public static function sortBy(string $default = self::SORT_BY): string
     {
