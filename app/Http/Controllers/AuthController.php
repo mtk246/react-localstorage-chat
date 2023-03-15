@@ -109,14 +109,15 @@ class AuthController extends Controller
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
 
-        if ($this->checkIpIsRestricted($request->ip())) {
-            return response()->json(['error' => __('You are not allowed to access this application')], 401);
-        }
-
+        /** @var User */
         $user = User::where('email', $dataValidated['email'])->first();
 
         if (!isset($user)) {
             return response()->json(['error' => __('Bad Credentials')], 401);
+        }
+
+        if ($this->checkIpIsRestricted($request->ip(), $user->billing_company_id)) {
+            return response()->json(['error' => __('You are not allowed to access this application')], 401);
         }
 
         if ($this->checkIsLogged($request, $deviceDetect)) {
@@ -411,7 +412,7 @@ class AuthController extends Controller
         return response()->json(auth()->refresh());
     }
 
-    protected function checkIpIsRestricted(string $ip, int $billingCompanyId): bool
+    protected function checkIpIsRestricted(string $ip, ?int $billingCompanyId): bool
     {
         /** @var IpRestriction|null */
         $ipRestriction = IpRestriction::query()
