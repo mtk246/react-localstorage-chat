@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -250,7 +251,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Contact.
      */
-    public function contacts(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function contacts(): MorphMany
     {
         return $this->morphMany(Contact::class, 'contactable');
     }
@@ -258,7 +259,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Address.
      */
-    public function addresses(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function addresses(): MorphMany
     {
         return $this->morphMany(Address::class, 'addressable');
     }
@@ -266,7 +267,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many ipRestrictions.
      */
-    public function ipRestrictions(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function ipRestrictions(): MorphMany
     {
         return $this->morphMany(IpRestriction::class, 'restrictable');
     }
@@ -317,6 +318,14 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         $billingCompany = $this->billingCompanies->first();
 
         return $billingCompany ?? null;
+    }
+
+    /**
+     * The keyboard shortcuts that belong to the BillingCompany.
+     */
+    public function customKeyboardShortcuts(): MorphMany
+    {
+        return $this->morphMany(CustomKeyboardShortcuts::class, 'shortcutable');
     }
 
     /*
