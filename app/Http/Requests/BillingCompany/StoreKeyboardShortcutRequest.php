@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\BillingCompany;
 
+use App\Rules\KeyboardShortcut;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -21,7 +22,12 @@ final class StoreKeyboardShortcutRequest extends FormRequest
         return [
             'update' => 'nullable|array',
             'update.*.id' => 'required|integer|exists:\App\Models\KeyboardShortcut,id',
-            'update.*.key' => 'required|string|max:20',
+            'update.*.key' => [
+                'required',
+                'string',
+                'max:20',
+                new KeyboardShortcut(),
+            ],
             'delete' => 'nullable|array',
             'delete.*.id' => 'required|integer|exists:\App\Models\KeyboardShortcut,id',
         ];
