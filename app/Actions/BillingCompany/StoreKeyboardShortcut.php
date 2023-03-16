@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\BillingCompany;
 
 use App\Models\BillingCompany;
-use App\Models\BillingCompanyKeyboardShortcut;
+use App\Models\CustomKeyboardShortcuts;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -15,35 +15,45 @@ final class StoreKeyboardShortcut
     {
     }
 
-    /** @param array<key, string> $data */
-    public function invoke(array $data, BillingCompany $billingCompany): AnonymousResourceCollection
+    /**
+     * @param array<key, string> $data
+     * @param BillingCompany|User $shortcutable
+     */
+    public function invoke(array $data, $shortcutable): AnonymousResourceCollection
     {
-        DB::transaction(function () use ($data, $billingCompany): void {
-            $this->deleteCustomKeys($data['delete'] ?? [], $billingCompany);
-            $this->updateKeys($data['update'] ?? [], $billingCompany);
+        DB::transaction(function () use ($data, $shortcutable): void {
+            $this->deleteCustomKeys($data['delete'] ?? [], $shortcutable);
+            $this->updateKeys($data['update'] ?? [], $shortcutable);
         });
 
         return $this->getKeyboardShortcut->getAll();
     }
 
-    /** @param array<key, string> $data */
-    private function deleteCustomKeys(array $data, BillingCompany $billingCompany): void
+    /**
+     * @param array<key, string> $data
+     * @param BillingCompany|User $shortcutable
+     */
+    private function deleteCustomKeys(array $data, $shortcutable): void
     {
         foreach ($data as $keyboardShortcut) {
-            $billingCompany->customKeyboardShortcuts()
+            $shortcutable->customKeyboardShortcuts()
                 ->where('keyboard_shortcut_id', $keyboardShortcut['id'])
                 ->delete();
         }
     }
 
-    /** @param array<key, string> $data */
-    private function updateKeys(array $data, BillingCompany $billingCompany): void
+    /**
+     * @param array<key, string> $data
+     * @param BillingCompany|User $shortcutable
+     */
+    private function updateKeys(array $data, $shortcutable): void
     {
         foreach ($data as $keyboardShortcut) {
-            BillingCompanyKeyboardShortcut::query()
+            CustomKeyboardShortcuts::query()
                 ->updateOrCreate([
                     'keyboard_shortcut_id' => $keyboardShortcut['id'],
-                    'billing_company_id' => $billingCompany->id,
+                    'shortcutable_type' => get_class($shortcutable),
+                    'shortcutable_id' => $shortcutable->id,
                 ], ['key' => $keyboardShortcut['key']]);
         }
     }
