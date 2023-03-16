@@ -33,6 +33,6 @@ final class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('is-admin', [\App\Policies\UserPolicy::class, 'super']);
-        Gate::define('employe', [\App\Policies\UserPolicy::class, 'employe']);
+        Gate::define('billingmanager', [\App\Policies\UserPolicy::class, 'billingmanager']);
     }
 }
