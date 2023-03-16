@@ -17,6 +17,7 @@ enum KeyboardKey: string
     case KEY_ESC = 'ESC';
     case KEY_SPACE = 'Space';
     case KEY_BACKSPACE = 'Backspace';
+    case KEY_PLUS = 'Plus';
     case KEY_F1 = 'F1';
     case KEY_F2 = 'F2';
     case KEY_F3 = 'F3';
