@@ -12,7 +12,7 @@ final class StoreKeyboardShortcutRequest extends FormRequest
     public function authorize(): bool
     {
         return Gate::allows('is-admin')
-            || Gate::allows('employe', $this->billing_company);
+            || Gate::allows('billingmanager', $this->billing_company);
     }
 
     /** @return array<string, mixed> */
