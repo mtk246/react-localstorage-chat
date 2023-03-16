@@ -14,6 +14,8 @@ final class CustomKeyboardShortcuts extends Model
     protected $fillable = [
         'key',
         'keyboard_shortcut_id',
+        'shortcutable_type',
+        'shortcutable_id',
     ];
 
     public function keyboardShortcut(): BelongsTo
