@@ -17,6 +17,12 @@ final class UserPolicy
         return $user->hasRole('superuser');
     }
 
+    public function billingmanager(User $user, int $billingCompanyId): bool
+    {
+        return $user->hasRole('billingmanager')
+            && $user->billing_company_id === $billingCompanyId;
+    }
+
     public function employe(User $user, int $billingCompanyId): bool
     {
         return $user->billing_company_id === $billingCompanyId;
