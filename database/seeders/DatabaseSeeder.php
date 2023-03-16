@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -21,8 +23,8 @@ class DatabaseSeeder extends Seeder
             FacilityTypeSeeder::class,
             ModifierSeeder::class,
             DiagnosisSeeder::class,
-            //DataTestSeeder::class,
-            //ServiceDataSeeder::class,
+            // DataTestSeeder::class,
+            // ServiceDataSeeder::class,
             ProcedureDataSeeder::class,
             SocialNetworkSeeder::class,
             MaritalStatusSeeder::class,
@@ -32,7 +34,8 @@ class DatabaseSeeder extends Seeder
             TypeCatalogSeeder::class,
             ClaimDataSeeder::class,
             AddressTypeSeeder::class,
-            DataTestSeeder::class
+            KeyboardShortcutSeeder::class,
+            DataTestSeeder::class,
         ]);
     }
 }
