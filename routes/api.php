@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
+use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +42,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('user')->group(function () {
+        Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
@@ -104,7 +106,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function (): void {
         Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
         Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
-            ->only(['index', 'show', 'store']);
+            ->only(['index', 'store']);
 
         Route::prefix('billing-company')->group(function (): void {
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
