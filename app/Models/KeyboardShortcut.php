@@ -61,16 +61,23 @@ final class KeyboardShortcut extends Model implements Auditable
 
     public function keys(): HasMany
     {
-        return $this->hasMany(BillingCompanyKeyboardShortcut::class);
+        return $this->hasMany(CustomKeyboardShortcuts::class);
     }
 
-    public function billingCompanyKey(?int $billingCompanyId): string
+    public function userKey(): ?string
     {
-        return $billingCompanyId
-            ? $this->keys()
-                ->where('billing_company_id', $billingCompanyId)
-                ->first()?->key ?? $this->default_key
-            : $this->default_key;
+        return $this->keys()
+            ->where('shortcutable_type', User::class)
+            ->where('shortcutable_id', auth()->id())
+            ->first()?->key;
+    }
+
+    public function billingCompanyKey(int $billingCompanyId): ?string
+    {
+        return $this->keys()
+                ->where('shortcutable_type', BillingCompany::class)
+                ->where('shortcutable_id', $billingCompanyId)
+                ->first()?->key;
     }
 
     protected function description(): Attribute

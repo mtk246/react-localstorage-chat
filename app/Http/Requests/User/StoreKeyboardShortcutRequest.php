@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\BillingCompany;
+namespace App\Http\Requests\User;
 
 use App\Rules\KeyboardShortcut;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
 final class StoreKeyboardShortcutRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Gate::allows('is-admin')
-            || Gate::allows('billingmanager', $this->billing_company);
+        return true;
     }
 
     /** @return array<string, mixed> */
