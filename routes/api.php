@@ -109,6 +109,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             ->only(['index', 'store']);
 
         Route::prefix('billing-company')->group(function (): void {
+            Route::post('/filtered', [BillingCompanyController::class, 'filtered']);
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
             Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
