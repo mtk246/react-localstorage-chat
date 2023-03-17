@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\BillingCompany;
+namespace App\Http\Requests\InsuranceCompany;
 
 use Illuminate\Foundation\Http\FormRequest;
 
