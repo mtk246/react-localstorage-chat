@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Actions\BillingCompany;
 
-use App\Models\BillingCompany;
+use App\Models\InsuranceCompany;
+use Illuminate\Database\Eloquent\Collection;
 
-// use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-
-final class GetBillingCompany
+final class GetInsuranceCompany
 {
-    public function filtered(array $request)
+    public function filtered(array $request): Collection
     {
-        return BillingCompany::query()
+        return InsuranceCompany::query()
             ->whereNotIn('id', $request['ids'])
             ->get(['id', 'name'])
             ->setHidden([
