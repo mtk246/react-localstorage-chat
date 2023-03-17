@@ -33,7 +33,8 @@
     - [Company](/{{route}}/{{version}}/company)
 
 - ## Insurance-Company
-    - [Insurance-Company](/{{route}}/{{version}}/insurance-company)
+    - [General](/{{route}}/{{version}}/insurance-company/general)
+    - [Search](/{{route}}/{{version}}/insurance-company/search)
 
 - ## Insurance-plan
     - [Insurance-Plan](/{{route}}/{{version}}/insurance-plan)

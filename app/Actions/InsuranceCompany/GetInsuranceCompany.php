@@ -9,11 +9,19 @@ use Illuminate\Database\Eloquent\Collection;
 
 final class GetInsuranceCompany
 {
-    public function filtered(array $request): Collection
+    public function search(array $request): Collection
     {
-        return InsuranceCompany::query()
-            ->whereNotIn('id', $request['ids'])
-            ->get(['id', 'name'])
+        $query = InsuranceCompany::query();
+
+        if (isset($request['name'])) {
+            $query->where('name', 'like', "%{$request['name']}%");
+        }
+
+        if (isset($request['exclude'])) {
+            $query->whereNotIn('id', $request['exclude']);
+        }
+
+        return $query->get(['id', 'name'])
             ->setHidden(['status', 'last_modified']);
     }
 }

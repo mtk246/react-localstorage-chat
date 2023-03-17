@@ -6,7 +6,7 @@ namespace App\Http\Requests\InsuranceCompany;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class GetAllFiltered extends FormRequest
+final class SearchRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,8 +17,9 @@ final class GetAllFiltered extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'nullable|array',
-            'ids.*' => 'required|numeric',
+            'name' => 'nullable|string',
+            'exclude' => 'nullable|array',
+            'exclude.*' => 'required|numeric',
         ];
     }
 }
