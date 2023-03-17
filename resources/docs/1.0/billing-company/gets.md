@@ -1,7 +1,6 @@
 # Company Billing Gets request Docs
 
 ---
-- [Get filtered billing company](#get-filtered-billing-company)
 - [Get billing company](#get-billing-company)
 - [Get all billing companies](#get-all-billing-companies)
 - [Get all billing companies from server](#get-all-billing-companies-server)
@@ -15,52 +14,13 @@
 
 | # | METHOD   | Name             | URL                     | Token required|Description|
 | : ||   :-                 |  :                      |               |                    |  
-| 1 |POST|`Get filtered billing company`|`/billing-company/filtered`|yes|Get billing company by filter|
-| 2 |GET | `Get billing company`| `/billing-company/{billing_company_id}`        |yes            |Get one billing company|
-| 3 |GET | `Get all billing companies`          | `/billing-company`|yes|Get all billing companies|
-| 4 |GET | `Get all billing companies from server`          | `/billing-company/get-all-server`|yes|Get all billing companies from server|
-| 5 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
-| 6 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
+| 1 |GET | `Get billing company`| `/billing-company/{billing_company_id}`        |yes            |Get one billing company|
+| 2 |GET | `Get all billing companies`          | `/billing-company`|yes|Get all billing companies|
+| 3 |GET | `Get all billing companies from server`          | `/billing-company/get-all-server`|yes|Get all billing companies from server|
+| 4 |GET | `Get biling company by code`          | `/billing-company/get-by-code/{code}`|yes|Get one billing company by code|
+| 5 |GET | `Get biling company by name`          | `/billing-company/get-by-name/{name}`|yes|Get one billing company by name|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
-
-<a name="get-filtered-billing-company"></a>
-## Get filtered companies
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-### Body request example
-
-```json
-{
-  "ids":[
-    1,
-    3
-  ]
-}
-```
-
-## Response
-
-> {success} 200 data retorned
-
-#
-```json
-[
-  {
-    "id": 2,
-    "name": "Advanced Pacific Medical, Llc",
-  }
-]
-```
-
->{warning} possible errors: 404 when user not found 
 
 <a name="get-billing-company"></a>
 ## Get companies by User

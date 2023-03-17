@@ -109,7 +109,6 @@ Route::prefix('v1')/* ->middleware('audit') */
             ->only(['index', 'store']);
 
         Route::prefix('billing-company')->group(function (): void {
-            Route::post('/filtered', [BillingCompanyController::class, 'filtered']);
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
             Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
@@ -250,6 +249,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::post('/filtered', [\App\Http\Controllers\InsuranceCompanyController::class, 'filtered']);
         Route::get('/get-all-server', [\App\Http\Controllers\InsuranceCompanyController::class, 'getServerAll']);
         Route::get('/get-list', [\App\Http\Controllers\InsuranceCompanyController::class, 'getList']);
         Route::get('/get-list-file-methods', [\App\Http\Controllers\InsuranceCompanyController::class, 'getListFileMethods']);
