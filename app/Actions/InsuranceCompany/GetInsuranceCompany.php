@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\BillingCompany;
+namespace App\Actions\InsuranceCompany;
 
 use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Collection;
