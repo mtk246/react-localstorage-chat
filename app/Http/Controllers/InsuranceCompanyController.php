@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\InsuranceCompany\GetInsuranceCompany;
-use App\Http\Requests\BillingCompany\GetAllFiltered;
 use App\Http\Requests\ChangeStatusInsuraceRequest;
 use App\Http\Requests\CreateInsuranceRequest;
+use App\Http\Requests\InsuranceCompany\GetAllFiltered;
 use App\Http\Requests\UpdateInsuranceRequest;
 use App\Repositories\InsuranceCompanyRepository;
 use Illuminate\Http\JsonResponse;
