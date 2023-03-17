@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\InsuranceCompany\GetInsuranceCompany;
 use App\Http\Requests\ChangeStatusInsuraceRequest;
 use App\Http\Requests\CreateInsuranceRequest;
-use App\Http\Requests\InsuranceCompany\GetAllFiltered;
+use App\Http\Requests\InsuranceCompany\SearchRequest;
 use App\Http\Requests\UpdateInsuranceRequest;
 use App\Repositories\InsuranceCompanyRepository;
 use Illuminate\Http\JsonResponse;
@@ -23,9 +23,9 @@ final class InsuranceCompanyController extends Controller
     }
 
     /** @todo please delete me this kind of end point should not exist */
-    public function filtered(GetAllFiltered $request, GetInsuranceCompany $getInsuranceCompany): JsonResponse
+    public function search(SearchRequest $request, GetInsuranceCompany $getInsuranceCompany): JsonResponse
     {
-        $rs = $getInsuranceCompany->filtered($request->toArray());
+        $rs = $getInsuranceCompany->search($request->toArray());
 
         return response()->json($rs);
     }
