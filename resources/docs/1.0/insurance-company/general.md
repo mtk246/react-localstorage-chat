@@ -47,46 +47,6 @@
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null.... Clearing house Status is a boolean
 
-
-<a name="get-filtered-billing-company"></a>
-## Get filtered companies
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-### Body request example
-
-```json
-{
-  "ids":[
-    1,
-    3
-  ]
-}
-```
-
-## Response
-
-> {success} 200 data retorned
-
-#
-```json
-[
-  {
-    "id": 2,
-    "name": "Advanced Pacific Medical, Llc",
-  }
-]
-```
-
->{warning} possible errors: 404 when user not found 
-#
-
 <a name="create-insurance-company"></a>
 ## Create Insurance Company
 
