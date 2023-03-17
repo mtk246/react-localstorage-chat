@@ -20,6 +20,7 @@
 
 - ## Billing-Company
     - [Billing-Company](/{{route}}/{{version}}/billing-company)
+    - [Gets](/{{route}}/{{version}}/billing-company/gets)
     - [Shortcuts](/{{route}}/{{version}}/billing-company/shortcuts)
 
 - ## Clearing-House
