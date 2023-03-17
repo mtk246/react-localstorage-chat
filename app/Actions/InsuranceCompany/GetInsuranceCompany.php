@@ -14,12 +14,6 @@ final class GetInsuranceCompany
         return InsuranceCompany::query()
             ->whereNotIn('id', $request['ids'])
             ->get(['id', 'name'])
-            ->setHidden([
-                'last_modified',
-                'contact',
-                'address',
-                'contacts',
-                'addresses',
-            ]);
+            ->setHidden(['status', 'last_modified']);
     }
 }
