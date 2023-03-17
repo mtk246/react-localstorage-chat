@@ -249,7 +249,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::post('/filtered', [\App\Http\Controllers\InsuranceCompanyController::class, 'filtered']);
+        Route::post('/search', [\App\Http\Controllers\InsuranceCompanyController::class, 'search']);
         Route::get('/get-all-server', [\App\Http\Controllers\InsuranceCompanyController::class, 'getServerAll']);
         Route::get('/get-list', [\App\Http\Controllers\InsuranceCompanyController::class, 'getList']);
         Route::get('/get-list-file-methods', [\App\Http\Controllers\InsuranceCompanyController::class, 'getListFileMethods']);
