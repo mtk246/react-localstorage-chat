@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\BillingCompany;
 
+use App\Actions\BillingCompany\GetBillingCompany;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BillingCompany\GetAllFiltered;
 use App\Http\Requests\BillingCompany\UpdateBillingCompanyRequest;
 use App\Http\Requests\CreateCompanyBilling;
 use App\Http\Requests\ImgBillingCompanyRequest;
@@ -21,6 +23,14 @@ final class BillingCompanyController extends Controller
     public function index(): JsonResponse
     {
         $rs = $this->billingCompanyRepository->getAllBillingCompany();
+
+        return response()->json($rs);
+    }
+
+    /** @todo please delete me this kind of end point should not exist */
+    public function filtered(GetAllFiltered $request, GetBillingCompany $getBillingCompany): JsonResponse
+    {
+        $rs = $getBillingCompany->filtered($request->toArray());
 
         return response()->json($rs);
     }
