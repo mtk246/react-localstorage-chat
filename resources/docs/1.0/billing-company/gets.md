@@ -39,9 +39,9 @@
 
 ```json
 {
-  "codes":[
-    "BC-00001-2023",
-    "BC-00002-2023"
+  "ids":[
+    1,
+    3
   ]
 }
 ```
@@ -54,8 +54,8 @@
 ```json
 [
   {
+    "id": 2,
     "name": "Advanced Pacific Medical, Llc",
-    "code": "BC-00003-2023"
   }
 ]
 ```
