@@ -56,6 +56,7 @@
 
 - ## Claim
     - [Claim](/{{route}}/{{version}}/claim)
+    - [Address](/{{route}}/{{version}}/address)
 
 - ## Claim Batch
     - [Claim Batch](/{{route}}/{{version}}/claim-batch)

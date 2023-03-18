@@ -366,6 +366,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{id}', [\App\Http\Controllers\ServiceController::class, 'getOneService']);
     });
 
+    Route::prefix('address')->middleware([
+        'auth:api',
+    ])->group(function () {
+        Route::get('/get-list-countries', [\App\Http\Controllers\AddressController::class, 'getListCountries']);
+        Route::get('/get-list-states', [\App\Http\Controllers\AddressController::class, 'getListStates']);
+    });
+
     Route::prefix('diagnosis')->middleware([
         'auth:api',
         'role:superuser|biller|billingmanager',
