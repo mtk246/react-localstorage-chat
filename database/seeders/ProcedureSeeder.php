@@ -9,26 +9,17 @@ use Illuminate\Database\Seeder;
 
 final class ProcedureSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $procedures = collect(array_map(
-            function ($procedure) {
+        collect(json_decode(\File::get('database/data/Procedures.json')))
+            ->map(function ($procedure) {
                 $procedure->start_date = '2023-01-1';
                 $procedure->end_date = null;
                 $procedure->active = true;
 
                 return (array) $procedure;
-            },
-            json_decode(\File::get('database/data/Procedures.json')),
-        ));
-
-        $procedures->chunk(1000)->each(function ($chunk) {
-            Procedure::upsert($chunk->toArray(), ['code']);
-        });
+            })
+            ->chunk(1000)
+            ->each(fn ($chunk) => Procedure::upsert($chunk->toArray(), ['code']));
     }
 }
