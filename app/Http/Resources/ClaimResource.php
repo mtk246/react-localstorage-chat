@@ -91,7 +91,7 @@ final class ClaimResource extends JsonResource
             'insurance_company' => $this->getInsuranceCompanyAttribute(),
             'insurance_plan' => $this->getInsurancePlanAttribute(),
             'user_created' => $this->getUserCreatedAttribute(),
-            'type_responsibility' => $this->getTypeResponsibilityAttribute(),
+            'type_responsibility' => $this->insurancePolicies()->first()?->typeResponsibility ?? null,
 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

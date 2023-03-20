@@ -154,6 +154,13 @@ class ClaimRepository
                     'note'               => $data['private_note']
                 ]);
             }
+            if(isset($data['sub_status_id'])) {
+                $this->changeStatus([
+                    'status_id' => $claimStatus->id,
+                    'sub_status_id' => $data['sub_status_id'],
+                    'private_note' => $data['private_note'] ?? '',
+                ], $claim->id);
+            }
 
             DB::commit();
             return $claim;
@@ -441,6 +448,13 @@ class ClaimRepository
                 ], [
                     'note'               => $data['private_note'],
                 ]);
+            }
+            if(isset($data['sub_status_id'])) {
+                $this->changeStatus([
+                    'status_id' => $claimStatus->id,
+                    'sub_status_id' => $data['sub_status_id'],
+                    'private_note' => $data['private_note'] ?? '',
+                ], $claim->id);
             }
 
             if (isset($data['will_report_injuries'])) {

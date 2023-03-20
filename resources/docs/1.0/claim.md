@@ -89,7 +89,7 @@
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1169,7 +1169,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1284,7 +1284,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1333,7 +1333,8 @@ subStatus optional <array>    //[1,2]
             "family_planning_id": 1
         }
     ],
-    "private_note": "Note claim"
+    "private_note": "Note claim",
+    "sub_status_id": 1
 }
 ```
 
@@ -1386,7 +1387,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1435,7 +1436,8 @@ subStatus optional <array>    //[1,2]
             "family_planning_id": 1
         }
     ],
-    "private_note": "Note claim"
+    "private_note": "Note claim",
+    "sub_status_id": 1
 }
 ```
 
@@ -1511,7 +1513,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1683,7 +1685,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1808,7 +1810,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
