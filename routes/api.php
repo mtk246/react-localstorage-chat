@@ -489,7 +489,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimSubStatusController::class, 'getServerAll'])->middleware(['auth:api']);
-        Route::get('/get-list-by-billing-company/{status_id}/{billing_company_id?}', [\App\Http\Controllers\ClaimSubStatusController::class, 'getList']);
+        Route::get('/get-list-by-billing-company/{status_id}/{billing_company_id?}', [\App\Http\Controllers\ClaimSubStatusController::class, 'getListByBilling']);
+        Route::get('/get-list', [\App\Http\Controllers\ClaimSubStatusController::class, 'getList']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimSubStatusController::class, 'getListStatus']);
         Route::post('/', [\App\Http\Controllers\ClaimSubStatusController::class, 'createClaimSubStatus'])->middleware([
             'auth:api',
