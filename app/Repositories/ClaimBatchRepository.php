@@ -70,9 +70,9 @@ class ClaimBatchRepository
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status) {
                 $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
             })->with([
-                "insuranceCompany" => function ($query) {
+                /**"insuranceCompany" => function ($query) {
                     $query->with('nicknames');
-                },
+                },*/
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
@@ -88,13 +88,13 @@ class ClaimBatchRepository
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $bC) {
                 $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
             })->with([
-                "insuranceCompany" => function ($query) use ($bC) {
+                /**"insuranceCompany" => function ($query) use ($bC) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
                             $q->where('billing_company_id', $bC);
                         }
                     ]);
-                },
+                },*/
                 "company" => function ($query) use ($bC) {
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
@@ -167,9 +167,9 @@ class ClaimBatchRepository
                 },
                 "claims" => function ($query) {
                     $query->with([
-                        "insuranceCompany" => function ($query) {
+                        /**"insuranceCompany" => function ($query) {
                             $query->with('nicknames');
-                        },
+                        },*/
                         "patient" => function ($query) {
                             $query->with([
                                 "user" => function ($q) {
@@ -192,13 +192,13 @@ class ClaimBatchRepository
                 },
                 "claims" => function ($query) use ($bC) {
                     $query->with([
-                        "insuranceCompany" => function ($query) use ($bC){
+                        /**"insuranceCompany" => function ($query) use ($bC){
                             $query->with([
                                 "nicknames" => function ($q) use ($bC) {
                                     $q->where('billing_company_id', $bC);
                                 }
                             ]);
-                        },
+                        },*/
                         "patient" => function ($query) use ($bC) {
                             $query->with([
                                 "user" => function ($q) use ($bC) {
