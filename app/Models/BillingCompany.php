@@ -113,6 +113,11 @@ class BillingCompany extends Model implements Auditable
         'abbreviation',
     ];
 
+    public function abbreviation(): Attribute
+    {
+        return Attribute::make(set: fn (string $value) => strtoupper($value));
+    }
+
     /**
      * The accessors to append to the model's array form.
      *
