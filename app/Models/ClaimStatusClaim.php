@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -66,6 +67,16 @@ class ClaimStatusClaim extends Model implements Auditable
     public function claim(): BelongsTo
     {
         return $this->belongsTo(Claim::class);
+    }
+
+    /**
+     * Get all of the claimCheckStatus for the ClaimStatusClaim
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function claimCheckStatus(): HasMany
+    {
+        return $this->hasMany(ClaimCheckStatus::class);
     }
 
     /**
