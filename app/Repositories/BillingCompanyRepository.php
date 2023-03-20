@@ -29,7 +29,7 @@ final class BillingCompanyRepository
 
         $company = BillingCompany::create([
             'name' => $data['name'],
-            'abbreviation' => $data['abbreviation'] ?? '',
+            'abbreviation' => strtoupper($data['abbreviation'] ?? ''),
             'code' => generateNewCode(getPrefix($data['name']), 5, date('y'), BillingCompany::class, 'code'),
             'logo' => $pathNameFile ?? '',
         ]);
