@@ -366,6 +366,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{id}', [\App\Http\Controllers\ServiceController::class, 'getOneService']);
     });
 
+    Route::prefix('address')->middleware([
+        'auth:api',
+    ])->group(function () {
+        Route::get('/get-list-countries', [\App\Http\Controllers\AddressController::class, 'getListCountries']);
+        Route::get('/get-list-states', [\App\Http\Controllers\AddressController::class, 'getListStates']);
+    });
+
     Route::prefix('diagnosis')->middleware([
         'auth:api',
         'role:superuser|biller|billingmanager',
@@ -474,6 +481,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
+        Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
     });
 
     Route::prefix('claim-sub-status')->middleware([

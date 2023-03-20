@@ -35,6 +35,9 @@ use App\Models\ClaimDateInformation;
 use App\Models\Injury;
 use App\Models\TypeCatalog;
 
+use App\Http\Resources\ClaimResource;
+use App\Models\ClaimCheckStatus;
+
 class ClaimRepository
 {
     /**
@@ -253,9 +256,9 @@ class ClaimRepository
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
-                "insuranceCompany" => function ($query) {
+                /**"insuranceCompany" => function ($query) {
                     $query->with('nicknames');
-                },
+                },*/
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
@@ -276,13 +279,13 @@ class ClaimRepository
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
-                "insuranceCompany" => function ($query) use ($bC){
+                /**"insuranceCompany" => function ($query) use ($bC){
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
                             $q->where('billing_company_id', $bC);
                         }
                     ]);
-                },
+                },*/
                 "company" => function ($query) use ($bC){
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
@@ -341,40 +344,8 @@ class ClaimRepository
      * @return claim|Builder|Model|object|null
      */
     public function getOneclaim(int $id) {
-        $claim = Claim::with([
-            "diagnoses",
-            "insurancePolicies" => function ($query) {
-                $query->with('typeResponsibility');
-            },
-            "claimFormattable"
-        ])->whereId($id)->first();
-
-        if (isset($claim)) {
-            $insurancePolicies = [];
-            foreach ($claim->insurancePolicies as $key => $insurancePolicy) {
-                $insurancePolicies[$key] = $insurancePolicy;
-                $claimEligibilityCurrent = $insurancePolicy->claimEligibilities()
-                                                           ->where('claim_id', $claim->id)
-                                                           ->orderBy("created_at", "desc")
-                                                           ->orderBy("id", "asc")->first();
-
-                if (isset($claimEligibilityCurrent)) {
-                    $insurancePolicies[$key]["claim_eligibility"] = [
-                        "control_number"              => $claimEligibilityCurrent->control_number ?? null,
-                        "claim_id"                    => $claimEligibilityCurrent->claim_id ?? null,
-                        "insurance_policy"            => $claimEligibilityCurrent->insurancePolicy ?? null,
-                        "insurance_policy_id"         => $claimEligibilityCurrent->insurance_policy_id ?? null,
-                        "response_details"            => json_decode($claimEligibilityCurrent->response_details ?? null),
-                        "claim_eligibility_status"    => $claimEligibilityCurrent->claimEligibilityStatus ?? null,
-                        "claim_eligibility_status_id" => $claimEligibilityCurrent->claim_eligibility_status_id ?? null,
-                    ];
-                } else {
-                    $insurancePolicies[$key]["claim_eligibility"] = null;
-                }
-            }
-        }
-
-        return !is_null($claim) ? $claim : null;
+        $claim = Claim::query()->find($id);
+        return !is_null($claim) ? new ClaimResource($claim) : null;
     }
 
     /**
@@ -990,7 +961,7 @@ class ClaimRepository
             $claim = Claim::with([
                 "company",
                 "diagnoses",
-                "insuranceCompany",
+                //"insuranceCompany",
                 "insurancePolicies",
                 "claimFormattable" => function ($query) {
                     $query->with([
@@ -1365,7 +1336,7 @@ class ClaimRepository
             $claim = Claim::with([
                 "company",
                 "diagnoses",
-                "insuranceCompany",
+                //"insuranceCompany",
                 "insurancePolicies",
                 "claimFormattable" => function ($query) {
                     $query->with([
@@ -1655,6 +1626,39 @@ class ClaimRepository
                     'publishable_id'     => $statusClaim->id,
                     'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
                     'note'               => $data['private_note']
+                ]);
+            }
+            DB::commit();
+            return $claim;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
+    }
+
+    public function AddCheckStatus($data, $id) {
+        try {
+            DB::beginTransaction();
+            $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
+            $statusClaim = $claim->claimStatusClaims()
+                                 ->orderBy("created_at", "desc")
+                                 ->orderBy("id", "asc")->first() ?? null;
+            
+            if (isset($statusClaim)) {
+                $note = PrivateNote::create([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $statusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                    'note'               => $data['private_note']
+                ]);
+                ClaimCheckStatus::create([
+                    'response_details' => $data['response_details'] ?? null,
+                    'interface_type' => $data['interface_type'] ?? null,
+                    'interface' => $data['interface'] ?? null,
+                    'consultation_date' => $data['consultation_date'] ?? null,
+                    'resolution_time' => $data['resolution_time'] ?? null,
+                    'past_due_date' => $data['past_due_date'] ?? null,
+                    'private_note_id' => $note->id,
                 ]);
             }
             DB::commit();
