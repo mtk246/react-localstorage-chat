@@ -48,7 +48,7 @@ final class ClaimResource extends JsonResource
             'company_id' => $this->company_id,
             'company' => $this->company->name ?? '',
             'facility_id' => $this->facility_id,
-            'facility' => $this->facility->name,
+            'facility' => $this->facility->name ?? '',
             'patient_id' => $this->patient_id,
             'patient' => isset($this->patient->user)
                 ? ($this->patient->user->profile->first_name.' '.$this->patient->user->profile->last_name)
