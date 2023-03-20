@@ -29,7 +29,7 @@ final class BillingCompanyRepository
 
         $company = BillingCompany::create([
             'name' => $data['name'],
-            'abbreviation' => $data['abbreviation'] ?? '',
+            'abbreviation' => strtoupper($data['abbreviation'] ?? ''),
             'code' => generateNewCode(getPrefix($data['name']), 5, date('y'), BillingCompany::class, 'code'),
             'logo' => $pathNameFile ?? '',
         ]);
@@ -87,7 +87,7 @@ final class BillingCompanyRepository
         return isset($billingCompany) ? $billingCompany->load('contacts', 'addresses') : null;
     }
 
-    public function getBillingCompany($id)
+    public function getBillingCompany(string $id)
     {
         return BillingCompany::with([
             'addresses',

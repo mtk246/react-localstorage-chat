@@ -104,10 +104,6 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::middleware([
             'auth:api',
     ])->group(function (): void {
-        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
-        Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
-            ->only(['index', 'store']);
-
         Route::prefix('billing-company')->group(function (): void {
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
@@ -117,6 +113,10 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
             Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
         });
+
+        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+        Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
+            ->only(['index', 'store']);
     });
 
     Route::prefix('clearing-house')->group(function () {

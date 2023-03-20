@@ -25,7 +25,7 @@ final class BillingCompanyController extends Controller
         return response()->json($rs);
     }
 
-    public function show(int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
         $rs = $this->billingCompanyRepository->getBillingCompany($id);
 
