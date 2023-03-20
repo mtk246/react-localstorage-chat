@@ -23,9 +23,8 @@ class DatabaseSeeder extends Seeder
             FacilityTypeSeeder::class,
             ModifierSeeder::class,
             DiagnosisSeeder::class,
-            // DataTestSeeder::class,
             // ServiceDataSeeder::class,
-            ProcedureDataSeeder::class,
+            GeneralSeeder::class,
             SocialNetworkSeeder::class,
             MaritalStatusSeeder::class,
             HealthProfessionalTypeSeeder::class,
@@ -36,6 +35,7 @@ class DatabaseSeeder extends Seeder
             AddressTypeSeeder::class,
             KeyboardShortcutSeeder::class,
             DataTestSeeder::class,
+            ProcedureSeeder::class,
         ]);
     }
 }
