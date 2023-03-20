@@ -87,7 +87,7 @@ final class BillingCompanyRepository
         return isset($billingCompany) ? $billingCompany->load('contacts', 'addresses') : null;
     }
 
-    public function getBillingCompany($id)
+    public function getBillingCompany(string $id)
     {
         return BillingCompany::with([
             'addresses',
