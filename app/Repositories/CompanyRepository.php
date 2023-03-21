@@ -346,7 +346,6 @@ class CompanyRepository
         if (!$bC) {
             $company = Company::whereId($id)->with([
                 'taxonomies',
-                'nameSuffix',
                 'addresses',
                 'contacts',
                 'nicknames',
@@ -361,7 +360,6 @@ class CompanyRepository
         } else {
             $company = Company::whereId($id)->with([
                 'taxonomies',
-                'nameSuffix',
                 'addresses' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
@@ -589,158 +587,152 @@ class CompanyRepository
      */
     public function updateCompany(array $data, int $id)
     {
-        try {
-            DB::beginTransaction();
-            $company = Company::find($id);
+        DB::beginTransaction();
+        $company = Company::find($id);
 
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-                $company->load([
-                    'companyStatements' => function ($query) use ($billingCompany) {
-                        $query->where('billing_company_id', $billingCompany);
-                    },
-                    'exceptionInsuranceCompanies' => function ($query) use ($billingCompany) {
-                        $query->where('billing_company_id', $billingCompany);
-                    },
-                ]);
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-                $company->load(['companyStatements', 'exceptionInsuranceCompanies']);
-            }
-
-            /* Attach billing company */
-            if (is_null($company->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
-                $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
-            } else {
-                $company->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
-                    'status' => true,
-                ]);
-            }
-
-            $company->update([
-                'ein' => $data['ein'] ?? null,
-                'upin' => $data['upin'] ?? null,
-                'clia' => $data['clia'] ?? null
+        if (auth()->user()->hasRole('superuser')) {
+            $billingCompany = $data['billing_company_id'];
+            $company->load([
+                'companyStatements' => function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany);
+                },
+                'exceptionInsuranceCompanies' => function ($query) use ($billingCompany) {
+                    $query->where('billing_company_id', $billingCompany);
+                },
             ]);
-
-            if (isset($data['taxonomies'])) {
-                $tax_array = [];
-                foreach ($data['taxonomies'] as $taxonomy) {
-                    $tax = Taxonomy::updateOrCreate([
-                        'tax_id' => $taxonomy['tax_id'],
-                    ], $taxonomy);
-                    array_push($tax_array, $tax->id);
-                }
-                $company->taxonomies()->sync($tax_array);
-            }
-
-            if (isset($data['nickname'])) {
-                EntityNickname::updateOrCreate([
-                    'nicknamable_id' => $company->id,
-                    'nicknamable_type' => Company::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'nickname' => $data['nickname'],
-                ]);
-            }
-
-            if (isset($data['abbreviation'])) {
-                EntityAbbreviation::updateOrCreate([
-                    'abbreviable_id' => $company->id,
-                    'abbreviable_type' => Company::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'abbreviation' => $data['abbreviation'],
-                ]);
-            }
-
-            if (isset($data['contact'])) {
-                Contact::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'contactable_id' => $company->id,
-                    'contactable_type' => Company::class,
-                ], $data['contact']);
-            }
-
-            if (isset($data['address']['address'])) {
-                Address::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'addressable_id' => $company->id,
-                    'addressable_type' => Company::class,
-                ], $data['address']);
-            }
-
-            if (isset($data['payment_address']['address'])) {
-                Address::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'addressable_id' => $company->id,
-                    'addressable_type' => Company::class,
-                ], $data['payment_address']);
-            }
-
-            if (isset($data['statements'])) {
-                $company->companyStatements()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
-                foreach ($data['statements'] as $statement) {
-                    CompanyStatement::create([
-                        'start_date' => $statement['start_date'] ?? null,
-                        'end_date' => $statement['end_date'] ?? null,
-                        'rule_id' => $statement['rule_id'] ?? null,
-                        'when_id' => $statement['when_id'] ?? null,
-                        'apply_to_ids' => $statement['apply_to_ids'] ?? null,
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                }
-            }
-            if (isset($data['exception_insurance_companies'])) {
-                foreach ($company->exceptionInsuranceCompanies ?? [] as $exceptionICDB) {
-                    $find = false;
-                    foreach ($data['exception_insurance_companies'] as $exceptionIC) {
-                        if ($exceptionIC == $exceptionICDB->id) {
-                            $find = true;
-                        }
-                    }
-                    if (false == $find) {
-                        $exceptionICDB->delete();
-                    }
-                }
-
-                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
-                    ExceptionInsuranceCompany::updateOrCreate([
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'insurance_company_id' => $exceptionIC,
-                    ], []);
-                }
-            }
-
-            if (isset($data['private_note'])) {
-                PrivateNote::updateOrCreate([
-                    'publishable_type' => Company::class,
-                    'publishable_id' => $company->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'note' => $data['private_note'],
-                ]);
-            }
-
-            if (isset($data['public_note'])) {
-                PublicNote::updateOrCreate([
-                    'publishable_type' => Company::class,
-                    'publishable_id' => $company->id,
-                ], [
-                    'note' => $data['public_note'],
-                ]);
-            }
-
-            DB::commit();
-
-            return $this->getOneCompany($id);
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return null;
+        } else {
+            $billingCompany = auth()->user()->billingCompanies->first();
+            $company->load(['companyStatements', 'exceptionInsuranceCompanies']);
         }
+
+        /* Attach billing company */
+        if (is_null($company->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+        } else {
+            $company->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                'status' => true,
+            ]);
+        }
+
+        $company->update([
+            'ein' => $data['ein'] ?? null,
+            'upin' => $data['upin'] ?? null,
+            'clia' => $data['clia'] ?? null,
+        ]);
+
+        if (isset($data['taxonomies'])) {
+            $tax_array = [];
+            foreach ($data['taxonomies'] as $taxonomy) {
+                $tax = Taxonomy::updateOrCreate([
+                    'tax_id' => $taxonomy['tax_id'],
+                ], $taxonomy);
+                array_push($tax_array, $tax->id);
+            }
+            $company->taxonomies()->sync($tax_array);
+        }
+
+        if (isset($data['nickname'])) {
+            EntityNickname::updateOrCreate([
+                'nicknamable_id' => $company->id,
+                'nicknamable_type' => Company::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ], [
+                'nickname' => $data['nickname'],
+            ]);
+        }
+
+        if (isset($data['abbreviation'])) {
+            EntityAbbreviation::updateOrCreate([
+                'abbreviable_id' => $company->id,
+                'abbreviable_type' => Company::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ], [
+                'abbreviation' => $data['abbreviation'],
+            ]);
+        }
+
+        if (isset($data['contact'])) {
+            Contact::updateOrCreate([
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'contactable_id' => $company->id,
+                'contactable_type' => Company::class,
+            ], $data['contact']);
+        }
+
+        if (isset($data['address']['address'])) {
+            Address::updateOrCreate([
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'addressable_id' => $company->id,
+                'addressable_type' => Company::class,
+            ], $data['address']);
+        }
+
+        if (isset($data['payment_address']['address'])) {
+            Address::updateOrCreate([
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'addressable_id' => $company->id,
+                'addressable_type' => Company::class,
+            ], $data['payment_address']);
+        }
+
+        if (isset($data['statements'])) {
+            $company->companyStatements()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
+            foreach ($data['statements'] as $statement) {
+                CompanyStatement::create([
+                    'start_date' => $statement['start_date'] ?? null,
+                    'end_date' => $statement['end_date'] ?? null,
+                    'rule_id' => $statement['rule_id'] ?? null,
+                    'when_id' => $statement['when_id'] ?? null,
+                    'apply_to_ids' => $statement['apply_to_ids'] ?? null,
+                    'company_id' => $company->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            }
+        }
+        if (isset($data['exception_insurance_companies'])) {
+            foreach ($company->exceptionInsuranceCompanies ?? [] as $exceptionICDB) {
+                $find = false;
+                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
+                    if ($exceptionIC == $exceptionICDB->id) {
+                        $find = true;
+                    }
+                }
+                if (false == $find) {
+                    $exceptionICDB->delete();
+                }
+            }
+
+            foreach ($data['exception_insurance_companies'] as $exceptionIC) {
+                ExceptionInsuranceCompany::updateOrCreate([
+                    'company_id' => $company->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'insurance_company_id' => $exceptionIC,
+                ], []);
+            }
+        }
+
+        if (isset($data['private_note'])) {
+            PrivateNote::updateOrCreate([
+                'publishable_type' => Company::class,
+                'publishable_id' => $company->id,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ], [
+                'note' => $data['private_note'],
+            ]);
+        }
+
+        if (isset($data['public_note'])) {
+            PublicNote::updateOrCreate([
+                'publishable_type' => Company::class,
+                'publishable_id' => $company->id,
+            ], [
+                'note' => $data['public_note'],
+            ]);
+        }
+
+        DB::commit();
+
+        return $this->getOneCompany($id);
     }
 
     /**
