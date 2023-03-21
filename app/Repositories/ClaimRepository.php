@@ -1572,27 +1572,39 @@ class ClaimRepository
         try {
             DB::beginTransaction();
             $claim = Claim::with('claimFormattable')->find($id);
-            if (!isset($data['sub_status_id'])) {
+            $status = $claim->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
+
+            if ($data['status_id'] != $status->id) {
                 $claimStatus = ClaimStatus::find($data['status_id']);
                 $claimStatusClaim = ClaimStatusClaim::create([
                     'claim_id'          => $claim->id,
                     'claim_status_type' => ClaimStatus::class,
                     'claim_status_id'   => $claimStatus->id,
                 ]);
-            } else {
+                PrivateNote::create([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                    'note'               => $data['private_note']
+                ]);
+            }
+            if (isset($data['sub_status_id'])) {
                 $claimSubStatus = ClaimSubStatus::find($data['sub_status_id']);
                 $claimStatusClaim = ClaimStatusClaim::create([
                     'claim_id'          => $claim->id,
                     'claim_status_type' => ClaimSubStatus::class,
                     'claim_status_id'   => $claimSubStatus->id,
                 ]);
+                PrivateNote::create([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                    'note'               => $data['private_note']
+                ]);
             }
-            PrivateNote::create([
-                'publishable_type'   => ClaimStatusClaim::class,
-                'publishable_id'     => $claimStatusClaim->id,
-                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                'note'               => $data['private_note']
-            ]);
             DB::commit();
             return $claim;
         } catch (\Exception $e) {
@@ -1607,7 +1619,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first() ?? null;
+                    ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 PrivateNote::updateOrCreate([
@@ -1632,7 +1644,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                                  ->orderBy("created_at", "desc")
-                                 ->orderBy("id", "asc")->first() ?? null;
+                                 ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 PrivateNote::create([
@@ -1656,7 +1668,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                                  ->orderBy("created_at", "desc")
-                                 ->orderBy("id", "asc")->first() ?? null;
+                                 ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 $note = PrivateNote::create([
