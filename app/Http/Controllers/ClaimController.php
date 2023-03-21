@@ -6,9 +6,11 @@ use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
+use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ReportRepository;
 use App\Models\Claim;
+use App\Models\ClaimCheckStatus;
 use App\Models\ClaimStatus;
 
 use Illuminate\Http\JsonResponse;
@@ -368,5 +370,20 @@ class ClaimController extends Controller
     {
         $rs = $this->claimRepository->addNoteCurrentStatus($request, $id);
         return $rs ? response()->json($rs) : response()->json(__("Error, change claim status"), 400);
+    }
+
+    /**
+     * addCheckStatus
+     *
+     * @method addCheckStatus
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addCheckStatus(ClaimCheckStatusRequest $request, int $id): JsonResponse
+    {
+        $rs = $this->claimRepository->addCheckStatus($request->validated(), $id);
+        return $rs ? response()->json($rs) : response()->json(__("Error, check status claim"), 400);
     }
 }

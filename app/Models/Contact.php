@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Contact
+ * App\Models\Contact.
  *
  * @property int $id
  * @property string $phone
@@ -24,12 +27,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int|null $facility_id
  * @property int|null $company_id
  * @property int|null $insurance_company_id
- * @property-read \App\Models\BillingCompany|null $billingCompany
- * @property-read \App\Models\ClearingHouse|null $clearingHouse
- * @property-read \App\Models\Company|null $company
- * @property-read \App\Models\Facility|null $facility
- * @property-read \App\Models\InsuranceCompany|null $insuranceCompany
- * @property-read \App\Models\User|null $user
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\ClearingHouse|null $clearingHouse
+ * @property \App\Models\Company|null $company
+ * @property \App\Models\Facility|null $facility
+ * @property \App\Models\InsuranceCompany|null $insuranceCompany
+ * @property \App\Models\User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
@@ -45,40 +49,48 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
+ *
  * @property string|null $mobile
  * @property string $contactable_type
  * @property int $contactable_id
  * @property string|null $contact_name
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read Model|\Eloquent $contactable
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property Model|\Eloquent $contactable
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereMobile($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class Contact extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
-    
+    use HasFactory;
+    use AuditableTrait;
+
     protected $fillable = [
-        "contact_name",
-        "phone",
-        "fax",
-        "email",
-        "mobile",
-        "billing_company_id",
-        "contactable_type",
-        "contactable_id"
+        'contact_name',
+        'phone',
+        'fax',
+        'email',
+        'mobile',
+        'billing_company_id',
+        'contactable_type',
+        'contactable_id',
     ];
+
+    public function email(): Attribute
+    {
+        return Attribute::make(set: fn (string $value) => strtolower($value));
+    }
 
     /**
      * Contact belongs to BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billingCompany(): BelongsTo
     {
@@ -87,8 +99,6 @@ class Contact extends Model implements Auditable
 
     /**
      * Contact morphs to models in contactable_type.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function contactable(): MorphTo
     {

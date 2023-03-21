@@ -135,8 +135,8 @@ class Claim extends Model implements Auditable
     protected $appends = [
         'format', 'last_modified', 'private_note', 'status', 'status_history',
         'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
-        'insurance_company_id', 'insurance_plan', 'billing_provider_name', 'user_created',
-        'type_responsibility'
+        'insurance_company_id', 'insurance_company', 'insurance_plan',
+        'billing_provider_name', 'user_created', 'type_responsibility'
     ];
     
     /**
@@ -167,16 +167,6 @@ class Claim extends Model implements Auditable
     public function facility()
     {
         return $this->belongsTo(Facility::class);
-    }
-
-    /**
-     * Claim belongs to InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function insuranceCompany()
-    {
-        return $this->belongsTo(InsuranceCompany::class);
     }
 
     /**
@@ -292,7 +282,18 @@ class Claim extends Model implements Auditable
     public function getInsuranceCompanyIdAttribute()
     {
         $policyPrimary = $this->insurancePolicies()->first();
-        return $policyPrimary->insurance_company_id ?? '';
+        return $policyPrimary->insurancePlan->insuranceCompany->id ?? '';
+    }
+
+    /**
+     * Interact with the claim's insuranceCompanyId.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getInsuranceCompanyAttribute()
+    {
+        $policyPrimary = $this->insurancePolicies()->first();
+        return $policyPrimary->insurancePlan->insuranceCompany->name ?? '';
     }
 
     /**
@@ -418,12 +419,21 @@ class Claim extends Model implements Auditable
                 $record = [];
                 $notes = [];
                 foreach ($status->privateNotes as $note) {
+                    $check = ClaimCheckStatus::where('private_note_id', $note->id)->first();
                     array_push(
                         $notes,
                         [
                             'note'          => $note->note,
                             'created_at'    => $note->created_at,
-                            'last_modified' => $note->last_modified
+                            'last_modified' => $note->last_modified,
+                            'check_status'  => isset($check) ? [
+                                'response_details' => $check->response_details ?? '',
+                                'interface_type' => $check->interface_type ?? '',
+                                'interface' => $check->interface ?? '',
+                                'consultation_date' => $check->consultation_date ?? '',
+                                'resolution_time' => $check->resolution_time ?? '',
+                                'past_due_date' => $check->past_due_date ?? '',
+                            ] : null,
                         ]
                     );
                 }

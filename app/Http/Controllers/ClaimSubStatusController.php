@@ -7,6 +7,7 @@ use App\Http\Requests\ClaimSubStatus\ClaimSubStatusUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ClaimSubStatusRepository;
 use App\Models\ClaimSubStatus;
+use App\Models\ClaimStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -87,7 +88,20 @@ class ClaimSubStatusController extends Controller
         return $rs ? response()->json([], 204) : response()->json(__("Error updating status"), 400);
     }
 
-    public function getList(int $status_id, $id = null)
+    public function getList(Request $request)
+    {
+        $status_id = $request->status_id ?? null;
+        $status_name = $request->status ?? null;
+        $billing_company_id = $request->billing_company_id ?? null;
+        $status = ClaimStatus::where('id', $status_id)
+            ->orWhereRaw('LOWER(status) LIKE (?)', [strtolower("$status_name")])
+            ->first();
+        return response()->json(
+            $this->claimSubStatusRepository->getList($status->id ?? null, $billing_company_id)
+        );
+    }
+
+    public function getListByBilling(int $status_id, $id = null)
     {
         return response()->json(
             $this->claimSubStatusRepository->getList($status_id, $id)

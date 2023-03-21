@@ -25,7 +25,8 @@
 - [Change status Claim](#change-status-claim)
 - [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
-- [Get list diagnoses](#get-list-diagnoses)
+- [Get list diagnoses](#get-list-diagnoses
+- [Add check status Claim](#add-check-status)
 
 
 
@@ -57,7 +58,7 @@
 | 20 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
 | 21 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
 | 22 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
-
+| 23 |PATCH | `Add check status Claim` | `/claim/add-check-status-claim/{id}`|yes|Add check status claim|
 
 <a name="data-another-module"></a>
 ## Data from another module to make request
@@ -88,7 +89,7 @@
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1168,7 +1169,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1283,7 +1284,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1332,7 +1333,8 @@ subStatus optional <array>    //[1,2]
             "family_planning_id": 1
         }
     ],
-    "private_note": "Note claim"
+    "private_note": "Note claim",
+    "sub_status_id": 1
 }
 ```
 
@@ -1385,7 +1387,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1434,7 +1436,8 @@ subStatus optional <array>    //[1,2]
             "family_planning_id": 1
         }
     ],
-    "private_note": "Note claim"
+    "private_note": "Note claim",
+    "sub_status_id": 1
 }
 ```
 
@@ -1510,7 +1513,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1682,7 +1685,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -1807,7 +1810,7 @@ subStatus optional <array>    //[1,2]
     "patient_or_insured_information": {
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
-        "auto_accident_place_state": true,
+        "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
         "patient_signature": false,
         "insured_signature": false,
@@ -2038,4 +2041,48 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
         "name": "A0100"
     }
 ]
+```
+
+<a name="add-check-status"></a>
+## Add check status of the claim
+
+## Param in path
+
+```json
+{
+    "id": <integer> /** ID Claim */
+}
+```
+## Body request example
+
+```json
+{
+    "response_details": "Response API", /** Optional */
+    "interface_type": "call", /** Optional Options:['call', 'email', 'website'] */
+    "interface": "+1432323212", /** Required if interface_type is not null */
+    "consultation_date": "2022-09-16", /** Optional */
+    "resolution_time": "2022-09-16", /** Optional */
+    "past_due_date": "2022-09-16", /** Optional */
+    "private_note": "Note private", /** Optional */
+}
+```
+
+## Response
+
+> {success} 204 Good response
+
+```json
+{
+    "id": 1,
+    "status_id": 1,
+    "subtatus_id": 1,
+    "response_details": "Response API",
+    "interface_type": "call",
+    "interface": "+1432323212",
+    "consultation_date": "2022-09-16",
+    "resolution_time": "2022-09-16",
+    "past_due_date": "2022-09-16",
+    "updated_at": "2022-09-16T13:23:19.000000Z",
+    "created_at": "2022-09-16T13:23:19.000000Z",
+}
 ```

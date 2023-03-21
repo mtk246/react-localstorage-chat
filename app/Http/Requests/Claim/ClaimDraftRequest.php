@@ -84,6 +84,7 @@ class ClaimDraftRequest extends FormRequest
             'claim_services.*.family_planning_id'  => ['nullable', 'integer'],
 
             'private_note'                         => ['string', 'nullable'],
+            'sub_status_id'                        => ['integer', 'nullable'],
         ];
     }
 }

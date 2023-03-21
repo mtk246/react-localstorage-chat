@@ -104,10 +104,6 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::middleware([
             'auth:api',
     ])->group(function (): void {
-        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
-        Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
-            ->only(['index', 'store']);
-
         Route::prefix('billing-company')->group(function (): void {
             Route::get('/get-all-server', [BillingCompanyController::class, 'getServerAllBillingCompanies']);
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
@@ -117,6 +113,10 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
             Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
         });
+
+        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+        Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
+            ->only(['index', 'store']);
     });
 
     Route::prefix('clearing-house')->group(function () {
@@ -366,6 +366,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{id}', [\App\Http\Controllers\ServiceController::class, 'getOneService']);
     });
 
+    Route::prefix('address')->middleware([
+        'auth:api',
+    ])->group(function () {
+        Route::get('/get-list-countries', [\App\Http\Controllers\AddressController::class, 'getListCountries']);
+        Route::get('/get-list-states', [\App\Http\Controllers\AddressController::class, 'getListStates']);
+    });
+
     Route::prefix('diagnosis')->middleware([
         'auth:api',
         'role:superuser|biller|billingmanager',
@@ -474,6 +481,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
+        Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
     });
 
     Route::prefix('claim-sub-status')->middleware([
@@ -481,7 +489,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimSubStatusController::class, 'getServerAll'])->middleware(['auth:api']);
-        Route::get('/get-list-by-billing-company/{status_id}/{billing_company_id?}', [\App\Http\Controllers\ClaimSubStatusController::class, 'getList']);
+        Route::get('/get-list-by-billing-company/{status_id}/{billing_company_id?}', [\App\Http\Controllers\ClaimSubStatusController::class, 'getListByBilling']);
+        Route::get('/get-list', [\App\Http\Controllers\ClaimSubStatusController::class, 'getList']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimSubStatusController::class, 'getListStatus']);
         Route::post('/', [\App\Http\Controllers\ClaimSubStatusController::class, 'createClaimSubStatus'])->middleware([
             'auth:api',
