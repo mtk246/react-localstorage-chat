@@ -68,7 +68,7 @@ class ClaimSubStatusRepository
                 if (isset($current) && $current->status == 'Draft') {
                     $nextStatuses = ClaimStatus::where('status', 'Verified - Not submitted');
                 } else if (isset($current) && $current->status == 'Verified - Not submitted') {
-                    $nextStatuses = ClaimStatus::where('status', 'Draft')
+                    $nextStatuses = ClaimStatus::where('status', 'Submitted')
                         ->orWhere('status', 'Draft');
                 } else if (isset($current) && $current->status == 'Submitted') {
                     $nextStatuses = ClaimStatus::where('status', 'Approved')
