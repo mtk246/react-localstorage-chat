@@ -8,7 +8,7 @@
 - [Get one claim sub-status](#get-one-claim-sub-status)
 - [Get one claim sub-status by name](#get-one-claim-sub-status-by-name)
 - [Get list claim status](#get-list-status)
-- [Get list claim sub-status by billing company](#get-list)
+- [Get list claim sub-status](#get-list)
 - [Update claim sub-status](#update-claim-sub-status)
 - [Change status claim sub-status](#change-status-claim-sub-status)
 
@@ -23,7 +23,7 @@
 | 3 |GET     | `Get one claim sub-status`                     | `/claim-sub-status/{id}`                              | yes | Get one claim sub-status|
 | 4 |GET     | `Get one claim sub-status by name`             | `/claim-sub-status/get-by-name/{name}`                | yes | Get claim sub-status by name|
 | 5 |GET     | `Get list claim status`                        | `/claim-sub-status/get-list-status`                   | yes | Get all claim status|
-| 6 |GET     | `Get list claim sub-status by billing company` | `/claim-sub-status/get-list-by-billing-company/{status_id}/{billing_company_id?}` | yes | Get all claim sub-status by billing company|
+| 6 |GET     | `Get list claim sub-status` | `/claim-sub-status/get-list` | yes | Get all claim sub-status by billing company|
 | 7 |PUT     | `Update claim sub-status`                      | `/claim-sub-status/{id}`                              | yes | update claim sub-status|
 | 8 |PATCH   | `Change status claim sub-status`               | `/claim-sub-status/change-status/{id}`                | yes | Change status claim sub-status|
 
@@ -661,6 +661,19 @@
 }
 ```
 
+### Param in path
+
+```json
+{
+    "current_id": optional <integer>
+}
+```
+
+## Example path
+
+>{primary} ?current_id=1
+
+
 ## Response
 
 > {success} 200 claim status found
@@ -725,10 +738,24 @@
 
 ```json
 {
-    "status_id": required <integer>
+    "status_id": optional <integer>
+    "status": optional <string>
     "billing_company_id": optional <integer>
+    "current_id": optional <integer>
 }
 ```
+
+## Example path with status_id
+
+>{primary} ?status_id=1&billing_company_id=1
+
+## Example path with status name
+
+>{primary} ?status=draft&billing_company_id=1
+
+## Example path with current_id
+
+>{primary} ?status_id=1&billing_company_id=1&current_id=1
 
 ## Response
 

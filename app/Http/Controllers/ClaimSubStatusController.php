@@ -96,8 +96,9 @@ class ClaimSubStatusController extends Controller
         $status = ClaimStatus::where('id', $status_id)
             ->orWhereRaw('LOWER(status) LIKE (?)', [strtolower("$status_name")])
             ->first();
+        $current_id = $request->current_id ?? null;
         return response()->json(
-            $this->claimSubStatusRepository->getList($status->id ?? null, $billing_company_id)
+            $this->claimSubStatusRepository->getList($status->id ?? null, $billing_company_id, $current_id)
         );
     }
 
@@ -108,10 +109,10 @@ class ClaimSubStatusController extends Controller
         );
     }
 
-    public function getListStatus()
+    public function getListStatus(Request $request)
     {
         return response()->json(
-            $this->claimSubStatusRepository->getListStatus()
+            $this->claimSubStatusRepository->getListStatus($request->input())
         );
     }
 }
