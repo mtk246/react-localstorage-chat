@@ -377,7 +377,7 @@ class Claim extends Model implements Auditable
                     ->orderBy("created_at", "desc")
                     ->orderBy("id", "asc")->first()->claimStatus ?? null;
         if (isset($status)) {
-            $status->claim_sub_status = ($status->id != $subStatus->id) ? $subStatus : null;
+            $status->claim_sub_status = ($status != $subStatus) ? $subStatus : null;
             $status->claim_sub_statuses = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status->id]]);
         }
         return $status;
@@ -445,6 +445,7 @@ class Claim extends Model implements Auditable
                 $record['sub_status_history'] = $recordSubstatus;
                 $record['last_modified'] = $status->last_modified ?? '';
                 array_push($records, $record);
+                $recordSubstatus = [];
             }
         }
         return $records;
