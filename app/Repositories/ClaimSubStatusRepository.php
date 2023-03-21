@@ -66,18 +66,26 @@ class ClaimSubStatusRepository
             if (isset($data['current_id'])) {
                 $current = ClaimStatus::whereId($data['current_id'])->first();
                 if (isset($current) && $current->status == 'Draft') {
-                    $nextStatuses = ClaimStatus::where('status', 'Verified - Not submitted');
+                    $nextStatuses = ClaimStatus::where('status', 'Verified - Not submitted')
+                        ->orWhere('status', 'Draft');
                 } else if (isset($current) && $current->status == 'Verified - Not submitted') {
                     $nextStatuses = ClaimStatus::where('status', 'Submitted')
-                        ->orWhere('status', 'Draft');
+                        ->orWhere('status', 'Draft')
+                        ->orWhere('status', 'Verified - Not submitted');
                 } else if (isset($current) && $current->status == 'Submitted') {
                     $nextStatuses = ClaimStatus::where('status', 'Approved')
                         ->orWhere('status', 'Rejected')
+                        ->orWhere('status', 'Denied')
+                        ->orWhere('status', 'Submitted');
+                } else if (isset($current) && $current->status == 'Approved') {
+                    $nextStatuses = ClaimStatus::where('status', 'Complete')
+                        ->orWhere('status', 'Approved');
+                } else if (isset($current) && $current->status == 'Denied') {
+                    $nextStatuses = ClaimStatus::where('status', 'Complete')
                         ->orWhere('status', 'Denied');
-                } else if (isset($current) && ($current->status == 'Approved' || $current->status == 'Denied')) {
-                    $nextStatuses = ClaimStatus::where('status', 'Complete');
                 } else if (isset($current) && $current->status == 'Rejected') {
-                    $nextStatuses = ClaimStatus::where('status', 'Draft');
+                    $nextStatuses = ClaimStatus::where('status', 'Draft')
+                        ->orWhere('status', 'Rejected');
                 }
                 $nextStatuses = $nextStatuses->get()->pluck('id')->toArray();
                 return ClaimStatus::query()->select('id', 'status as name', 'background_color')

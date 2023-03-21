@@ -354,7 +354,7 @@ class Claim extends Model implements Auditable
     {
         $status = $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first();
+                    ->orderBy("id", "desc")->first();
         if (isset($status)) {
             $note = $status->privateNotes()->orderBy("created_at", "desc")
                            ->orderBy("id", "asc")->first();
@@ -372,10 +372,10 @@ class Claim extends Model implements Auditable
         $status = $this->claimStatusClaims()
                     ->where('claim_status_type', ClaimStatus::class)
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first()->claimStatus ?? null;
+                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
         $subStatus = $this->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first()->claimStatus ?? null;
+                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
         if (isset($status)) {
             $status->claim_sub_status = ($status != $subStatus) ? $subStatus : null;
             $status->claim_sub_statuses = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status->id]]);
@@ -394,7 +394,7 @@ class Claim extends Model implements Auditable
         $recordSubstatus = [];
         $history = $this->claimStatusClaims()
                         ->orderBy("created_at", "desc")
-                        ->orderBy("id", "asc")->get() ?? [];
+                        ->orderBy("id", "desc")->get() ?? [];
         foreach ($history as $status) {
             if ($status->claim_status_type == ClaimSubStatus::class) {
                 $record = [];
@@ -524,7 +524,7 @@ class Claim extends Model implements Auditable
 
     public function getStatusDateAttribute()
     {
-        $status = $this->claimStatusClaims()->orderBy("created_at", "desc")->orderBy("id", "asc")->first();
+        $status = $this->claimStatusClaims()->orderBy("created_at", "desc")->orderBy("id", "desc")->first();
         return (isset($status)) ? $status->created_at : '';
     }
 
