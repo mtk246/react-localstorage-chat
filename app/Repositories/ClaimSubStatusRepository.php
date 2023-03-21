@@ -47,7 +47,7 @@ class ClaimSubStatusRepository
     }
 
     
-    public function getList($status_id, $id = null) {
+    public function getList($status_id, $id = null, $current_id = null) {
         try {
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $id;
@@ -55,15 +55,36 @@ class ClaimSubStatusRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
             /**return getList(ClaimSubStatus::class, 'name', ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);*/
-            return getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status_id]]);
+            return getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status_id]], array($current_id));
         } catch (\Exception $e) {
             return [];
         }
     }
 
-    public function getListStatus() {
+    public function getListStatus(array $data) {
         try {
-            return getList(ClaimStatus::class, ['status'], [], null, ['background_color']);
+            if (isset($data['current_id'])) {
+                $current = ClaimStatus::whereId($data['current_id'])->first();
+                if (isset($current) && $current->status == 'Draft') {
+                    $nextStatuses = ClaimStatus::where('status', 'Verified - Not submitted');
+                } else if (isset($current) && $current->status == 'Verified - Not submitted') {
+                    $nextStatuses = ClaimStatus::where('status', 'Draft')
+                        ->orWhere('status', 'Draft');
+                } else if (isset($current) && $current->status == 'Submitted') {
+                    $nextStatuses = ClaimStatus::where('status', 'Approved')
+                        ->orWhere('status', 'Rejected')
+                        ->orWhere('status', 'Denied');
+                } else if (isset($current) && ($current->status == 'Approved' || $current->status == 'Denied')) {
+                    $nextStatuses = ClaimStatus::where('status', 'Complete');
+                } else if (isset($current) && $current->status == 'Rejected') {
+                    $nextStatuses = ClaimStatus::where('status', 'Draft');
+                }
+                $nextStatuses = $nextStatuses->get()->pluck('id')->toArray();
+                return ClaimStatus::query()->select('id', 'status as name', 'background_color')
+                    ->whereIn('id', $nextStatuses)->get()->toArray();
+            } else {
+                return getList(ClaimStatus::class, ['status'], [], null, ['background_color']);
+            }
         } catch (\Exception $e) {
             return [];
         }
