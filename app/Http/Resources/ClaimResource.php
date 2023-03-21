@@ -20,6 +20,7 @@ final class ClaimResource extends JsonResource
         $insurancePolicies = [];
 
         foreach ($this->insurancePolicies as $key => $insurancePolicy) {
+            $insurancePolicy['type_responsibility'] = $insurancePolicy->typeResponsibility;
             $insurancePolicies[$key] = $insurancePolicy;
             $claimEligibilityCurrent = $insurancePolicy->claimEligibilities()
                                                         ->where('claim_id', $this->id)
