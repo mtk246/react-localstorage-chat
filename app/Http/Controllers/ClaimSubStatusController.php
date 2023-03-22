@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClaimSubStatus\ClaimSubStatusCreateRequest;
 use App\Http\Requests\ClaimSubStatus\ClaimSubStatusUpdateRequest;
 use App\Http\Requests\ChangeStatusRequest;
+use App\Models\Claim;
 use App\Repositories\ClaimSubStatusRepository;
 use App\Models\ClaimSubStatus;
 use App\Models\ClaimStatus;
@@ -90,16 +91,34 @@ class ClaimSubStatusController extends Controller
 
     public function getList(Request $request)
     {
-        $status_id = $request->status_id ?? null;
+        $status_id = ((is_array($request->status_id)) ? $request->status_id : json_decode($request->status_id)) ?? [];
         $status_name = $request->status ?? null;
         $billing_company_id = $request->billing_company_id ?? null;
-        $status = ClaimStatus::where('id', $status_id)
-            ->orWhereRaw('LOWER(status) LIKE (?)', [strtolower("$status_name")])
-            ->first();
-        $current_id = $request->current_id ?? null;
-        return response()->json(
-            $this->claimSubStatusRepository->getList($status->id ?? null, $billing_company_id, $current_id)
-        );
+        if (is_array($status_id)) {
+            $records = [];
+            foreach($status_id as $id) {
+                $status = ClaimStatus::find($id);
+                if ($status) {
+                    $statusRecords = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $id]]);
+                    if (count($statusRecords) > 0) {
+                        array_push($records, ['header' => $status->status]);
+                    }
+                    foreach ($statusRecords as $value) {
+                        $value['group'] = $status->status;
+                        array_push($records, $value);
+                    }
+                }
+            }
+            return response()->json($records ?? []);
+        } else {
+            $status = ClaimStatus::where('id', $status_id)
+                ->orWhereRaw('LOWER(status) LIKE (?)', [strtolower("$status_name")])
+                ->first();
+            $current_id = $request->current_id ?? null;
+            return response()->json(
+                $this->claimSubStatusRepository->getList($status->id ?? null, $billing_company_id, $current_id)
+            );
+        }
     }
 
     public function getListByBilling(int $status_id, $id = null)
