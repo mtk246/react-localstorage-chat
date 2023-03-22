@@ -256,10 +256,15 @@ class ClaimRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                if (count($status) == 1) {
+                /**if (count($status) == 1) {
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
                           ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
                 } else if (count($status) > 1) {
+                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
+                }*/
+                if (count($subStatus) > 0) {
+                    $query->where('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
+                } else if (count($status) > 0) {
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([
