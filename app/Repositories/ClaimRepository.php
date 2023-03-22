@@ -255,62 +255,37 @@ class ClaimRepository
         $subStatus = ((is_array($request->substatus)) ? $request->substatus : json_decode($request->substatus)) ?? [];
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $data = Claim::query();
-            if (count($subStatus) > 0) {
-                $data = $data->whereHas("claimLastSubStatusClaim", function ($query) use ($subStatus) {
-                    $query->whereIn("claim_status_id", $subStatus);
-                })->whereHas("claimLastStatusClaim", function ($query) use ($status) {
-                    $query->whereIn("claim_status_id", $status);
-                })->with([
-                    /**"insuranceCompany" => function ($query) {
-                        $query->with('nicknames');
-                    },*/
-                    "company" => function ($query) {
-                        $query->with('nicknames');
-                    },
-                    "patient" => function ($query) {
-                        $query->with([
-                            "user" => function ($q) {
-                                $q->with(["profile", "addresses", "contacts"]);
-                            }
-                        ]);
-                    }
-                ]);
-            } else if (count($status) > 0) {
-                
-                $data = $data->whereHas("claimLastStatusClaim", function ($query) use ($status) {
-                    $query->whereIn("claim_status_id", $status);
-                })->with([
-                    /**"insuranceCompany" => function ($query) {
-                        $query->with('nicknames');
-                    },*/
-                    "company" => function ($query) {
-                        $query->with('nicknames');
-                    },
-                    "patient" => function ($query) {
-                        $query->with([
-                            "user" => function ($q) {
-                                $q->with(["profile", "addresses", "contacts"]);
-                            }
-                        ]);
-                    }
-                ]);
-            }
-        } else {
-            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                if (count($subStatus) > 0) {
-                    $query->where('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
-                } else if (count($status) > 0) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
-                }
-            })->with([
-                /**"insuranceCompany" => function ($query) use ($bC){
+            $data = Claim::query()->with([
+                "company" => function ($query) {
+                    $query->with('nicknames');
+                },
+                "patient" => function ($query) {
                     $query->with([
-                        "nicknames" => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
+                        "user" => function ($q) {
+                            $q->with(["profile", "addresses", "contacts"]);
                         }
                     ]);
-                },*/
+                }
+            ]);
+            if (count($subStatus) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($subStatus) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $subStatus)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                })->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            } else if (count($status) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            }
+        } else {
+            $data = Claim::query()->with([
                 "company" => function ($query) use ($bC){
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
@@ -334,6 +309,23 @@ class ClaimRepository
                     ]);
                 }
             ]);
+            if (count($subStatus) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($subStatus) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $subStatus)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                })->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            } else if (count($status) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            }
         }
 
         if (!empty($request->query('query')) && $request->query('query')!=="{}") {
@@ -356,6 +348,7 @@ class ClaimRepository
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
+
 
         return response()->json([
             'data'          => $data->items(),

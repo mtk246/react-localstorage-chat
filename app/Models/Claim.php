@@ -35,7 +35,6 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property-read int|null $audits_count
  * @property-read \App\Models\HealthProfessional|null $billingProvider
  * @property-read Model|\Eloquent $claimFormattable
- * @property-read \App\Models\ClaimStatusClaim|null $claimLastStatusClaim
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
  * @property-read int|null $claim_status_claims_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
@@ -249,15 +248,6 @@ class Claim extends Model implements Auditable
         return $this->hasMany(ClaimStatusClaim::class);
     }
 
-    public function claimLastStatusClaim()
-    {
-        return $this->hasOne(ClaimStatusClaim::class)->where('claim_status_type', ClaimStatus::class)->latestOfMany();
-    }
-    public function claimLastSubStatusClaim()
-    {
-        return $this->hasOne(ClaimStatusClaim::class)->where('claim_status_type', ClaimSubStatus::class)->latestOfMany();
-    }
-
     /**
      * Claim has many ClaimTransmissionResponses.
      *
@@ -375,16 +365,16 @@ class Claim extends Model implements Auditable
     {
         $status = $this->claimStatusClaims()
                     ->where('claim_status_type', ClaimStatus::class)
-                    ->orderBy("created_at", "desc")
-                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
+                    ->orderBy("id", "desc")->first() ?? null;
         $subStatus = $this->claimStatusClaims()
-                    ->orderBy("created_at", "desc")
-                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
+                          ->where('claim_status_type', ClaimSubStatus::class)
+                          ->orderBy("id", "desc")->first() ?? null;
         if (isset($status)) {
-            $status->claim_sub_status = ($status != $subStatus) ? $subStatus : null;
-            $status->claim_sub_statuses = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status->id]]);
+            $record = $status->claimStatus;
+            $record['claim_sub_status'] = (isset($subStatus) && $subStatus->id > $status->id) ? $subStatus->claimStatus : null;
+            $record['claim_sub_statuses'] = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $record->id]]);
         }
-        return $status;
+        return $record;
     }
 
     /**
