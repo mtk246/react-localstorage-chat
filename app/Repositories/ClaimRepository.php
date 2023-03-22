@@ -252,42 +252,55 @@ class ClaimRepository
 
     public function getServerAll(Request $request) {
         $status = ((is_array($request->status)) ? $request->status : json_decode($request->status)) ?? [];
-        $subStatus = ((is_array($request->subStatus)) ? $request->subStatus : json_decode($request->subStatus)) ?? [];
+        $subStatus = ((is_array($request->substatus)) ? $request->substatus : json_decode($request->substatus)) ?? [];
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
+            $data = Claim::query();
+            if (count($subStatus) > 0) {
+                $data = $data->whereHas("claimLastSubStatusClaim", function ($query) use ($subStatus) {
+                    $query->whereIn("claim_status_id", $subStatus);
+                })->whereHas("claimLastStatusClaim", function ($query) use ($status) {
+                    $query->whereIn("claim_status_id", $status);
+                })->with([
+                    /**"insuranceCompany" => function ($query) {
+                        $query->with('nicknames');
+                    },*/
+                    "company" => function ($query) {
+                        $query->with('nicknames');
+                    },
+                    "patient" => function ($query) {
+                        $query->with([
+                            "user" => function ($q) {
+                                $q->with(["profile", "addresses", "contacts"]);
+                            }
+                        ]);
+                    }
+                ]);
+            } else if (count($status) > 0) {
+                
+                $data = $data->whereHas("claimLastStatusClaim", function ($query) use ($status) {
+                    $query->whereIn("claim_status_id", $status);
+                })->with([
+                    /**"insuranceCompany" => function ($query) {
+                        $query->with('nicknames');
+                    },*/
+                    "company" => function ($query) {
+                        $query->with('nicknames');
+                    },
+                    "patient" => function ($query) {
+                        $query->with([
+                            "user" => function ($q) {
+                                $q->with(["profile", "addresses", "contacts"]);
+                            }
+                        ]);
+                    }
+                ]);
+            }
+        } else {
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                /**if (count($status) == 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
-                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
-                } else if (count($status) > 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
-                }*/
                 if (count($subStatus) > 0) {
                     $query->where('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
                 } else if (count($status) > 0) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
-                }
-            })->with([
-                /**"insuranceCompany" => function ($query) {
-                    $query->with('nicknames');
-                },*/
-                "company" => function ($query) {
-                    $query->with('nicknames');
-                },
-                "patient" => function ($query) {
-                    $query->with([
-                        "user" => function ($q) {
-                            $q->with(["profile", "addresses", "contacts"]);
-                        }
-                    ]);
-                }
-            ]);
-        } else {
-            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                if (count($status) == 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
-                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
-                } else if (count($status) > 1) {
                     $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
                 }
             })->with([

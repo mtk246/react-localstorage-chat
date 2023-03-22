@@ -68,7 +68,7 @@ class ClaimBatchRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status) {
-                $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
+                $query->where("claim_status_id", $status->id);
             })->with([
                 /**"insuranceCompany" => function ($query) {
                     $query->with('nicknames');
@@ -86,7 +86,7 @@ class ClaimBatchRepository
             ]);
         } else {
             $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $bC) {
-                $query->where('claim_status_type', ClaimStatus::class)->where("claim_status_id", $status->id);
+                $query->where("claim_status_id", $status->id);
             })->with([
                 /**"insuranceCompany" => function ($query) use ($bC) {
                     $query->with([
