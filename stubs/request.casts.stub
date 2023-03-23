@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace {{ namespace }};
 
-use App\http\Casts\CastsRequest;
+use App\Http\Casts\CastsRequest;
 
 final class {{ class }} extends CastsRequest
 {

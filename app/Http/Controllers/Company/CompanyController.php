@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Company;
 
 use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
+use App\Actions\Company\UpdateCompany;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\Company\AddCompanyCopaysRequest;
 use App\Http\Requests\Company\AddContractFeesRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
 use App\Http\Requests\Company\AddServicesRequest;
+use App\Http\Requests\Company\StoreExectionICRequest;
+use App\Http\Requests\Company\StoreStatementRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Http\Requests\Company\UpdateContactDataRequest;
+use App\Http\Requests\Company\UpdateNotesRequest;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Company;
@@ -20,6 +27,7 @@ use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/** @todo separate in multiple controllers files this class is too big */
 final class CompanyController extends Controller
 {
     public function __construct(private CompanyRepository $companyRepository)
@@ -106,6 +114,50 @@ final class CompanyController extends Controller
         $rs = $this->companyRepository->updateCompany($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating company'), 400);
+    }
+
+    public function updateCompanyData(UpdateCompanyRequest $request, UpdateCompany $updateCompany, Company $company): JsonResponse
+    {
+        $rs = $updateCompany->invoke($company, $request->casted());
+
+        return response()->json($rs);
+    }
+
+    public function UpdateContactData(
+        UpdateContactDataRequest $request,
+        UpdateCompany $updateCompany,
+        Company $company
+    ): JsonResponse {
+        $rs = $updateCompany->contactData($company, $request->casted());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error updating company'), 400);
+    }
+
+    public function StoreStatements(
+        StoreStatementRequest $request,
+        UpdateCompany $updateCompany,
+        Company $company
+    ): JsonResponse {
+        $rs = $updateCompany->statement($company, $request->casted());
+
+        return response()->json($rs);
+    }
+
+    public function StoreExectionInsuranceCompanies(
+        StoreExectionICRequest $request,
+        UpdateCompany $updateCompany,
+        Company $company
+    ): JsonResponse {
+        $rs = $updateCompany->exectionInsuranceCompanies($company, $request->casted());
+
+        return response()->json($rs);
+    }
+
+    public function updateCompanyNotes(UpdateNotesRequest $request, UpdateCompany $updateCompany, Company $company): JsonResponse
+    {
+        $rs = $updateCompany->notes($company, $request->casted());
+
+        return response()->json($rs);
     }
 
     public function getOneByEmail(string $email): JsonResponse
