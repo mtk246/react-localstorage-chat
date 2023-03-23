@@ -20,6 +20,22 @@ abstract class CastsRequest
     ) {
     }
 
+    /** @return string|int|null */
+    protected function get(string $input): mixed
+    {
+        return $this->inputs[$input] ?? null;
+    }
+
+    protected function getArray(string $input): array
+    {
+        return $this->inputs[$input] ?? [];
+    }
+
+    protected function getCollect(string $input): Collection
+    {
+        return collect($this->getArray($input));
+    }
+
     protected function cast(string $input, string $class): ?object
     {
         return $this->inputs[$input]
