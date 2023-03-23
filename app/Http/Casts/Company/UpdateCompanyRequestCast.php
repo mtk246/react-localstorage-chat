@@ -73,8 +73,7 @@ final class UpdateCompanyRequestCast extends CastsRequest
 
     public function getCompanyValues(): array
     {
-        return ($this->getName() ? ['name' => $this->getName()] : [])
-            + ($this->getEin() ? ['ein' => $this->getEin()] : [])
+        return ($this->getEin() ? ['ein' => $this->getEin()] : [])
             + ($this->getUpin() ? ['upin' => $this->getUpin()] : [])
             + ($this->getClia() ? ['clia' => $this->getClia()] : []);
     }
