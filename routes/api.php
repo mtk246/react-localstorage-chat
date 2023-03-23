@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
+use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
@@ -192,53 +193,37 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('company')->group(function () {
-        Route::get('/get-all-server', [\App\Http\Controllers\CompanyController::class, 'getServerAll'])->middleware(['auth:api']);
-        Route::get('/get-list-by-billing-company/{id?}', [\App\Http\Controllers\CompanyController::class, 'getList']);
-        Route::get('/get-list-name-suffix', [\App\Http\Controllers\CompanyController::class, 'getListNameSuffix']);
-        Route::get('/get-list-statement-rules', [\App\Http\Controllers\CompanyController::class, 'getListStatementRules']);
-        Route::get('/get-list-statement-when', [\App\Http\Controllers\CompanyController::class, 'getListStatementWhen']);
-        Route::get('/get-list-statement-apply-to', [\App\Http\Controllers\CompanyController::class, 'getListStatementApplyTo']);
-        Route::get('/get-list-contract-fee-types', [\App\Http\Controllers\CompanyController::class, 'getListContractFeeTypes']);
-        Route::get('/get-list-billing-companies', [\App\Http\Controllers\CompanyController::class, 'getListBillingCompanies']);
-        Route::post('/', [\App\Http\Controllers\CompanyController::class, 'createCompany'])->middleware([
+        Route::middleware([
             'auth:api',
-        ]);
-        Route::get('/', [\App\Http\Controllers\CompanyController::class, 'getAllCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/{id}', [\App\Http\Controllers\CompanyController::class, 'getOneCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/get-by-name/{name}', [\App\Http\Controllers\CompanyController::class, 'getByName'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/get-by-email/{email}', [\App\Http\Controllers\CompanyController::class, 'getOneByEmail'])->middleware([
-            'auth:api',
-        ]);
-        Route::get('/get-by-npi/{npi}', [\App\Http\Controllers\CompanyController::class, 'getOneByNpi'])->middleware([
-            'auth:api',
-        ]);
-        Route::put('/{id}', [\App\Http\Controllers\CompanyController::class, 'updateCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/change-status/{id}', [\App\Http\Controllers\CompanyController::class, 'changeStatus'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/add-to-billing-company/{id}', [\App\Http\Controllers\CompanyController::class, 'addToBillingCompany'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/add-facilities-to-company/{id}', [\App\Http\Controllers\CompanyController::class, 'addFacilities'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/add-services-to-company/{company}', [\App\Http\Controllers\CompanyController::class, 'addServices'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/add-copays-to-company/{company}', [\App\Http\Controllers\CompanyController::class, 'addCompanyCopays'])->middleware([
-            'auth:api',
-        ]);
-        Route::patch('/add-contract-fees-to-company/{company}', [\App\Http\Controllers\CompanyController::class, 'addCompanyContractFees'])->middleware([
-            'auth:api',
-        ]);
+        ])->group(function (): void {
+            Route::put('/{company}/data', [CompanyController::class, 'updateCompanyData']);
+            Route::put('/{company}/contacts', [CompanyController::class, 'UpdateContactData']);
+            Route::put('/{company}/statements', [CompanyController::class, 'StoreStatements']);
+            Route::put('/{company}/exections', [CompanyController::class, 'StoreExectionInsuranceCompanies']);
+            Route::put('/{company}/notes', [CompanyController::class, 'updateCompanyNotes']);
+            Route::get('/get-all-server', [CompanyController::class, 'getServerAll']);
+            Route::post('/', [CompanyController::class, 'createCompany']);
+            Route::get('/', [CompanyController::class, 'getAllCompany']);
+            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
+            Route::put('/{id}', [CompanyController::class, 'updateCompany']);
+            Route::get('/get-by-name/{name}', [CompanyController::class, 'getByName']);
+            Route::get('/get-by-email/{email}', [CompanyController::class, 'getOneByEmail']);
+            Route::get('/get-by-npi/{npi}', [CompanyController::class, 'getOneByNpi']);
+            Route::patch('/change-status/{id}', [CompanyController::class, 'changeStatus']);
+            Route::patch('/add-to-billing-company/{id}', [CompanyController::class, 'addToBillingCompany']);
+            Route::patch('/add-facilities-to-company/{id}', [CompanyController::class, 'addFacilities']);
+            Route::patch('/add-services-to-company/{company}', [CompanyController::class, 'addServices']);
+            Route::patch('/add-copays-to-company/{company}', [CompanyController::class, 'addCompanyCopays']);
+            Route::patch('/add-contract-fees-to-company/{company}', [CompanyController::class, 'addCompanyContractFees']);
+        });
+
+        Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
+        Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
+        Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
+        Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
+        Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
+        Route::get('/get-list-contract-fee-types', [CompanyController::class, 'getListContractFeeTypes']);
+        Route::get('/get-list-billing-companies', [CompanyController::class, 'getListBillingCompanies']);
     });
 
     Route::prefix('device')->group(function () {
