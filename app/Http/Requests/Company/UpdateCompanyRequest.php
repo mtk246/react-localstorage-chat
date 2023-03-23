@@ -31,7 +31,7 @@ final class UpdateCompanyRequest extends FormRequest
                 'nullable',
             ],
             'npi' => 'required|integer',
-            'ein' => 'nullable|string|max:9',
+            'ein' => 'nullable|string|regex:/^\d{2}-\d{7}$/',
             'upin' => 'nullable|string|max:50',
             'clia' => 'nullable|string|max:50',
             'nickname' => 'nullable|string',
