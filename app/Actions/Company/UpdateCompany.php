@@ -11,15 +11,20 @@ use App\Http\Casts\Company\StoreStatementRequestCast;
 use App\Http\Casts\Company\UpdateCompanyRequestCast;
 use App\Http\Casts\Company\UpdateContactDataRequestCast;
 use App\Http\Casts\Company\UpdateNotesRequestCast;
+use App\Http\Resources\Company\CompanyDataResource;
+use App\Http\Resources\Company\ContactDataResource;
+use App\Http\Resources\Company\ExectionICResource;
 use App\Http\Resources\Company\NotesResource;
+use App\Http\Resources\Company\StatementResource;
 use App\Models\Company;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 final class UpdateCompany
 {
-    public function invoke(Company $company, UpdateCompanyRequestCast $request): Company
+    public function invoke(Company $company, UpdateCompanyRequestCast $request): CompanyDataResource
     {
-        return DB::transaction(function () use ($company, $request): Company {
+        return DB::transaction(function () use ($company, $request): CompanyDataResource {
             $company->update($request->getCompanyValues());
 
             if ($request->getNickname()) {
@@ -46,13 +51,13 @@ final class UpdateCompany
                 )->delete();
             }
 
-            return $company;
+            return new CompanyDataResource($company, $request);
         });
     }
 
-    public function contactData(Company $company, UpdateContactDataRequestCast $request): Company
+    public function contactData(Company $company, UpdateContactDataRequestCast $request): ContactDataResource
     {
-        return DB::transaction(function () use ($company, $request): Company {
+        return DB::transaction(function () use ($company, $request): ContactDataResource {
             $company->contacts()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
                 'contact_name' => $request->getContact()->getContactName(),
                 'phone' => $request->getContact()->getPhone(),
@@ -62,7 +67,7 @@ final class UpdateCompany
             ]);
 
             $company->addresses()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
-                'addresses' => $request->getAddress()->getAddresses(),
+                'address' => $request->getAddress()->getAddress(),
                 'city' => $request->getAddress()->getCity(),
                 'state' => $request->getAddress()->getState(),
                 'zip' => $request->getAddress()->getZip(),
@@ -81,13 +86,13 @@ final class UpdateCompany
                 ]);
             }
 
-            return $company;
+            return new ContactDataResource($company, $request);
         });
     }
 
-    public function statement(Company $company, StoreStatementRequestCast $request): Company
+    public function statement(Company $company, StoreStatementRequestCast $request): AnonymousResourceCollection
     {
-        return DB::transaction(function () use ($company, $request): Company {
+        return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
             $request->getStore()->each(function (StatementCast $statement) use ($company, $request): void {
                 $company->companyStatements()
                     ->updateOrCreate([
@@ -107,13 +112,21 @@ final class UpdateCompany
                 ->where('billing_company_id', $request->getBillingCompanyId())
                 ->delete();
 
-            return $company;
+            return StatementResource::collection(
+                $company->companyStatements()
+                    ->where('billing_company_id', $request->getBillingCompanyId())
+                    ->orderBy('id')
+                    ->get(),
+                $request,
+            );
         });
     }
 
-    public function exectionInsuranceCompanies(Company $company, StoreExectionICRequestCast $request): Company
-    {
-        return DB::transaction(function () use ($company, $request): Company {
+    public function exectionInsuranceCompanies(
+        Company $company,
+        StoreExectionICRequestCast $request
+    ): AnonymousResourceCollection {
+        return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
             $request->getStore()
                 ->each(function (ExectionInsuranceCompanyCast $store) use ($company, $request): void {
                     $company->exceptionInsuranceCompanies()
@@ -128,7 +141,13 @@ final class UpdateCompany
                 ->where('billing_company_id', $request->getBillingCompanyId())
                 ->delete();
 
-            return $company;
+            return ExectionICResource::collection(
+                $company->exceptionInsuranceCompanies()
+                    ->where('billing_company_id', $request->getBillingCompanyId())
+                    ->orderBy('id')
+                    ->get(),
+                $request,
+            );
         });
     }
 
