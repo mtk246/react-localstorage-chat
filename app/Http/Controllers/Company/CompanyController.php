@@ -116,7 +116,7 @@ final class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error updating company'), 400);
     }
 
-    public function updateData(UpdateCompanyRequest $request, UpdateCompany $updateCompany, Company $company): JsonResponse
+    public function updateCompanyData(UpdateCompanyRequest $request, UpdateCompany $updateCompany, Company $company): JsonResponse
     {
         $rs = $updateCompany->invoke($company, $request->casted());
 
