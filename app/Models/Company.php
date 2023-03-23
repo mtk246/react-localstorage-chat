@@ -147,6 +147,14 @@ final class Company extends Model implements Auditable
      */
     protected $appends = ['status', 'edit_name', 'last_modified'];
 
+    protected function ein(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => preg_replace('/^(\d{2})(\d{7})$/', '$1-$2', $value),
+            set: fn (string $value) => preg_replace('/^(\d{2})-(\d{7})$/', '$1$2', $value),
+        );
+    }
+
     /**
      * The billingCompanies that belong to the company.
      */
