@@ -31,14 +31,14 @@ final class StoreExectionICRequest extends FormRequest
                 'nullable',
             ],
             'store' => 'nullable|array',
-            'store.*.id' => 'accepted|integer',
+            'store.*.id' => 'nullable|integer',
             'store.*.insurance_company_id' => [
                 'required',
                 'integer',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
             'delete' => 'nullable|array',
-            'delete.*' => 'accepted|integer',
+            'delete.*' => 'nullable|integer',
         ];
     }
 }
