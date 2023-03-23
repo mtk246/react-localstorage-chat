@@ -6,15 +6,48 @@ namespace App\Http\Resources;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class RequestWrapedResource extends JsonResource
 {
-    public function __construct(object $resource, protected ?object $request = null)
+    public function __construct($resource, protected $request = null)
     {
         $this->request ??= Container::getInstance()->make('request');
 
         parent::__construct($resource);
+    }
+
+    public function withRequest($request): self
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Create a new anonymous resource collection.
+     *
+     * @param mixed $resource
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public static function collection($resource, $request = null)
+    {
+        return tap(new AnonymousResourceCollection($resource, static::class), function ($collection) use ($request) {
+            $collection->collection->map(function ($collect) use ($request) {
+                $collect->withRequest($request);
+            });
+
+            if (property_exists(static::class, 'preserveKeys')) {
+                $collection->preserveKeys = true === (new static([]))->preserveKeys;
+            }
+        });
+    }
+
+    public function resolve($request = null)
+    {
+        return parent::resolve($request ?: $this->request);
     }
 
     /**
