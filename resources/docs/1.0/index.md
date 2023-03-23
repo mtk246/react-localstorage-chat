@@ -30,7 +30,9 @@
     - [Facility](/{{route}}/{{version}}/facility)
 
 - ## Company
-    - [Company](/{{route}}/{{version}}/company)
+    - [Company](/{{route}}/{{version}}/company/company)
+    - [create Company](/{{route}}/{{version}}/company/create)
+    - [Getters](/{{route}}/{{version}}/company/getters)
 
 - ## Insurance-Company
     - [General](/{{route}}/{{version}}/insurance-company/general)
