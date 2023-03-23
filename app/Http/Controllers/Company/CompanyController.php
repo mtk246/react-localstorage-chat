@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Company;
 
 use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\Company\AddCompanyCopaysRequest;
 use App\Http\Requests\Company\AddContractFeesRequest;
