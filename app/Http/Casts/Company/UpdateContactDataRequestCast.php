@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Casts\Company;
 
 use App\Http\Casts\CastsRequest;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 final class UpdateContactDataRequestCast extends CastsRequest
@@ -17,7 +16,7 @@ final class UpdateContactDataRequestCast extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
-    public function getContact(): Collection
+    public function getContact(): ContactCast
     {
         return $this->cast('contact', ContactCast::class);
     }
