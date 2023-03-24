@@ -252,20 +252,10 @@ class ClaimRepository
 
     public function getServerAll(Request $request) {
         $status = ((is_array($request->status)) ? $request->status : json_decode($request->status)) ?? [];
-        $subStatus = ((is_array($request->subStatus)) ? $request->subStatus : json_decode($request->subStatus)) ?? [];
+        $subStatus = ((is_array($request->substatus)) ? $request->substatus : json_decode($request->substatus)) ?? [];
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                if (count($status) == 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
-                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
-                } else if (count($status) > 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
-                }
-            })->with([
-                /**"insuranceCompany" => function ($query) {
-                    $query->with('nicknames');
-                },*/
+            $data = Claim::query()->with([
                 "company" => function ($query) {
                     $query->with('nicknames');
                 },
@@ -277,22 +267,25 @@ class ClaimRepository
                     ]);
                 }
             ]);
+            if (count($subStatus) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($subStatus) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $subStatus)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                })->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            } else if (count($status) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            }
         } else {
-            $data = Claim::whereHas("claimLastStatusClaim", function ($query) use ($status, $subStatus) {
-                if (count($status) == 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status)
-                          ->orWhere('claim_status_type', ClaimSubStatus::class)->whereIn("claim_status_id", $subStatus);
-                } else if (count($status) > 1) {
-                    $query->where('claim_status_type', ClaimStatus::class)->whereIn("claim_status_id", $status);
-                }
-            })->with([
-                /**"insuranceCompany" => function ($query) use ($bC){
-                    $query->with([
-                        "nicknames" => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        }
-                    ]);
-                },*/
+            $data = Claim::query()->with([
                 "company" => function ($query) use ($bC){
                     $query->with([
                         "nicknames" => function ($q) use ($bC) {
@@ -316,6 +309,23 @@ class ClaimRepository
                     ]);
                 }
             ]);
+            if (count($subStatus) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($subStatus) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $subStatus)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                })->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            } else if (count($status) > 0) {
+                $data = $data->whereHas("claimStatusClaims", function ($query) use ($status) {
+                    $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                        ->whereIn("claim_status_claim.claim_status_id", $status)
+                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                });
+            }
         }
 
         if (!empty($request->query('query')) && $request->query('query')!=="{}") {
@@ -338,6 +348,7 @@ class ClaimRepository
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
+
 
         return response()->json([
             'data'          => $data->items(),
@@ -1572,27 +1583,39 @@ class ClaimRepository
         try {
             DB::beginTransaction();
             $claim = Claim::with('claimFormattable')->find($id);
-            if (!isset($data['sub_status_id'])) {
+            $status = $claim->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
+                    ->orderBy("created_at", "desc")
+                    ->orderBy("id", "desc")->first()->claimStatus ?? null;
+
+            if ($data['status_id'] != $status->id) {
                 $claimStatus = ClaimStatus::find($data['status_id']);
                 $claimStatusClaim = ClaimStatusClaim::create([
                     'claim_id'          => $claim->id,
                     'claim_status_type' => ClaimStatus::class,
                     'claim_status_id'   => $claimStatus->id,
                 ]);
-            } else {
+                PrivateNote::create([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                    'note'               => $data['private_note']
+                ]);
+            }
+            if (isset($data['sub_status_id'])) {
                 $claimSubStatus = ClaimSubStatus::find($data['sub_status_id']);
                 $claimStatusClaim = ClaimStatusClaim::create([
                     'claim_id'          => $claim->id,
                     'claim_status_type' => ClaimSubStatus::class,
                     'claim_status_id'   => $claimSubStatus->id,
                 ]);
+                PrivateNote::create([
+                    'publishable_type'   => ClaimStatusClaim::class,
+                    'publishable_id'     => $claimStatusClaim->id,
+                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                    'note'               => $data['private_note']
+                ]);
             }
-            PrivateNote::create([
-                'publishable_type'   => ClaimStatusClaim::class,
-                'publishable_id'     => $claimStatusClaim->id,
-                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                'note'               => $data['private_note']
-            ]);
             DB::commit();
             return $claim;
         } catch (\Exception $e) {
@@ -1607,7 +1630,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                     ->orderBy("created_at", "desc")
-                    ->orderBy("id", "asc")->first() ?? null;
+                    ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 PrivateNote::updateOrCreate([
@@ -1632,7 +1655,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                                  ->orderBy("created_at", "desc")
-                                 ->orderBy("id", "asc")->first() ?? null;
+                                 ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 PrivateNote::create([
@@ -1656,7 +1679,7 @@ class ClaimRepository
             $claim = Claim::with('claimFormattable', 'claimStatusClaims')->find($id);
             $statusClaim = $claim->claimStatusClaims()
                                  ->orderBy("created_at", "desc")
-                                 ->orderBy("id", "asc")->first() ?? null;
+                                 ->orderBy("id", "desc")->first() ?? null;
             
             if (isset($statusClaim)) {
                 $note = PrivateNote::create([
