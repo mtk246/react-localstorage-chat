@@ -150,8 +150,12 @@ final class Company extends Model implements Auditable
     protected function ein(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => preg_replace('/^(\d{2})(\d{7})$/', '$1-$2', $value),
-            set: fn (string $value) => preg_replace('/^(\d{2})-(\d{7})$/', '$1$2', $value),
+            get: fn (?string $value) => $value
+                ? preg_replace('/^(\d{2})(\d{7})$/', '$1-$2', $value)
+                : null,
+            set: fn (?string $value) => $value
+                ? preg_replace('/^(\d{2})-(\d{7})$/', '$1$2', $value)
+                : null,
         );
     }
 
