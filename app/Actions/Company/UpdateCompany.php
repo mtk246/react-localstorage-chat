@@ -64,7 +64,10 @@ final class UpdateCompany
                 'email' => $request->getContact()->getEmail(),
             ]);
 
-            $company->addresses()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
+            $company->addresses()->updateOrCreate([
+                'billing_company_id' => $request->getBillingCompanyId(),
+                'address_type_id' => '1',
+            ], [
                 'address' => $request->getAddress()->getAddress(),
                 'city' => $request->getAddress()->getCity(),
                 'state' => $request->getAddress()->getState(),
@@ -74,8 +77,11 @@ final class UpdateCompany
             ]);
 
             if ($request->getPaymentAddres()) {
-                $company->addresses()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
-                    'addresses' => $request->getPaymentAddres()->getAddresses(),
+                $company->addresses()->updateOrCreate([
+                    'billing_company_id' => $request->getBillingCompanyId(),
+                    'address_type_id' => '3',
+                ], [
+                    'address' => $request->getPaymentAddres()->getAddress(),
                     'city' => $request->getPaymentAddres()->getCity(),
                     'state' => $request->getPaymentAddres()->getState(),
                     'zip' => $request->getPaymentAddres()->getZip(),
