@@ -15,9 +15,9 @@ final class PaymentAddressCast extends CastsRequest
             : null;
     }
 
-    public function getAddresses(): ?string
+    public function getAddress(): ?string
     {
-        return $this->get('addresses');
+        return $this->get('address');
     }
 
     public function getCity(): ?string
