@@ -27,6 +27,7 @@ final class UpdateCompany
     {
         return DB::transaction(function () use ($company, $request): CompanyDataResource {
             $company->update($request->getCompanyValues());
+            $company->billingCompanies()->syncWithoutDetaching($request->getBillingCompanyId());
 
             if ($request->getNickname()) {
                 $company->nicknames()->updateOrCreate(
