@@ -17,6 +17,7 @@ use App\Http\Resources\Company\ExectionICResource;
 use App\Http\Resources\Company\NotesResource;
 use App\Http\Resources\Company\StatementResource;
 use App\Models\Company;
+use App\Models\Taxonomy;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +27,7 @@ final class UpdateCompany
     {
         return DB::transaction(function () use ($company, $request): CompanyDataResource {
             $company->update($request->getCompanyValues());
+            $company->billingCompanies()->syncWithoutDetaching($request->getBillingCompanyId());
 
             if ($request->getNickname()) {
                 $company->nicknames()->updateOrCreate(
@@ -42,13 +44,9 @@ final class UpdateCompany
             }
 
             if ($request->getTaxonomies()) {
+                $taxIds = $request->getTaxonomies()->pluck('tax_id')->toArray();
                 $company->taxonomies()->upsert($request->getTaxonomies()->toArray(), ['tax_id']);
-                $company->taxonomies()->whereNotIn(
-                    'tax_id',
-                    $request->getTaxonomies()
-                        ->pluck('tax_id')
-                        ->toArray(),
-                )->delete();
+                $company->taxonomies()->sync(Taxonomy::whereIn('tax_id', $taxIds)->get('id'));
             }
 
             return new CompanyDataResource($company, $request);
