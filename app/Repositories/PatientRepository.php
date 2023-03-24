@@ -48,18 +48,25 @@ class PatientRepository
     public function createPatient(array $data) {
         try {
             DB::beginTransaction();
+            if (isset($data['id'])) {
+                $patient = Patient::find($data['id']);
+                $user = $patient->user;
+                $profile = $user->profile;
+            }
 
-            /** Create Profile */
-            $profile = Profile::firstOrCreate([
-                "ssn"           => $data["profile"]["ssn"] ?? '',
-            ], [
-                "ssn"           => $data["profile"]["ssn"] ?? '',
-                "first_name"    => $data["profile"]["first_name"],
-                "middle_name"   => $data["profile"]["middle_name"] ?? '',
-                "last_name"     => $data["profile"]["last_name"],
-                "sex"           => $data["profile"]["sex"],
-                "date_of_birth" => $data["profile"]["date_of_birth"]
-            ]);
+            if (!isset($profile)) {
+                /** Create Profile */
+                $profile = Profile::firstOrCreate([
+                    "ssn"           => $data["profile"]["ssn"] ?? '',
+                ], [
+                    "ssn"           => $data["profile"]["ssn"] ?? '',
+                    "first_name"    => $data["profile"]["first_name"],
+                    "middle_name"   => $data["profile"]["middle_name"] ?? '',
+                    "last_name"     => $data["profile"]["last_name"],
+                    "sex"           => $data["profile"]["sex"],
+                    "date_of_birth" => $data["profile"]["date_of_birth"]
+                ]);
+            }
 
             if (isset($data["profile"]["social_medias"])) {
                 $socialMedias = $profile->socialMedias;

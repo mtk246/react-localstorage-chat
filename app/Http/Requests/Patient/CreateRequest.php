@@ -4,6 +4,7 @@ namespace App\Http\Requests\Patient;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\MaritalStatus;
 
 class CreateRequest extends FormRequest
 {
@@ -25,7 +26,8 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'billing_company_id'                => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
+            'id' => ['nullable', 'integer'],
+            'billing_company_id'                => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'driver_license'                    => ['nullable', 'string'],
 
             'profile'                           => ['required', 'array'],
@@ -33,12 +35,21 @@ class CreateRequest extends FormRequest
             'profile.first_name'                => ['required', 'string', 'max:20'],
             'profile.last_name'                 => ['required', 'string', 'max:20'],
             'profile.middle_name'               => ['nullable', 'string', 'max:20'],
+            'profile.sufix_name_id'             => ['nullable', 'integer'],
             'profile.date_of_birth'             => ['required', 'date'],
             'profile.sex'                       => ['required', 'string', 'max:1'],
             
             'marital_status_id'                 => ['nullable', 'integer'],
-            'marital'                           => ['nullable', 'array'],
-            'marital.spuse_name'                => ['nullable', 'string'],
+            'marital'                           => [
+                Rule::requiredIf(function () {
+                    $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
+                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+                }), 'nullable', 'array'],
+            'marital.spuse_name'                => [
+                Rule::requiredIf(function () {
+                    $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
+                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+                }), 'nullable', 'string'],
             'marital.spuse_work'                => ['nullable', 'string'],
             'marital.spuse_work_phone'          => ['nullable', 'string'],
 
@@ -60,18 +71,18 @@ class CreateRequest extends FormRequest
             'addresses.*.state'                   => ['required', 'string'],
             'addresses.*.zip'                     => ['required', 'string'],
 
-            'insurance_policies'                       => ['required', 'array'],
-            'insurance_policies.*.policy_number'       => ['required', 'string'],
+            'insurance_policies'                       => ['nullable', 'array'],
+            'insurance_policies.*.policy_number'       => ['sometimes', 'string'],
             'insurance_policies.*.group_number'        => ['nullable', 'numeric'],
-            'insurance_policies.*.insurance_company'   => ['required', 'integer'],
-            'insurance_policies.*.insurance_plan'      => ['required', 'integer'],
-            'insurance_policies.*.type_responsibility_id'      => ['required', 'integer'],
+            'insurance_policies.*.insurance_company'   => ['sometimes', 'integer'],
+            'insurance_policies.*.insurance_plan'      => ['sometimes', 'integer'],
+            'insurance_policies.*.type_responsibility_id'      => ['sometimes', 'integer'],
             'insurance_policies.*.insurance_policy_type_id'      => ['nullable', 'integer'],
-            'insurance_policies.*.eff_date'            => ['required', 'date'],
+            'insurance_policies.*.eff_date'            => ['sometimes', 'date'],
             'insurance_policies.*.end_date'            => ['nullable', 'date'],
-            'insurance_policies.*.assign_benefits'     => ['required', 'boolean'],
-            'insurance_policies.*.release_info'        => ['required', 'boolean'],
-            'insurance_policies.*.own_insurance'       => ['required', 'boolean'],
+            'insurance_policies.*.assign_benefits'     => ['sometimes', 'boolean'],
+            'insurance_policies.*.release_info'        => ['sometimes', 'boolean'],
+            'insurance_policies.*.own_insurance'       => ['sometimes', 'boolean'],
 
             'insurance_policies.*.subscriber'            => ['nullable', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
             'insurance_policies.*.subscriber.relationship_id'  => ['nullable', 'integer'],
@@ -97,23 +108,23 @@ class CreateRequest extends FormRequest
             'guarantor.phone'                   => ['nullable', 'string'],
 
             'emergency_contacts'                => ['nullable', 'array'],
-            'emergency_contacts.*.name'         => ['sometimes', 'required', 'string'],
-            'emergency_contacts.*.cellphone'    => ['sometimes', 'required', 'string'],
-            'emergency_contacts.*.relationship_id' => ['sometimes', 'required', 'integer'],
+            'emergency_contacts.*.name'         => ['sometimes', 'string'],
+            'emergency_contacts.*.cellphone'    => ['sometimes', 'string'],
+            'emergency_contacts.*.relationship_id' => ['sometimes', 'integer'],
 
             'employments'                       => ['nullable', 'array'],
-            'employments.*.employer_name'       => ['sometimes', 'required', 'string'],
-            'employments.*.position'            => ['sometimes', 'required', 'string'],
-            'employments.*.employer_address'    => ['sometimes', 'required', 'string'],
-            'employments.*.employer_phone'      => ['sometimes', 'required', 'string'],
+            'employments.*.employer_name'       => ['sometimes', 'string'],
+            'employments.*.position'            => ['sometimes', 'string'],
+            'employments.*.employer_address'    => ['sometimes', 'string'],
+            'employments.*.employer_phone'      => ['sometimes', 'string'],
 
 
             'profile.social_medias'             => ['nullable', 'array'],
-            'profile.social_medias.*.name'      => ['sometimes', 'required', 'string'],
-            'profile.social_medias.*.link'      => ['sometimes', 'required', 'string'],
+            'profile.social_medias.*.name'      => ['sometimes', 'string'],
+            'profile.social_medias.*.link'      => ['sometimes', 'string'],
 
-            'public_note'                       => ['sometimes', 'required', 'string'],
-            'private_note'                      => ['sometimes', 'required', 'string'],
+            'public_note'                       => ['nullable', 'string'],
+            'private_note'                      => ['nullable', 'string'],
             'save_as_draft'                     => ['nullable', 'boolean'],
             'draft_note'                        => ['nullable', 'string']
         ];
