@@ -38,14 +38,14 @@ abstract class CastsRequest
 
     protected function cast(string $input, string $class): ?object
     {
-        return $this->inputs[$input]
+        return array_key_exists($input, $this->inputs)
             ? new $class($this->inputs[$input], $this->querys, $this->user)
             : null;
     }
 
     protected function castMany(string $input, string $class): ?Collection
     {
-        return $this->inputs[$input]
+        return array_key_exists($input, $this->inputs)
             ? collect($this->inputs[$input])
                 ->map(fn (array $input) => new $class($input, $this->querys, $this->user))
             : null;
