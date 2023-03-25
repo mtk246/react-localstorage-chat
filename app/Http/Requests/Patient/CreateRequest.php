@@ -27,106 +27,73 @@ class CreateRequest extends FormRequest
     {
         return [
             'id' => ['nullable', 'integer'],
-            'billing_company_id'                => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            'driver_license'                    => ['nullable', 'string'],
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'driver_license' => ['nullable', 'string'],
 
-            'profile'                           => ['required', 'array'],
-            'profile.ssn'                       => ['nullable', 'string'],
-            'profile.first_name'                => ['required', 'string', 'max:20'],
-            'profile.last_name'                 => ['required', 'string', 'max:20'],
-            'profile.middle_name'               => ['nullable', 'string', 'max:20'],
-            'profile.sufix_name_id'             => ['nullable', 'integer'],
-            'profile.date_of_birth'             => ['required', 'date'],
-            'profile.sex'                       => ['required', 'string', 'max:1'],
+            'profile' => ['required', 'array'],
+            'profile.ssn' => ['nullable', 'string'],
+            'profile.first_name' => ['required', 'string', 'max:20'],
+            'profile.last_name' => ['required', 'string', 'max:20'],
+            'profile.middle_name' => ['nullable', 'string', 'max:20'],
+            'profile.name_suffix_id' => ['nullable', 'integer'],
+            'profile.date_of_birth' => ['required', 'date'],
+            'profile.sex' => ['required', 'string', 'max:1'],
             
-            'marital_status_id'                 => ['nullable', 'integer'],
-            'marital'                           => [
+            'marital_status_id' => ['nullable', 'integer'],
+            'marital' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
                     return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
                 }), 'nullable', 'array'],
-            'marital.spuse_name'                => [
+            'marital.spuse_name' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
                     return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
                 }), 'nullable', 'string'],
-            'marital.spuse_work'                => ['nullable', 'string'],
-            'marital.spuse_work_phone'          => ['nullable', 'string'],
+            'marital.spuse_work' => ['nullable', 'string'],
+            'marital.spuse_work_phone' => ['nullable', 'string'],
 
-            'company_id'                        => ['required', 'integer'],
-            'company_med_num'                   => ['nullable', 'string'],
+            'company_id' => ['required', 'integer'],
+            'company_med_num' => ['nullable', 'string'],
 
-            'language'                          => ['nullable', 'string'],
+            'language' => ['nullable', 'string'],
 
-            'contact'                           => ['required', 'array'],
-            'contact.phone'                     => ['nullable', 'string'],
-            'contact.mobile'                    => ['nullable', 'string'],
-            'contact.fax'                       => ['nullable', 'string'],
-            'contact.email'                     => ['required', 'string', 'email:rfc'],
+            'contact' => ['required', 'array'],
+            'contact.phone' => ['nullable', 'string'],
+            'contact.mobile' => ['nullable', 'string'],
+            'contact.fax' => ['nullable', 'string'],
+            'contact.email' => ['required', 'string', 'email:rfc'],
 
-            'addresses'                           => ['required', 'array'],
-            'addresses.*.address_type_id'         => ['required', 'integer'],
-            'addresses.*.address'                 => ['required', 'string'],
-            'addresses.*.city'                    => ['required', 'string'],
-            'addresses.*.state'                   => ['required', 'string'],
-            'addresses.*.zip'                     => ['required', 'string'],
+            'addresses' => ['required', 'array'],
+            'addresses.*.address_type_id' => ['required', 'integer'],
+            'addresses.*.address' => ['required', 'string'],
+            'addresses.*.city' => ['required', 'string'],
+            'addresses.*.state' => ['required', 'string'],
+            'addresses.*.zip' => ['required', 'string'],
 
-            'insurance_policies'                       => ['nullable', 'array'],
-            'insurance_policies.*.policy_number'       => ['sometimes', 'string'],
-            'insurance_policies.*.group_number'        => ['nullable', 'numeric'],
-            'insurance_policies.*.insurance_company'   => ['sometimes', 'integer'],
-            'insurance_policies.*.insurance_plan'      => ['sometimes', 'integer'],
-            'insurance_policies.*.type_responsibility_id'      => ['sometimes', 'integer'],
-            'insurance_policies.*.insurance_policy_type_id'      => ['nullable', 'integer'],
-            'insurance_policies.*.eff_date'            => ['sometimes', 'date'],
-            'insurance_policies.*.end_date'            => ['nullable', 'date'],
-            'insurance_policies.*.assign_benefits'     => ['sometimes', 'boolean'],
-            'insurance_policies.*.release_info'        => ['sometimes', 'boolean'],
-            'insurance_policies.*.own_insurance'       => ['sometimes', 'boolean'],
+            'guarantor' => ['nullable', 'array'],
+            'guarantor.name' => ['nullable', 'string'],
+            'guarantor.phone' => ['nullable', 'string'],
 
-            'insurance_policies.*.subscriber'            => ['nullable', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.subscriber.relationship_id'  => ['nullable', 'integer'],
-            'insurance_policies.*.subscriber.ssn'        => ['nullable', 'required_if:insurance_policies.*.own_insurance,false', 'string'],
-            'insurance_policies.*.subscriber.date_of_birth'  => ['nullable', 'date'],
-            'insurance_policies.*.subscriber.first_name' => ['nullable', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.last_name'  => ['nullable', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
+            'emergency_contacts' => ['nullable', 'array'],
+            'emergency_contacts.*.name' => ['nullable', 'string'],
+            'emergency_contacts.*.cellphone' => ['nullable', 'string'],
+            'emergency_contacts.*.relationship_id' => ['nullable', 'integer'],
 
-            'insurance_policies.*.subscriber.address'         => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.subscriber.address.address' => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.address.city'    => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.address.state'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.address.zip'     => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            
-            'insurance_policies.*.subscriber.contact'         => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'array'],
-            'insurance_policies.*.subscriber.contact.phone'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.contact.mobile'  => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.contact.fax'     => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'string'],
-            'insurance_policies.*.subscriber.contact.email'   => ['sometimes', 'required_if:insurance_policies.*.own_insurance,false', 'nullable', 'email:rfc'],
+            'employments' => ['nullable', 'array'],
+            'employments.*.employer_name' => ['nullable', 'string'],
+            'employments.*.position' => ['nullable', 'string'],
+            'employments.*.employer_address' => ['nullable', 'string'],
+            'employments.*.employer_phone' => ['nullable', 'string'],
 
-            'guarantor'                         => ['nullable', 'array'],
-            'guarantor.name'                    => ['nullable', 'string'],
-            'guarantor.phone'                   => ['nullable', 'string'],
+            'profile.social_medias' => ['nullable', 'array'],
+            'profile.social_medias.*.name' => ['nullable', 'string'],
+            'profile.social_medias.*.link' => ['nullable', 'string'],
 
-            'emergency_contacts'                => ['nullable', 'array'],
-            'emergency_contacts.*.name'         => ['sometimes', 'string'],
-            'emergency_contacts.*.cellphone'    => ['sometimes', 'string'],
-            'emergency_contacts.*.relationship_id' => ['sometimes', 'integer'],
-
-            'employments'                       => ['nullable', 'array'],
-            'employments.*.employer_name'       => ['sometimes', 'string'],
-            'employments.*.position'            => ['sometimes', 'string'],
-            'employments.*.employer_address'    => ['sometimes', 'string'],
-            'employments.*.employer_phone'      => ['sometimes', 'string'],
-
-
-            'profile.social_medias'             => ['nullable', 'array'],
-            'profile.social_medias.*.name'      => ['sometimes', 'string'],
-            'profile.social_medias.*.link'      => ['sometimes', 'string'],
-
-            'public_note'                       => ['nullable', 'string'],
-            'private_note'                      => ['nullable', 'string'],
-            'save_as_draft'                     => ['nullable', 'boolean'],
-            'draft_note'                        => ['nullable', 'string']
+            'public_note' => ['nullable', 'string'],
+            'private_note' => ['nullable', 'string'],
+            'save_as_draft' => ['nullable', 'boolean'],
+            'draft_note' => ['nullable', 'string']
         ];
     }
 }
