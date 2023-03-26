@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Patient;
 
+use App\Models\MaritalStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\MaritalStatus;
+
 
 class CreateRequest extends FormRequest
 {
