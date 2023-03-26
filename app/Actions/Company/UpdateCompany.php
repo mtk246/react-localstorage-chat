@@ -64,25 +64,7 @@ final class UpdateCompany
                 'email' => $request->getContact()->getEmail(),
             ]);
 
-            $company->addresses()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
-                'address' => $request->getAddress()->getAddress(),
-                'city' => $request->getAddress()->getCity(),
-                'state' => $request->getAddress()->getState(),
-                'zip' => $request->getAddress()->getZip(),
-                'country' => $request->getAddress()->getCountry(),
-                'country_subdivision_code' => $request->getAddress()->getCountrySubdivisionCode(),
-            ]);
-
-            if ($request->getPaymentAddres()) {
-                $company->addresses()->updateOrCreate(['billing_company_id' => $request->getBillingCompanyId()], [
-                    'addresses' => $request->getPaymentAddres()->getAddresses(),
-                    'city' => $request->getPaymentAddres()->getCity(),
-                    'state' => $request->getPaymentAddres()->getState(),
-                    'zip' => $request->getPaymentAddres()->getZip(),
-                    'country' => $request->getPaymentAddres()->getCountry(),
-                    'country_subdivision_code' => $request->getPaymentAddres()->getCountrySubdivisionCode(),
-                ]);
-            }
+            $this->updateAddresses($company, $request);
 
             return new ContactDataResource($company, $request);
         });
@@ -160,5 +142,41 @@ final class UpdateCompany
 
             return new NotesResource($company, $request);
         });
+    }
+
+    private function updateAddresses(Company $company, UpdateContactDataRequestCast $request): void
+    {
+        $company->addresses()->updateOrCreate([
+            'billing_company_id' => $request->getBillingCompanyId(),
+            'address_type_id' => '1',
+        ], [
+            'address' => $request->getAddress()->getAddress(),
+            'city' => $request->getAddress()->getCity(),
+            'state' => $request->getAddress()->getState(),
+            'zip' => $request->getAddress()->getZip(),
+            'country' => $request->getAddress()->getCountry(),
+            'country_subdivision_code' => $request->getAddress()->getCountrySubdivisionCode(),
+        ]);
+
+        if (!$request->getPaymentAddres()) {
+            $company->addresses()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->where('address_type_id', '3')
+                ->delete();
+
+            return;
+        }
+
+        $company->addresses()->updateOrCreate([
+            'billing_company_id' => $request->getBillingCompanyId(),
+            'address_type_id' => '3',
+        ], [
+            'address' => $request->getPaymentAddres()->getAddress(),
+            'city' => $request->getPaymentAddres()->getCity(),
+            'state' => $request->getPaymentAddres()->getState(),
+            'zip' => $request->getPaymentAddres()->getZip(),
+            'country' => $request->getPaymentAddres()->getCountry(),
+            'country_subdivision_code' => $request->getPaymentAddres()->getCountrySubdivisionCode(),
+        ]);
     }
 }

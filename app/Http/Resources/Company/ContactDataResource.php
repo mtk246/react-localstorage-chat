@@ -21,19 +21,18 @@ final class ContactDataResource extends RequestWrapedResource
      */
     public function toArray($request): array
     {
-        $addresses = $this->resource->addresses()
-                ->where('billing_company_id', $request->getBillingCompanyId())
-                ->orderBy('id')
-                ->get();
-
         return [
             'contact' => new ContactResource($this->resource->contacts()
                 ->where('billing_company_id', $request->getBillingCompanyId())
                 ->first(), $request),
-            'address' => new AddressResource($addresses->first(), $request),
-            'payment_address' => $addresses->count() >= 2
-                ? new AddressResource($addresses->last(), $request)
-                : null,
+            'address' => new AddressResource($this->resource->addresses()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->where('address_type_id', 1)
+                ->first(), $request),
+            'payment_address' => new AddressResource($this->resource->addresses()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->where('address_type_id', 3)
+                ->first(), $request),
         ];
     }
 }
