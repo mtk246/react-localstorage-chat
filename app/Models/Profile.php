@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Profile.
@@ -69,8 +70,18 @@ final class Profile extends Model implements Auditable
         'date_of_birth',
         'avatar',
         'credit_score',
+        'name_suffix_id',
     ];
 
+    /**
+     * Get the nameSuffix that owns the Profile
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function nameSuffix(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, 'name_suffix_id');
+    }
     /**
      * Profile has many User.
      *
