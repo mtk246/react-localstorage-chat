@@ -297,13 +297,13 @@ class Patient extends Model implements Auditable
     }
 
     /**
-     * The insurancePlans that belong to the Patient.
+     * Get all of the insurancePolicies for the Patient
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function insurancePolicies()
+    public function insurancePolicies(): HasMany
     {
-        return $this->belongsToMany(InsurancePolicy::class)->withPivot('billing_company_id', 'own_insurance', 'status')->withTimestamps();
+        return $this->hasMany(InsurancePolicy::class);
     }
 
     /*
