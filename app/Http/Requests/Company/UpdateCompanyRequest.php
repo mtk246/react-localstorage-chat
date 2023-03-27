@@ -37,7 +37,7 @@ final class UpdateCompanyRequest extends FormRequest
             'nickname' => 'nullable|string',
             'abbreviation' => 'nullable|string|max:20',
             'taxonomies' => 'nullable|array',
-            'taxonomies.*.tax_id' => 'sometimes|string',
+            'taxonomies.*.tax_id' => 'sometimes|string|distinct',
             'taxonomies.*.name' => 'sometimes|string',
             'taxonomies.*.primary' => 'sometimes|boolean',
         ];
