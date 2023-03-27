@@ -34,9 +34,13 @@ final class CompanyController extends Controller
     {
     }
 
-    public function createCompany(CompanyCreateRequest $request): JsonResponse
+    /**
+     * @todo quick fix for the moment, the get should use aresource instead of a request
+     */
+    public function createCompany(CompanyCreateRequest $request, GetCompany $getCompany): JsonResponse
     {
-        $rs = $this->companyRepository->createCompany($request->validated());
+        $company = $this->companyRepository->createCompany($request->validated());
+        $rs = $getCompany->getOne($company->id, $request->user());
 
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating company'), 400);
     }
