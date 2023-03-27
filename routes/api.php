@@ -193,6 +193,14 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('company')->group(function () {
+        Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
+        Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
+        Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
+        Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
+        Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
+        Route::get('/get-list-contract-fee-types', [CompanyController::class, 'getListContractFeeTypes']);
+        Route::get('/get-list-billing-companies', [CompanyController::class, 'getListBillingCompanies']);
+
         Route::middleware([
             'auth:api',
         ])->group(function (): void {
@@ -204,8 +212,6 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('/get-all-server', [CompanyController::class, 'getServerAll']);
             Route::post('/', [CompanyController::class, 'createCompany']);
             Route::get('/', [CompanyController::class, 'getAllCompany']);
-            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
-            Route::put('/{id}', [CompanyController::class, 'updateCompany']);
             Route::get('/get-by-name/{name}', [CompanyController::class, 'getByName']);
             Route::get('/get-by-email/{email}', [CompanyController::class, 'getOneByEmail']);
             Route::get('/get-by-npi/{npi}', [CompanyController::class, 'getOneByNpi']);
@@ -215,15 +221,9 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/add-services-to-company/{company}', [CompanyController::class, 'addServices']);
             Route::patch('/add-copays-to-company/{company}', [CompanyController::class, 'addCompanyCopays']);
             Route::patch('/add-contract-fees-to-company/{company}', [CompanyController::class, 'addCompanyContractFees']);
+            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
+            Route::put('/{id}', [CompanyController::class, 'updateCompany']);
         });
-
-        Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
-        Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
-        Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
-        Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
-        Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
-        Route::get('/get-list-contract-fee-types', [CompanyController::class, 'getListContractFeeTypes']);
-        Route::get('/get-list-billing-companies', [CompanyController::class, 'getListBillingCompanies']);
     });
 
     Route::prefix('device')->group(function () {
