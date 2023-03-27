@@ -175,8 +175,9 @@ final class GetCompany
                 $exceptionIC = [];
 
                 foreach ($exception_insurance_companies as $exception) {
+                    dd($exception);
                     array_push($exceptionIC, [
-                        'id' => $exception->insuranceCompany->id,
+                        'id' => $exception->id,
                         'code' => $exception->insuranceCompany->code,
                         'name' => $exception->insuranceCompany->name,
                         'payer_id' => $exception->insuranceCompany->payer_id,
