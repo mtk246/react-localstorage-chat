@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -78,23 +79,45 @@ class InsurancePolicy extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "eff_date",
-        "end_date",
-        "release_info",
-        "assign_benefits",
-        "policy_number",
-        "group_number",
-        "insurance_plan_id",
-        "insurance_policy_type_id",
-        "type_responsibility_id",
-        "payer_responsibility_id",
-        "payment_responsibility_level_code",
+        'own',
+        'eff_date',
+        'end_date',
+        'release_info',
+        'assign_benefits',
+        'policy_number',
+        'group_number',
+        'insurance_plan_id',
+        'insurance_policy_type_id',
+        'type_responsibility_id',
+        'payer_responsibility_id',
+        'payment_responsibility_level_code',
+        'patient_id',
+        'billing_company_id',
     ];
 
     protected $with = ['insurancePlan'];
     
-    protected $appends = ['insurance_company_name', 'insurance_company_id', 'subscriber', 'payer_id', 'own'];
+    protected $appends = ['insurance_company_name', 'insurance_company_id', 'subscriber', 'payer_id'];
 
+    /**
+     * Get the patient that owns the InsurancePolicy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class);
+    }
+
+    /**
+     * Get the billingCompany that owns the InsurancePolicy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
+    }
     /**
      * InsurancePolicy has many ClaimEligibilities.
      *
@@ -118,16 +141,6 @@ class InsurancePolicy extends Model implements Auditable
     public function claimValidations()
     {
         return $this->hasMany(ClaimValidation::class);
-    }
-
-    /**
-     * The patients that belong to the insurancePolicy.
-     *
-     * @return BelongsToMany
-     */
-    public function patients(): BelongsToMany
-    {
-        return $this->belongsToMany(Patient::class)->withPivot('billing_company_id', 'own_insurance', 'status')->withTimestamps();
     }
 
     /**
@@ -195,15 +208,10 @@ class InsurancePolicy extends Model implements Auditable
         return $this->insurancePlan['insuranceCompany']['payer_id'];
     }
 
-    public function getOwnAttribute()
-    {
-        return $this->pivot['own_insurance'] ?? null;
-    }
-
     public function getSubscriberAttribute()
     {
-	    if (isset($this->pivot['own_insurance'])) {
-	        return (!$this->pivot['own_insurance']) ? ($this->subscribers['0']->load(['addresses', 'contacts']) ?? null) : null;
+	    if (isset($this->own)) {
+	        return (!$this->own) ? ($this->subscribers['0']->load(['addresses', 'contacts']) ?? null) : null;
 	    }
     }
 }

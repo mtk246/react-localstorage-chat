@@ -175,3 +175,14 @@ if (!function_exists('has_foreign_key')) {
         return $detailTable->hasForeignKey($foreignKey);
     }
 }
+
+if (!function_exists('filter_array_empty')) {
+    function filter_array_empty($array): array
+    {
+        return array_filter($array, function ($item) {
+            return count(array_filter($item, function ($value) {
+                return !empty($value);
+            })) > 0;
+        });
+    }
+}
