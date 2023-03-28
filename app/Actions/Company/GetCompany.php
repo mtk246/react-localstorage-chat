@@ -28,7 +28,7 @@ final class GetCompany
 
             $company = $this->getCompanyInstance($id, $user);
 
-            if (!$user->hasRole('superuser')) {
+            if ($user->hasRole('superuser')) {
                 $facilities = $company->facilities()
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
