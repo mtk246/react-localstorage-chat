@@ -132,7 +132,7 @@ class Claim extends Model implements Auditable
      * @var array
      */
     protected $appends = [
-        'format', 'last_modified', 'private_note', 'status', 'status_history',
+        'format', 'last_modified', 'private_note', 'status', 'status_history', 'notes_history',
         'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
         'insurance_company_id', 'insurance_company', 'insurance_plan',
         'billing_provider_name', 'user_created', 'type_responsibility'
@@ -375,6 +375,70 @@ class Claim extends Model implements Auditable
             $record['claim_sub_statuses'] = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $record->id]]);
         }
         return $record;
+    }
+
+    public function getNotesHistoryAttribute()
+    {
+        $records = [];
+        $recordSubstatus = [];
+        $history = $this->claimStatusClaims()
+                        ->orderBy("created_at", "desc")
+                        ->orderBy("id", "desc")->get() ?? [];
+        foreach ($history as $status) {
+            if ($status->claim_status_type == ClaimSubStatus::class) {
+                $recordSubstatus = [];
+                foreach ($status->privateNotes as $note) {
+                    array_push(
+                        $recordSubstatus,
+                        [
+                            'status' => $status->claimStatus->name ?? '',
+                            'note'          => $note->note,
+                            'created_at'    => $note->created_at,
+                            'last_modified' => $note->last_modified,
+                        ]
+                    );
+                }
+            } else if ($status->claim_status_type == ClaimStatus::class) {
+                foreach($recordSubstatus as $subNote) {
+                    array_push(
+                        $records,
+                        [
+                            'note'          => $subNote['note'],
+                            'created_at'    => $subNote['created_at'],
+                            'last_modified' => $subNote['last_modified'],
+                            'check_status'  => null,
+                            'status' => $subNote['status'],
+                            'status_background_color' => $status->claimStatus->background_color ?? '',
+                            'status_font_color' => $status->claimStatus->font_color ?? '',
+                        ]
+                    );
+                }
+                $recordSubstatus = [];
+                foreach ($status->privateNotes as $note) {
+                    $check = ClaimCheckStatus::where('private_note_id', $note->id)->first();
+                    array_push(
+                        $records,
+                        [
+                            'note'          => $note->note,
+                            'created_at'    => $note->created_at,
+                            'last_modified' => $note->last_modified,
+                            'check_status'  => isset($check) ? [
+                                'response_details' => $check->response_details ?? '',
+                                'interface_type' => $check->interface_type ?? '',
+                                'interface' => $check->interface ?? '',
+                                'consultation_date' => $check->consultation_date ?? '',
+                                'resolution_time' => $check->resolution_time ?? '',
+                                'past_due_date' => $check->past_due_date ?? '',
+                            ] : null,
+                            'status' => $status->claimStatus->status ?? '',
+                            'status_background_color' => $status->claimStatus->background_color ?? '',
+                            'status_font_color' => $status->claimStatus->font_color ?? '',
+                        ]
+                    );
+                }
+            }
+        }
+        return $records;
     }
 
     /**
