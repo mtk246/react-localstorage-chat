@@ -386,7 +386,6 @@ class Claim extends Model implements Auditable
                         ->orderBy("id", "desc")->get() ?? [];
         foreach ($history as $status) {
             if ($status->claim_status_type == ClaimSubStatus::class) {
-                $recordSubstatus = [];
                 foreach ($status->privateNotes as $note) {
                     array_push(
                         $recordSubstatus,
