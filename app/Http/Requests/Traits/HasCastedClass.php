@@ -10,7 +10,7 @@ trait HasCastedClass
 {
     public function castedCollect(string $input): Collection
     {
-        return $this->collect($this->input($input))
+        return collect($this->get($input))
             ->map(fn (mixed $item) => new $this->castedClass($item, $this->query(), $this->user()));
     }
 
