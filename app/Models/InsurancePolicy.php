@@ -211,7 +211,11 @@ class InsurancePolicy extends Model implements Auditable
     public function getSubscriberAttribute()
     {
 	    if (isset($this->own)) {
-	        return (!$this->own) ? ($this->subscribers['0']->load(['addresses', 'contacts']) ?? null) : null;
+	        return (!$this->own)
+                ? ((count($this->subscribers) > 1)
+                    ? $this->subscribers['0']->load(['addresses', 'contacts']) ?? null
+                    : null)
+                : null;
 	    }
     }
 }

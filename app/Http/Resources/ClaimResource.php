@@ -83,6 +83,7 @@ final class ClaimResource extends JsonResource
             'private_note' => $this->getPrivateNoteAttribute(),
             'status' => $this->getStatusAttribute(),
             'status_history' => $this->getStatusHistoryAttribute(),
+            'notes_history' => $this->getNotesHistoryAttribute(),
             'billed_amount' => $this->getBilledAmountAttribute(),
             'amount_paid' => $this->getAmountPaidAttribute(),
             'past_due_date' => $this->getPastDueDateAttribute(),
