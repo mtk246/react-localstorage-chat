@@ -115,6 +115,7 @@ final class GetCompany
                 'ein' => $company->ein,
                 'upin' => $company->upin,
                 'clia' => $company->clia,
+                'status' => $company->status,
                 'created_at' => $company->created_at,
                 'updated_at' => $company->updated_at,
                 'last_modified' => $company->last_modified,
