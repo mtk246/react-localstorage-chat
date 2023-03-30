@@ -1099,6 +1099,23 @@ class TypeCatalogSeeder extends Seeder
                     ],
                 ]
             ],
+            [
+                'description' => 'Gender',
+                'type_catalogs' => [
+                    [
+                        'code' => 'F',
+                        'description' => 'Female'
+                    ],
+                    [
+                        'code' => 'M',
+                        'description' => 'Male'
+                    ],
+                    [
+                        'code' => 'B',
+                        'description' => 'Both'
+                    ],
+                ]
+            ],
         ];
     
     
