@@ -157,7 +157,8 @@ final class GetCompany
                 $exceptionIC = [];
 
                 foreach ($exception_insurance_companies as $exception) {
-                    $exceptionIC[$exception->id] = [
+                    $exceptionIC[] = [
+                        'index' => $exception->id,
                         'id' => $exception->insuranceCompany->id,
                         'code' => $exception->insuranceCompany->code,
                         'name' => $exception->insuranceCompany->name,
