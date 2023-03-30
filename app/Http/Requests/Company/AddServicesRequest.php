@@ -28,6 +28,7 @@ final class AddServicesRequest extends FormRequest
     {
         return [
             'services' => ['required', 'array'],
+            'services.*.id' => ['nullable', 'integer'],
             'services.*.billing_company_id' => ['nullable', 'integer'],
             'services.*.procedure_id' => [
                 'required',
@@ -45,11 +46,12 @@ final class AddServicesRequest extends FormRequest
             'services.*.price_percentage' => ['nullable', 'numeric'],
             'services.*.clia' => ['nullable', 'string'],
             'services.*.medications' => ['nullable', 'array'],
-            'services.*.medications.*.date' => ['required_with:services.*.medications', 'date'],
-            'services.*.medications.*.drug_code' => ['required_with:services.*.medications', 'string'],
-            'services.*.medications.*.batch' => ['required_with:services.*.medications', 'string'],
-            'services.*.medications.*.quantity' => ['required_with:services.*.medications', 'integer'],
-            'services.*.medications.*.frequency' => ['required_with:services.*.medications', 'integer'],
+            'services.*.medications.*.id' => 'nullable|integer',
+            'services.*.medications.*.date' => 'required|date',
+            'services.*.medications.*.drug_code' => 'required|string',
+            'services.*.medications.*.batch' => 'required|string',
+            'services.*.medications.*.quantity' => 'required|integer',
+            'services.*.medications.*.frequency' => 'required|integer',
         ];
     }
 }
