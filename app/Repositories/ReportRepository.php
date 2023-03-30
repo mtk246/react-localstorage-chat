@@ -784,7 +784,9 @@ class ReportRepository implements ReportInterface
                 $address = ($this->billingProvider && $this->billingProvider->user->addresses) ? $this->billingProvider->user->addresses->first() : null;
 
                 $this->pdf->SetFont($this->fontFamily, '', 9);
-                $name = ($this->billingProvider->user->profile->last_name . ', ' . $this->billingProvider->user->profile->first_name . ', ' . substr($this->billingProvider->user->profile->middle_name, 0, 1));
+                $name = isset($this->billingProvider)
+                    ? ($this->billingProvider->user->profile->last_name . ', ' . $this->billingProvider->user->profile->first_name . ', ' . substr($this->billingProvider->user->profile->middle_name, 0, 1))
+                    : '';
 
                 $this->pdf->MultiCell(70, 5.8, $name ?? '', 0, 'L', false, 1, 134, 248, true, 0, false, true, 0, 'T', true);
                 $this->pdf->MultiCell(70, 5.8, ($address->address ?? ''), 0, 'L', false, 1, 134, 252, true, 0, false, true, 0, 'T', true);

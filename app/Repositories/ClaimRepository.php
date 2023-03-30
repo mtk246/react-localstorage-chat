@@ -1595,12 +1595,14 @@ class ClaimRepository
                     'claim_status_type' => ClaimStatus::class,
                     'claim_status_id'   => $claimStatus->id,
                 ]);
-                PrivateNote::create([
-                    'publishable_type'   => ClaimStatusClaim::class,
-                    'publishable_id'     => $claimStatusClaim->id,
-                    'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                    'note'               => $data['private_note']
-                ]);
+                if (empty($data['sub_status_id'])) {
+                    PrivateNote::create([
+                        'publishable_type'   => ClaimStatusClaim::class,
+                        'publishable_id'     => $claimStatusClaim->id,
+                        'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
+                        'note'               => $data['private_note']
+                    ]);
+                }
             }
             if (isset($data['sub_status_id'])) {
                 $claimSubStatus = ClaimSubStatus::find($data['sub_status_id']);
