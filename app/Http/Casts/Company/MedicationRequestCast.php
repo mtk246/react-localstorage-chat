@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Casts\Company;
 
 use App\Http\Casts\CastsRequest;
-use App\Models\Medication as MedicationModel;
 
 final class MedicationRequestCast extends CastsRequest
 {
-    public function getCode(): string
+    public function getId(): int
     {
-        return generateNewCode(prefix: 'test', code_length: 5, model: MedicationModel::class);
+        return (int) $this->inputs['id'];
     }
 
     public function getDate(): string
