@@ -158,7 +158,8 @@
 {
     "services": [
         {
-            "billing_company_id": 1, /** Only required by superuser */
+            "billing_company_id": 1,  /** Only required by superuser */
+            "id":87,
             "procedure_id": 1,
             "description": "Description procedure",
             "modifier_id": 2,
@@ -171,9 +172,9 @@
             "insurance_label_fee_id": 1,
             "price_percentage": "70",
             "clia": "00001A",
-            "medication_application": true,
             "medications": [
                 {
+                    "id": 2,
                     "date": "2022-03-16",
                     "drug_code": "001A23X",
                     "batch": "0101AS",
@@ -181,6 +182,7 @@
                     "frequency": 3
                 },
                 {
+                    "id": 0, /** zero for new entries */
                     "date": "2022-03-16",
                     "drug_code": "002A23X",
                     "batch": "0201AS",
@@ -188,7 +190,13 @@
                     "frequency": 3
                 }
             ]
-
+        },
+        {
+            "billing_company_id": 1,  /** Only required by superuser */
+            "id": 88, /** zero for new entries */
+            "procedure_id": 2,
+            "description": "Description procedure",
+            "price": 300
         }
     ]
 }
@@ -201,42 +209,62 @@
 
 ```json
 [
-        {
-            "billing_company_id": 1, /** Only required by superuser */
-            "procedure_id": 1,
-            "description": "Description procedure",
-            "modifier_id": 2,
-            "price": 20.2,
-            "mac": "02102",
-            "locality_number":"01",
-            "state": "ALASKA",
-            "fsa": "STATEWIDE",
-            "counties": "ALL COUNTIES",
-            "insurance_label_fee_id": 1,
-            "price_percentage": "70",
-            "clia": "00001A",
-            "medication_application": true,
-            "medications": [
-                {
-                    "code": "000001",
-                    "date": "2022-03-16",
-                    "drug_code": "001A23X",
-                    "batch": "0101AS",
-                    "quantity": 2,
-                    "frequency": 3
-                },
-                {
-                    "code": "000002",
-                    "date": "2022-03-16",
-                    "drug_code": "002A23X",
-                    "batch": "0201AS",
-                    "quantity": 2,
-                    "frequency": 3
-                }
-            ]
-
-        }
+  {
+    "id": 87,
+    "billing_company_id": 1,
+    "procedure_id": 1,
+    "description": "Office o/p new low 30-44 min",
+    "modifier_id": 2,
+    "mac": "02102",
+    "locality_number": "01",
+    "state": "ALASKA",
+    "fsa": "STATEWIDE",
+    "counties": "ALL COUNTIES",
+    "insurance_label_fee_id": 1,
+    "price": "20.2",
+    "price_percentage": "70",
+    "clia": "00001A",
+    "medication_application": false,
+    "medications": [
+      {
+        "id": 2,
+        "code": "87001A23X0101AS54",
+        "drug_code": "001A23X",
+        "batch": "0101AS",
+        "quantity": 2,
+        "frequency": 3,
+        "date": "2022-03-16"
+      },
+      {
+        "id": 3,
+        "code": "87002A23X0201AS55",
+        "drug_code": "002A23X",
+        "batch": "0201AS",
+        "quantity": 2,
+        "frequency": 3,
+        "date": "2022-03-16"
+      }
     ]
+  },
+  {
+    "id": 88,
+    "billing_company_id": 1,
+    "procedure_id": 2,
+    "description": "Office o/p new mod 45-59 min",
+    "modifier_id": null,
+    "mac": "10112",
+    "locality_number": "00",
+    "state": "ALABAMA",
+    "fsa": "STATEWIDE",
+    "counties": "ALL COUNTIES",
+    "insurance_label_fee_id": null,
+    "price": "300",
+    "price_percentage": null,
+    "clia": null,
+    "medication_application": false,
+    "medications": []
+  }
+]
 ```
 
 #
