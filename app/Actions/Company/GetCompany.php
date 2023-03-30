@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Actions\Company;
 
 use App\Facades\Pagination;
+use App\Http\Resources\Company\ServiceResource;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\Company;
+use App\Models\CompanyProcedure;
 use App\Models\Contact;
 use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
-use App\Models\MacLocality;
 use App\Models\PrivateNote;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +33,8 @@ final class GetCompany
                 $facilities = $company->facilities()
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
-                $companyProcedures = $company->procedures()
+                $companyProcedures = CompanyProcedure::query()
+                    ->where('company_id', $company->id)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
@@ -53,8 +55,9 @@ final class GetCompany
                     ->wherePivot('billing_company_id', $bC)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
-                $companyProcedures = $company->procedures()
-                    ->wherePivot('billing_company_id', $bC)
+                $companyProcedures = CompanyProcedure::query()
+                    ->where('company_id', $company->id)
+                    ->where('billing_company_id', $bC)
                     ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                     ->paginate(Pagination::itemsPerPage());
                 $copays = $company->copays()
@@ -85,28 +88,6 @@ final class GetCompany
                 'facility_type' => $facility->facilityType->type,
             ]);
 
-            $companyProcedures->getCollection()->transform(function ($companyProcedure) {
-                $macLocality = MacLocality::find($companyProcedure->pivot->mac_locality_id ?? null);
-
-                return [
-                    'billing_company_id' => $companyProcedure->pivot->billing_company_id ?? null,
-                    'procedure_id' => $companyProcedure->id ?? null,
-                    'description' => $companyProcedure->description ?? '',
-                    'modifier_id' => $companyProcedure->pivot->modifier_id ?? null,
-                    'price' => $companyProcedure->pivot->price ?? null,
-                    'mac' => isset($macLocality) ? $macLocality->mac : '',
-                    'locality_number' => isset($macLocality) ? $macLocality->locality_number : '',
-                    'state' => isset($macLocality) ? $macLocality->state : '',
-                    'fsa' => isset($macLocality) ? $macLocality->fsa : '',
-                    'counties' => isset($macLocality) ? $macLocality->counties : '',
-                    'insurance_label_fee_id' => $companyProcedure->pivot->insurance_label_fee_id ?? null,
-                    'price_percentage' => $companyProcedure->pivot->price_percentage ?? null,
-                    'clia' => $companyProcedure->pivot->clia ?? null,
-                    'medication_application' => $companyProcedure->pivot->medications()->exists(),
-                    'medications' => $companyProcedure->pivot->medications,
-                ];
-            });
-
             $record = [
                 'id' => $company->id,
                 'code' => $company->code,
@@ -122,7 +103,7 @@ final class GetCompany
                 'public_note' => isset($company->publicNote) ? $company->publicNote->note : null,
                 'taxonomies' => $company->taxonomies,
                 'facilities' => $facilities,
-                'services' => $companyProcedures,
+                'services' => ServiceResource::collection($companyProcedures)->resource,
                 'copays' => $copays,
                 'contract_fees' => $contracFees,
             ];
