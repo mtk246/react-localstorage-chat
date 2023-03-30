@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Medication
+ * App\Models\Medication.
  *
  * @property int $id
  * @property string $code
@@ -21,7 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $company_procedure_id
- * @property-read \App\Models\CompanyProcedure|null $companyProcedure
+ * @property \App\Models\CompanyProcedure|null $companyProcedure
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication query()
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class Medication extends Model
@@ -47,7 +49,6 @@ final class Medication extends Model
      * @var string[]
      */
     protected $fillable = [
-        'code',
         'date',
         'drug_code',
         'batch',
@@ -55,11 +56,25 @@ final class Medication extends Model
         'frequency',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'code',
+    ];
+
     /** @var string[] */
     protected $hidden = [
         'id',
         'company_procedure_id',
     ];
+
+    public function getCodeAttribute(): string
+    {
+        return $this->company_procedure_id.$this->drug_code.$this->batch.$this->id;
+    }
 
     public function companyProcedure(): BelongsTo
     {
