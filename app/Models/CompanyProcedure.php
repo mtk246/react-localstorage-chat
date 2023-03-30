@@ -7,15 +7,18 @@ namespace App\Models;
 use Cknow\Money\Casts\MoneyStringCast;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * App\Models\CondoMembership.
  *
  * @property mixed $roles
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership query()
+ *
  * @property int $id
  * @property int $company_id
  * @property int $procedure_id
@@ -28,8 +31,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int|null $modifier_id
  * @property int|null $mac_locality_id
  * @property string|null $clia
- * @property-read Collection<int, \App\Models\Medication> $medications
- * @property-read int|null $medications_count
+ * @property Collection<int, \App\Models\Medication> $medications
+ * @property int|null $medications_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereClia($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereCompanyId($value)
@@ -42,6 +46,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure wherePricePercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereUpdatedAt($value)
+ *
+ * @property \App\Models\Company|null $billingCompany
+ * @property \App\Models\MacLocality $mac_locality
+ * @property Collection<int, \App\Models\Medication> $medications
+ * @property \App\Models\MacLocality|null $macLocality
+ * @property \App\Models\Procedure|null $procedure
+ *
  * @mixin \Eloquent
  */
 final class CompanyProcedure extends Pivot
@@ -86,18 +97,33 @@ final class CompanyProcedure extends Pivot
         'medications',
     ];
 
-    /** @var string[] */
-    protected $hidden = [
-        'id',
-    ];
-
     public function getMedicationsAttribute(): Collection
     {
         return $this->medications()->get();
     }
 
+    public function getMacLocalityAttribute(): MacLocality
+    {
+        return $this->macLocality()->sole();
+    }
+
     public function medications(): ?HasMany
     {
         return $this->hasMany(Medication::class, 'company_procedure_id');
+    }
+
+    public function procedure(): HasOne
+    {
+        return $this->hasOne(Procedure::class, 'id', 'procedure_id');
+    }
+
+    public function billingCompany(): HasOne
+    {
+        return $this->hasOne(Company::class, 'id', 'billing_company_id');
+    }
+
+    public function macLocality(): HasOne
+    {
+        return $this->hasOne(MacLocality::class, 'id', 'mac_locality_id');
     }
 }
