@@ -7,29 +7,34 @@ namespace App\Actions\Company;
 use App\Exceptions\User\NotHaveBillingCompany;
 use App\Http\Casts\Company\MedicationRequestCast;
 use App\Http\Casts\Company\ServiceRequestCast;
+use App\Http\Resources\Company\ServiceResource;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\CompanyProcedure;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 final class AddServices
 {
-    public function invoke(Collection $services, Company $company, User $user): Collection
+    public function invoke(Collection $services, Company $company, User $user): AnonymousResourceCollection
     {
-        return DB::transaction(function () use ($company, $services, $user) {
+        return DB::transaction(function () use ($company, $services, $user): AnonymousResourceCollection {
             $billingCompany = $this->getBillingCompany($user);
 
-            $this->detachProcedures($company, $billingCompany?->id);
+            $this->syncServices($company, $services, $billingCompany?->id);
 
             $services->each(fn (ServiceRequestCast $service) => tap(
-                CompanyProcedure::create([
+                CompanyProcedure::updateOrCreate([
+                    'id' => $service->getId(),
                     'company_id' => $company->id,
+                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
+                ], [
                     'procedure_id' => $service->getProcedureId(),
                     'mac_locality_id' => $service->getMacLocality()?->id,
-                    'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
                     'price' => $service->getPrice(),
                     'price_percentage' => $service->getPricePercentage(),
                     'modifier_id' => $service->getModifierId(),
@@ -42,27 +47,27 @@ final class AddServices
                 )
             ));
 
-            $procedures = CompanyProcedure::query();
+            $procedures = CompanyProcedure::query()
+                ->where('company_id', $company->id)
+                ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompany): void {
+                    $query->where('billing_company_id', $billingCompany->id);
+                })
+                ->get();
 
-            if (Gate::denies('is-admin')) {
-                $procedures = $procedures->where('billing_company_id', $billingCompany->id)
-                    ->with('medications');
-            }
-
-            return $procedures->get();
+            return ServiceResource::collection($procedures);
         });
     }
 
-    /** @todo move to model */
-    private function detachProcedures(Company $company, ?int $billingCompanyId): void
+    private function syncServices(Company $company, collection $services, ?int $billingCompanyId): void
     {
-        $query = $company->procedures();
-
-        if (Gate::denies('is-admin')) {
-            $query = $query->wherePivot('billing_company_id', $billingCompanyId);
-        }
-
-        $query->detach();
+        CompanyProcedure::query()
+            ->where('company_id', $company->id)
+            ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompanyId): void {
+                $query->where('billing_company_id', $billingCompanyId);
+            })
+            ->whereNotIn('id', $services->map(fn (ServiceRequestCast $services) => $services->getId())
+                ->toArray())
+            ->delete();
     }
 
     /** @todo move to model */
@@ -79,8 +84,17 @@ final class AddServices
 
     private function setMedications(CompanyProcedure $cProcedure, Collection $medications): void
     {
+        $cProcedure->medications()
+            ->whereNotIn(
+                'id',
+                $medications->map(fn (MedicationRequestCast $medication) => $medication->getId())
+                    ->toArray(),
+            )
+            ->delete();
+
         $medications->each(
             fn (MedicationRequestCast $medication) => $cProcedure->medications()->updateOrCreate(
+                ['id' => $medication->getId()],
                 [
                     'date' => $medication->getDate(),
                     'drug_code' => $medication->getDrugCode(),
@@ -88,7 +102,6 @@ final class AddServices
                     'quantity' => $medication->getQuantity(),
                     'frequency' => $medication->getFrequency(),
                 ],
-                ['code' => $medication->getCode()],
             )
         );
     }
