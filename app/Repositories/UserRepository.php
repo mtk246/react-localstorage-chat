@@ -13,6 +13,7 @@ use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
 use App\Models\User;
+use App\Models\TypeCatalog;
 use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
@@ -718,5 +719,23 @@ class UserRepository{
             'language' => $lang,
         ]);
         return $user;
+    }
+
+    public function getListNameSuffix()
+    {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Name suffix']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListGender()
+    {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Gender']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
