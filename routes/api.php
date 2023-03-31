@@ -46,6 +46,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
+        Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
+        Route::get('/get-list-name-suffix', [\App\Http\Controllers\UserController::class, 'getListNameSuffix'])->middleware(['auth:api']);
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
@@ -449,7 +451,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
-        Route::get('/check-eligibility/{id}', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
+        Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
