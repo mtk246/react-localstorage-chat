@@ -199,7 +199,7 @@ class AuditController extends Controller
         }
 
         if (isset($record)) {
-            $auditables = Audit::where('url', 'like', '%/'.$entity.'/'.$id)
+            $auditables = Audit::where('url', 'like', '%/'.$entity.'/'.$id.'%')
                 ->orWhere('url', 'like', '%/'.$entity.'/create')
                 ->where('created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity)
