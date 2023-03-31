@@ -319,7 +319,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
 
-        Route::get('/get-subscribers/{ssn_patient}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
+        Route::get('/get-subscribers/{id}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
     });
 
     Route::prefix('taxonomy')->middleware([
@@ -469,6 +469,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
+        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
     });
 
     Route::prefix('claim-sub-status')->middleware([

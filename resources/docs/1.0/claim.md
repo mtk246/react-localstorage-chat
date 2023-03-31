@@ -25,8 +25,9 @@
 - [Change status Claim](#change-status-claim)
 - [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
-- [Get list diagnoses](#get-list-diagnoses
+- [Get list diagnoses](#get-list-diagnoses)
 - [Add check status Claim](#add-check-status)
+- [Get check status Claim](#get-check-status)
 
 
 
@@ -59,6 +60,7 @@
 | 21 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
 | 22 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
 | 23 |PATCH | `Add check status Claim` | `/claim/add-check-status-claim/{id}`|yes|Add check status claim|
+| 24 |GET | `Get check status Claim` | `/claim/get-check-status/{id}`|yes|Get check status claim|
 
 <a name="data-another-module"></a>
 ## Data from another module to make request
@@ -2084,5 +2086,25 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
     "past_due_date": "2022-09-16",
     "updated_at": "2022-09-16T13:23:19.000000Z",
     "created_at": "2022-09-16T13:23:19.000000Z",
+}
+```
+
+<a name="get-check-status"></a>
+## Get check status of the claim
+
+## Param in path
+
+```json
+{
+    "id": <integer> /** ID Claim */
+}
+```
+
+## Response
+
+> {success} 204 Good response
+
+```json
+{
 }
 ```

@@ -386,4 +386,14 @@ class ClaimController extends Controller
         $rs = $this->claimRepository->addCheckStatus($request->validated(), $id);
         return $rs ? response()->json($rs) : response()->json(__("Error, check status claim"), 400);
     }
+
+    public function getCheckStatus(int $id): JsonResponse
+    {
+        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+
+        if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
+
+        $rs = $this->claimRepository->getCheckStatus($token->access_token ?? '', $id);
+        return $rs ? response()->json($rs) : response()->json(__("Error, get check status"), 400);
+    }
 }
