@@ -699,8 +699,10 @@
 
 ```json
 {
-    "ssn": "5345",
-    "dateOfBirth": "1990-11-11",
+    "last_name": "Bello",
+    "first_name": "Maikel",
+    "birth_date": "1990-04-01",
+    "ssn": "990990106"
 }
 ```
 
@@ -708,7 +710,7 @@
 
 ```json
 {
-    "email":"admin@admin.com"
+    "email":"a****@a*******m"
 }
 ```
 
