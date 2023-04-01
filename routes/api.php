@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\PlateauController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
@@ -495,6 +496,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimSubStatusController::class, 'changeStatus'])->middleware([
             'auth:api',
         ]);
+    });
+
+    Route::prefix('plateau')->middleware([
+        'auth:api',
+        'role:superuser|billingmanager',
+    ])->group(function () {
+        Route::get('/embed', [PlateauController::class, 'getEmbedToken']);
     });
 
     Route::prefix('reports')->middleware([
