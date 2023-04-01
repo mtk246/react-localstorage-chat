@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Http\Requests\Casts\ContractFeesRequestCast;
+use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
