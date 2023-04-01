@@ -320,6 +320,26 @@ class UserController extends Controller
     /**
      * @param Illuminate\Http\Request $request
      */
+    public function getListNameSuffix(): JsonResponse
+    {
+        $rs = $this->userRepository->getListNameSuffix();
+
+        return response()->json($rs);
+    }
+
+    /**
+     * @param Illuminate\Http\Request $request
+     */
+    public function getListGender(): JsonResponse
+    {
+        $rs = $this->userRepository->getListGender();
+
+        return response()->json($rs);
+    }
+
+    /**
+     * @param Illuminate\Http\Request $request
+     */
     public function getList(Request $request): JsonResponse
     {
         $rs = $this->userRepository->getList($request);

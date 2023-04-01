@@ -22,6 +22,8 @@
 - [New token](#new-token)
 - [Update language](#update-lang)
 - [Get list users](#get-list)
+- [Get list name suffix](#get-list-name-suffix)
+- [Get list name suffix](#get-list-gender)
 
 
 <a name="basic-data"></a>
@@ -48,6 +50,8 @@
 | 17 |POST | `new token`   | `/user/new-token` |no|generate new token user|
 | 18|PATCH | `update language`   | `/setting/lang` |yes|update language|
 | 19|GET | `get list users`   | `/user/get-list?biling_company_id={ID?}&authorization={NameAuth?}` |yes|Get list users |
+| 20 |GET | `Get list name suffix`          | `/user/get-list-name-suffix`|yes|Get all name suffix|
+| 21 |GET | `Get list gender`          | `/user/get-list-gender`|yes|Get all gender|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -699,8 +703,10 @@
 
 ```json
 {
-    "ssn": "5345",
-    "dateOfBirth": "1990-11-11",
+    "last_name": "Bello",
+    "first_name": "Maikel",
+    "birth_date": "1990-04-01",
+    "ssn": "990990106"
 }
 ```
 
@@ -708,7 +714,7 @@
 
 ```json
 {
-    "email":"admin@admin.com"
+    "email":"a****@a*******m"
 }
 ```
 
@@ -1254,5 +1260,103 @@
         "id": 19,
         "name": "Leonard K Berkowitz"
     }
+]
+```
+
+<a name="get-list-name-suffix"></a>
+## Get all user name suffix
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 User name suffix found
+
+#
+
+```json
+[
+    {
+        "id": 182,
+        "name": "I"
+    },
+    {
+        "id": 183,
+        "name": "II"
+    },
+    {
+        "id": 184,
+        "name": "III"
+    },
+    {
+        "id": 185,
+        "name": "IV"
+    },
+    {
+        "id": 186,
+        "name": "Jr"
+    },
+    {
+        "id": 187,
+        "name": "Sr"
+    }
+]
+```
+
+<a name="get-list-gender"></a>
+## Get all user gender
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 User gender found
+
+#
+
+```json
+[
+    {
+        "id": 182,
+        "name": "Female"
+    },
+    {
+        "id": 183,
+        "name": "Male"
+    },
+    {
+        "id": 184,
+        "name": "Both"
+    },
 ]
 ```

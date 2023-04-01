@@ -640,6 +640,125 @@ class ClaimRepository
         }
     }
 
+    public function getcheckStatus($token, $id) {
+        try {
+            $data = [
+                "sandbox" => [
+                    "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/claimstatus/v2",
+                    "body" => [
+                        'controlNumber'           => "123456789",
+                        'tradingPartnerServiceId' => "CMSMED",
+                        'provider' => [
+                            'organizationName'        => "provider_name",
+                            'npi'                     => "0123456789",
+                            'serviceProviderNumber'   => "54321",
+                            'providerCode'            => "AD",
+                            'referenceIdentification' => "54321g"
+                        ],
+                        'subscriber' => [
+                            'memberId'    => "0000000000",
+                            'firstName'   => "johnOne",
+                            'lastName'    => "doeOne",
+                            'gender'      => "M",
+                            'dateOfBirth' => "18800102",
+                            'ssn'         => "555443333",
+                            'idCard'      => "card123"
+                        ],
+                        'dependents' => [
+                            [
+                                'firstName'   => "janeOne",
+                                'lastName'    => "doeone",
+                                'gender'      => "F",
+                                'dateOfBirth' => "18160421",
+                                'groupNumber' => "1111111111"
+                            ]
+                        ],
+                        'encounter' => [
+                            "beginningDateOfService" => "20100102",
+                            "endDateOfService"       => "20100102",
+                            "serviceTypeCodes"       => [
+                              "98"
+                            ]
+                        ]
+                    ]
+                ],
+                "production" => [
+                    "url"  => "https://apigw.changehealthcare.com/medicalnetwork/claimstatus/v2",
+                    "body" => null
+                ]
+            ];
+
+            $claim = Claim::with(["patient", "company", "claimFormattable", "claimFormattable.claimFormServices.typeOfService"])->find($id);
+            $patient = Patient::with([
+                "insurancePolicies" => function ($query) {
+                    $query->with('typeResponsibility');
+                },
+                "user.profile"
+            ])->find($claim->patient_id);
+            $insurancePolicies = [];
+
+            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
+                $encounter = [];
+                $serviceCodes = [];
+
+                foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                    $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
+                    $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
+                    array_push($serviceCodes, $service->typeOfService->code);
+                }
+                $encounter["serviceTypeCodes"] = $serviceCodes;
+
+                $dataReal = [
+                    'controlNumber'           => $claim->control_number ?? '',
+                    'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
+                    'tradingPartnerName'      => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
+                    'provider' => [
+                        'organizationName'        => $claim->company->name ?? null,
+                        'npi'                     => $claim->company->npi ?? null,
+                        'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
+                        'providerCode'            => $claim->company->code ?? null,
+                        'referenceIdentification' => $claim->company->reference_identification ?? null
+                    ],
+                    'subscriber' => [
+                        'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
+                        'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
+                        'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
+                        'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
+                        'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
+                        'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
+                        'idCard'      => $insurancePolicy->subscriber->id_card ?? null
+                    ],
+                    'dependents' => [
+                        [
+                            'firstName'   => $patient->user->profile->first_name,
+                            'lastName'    => $patient->user->profile->last_name,
+                            'gender'      => strtoupper($patient->user->profile->sex),
+                            'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
+                            'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
+                        ]
+                    ],
+                    'encounter' => $encounter
+                ];
+
+                $response = Http::withToken($token)->acceptJson()->post(
+                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+                );
+                $responseData = json_decode($response->body());
+                
+                array_push($insurancePolicies, $insurancePolicy);
+            }
+
+            return [
+                "claim_id" => $claim->id,
+                "insurance_policies" => $insurancePolicies
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
+    }
+
     public function checkEligibility($token, $id) {
         try {
             $data = [

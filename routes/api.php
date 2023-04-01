@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\PlateauController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
+        Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
+        Route::get('/get-list-name-suffix', [\App\Http\Controllers\UserController::class, 'getListNameSuffix'])->middleware(['auth:api']);
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
@@ -317,7 +320,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
 
-        Route::get('/get-subscribers/{ssn_patient}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
+        Route::get('/get-subscribers/{id}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
     });
 
     Route::prefix('taxonomy')->middleware([
@@ -449,7 +452,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
-        Route::get('/check-eligibility/{id}', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
+        Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
@@ -467,6 +470,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
+        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
     });
 
     Route::prefix('claim-sub-status')->middleware([
@@ -492,6 +496,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimSubStatusController::class, 'changeStatus'])->middleware([
             'auth:api',
         ]);
+    });
+
+    Route::prefix('plateau')->middleware([
+        'auth:api',
+        'role:superuser|billingmanager',
+    ])->group(function () {
+        Route::get('/embed', [PlateauController::class, 'getEmbedToken']);
     });
 
     Route::prefix('reports')->middleware([
