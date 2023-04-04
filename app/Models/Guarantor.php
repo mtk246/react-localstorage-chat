@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -38,9 +39,10 @@ class Guarantor extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "name",
-        "phone",
-        "patient_id"
+        'name',
+        'phone',
+        'patient_id',
+        'billing_company_id',
     ];
 
     /**
@@ -51,6 +53,16 @@ class Guarantor extends Model implements Auditable
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    /**
+     * Get the billingCompany that owns the Guarantor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**

@@ -173,9 +173,9 @@ class Patient extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function marital()
+    public function maritals()
     {
-        return $this->hasOne(Marital::class);
+        return $this->hasMany(Marital::class);
     }
 
     /**
@@ -183,9 +183,9 @@ class Patient extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function guarantor()
+    public function guarantors()
     {
-        return $this->hasOne(Guarantor::class);
+        return $this->hasMany(Guarantor::class);
     }
 
     /**
