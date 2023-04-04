@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\AddressType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Patient\AddCompaniesRequest;
 use App\Http\Requests\Patient\ChangeStatusPolicyRequest;
@@ -11,6 +12,8 @@ use App\Http\Requests\Patient\CreateRequest;
 use App\Http\Requests\Patient\PolicyRequest;
 use App\Http\Requests\Patient\UpdateRequest;
 use App\Http\Requests\ValidateSearchRequest;
+use App\Http\Resources\Enums\AddressTypeResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -142,7 +145,7 @@ class PatientController extends Controller
     public function getListAddressType(): JsonResponse
     {
         return response()->json(
-            $this->patientRepository->getListAddressType()
+            new EnumResource([AddressType::class, AddressTypeResource::class])
         );
     }
 
