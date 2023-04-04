@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Plateau;
+namespace App\Actions\Tableau;
 
-use App\Http\Resources\Plateau\JWTResource;
+use App\Http\Resources\Tableau\JWTResource;
 use Illuminate\Support\Str;
 use Lcobucci\JWT\Encoding\ChainedFormatter;
 use Lcobucci\JWT\Encoding\JoseEncoder;

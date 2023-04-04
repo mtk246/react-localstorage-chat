@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Plateau;
+namespace App\Http\Resources\Tableau;
 
 use App\Http\Resources\RequestWrapedResource;
 use Lcobucci\JWT\Token\Plain;
