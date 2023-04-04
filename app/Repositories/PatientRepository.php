@@ -65,7 +65,7 @@ class PatientRepository
                     "middle_name"   => $data["profile"]["middle_name"] ?? '',
                     "last_name"     => $data["profile"]["last_name"],
                     "sex"           => $data["profile"]["sex"],
-                    'name_suffix_id' => $data['name_suffix_id'] ?? null,
+                    'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     "date_of_birth" => $data["profile"]["date_of_birth"]
                 ]);
             }
@@ -845,7 +845,7 @@ class PatientRepository
                 "middle_name"   => $data["profile"]["middle_name"],
                 "last_name"     => $data["profile"]["last_name"],
                 "sex"           => $data["profile"]["sex"],
-                'name_suffix_id' => $data['name_suffix_id'] ?? null,
+                'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 "date_of_birth" => $data["profile"]["date_of_birth"]
             ]);
 
@@ -1432,7 +1432,6 @@ class PatientRepository
                 }, "roles", "addresses", "contacts", "billingCompanies"]);
             },
             "maritalStatus",
-            "marital",
             "companies",
             "insurancePolicies",
             "insurancePlans" => function ($query) {
@@ -1440,7 +1439,6 @@ class PatientRepository
                     "insuranceCompany"
                 ]);
             },
-            "guarantor",
             "emergencyContacts",
             "employments",
             "publicNote",
