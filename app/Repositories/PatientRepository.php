@@ -43,6 +43,12 @@ class PatientRepository
     public function createPatient(array $data) {
         try {
             DB::beginTransaction();
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data["billing_company_id"];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
             if (isset($data['id'])) {
                 $patient = Patient::find($data['id']);
                 $user = $patient->user;
@@ -65,7 +71,7 @@ class PatientRepository
             }
 
             if (isset($data["profile"]["social_medias"]) && !empty(filter_array_empty($data["profile"]["social_medias"]))) {
-                $socialMedias = $profile->socialMedias;
+                $socialMedias = $profile->socialMedias()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
@@ -86,8 +92,9 @@ class PatientRepository
                     $socialNetwork = SocialNetwork::whereName($socialMedia["name"])->first();
                     if (isset($socialNetwork)) {
                         SocialMedia::updateOrCreate([
-                            "profile_id"        => $profile->id,
-                            "social_network_id" => $socialNetwork->id
+                            'profile_id'        => $profile->id,
+                            'social_network_id' => $socialNetwork->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         ], [
                             "link" => $socialMedia["link"]
                         ]);
@@ -106,12 +113,6 @@ class PatientRepository
                     "userkey"    => encrypt(uniqid("", true)),
                     "profile_id" => $profile->id
                 ]);
-            }
-
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
             }
 
             /** Attach billing company */
@@ -195,37 +196,40 @@ class PatientRepository
 
             /** Create Marital */
             if (isset($data['marital']['spuse_name'])) {
-                $data["marital"]["patient_id"] = $patient->id;
+                $data['marital']['patient_id'] = $patient->id;
                 $marital = Marital::firstOrCreate([
-                    "patient_id" => $patient->id,
-                ], $data["marital"]);
+                    'patient_id' => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], $data['marital']);
             }
 
             /** Create Guarantor */
             if (isset($data['guarantor']['name'])) {
-                $data["guarantor"]["patient_id"] = $patient->id;
+                $data['guarantor']['patient_id'] = $patient->id;
                 $guarantor = Guarantor::firstOrCreate([
-                    "patient_id" => $patient->id,
-                ], $data["guarantor"]);
+                    'patient_id' => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], $data['guarantor']);
             }
 
             /** Create Employment */
-            if (isset($data["employments"]) && !empty(filter_array_empty($data["employments"]))) {
-                foreach ($data["employments"] as $employment) {
-                    $employment["patient_id"] = $patient->id;
+            if (isset($data['employments']) && !empty(filter_array_empty($data['employments']))) {
+                foreach ($data['employments'] as $employment) {
+                    $employment['patient_id'] = $patient->id;
                     Employment::firstOrCreate([
-                        "patient_id" => $patient->id,
+                        'patient_id' => $patient->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], $employment);
                 }
             }
 
             /** Emergency Contacts */
-            if (isset($data["emergency_contacts"]) && !empty(filter_array_empty($data["emergency_contacts"]))) {
-                $emergencyContacts = $patient->emergencyContacts;
+            if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
+                $emergencyContacts = $patient->emergencyContacts()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
                 /** Delete energencyContact */
                 foreach ($emergencyContacts as $emergencyContact) {
                     $validated = false;
-                    foreach ($data["emergency_contacts"] as $emergencyC) {
+                    foreach ($data['emergency_contacts'] as $emergencyC) {
                         if ($emergencyC['name'] == $emergencyContact->name) {
                             $validated = true;
                             break;
@@ -235,15 +239,16 @@ class PatientRepository
                 }
 
                 /** update or create new emergency contact */
-                foreach ($data["emergency_contacts"] as $emergencyContact) {
+                foreach ($data['emergency_contacts'] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
-                        "name"       => $emergencyContact["name"],
-                        "patient_id" => $patient->id
+                        'name'       => $emergencyContact['name'],
+                        'patient_id' => $patient->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        "name"            => $emergencyContact["name"],
-                        "cellphone"       => $emergencyContact["cellphone"],
-                        "relationship_id" => $emergencyContact["relationship_id"],
-                        "patient_id"      => $patient->id
+                        'name'            => $emergencyContact['name'],
+                        'cellphone'       => $emergencyContact['cellphone'],
+                        'relationship_id' => $emergencyContact['relationship_id'],
+                        'patient_id'      => $patient->id
                     ]);
                 }
             }
@@ -295,27 +300,7 @@ class PatientRepository
      * @return Patient|Builder|Model|object|null
      */
     public function getOnePatient(int $id) {
-        $patient = Patient::with([
-            "user" => function ($query) {
-                $query->with(["profile" => function ($q) {
-                    $q->with("socialMedias");
-                }, "roles", "addresses", "contacts", "billingCompanies"]);
-            },
-            "maritalStatus",
-            "marital",
-            "insurancePolicies",
-            "insurancePlans" => function ($query) {
-                $query->with([
-                    "insuranceCompany"
-                ]);
-            },
-            "billingCompanies",
-            "guarantor",
-            "emergencyContacts",
-            "employments",
-            "publicNote",
-            "privateNotes"
-        ])->find($id);
+        $patient = Patient::find($id);
         
         if (auth()->user()->hasRole('superuser')) {
             $dataCompany = $patient->companies;
@@ -407,6 +392,8 @@ class PatientRepository
             "code"              => $patient->code,
             "profile"           => [
                 "ssn"           => $patient->user->profile->ssn ?? '',
+                "name_suffix_id" => $patient->user->profile->name_suffix_id ?? '',
+                "name_suffix" => $patient->user->profile->nameSuffix->description ?? '',
                 "first_name"    => $patient->user->profile->first_name ?? '',
                 "middle_name"   => $patient->user->profile->middle_name ?? '',
                 "last_name"     => $patient->user->profile->last_name ?? '',
@@ -447,11 +434,16 @@ class PatientRepository
             $insurance_policies = $patient->insurancePolicies()
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
 
-            /** Change to private data */
-            $guarantor = $patient->guarantor;
-            $emergency_contacts = $patient->emergencyContacts;
-            $employments = $patient->employments;
-            $social_medias = $patient->user->profile->socialMedias;
+            $marital = $patient->maritals()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->first();
+            $guarantor = $patient->guarantors()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->first();
+            $emergency_contacts = $patient->emergencyContacts()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+            $employments = $patient->employments()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+            $social_medias = $patient->user->profile->socialMedias()
+            ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
 
             if (isset($social_medias)) {
                 $patient_social_medias = [];
@@ -464,6 +456,13 @@ class PatientRepository
                 }
             };
 
+            if (isset($marital)) {
+                $patient_marital = [
+                    "spuse_name"       => $marital->spuse_name ?? '',
+                    "spuse_work"       => $marital->spuse_work ?? '',
+                    "spuse_work_phone" => $marital->spuse_work_phone ?? '',
+                ];
+            };
             if (isset($guarantor)) {
                 $patient_guarantor = [
                     "name" => $guarantor->name,
@@ -614,9 +613,9 @@ class PatientRepository
                     "marital_status_id" => $patient->marital_status_id,
                     "marital_status"    => $patient->maritalStatus->name,
                     "marital"           => ($patient->maritalStatus->name ?? '' == 'Married') ? [
-                        "spuse_name"       => $patient->marital->spuse_name ?? '',
-                        "spuse_work"       => $patient->marital->spuse_work ?? '',
-                        "spuse_work_phone" => $patient->marital->spuse_work_phone ?? '',
+                        "spuse_name"       => $patient_marital->spuse_name ?? '',
+                        "spuse_work"       => $patient_marital->spuse_work ?? '',
+                        "spuse_work_phone" => $patient_marital->spuse_work_phone ?? '',
                     ] : null,
                     "companies"          => isset($patient_companies) ? $patient_companies : null,
                     "insurance_policies" => isset($patient_policies) ? $patient_policies : null,
@@ -711,8 +710,8 @@ class PatientRepository
                         $q->with("socialMedias");
                     }, "roles", "addresses", "contacts", "billingCompanies"]);
                 },
-                "marital",
-                "guarantor",
+                //"marital",
+                //"guarantor",
                 "employments",
                 "companies",
                 "emergencyContacts",
@@ -732,8 +731,8 @@ class PatientRepository
                     "billingCompanies"
                     ]);
                 },
-                "marital",
-                "guarantor",
+                //"marital",
+                //"guarantor",
                 "employments",
                 "companies",
                 "emergencyContacts",
@@ -853,7 +852,8 @@ class PatientRepository
             ]);
 
             if (isset($data["profile"]["social_medias"]) && !empty(filter_array_empty($data["profile"]["social_medias"]))) {
-                $socialMedias = $profile->socialMedias;
+                $socialMedias = $profile->socialMedias()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
                 /** Delete socialMedia */
                 foreach ($socialMedias as $socialMedia) {
                     $validated = false;
@@ -875,7 +875,8 @@ class PatientRepository
                     if (isset($socialNetwork)) {
                         SocialMedia::updateOrCreate([
                             "profile_id"        => $profile->id,
-                            "social_network_id" => $socialNetwork->id
+                            "social_network_id" => $socialNetwork->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         ], [
                             "link" => $socialMedia["link"]
                         ]);
@@ -905,29 +906,34 @@ class PatientRepository
             /** Create Marital */
             if (isset($data['marital']['spuse_name'])) {
                 Marital::updateOrCreate([
-                    "patient_id" => $patient->id
+                    "patient_id" => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $data["marital"]);
             }
 
             /** Create Guarantor */
             if (isset($data['guarantor']['name'])) {
                 Guarantor::updateOrCreate([
-                    "patient_id" => $patient->id
+                    "patient_id" => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $data["guarantor"]);
             }
 
             /** Create Employment */
             if (isset($data["employments"]) && !empty(filter_array_empty($data["employments"]))) {
-                $patient->employments()->delete();
+                $patient->employments()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
                 foreach ($data["employments"] as $employment) {
                     $employment["patient_id"] = $patient->id;
+                    $employment["billing_company_id"] = $billingCompany->id ?? $billingCompany;
                     Employment::create($employment);
                 }
             }
 
             /** Emergency Contacts */
             if (isset($data["emergency_contacts"]) && !empty(filter_array_empty($data["emergency_contacts"]))) {
-                $emergencyContacts = $patient->emergencyContacts;
+                $emergencyContacts = $patient->emergencyContacts()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
                 /** Delete energencyContact */
                 foreach ($emergencyContacts as $emergencyContact) {
                     $validated = false;
@@ -944,7 +950,8 @@ class PatientRepository
                 foreach ($data["emergency_contacts"] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
                         "name"       => $emergencyContact["name"],
-                        "patient_id" => $patient->id
+                        "patient_id" => $patient->id,
+                        "billing_company_id" => $billingCompany->id ?? $billingCompany,
                     ], [
                         "name"         => $emergencyContact["name"],
                         "cellphone"    => $emergencyContact["cellphone"],
