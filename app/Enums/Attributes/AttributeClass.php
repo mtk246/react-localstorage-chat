@@ -10,7 +10,7 @@ use Attribute;
 abstract class AttributeClass
 {
     public function __construct(
-        public readonly string $value,
+        public readonly string|int|bool $value,
     ) {
     }
 }
