@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -40,13 +41,22 @@ class Marital extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "spuse_name",
-        "spuse_work",
-        "spuse_work_phone",
-        "patient_id"
+        'spuse_name',
+        'spuse_work',
+        'spuse_work_phone',
+        'patient_id',
+        'billing_company_id',
     ];
 
-
+    /**
+     * Get the billingCompany that owns the Marital
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
+    }
     /**
      * Marital belongs to Patient.
      *

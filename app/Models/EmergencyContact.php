@@ -43,10 +43,11 @@ class EmergencyContact extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "name",
-        "cellphone",
-        "relationship_id",
-        "patient_id"
+        'name',
+        'cellphone',
+        'relationship_id',
+        'patient_id',
+        'billing_company_id',
     ];
 
     /**
@@ -67,6 +68,16 @@ class EmergencyContact extends Model implements Auditable
     public function relationship(): BelongsTo
     {
         return $this->belongsTo(TypeCatalog::class, 'relationship_id');
+    }
+
+    /**
+     * Get the billingCompany that owns the EmergencyContact
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**
