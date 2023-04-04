@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 trait HasAttributes
 {
-    public function getAttribute(string $Attribute): string
+    public function getAttribute(string $Attribute): string|int|bool
     {
         $classAttributes = (new \ReflectionClassConstant(self::class, $this->name))->getAttributes();
 
