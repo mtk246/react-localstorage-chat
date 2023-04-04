@@ -72,5 +72,5 @@
 - ## Report
     - [Report](/{{route}}/{{version}}/report)
 
-- ## Plateau
-    - [Report](/{{route}}/{{version}}/plateau)
+- ## Tableau
+    - [Oauth](/{{route}}/{{version}}/tableau/oauth)
