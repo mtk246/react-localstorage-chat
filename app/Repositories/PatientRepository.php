@@ -391,6 +391,7 @@ class PatientRepository
             "id"                => $patient->id,
             "code"              => $patient->code,
             "profile"           => [
+                "avatar"           => $patient->user->profile->avatar ?? null,
                 "ssn"           => $patient->user->profile->ssn ?? '',
                 "name_suffix_id" => $patient->user->profile->name_suffix_id ?? '',
                 "name_suffix" => $patient->user->profile->nameSuffix->description ?? '',
@@ -612,11 +613,8 @@ class PatientRepository
                 "private_patient" => [
                     "marital_status_id" => $patient->marital_status_id,
                     "marital_status"    => $patient->maritalStatus->name,
-                    "marital"           => ($patient->maritalStatus->name ?? '' == 'Married') ? [
-                        "spuse_name"       => $patient_marital->spuse_name ?? '',
-                        "spuse_work"       => $patient_marital->spuse_work ?? '',
-                        "spuse_work_phone" => $patient_marital->spuse_work_phone ?? '',
-                    ] : null,
+                    "marital"           => (($patient->maritalStatus->name ?? '' === 'Married') && isset($patient_marital))
+                        ? $patient_marital : null,
                     "companies"          => isset($patient_companies) ? $patient_companies : null,
                     "insurance_policies" => isset($patient_policies) ? $patient_policies : null,
                     "need_guardian"      => isset($patient_guarantor) ? true : false,
