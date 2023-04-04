@@ -733,7 +733,7 @@ class UserRepository{
     public function getListGender()
     {
         try {
-            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Gender']], null);
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Gender']], null, ['code']);
         } catch (\Exception $e) {
             return [];
         }
