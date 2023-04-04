@@ -144,9 +144,7 @@ class PatientController extends Controller
 
     public function getListAddressType(): JsonResponse
     {
-        return response()->json(
-            new EnumResource([AddressType::class, AddressTypeResource::class])
-        );
+        return response()->json(new EnumResource(AddressType::class, AddressTypeResource::class));
     }
 
     public function getListInsurancePolicyType(): JsonResponse
