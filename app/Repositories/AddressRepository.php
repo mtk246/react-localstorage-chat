@@ -12,7 +12,7 @@ final class AddressRepository
     public function getListCountries(): array
     {
         return \DB::transaction(
-            fn () => Country::query()->select('id', \DB::raw("CONCAT(code, ' - ', name) as name"))->get()->toArray()
+            fn () => Country::query()->select('id', 'code', \DB::raw("CONCAT(code, ' - ', name) as name"))->get()->toArray()
         );
     }
 
