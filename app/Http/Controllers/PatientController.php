@@ -70,10 +70,10 @@ class PatientController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error updating patient'), 400);
     }
 
-    public function getAllSubscribers(string $ssn): JsonResponse
+    public function getAllSubscribers(Request $request): JsonResponse
     {
         return response()->json(
-            $this->patientRepository->getAllSubscribers($ssn)
+            $this->patientRepository->getAllSubscribers($request->input())
         );
     }
 
