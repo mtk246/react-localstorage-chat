@@ -320,8 +320,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/{patient_id}/edit-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'editPolicy']);
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
-
-        
     });
 
     Route::prefix('taxonomy')->middleware([
@@ -503,7 +501,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|billingmanager',
     ])->group(function () {
-        Route::post('/auth/embed-token', [AuthController::class, 'getEmbedToken']);
+        Route::get('/auth/embed-token', [AuthController::class, 'getEmbedToken']);
         Route::resource('/workbooks', App\Http\Controllers\Tableau\WorkbookController::class);
     });
 
