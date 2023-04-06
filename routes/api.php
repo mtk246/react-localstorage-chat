@@ -309,6 +309,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-relationship', [\App\Http\Controllers\PatientController::class, 'getListRelationship']);
         Route::post('/', [\App\Http\Controllers\PatientController::class, 'createPatient']);
         Route::get('/', [\App\Http\Controllers\PatientController::class, 'getAllPatient']);
+        Route::get('/get-subscribers', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
         Route::get('/get-by-ssn/{ssn}', [\App\Http\Controllers\PatientController::class, 'getBySsn']);
         Route::get('/{id}', [\App\Http\Controllers\PatientController::class, 'getOnePatient']);
         Route::put('/{id}', [\App\Http\Controllers\PatientController::class, 'updatePatient']);
@@ -320,7 +321,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
 
-        Route::get('/get-subscribers/{id}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
+        
     });
 
     Route::prefix('taxonomy')->middleware([
