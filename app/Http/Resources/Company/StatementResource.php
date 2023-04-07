@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\Company;
 
 use App\Http\Casts\Company\StoreStatementRequestCast;
+use App\Http\Resources\Enums\CatalogResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Models\CompanyStatement;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,7 +31,10 @@ final class StatementResource extends JsonResource
             'when_id' => $this->resource->when_id,
             'start_date' => $this->resource->start_date,
             'end_date' => $this->resource->end_date,
-            'apply_to_ids' => $this->resource->apply_to_ids,
+            'apply_to_ids' => new EnumResource(
+                collect($this->resource->apply_to_ids),
+                CatalogResource::class,
+            ),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];
