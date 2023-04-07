@@ -571,6 +571,7 @@ class PatientRepository
                             ];
                         };
                         array_push($patient_policy_subscriber, [
+                            "id" => $subscriber->id,
                             "ssn" => $subscriber->ssn,
                             "first_name" => $subscriber->first_name,
                             "last_name"  => $subscriber->last_name,
@@ -1134,14 +1135,12 @@ class PatientRepository
             if ($data["own_insurance"] == false) {
 
                 /** The subscriber is searched for each billing company */
-                $subscriber = Subscriber::firstOrCreate([
-                    "ssn"         => $data["subscriber"]["ssn"],
+                $subscriber = Subscriber::updateOrCreate([
+                    "id" => $data["subscriber"]["id"] ?? null,
+                ], [
+                    "ssn" => $data["subscriber"]["ssn"],
                     "first_name" => upperCaseWords($data["subscriber"]["first_name"]),
                     "last_name" => upperCaseWords($data["subscriber"]["last_name"]),
-                    "date_of_birth" => $data["subscriber"]["date_of_birth"]
-                ], [
-                    "first_name" => $data["subscriber"]["first_name"],
-                    "last_name" => $data["subscriber"]["last_name"],
                     "date_of_birth" => $data["subscriber"]["date_of_birth"],
                     "relationship_id" => $data["subscriber"]["relationship_id"],
                 ]);
@@ -1220,14 +1219,11 @@ class PatientRepository
         if ($data["own_insurance"] == false) {
 
             /** The subscriber is searched for each billing company */
-            $subscriber = Subscriber::firstOrCreate([
-                "ssn" => $data["subscriber"]["ssn"],
+            $subscriber = Subscriber::updateOrCreate([
+                "id" => $data["subscriber"]["id"] ?? null,
+            ], [
                 "first_name" => upperCaseWords($data["subscriber"]["first_name"]),
                 "last_name" => upperCaseWords($data["subscriber"]["last_name"]),
-                "date_of_birth" => $data["subscriber"]["date_of_birth"]
-            ], [
-                "first_name" => $data["subscriber"]["first_name"],
-                "last_name" => $data["subscriber"]["last_name"],
                 "date_of_birth" => $data["subscriber"]["date_of_birth"],
                 "relationship_id" => $data["subscriber"]["relationship_id"],
             ]);

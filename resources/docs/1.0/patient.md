@@ -115,54 +115,6 @@
             "zip": "123456789" /** Required */
         }
     ],
-    "insurance_policies": [
-        {
-            "policy_number": 12344, /** Required */
-            "group_number": 1234, /** Optional */
-            "insurance_company": 1, /** Required */
-            "insurance_plan": 1, /** Required */
-            "type_responsibility_id": 1, /** Required */
-            "insurance_policy_type_id": 1, /** Optional */
-            "eff_date": "2020-01-23", /** Optional */
-            "end_date": "2022-01-23", /** Optional */
-            "assign_benefits": false,  /** Required */
-            "release_info": false, /** Required */
-            "own_insurance": true, /** Required */
-            "subscriber": null /** Optional */
-        },
-        {
-            "policy_number": 12344, /** Required */
-            "group_number": 1234, /** Optional */
-            "insurance_company": 1, /** Required */
-            "insurance_plan": 1, /** Required */
-            "type_responsibility_id": 1, /** Required */
-            "insurance_policy_type_id": 1, /** Optional */
-            "eff_date": "2020-01-23", /** Optional */
-            "end_date": "2022-01-23", /** Optional */
-            "assign_benefits": false,  /** Required */
-            "release_info": false, /** Required */
-            "own_insurance": true, /** Required */
-            "subscriber": {
-                "relationship_id": 1, /** Optional */
-                "ssn": "ssn subscriber",
-                "date_of_birth":"1990-11-11", /** Optional */
-                "first_name" : "firstName subscriber", /** Required */
-                "last_name"  : "lastName subscriber", /** Required */
-                "address": {
-                    "address": "Direction address subscriber", /** Optional */
-                    "city": "city address subscriber", /** Optional */
-                    "state": "state address subscriber", /** Optional */
-                    "zip": "123456789" /** Optional */
-                },
-                "contact": {
-                    "phone": "04241234321", /** Optional */
-                    "fax": "", /** Optional */
-                    "mobile": "", /** Optional */
-                    "email": "subscriber@gmail.com"  /** Optional */
-                }
-            }
-        }
-    ],
     "guarantor": {
         "name": "name", /** Optional */
         "phone": "phone" /** Optional */
@@ -942,54 +894,6 @@
             "zip": "123456789" /** Required */
         }
     ],
-    "insurance_policies": [
-        {
-            "policy_number": 12344, /** Required */
-            "group_number": 1234, /** Optional */
-            "insurance_company": 1, /** Required */
-            "insurance_plan": 1, /** Required */
-            "type_responsibility_id": 1, /** Required */
-            "insurance_policy_type_id": 1, /** Optional */
-            "eff_date": "2020-01-23", /** Optional */
-            "end_date": "2022-01-23", /** Optional */
-            "assign_benefits": false,  /** Required */
-            "release_info": false, /** Required */
-            "own_insurance": true, /** Required */
-            "subscriber": null /** Optional */
-        },
-        {
-            "policy_number": 12344, /** Required */
-            "group_number": 1234, /** Optional */
-            "insurance_company": 1, /** Required */
-            "insurance_plan": 1, /** Required */
-            "type_responsibility_id": 1, /** Required */
-            "insurance_policy_type_id": 1, /** Optional */
-            "eff_date": "2020-01-23", /** Optional */
-            "end_date": "2022-01-23", /** Optional */
-            "assign_benefits": false,  /** Required */
-            "release_info": false, /** Required */
-            "own_insurance": true, /** Required */
-            "subscriber": {
-                "relationship_id": 1, /** Optional */
-                "ssn": "ssn subscriber",
-                "date_of_birth":"1990-11-11", /** Optional */
-                "first_name" : "firstName subscriber", /** Required */
-                "last_name"  : "lastName subscriber", /** Required */
-                "address": {
-                    "address": "Direction address subscriber", /** Optional */
-                    "city": "city address subscriber", /** Optional */
-                    "state": "state address subscriber", /** Optional */
-                    "zip": "123456789" /** Optional */
-                },
-                "contact": {
-                    "phone": "04241234321", /** Optional */
-                    "fax": "", /** Optional */
-                    "mobile": "", /** Optional */
-                    "email": "subscriber@gmail.com"  /** Optional */
-                }
-            }
-        }
-    ],
     "guarantor": {
         "name": "name", /** Optional */
         "phone": "phone" /** Optional */
@@ -1205,6 +1109,7 @@
     "release_info": false, /** Required */
     "own_insurance": false, /** Required */
     "subscriber": {
+        "id": 1, /** Optional */
         "relationship_id": 1, /** Optional */
         "ssn": "ssn subscriber",
         "date_of_birth":"1990-11-11", /** Optional */
@@ -1372,6 +1277,7 @@
     "release_info": false, /** Required */
     "own_insurance": false, /** Required */
     "subscriber": {
+        "id": 1, /** Optional */
         "relationship_id": 1, /** Optional */
         "ssn": "ssn subscriber",
         "date_of_birth":"1990-11-11", /** Optional */
