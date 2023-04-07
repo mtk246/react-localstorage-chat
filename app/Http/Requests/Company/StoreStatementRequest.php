@@ -40,6 +40,7 @@ final class StoreStatementRequest extends FormRequest
             'store.*.apply_to_ids.*' => [
                 'nullable',
                 'integer',
+                'distinct',
                 new Enum(ApplyToType::class),
             ],
             'store.*.start_date' => 'nullable|date|before:store.*.end_date',
