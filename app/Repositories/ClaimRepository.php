@@ -695,63 +695,58 @@ class ClaimRepository
                 },
                 "user.profile"
             ])->find($claim->patient_id);
-            $insurancePolicies = [];
+            $insurancePolicy = $claim->insurancePolicies->first();
+            $encounter = [];
+            $serviceCodes = [];
 
-            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                $encounter = [];
-                $serviceCodes = [];
-
-                foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
-                    $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
-                    $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
-                    array_push($serviceCodes, $service->typeOfService->code);
-                }
-                $encounter["serviceTypeCodes"] = $serviceCodes;
-
-                $dataReal = [
-                    'controlNumber'           => $claim->control_number ?? '',
-                    'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
-                    'tradingPartnerName'      => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
-                    'provider' => [
-                        'organizationName'        => $claim->company->name ?? null,
-                        'npi'                     => $claim->company->npi ?? null,
-                        'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
-                        'providerCode'            => $claim->company->code ?? null,
-                        'referenceIdentification' => $claim->company->reference_identification ?? null
-                    ],
-                    'subscriber' => [
-                        'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
-                        'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
-                        'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
-                        'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
-                        'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
-                        'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
-                        'idCard'      => $insurancePolicy->subscriber->id_card ?? null
-                    ],
-                    'dependents' => [
-                        [
-                            'firstName'   => $patient->user->profile->first_name,
-                            'lastName'    => $patient->user->profile->last_name,
-                            'gender'      => strtoupper($patient->user->profile->sex),
-                            'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
-                            'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
-                        ]
-                    ],
-                    'encounter' => $encounter
-                ];
-
-                $response = Http::withToken($token)->acceptJson()->post(
-                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
-                    $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
-                );
-                $responseData = json_decode($response->body());
-                
-                array_push($insurancePolicies, $insurancePolicy);
+            foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                $encounter["beginningDateOfService"] = str_replace("-", "", $service->from_service);
+                $encounter["endDateOfService"] = str_replace("-", "", $service->to_service);
+                array_push($serviceCodes, $service->typeOfService->code);
             }
+            $encounter["serviceTypeCodes"] = $serviceCodes;
+
+            $dataReal = [
+                'controlNumber'           => $claim->control_number ?? '',
+                'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
+                'tradingPartnerName'      => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
+                'provider' => [
+                    'organizationName'        => $claim->company->name ?? null,
+                    'npi'                     => $claim->company->npi ?? null,
+                    'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
+                    'providerCode'            => $claim->company->code ?? null,
+                    'referenceIdentification' => $claim->company->reference_identification ?? null
+                ],
+                'subscriber' => [
+                    'memberId'    => $insurancePolicy->subscriber->member_id ?? null,
+                    'firstName'   => $insurancePolicy->subscriber->first_name ?? $patient->user->profile->first_name,
+                    'lastName'    => $insurancePolicy->subscriber->last_name ?? $patient->user->profile->last_name,
+                    'gender'      => $insurancePolicy->subscriber ? null : strtoupper($patient->user->profile->sex),
+                    'dateOfBirth' => $insurancePolicy->subscriber ? null : str_replace("-", "", $patient->user->profile->date_of_birth),
+                    'ssn'         => $insurancePolicy->subscriber->ssn ?? $patient->user->profile->ssn,
+                    'idCard'      => $insurancePolicy->subscriber->id_card ?? null
+                ],
+                'dependents' => [
+                    [
+                        'firstName'   => $patient->user->profile->first_name,
+                        'lastName'    => $patient->user->profile->last_name,
+                        'gender'      => strtoupper($patient->user->profile->sex),
+                        'dateOfBirth' => str_replace("-", "", $patient->user->profile->date_of_birth),
+                        'groupNumber' => $insurancePolicy->subscriber->group_number ?? null
+                    ]
+                ],
+                'encounter' => $encounter
+            ];
+
+            $response = Http::withToken($token)->acceptJson()->post(
+                $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+            );
+            $responseData = json_decode($response->body());
 
             return [
                 "claim_id" => $claim->id,
-                "insurance_policies" => $insurancePolicies
+                "response" => $responseData,
             ];
         } catch (\Exception $e) {
             DB::rollBack();

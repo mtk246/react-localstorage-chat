@@ -43,7 +43,7 @@
 | 5 |GET | `Get one Patient by ssn`            | `/patient/get-by-ssn{ssn}`|yes|Get one Patient by ssn|
 | 6 |PUT | `Update Patient`                | `/patient/{id}`|yes|Update Patient|
 | 7 |PATCH | `Change status Patient`           | `/patient/change-status/{id}`|yes|change status patient|
-| 8 |GET | `Get all patient subscribers`| `/patient/get-subscribers/{ssn_patient}`        |yes            |Get all patient subscribers|
+| 8 |GET | `Get all patient subscribers`| `/patient/get-subscribers`        |yes            |Get all patient subscribers|
 | 9 |PATCH | `Add policy to patient`           | `/patient/add-policy-to-patient/{patient_id}`|yes|add policy to patient|
 | 10 |PATCH | `Edit policy to patient`           | `/patient/{patient_id}/edit-policy/{policy_id}`|yes|edit policy to patient|
 | 11 |PATCH | `Change status policy to patient`           | `/patient/{patient_id}/change-status-policy/{policy_id}`|yes|change status policy to patient|
@@ -1095,6 +1095,16 @@
 }
 ```
 
+
+## Param in path
+
+`patient_id required integer`
+`billing_company_id optional integer`
+
+## Example path Super user
+
+> {success} /get-subscribers?billing_company_id=1&patient_id=1
+
 ## Response
 
 > {success} 200 Patient Subscribers found
@@ -1103,49 +1113,56 @@
 
 ```json
 [
-    {
-        "id": 1,
-        "ssn": "ssn subscriber",
-        "first_name": "firstName subscriber",
-        "last_name": "lastName subscriber",
-        "billing_company_id": 1,
-        "created_at": "2022-04-08T16:03:46.000000Z",
-        "updated_at": "2022-04-08T16:03:46.000000Z",
-        "pivot": {
-            "patient_id": 3,
-            "subscriber_id": 1,
-            "created_at": "2022-04-08T16:49:25.000000Z",
-            "updated_at": "2022-04-08T16:49:25.000000Z"
-        },
-        "addresses": [
-            {
-                "id": 11,
-                "address": "Direction address subscriber",
-                "city": "city address subscriber",
-                "state": "state address subscriber",
-                "zip": "123456789",
-                "billing_company_id": 1,
-                "created_at": "2022-04-08T16:49:25.000000Z",
-                "updated_at": "2022-04-08T16:49:25.000000Z",
-                "addressable_type": "App\\Models\\Subscriber",
-                "addressable_id": 1
-            }
-        ],
-        "contacts": [
-            {
-                "id": 12,
-                "phone": "04241234321",
-                "fax": null,
-                "email": "subscriber11@gmail.com",
-                "billing_company_id": 1,
-                "created_at": "2022-04-08T16:49:25.000000Z",
-                "updated_at": "2022-04-08T16:49:25.000000Z",
-                "mobile": null,
-                "contactable_type": "App\\Models\\Subscriber",
-                "contactable_id": 1
-            }
-        ]
+  {
+    "id": 1,
+    "ssn": null,
+    "first_name": "David",
+    "last_name": "Ochoa",
+    "date_of_birth": "2020-04-11",
+    "relationship_id": 32,
+    "relationship": "Self/Patient is Insured",
+    "address": {
+      "zip": "331861768",
+      "city": "Miami",
+      "state": "FL - Florida",
+      "address": "13004 Southwest 88th Terrace North",
+      "country": null,
+      "address_type_id": null,
+      "address_type": ""
+    },
+    "contact": {
+      "fax": "8003341041",
+      "email": "memo@davidochoa.net",
+      "phone": "7862089235",
+      "mobile": "7862089235",
+      "contact_name": null
     }
+  },
+  {
+    "id": 2,
+    "ssn": null,
+    "first_name": "Josefina",
+    "last_name": "Gonzales",
+    "date_of_birth": "2020-04-11",
+    "relationship_id": 31,
+    "relationship": "Other",
+    "address": {
+      "zip": "331861768",
+      "city": "Miami",
+      "state": "FL - Florida",
+      "address": "13004 Southwest 88th Terrace North",
+      "country": null,
+      "address_type_id": null,
+      "address_type": ""
+    },
+    "contact": {
+      "fax": "8003341041",
+      "email": "josefina@gonzales.net",
+      "phone": "7862089235",
+      "mobile": "7862089235",
+      "contact_name": null
+    }
+  }
 ]
 ```
 

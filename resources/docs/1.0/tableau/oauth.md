@@ -11,7 +11,7 @@
 
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |  
-| 1 |GET    | `get jwt for embed`  | `/Tableau/embed`     | yes            | generate new jwt for embed links  |         
+| 1 | GET    |`get jwt for embed`|`/tableau/auth/embed-token`| yes  | generate new jwt for embed links  |         
 
 
 <a name="get-embed-jwt"></a>

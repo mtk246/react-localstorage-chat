@@ -33,6 +33,7 @@ use App\Models\Subscriber;
 use App\Models\User;
 use App\Roles\Models\Role;
 use App\Models\TypeCatalog;
+use Arr;
 
 class PatientRepository
 {
@@ -1014,16 +1015,63 @@ class PatientRepository
     /**
      * @return Builder[]|Collection
      */
-    public function getAllSubscribers(string $ssn) {
-        $patient = Patient::whereHas('user', function ($query) use ($ssn) {
-            $query->whereHas('profile', function ($q) use ($ssn) {
-                $q->where('ssn', $ssn);
-            });
-        })->with(['subscribers' => function ($query) {
-            $query->with('addresses', 'contacts');
-        }])->first();
+    public function getAllSubscribers(array $data) {
+        $patient_id = $data['patient_id'];
+        if (!auth()->user()->hasRole('superuser')) {
+            $billingCompany = auth()->user()->billingCompanies->first();
+        } else {
+            $billingCompany = $data['billing_company_id'] ?? null;
+        }
+        $patient = Patient::find($patient_id);
+        $subscribers = [];
+        foreach ($patient->subscribers ?? [] as $subscriber) {
+            if (isset($subscriber)) {
+                $address = Address::where([
+                    "addressable_id"     => $subscriber->id,
+                    "addressable_type"   => Subscriber::class,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                ])->first();
+                $contact = Contact::where([
+                    "contactable_id"     => $subscriber->id,
+                    "contactable_type"   => Subscriber::class,
+                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
+                ])->first();
+                if (isset($address)) {
+                    $subscriber_address = [
+                        "zip"                      => $address->zip,
+                        "city"                     => $address->city,
+                        "state"                    => $address->state,
+                        "address"                  => $address->address,
+                        "country"                  => $address->country,
+                        "address_type_id"          => $address->address_type_id,
+                        "address_type"             => $address->addressType->name ?? '',
+                    ];
+                };
+    
+                if (isset($contact)) {
+                    $subscriber_contact = [
+                        "fax"          => $contact->fax,
+                        "email"        => $contact->email,
+                        "phone"        => $contact->phone,
+                        "mobile"       => $contact->mobile,
+                        "contact_name" => $contact->contact_name,
+                    ];
+                };
+                array_push($subscribers, [
+                    "id" => $subscriber->id,
+                    "ssn" => $subscriber->ssn,
+                    "first_name" => $subscriber->first_name,
+                    "last_name" => $subscriber->last_name,
+                    "date_of_birth" => $subscriber->date_of_birth,
+                    "relationship_id" => $subscriber->relationship_id,
+                    "relationship" => $subscriber->relationship->description ?? '',
+                    "address" => isset($subscriber_address) ? $subscriber_address : null,
+                    "contact" => isset($subscriber_contact) ? $subscriber_contact : null,
+                ]);
+            }
+        };
 
-        return $patient->subscribers ?? [];
+        return $subscribers ?? [];
     }
 
     /**

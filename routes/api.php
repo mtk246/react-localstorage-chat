@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
-use App\Http\Controllers\TableauController;
+use App\Http\Controllers\Tableau\AuthController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
 
@@ -309,6 +309,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-relationship', [\App\Http\Controllers\PatientController::class, 'getListRelationship']);
         Route::post('/', [\App\Http\Controllers\PatientController::class, 'createPatient']);
         Route::get('/', [\App\Http\Controllers\PatientController::class, 'getAllPatient']);
+        Route::get('/get-subscribers', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
         Route::get('/get-by-ssn/{ssn}', [\App\Http\Controllers\PatientController::class, 'getBySsn']);
         Route::get('/{id}', [\App\Http\Controllers\PatientController::class, 'getOnePatient']);
         Route::put('/{id}', [\App\Http\Controllers\PatientController::class, 'updatePatient']);
@@ -319,8 +320,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/{patient_id}/edit-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'editPolicy']);
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
-
-        Route::get('/get-subscribers/{id}', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);
     });
 
     Route::prefix('taxonomy')->middleware([
@@ -448,6 +447,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
         Route::get('/get-list-qualifier-by-field/{field_id}', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
+        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
 
@@ -470,7 +470,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
-        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
     });
 
     Route::prefix('claim-sub-status')->middleware([
@@ -502,7 +501,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|billingmanager',
     ])->group(function () {
-        Route::get('/embed', [TableauController::class, 'getEmbedToken']);
+        Route::get('/auth/embed-token', [AuthController::class, 'getEmbedToken']);
+        Route::resource('/workbooks', App\Http\Controllers\Tableau\WorkbookController::class);
     });
 
     Route::prefix('reports')->middleware([
