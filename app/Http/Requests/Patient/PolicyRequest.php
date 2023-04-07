@@ -39,6 +39,7 @@ class PolicyRequest extends FormRequest
             'own_insurance'        => ['required', 'boolean'],
 
             'subscriber'            => ['nullable', 'required_if:own_insurance,false', 'array'],
+            'subscriber.id'         => ['nullable', 'integer'],
             'subscriber.relationship_id'  => ['nullable', 'integer'],
             'subscriber.ssn'        => ['required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.date_of_birth'  => ['nullable', 'date'],
@@ -47,6 +48,7 @@ class PolicyRequest extends FormRequest
 
             'subscriber.address'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
             'subscriber.address.address' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address.country' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.address.city'    => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.address.state'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.address.zip'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
