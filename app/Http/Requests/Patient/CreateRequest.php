@@ -68,6 +68,7 @@ class CreateRequest extends FormRequest
             'addresses' => ['required', 'array'],
             'addresses.*.address_type_id' => ['required', 'integer'],
             'addresses.*.address' => ['required', 'string'],
+            'addresses.*.country' => ['required', 'string'],
             'addresses.*.city' => ['required', 'string'],
             'addresses.*.state' => ['required', 'string'],
             'addresses.*.zip' => ['required', 'string'],
