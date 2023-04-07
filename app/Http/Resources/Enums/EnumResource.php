@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Enums;
 
+use App\Enums\Interfaces\PublicInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -27,7 +28,7 @@ final class EnumResource extends JsonResource
     public function toArray($request): array
     {
         return collect($this->enum::cases())
-            ->map(fn ($value) => $value->getPublic() ?? true
+            ->map(fn (PublicInterface $value) => $value->getPublic() ?? true
                 ? new $this->resourceClass($value)
                 : null
             )

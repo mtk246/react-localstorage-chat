@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Gate;
 
 final class CopayRequestCast extends CastsRequest
 {
+    public function getId(): ?int
+    {
+        return array_key_exists('id', $this->inputs)
+            ? (int) $this->inputs['id']
+            : null;
+    }
+
     public function getBillingCompanyId(): ?int
     {
         return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
