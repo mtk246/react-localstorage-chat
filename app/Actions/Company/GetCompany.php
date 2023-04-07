@@ -6,6 +6,8 @@ namespace App\Actions\Company;
 
 use App\Facades\Pagination;
 use App\Http\Resources\Company\ServiceResource;
+use App\Http\Resources\Enums\CatalogResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\Company;
@@ -177,7 +179,7 @@ final class GetCompany
                         'rule' => $statement->rule->description ?? null,
                         'when_id' => $statement->when_id,
                         'when' => $statement->when->description ?? null,
-                        'apply_to_ids' => $statement->apply_to_ids,
+                        'apply_to_ids' => new EnumResource($statement->apply_to_ids, CatalogResource::class),
                     ]);
                 }
 
