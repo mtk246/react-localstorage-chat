@@ -42,7 +42,7 @@ final class StoreStatementRequest extends FormRequest
                 'integer',
                 new Enum(ApplyToType::class),
             ],
-            'store.*.start_date' => 'nullable|date',
+            'store.*.start_date' => 'nullable|date|before:store.*.end_date',
             'store.*.end_date' => 'nullable|date',
             'delete' => 'nullable|array',
             'delete.*' => 'nullable|integer',
