@@ -21,6 +21,11 @@ final class AddCompanyCopaysRequest extends FormRequest
     {
         return [
             'copays' => 'nullable|array',
+            'copays.*.id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\Copay,id',
+            ],
             'copays.*.billing_company_id' => [
                 'nullable',
                 'integer',
