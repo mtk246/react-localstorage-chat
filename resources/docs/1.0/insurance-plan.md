@@ -363,7 +363,7 @@ insurance_plan_id required <integer>
         {
             "billing_company_id": 1, /** Only required by superuser */
             "company_id": 1, /** required */
-            "contract_fee_type_id": 1, /** required */
+            "type_id": 1, /** required */
             "start_date": "2022-03-16", /** required */
             "end_date": "2022-03-16", /** required */
             "procedure_ids": [2,1,3], /** required */
@@ -378,12 +378,12 @@ insurance_plan_id required <integer>
             "price_percentage": 70, /** optional */
             "private_note": "Note private by billing_company", /** optional */
             "patients": [ /** optional */
-            {
-                "patient_id": 1,
-                "start_date": "2022-03-16",
-                "end_date": "2022-03-16",
-            }
-        ]
+                {
+                    "patient_id": 1, /** required */
+                    "start_date": "2022-03-16", /** required */
+                    "end_date": "2022-03-16", /** required */
+                }
+            ]
         }
     ]
 }
@@ -406,7 +406,7 @@ insurance_plan_id required <integer>
         "billing_company_id": 1,
         "modifier_id": null,
         "insurance_label_fee_id": "",
-        "contract_fee_type_id": "",
+        "type_id": "",
         "start_date": "2022-03-17",
         "end_date": "2023-03-16",
         "price_percentage": "",
@@ -414,11 +414,18 @@ insurance_plan_id required <integer>
             1,
             2
         ],
-        "mac": "",
-        "locality_number": "",
-        "state": "",
-        "fsa": "",
-        "counties": ""
+        "mac": "02102",
+        "locality_number":"01",
+        "state": "ALASKA",
+        "fsa": "STATEWIDE",
+        "counties": "ALL COUNTIES",
+        "patients": [
+            {
+                "patient_id": 1,
+                "start_date": "2022-03-16",
+                "end_date": "2022-03-16",
+            }
+        ]
   },
 ]
 ```
