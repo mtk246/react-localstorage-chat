@@ -161,7 +161,7 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->insurancePlanRepository->addCopays($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error add copays to company"), 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error add copays to insurance"), 404);
     }
 
     /**
@@ -172,6 +172,6 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->insurancePlanRepository->addContractFees($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error add contract fees to company"), 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error add contract fees to insurance"), 404);
     }
 }

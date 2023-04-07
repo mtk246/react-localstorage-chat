@@ -63,7 +63,6 @@ class CreateRequest extends FormRequest
             'address.state'         => ['nullable', 'string'],
             'address.zip'           => ['nullable', 'string'],
             'address.country'       => ['nullable', 'string'],
-            'address.country_subdivision_code' => ['nullable', 'string'],
 
             'contact'               => ['nullable', 'array'],
             'contact.phone'         => ['nullable', 'string'],
