@@ -362,13 +362,13 @@ insurance_plan_id required <integer>
     "contract_fees": [
         {
             "billing_company_id": 1, /** Only required by superuser */
-            "company_id": 1, /** optional */
-            "type_id": 1, /** optional */
-            "start_date": "2022-03-16", /** optional */
-            "end_date": "2022-03-16", /** optional */
+            "company_id": 1, /** required */
+            "contract_fee_type_id": 1, /** required */
+            "start_date": "2022-03-16", /** required */
+            "end_date": "2022-03-16", /** required */
             "procedure_ids": [2,1,3], /** required */
             "modifier_id": 1, /** optional */
-            "contract": 120.5, /** required */
+            "price": 120.5, /** required */
             "mac": "02102", /** optional */
             "locality_number":"01", /** optional */
             "state": "ALASKA", /** optional */
@@ -397,30 +397,29 @@ insurance_plan_id required <integer>
 ```json
 [
     {
-        "billing_company_id": 1,
+        "id": 1,
+        "price": 13,
         "company_id": 1,
-        "type_id": 1,
-        "start_date": "2022-03-16",
-        "end_date": "2022-03-16",
-        "procedure_ids": [2,1,3],
-        "modifier_id": 1,
-        "contract": 120.5,
-        "mac": "02102",
-        "locality_number":"01",
-        "state": "ALASKA",
-        "fsa": "STATEWIDE",
-        "counties": "ALL COUNTIES",
-        "insurance_label_fee_id": 1,
-        "price_percentage": 70,
+        "insurance_plan_id": 1,
+        "insurance_company_id": 1,
         "private_note": "Note private by billing_company",
-        "patients": [
-            {
-                "patient_id": 1,
-                "start_date": "2022-03-16",
-                "end_date": "2022-03-16",
-            }
-        ]
-    }
+        "billing_company_id": 1,
+        "modifier_id": null,
+        "insurance_label_fee_id": "",
+        "contract_fee_type_id": "",
+        "start_date": "2022-03-17",
+        "end_date": "2023-03-16",
+        "price_percentage": "",
+        "procedure_ids": [
+            1,
+            2
+        ],
+        "mac": "",
+        "locality_number": "",
+        "state": "",
+        "fsa": "",
+        "counties": ""
+  },
 ]
 ```
 
