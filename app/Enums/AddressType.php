@@ -6,10 +6,11 @@ namespace App\Enums;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\PublicInterface;
 use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 
-enum AddressType: int
+enum AddressType: int implements PublicInterface
 {
     use EnumToArray;
     use HasAttributes;
