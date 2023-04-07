@@ -21,7 +21,7 @@ final class AddCopays
             $this->syncCopays($company, $copays, $user->billingCompanies->first()?->id);
 
             $copays->each(fn (CopayRequestCast $copayData) => tap(
-                Copay::query()->updateOrCreate([
+                Copay::query()->updateOrCreate(['id' => $copayData->getId()], [
                     'billing_company_id' => $copayData->getBillingCompanyId(),
                     'insurance_plan_id' => $copayData->getInsurancePlanId(),
                     'insurance_company_id' => $copayData->getInsuranceCompanyId(),
