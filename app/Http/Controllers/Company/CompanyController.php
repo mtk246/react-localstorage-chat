@@ -9,6 +9,7 @@ use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
+use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusCompanyRequest;
 use App\Http\Requests\Company\AddCompanyCopaysRequest;
@@ -22,6 +23,8 @@ use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use App\Http\Resources\Enums\CatalogResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
@@ -69,7 +72,7 @@ final class CompanyController extends Controller
     public function getListStatementApplyTo(): JsonResponse
     {
         return response()->json(
-            $this->companyRepository->getListStatementApplyTo(),
+            new EnumResource(collect(ApplyToType::cases()), CatalogResource::class),
         );
     }
 
@@ -225,7 +228,7 @@ final class CompanyController extends Controller
     ): JsonResponse {
         $request->validated();
 
-        $rs = $addCopays->invoke($request->castedCollect('copays'), $company);
+        $rs = $addCopays->invoke($request->castedCollect('copays'), $company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }
