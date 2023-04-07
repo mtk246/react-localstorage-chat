@@ -38,9 +38,7 @@ final class AddCopays
 
     private function afterCreate(Copay $copay, Collection $proceduresIds): void
     {
-        $proceduresIds->each(
-            fn (int $procedureId) => $copay->procedures()->attach($procedureId)
-        );
+        $copay->procedures()->sync($proceduresIds->toArray());
     }
 
     private function syncCopays(Company $company, collection $services, ?int $billingCompanyId): void
