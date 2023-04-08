@@ -3,6 +3,7 @@
 namespace App\Http\Requests\InsurancePlan;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\TypeCatalog;
 
 class AddContractFeesRequest extends FormRequest
 {
@@ -23,12 +24,18 @@ class AddContractFeesRequest extends FormRequest
      */
     public function rules()
     {
+        $type_id = TypeCatalog::query()
+            ->where(['code' => 'CAP', 'description' => 'CAP'])
+            ->whereHas('type', function ($query) {
+                $query->where('description', 'Contract fee type');
+            })->value('id');
+
         return [
             'contract_fees' => ['required', 'array'],
             'contract_fees.*.id' => ['nullable', 'integer'],
             'contract_fees.*.billing_company_id' => ['nullable', 'integer'],
-            'contract_fees.*.company_id' => ['nullable', 'integer'],
-            'contract_fees.*.type_id' => ['nullable', 'integer'],
+            'contract_fees.*.company_id' => ['required', 'integer'],
+            'contract_fees.*.type_id' => ['required', 'integer'],
             'contract_fees.*.start_date' => ['required', 'date'],
             'contract_fees.*.end_date' => ['required', 'date'],
             'contract_fees.*.procedure_ids' => ['required', 'array'],
@@ -42,6 +49,10 @@ class AddContractFeesRequest extends FormRequest
             'contract_fees.*.insurance_label_fee_id' => ['nullable', 'integer'],
             'contract_fees.*.price_percentage' => ['nullable', 'numeric'],
             'contract_fees.*.private_note' => ['nullable', 'string'],
+            'contract_fees.*.patients' => ['array', 'required_if:contract_fees.*.type_id,'.$type_id],
+            'contract_fees.*.patients.*.patient_id' => ['sometimes', 'integer'],
+            'contract_fees.*.patients.*.start_date' => ['nullable', 'date'],
+            'contract_fees.*.patients.*.end_date' => ['nullable', 'date'],
         ];
     }
 }
