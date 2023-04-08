@@ -20,7 +20,7 @@ final class AddCopays
         return DB::transaction(function () use ($copays, $company, $user): Collection {
             $this->syncCopays($company, $copays, $user->billingCompanies->first()?->id);
 
-            $copays->each(fn (CopayRequestCast $copayData) => tap(
+            return $copays->map(fn (CopayRequestCast $copayData) => tap(
                 Copay::query()->updateOrCreate(['id' => $copayData->getId()], [
                     'billing_company_id' => $copayData->getBillingCompanyId(),
                     'insurance_plan_id' => $copayData->getInsurancePlanId(),
@@ -30,13 +30,12 @@ final class AddCopays
                     'private_note' => $copayData->getPrivateNote(),
                 ]),
                 fn (Copay $copay) => $this->afterCreate($copay, $copayData->getProceduresIds())
-            ));
-
-            return $company->copays()->with('procedures')->get();
+            ))
+            ->map(fn (Copay $copay) => $copay->load('procedures'));
         });
     }
 
-    private function afterCreate(Copay $copay, Collection $proceduresIds): void
+    private function afterCreate(Copay &$copay, Collection $proceduresIds): void
     {
         $copay->procedures()->sync($proceduresIds->toArray());
     }
