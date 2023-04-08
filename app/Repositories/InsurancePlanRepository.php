@@ -318,36 +318,8 @@ class InsurancePlanRepository
             ])->first();
         }
 
-        $copaysFields = [];
-        $contractFeesFields = [];
-
-        if (auth()->user()->hasRole('superuser')) {
-            $insurancePlanCopays = $insurance->copays;
-            $insurancePlanContractFees = $insurance->contractFees;
-        } else {
-            $insurancePlanCopays = $insurance->copays()->where('billing_company_id', $bC)->get();
-            $insurancePlanContractFees = $insurance->contractFees()->where('billing_company_id', $bC)->get();
-        }
-
-        foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
-            $procedure_ids = [];
-            foreach ($insurancePlanCopay->procedures ?? [] as $procedure) {
-                array_push($procedure_ids, $procedure->id);
-            };
-            $private_note = PrivateNote::where([
-                'publishable_id'     => $insurancePlanCopay->id,
-                'publishable_type'   => Copay::class,
-                'billing_company_id' => $insurancePlanCopay->billing_company_id
-            ])->first();
-
-            array_push($copaysFields, [
-                'billing_company_id' => $insurancePlanCopay->billing_company_id ?? null,
-                'company_id'         => $insurancePlanCopay->company_id ?? null,
-                'procedure_ids'      => $procedure_ids,
-                'copay'              => (float)$insurancePlanCopay->copay ?? null,
-                'private_note'       => $private_note->note ?? '',
-            ]);
-        }
+        $copaysFields = $this->getCopays($id);
+        $contractFeesFields = $this->getContractFees($id);
 
         $record = [
             'id' => $insurance->id,
@@ -506,11 +478,6 @@ class InsurancePlanRepository
     }
 
     public function getServerAllInsurancePlan(Request $request) {
-        $sortBy   = $request->sortBy ?? 'id';
-        $sortDesc = $request->sortDesc ?? false;
-        $page = $request->page ?? 1;
-        $itemsPerPage = $request->itemsPerPage ?? 5;
-        $search = $request->search ?? '';
         $insuranceCompanyId = $request->insurance_company_id ?? '';
 
         $bC = auth()->user()->billing_company_id ?? null;
@@ -962,5 +929,99 @@ class InsurancePlanRepository
             DB::rollBack();
             return null;
         }
+    }
+
+    public function getCopays(int $id) {
+        $insurancePlan = InsurancePlan::find($id);
+        $records = [];
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (!auth()->user()->hasRole('superuser')) {
+            if (is_null($billingCompany)) return null;
+        }
+        if (auth()->user()->hasRole('superuser')) {
+            $insurancePlanCopays = $insurancePlan->copays;
+        } else {
+            $insurancePlanCopays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
+        }
+
+        foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
+            $procedure_ids = [];
+            foreach ($insurancePlanCopay->procedures ?? [] as $procedure) {
+                array_push($procedure_ids, $procedure->id);
+            };
+            $private_note = PrivateNote::where([
+                'publishable_id'     => $insurancePlanCopay->id,
+                'publishable_type'   => Copay::class,
+                'billing_company_id' => $insurancePlanCopay->billing_company_id
+            ])->first();
+
+            array_push($records, [
+                'billing_company_id' => $insurancePlanCopay->billing_company_id ?? null,
+                'company_id'         => $insurancePlanCopay->company_id ?? null,
+                'procedure_ids'      => $procedure_ids,
+                'copay'              => (float)$insurancePlanCopay->copay ?? null,
+                'private_note'       => $private_note->note ?? '',
+            ]);
+        }
+        return $records;
+    }
+
+    public function getContractFees(int $id) {
+        $insurancePlan = InsurancePlan::find($id);
+        $records = [];
+        $billingCompany = auth()->user()->billingCompanies->first();
+        if (!auth()->user()->hasRole('superuser')) {
+            if (is_null($billingCompany)) return null;
+        }
+        if (auth()->user()->hasRole('superuser')) {
+            $insurancePlanContracts = $insurancePlan->contractFees;
+        } else {
+            $insurancePlanContracts = $insurancePlan
+                ->contractFees()
+                ->where('billing_company_id', $billingCompany->id)
+                ->get();
+        }
+
+        foreach ($insurancePlanContracts ?? [] as $insurancePlanContract) {
+            $procedure_ids = $insurancePlanContract
+                ->procedures()
+                ->select('procedures.id')
+                ->get()
+                ->pluck('id');
+            $patients = $insurancePlanContract
+                ->patiens()
+                ->get()
+                ->map(function ($patient) {
+                    return [
+                        'patient_id' => $patient->id,
+                        'start_date' => $patient->pivot->start_date,
+                        'end_date' => $patient->pivot->end_date,
+                    ];
+                })->toArray();
+
+            $macLocality = MacLocality::find($insurancePlanContract->mac_locality_id ?? null)?->first();
+
+            array_push($records, [
+                'id' => $insurancePlanContract->id,
+                'price' => (float) $insurancePlanContract->price ?? null,
+                'company_id' => $insurancePlanContract->company_id ?? '',
+                'private_note' => $insurancePlanContract->private_note ?? '',
+                'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
+                'modifier_id' => $insurancePlanContract->modifier_id ?? '',
+                'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
+                'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
+                'start_date' => $insurancePlanContract->start_date ?? '',
+                'end_date' => $insurancePlanContract->end_date ?? '',
+                'price_percentage' => $insurancePlanContract->price_percentage ?? '',
+                'procedure_ids' => $procedure_ids,
+                'mac' => $macLocality['mac'] ?? '',
+                'locality_number' => $macLocality['locality_number'] ?? '',
+                'state' => $macLocality['state'] ?? '',
+                'fsa' => $macLocality['fsa'] ?? '',
+                'counties' => $macLocality['counties'] ?? '',
+                'patients' => $patients
+            ]);
+        }
+        return $records;
     }
 }
