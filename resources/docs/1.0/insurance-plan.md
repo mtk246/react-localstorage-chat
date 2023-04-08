@@ -384,6 +384,32 @@ insurance_plan_id required <integer>
                     "end_date": "2022-03-16", /** required */
                 }
             ]
+        },
+        {
+            "id": 1, /** Only if you are editing */
+            "billing_company_id": 1, /** Only required by superuser */
+            "company_id": 1, /** required */
+            "type_id": 1, /** required */
+            "start_date": "2022-03-16", /** required */
+            "end_date": "2022-03-16", /** required */
+            "procedure_ids": [2,1,3], /** required */
+            "modifier_id": 1, /** optional */
+            "price": 120.5, /** required */
+            "mac": "02102", /** optional */
+            "locality_number":"01", /** optional */
+            "state": "ALASKA", /** optional */
+            "fsa": "STATEWIDE", /** optional */
+            "counties": "ALL COUNTIES", /** optional */
+            "insurance_label_fee_id": 1, /** optional */
+            "price_percentage": 70, /** optional */
+            "private_note": "Note private by billing_company", /** optional */
+            "patients": [ /** optional */
+                {
+                    "patient_id": 1, /** required */
+                    "start_date": "2022-03-16", /** required */
+                    "end_date": "2022-03-16", /** required */
+                }
+            ]
         }
     ]
 }
