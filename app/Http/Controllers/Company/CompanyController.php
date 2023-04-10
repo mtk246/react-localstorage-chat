@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Company;
 
 use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
+use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
@@ -202,9 +203,9 @@ final class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error add company to billing company'), 404);
     }
 
-    public function addFacilities(AddFacilitiesRequest $request, int $id): JsonResponse
+    public function addFacilities(AddFacilitiesRequest $request, AddFacilities $addFacilities, Company $company): JsonResponse
     {
-        $rs = $this->companyRepository->addFacilities($request->validated(), $id);
+        $rs = $addFacilities->invoke($request->castedCollect('facilities'), $company);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add facilities to company'), 404);
     }

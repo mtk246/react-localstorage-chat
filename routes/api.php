@@ -220,7 +220,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('/get-by-npi/{npi}', [CompanyController::class, 'getOneByNpi']);
             Route::patch('/change-status/{id}', [CompanyController::class, 'changeStatus']);
             Route::patch('/add-to-billing-company/{id}', [CompanyController::class, 'addToBillingCompany']);
-            Route::patch('/add-facilities-to-company/{id}', [CompanyController::class, 'addFacilities']);
+            Route::patch('/add-facilities-to-company/{company}', [CompanyController::class, 'addFacilities']);
             Route::patch('/add-services-to-company/{company}', [CompanyController::class, 'addServices']);
             Route::patch('/add-copays-to-company/{company}', [CompanyController::class, 'addCompanyCopays']);
             Route::patch('/add-contract-fees-to-company/{company}', [CompanyController::class, 'addCompanyContractFees']);
