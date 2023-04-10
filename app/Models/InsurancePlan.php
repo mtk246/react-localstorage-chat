@@ -404,7 +404,7 @@ class InsurancePlan extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != ') {
+        if ($search != '') {
             return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower('%$search%')])
                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower('%$search%')]);
         }
