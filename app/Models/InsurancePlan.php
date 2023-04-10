@@ -143,21 +143,22 @@ class InsurancePlan extends Model implements Auditable
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        "code",
-        "name",
-        "accept_assign",
-        "pre_authorization",
-        "file_zero_changes",
-        "referral_required",
-        "accrue_patient_resp",
-        "require_abn",
-        "pqrs_eligible",
-        "allow_attached_files",
-        "eff_date",
-        "ins_type_id",
-        "plan_type_id",
-        "charge_using_id",
-        "insurance_company_id"
+        'code',
+        'name',
+        'payer_id',
+        'accept_assign',
+        'pre_authorization',
+        'file_zero_changes',
+        'referral_required',
+        'accrue_patient_resp',
+        'require_abn',
+        'pqrs_eligible',
+        'allow_attached_files',
+        'eff_date',
+        'ins_type_id',
+        'plan_type_id',
+        'charge_using_id',
+        'insurance_company_id'
     ];
 
     /**
@@ -403,9 +404,9 @@ class InsurancePlan extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
-            return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+        if ($search != ') {
+            return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower('%$search%')])
+                         ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower('%$search%')]);
         }
 
         return $query;
