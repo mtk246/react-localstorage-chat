@@ -36,7 +36,7 @@ final class ServiceResource extends RequestWrapedResource
             'price' => $this->resource->price,
             'price_percentage' => $this->resource->price_percentage,
             'clia' => $this->resource->clia,
-            'medication_application' => $this->resource->medications_count > 0,
+            'medication_application' => $this->resource->medications->count() > 0,
             'medications' => MedicationResource::collection($this->resource->medications),
         ];
     }
