@@ -235,7 +235,8 @@ class ProcedureRepository
                     }]);
                 },
             ])->first();
-            if (isset($procedure->macLocalities)) {
+
+            if ($procedure->macLocalities->isNotEmpty()) {
                 $macLocality = $procedure->macLocalities->first();
                 $labelFee = $macLocality->procedureFees()->where('insurance_label_fee_id', $label_fee->id)->first();
 
