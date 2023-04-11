@@ -623,8 +623,38 @@ class InsurancePlanRepository
     }
     
     public function getByPayer(string $payer) {
-        $insurance = InsurancePlan::wherePayerId($payer)->with("publicNote")->first();
-        return !is_null($insurance) ? $insurance : null;
+        $insurance = InsurancePlan::wherePayerId($payer)->first();
+
+        $record = [
+            'id' => $insurance->id,
+            'code' => $insurance->code,
+            'name' => $insurance->name,
+            'payer_id' => $insurance->payer_id,
+            'accept_assign' => $insurance->accept_assign,
+            'pre_authorization' => $insurance->pre_authorization,
+            'file_zero_changes' => $insurance->file_zero_changes,
+            'referral_required' => $insurance->referral_required,
+            'accrue_patient_resp' => $insurance->accrue_patient_resp,
+            'require_abn' => $insurance->require_abn,
+            'pqrs_eligible' => $insurance->pqrs_eligible,
+            'allow_attached_files' => $insurance->allow_attached_files,
+            'eff_date' => $insurance->eff_date,
+            'ins_type_id' => $insurance->ins_type_id ?? '',
+            'ins_type' => isset($insurance->insType) ? ($insurance->insType->code . ' - ' . $insurance->insType->description) : '',
+            'plan_type_id' => $insurance->plan_type_id ?? '',
+            'plan_type'    => isset($insurance->planType) ? ($insurance->planType->code . ' - ' . $insurance->planType->description) : '',
+            'charge_using_id' => $insurance->charge_using_id ?? '',
+            'charge_using'    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
+            'insurance_company_id' => $insurance->insurance_company_id,
+            'insurance_company' => $insurance->insuranceCompany->name,
+            'created_at' => $insurance->created_at,
+            'updated_at' => $insurance->updated_at,
+            'last_modified' => $insurance->last_modified,
+            'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
+            'copays' => [],
+            'contract_fees' => [],
+        ];
+        return !is_null($insurance) ? $record : null;
     }
 
     public function getByCompany(string $nameCompany) {
