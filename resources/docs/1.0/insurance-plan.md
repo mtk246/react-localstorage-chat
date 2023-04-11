@@ -10,6 +10,7 @@
 - [Add contract fees to insurance](#add-contracts-fee)
 - [Get all insurance plan from server](#get-all-insurance-plan-server)
 - [Get one insurance plan](#get-one-insurance-plan)
+- [Get one insurance plan by payer](#get-one-insurance-plan-by-payer)
 - [Get insurance plan by name](#get-insurance-plan-by-name)
 - [Get list insurance plans](#get-list-insurance-plans)
 - [Get list format](#get-list-formats)
@@ -36,6 +37,7 @@
 | 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/add-contract-fees-to-insurance-plan/{id}` | yes            | Add contract fee to insurance plan |
 | 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                           | yes            | Get all insurance plan from server |
 | 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                                     | yes            | Get one insurance plan             |
+| 12 |GET | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
 | 8  | GET    | `Get Insurance plan by name`    | `/insurance-plan/{name}/get-by-name`                       | yes            | Get all insurance plan by name     |
 | 9  | GET    | `Get list insurance plans`      | `/insurance-plan/get-list`                                 | yes            | Get list insurance plans           |
 | 10 | GET    | `Get list formats`              | `/insurance-plan/get-list-formats`                         | yes            | Get list formats                   |
@@ -67,9 +69,11 @@
 
 ```json
 {
+    "id": 1, /** Only by search optional */
     "billing_company_id": 1, /** Only required by superuser */
     "insurance_company_id":1, /** required */
     "name":"Name insurance", /** required */
+    "payer_id":"Payer insurance", /** required */
     "nickname":"alias insurance plan", /** optional */
     "ins_type_id": 1, /** required */
     "plan_type_id": 1,  /** optional */
@@ -165,6 +169,7 @@
     "billing_company_id": 1, /** Only required by superuser */
     "insurance_company_id":1, /** required */
     "name":"Name insurance", /** required */
+    "payer_id":"Payer insurance", /** required */
     "nickname":"alias insurance plan", /** optional */
     "ins_type_id": 1, /** required */
     "plan_type_id": 1,  /** optional */
@@ -690,6 +695,60 @@ insurance_company_id <integer>
             }
         }
     ]
+}
+```
+<a name="get-one-insurance-plan-by-payer"></a>
+## Get One Insurance plan by payer ID
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "payer_id": <string>
+}
+```
+
+## Response
+
+> {success} 200 Insurance found
+
+#
+
+
+```json
+{
+    "id": 19,
+    "code": "IP-00019-2023",
+    "name": "Name Insurance",
+    "accept_assign": true,
+    "pre_authorization": true,
+    "file_zero_changes": true,
+    "referral_required": true,
+    "accrue_patient_resp": true,
+    "require_abn": true,
+    "pqrs_eligible": true,
+    "allow_attached_files": true,
+    "eff_date": "2022-01-23",
+    "ins_type_id": 1,
+    "ins_type": "AETNA - Aetna",
+    "plan_type_id": 2,
+    "plan_type": "AUTO - Automobile Insurance",
+    "charge_using_id": 3,
+    "charge_using": "BCBS - Blue Cross an Blue Shield",
+    "insurance_company_id": 1,
+    "insurance_company": "Providence Administrative Services",
+    "created_at": "2023-02-23T20:00:08.000000Z",
+    "updated_at": "2023-02-23T20:00:08.000000Z",
+    "public_note": "Note public"
 }
 ```
 #

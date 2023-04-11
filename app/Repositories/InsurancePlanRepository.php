@@ -33,7 +33,8 @@ class InsurancePlanRepository
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
                 'insurance_company_id' => $data['insurance_company_id'],
-                'name'                 => $data['name']
+                'name'                 => $data['name'],
+                'payer_id'             => $data['payer_id']
             ])->first();
             if (isset($insurancePlan)) {
                 $insurancePlan->update([
@@ -54,6 +55,7 @@ class InsurancePlanRepository
                 $insurancePlan = InsurancePlan::create([
                     'code'                 => generateNewCode('IP', 5, date('Y'), InsurancePlan::class, 'code'),
                     'name'                 => $data['name'],
+                    'payer_id'             => $data['payer_id'],
                     'ins_type_id'          => $data['ins_type_id'],
                     'plan_type_id'         => $data['plan_type_id'] ?? null,
                     'accept_assign'        => $data['accept_assign'],
@@ -168,6 +170,7 @@ class InsurancePlanRepository
 
             $insurancePlan->update([
                 'name'                 => $data['name'],
+                'payer_id'             => $data['payer_id'],
                 'ins_type_id'          => $data['ins_type_id'],
                 'plan_type_id'         => $data['plan_type_id'],
                 'accept_assign'        => $data['accept_assign'],
@@ -296,7 +299,7 @@ class InsurancePlanRepository
         $billingCompany = auth()->user()->billingCompanies->first();
         if (is_null($billingCompany)) return null;
         
-        if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
+        if (is_null($insurancePlan->billingCompanies()->find($billingCompany->id))) {
             $insurancePlan->billingCompanies()->attach($billingCompany->id);
         }
         return $insurancePlan;
@@ -325,6 +328,7 @@ class InsurancePlanRepository
             'id' => $insurance->id,
             'code' => $insurance->code,
             'name' => $insurance->name,
+            'payer_id' => $insurance->payer_id,
             'accept_assign' => $insurance->accept_assign,
             'pre_authorization' => $insurance->pre_authorization,
             'file_zero_changes' => $insurance->file_zero_changes,
@@ -591,6 +595,7 @@ class InsurancePlanRepository
                     'id' => $insurance->id,
                     'code' => $insurance->code,
                     'name' => $insurance->name,
+                    'payer_id' => $insurance->payer_id,
                     'accept_assign' => $insurance->accept_assign,
                     'pre_authorization' => $insurance->pre_authorization,
                     'file_zero_changes' => $insurance->file_zero_changes,
@@ -615,6 +620,43 @@ class InsurancePlanRepository
             );
         }
         return $records;
+    }
+    
+    public function getByPayer(string $payer) {
+        $insurance = InsurancePlan::wherePayerId($payer)->first();
+
+        if ($insurance) {
+            $record = [
+                'id' => $insurance->id,
+                'code' => $insurance->code,
+                'name' => $insurance->name,
+                'payer_id' => $insurance->payer_id,
+                'accept_assign' => $insurance->accept_assign,
+                'pre_authorization' => $insurance->pre_authorization,
+                'file_zero_changes' => $insurance->file_zero_changes,
+                'referral_required' => $insurance->referral_required,
+                'accrue_patient_resp' => $insurance->accrue_patient_resp,
+                'require_abn' => $insurance->require_abn,
+                'pqrs_eligible' => $insurance->pqrs_eligible,
+                'allow_attached_files' => $insurance->allow_attached_files,
+                'eff_date' => $insurance->eff_date,
+                'ins_type_id' => $insurance->ins_type_id ?? '',
+                'ins_type' => isset($insurance->insType) ? ($insurance->insType->code . ' - ' . $insurance->insType->description) : '',
+                'plan_type_id' => $insurance->plan_type_id ?? '',
+                'plan_type'    => isset($insurance->planType) ? ($insurance->planType->code . ' - ' . $insurance->planType->description) : '',
+                'charge_using_id' => $insurance->charge_using_id ?? '',
+                'charge_using'    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
+                'insurance_company_id' => $insurance->insurance_company_id,
+                'insurance_company' => $insurance->insuranceCompany->name,
+                'created_at' => $insurance->created_at,
+                'updated_at' => $insurance->updated_at,
+                'last_modified' => $insurance->last_modified,
+                'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
+                'copays' => [],
+                'contract_fees' => [],
+            ];
+        }
+        return !is_null($insurance) ? $record : null;
     }
 
     public function getByCompany(string $nameCompany) {
@@ -828,7 +870,7 @@ class InsurancePlanRepository
                         'contract_fee_type_id' => $contract['type_id'] ?? null,
                         'start_date' => $contract['start_date'] ?? null,
                         'end_date' => $contract['end_date'] ?? null,
-                        'price' => $contract['price'],
+                        'price' => $contract['price'] ?? null,
                         'price_percentage' => $contract['price_percentage'] ?? null,
                     ]);
                     $contractFee->procedures()->sync($contract['procedure_ids']);

@@ -30,6 +30,7 @@ class UpdateRequest extends FormRequest
             'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'insurance_company_id' => ['required', 'integer'],
             'name'                 => ['required', 'string', new IUnique(InsurancePlan::class, 'name', $this->id)],
+            'payer_id'             => ['required', 'string', 'max:20'],
             'nickname'             => ['nullable', 'string'],
             'ins_type_id'          => ['required', 'integer'],
             'plan_type_id'         => ['nullable', 'integer'],
