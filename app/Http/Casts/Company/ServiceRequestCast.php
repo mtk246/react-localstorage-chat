@@ -6,6 +6,7 @@ namespace App\Http\Casts\Company;
 
 use App\Http\Casts\CastsRequest;
 use App\Models\MacLocality;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 final class ServiceRequestCast extends CastsRequest
@@ -115,28 +116,31 @@ final class ServiceRequestCast extends CastsRequest
 
     public function getMacLocality(): ?MacLocality
     {
-        $query = MacLocality::query();
+        $cond = 0;
+        $query = MacLocality::query()
+            ->when($this->getMac(), function (Builder $query) use (&$cond): void {
+                ++$cond;
+                $query->where('mac', $this->getMac());
+            })
+            ->when($this->getLocalityNumber(), function (Builder $query) use (&$cond): void {
+                ++$cond;
+                $query->where('locality_number', $this->getLocalityNumber());
+            })
+            ->when($this->getState(), function (Builder $query) use (&$cond): void {
+                ++$cond;
+                $query->where('state', $this->getState());
+            })
+            ->when($this->getFsa(), function (Builder $query) use (&$cond): void {
+                ++$cond;
+                $query->where('fsa', $this->getFsa());
+            })
+            ->when($this->getCounties(), function (Builder $query) use (&$cond): void {
+                ++$cond;
+                $query->where('counties', $this->getCounties());
+            });
 
-        if ($this->getMac()) {
-            $query = $query->where('mac', $this->getMac());
-        }
-
-        if ($this->getLocalityNumber()) {
-            $query = $query->where('locality_number', $this->getLocalityNumber());
-        }
-
-        if ($this->getState()) {
-            $query = $query->where('state', $this->getState());
-        }
-
-        if ($this->getFsa()) {
-            $query = $query->where('fsa', $this->getFsa());
-        }
-
-        if ($this->getCounties()) {
-            $query = $query->where('counties', $this->getCounties());
-        }
-
-        return $query->first() ?? null;
+        return $cond > 0
+            ? $query->first()
+            : null;
     }
 }
