@@ -153,6 +153,13 @@ class InsurancePlanController extends Controller
         );
     }
 
+    public function getByPayer(string $payer): JsonResponse
+    {
+        $rs = $this->insurancePlanRepository->getByPayer($payer);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+    }
+
     /**
      * @param  int $id
      * @return JsonResponse
