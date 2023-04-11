@@ -838,7 +838,7 @@ class InsurancePlanRepository
                         'contract_fee_type_id' => $contract['type_id'] ?? null,
                         'start_date' => $contract['start_date'] ?? null,
                         'end_date' => $contract['end_date'] ?? null,
-                        'price' => $contract['price'],
+                        'price' => $contract['price'] ?? null,
                         'price_percentage' => $contract['price_percentage'] ?? null,
                     ]);
                     $contractFee->procedures()->sync($contract['procedure_ids']);
