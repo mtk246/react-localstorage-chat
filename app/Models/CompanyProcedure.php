@@ -102,9 +102,9 @@ final class CompanyProcedure extends Pivot
         return $this->medications()->get();
     }
 
-    public function getMacLocalityAttribute(): MacLocality
+    public function getMacLocalityAttribute(): ?MacLocality
     {
-        return $this->macLocality()->sole();
+        return $this->macLocality()->first();
     }
 
     public function medications(): ?HasMany
