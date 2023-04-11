@@ -1,44 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-
-use App\Models\InsuranceLabelFee;
+use App\Models\Company;
+use App\Models\Diagnosis;
+use App\Models\Discriminatory;
+use App\Models\Gender;
 use App\Models\InsuranceCompany;
+use App\Models\InsuranceLabelFee;
 use App\Models\InsurancePlan;
 use App\Models\InsuranceType;
 use App\Models\MacLocality;
-use App\Models\PublicNote;
+use App\Models\Modifier;
+use App\Models\Procedure;
 use App\Models\ProcedureConsideration;
 use App\Models\ProcedureFee;
-use App\Models\Procedure;
-use App\Models\Gender;
-use App\Models\Discriminatory;
-use App\Models\Diagnosis;
-use App\Models\Modifier;
-use App\Models\Company;
+use App\Models\PublicNote;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProcedureRepository
 {
     /**
-     * @param array $data
      * @return Procedure|Model
      */
-    public function createProcedure(array $data) {
+    public function createProcedure(array $data)
+    {
         try {
             DB::beginTransaction();
             $procedure = Procedure::create([
-                "code"        => $data['code'],
-                "start_date"  => $data["start_date"],
-                "description" => $data['description']
+                'code' => $data['code'],
+                'start_date' => $data['start_date'],
+                'description' => $data['description'],
             ]);
-            
+
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
                 if ($data['specific_insurance_company']) {
                     $procedure->insuranceCompanies()->sync($data['insurance_companies']);
@@ -48,14 +49,14 @@ class ProcedureRepository
             if (isset($data['mac_localities'])) {
                 foreach ($data['mac_localities'] as $macL) {
                     $macLocality = MacLocality::where([
-                        "mac"             => $macL['mac'],
-                        "locality_number" => $macL['locality_number'],
-                        "state"           => $macL['state'],
-                        "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['counties']
+                        'mac' => $macL['mac'],
+                        'locality_number' => $macL['locality_number'],
+                        'state' => $macL['state'],
+                        'fsa' => $macL['fsa'],
+                        'counties' => $macL['counties'],
                     ])->first();
                     if (isset($macLocality)) {
-                        /** Attach macLocality to procedure */
+                        /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
@@ -66,14 +67,14 @@ class ProcedureRepository
                             })->get();
 
                             foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
-                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
+                                $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicare->description));
                                 if ($procedureFees == $field) {
                                     ProcedureFee::updateOrCreate([
                                         'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                        'procedure_id'           => $procedure->id,
-                                        'mac_locality_id'        => $macLocality->id
+                                        'procedure_id' => $procedure->id,
+                                        'mac_locality_id' => $macLocality->id,
                                     ], [
-                                        'fee'                    => $value
+                                        'fee' => $value,
                                     ]);
                                 }
                             }
@@ -84,14 +85,14 @@ class ProcedureRepository
                             })->get();
 
                             foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
-                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
+                                $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicaid->description));
                                 if ($procedureFees == $field) {
                                     ProcedureFee::updateOrCreate([
                                         'insurance_label_fee_id' => $insuranceLabelFeeMedicaid->id,
-                                        'procedure_id'           => $procedure->id,
-                                        'mac_locality_id'        => $macLocality->id
+                                        'procedure_id' => $procedure->id,
+                                        'mac_locality_id' => $macLocality->id,
                                     ], [
-                                        'fee'                    => $value
+                                        'fee' => $value,
                                     ]);
                                 }
                             }
@@ -105,11 +106,11 @@ class ProcedureRepository
                     isset($data['procedure_considerations']['age_init']) &&
                     isset($data['procedure_considerations']['discriminatory_id'])) {
                     ProcedureConsideration::create([
-                        'procedure_id'      => $procedure->id,
-                        'gender_id'         => $data['procedure_considerations']['gender_id'],
-                        'age_init'          => $data['procedure_considerations']['age_init'],
-                        'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
-                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
+                        'procedure_id' => $procedure->id,
+                        'gender_id' => $data['procedure_considerations']['gender_id'],
+                        'age_init' => $data['procedure_considerations']['age_init'],
+                        'age_end' => $data['procedure_considerations']['age_end'] ?? null,
+                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
                     ]);
                 }
             }
@@ -125,15 +126,17 @@ class ProcedureRepository
             if (isset($data['note'])) {
                 PublicNote::create([
                     'publishable_type' => Procedure::class,
-                    'publishable_id'   => $procedure->id,
-                    'note'             => $data['note'],
+                    'publishable_id' => $procedure->id,
+                    'note' => $data['note'],
                 ]);
             }
 
             DB::commit();
+
             return $procedure;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -141,54 +144,56 @@ class ProcedureRepository
     /**
      * @return Procedure[]|Collection
      */
-    public function getAllProcedures() {
+    public function getAllProcedures()
+    {
         $procedures = Procedure::with([
-            "publicNote",
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
-        
+            'publicNote',
+        ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
+
         return is_null($procedures) ? null : $procedures;
     }
 
-    public function getServerAllProcedures(Request $request) {
+    public function getServerAllProcedures(Request $request)
+    {
         $data = Procedure::with([
-            "publicNote"
+            'publicNote',
         ]);
-        
-        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+
+        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
         }
-        
+
         if ($request->sortBy) {
-            $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
         } else {
-            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data'          => $data->items(),
+            'data' => $data->items(),
             'numberOfPages' => $data->lastPage(),
-            'count'         => $data->total()
+            'count' => $data->total(),
         ], 200);
     }
 
     /**
-     * @param int $id
      * @return Procedure|Builder|Model|object|null
      */
-    public function getOneProcedure(int $id) {
+    public function getOneProcedure(int $id)
+    {
         $procedure = Procedure::whereId($id)->with([
-            "publicNote",
-            "procedureCosiderations",
-            "insuranceCompanies",
-            "diagnoses",
-            "modifiers",
-            "macLocalities" => function ($query) use ($id) {
+            'publicNote',
+            'procedureCosiderations',
+            'insuranceCompanies',
+            'diagnoses',
+            'modifiers',
+            'macLocalities' => function ($query) use ($id) {
                 $query->with(['procedureFees' => function ($q) use ($id) {
                     $q->where('procedure_id', $id)->with('insuranceLabelFee');
                 }]);
-            }
+            },
         ])->first();
 
         return !is_null($procedure) ? $procedure : null;
@@ -196,13 +201,15 @@ class ProcedureRepository
 
     /**
      * @param int $id
+     *
      * @return Procedure|Builder|Model|object|null
      */
-    public function getPriceOfProcedure(Request $request) {
+    public function getPriceOfProcedure(Request $request)
+    {
         if (isset($request->procedure_id)) {
             $id = $request->procedure_id;
             $filters = [];
-            
+
             if (isset($request->mac)) {
                 $filters['mac'] = $request->mac;
             }
@@ -222,21 +229,22 @@ class ProcedureRepository
                 $label_fee = InsuranceLabelFee::find($request->insurance_label_fee_id);
             }
             $procedure = Procedure::whereId($id)->with([
-                "macLocalities" => function ($query) use ($id, $filters) {
+                'macLocalities' => function ($query) use ($id, $filters) {
                     $query->where($filters)->with(['procedureFees' => function ($q) use ($id) {
                         $q->where('procedure_id', $id)->with('insuranceLabelFee');
                     }]);
-                }
+                },
             ])->first();
             if (isset($procedure->macLocalities)) {
                 $macLocality = $procedure->macLocalities->first();
                 $labelFee = $macLocality->procedureFees()->where('insurance_label_fee_id', $label_fee->id)->first();
+
                 return [
-                    "fee" => $labelFee->fee ?? '',
-                    "insurance_label_fee_id" => $labelFee->insurance_label_fee_id ?? null,
-                    "insurance_label_fee" => $labelFee->insuranceLabelFee->description ?? '',
-                    "created_at" => $labelFee->created_at ?? null,
-                    "updated_at" => $labelFee->updated_at ?? null,
+                    'fee' => $labelFee->fee ?? '',
+                    'insurance_label_fee_id' => $labelFee->insurance_label_fee_id ?? null,
+                    'insurance_label_fee' => $labelFee->insuranceLabelFee->description ?? '',
+                    'created_at' => $labelFee->created_at ?? null,
+                    'updated_at' => $labelFee->updated_at ?? null,
                 ];
             }
         }
@@ -245,42 +253,41 @@ class ProcedureRepository
     }
 
     /**
-     * @param string $code
      * @return Procedure|Builder|Model|object|null
      */
-    public function getByCode(string $code) {
+    public function getByCode(string $code)
+    {
         $proID = Procedure::whereCode($code)->first();
         $id = $proID->id ?? null;
         $procedure = Procedure::whereId($id)->with([
-            "publicNote",
-            "procedureCosiderations",
-            "insuranceCompanies",
-            "diagnoses",
-            "modifiers",
-            "macLocalities" => function ($query) use ($id) {
+            'publicNote',
+            'procedureCosiderations',
+            'insuranceCompanies',
+            'diagnoses',
+            'modifiers',
+            'macLocalities' => function ($query) use ($id) {
                 $query->with(['procedureFees' => function ($q) use ($id) {
                     $q->where('procedure_id', $id)->with('insuranceLabelFee');
                 }]);
-            }
+            },
         ])->first();
 
         return !is_null($procedure) ? $procedure : null;
     }
 
     /**
-     * @param array $data
-     * @param int $id
      * @return Procedure|Builder|Model|object|null
      */
-    public function updateProcedure(array $data, int $id) {
+    public function updateProcedure(array $data, int $id)
+    {
         try {
             DB::beginTransaction();
             $procedure = Procedure::find($id);
 
             $procedure->update([
-                "start_date"  => $data["start_date"],
-                "end_date"  => $data["end_date"] ?? null,
-                "description" => $data['description']
+                'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
+                'description' => $data['description'],
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
@@ -290,19 +297,19 @@ class ProcedureRepository
             }
 
             if (isset($data['mac_localities'])) {
-                /** Delete mac localities */
+                /* Delete mac localities */
                 $procedure->macLocalities()->detach();
-                /** update or create new mac localities */
+                /* update or create new mac localities */
                 foreach ($data['mac_localities'] as $macL) {
                     $macLocality = MacLocality::where([
-                        "mac"             => $macL['mac'],
-                        "locality_number" => $macL['locality_number'],
-                        "state"           => $macL['state'],
-                        "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['counties']
+                        'mac' => $macL['mac'],
+                        'locality_number' => $macL['locality_number'],
+                        'state' => $macL['state'],
+                        'fsa' => $macL['fsa'],
+                        'counties' => $macL['counties'],
                     ])->first();
                     if (isset($macLocality)) {
-                        /** Attach macLocality to procedure */
+                        /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
@@ -313,14 +320,14 @@ class ProcedureRepository
                             })->get();
 
                             foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
-                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
+                                $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicare->description));
                                 if ($procedureFees == $field) {
                                     ProcedureFee::updateOrCreate([
                                         'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                        'procedure_id'           => $procedure->id,
-                                        'mac_locality_id'        => $macLocality->id
+                                        'procedure_id' => $procedure->id,
+                                        'mac_locality_id' => $macLocality->id,
                                     ], [
-                                        'fee'                    => $value
+                                        'fee' => $value,
                                     ]);
                                 }
                             }
@@ -331,14 +338,14 @@ class ProcedureRepository
                             })->get();
 
                             foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
-                                $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
+                                $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicaid->description));
                                 if ($procedureFees == $field) {
                                     ProcedureFee::updateOrCreate([
                                         'insurance_label_fee_id' => $insuranceLabelFeeMedicaid->id,
-                                        'procedure_id'           => $procedure->id,
-                                        'mac_locality_id'        => $macLocality->id
+                                        'procedure_id' => $procedure->id,
+                                        'mac_locality_id' => $macLocality->id,
                                     ], [
-                                        'fee'                    => $value
+                                        'fee' => $value,
                                     ]);
                                 }
                             }
@@ -352,14 +359,14 @@ class ProcedureRepository
                     isset($data['procedure_considerations']['age_init']) &&
                     isset($data['procedure_considerations']['discriminatory_id'])) {
                     ProcedureConsideration::updateOrCreate([
-                        'procedure_id'      => $procedure->id,
+                        'procedure_id' => $procedure->id,
                     ], [
-                        'gender_id'         => $data['procedure_considerations']['gender_id'],
-                        'age_init'          => $data['procedure_considerations']['age_init'],
-                        'age_end'           => $data['procedure_considerations']['age_end'] ?? null,
-                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id']
+                        'gender_id' => $data['procedure_considerations']['gender_id'],
+                        'age_init' => $data['procedure_considerations']['age_init'],
+                        'age_end' => $data['procedure_considerations']['age_end'] ?? null,
+                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
                     ]);
-                };
+                }
             }
 
             if (isset($data['modifiers'])) {
@@ -371,51 +378,55 @@ class ProcedureRepository
             }
 
             if (isset($data['note'])) {
-                /** PublicNote */
+                /* PublicNote */
                 PublicNote::updateOrCreate([
                     'publishable_type' => Procedure::class,
-                    'publishable_id'   => $procedure->id,
+                    'publishable_id' => $procedure->id,
                 ], [
-                    'note'             => $data['note'],
+                    'note' => $data['note'],
                 ]);
             }
 
             DB::commit();
+
             return Procedure::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
 
     /**
-     * @param bool $status
-     * @param int $id
      * @return bool|int|null
      */
-    public function changeStatus(bool $status, int $id) {
+    public function changeStatus(bool $status, int $id)
+    {
         $procedure = Procedure::find($id);
 
-        if (is_null($procedure)) return null;
+        if (is_null($procedure)) {
+            return null;
+        }
 
         if ($status) {
             return $procedure->update(
                 [
-                    "active"   => $status,
-                    "end_date" => null
+                    'active' => $status,
+                    'end_date' => null,
                 ]
             );
         } else {
             return $procedure->update(
                 [
-                    "active"   => $status,
-                    "end_date" => now()
+                    'active' => $status,
+                    'end_date' => now(),
                 ]
             );
         }
     }
 
-    public function getListMacLocalities(Request $request) {
+    public function getListMacLocalities(Request $request)
+    {
         try {
             $filters = [];
             if (isset($request->mac)) {
@@ -438,14 +449,13 @@ class ProcedureRepository
             $records['state'] = MacLocality::where($filters)->distinct('state')->get();
             $records['fsa'] = MacLocality::where($filters)->distinct('fsa')->get();
             $records['counties'] = MacLocality::where($filters)->distinct('counties')->get();
-            
-            $options = [
-                'mac'             => [],
-                'locality_number' => [],
-                'state'           => [],
-                'fsa'             => [],
-                'counties'        => []
 
+            $options = [
+                'mac' => [],
+                'locality_number' => [],
+                'state' => [],
+                'fsa' => [],
+                'counties' => [],
             ];
             foreach ($records['mac'] as $rec) {
                 array_push($options['mac'], ['id' => $rec->mac, 'name' => $rec->mac]);
@@ -469,7 +479,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListMac() {
+    public function getListMac()
+    {
         try {
             return getList(MacLocality::class, ['mac']);
         } catch (\Exception $e) {
@@ -477,7 +488,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListLocalityNumber() {
+    public function getListLocalityNumber()
+    {
         try {
             return getList(MacLocality::class, ['locality_number']);
         } catch (\Exception $e) {
@@ -485,7 +497,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListState() {
+    public function getListState()
+    {
         try {
             return getList(MacLocality::class, ['state']);
         } catch (\Exception $e) {
@@ -493,7 +506,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListFsa() {
+    public function getListFsa()
+    {
         try {
             return getList(MacLocality::class, ['fsa']);
         } catch (\Exception $e) {
@@ -501,7 +515,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListCounties() {
+    public function getListCounties()
+    {
         try {
             return getList(MacLocality::class, ['counties']);
         } catch (\Exception $e) {
@@ -509,17 +524,20 @@ class ProcedureRepository
         }
     }
 
-    public function getListGenders() {
+    public function getListGenders()
+    {
         return getList(Gender::class, 'description');
     }
 
-    public function getListDiscriminatories() {
+    public function getListDiscriminatories()
+    {
         return getList(Discriminatory::class, 'description');
     }
 
-    public function getListDiagnoses($code = '', $except_ids = null) {
+    public function getListDiagnoses($code = '', $except_ids = null)
+    {
         try {
-            if ($code == '') {
+            if ('' == $code) {
                 return getList(Diagnosis::class, 'code', [], null, ['description']);
             } else {
                 return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]], $except_ids, ['description']);
@@ -529,26 +547,27 @@ class ProcedureRepository
         }
     }
 
-    public function getListModifiers($code = '') {
+    public function getListModifiers($code = '')
+    {
         try {
-            if ($code == '') {
+            if ('' == $code) {
                 return getList(Modifier::class, 'modifier');
             } else {
                 return getList(Modifier::class, 'modifier', ['whereRaw' => ['search' => $code]]);
             }
-            
         } catch (\Exception $e) {
             return [];
         }
     }
 
-    public function getListInsuranceCompanies($procedure_id = null) {
+    public function getListInsuranceCompanies($procedure_id = null)
+    {
         try {
-            if ($procedure_id == null) {
+            if (null == $procedure_id) {
                 return [];
             } else {
                 $procedure = Procedure::whereId($procedure_id)->with([
-                    "insuranceCompanies",
+                    'insuranceCompanies',
                 ])->first();
                 if (count($procedure->insuranceCompanies) > 0) {
                     return getList(
@@ -565,16 +584,17 @@ class ProcedureRepository
         }
     }
 
-    public function getList($company_id = null, $search = '') {
+    public function getList($company_id = null, $search = '')
+    {
         try {
-            if ($company_id == null) {
-                if ($search == '') {
+            if (null == $company_id) {
+                if ('' == $search) {
                     return getList(Procedure::class, 'code', [], null, ['description']);
                 } else {
                     return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
-                if ($search == '') {
+                if ('' == $search) {
                     return getList(
                         Procedure::class,
                         'code',
@@ -590,7 +610,7 @@ class ProcedureRepository
                         [
                             'whereRaw' => ['search' => $search],
                             'relationship' => 'companies',
-                            'where' => ['company_id' => $company_id]
+                            'where' => ['company_id' => $company_id],
                         ],
                         null,
                         ['description'],
@@ -603,7 +623,8 @@ class ProcedureRepository
         }
     }
 
-    public function getListInsuranceLabelFees() {
+    public function getListInsuranceLabelFees()
+    {
         try {
             return getList(InsuranceLabelFee::class, 'description');
         } catch (\Exception $e) {
@@ -612,15 +633,14 @@ class ProcedureRepository
     }
 
     /**
-     * @param array $data
-     * @param int $id
      * @return Procedure|Builder|Model|object|null
      */
-    public function addToCompany(array $data, int $id) {
+    public function addToCompany(array $data, int $id)
+    {
         try {
             DB::beginTransaction();
             $company = Company::find($id);
-            
+
             $procedures = Procedure::whereHas('companies', function ($query) use ($company) {
                 $query->where('company_id', $company->id);
             })->with(['companies', 'macLocalities'])->get();
@@ -635,15 +655,15 @@ class ProcedureRepository
                     $procedure = Procedure::find($macL['procedure_id']);
 
                     $macLocality = MacLocality::where([
-                        "mac"             => $macL['mac'],
-                        "locality_number" => $macL['locality_number'],
-                        "state"           => $macL['state'],
-                        "fsa"             => $macL['fsa'],
-                        "counties"        => $macL['counties']
+                        'mac' => $macL['mac'],
+                        'locality_number' => $macL['locality_number'],
+                        'state' => $macL['state'],
+                        'fsa' => $macL['fsa'],
+                        'counties' => $macL['counties'],
                     ])->first();
                     if (isset($macLocality)) {
                         if (is_null($macLocality->procedures()->wherePivot('modifier_id', $macL['modifier_id'])->find($procedure->id))) {
-                            $macLocality->procedures()->attach($procedure->id, ['modifier_id'  => $macL['modifier_id']]);
+                            $macLocality->procedures()->attach($procedure->id, ['modifier_id' => $macL['modifier_id']]);
                         }
                     }
 
@@ -656,14 +676,14 @@ class ProcedureRepository
                                 })->get();
 
                                 foreach ($insuranceLabelFeesMedicare as $insuranceLabelFeeMedicare) {
-                                    $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicare->description));
+                                    $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicare->description));
                                     if ($procedureFees == $field) {
                                         ProcedureFee::updateOrCreate([
                                             'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                            'procedure_id'           => $procedure->id,
-                                            'mac_locality_id'        => $macLocality->id
+                                            'procedure_id' => $procedure->id,
+                                            'mac_locality_id' => $macLocality->id,
                                         ], [
-                                            'fee'                    => $value
+                                            'fee' => $value,
                                         ]);
                                     }
                                 }
@@ -674,14 +694,14 @@ class ProcedureRepository
                                 })->get();
 
                                 foreach ($insuranceLabelFeesMedicaid as $insuranceLabelFeeMedicaid) {
-                                    $field = str_replace(" ", "_", strtolower($insuranceLabelFeeMedicaid->description));
+                                    $field = str_replace(' ', '_', strtolower($insuranceLabelFeeMedicaid->description));
                                     if ($procedureFees == $field) {
                                         ProcedureFee::updateOrCreate([
                                             'insurance_label_fee_id' => $insuranceLabelFeeMedicare->id,
-                                            'procedure_id'           => $procedure->id,
-                                            'mac_locality_id'        => $macLocality->id
+                                            'procedure_id' => $procedure->id,
+                                            'mac_locality_id' => $macLocality->id,
                                         ], [
-                                            'fee'                    => $value
+                                            'fee' => $value,
                                         ]);
                                     }
                                 }
@@ -693,9 +713,9 @@ class ProcedureRepository
                             $company->procedures()->attach(
                                 $procedure->id,
                                 [
-                                    'price'                  => $macL['company_procedure']['price'],
-                                    'price_percentage'       => $macL['company_procedure']['price_percentage'],
-                                    'insurance_label_fee_id' => $companyProcedureLabelFee->id ?? null
+                                    'price' => $macL['company_procedure']['price'],
+                                    'price_percentage' => $macL['company_procedure']['price_percentage'],
+                                    'insurance_label_fee_id' => $companyProcedureLabelFee->id ?? null,
                                 ]
                             );
                         }
@@ -707,9 +727,9 @@ class ProcedureRepository
                                 $insurancePlan->procedures()->attach(
                                     $procedure->id,
                                     [
-                                        'price'                  => $macL['insurance_plan_procedure']['price'],
-                                        'price_percentage'       => $macL['insurance_plan_procedure']['price_percentage'],
-                                        'insurance_label_fee_id' => $planProcedureLabelFee->id ?? null
+                                        'price' => $macL['insurance_plan_procedure']['price'],
+                                        'price_percentage' => $macL['insurance_plan_procedure']['price_percentage'],
+                                        'insurance_label_fee_id' => $planProcedureLabelFee->id ?? null,
                                     ]
                                 );
                             }
@@ -718,18 +738,22 @@ class ProcedureRepository
                 }
             }
             DB::commit();
+
             return $company;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
 
     /**
-     * @param  int $id
+     * @param int $id
+     *
      * @return Company|Builder|Model|object|null
      */
-    public function getToCompany(int $companyId) {
+    public function getToCompany(int $companyId)
+    {
         $mac_localities = [];
         $labelFees = getList(InsuranceLabelFee::class, 'description');
         $procedures = Procedure::whereHas('companies', function ($query) use ($companyId) {
@@ -748,34 +772,35 @@ class ProcedureRepository
                 $planProcedureLabelFee = InsuranceLabelFee::find($procedure['insurancePlans']['0']['pivot']['insurance_label_fee_id'] ?? null);
 
                 array_push($mac_localities, [
-                    'procedure_id'          => $macL['pivot']['procedure_id'],
-                    'procedure_code'        => $procedure['code'],
+                    'procedure_id' => $macL['pivot']['procedure_id'],
+                    'procedure_code' => $procedure['code'],
                     'procedure_description' => $procedure['description'],
-                    'modifier_id'           => $macL['pivot']['modifier_id'],
-                    'modifier_code'         => $macL['modifier']['modifier'] ?? '',
-                    'mac'                   => $macL['mac'],
-                    'state'                 => $macL['state'],
-                    'fsa'                   => $macL['fsa'],
-                    'counties'              => $macL['counties'],
-                    'locality_number'       => $macL['locality_number'],
-                    'procedure_fees'        => $fees,
-                    'company_procedure'     => [
-                        'price'                  => $procedure['companies']['0']['pivot']['price'] ?? '',
-                        'price_percentage'       => $procedure['companies']['0']['pivot']['price_percentage'] ?? ''
+                    'modifier_id' => $macL['pivot']['modifier_id'],
+                    'modifier_code' => $macL['modifier']['modifier'] ?? '',
+                    'mac' => $macL['mac'],
+                    'state' => $macL['state'],
+                    'fsa' => $macL['fsa'],
+                    'counties' => $macL['counties'],
+                    'locality_number' => $macL['locality_number'],
+                    'procedure_fees' => $fees,
+                    'company_procedure' => [
+                        'price' => $procedure['companies']['0']['pivot']['price'] ?? '',
+                        'price_percentage' => $procedure['companies']['0']['pivot']['price_percentage'] ?? '',
                     ],
                     'insurance_plan_procedure' => [
-                        'price'                  => $procedure['insurancePlans']['0']['pivot']['price'] ?? '',
-                        'price_percentage'       => $procedure['insurancePlans']['0']['pivot']['price_percentage'] ?? '',
-                        'insurance_company_id'   => $procedure['insurancePlans']['0']['insurance_company_id'] ?? '',
+                        'price' => $procedure['insurancePlans']['0']['pivot']['price'] ?? '',
+                        'price_percentage' => $procedure['insurancePlans']['0']['pivot']['price_percentage'] ?? '',
+                        'insurance_company_id' => $procedure['insurancePlans']['0']['insurance_company_id'] ?? '',
                         'insurance_company_name' => $procedure['insurancePlans']['0']['insuranceCompany']['name'] ?? '',
-                        'insurance_plan_id'      => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id'] ?? '',
-                        'insurance_plan_name'    => $procedure['insurancePlans']['0']['name'] ?? ''
+                        'insurance_plan_id' => $procedure['insurancePlans']['0']['pivot']['insurance_plan_id'] ?? '',
+                        'insurance_plan_name' => $procedure['insurancePlans']['0']['name'] ?? '',
                     ],
-                    "selectedPrice"              => ucwords($companyProcedureLabelFee->description ?? ''),
-                    "selectedPriceContractFee"   => ucwords($planProcedureLabelFee->description ?? '')
+                    'selectedPrice' => ucwords($companyProcedureLabelFee->description ?? ''),
+                    'selectedPriceContractFee' => ucwords($planProcedureLabelFee->description ?? ''),
                 ]);
             }
         }
+
         return $mac_localities;
     }
 }
