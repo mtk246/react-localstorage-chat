@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
-final class GetReport
+final class GetReportAction
 {
     public function all(GetAllCast $filters): AnonymousResourceCollection
     {
