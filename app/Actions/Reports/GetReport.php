@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Reports;
 
-use App\Http\Casts\Report\GetAllCast;
+use App\Http\Casts\Reports\GetAllCast;
 use App\Http\Resources\Reports\ReportResource;
 use App\Models\Reports\Report;
 use App\Models\User;
