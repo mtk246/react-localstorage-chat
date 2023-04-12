@@ -670,6 +670,26 @@ class InsurancePlanRepository
         return getList(InsurancePlan::class);
     }
 
+    public function getListBillingCompanies(Request $request) {
+        $insurancePlanId = $request->insurance_plan_id ?? null;
+        $edit = $request->edit ?? 'false';
+
+        if (is_null($insurancePlanId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            $ids = [];
+            $billingCompanies = InsurancePlan::find($insurancePlanId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ($edit == 'true') {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insurancePlans', 'whereHas' => ['relationship' => 'insurancePlans', 'where' => ['insurance_plan_id' => $insurancePlanId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insurancePlans', 'orWhereHas' => ['relationship' => 'insurancePlans', 'where' => ['billing_company_id', $ids]]]);
+            }
+        }
+    }
+
     public function getListByCompany($id) {
         return getList(InsurancePlan::class, ['name'], ['insurance_company_id' => $id]);
     }

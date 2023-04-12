@@ -265,6 +265,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-ins-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListInsTypes']);
         Route::get('/get-list-plan-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListPlanTypes']);
         Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
+        Route::get('/get-list-billing-companies', [\App\Http\Controllers\InsurancePlanController::class, 'getListBillingCompanies']);
         Route::get('/get-by-payer-id/{payer}', [\App\Http\Controllers\InsurancePlanController::class, 'getByPayer']);
         Route::post('/', [\App\Http\Controllers\InsurancePlanController::class, 'createInsurancePlan']);
         Route::put('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'updateInsurancePlan']);
