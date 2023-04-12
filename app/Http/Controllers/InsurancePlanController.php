@@ -123,6 +123,13 @@ class InsurancePlanController extends Controller
         );
     }
 
+    public function getListBillingCompanies(Request $request)
+    {
+        return response()->json(
+            $this->insurancePlanRepository->getListBillingCompanies($request)
+        );
+    }
+
     public function getListByCompany(int $id) {
         return response()->json(
             $this->insurancePlanRepository->getListByCompany($id)
