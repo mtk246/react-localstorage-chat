@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Casts\Report;
+namespace App\Http\Casts\Reports;
 
 use App\Http\Casts\CastsRequest;
 use Illuminate\Support\Collection;
