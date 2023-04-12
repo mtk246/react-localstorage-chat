@@ -959,8 +959,6 @@ class InsurancePlanRepository
                         ];
                     })->toArray();
 
-                $macLocality = MacLocality::find($insurancePlanContract->mac_locality_id ?? null)?->first();
-
                 array_push($records, [
                     'id' => $insurancePlanContract->id,
                     'price' => (float) $insurancePlanContract->price ?? null,
@@ -974,11 +972,11 @@ class InsurancePlanRepository
                     'end_date' => $insurancePlanContract->end_date ?? '',
                     'price_percentage' => $insurancePlanContract->price_percentage ?? '',
                     'procedure_ids' => $procedure_ids,
-                    'mac' => $macLocality['mac'] ?? '',
-                    'locality_number' => $macLocality['locality_number'] ?? '',
-                    'state' => $macLocality['state'] ?? '',
-                    'fsa' => $macLocality['fsa'] ?? '',
-                    'counties' => $macLocality['counties'] ?? '',
+                    'mac' => $insurancePlanContract->macLocality->mac ?? '',
+                    'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
+                    'state' => $insurancePlanContract->macLocality->state ?? '',
+                    'fsa' => $insurancePlanContract->macLocality->fsa ?? '',
+                    'counties' => $insurancePlanContract->macLocality->counties ?? '',
                     'patients' => $patients
                 ]);
             }
