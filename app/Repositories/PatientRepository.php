@@ -1026,6 +1026,8 @@ class PatientRepository
         $patient = Patient::find($patient_id);
         $subscribers = [];
         foreach ($patient->subscribers ?? [] as $subscriber) {
+            $subscriber_address = null;
+            $subscriber_contact = null;
             if (isset($subscriber)) {
                 $address = Address::where([
                     "addressable_id"     => $subscriber->id,
@@ -1321,6 +1323,7 @@ class PatientRepository
             "release_info"             => $insurancePolicy->release_info ?? false,
             "own_insurance"            => $insurancePolicy->own ?? false,
             "subscriber"               => isset($subscriber) ? [
+                "id" => $subscriber->id,
                 "ssn" => $subscriber->ssn,
                 "first_name" => $subscriber->first_name,
                 "last_name" => $subscriber->last_name,
