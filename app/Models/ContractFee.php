@@ -83,6 +83,11 @@ final class ContractFee extends Model
         return $this->belongsToMany(Procedure::class)->withTimestamps();
     }
 
+    public function modifiers(): BelongsToMany
+    {
+        return $this->belongsToMany(Modifier::class)->withTimestamps();
+    }
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

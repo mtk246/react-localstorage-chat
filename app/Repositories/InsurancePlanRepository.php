@@ -857,6 +857,7 @@ class InsurancePlanRepository
                 $contractFeesDelete->chunk(20, function ($contracts) {
                     foreach ($contracts as $contract) {
                         $contract->procedures()->detach();
+                        $contract->modifiers()->detach();
                         $contract->patiens()->detach();
                     }
                     $contracts->each->delete();
@@ -881,7 +882,7 @@ class InsurancePlanRepository
                         'insurance_company_id' => $insurancePlan->insurance_company_id,
                         'private_note' => $contract['private_note'],
                         'billing_company_id' => $billingCompany->id ?? $contract['billing_company_id'],
-                        'modifier_id' => $contract['modifier_id'] ?? null,
+                        //'modifier_id' => $contract['modifier_id'] ?? null,
                         'mac_locality_id' => $macLocality->id ?? null,
                         'insurance_label_fee_id' => $contract['insurance_label_fee_id'] ?? null,
                         'contract_fee_type_id' => $contract['type_id'] ?? null,
@@ -891,6 +892,7 @@ class InsurancePlanRepository
                         'price_percentage' => $contract['price_percentage'] ?? null,
                     ]);
                     $contractFee->procedures()->sync($contract['procedure_ids']);
+                    $contractFee->modifiers()->sync($contract['modifier_ids']);
 
                     if (($type_id === $contract['type_id']) &&
                         isset($contract['patients'])  &&
@@ -948,6 +950,11 @@ class InsurancePlanRepository
                     ->select('procedures.id')
                     ->get()
                     ->pluck('id');
+                $modifier_ids = $insurancePlanContract
+                    ->modifiers()
+                    ->select('modifiers.id')
+                    ->get()
+                    ->pluck('id');
                 $patients = $insurancePlanContract
                     ->patiens()
                     ->get()
@@ -965,12 +972,13 @@ class InsurancePlanRepository
                     'company_id' => $insurancePlanContract->company_id ?? '',
                     'private_note' => $insurancePlanContract->private_note ?? '',
                     'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
-                    'modifier_id' => $insurancePlanContract->modifier_id ?? '',
+                    //'modifier_id' => $insurancePlanContract->modifier_id ?? '',
                     'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
                     'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
                     'start_date' => $insurancePlanContract->start_date ?? '',
                     'end_date' => $insurancePlanContract->end_date ?? '',
                     'price_percentage' => $insurancePlanContract->price_percentage ?? '',
+                    'modifier_ids' => $modifier_ids,
                     'procedure_ids' => $procedure_ids,
                     'mac' => $insurancePlanContract->macLocality->mac ?? '',
                     'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
@@ -1045,6 +1053,11 @@ class InsurancePlanRepository
                 ->select('procedures.id')
                 ->get()
                 ->pluck('id');
+            $modifier_ids = $insurancePlanContract
+                ->modifiers()
+                ->select('modifiers.id')
+                ->get()
+                ->pluck('id');
             $patients = $insurancePlanContract
                 ->patiens()
                 ->get()
@@ -1056,26 +1069,25 @@ class InsurancePlanRepository
                     ];
                 })->toArray();
 
-            $macLocality = MacLocality::find($insurancePlanContract->mac_locality_id ?? null)?->first();
-
             array_push($records, [
                 'id' => $insurancePlanContract->id,
                 'price' => (float) $insurancePlanContract->price ?? null,
                 'company_id' => $insurancePlanContract->company_id ?? '',
                 'private_note' => $insurancePlanContract->private_note ?? '',
                 'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
-                'modifier_id' => $insurancePlanContract->modifier_id ?? '',
+                //'modifier_id' => $insurancePlanContract->modifier_id ?? '',
                 'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
                 'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
                 'start_date' => $insurancePlanContract->start_date ?? '',
                 'end_date' => $insurancePlanContract->end_date ?? '',
                 'price_percentage' => $insurancePlanContract->price_percentage ?? '',
+                'modifier_ids' => $modifier_ids,
                 'procedure_ids' => $procedure_ids,
-                'mac' => $macLocality['mac'] ?? '',
-                'locality_number' => $macLocality['locality_number'] ?? '',
-                'state' => $macLocality['state'] ?? '',
-                'fsa' => $macLocality['fsa'] ?? '',
-                'counties' => $macLocality['counties'] ?? '',
+                'mac' => $insurancePlanContract->macLocality->mac ?? '',
+                'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
+                'state' => $insurancePlanContract->macLocality->state ?? '',
+                'fsa' => $insurancePlanContract->macLocality->fsa ?? '',
+                'counties' => $insurancePlanContract->macLocality->counties ?? '',
                 'patients' => $patients
             ]);
         }
