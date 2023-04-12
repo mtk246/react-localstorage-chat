@@ -49,7 +49,7 @@ class AddContractFeesRequest extends FormRequest
             'contract_fees.*.price' => ['nullable', 'numeric', 'sometimes', 'required_without_all:contract_fees.*.price_percentage', 'prohibited_unless:contract_fees.*.price_percentage,null'],
             'contract_fees.*.price_percentage' => ['nullable', 'numeric', 'sometimes', 'required_without_all:contract_fees.*.price', 'prohibited_unless:contract_fees.*.price,null'],
             'contract_fees.*.private_note' => ['nullable', 'string'],
-            'contract_fees.*.patients' => ['array', 'required_if:contract_fees.*.type_id,'.$type_id],
+            'contract_fees.*.patients' => ['array', 'nullable'/**'required_if:contract_fees.*.type_id,'.$type_id*/],
             'contract_fees.*.patients.*.patient_id' => ['sometimes', 'integer'],
             'contract_fees.*.patients.*.start_date' => ['nullable', 'date'],
             'contract_fees.*.patients.*.end_date' => ['nullable', 'date'],
