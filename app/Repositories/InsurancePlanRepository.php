@@ -1024,6 +1024,7 @@ class InsurancePlanRepository
                 'billing_company_id' => $insurancePlanCopay->billing_company_id ?? null,
                 'company_id'         => $insurancePlanCopay->company_id ?? null,
                 'procedure_ids'      => $procedure_ids,
+                'procedures'         => $insurancePlanCopay->procedures,
                 'copay'              => (float)$insurancePlanCopay->copay ?? null,
                 'private_note'       => $private_note->note ?? '',
             ]);
@@ -1083,6 +1084,8 @@ class InsurancePlanRepository
                 'price_percentage' => $insurancePlanContract->price_percentage ?? '',
                 'modifier_ids' => $modifier_ids,
                 'procedure_ids' => $procedure_ids,
+                'modifiers' => $insurancePlanContract->modifiers,
+                'procedures' => $insurancePlanContract->procedures,
                 'mac' => $insurancePlanContract->macLocality->mac ?? '',
                 'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
                 'state' => $insurancePlanContract->macLocality->state ?? '',
