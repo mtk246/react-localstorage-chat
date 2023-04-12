@@ -39,7 +39,7 @@ class AddContractFeesRequest extends FormRequest
             'contract_fees.*.start_date' => ['required', 'date'],
             'contract_fees.*.end_date' => ['required', 'date'],
             'contract_fees.*.procedure_ids' => ['required', 'array'],
-            'contract_fees.*.modifiers_ids' => ['nullable', 'array'],
+            'contract_fees.*.modifier_ids' => ['nullable', 'array'],
             'contract_fees.*.mac' => ['nullable', 'string'],
             'contract_fees.*.locality_number' => ['nullable', 'numeric'],
             'contract_fees.*.state' => ['nullable', 'string'],
