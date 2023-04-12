@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('contract_fee_modifier_to', function (Blueprint $table) {
+        Schema::create('contract_fee_modifier', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_fee_id')
                 ->constrained()
@@ -27,6 +27,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('contract_fee_modifier_to');
+        Schema::dropIfExists('contract_fee_modifier');
     }
 };
