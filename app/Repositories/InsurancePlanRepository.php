@@ -182,7 +182,8 @@ class InsurancePlanRepository
                 'pqrs_eligible'        => $data['pqrs_eligible'],
                 'allow_attached_files' => $data['allow_attached_files'],
                 'eff_date'             => $data['eff_date'],
-                'charge_using_id'      => $data['charge_using_id']
+                'charge_using_id'      => $data['charge_using_id'],
+                'insurance_company_id' => $data['insurance_company_id'],
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
