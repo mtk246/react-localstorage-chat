@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Reports;
 
-use App\Actions\Reports\GetReport;
-use App\Actions\Reports\StoreAction;
+use App\Actions\Reports\GetReportAction;
+use App\Actions\Reports\StoreReportAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
 use App\Http\Requests\Reports\StoreRequest;
@@ -14,24 +14,24 @@ use Illuminate\Http\Request;
 
 final class ReportReSource extends Controller
 {
-    public function index(GetAllRequest $request, GetReport $getReport): JsonResponse
+    public function index(GetAllRequest $request, GetReportAction $get): JsonResponse
     {
         return response()->json(
-            $getReport->all($request->casted()),
+            $get->all($request->casted()),
         );
     }
 
-    public function store(StoreRequest $request, StoreAction $store): JsonResponse
+    public function store(StoreRequest $request, StoreReportAction $store): JsonResponse
     {
         return response()->json(
             $store->invoke($request->casted())
         );
     }
 
-    public function show(string $id, Request $request, GetReport $getReport): JsonResponse
+    public function show(string $id, Request $request, GetReportAction $get): JsonResponse
     {
         return response()->json(
-            $getReport->single($id, $request->user()),
+            $get->single($id, $request->user()),
         );
     }
 
