@@ -10,7 +10,7 @@ use App\Http\Resources\Reports\ReportResource;
 use App\Models\Reports\Report;
 use Illuminate\Support\Facades\DB;
 
-final class StoreAction
+final class StoreReportAction
 {
     public function invoke(StoreRequestCast $report): ReportResource
     {
