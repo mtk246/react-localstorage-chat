@@ -18,16 +18,20 @@ final class ReportResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->id,
+            'id' => $this->resource->billing_company_id
+                ? $this->resource->id
+                : null,
             'name' => $this->resource->name,
             'use' => $this->resource->use,
             'description' => $this->resource->description,
             'type' => $this->resource->type->value,
+            'url' => $this->resource->type->getUrl(),
             'range' => $this->resource->range,
             'begin_date' => now()->subDay($this->resource->range->format('D')),
             'end_date' => now(),
             'tags' => $this->resource->tags,
             'configuration' => $this->resource->configuration,
+            'default' => null,
             'favorite' => $this->resource->favorite,
         ];
     }
