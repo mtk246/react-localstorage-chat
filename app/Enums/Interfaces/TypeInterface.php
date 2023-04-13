@@ -6,5 +6,5 @@ namespace App\Enums\Interfaces;
 
 interface TypeInterface extends PublicInterface
 {
-    public function getDescription(): string;
+    public function getName(): string;
 }
