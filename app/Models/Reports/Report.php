@@ -6,6 +6,7 @@ namespace App\Models\Reports;
 
 use App\Enums\Reports\ReportType;
 use App\Models\BillingCompany;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,6 +49,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 final class Report extends Model
 {
     use HasFactory;
+    use HasUlids;
 
     /** @var string[] */
     protected $fillable = [
@@ -59,12 +61,12 @@ final class Report extends Model
         'tags',
         'configuration',
         'favorite',
+        'billing_company_id',
     ];
 
     /** @var array<key, string> */
     protected $casts = [
         'type' => ReportType::class,
-        'range' => 'date',
         'tags' => 'json',
         'configuration' => 'json',
         'favorite' => 'boolean',
