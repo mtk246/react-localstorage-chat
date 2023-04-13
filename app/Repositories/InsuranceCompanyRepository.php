@@ -418,7 +418,7 @@ class InsuranceCompanyRepository
             }
             return getList(
                 InsuranceCompany::class,
-                ['payer_id', '-', 'name'].
+                ['payer_id', '-', 'name'],
                 ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
             );
         } catch (\Exception $e) {

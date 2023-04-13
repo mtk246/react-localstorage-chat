@@ -1118,10 +1118,13 @@
 
 ```json
 {
-    "company_id": <integer>
+    "company_id": <integer> optional
 }
 ```
 
+## Example path
+
+>{primary} ?search=code & except_ids[]=1 & except_ids[]=2
 ## Response
 
 > {success} 200 Procedures found
