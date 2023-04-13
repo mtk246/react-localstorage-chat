@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace App\Enums\Reports;
 
-use App\Enums\Attributes\CodeAttribute;
+use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 
-enum TagType: int
+enum TagType: int implements TypeInterface
 {
     use EnumToArray;
     use HasAttributes;
 
-    #[CodeAttribute('tag one')]
+    #[NameAttribute('tag one')]
     #[PublicAttribute(true)]
     case TAG_1 = 1;
 
-    #[CodeAttribute('tag two')]
+    #[NameAttribute('tag two')]
     #[PublicAttribute(true)]
     case TAG_2 = 2;
 
-    public function getCode(): string
+    public function getName(): string
     {
-        return $this->getAttribute(CodeAttribute::class);
+        return $this->getAttribute(NameAttribute::class);
     }
 
     public function getPublic(): bool
