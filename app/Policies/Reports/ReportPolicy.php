@@ -15,8 +15,10 @@ final class ReportPolicy
 
     public function update(User $user, Report $report): bool
     {
-        return $report->billingCompany
-            && $report->billingCompany->id === $user->billing_company_id;
+        return Gate::allows('is-admin')
+            ? true
+            : $report->billing_company_id
+                && $report->billing_company_id === $user->billing_company_id;
     }
 
     public function destroy(User $user, Report $report): bool
