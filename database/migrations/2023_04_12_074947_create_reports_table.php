@@ -10,14 +10,14 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::create('reports', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->text('use');
             $table->text('description');
             $table->string('type');
             $table->json('tags');
             $table->json('configuration');
-            $table->date('range');
+            $table->string('range');
             $table->boolean('favorite');
             $table->foreignId('billing_company_id')
                 ->nullable()
