@@ -27,11 +27,11 @@ final class ReportResource extends JsonResource
             'type' => $this->resource->type->value,
             'url' => $this->resource->type->getUrl(),
             'range' => $this->resource->range,
-            'begin_date' => now()->subDay($this->resource->range->format('D')),
+            'begin_date' => now()->subDay($this->resource->range),
             'end_date' => now(),
             'tags' => $this->resource->tags,
             'configuration' => $this->resource->configuration,
-            'default' => null,
+            'default' => [],
             'favorite' => $this->resource->favorite,
         ];
     }
