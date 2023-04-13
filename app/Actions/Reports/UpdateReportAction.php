@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Reports;
 
-use App\Http\Casts\Reports\ConfigurationCast;
 use App\Http\Casts\Reports\UpdateRequestCast;
 use App\Http\Resources\Reports\ReportResource;
 use App\Models\Reports\Report;
@@ -22,13 +21,11 @@ final class UpdateReportAction
                 'type' => $reportUpdate->getType(),
                 'range' => $reportUpdate->getRange(),
                 'tags' => $reportUpdate->getTags(),
-                'configuration' => $reportUpdate->getConfiguration()->map(
-                    fn (ConfigurationCast $configuration) => $configuration->toArray()
-                )->toArray(),
+                'configuration' => $reportUpdate->getConfiguration()->toArray(),
                 'favorite' => $reportUpdate->getFavorite(),
             ]);
 
-            $report->billingCompany()->attach($reportUpdate->getBillingCompanyId());
+            $report->billingCompany()->associate($reportUpdate->getBillingCompanyId());
 
             return new ReportResource($report);
         });
