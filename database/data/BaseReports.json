@@ -1,0 +1,93 @@
+[
+    {
+        "name": "General Report",
+        "use": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et justo in orci malesuada convallis.",
+        "description": "Nullam tortor velit, varius laoreet molestie sed, feugiat vel massa. Phasellus varius accumsan enim. Cras congue ut lacus eget malesuada. Suspendisse lobortis mauris in dui pretium fringilla. Mauris a gravida nulla. Quisque imperdiet libero sem",
+        "type": 1,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Posted Payment Transaction Audit Report",
+        "use": "Integer condimentum id mi sed tincidunt. Nunc luctus lorem nec sem gravida, a fringilla dui volutpat. Donec mauris urna",
+        "description": "ornare luctus tincidunt at, cursus at ipsum. Aliquam accumsan ac velit quis pretium. Fusce tincidunt magna risus, nec vulputate neque tincidunt a. Suspendisse imperdiet nisl felis, eget tristique dui interdum et. Proin mollis ut dolor laoreet luctus",
+        "type": 2,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Payments",
+        "use": "Nunc sed tincidunt dui. Donec nec ultrices massa. Pellentesque eleifend quam quam, sed sollicitudin libero efficitur sit amet. Donec non nibh sed neque auctor consequat. Duis non justo diam",
+        "description": "Vivamus ac elit mauris. Vestibulum massa augue, sagittis ac ipsum vel",
+        "type": 3,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Productivity",
+        "use": "Curabitur eleifend mi dolor, ut molestie felis mattis in. Nulla vitae lobortis diam",
+        "description": "Suspendisse fringilla odio dolor, vel consequat mi faucibus aliquet",
+        "type": 4,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Daily Insurance Responsibility Aging",
+        "use": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et justo in orci malesuada convallis.",
+        "description": "Vivamus ac elit mauris. Vestibulum massa augue, sagittis ac ipsum vel",
+        "type": 5,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Bad Debt Amount General Report",
+        "use": "Integer condimentum id mi sed tincidunt. Nunc luctus lorem nec sem gravida, a fringilla dui volutpat. Donec mauris urna",
+        "description": "Suspendisse fringilla odio dolor, vel consequat mi faucibus aliquet",
+        "type": 6,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    },
+    {
+        "name": "Charges Report",
+        "use": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et justo in orci malesuada convallis.",
+        "description": "Suspendisse fringilla odio dolor, vel consequat mi faucibus aliquet",
+        "type": 7,
+        "range": 30,
+        "tags": [
+            1,
+            2
+        ],
+        "configuration": {},
+        "favorite": false
+    }
+]
