@@ -120,7 +120,7 @@ class InsurancePlanRepository
                 ]);
             }
 
-            if (isset($data['address']['address'])) {
+            if (isset($data['address']) && !array_empty($data['address'])) {
                 $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                 $data['address']['addressable_id']     = $insurancePlan->id;
                 $data['address']['addressable_type']   = InsurancePlan::class;
@@ -163,7 +163,6 @@ class InsurancePlanRepository
      * @return InsurancePlan|Builder|Model|object|null
      */
     public function updateInsurancePlan(array $data, int $id) {
-
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::whereId($id)->first();
@@ -246,7 +245,7 @@ class InsurancePlanRepository
                 ]);
             }
 
-            if (isset($data['address']['address'])) {
+            if (isset($data['address']) && !array_empty($data['address'])) {
                 Address::updateOrCreate([
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'addressable_id'     => $insurancePlan->id,
