@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Reports;
 
+use App\Enums\Reports\ReportType;
+use App\Enums\Reports\TagType;
 use App\Http\Casts\Reports\StoreRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
@@ -21,7 +23,7 @@ final class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'billing_company' => [
+            'billing_company_id' => [
                 Rule::requiredIf(Gate::check('is-admin')),
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
@@ -31,11 +33,11 @@ final class StoreRequest extends FormRequest
             'description' => 'nullable|string',
             'tags' => 'nullable|array',
             'tags.*' => ['required', 'integer', new Enum(TagType::class)],
-            'type' => ['required', 'string', new Enum(ReportType::class)],
-            'range' => ['required', 'date'],
+            'type' => ['required', 'integer', new Enum(ReportType::class)],
+            'range' => ['required', 'string'],
             'configuration' => 'required|array',
-            'configuration.*.columns' => ['nullable', 'array'],
-            'configuration.*.columns.*' => ['nullable', 'string'],
+            'configuration.columns' => ['nullable', 'array'],
+            'configuration.columns.*' => ['nullable', 'string'],
         ];
     }
 }
