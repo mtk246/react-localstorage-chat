@@ -220,7 +220,7 @@ class ProcedureController extends Controller
     {
         $search = $request->search ?? '';
         return response()->json(
-            $this->procedureRepository->getList($company_id, $search, $request->except_ids ?? null)
+            $this->procedureRepository->getList($company_id, $search)
         );
     }
 

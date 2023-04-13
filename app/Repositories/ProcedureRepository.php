@@ -565,13 +565,13 @@ class ProcedureRepository
         }
     }
 
-    public function getList($company_id = null, $search = '', $except_ids = null) {
+    public function getList($company_id = null, $search = '') {
         try {
             if ($company_id == null) {
                 if ($search == '') {
                     return getList(Procedure::class, 'code', [], null, ['description']);
                 } else {
-                    return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], $except_ids, ['description']);
+                    return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
                 if ($search == '') {
@@ -592,7 +592,7 @@ class ProcedureRepository
                             'relationship' => 'companies',
                             'where' => ['company_id' => $company_id]
                         ],
-                        $except_ids,
+                        null,
                         ['description'],
                         ['price']
                     );
