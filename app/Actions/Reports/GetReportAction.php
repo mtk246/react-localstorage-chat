@@ -19,15 +19,18 @@ final class GetReportAction
     {
         return DB::transaction(function () use ($filters): AnonymousResourceCollection {
             $reports = Report::query()
-                ->where('billing_company_id', null)
-                ->orWhere('billing_company_id', $filters->getBillingCompanyId())
+                ->where(function (Builder $query) use ($filters): void {
+                    $query
+                        ->where('billing_company_id', null)
+                        ->orWhere('billing_company_id', $filters->getBillingCompanyId());
+                })
                 ->when($filters->getTags()->isNotEmpty(), function (Builder $query) use ($filters): void {
                     $filters->getTags()->each(function (int $value) use (&$query): void {
                         $query->orWhere('tags', 'like', "%{$value}%");
                     });
                 })
                 ->when($filters->getFavorite(), function (Builder $query): void {
-                    $query->orWhere('favorite', true);
+                    $query->Where('favorite', true);
                 })
                 ->get();
 
@@ -40,9 +43,10 @@ final class GetReportAction
         return DB::transaction(function () use ($id, $user): ReportResource {
             $report = Report::query()
                 ->where('id', $id)
-                ->where('billing_company_id', null)
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($user): void {
-                    $query->orWhere('billing_company_id', $user->billingCompanies->first()?->id);
+                    $query
+                        ->where('billing_company_id', null)
+                        ->orWhere('billing_company_id', $user->billingCompanies->first()?->id);
                 })
                 ->firstOrFail();
 
