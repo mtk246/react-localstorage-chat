@@ -22,7 +22,7 @@ final class GetAllRequest extends FormRequest
     public function rules()
     {
         return [
-            'billing_company' => [
+            'billing_company_id' => [
                 Rule::requiredIf(Gate::check('is-admin')),
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
