@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Casts\Reports;
 
 use App\Http\Casts\CastsRequest;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 final class StoreRequestCast extends CastsRequest
@@ -37,7 +36,7 @@ final class StoreRequestCast extends CastsRequest
         return $this->getArray('tags');
     }
 
-    public function getType(): string
+    public function getType(): int
     {
         return $this->get('type');
     }
@@ -47,8 +46,8 @@ final class StoreRequestCast extends CastsRequest
         return $this->get('range');
     }
 
-    public function getConfiguration(): Collection
+    public function getConfiguration(): ConfigurationCast
     {
-        return $this->castMany('configuration', ConfigurationCast::class);
+        return $this->cast('configuration', ConfigurationCast::class);
     }
 }
