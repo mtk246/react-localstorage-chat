@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claim
+ * App\Models\Claim.
  *
  * @property int $id
  * @property string|null $qr_claim
@@ -31,37 +33,38 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int|null $billing_provider_id
  * @property int|null $service_provider_id
  * @property int|null $referred_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\HealthProfessional|null $billingProvider
- * @property-read Model|\Eloquent $claimFormattable
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read int|null $claim_status_claims_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property-read int|null $claim_transmission_responses_count
- * @property-read \App\Models\Company|null $company
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read int|null $diagnoses_count
- * @property-read \App\Models\Facility|null $facility
- * @property-read mixed $amount_paid
- * @property-read mixed $billed_amount
- * @property-read Attribute $billing_provider_name
- * @property-read mixed $date_of_service
- * @property-read Attribute $format
- * @property-read Attribute $insurance_company_id
- * @property-read mixed $last_modified
- * @property-read mixed $past_due_date
- * @property-read Attribute $private_note
- * @property-read Attribute $status
- * @property-read mixed $status_date
- * @property-read Attribute $status_history
- * @property-read Attribute $user_created
- * @property-read \App\Models\InsuranceCompany|null $insuranceCompany
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property-read int|null $insurance_policies_count
- * @property-read \App\Models\Patient|null $patient
- * @property-read \App\Models\HealthProfessional|null $referred
- * @property-read \App\Models\HealthProfessional|null $serviceProvider
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\HealthProfessional|null $billingProvider
+ * @property Model|\Eloquent $claimFormattable
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property int|null $claim_status_claims_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property int|null $claim_transmission_responses_count
+ * @property \App\Models\Company|null $company
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property int|null $diagnoses_count
+ * @property \App\Models\Facility|null $facility
+ * @property mixed $amount_paid
+ * @property mixed $billed_amount
+ * @property Attribute $billing_provider_name
+ * @property mixed $date_of_service
+ * @property Attribute $format
+ * @property Attribute $insurance_company_id
+ * @property mixed $last_modified
+ * @property mixed $past_due_date
+ * @property Attribute $private_note
+ * @property Attribute $status
+ * @property mixed $status_date
+ * @property Attribute $status_history
+ * @property Attribute $user_created
+ * @property \App\Models\InsuranceCompany|null $insuranceCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property int|null $insurance_policies_count
+ * @property \App\Models\Patient|null $patient
+ * @property \App\Models\HealthProfessional|null $referred
+ * @property \App\Models\HealthProfessional|null $serviceProvider
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim query()
@@ -84,47 +87,51 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereValidate($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ *
  * @mixin \Eloquent
  */
 class Claim extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
-        "qr_claim",
-        "control_number",
-        "submitter_name",
-        "submitter_contact",
-        "submitter_phone",
-        "company_id",
-        "facility_id",
-        "patient_id",
-        "billing_provider_id",
-        "service_provider_id",
-        "referred_id",
-        "referred_provider_role_id",
-        "validate",
-        "automatic_eligibility",
-        "claim_formattable_type",
-        "claim_formattable_id"
+        'qr_claim',
+        'control_number',
+        'submitter_name',
+        'submitter_contact',
+        'submitter_phone',
+        'company_id',
+        'facility_id',
+        'patient_id',
+        'billing_provider_id',
+        'service_provider_id',
+        'referred_id',
+        'referred_provider_role_id',
+        'validate',
+        'automatic_eligibility',
+        'claim_formattable_type',
+        'claim_formattable_id',
     ];
 
-    protected $with = ["claimFormattable"];
+    protected $with = ['claimFormattable'];
 
     /**
      * The accessors to append to the model's array form.
@@ -135,9 +142,9 @@ class Claim extends Model implements Auditable
         'format', 'last_modified', 'private_note', 'status', 'status_history', 'notes_history',
         'billed_amount', 'amount_paid', 'past_due_date', 'date_of_service', 'status_date',
         'insurance_company_id', 'insurance_company', 'insurance_plan',
-        'billing_provider_name', 'user_created', 'type_responsibility'
+        'billing_provider_name', 'user_created', 'type_responsibility',
     ];
-    
+
     /**
      * Claim belongs to Company.
      *
@@ -199,9 +206,7 @@ class Claim extends Model implements Auditable
     }
 
     /**
-     * Get the referredProviderRole that owns the Claim
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the referredProviderRole that owns the Claim.
      */
     public function referredProviderRole(): BelongsTo
     {
@@ -276,6 +281,7 @@ class Claim extends Model implements Auditable
     public function getInsuranceCompanyIdAttribute()
     {
         $policyPrimary = $this->insurancePolicies()->first();
+
         return $policyPrimary->insurancePlan->insuranceCompany->id ?? '';
     }
 
@@ -287,6 +293,7 @@ class Claim extends Model implements Auditable
     public function getInsuranceCompanyAttribute()
     {
         $policyPrimary = $this->insurancePolicies()->first();
+
         return $policyPrimary->insurancePlan->insuranceCompany->name ?? '';
     }
 
@@ -298,9 +305,10 @@ class Claim extends Model implements Auditable
     public function getInsurancePlanAttribute()
     {
         $policyPrimary = $this->insurancePolicies()->first();
+
         return $policyPrimary->insurancePlan->name ?? '';
     }
-    
+
     /**
      * Interact with the claim's typeResponsibility.
      *
@@ -309,6 +317,7 @@ class Claim extends Model implements Auditable
     public function getTypeResponsibilityAttribute()
     {
         $policyPrimary = $this->insurancePolicies()->first();
+
         return $policyPrimary->typeResponsibility->code ?? '';
     }
 
@@ -320,7 +329,8 @@ class Claim extends Model implements Auditable
     public function getBillingProviderNameAttribute()
     {
         $billingProvider = $this->billingProvider->user->profile ?? null;
-        return (isset($billingProvider)) ? ($billingProvider->first_name . ' ' . $billingProvider->last_name) : '';
+
+        return (isset($billingProvider)) ? ($billingProvider->first_name.' '.$billingProvider->last_name) : '';
     }
 
     /**
@@ -335,7 +345,8 @@ class Claim extends Model implements Auditable
             return 'Console';
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
-            return $user->profile->first_name . ' ' . $user->profile->last_name;
+
+            return $user->profile->first_name.' '.$user->profile->last_name;
         }
     }
 
@@ -347,12 +358,13 @@ class Claim extends Model implements Auditable
     public function getPrivateNoteAttribute()
     {
         $status = $this->claimStatusClaims()
-                    ->orderBy("created_at", "desc")
-                    ->orderBy("id", "desc")->first();
+                    ->orderBy('created_at', 'desc')
+                    ->orderBy('id', 'desc')->first();
         if (isset($status)) {
-            $note = $status->privateNotes()->orderBy("created_at", "desc")
-                           ->orderBy("id", "asc")->first();
+            $note = $status->privateNotes()->orderBy('created_at', 'desc')
+                           ->orderBy('id', 'asc')->first();
         }
+
         return (isset($note)) ? $note : null;
     }
 
@@ -365,15 +377,16 @@ class Claim extends Model implements Auditable
     {
         $status = $this->claimStatusClaims()
                     ->where('claim_status_type', ClaimStatus::class)
-                    ->orderBy("id", "desc")->first() ?? null;
+                    ->orderBy('id', 'desc')->first() ?? null;
         $subStatus = $this->claimStatusClaims()
                           ->where('claim_status_type', ClaimSubStatus::class)
-                          ->orderBy("id", "desc")->first() ?? null;
+                          ->orderBy('id', 'desc')->first() ?? null;
         if (isset($status)) {
             $record = $status->claimStatus;
             $record['claim_sub_status'] = (isset($subStatus) && $subStatus->id > $status->id) ? $subStatus->claimStatus : null;
             $record['claim_sub_statuses'] = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $record->id]]);
         }
+
         return $record;
     }
 
@@ -382,30 +395,30 @@ class Claim extends Model implements Auditable
         $records = [];
         $recordSubstatus = [];
         $history = $this->claimStatusClaims()
-                        ->orderBy("created_at", "desc")
-                        ->orderBy("id", "desc")->get() ?? [];
+                        ->orderBy('created_at', 'desc')
+                        ->orderBy('id', 'desc')->get() ?? [];
         foreach ($history as $status) {
-            if ($status->claim_status_type == ClaimSubStatus::class) {
+            if (ClaimSubStatus::class == $status->claim_status_type) {
                 foreach ($status->privateNotes as $note) {
                     array_push(
                         $recordSubstatus,
                         [
                             'status' => $status->claimStatus->name ?? '',
-                            'note'          => $note->note,
-                            'created_at'    => $note->created_at,
+                            'note' => $note->note,
+                            'created_at' => $note->created_at,
                             'last_modified' => $note->last_modified,
                         ]
                     );
                 }
-            } else if ($status->claim_status_type == ClaimStatus::class) {
-                foreach($recordSubstatus as $subNote) {
+            } elseif (ClaimStatus::class == $status->claim_status_type) {
+                foreach ($recordSubstatus as $subNote) {
                     array_push(
                         $records,
                         [
-                            'note'          => $subNote['note'],
-                            'created_at'    => $subNote['created_at'],
+                            'note' => $subNote['note'],
+                            'created_at' => $subNote['created_at'],
                             'last_modified' => $subNote['last_modified'],
-                            'check_status'  => null,
+                            'check_status' => null,
                             'status' => $subNote['status'],
                             'status_background_color' => $status->claimStatus->background_color ?? '',
                             'status_font_color' => $status->claimStatus->font_color ?? '',
@@ -418,10 +431,10 @@ class Claim extends Model implements Auditable
                     array_push(
                         $records,
                         [
-                            'note'          => $note->note,
-                            'created_at'    => $note->created_at,
+                            'note' => $note->note,
+                            'created_at' => $note->created_at,
                             'last_modified' => $note->last_modified,
-                            'check_status'  => isset($check) ? [
+                            'check_status' => isset($check) ? [
                                 'response_details' => $check->response_details ?? '',
                                 'interface_type' => $check->interface_type ?? '',
                                 'interface' => $check->interface ?? '',
@@ -437,6 +450,7 @@ class Claim extends Model implements Auditable
                 }
             }
         }
+
         return $records;
     }
 
@@ -450,29 +464,29 @@ class Claim extends Model implements Auditable
         $records = [];
         $recordSubstatus = [];
         $history = $this->claimStatusClaims()
-                        ->orderBy("created_at", "desc")
-                        ->orderBy("id", "desc")->get() ?? [];
+                        ->orderBy('created_at', 'desc')
+                        ->orderBy('id', 'desc')->get() ?? [];
         foreach ($history as $status) {
-            if ($status->claim_status_type == ClaimSubStatus::class) {
+            if (ClaimSubStatus::class == $status->claim_status_type) {
                 $record = [];
                 $notes = [];
                 foreach ($status->privateNotes as $note) {
                     array_push(
                         $notes,
                         [
-                            'note'          => $note->note,
-                            'created_at'    => $note->created_at,
-                            'last_modified' => $note->last_modified
+                            'note' => $note->note,
+                            'created_at' => $note->created_at,
+                            'last_modified' => $note->last_modified,
                         ]
                     );
                 }
-                $record['notes_history']  = $notes;
+                $record['notes_history'] = $notes;
                 $record['code'] = $status->claimStatus->code ?? '';
                 $record['name'] = $status->claimStatus->name ?? '';
                 $record['sub_status_date'] = $status->created_at;
                 $record['last_modified'] = $status->last_modified ?? '';
                 array_push($recordSubstatus, $record);
-            } else if ($status->claim_status_type == ClaimStatus::class) {
+            } elseif (ClaimStatus::class == $status->claim_status_type) {
                 $record = [];
                 $notes = [];
                 foreach ($status->privateNotes as $note) {
@@ -480,10 +494,10 @@ class Claim extends Model implements Auditable
                     array_push(
                         $notes,
                         [
-                            'note'          => $note->note,
-                            'created_at'    => $note->created_at,
+                            'note' => $note->note,
+                            'created_at' => $note->created_at,
                             'last_modified' => $note->last_modified,
-                            'check_status'  => isset($check) ? [
+                            'check_status' => isset($check) ? [
                                 'response_details' => $check->response_details ?? '',
                                 'interface_type' => $check->interface_type ?? '',
                                 'interface' => $check->interface ?? '',
@@ -494,7 +508,7 @@ class Claim extends Model implements Auditable
                         ]
                     );
                 }
-                $record['notes_history']  = $notes;
+                $record['notes_history'] = $notes;
                 $record['status'] = $status->claimStatus->status ?? '';
                 $record['status_background_color'] = $status->claimStatus->background_color ?? '';
                 $record['status_font_color'] = $status->claimStatus->font_color ?? '';
@@ -505,25 +519,27 @@ class Claim extends Model implements Auditable
                 $recordSubstatus = [];
             }
         }
+
         return $records;
     }
 
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -533,12 +549,14 @@ class Claim extends Model implements Auditable
     {
         $billed = 0;
         $claimForm = $this->claimFormattable;
-        if ($this->claim_formattable_type == ClaimFormP::class) {
-            foreach ($claimForm->claimFormServices  ?? [] as $service) {
+        if (ClaimFormP::class == $this->claim_formattable_type) {
+            foreach ($claimForm->claimFormServices ?? [] as $service) {
                 $billed += (($service->price ?? 0) - ($service->copay ?? 0));
             }
         }
+
         return $billed;
+
         return '0.00';
     }
 
@@ -551,15 +569,16 @@ class Claim extends Model implements Auditable
     {
         $date = '';
         $claimForm = $this->claimFormattable;
-        if ($this->claim_formattable_type == ClaimFormP::class) {
-            foreach ($claimForm->claimFormServices  ?? [] as $service) {
-                if ($date == '') {
+        if (ClaimFormP::class == $this->claim_formattable_type) {
+            foreach ($claimForm->claimFormServices ?? [] as $service) {
+                if ('' == $date) {
                     $date = $service->to_service;
                 } elseif ($service->to_service > $date) {
                     $date = $service->to_service;
                 }
             }
         }
+
         return $date;
     }
 
@@ -567,26 +586,41 @@ class Claim extends Model implements Auditable
     {
         $date = '';
         $claimForm = $this->claimFormattable;
-        if ($this->claim_formattable_type == ClaimFormP::class) {
+        if (ClaimFormP::class == $this->claim_formattable_type) {
             foreach ($claimForm->claimFormServices ?? [] as $service) {
-                if ($date == '') {
+                if ('' == $date) {
                     $date = $service->from_service;
                 } elseif ($service->from_service < $date) {
                     $date = $service->from_service;
                 }
             }
         }
+
         return $date;
     }
 
     public function getStatusDateAttribute()
     {
-        $status = $this->claimStatusClaims()->orderBy("created_at", "desc")->orderBy("id", "desc")->first();
+        $status = $this->claimStatusClaims()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+
         return (isset($status)) ? $status->created_at : '';
     }
 
     public function scopeSearch($query, $search)
     {
         return $query;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'control_number' => $this->control_number,
+            'company.code' => $this->company->code,
+            'company.name' => $this->company->name,
+            'company.npi' => $this->company->npi,
+            'company.ein' => $this->company->ein,
+            'company.upin' => $this->company->upin,
+            'company.clia' => $this->company->clia,
+        ];
     }
 }
