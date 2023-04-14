@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Models\BillingCompany;
+use App\Models\Claim;
+use App\Models\Company;
+use App\Models\Facility;
+use App\Models\HealthProfessional;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -134,6 +140,46 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
+            BillingCompany::class => [
+                'filterableAttributes' => ['name', 'code', 'abbreviation'],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Claim::class => [
+                'filterableAttributes' => [
+                    'control_number',
+                    'company.code',
+                    'company.name',
+                    'company.npi',
+                    'company.ein',
+                    'company.upin',
+                    'company.clia',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Company::class => [
+                'filterableAttributes' => ['code', 'name', 'npi', 'ein', 'upin', 'clia'],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Facility::class => [
+                'filterableAttributes' => ['code', 'name', 'npi'],
+                'sortableAttributes' => ['created_at'],
+            ],
+            HealthProfessional::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'npi',
+                    'user.full_name',
+                    'user.first_name',
+                    'user.last_name',
+                    'user.email',
+                    'user.ssn',
+                    'user.phone',
+                    'company.name',
+                    'company.npi',
+                    'company.code',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
         ],
     ],
 ];
