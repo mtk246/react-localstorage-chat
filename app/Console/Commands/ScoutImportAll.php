@@ -27,9 +27,9 @@ final class ScoutImportAll extends Command
             $this->newLine(2);
             $this->info(">> Importing {$model}...");
         });
-        $this->newLine(1);
+        $this->newLine(2);
 
-        $this->info('Sucefully imported all models to search engine!');
+        $modelList->each(fn ($model) => $this->info("All [{$model}] records have been imported"));
 
         return Command::SUCCESS;
     }
