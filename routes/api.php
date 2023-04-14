@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
@@ -514,6 +515,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-sheet/{name?}', [\App\Http\Controllers\ReportController::class, 'getSheet']);
     });
 
+    Route::get('/search', SearchController::class)->middleware('auth:api');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });
