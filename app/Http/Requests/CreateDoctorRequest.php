@@ -4,21 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\HealthProfessionalType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class CreateDoctorRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,15 +17,26 @@ class CreateDoctorRequest extends FormRequest
      */
     public function rules()
     {
+        $doctorTypeId = HealthProfessionalType::whereType('Medical doctor')->first('id');
+
         return [
             'npi' => ['required', 'string'],
+            'ein' => ['nullable', 'string', 'regex:/^\d{2}-\d{7}$/'],
+            'upin' => ['nullable', 'string', 'max:50'],
             'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
             'is_provider' => ['nullable', 'boolean'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required_unless:is_provider,true', 'integer', 'nullable'],
-            'authorization' => ['required_unless:is_provider,true', 'array', 'nullable'],
+            'authorization' => [
+                Rule::requiredIf(
+                    !$this->is_provider
+                    && $doctorTypeId == $this->health_professional_type_id
+                ),
+                'array',
+                'nullable',
+            ],
 
             'taxonomies_company' => ['required_unless:npi_company,null', 'array', 'nullable'],
             'taxonomies_company.*.tax_id' => ['required_unless:npi_company,null', 'string', 'nullable'],
@@ -57,6 +59,7 @@ class CreateDoctorRequest extends FormRequest
             'profile.sex' => ['required', 'string', 'max:1'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
+            'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
             'profile.ssn' => ['nullable', 'string'],
             'profile.date_of_birth' => ['required', 'date'],
