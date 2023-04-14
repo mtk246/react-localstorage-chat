@@ -136,6 +136,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies_company'])) {
@@ -170,6 +172,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies'])) {
@@ -208,6 +212,8 @@ class DoctorRepository
                     'health_professional_type_id' => $data['health_professional_type_id'],
                     'is_provider' => $data['is_provider'] ?? false,
                     'npi_company' => $data['npi_company'] ?? '',
+                    'ein' => $data['ein'] ?? null,
+                    'upin' => $data['upin'] ?? null,
                     'company_id' => $company->id ?? $data['company_id'],
                     'user_id' => $user->id,
                 ],
@@ -444,6 +450,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies_company'])) {
@@ -478,6 +486,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies'])) {
