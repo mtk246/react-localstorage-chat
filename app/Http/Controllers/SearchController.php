@@ -24,7 +24,7 @@ final class SearchController extends Controller
             ->merge(Company::search($search)->get())
             ->merge(Facility::search($search)->get())
             ->merge(HealthProfessional::search($search)->get())
-            ->groupBy(fn ($result) => get_class($result));
+            ->groupBy(fn ($result) => class_basename($result));
 
         return response()->json($results);
     }
