@@ -515,10 +515,12 @@ class DoctorRepository
             if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
                 $healthP->companies()->attach($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             } else {
                 $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
