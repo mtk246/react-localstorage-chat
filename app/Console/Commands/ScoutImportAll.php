@@ -27,7 +27,7 @@ final class ScoutImportAll extends Command
             $this->newLine(2);
             $this->info(">> Importing {$model}...");
         });
-        $this->newLine(2);
+        $this->newLine(1);
 
         $this->info('Sucefully imported all models to search engine!');
 
@@ -42,6 +42,8 @@ final class ScoutImportAll extends Command
 
     public function importConfig(): Collection
     {
-        return collect(config('scout.index'));
+        return config('scout.index')
+            ? collect(config('scout.to_index'))
+            : throw new \Exception('No "to_index" key found in config/scout.php');
     }
 }
