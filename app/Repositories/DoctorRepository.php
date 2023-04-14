@@ -321,6 +321,8 @@ class DoctorRepository
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'company_id' => $data['company_id'] ?? null,
+                'ein' => $data['ein'] ?? null,
+                'upin' => $data['upin'] ?? null,
             ]);
 
             if (isset($data['taxonomies'])) {
