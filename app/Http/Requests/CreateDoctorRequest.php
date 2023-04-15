@@ -32,7 +32,7 @@ class CreateDoctorRequest extends FormRequest
             'authorization' => [
                 Rule::requiredIf(
                     !$this->is_provider
-                    && $doctorTypeId == $this->health_professional_type_id
+                    && $doctorTypeId->id == $this->health_professional_type_id
                 ),
                 'array',
                 'nullable',
