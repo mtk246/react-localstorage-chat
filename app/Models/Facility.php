@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOne as HasOneAlias;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Facility
+ * App\Models\Facility.
  *
  * @property int $id
  * @property int $type
@@ -24,12 +25,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $company_id
- * @property-read \App\Models\Address|null $address
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property-read int|null $billing_companies_count
- * @property-read \App\Models\Company|null $company
- * @property-read \App\Models\Contact|null $contact
- * @property-read mixed $status
+ * @property \App\Models\Address|null $address
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property int|null $billing_companies_count
+ * @property \App\Models\Company|null $company
+ * @property \App\Models\Contact|null $contact
+ * @property mixed $status
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
@@ -42,66 +44,72 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereTaxonomy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
+ *
  * @property int $facility_type_id
  * @property string $code
  * @property string|null $nppes_verified_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read int|null $abbreviations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read int|null $addresses_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read int|null $companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read int|null $contacts_count
- * @property-read \App\Models\FacilityType $facilityType
- * @property-read mixed $last_modified
- * @property-read mixed $verified_on_nppes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read int|null $health_professionals_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read int|null $nicknames_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
- * @property-read int|null $place_of_services_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property-read int|null $taxonomies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property int|null $abbreviations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property int|null $addresses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property int|null $contacts_count
+ * @property \App\Models\FacilityType $facilityType
+ * @property mixed $last_modified
+ * @property mixed $verified_on_nppes
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property int|null $health_professionals_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property int|null $nicknames_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property int|null $place_of_services_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property int|null $taxonomies_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Facility search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereFacilityTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNppesVerifiedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ *
  * @mixin \Eloquent
  */
 class Facility extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
+    use Searchable;
 
-    protected $table = "facilities";
+    protected $table = 'facilities';
 
     protected $fillable = [
-        "code",
-        "name",
-        "npi",
-        "facility_type_id",
-        "nppes_verified_at",
+        'code',
+        'name',
+        'npi',
+        'facility_type_id',
+        'nppes_verified_at',
     ];
 
     /**
@@ -113,8 +121,6 @@ class Facility extends Model implements Auditable
 
     /**
      * Facility belongs to FacilityType.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function facilityType(): BelongsTo
     {
@@ -123,8 +129,6 @@ class Facility extends Model implements Auditable
 
     /**
      * The billingCompanies that belong to the company.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
@@ -133,8 +137,6 @@ class Facility extends Model implements Auditable
 
     /**
      * The companies that belong to the facility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function companies(): BelongsToMany
     {
@@ -143,8 +145,6 @@ class Facility extends Model implements Auditable
 
     /**
      * The healthProfessionals that belong to the Facility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function healthProfessionals(): BelongsToMany
     {
@@ -153,8 +153,6 @@ class Facility extends Model implements Auditable
 
     /**
      * The PlaceOfServices that belong to the Facility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function placeOfServices(): BelongsToMany
     {
@@ -163,8 +161,6 @@ class Facility extends Model implements Auditable
 
     /**
      * The taxonomies that belong to the Facility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function taxonomies(): BelongsToMany
     {
@@ -213,8 +209,6 @@ class Facility extends Model implements Auditable
 
     /**
      * Interact with the user's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {
@@ -233,7 +227,10 @@ class Facility extends Model implements Auditable
     public function getStatusAttribute()
     {
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (is_null($billingCompany)) return false;
+        if (is_null($billingCompany)) {
+            return false;
+        }
+
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 
@@ -245,19 +242,20 @@ class Facility extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -265,12 +263,21 @@ class Facility extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+                ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'code' => $this->code,
+            'name' => $this->name,
+            'npi' => $this->npi,
+        ];
     }
 }
