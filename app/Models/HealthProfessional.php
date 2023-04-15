@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -75,6 +76,7 @@ class HealthProfessional extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'code',
@@ -237,5 +239,22 @@ class HealthProfessional extends Model implements Auditable
         }
 
         return $query;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'code' => $this->code,
+            'npi' => $this->npi,
+            'user.full_name' => $this->user->profile->first_name.' '.$this->user->profile->last_name,
+            'user.first_name' => $this->user->profile->first_name,
+            'user.last_name' => $this->user->profile->last_name,
+            'user.email' => $this->user->email,
+            'user.ssn' => $this->user->profile->ssn,
+            'user.phone' => $this->user->profile->phone,
+            'company.name' => $this->company->name,
+            'company.npi' => $this->company->npi,
+            'company.code' => $this->company->code,
+        ];
     }
 }

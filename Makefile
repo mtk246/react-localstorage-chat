@@ -44,6 +44,10 @@ migrate: ## Run migrations
 	./vendor/bin/sail artisan migrate:fresh
 seed: ## Build client containers and enviroment with seeders
 	./vendor/bin/sail artisan db:seed
+scout: ## Sync scout models
+	./vendor/bin/sail artisan scout:sync-index-settings
+	./vendor/bin/sail artisan scout:import-all -m
+
 upgrade: ## Upgrade client containers and enviroment
 	./vendor/bin/sail down
 	./vendor/bin/sail build --no-cache
@@ -52,5 +56,7 @@ upgrade: ## Upgrade client containers and enviroment
 	./vendor/bin/sail composer upgrade
 	./vendor/bin/sail artisan migrate
 	./vendor/bin/sail artisan db:seed
+	./vendor/bin/sail artisan scout:sync-index-settings
+	./vendor/bin/sail artisan scout:import-all -m
 
-aio: prepare build up install migrate seed ## Build, install and migrate client containers and enviroment
+aio: prepare build up install migrate seed scout ## Build, install and migrate client containers and enviroment
