@@ -291,7 +291,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-all-server', [\App\Http\Controllers\DoctorController::class, 'getServerAll']);
         Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'updateDoctor']);
-        Route::get('/{id}', [\App\Http\Controllers\DoctorController::class, 'getOneDoctor']);
+        Route::get('/{doctor}', [\App\Http\Controllers\DoctorController::class, 'getOneDoctor']);
         Route::get('/', [\App\Http\Controllers\DoctorController::class, 'getAllDoctors']);
         Route::get('/{npi}/get-by-npi', [\App\Http\Controllers\DoctorController::class, 'getOneByNpi']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\DoctorController::class, 'changeStatus']);
