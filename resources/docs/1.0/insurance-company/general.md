@@ -922,6 +922,17 @@
     "Authorization": bearer <token>
 }
 ```
+### Param in path
+
+```json
+{
+    "billing_company_id": <integer>
+}
+```
+
+## Example path
+
+>{primary} /get-list?billing_company_id=2
 
 ## Response
 

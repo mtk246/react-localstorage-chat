@@ -409,8 +409,21 @@ class InsuranceCompanyRepository
         return !is_null($insurance) ? $insurance : null;
     }
 
-    public function getList() {
-        return getList(InsuranceCompany::class, ['payer_id', '-', 'name']);
+    public function getList(array $data) {
+        try {
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'] ?? null;
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+            return getList(
+                InsuranceCompany::class,
+                ['payer_id', '-', 'name'],
+                ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+            );
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function getListBillingCompanies(Request $request) {

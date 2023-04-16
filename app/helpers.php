@@ -186,3 +186,12 @@ if (!function_exists('filter_array_empty')) {
         });
     }
 }
+
+if (!function_exists('array_empty')) {
+    function array_empty($array): bool
+    {
+        return empty(array_filter($array, function ($value) {
+            return !empty($value);
+        }));
+    }
+}

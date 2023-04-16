@@ -24,6 +24,7 @@
 - [Get list mac localities](#get-list-mac-localities)
 - [Get list procedures](#get-list-procedures)
 - [Get list patients](#get-list-patients)
+- [Get list billing companies](#get-list-billing-companies)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -44,7 +45,7 @@
 | 11 | GET    | `Get list ins types`            | `/insurance-plan/get-list-ins-types`                       | yes            | Get list ins types                 |
 | 12 | GET    | `Get list plan types`           | `/insurance-plan/get-list-plan-types`                      | yes            | Get list plan types                |
 | 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`                   | yes            | Get list charge usings             |
-
+| 14 |GET | `Get list billing companies`| `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
 > {primary} when url params have this symbol "?" mean not required, so you must to send null....
 
 <a name="data-another-module"></a>
@@ -372,15 +373,15 @@ insurance_plan_id required <integer>
             "start_date": "2022-03-16", /** required */
             "end_date": "2022-03-16", /** required */
             "procedure_ids": [2,1,3], /** required */
-            "modifier_id": 1, /** optional */
-            "price": 120.5, /** required */
+            "modifier_ids": [1,2,3], /** optional */
+            "price": 120.5, /** required if price percentage is null */
             "mac": "02102", /** optional */
             "locality_number":"01", /** optional */
             "state": "ALASKA", /** optional */
             "fsa": "STATEWIDE", /** optional */
             "counties": "ALL COUNTIES", /** optional */
             "insurance_label_fee_id": 1, /** optional */
-            "price_percentage": 70, /** optional */
+            "price_percentage": 70, /** required if price is null */
             "private_note": "Note private by billing_company", /** optional */
             "patients": [ /** optional */
                 {
@@ -398,15 +399,15 @@ insurance_plan_id required <integer>
             "start_date": "2022-03-16", /** required */
             "end_date": "2022-03-16", /** required */
             "procedure_ids": [2,1,3], /** required */
-            "modifier_id": 1, /** optional */
-            "price": 120.5, /** required */
+            "modifier_ids": [1], /** optional */
+            "price": 120.5, /** required if price percentage is null */
             "mac": "02102", /** optional */
             "locality_number":"01", /** optional */
             "state": "ALASKA", /** optional */
             "fsa": "STATEWIDE", /** optional */
             "counties": "ALL COUNTIES", /** optional */
             "insurance_label_fee_id": 1, /** optional */
-            "price_percentage": 70, /** optional */
+            "price_percentage": 70, /** required if price is null */
             "private_note": "Note private by billing_company", /** optional */
             "patients": [ /** optional */
                 {
@@ -1402,6 +1403,60 @@ billing_company_id <integer> optional
     {
         "id": 49,
         "name": "PA-00010-23 - Johnatan Doe"
+    }
+]
+```
+
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "insurance_plan_id": <integer>
+    "edit": <boolean>
+}
+```
+
+## Example path
+
+>{primary} /get-list-billing-companies?insurance_plan_id=2&edit=false
+
+
+> /get-list-billing-companies?insurance_plan_id=2&edit=true
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
     }
 ]
 ```

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\Tableau\AuthController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
 use Illuminate\Support\Facades\Route;
@@ -265,6 +266,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-ins-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListInsTypes']);
         Route::get('/get-list-plan-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListPlanTypes']);
         Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
+        Route::get('/get-list-billing-companies', [\App\Http\Controllers\InsurancePlanController::class, 'getListBillingCompanies']);
         Route::get('/get-by-payer-id/{payer}', [\App\Http\Controllers\InsurancePlanController::class, 'getByPayer']);
         Route::post('/', [\App\Http\Controllers\InsurancePlanController::class, 'createInsurancePlan']);
         Route::put('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'updateInsurancePlan']);
@@ -503,14 +505,15 @@ Route::prefix('v1')/* ->middleware('audit') */
         'role:superuser|billingmanager',
     ])->group(function () {
         Route::get('/auth/embed-token', [AuthController::class, 'getEmbedToken']);
-        Route::resource('/workbooks', App\Http\Controllers\Tableau\WorkbookController::class);
     });
 
-    Route::prefix('reports')->middleware([
+    Route::middleware([
         'auth:api',
         'role:superuser|billingmanager',
     ])->group(function () {
-        Route::get('/get-sheet/{name?}', [\App\Http\Controllers\ReportController::class, 'getSheet']);
+        Route::get('/reports/types', [ReportReSource::class, 'getReportTypes']);
+        Route::get('/reports/tags', [ReportReSource::class, 'getReportTags']);
+        Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);

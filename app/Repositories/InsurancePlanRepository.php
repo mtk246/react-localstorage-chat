@@ -120,7 +120,7 @@ class InsurancePlanRepository
                 ]);
             }
 
-            if (isset($data['address']['address'])) {
+            if (isset($data['address']) && !array_empty($data['address'])) {
                 $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                 $data['address']['addressable_id']     = $insurancePlan->id;
                 $data['address']['addressable_type']   = InsurancePlan::class;
@@ -163,7 +163,6 @@ class InsurancePlanRepository
      * @return InsurancePlan|Builder|Model|object|null
      */
     public function updateInsurancePlan(array $data, int $id) {
-
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::whereId($id)->first();
@@ -182,7 +181,8 @@ class InsurancePlanRepository
                 'pqrs_eligible'        => $data['pqrs_eligible'],
                 'allow_attached_files' => $data['allow_attached_files'],
                 'eff_date'             => $data['eff_date'],
-                'charge_using_id'      => $data['charge_using_id']
+                'charge_using_id'      => $data['charge_using_id'],
+                'insurance_company_id' => $data['insurance_company_id'],
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
@@ -245,7 +245,7 @@ class InsurancePlanRepository
                 ]);
             }
 
-            if (isset($data['address']['address'])) {
+            if (isset($data['address']) && !array_empty($data['address'])) {
                 Address::updateOrCreate([
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'addressable_id'     => $insurancePlan->id,
@@ -337,13 +337,10 @@ class InsurancePlanRepository
             'require_abn' => $insurance->require_abn,
             'pqrs_eligible' => $insurance->pqrs_eligible,
             'allow_attached_files' => $insurance->allow_attached_files,
-            'eff_date' => $insurance->eff_date,
             'ins_type_id' => $insurance->ins_type_id ?? '',
             'ins_type' => isset($insurance->insType) ? ($insurance->insType->code . ' - ' . $insurance->insType->description) : '',
             'plan_type_id' => $insurance->plan_type_id ?? '',
             'plan_type'    => isset($insurance->planType) ? ($insurance->planType->code . ' - ' . $insurance->planType->description) : '',
-            'charge_using_id' => $insurance->charge_using_id ?? '',
-            'charge_using'    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
             'insurance_company_id' => $insurance->insurance_company_id,
             'insurance_company' => $insurance->insuranceCompany->name,
             'created_at' => $insurance->created_at,
@@ -440,6 +437,9 @@ class InsurancePlanRepository
 
                     'file_method_id'    => isset($private_insurance_plan) ? $private_insurance_plan->file_method_id : '',
                     'file_method'       => isset($private_insurance_plan->fileMethod) ? ($private_insurance_plan->fileMethod->code . ' - ' . $private_insurance_plan->fileMethod->description) : '',
+                    'eff_date' => $insurance->eff_date,
+                    'charge_using_id' => $insurance->charge_using_id ?? '',
+                    'charge_using'    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
                     'status'       => $billingCompany->pivot->status ?? false,
                     'edit_name'    => isset($nickname->nickname) ? true : false,
                     'nickname'     => $nickname->nickname ?? '',
@@ -639,13 +639,10 @@ class InsurancePlanRepository
                 'require_abn' => $insurance->require_abn,
                 'pqrs_eligible' => $insurance->pqrs_eligible,
                 'allow_attached_files' => $insurance->allow_attached_files,
-                'eff_date' => $insurance->eff_date,
                 'ins_type_id' => $insurance->ins_type_id ?? '',
                 'ins_type' => isset($insurance->insType) ? ($insurance->insType->code . ' - ' . $insurance->insType->description) : '',
                 'plan_type_id' => $insurance->plan_type_id ?? '',
                 'plan_type'    => isset($insurance->planType) ? ($insurance->planType->code . ' - ' . $insurance->planType->description) : '',
-                'charge_using_id' => $insurance->charge_using_id ?? '',
-                'charge_using'    => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code . ' - ' . $insurance->chargeUsing->description) : '',
                 'insurance_company_id' => $insurance->insurance_company_id,
                 'insurance_company' => $insurance->insuranceCompany->name,
                 'created_at' => $insurance->created_at,
@@ -671,6 +668,26 @@ class InsurancePlanRepository
 
     public function getList() {
         return getList(InsurancePlan::class);
+    }
+
+    public function getListBillingCompanies(Request $request) {
+        $insurancePlanId = $request->insurance_plan_id ?? null;
+        $edit = $request->edit ?? 'false';
+
+        if (is_null($insurancePlanId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            $ids = [];
+            $billingCompanies = InsurancePlan::find($insurancePlanId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ($edit == 'true') {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insurancePlans', 'whereHas' => ['relationship' => 'insurancePlans', 'where' => ['insurance_plan_id' => $insurancePlanId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insurancePlans', 'orWhereHas' => ['relationship' => 'insurancePlans', 'where' => ['billing_company_id', $ids]]]);
+            }
+        }
     }
 
     public function getListByCompany($id) {
@@ -840,6 +857,7 @@ class InsurancePlanRepository
                 $contractFeesDelete->chunk(20, function ($contracts) {
                     foreach ($contracts as $contract) {
                         $contract->procedures()->detach();
+                        $contract->modifiers()->detach();
                         $contract->patiens()->detach();
                     }
                     $contracts->each->delete();
@@ -864,7 +882,7 @@ class InsurancePlanRepository
                         'insurance_company_id' => $insurancePlan->insurance_company_id,
                         'private_note' => $contract['private_note'],
                         'billing_company_id' => $billingCompany->id ?? $contract['billing_company_id'],
-                        'modifier_id' => $contract['modifier_id'] ?? null,
+                        //'modifier_id' => $contract['modifier_id'] ?? null,
                         'mac_locality_id' => $macLocality->id ?? null,
                         'insurance_label_fee_id' => $contract['insurance_label_fee_id'] ?? null,
                         'contract_fee_type_id' => $contract['type_id'] ?? null,
@@ -874,6 +892,7 @@ class InsurancePlanRepository
                         'price_percentage' => $contract['price_percentage'] ?? null,
                     ]);
                     $contractFee->procedures()->sync($contract['procedure_ids']);
+                    $contractFee->modifiers()->sync($contract['modifier_ids']);
 
                     if (($type_id === $contract['type_id']) &&
                         isset($contract['patients'])  &&
@@ -931,6 +950,11 @@ class InsurancePlanRepository
                     ->select('procedures.id')
                     ->get()
                     ->pluck('id');
+                $modifier_ids = $insurancePlanContract
+                    ->modifiers()
+                    ->select('modifiers.id')
+                    ->get()
+                    ->pluck('id');
                 $patients = $insurancePlanContract
                     ->patiens()
                     ->get()
@@ -942,26 +966,25 @@ class InsurancePlanRepository
                         ];
                     })->toArray();
 
-                $macLocality = MacLocality::find($insurancePlanContract->mac_locality_id ?? null)?->first();
-
                 array_push($records, [
                     'id' => $insurancePlanContract->id,
                     'price' => (float) $insurancePlanContract->price ?? null,
                     'company_id' => $insurancePlanContract->company_id ?? '',
                     'private_note' => $insurancePlanContract->private_note ?? '',
                     'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
-                    'modifier_id' => $insurancePlanContract->modifier_id ?? '',
+                    //'modifier_id' => $insurancePlanContract->modifier_id ?? '',
                     'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
                     'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
                     'start_date' => $insurancePlanContract->start_date ?? '',
                     'end_date' => $insurancePlanContract->end_date ?? '',
                     'price_percentage' => $insurancePlanContract->price_percentage ?? '',
+                    'modifier_ids' => $modifier_ids,
                     'procedure_ids' => $procedure_ids,
-                    'mac' => $macLocality['mac'] ?? '',
-                    'locality_number' => $macLocality['locality_number'] ?? '',
-                    'state' => $macLocality['state'] ?? '',
-                    'fsa' => $macLocality['fsa'] ?? '',
-                    'counties' => $macLocality['counties'] ?? '',
+                    'mac' => $insurancePlanContract->macLocality->mac ?? '',
+                    'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
+                    'state' => $insurancePlanContract->macLocality->state ?? '',
+                    'fsa' => $insurancePlanContract->macLocality->fsa ?? '',
+                    'counties' => $insurancePlanContract->macLocality->counties ?? '',
                     'patients' => $patients
                 ]);
             }
@@ -1001,6 +1024,7 @@ class InsurancePlanRepository
                 'billing_company_id' => $insurancePlanCopay->billing_company_id ?? null,
                 'company_id'         => $insurancePlanCopay->company_id ?? null,
                 'procedure_ids'      => $procedure_ids,
+                'procedures'         => $insurancePlanCopay->procedures,
                 'copay'              => (float)$insurancePlanCopay->copay ?? null,
                 'private_note'       => $private_note->note ?? '',
             ]);
@@ -1030,6 +1054,11 @@ class InsurancePlanRepository
                 ->select('procedures.id')
                 ->get()
                 ->pluck('id');
+            $modifier_ids = $insurancePlanContract
+                ->modifiers()
+                ->select('modifiers.id')
+                ->get()
+                ->pluck('id');
             $patients = $insurancePlanContract
                 ->patiens()
                 ->get()
@@ -1041,26 +1070,27 @@ class InsurancePlanRepository
                     ];
                 })->toArray();
 
-            $macLocality = MacLocality::find($insurancePlanContract->mac_locality_id ?? null)?->first();
-
             array_push($records, [
                 'id' => $insurancePlanContract->id,
                 'price' => (float) $insurancePlanContract->price ?? null,
                 'company_id' => $insurancePlanContract->company_id ?? '',
                 'private_note' => $insurancePlanContract->private_note ?? '',
                 'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
-                'modifier_id' => $insurancePlanContract->modifier_id ?? '',
+                //'modifier_id' => $insurancePlanContract->modifier_id ?? '',
                 'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
                 'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
                 'start_date' => $insurancePlanContract->start_date ?? '',
                 'end_date' => $insurancePlanContract->end_date ?? '',
                 'price_percentage' => $insurancePlanContract->price_percentage ?? '',
+                'modifier_ids' => $modifier_ids,
                 'procedure_ids' => $procedure_ids,
-                'mac' => $macLocality['mac'] ?? '',
-                'locality_number' => $macLocality['locality_number'] ?? '',
-                'state' => $macLocality['state'] ?? '',
-                'fsa' => $macLocality['fsa'] ?? '',
-                'counties' => $macLocality['counties'] ?? '',
+                'modifiers' => $insurancePlanContract->modifiers,
+                'procedures' => $insurancePlanContract->procedures,
+                'mac' => $insurancePlanContract->macLocality->mac ?? '',
+                'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
+                'state' => $insurancePlanContract->macLocality->state ?? '',
+                'fsa' => $insurancePlanContract->macLocality->fsa ?? '',
+                'counties' => $insurancePlanContract->macLocality->counties ?? '',
                 'patients' => $patients
             ]);
         }
