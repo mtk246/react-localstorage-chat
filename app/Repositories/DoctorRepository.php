@@ -61,8 +61,25 @@ class DoctorRepository
                     'last_name' => $data['profile']['last_name'],
                     'sex' => $data['profile']['sex'],
                     'date_of_birth' => $data['profile']['date_of_birth'],
+                    'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 ]);
             }
+            /** Create User */
+            $user = User::create([
+                'usercode' => generateNewCode('US', 5, date('y'), User::class, 'usercode'),
+                'email' => $data['email'],
+                'userkey' => encrypt(uniqid('', true)),
+                'profile_id' => $profile->id,
+            ]);
+
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            /* Attach billing company */
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
@@ -90,28 +107,13 @@ class DoctorRepository
                         SocialMedia::updateOrCreate([
                             'profile_id' => $profile->id,
                             'social_network_id' => $socialNetwork->id,
+                            'billing_company_id' => $billingCompany?->id ?? $billingCompany,
                         ], [
                             'link' => $socialMedia['link'],
                         ]);
                     }
                 }
             }
-            /** Create User */
-            $user = User::create([
-                'usercode' => generateNewCode('US', 5, date('y'), User::class, 'usercode'),
-                'email' => $data['email'],
-                'userkey' => encrypt(uniqid('', true)),
-                'profile_id' => $profile->id,
-            ]);
-
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-
-            /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $user->id;
@@ -134,6 +136,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies_company'])) {
@@ -168,6 +172,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies'])) {
@@ -206,6 +212,8 @@ class DoctorRepository
                     'health_professional_type_id' => $data['health_professional_type_id'],
                     'is_provider' => $data['is_provider'] ?? false,
                     'npi_company' => $data['npi_company'] ?? '',
+                    'ein' => $data['ein'] ?? null,
+                    'upin' => $data['upin'] ?? null,
                     'company_id' => $company->id ?? $data['company_id'],
                     'user_id' => $user->id,
                 ],
@@ -221,10 +229,12 @@ class DoctorRepository
             if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
                 $healthP->companies()->attach($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             } else {
                 $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
@@ -311,6 +321,8 @@ class DoctorRepository
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'company_id' => $data['company_id'] ?? null,
+                'ein' => $data['ein'] ?? null,
+                'upin' => $data['upin'] ?? null,
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -342,6 +354,25 @@ class DoctorRepository
                 'date_of_birth' => $data['profile']['date_of_birth'],
             ]);
 
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            } else {
+                $healthP->billingCompanies()->updateExistingPivot(
+                    $billingCompany->id ?? $billingCompany,
+                    [
+                        'status' => true,
+                    ]
+                );
+            }
+
+            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
                 /* Delete socialMedia */
@@ -368,31 +399,13 @@ class DoctorRepository
                         SocialMedia::updateOrCreate([
                             'profile_id' => $profile->id,
                             'social_network_id' => $socialNetwork->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         ], [
                             'link' => $socialMedia['link'],
                         ]);
                     }
                 }
             }
-
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-
-            if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
-                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
-            } else {
-                $healthP->billingCompanies()->updateExistingPivot(
-                    $billingCompany->id ?? $billingCompany,
-                    [
-                        'status' => true,
-                    ]
-                );
-            }
-
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
@@ -439,6 +452,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies_company'])) {
@@ -473,6 +488,8 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
+                            'ein' => $data['ein'] ?? null,
+                            'upin' => $data['upin'] ?? null,
                         ]);
                     }
                     if (isset($data['taxonomies'])) {
@@ -510,10 +527,12 @@ class DoctorRepository
             if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
                 $healthP->companies()->attach($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             } else {
                 $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
                     'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
@@ -682,6 +701,9 @@ class DoctorRepository
                 'privateNotes',
                 'publicNote',
             ])->first();
+            $healthP->user->profile->socialMedias->groupBy('billing_company_id');
+            $healthP->user->addresses->groupBy('billing_company_id');
+            $healthP->user->contacts->groupBy('billing_company_id');
         } else {
             $healthP = HealthProfessional::whereId($id)->with([
                 'user' => function ($query) use ($bC) {
