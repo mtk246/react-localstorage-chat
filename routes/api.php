@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\Tableau\AuthController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
@@ -284,6 +285,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
         Route::get('/get-list-health-professional-types', [\App\Http\Controllers\DoctorController::class, 'getListTypes']);
         Route::get('/get-list-authorizations', [\App\Http\Controllers\DoctorController::class, 'getListAuthorizations']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\DoctorController::class, 'getListBillingCompanies']);
