@@ -1,11 +1,13 @@
 <?php
- 
+
+declare(strict_types=1);
+
 namespace App\Models;
- 
+
 use Illuminate\Database\Eloquent\Relations\Pivot;
- 
+
 /**
- * App\Models\CompanyHealthProfessional
+ * App\Models\CompanyHealthProfessional.
  *
  * @property int $id
  * @property int $company_id
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property array|null $authorization
  * @property int|null $billing_company_id
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional query()
@@ -24,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereHealthProfessionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class CompanyHealthProfessional extends Pivot
@@ -36,10 +40,10 @@ class CompanyHealthProfessional extends Pivot
     public $incrementing = true;
 
     protected $fillable = [
-        "authorization",
-        "company_id",
-        "health_professional_id",
-        "billing_company_id"
+        'authorization',
+        'company_id',
+        'health_professional_id',
+        'billing_company_id',
     ];
 
     /**
@@ -50,4 +54,14 @@ class CompanyHealthProfessional extends Pivot
     protected $casts = [
         'authorization' => 'array',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function healthProfessional()
+    {
+        return $this->belongsTo(HealthProfessional::class);
+    }
 }
