@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\HealthProfessional\GetDoctorAction;
 use App\Http\Requests\CreateDoctorRequest;
 use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\HealthProfessional\UpdateCompaniesRequest;
 use App\Http\Requests\UpdateDoctorRequest;
+use App\Models\HealthProfessional;
 use App\Repositories\DoctorRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -48,11 +50,12 @@ class DoctorController extends Controller
         return $this->doctorRepository->getServerAllDoctors($request);
     }
 
-    public function getOneDoctor(int $id): JsonResponse
-    {
-        $rs = $this->doctorRepository->getOneDoctor($id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error, health professional not found'), 404);
+    public function getOneDoctor(
+        Request $request,
+        HealthProfessional $doctor,
+        GetDoctorAction $getDoctor
+    ): JsonResponse {
+        return response()->json($getDoctor->single($doctor, $request->user()));
     }
 
     public function getOneByNpi(string $npi): JsonResponse
