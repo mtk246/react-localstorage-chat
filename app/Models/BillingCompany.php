@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -104,6 +105,7 @@ class BillingCompany extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'name',
@@ -280,5 +282,15 @@ class BillingCompany extends Model implements Auditable
     public function getAddressAttribute()
     {
         return $this->addresses[0] ?? null;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'code' => $this->code,
+            'abbreviation' => $this->abbreviation,
+            'contact.email' => $this->contact->email ?? null,
+        ];
     }
 }

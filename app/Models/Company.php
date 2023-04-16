@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -125,6 +126,7 @@ final class Company extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -378,4 +380,16 @@ final class Company extends Model implements Auditable
         return $query;
     }
     // @codingStandardsIgnoreEnd
+
+    public function toSearchableArray()
+    {
+        return [
+            'code' => $this->code,
+            'name' => $this->name,
+            'npi' => $this->npi,
+            'ein' => $this->ein,
+            'upin' => $this->upin,
+            'clia' => $this->clia,
+        ];
+    }
 }
