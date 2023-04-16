@@ -143,47 +143,14 @@ class ReportRepository implements ReportInterface
                         "contacts" => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },
-                        "billingCompanies"
                     ]);
                 },
-                "maritalStatus",
-                "marital",
-                "companies",
-                "insurancePolicies",
-                "insurancePlans" => function ($query) {
-                    $query->with([
-                        "insuranceCompany"
-                    ]);
-                },
-                "billingCompanies",
-                "guarantor",
-                "emergencyContacts",
-                "employments",
-                "publicNote",
-                "privateNotes"
             ])->find($params['patient_id']);
         } else {
             $this->patient = Patient::with([
                 "user" => function ($query) use ($bC) {
-                    $query->with([
-                        "profile", "addresses", "contacts", "billingCompanies"
-                    ]);
+                    $query->with(["profile", "addresses", "contacts"]);
                 },
-                "maritalStatus",
-                "marital",
-                "companies",
-                "insurancePolicies",
-                "insurancePlans" => function ($query) {
-                    $query->with([
-                        "insuranceCompany"
-                    ]);
-                },
-                "billingCompanies",
-                "guarantor",
-                "emergencyContacts",
-                "employments",
-                "publicNote",
-                "privateNotes"
             ])->find($params['patient_id']);
         }
         if (isset($this->patient)) {
@@ -217,23 +184,23 @@ class ReportRepository implements ReportInterface
             $this->additionalField = null;
             
             foreach ($this->physicianOrSupplierInfo->claimDateInformations ?? [] as $service) {
-                if (str_contains(($service->field->description), '14.')) {
+                if (str_contains(($service->field->description ?? ''), '14.')) {
                     if(!isset($this->currentField)) {
                         $this->currentField = $service;
                     }
-                } elseif (str_contains(($service->field->description), '15.')) {
+                } elseif (str_contains(($service->field->description ?? ''), '15.')) {
                     if(!isset($this->otherField)) {
                         $this->otherField = $service;
                     }
-                } elseif (str_contains(($service->field->description), '16.')) {
+                } elseif (str_contains(($service->field->description ?? ''), '16.')) {
                     if(!isset($this->currentOccupationField)) {
                         $this->currentOccupationField = $service;
                     }
-                } elseif (str_contains(($service->field->description), '18.')) {
+                } elseif (str_contains(($service->field->description ?? ''), '18.')) {
                     if(!isset($this->hospitalizationField)) {
                         $this->hospitalizationField = $service;
                     }
-                } elseif (str_contains(($service->field->description), '19.')) {
+                } elseif (str_contains(($service->field->description ?? ''), '19.')) {
                     if(!isset($this->additionalField)) {
                         $this->additionalField = $service;
                     }
@@ -301,9 +268,9 @@ class ReportRepository implements ReportInterface
             // set bacground image
             if ($params->print == false) {
                 if (isset($this->typeForm)) {
-                    $img_file = storage_path('pictures') . '/' . $this->typeForm . '.png';
+                    $img_file = storage_path('pictures') . '/CMS-1500_837P_1_v3.png';
                 } else {
-                    $img_file = storage_path('pictures') . '/CMS-1500_837P_1.png';
+                    $img_file = storage_path('pictures') . '/CMS-1500_837P_1_v3.png';
                 }
                 $pdf->Image($img_file, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
 
@@ -826,7 +793,7 @@ class ReportRepository implements ReportInterface
          * FD: Es equivalente a las opciones F + D
          * E: Devuelve el documento del tipo mime base64 para ser adjuntado en correos electrónicos
          */
-        return $this->pdf->Output($this->filename, $storeAction);
+    return $this->pdf->Output($this->filename, $storeAction);
     }
 
     public function setFooter($pages = true, $footerText = '')
