@@ -136,14 +136,13 @@ class ClaimRepository
                 }
             }
 
-            
             if (isset($data['insurance_policies'])) {
                 $order_values = [];
 
                 foreach ($data['insurance_policies'] as $item) {
                     $order_values[$item['insurance_policy_id']] = ['order' => $item['order']];
                 }
-                $claim->insurancePolicies()->sync($ids, false, $order_values);
+                $claim->insurancePolicies()->sync($order_values);
             }
 
             $claimStatus = ClaimStatus::whereStatus('Draft')->first();
@@ -453,7 +452,7 @@ class ClaimRepository
                 foreach ($data['insurance_policies'] as $item) {
                     $order_values[$item['insurance_policy_id']] = ['order' => $item['order']];
                 }
-                $claim->insurancePolicies()->sync($ids, false, $order_values);
+                $claim->insurancePolicies()->sync($order_values);
             }
 
             $claimStatus = ClaimStatus::whereStatus('Draft')->first();
