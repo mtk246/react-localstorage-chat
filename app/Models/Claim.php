@@ -603,7 +603,7 @@ class Claim extends Model implements Auditable
     {
         $status = $this->claimStatusClaims()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
 
-        return (isset($status)) ? $status->created_at : '';
+        return (isset($status)) ? $status->created_at->format('Y-m-d') : '';
     }
 
     public function scopeSearch($query, $search)
