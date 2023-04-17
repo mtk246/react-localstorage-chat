@@ -39,6 +39,14 @@ final class ClaimResource extends JsonResource
                 ] : null;
         }
 
+        $order = ['P', 'S', 'T'];
+
+        usort($insurancePolicies, function ($a, $b) use ($order) {
+            $a_index = array_search($a['type_responsibility']['code'], $order);
+            $b_index = array_search($b['type_responsibility']['code'], $order);
+            return $a_index - $b_index;
+        });
+
         return [
             'id' => $this->id,
             'qr_claim' => $this->qr_claim,

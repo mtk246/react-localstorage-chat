@@ -366,7 +366,8 @@ class ClaimRepository
      * @param int $id
      * @return claim|Builder|Model|object|null
      */
-    public function getOneclaim(int $id) {
+    public function getOneclaim(int $id)
+    {
         $claim = Claim::query()->find($id);
         return !is_null($claim) ? new ClaimResource($claim) : null;
     }
@@ -820,8 +821,16 @@ class ClaimRepository
                 "user.profile"
             ])->find($claim->patient_id);
             $insurancePolicies = [];
+            $policies = $patient->insurancePolicies->toArray();
+            $order = ['P', 'S', 'T'];
 
-            foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
+            usort($policies, function ($a, $b) use ($order) {
+                $a_index = array_search($a['type_responsibility']['code'], $order);
+                $b_index = array_search($b['type_responsibility']['code'], $order);
+                return $a_index - $b_index;
+            });
+
+            foreach ($policies ?? [] as $insurancePolicy) {
                 $newCode = 1;
                 $targetModel = ClaimEligibility::select("id", "control_number")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
                 
