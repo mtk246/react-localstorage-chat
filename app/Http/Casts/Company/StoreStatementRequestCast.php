@@ -21,9 +21,4 @@ final class StoreStatementRequestCast extends CastsRequest
     {
         return $this->castMany('store', StatementCast::class);
     }
-
-    public function getDelete(): array
-    {
-        return $this->getArray('delete');
-    }
 }

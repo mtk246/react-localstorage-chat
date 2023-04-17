@@ -21,9 +21,4 @@ final class StoreExectionICRequestCast extends CastsRequest
     {
         return $this->castMany('store', ExectionInsuranceCompanyCast::class);
     }
-
-    public function getDelete(): array
-    {
-        return $this->getArray('delete');
-    }
 }

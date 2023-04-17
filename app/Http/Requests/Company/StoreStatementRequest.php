@@ -7,6 +7,7 @@ namespace App\Http\Requests\Company;
 use App\Enums\Company\ApplyToType;
 use App\Http\Casts\Company\StoreStatementRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Rules\DistinctArray;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -36,17 +37,18 @@ final class StoreStatementRequest extends FormRequest
             'store.*.id' => 'nullable|integer',
             'store.*.rule_id' => 'nullable|integer',
             'store.*.when_id' => 'nullable|integer',
-            'store.*.apply_to_ids' => 'nullable|array',
+            'store.*.apply_to_ids' => [
+                'nullable',
+                'array',
+                new DistinctArray(),
+            ],
             'store.*.apply_to_ids.*' => [
                 'nullable',
                 'integer',
-                'distinct',
                 new Enum(ApplyToType::class),
             ],
             'store.*.start_date' => 'nullable|date|before:store.*.end_date',
             'store.*.end_date' => 'nullable|date',
-            'delete' => 'nullable|array',
-            'delete.*' => 'nullable|integer',
         ];
     }
 }

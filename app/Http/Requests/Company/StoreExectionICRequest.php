@@ -16,11 +16,6 @@ final class StoreExectionICRequest extends FormRequest
 
     protected string $castedClass = StoreExectionICRequestCast::class;
 
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /** @return array<string, mixed> */
     public function rules()
     {
@@ -35,10 +30,9 @@ final class StoreExectionICRequest extends FormRequest
             'store.*.insurance_company_id' => [
                 'required',
                 'integer',
+                'distinct',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
-            'delete' => 'nullable|array',
-            'delete.*' => 'nullable|integer',
         ];
     }
 }
