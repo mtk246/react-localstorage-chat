@@ -30,10 +30,9 @@ final class StoreExectionICRequest extends FormRequest
             'store.*.insurance_company_id' => [
                 'required',
                 'integer',
+                'distinct',
                 'exists:\App\Models\InsuranceCompany,id',
             ],
-            'delete' => 'nullable|array',
-            'delete.*' => 'nullable|integer',
         ];
     }
 }
