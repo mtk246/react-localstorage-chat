@@ -16,11 +16,6 @@ final class StoreExectionICRequest extends FormRequest
 
     protected string $castedClass = StoreExectionICRequestCast::class;
 
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /** @return array<string, mixed> */
     public function rules()
     {
