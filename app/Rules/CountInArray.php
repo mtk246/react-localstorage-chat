@@ -8,6 +8,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 final class CountInArray implements Rule
 {
+    private string $attribute;
+
     public function __construct(
         private readonly string $column,
         private readonly mixed $value,
@@ -23,13 +25,14 @@ final class CountInArray implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $valueFilter = array_filter($value, fn ($value) => $value[$this->column] && $value[$this->column] === $value);
+        $this->attribute = $attribute;
+        $valueFilter = array_filter($value, fn ($value) => $value[$this->column] && $value[$this->column] === $this->value);
 
         return count($valueFilter) === $this->count;
     }
 
     public function message(): string
     {
-        return 'The validation error message.';
+        return "the {$this->column} parameter must be {$this->value} only {$this->count} times in {$this->attribute}";
     }
 }
