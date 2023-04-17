@@ -155,9 +155,9 @@ class ReportRepository implements ReportInterface
         }
         if (isset($this->patient)) {
             $this->policyPrimary = $this->patient->insurancePolicies
-                                        ->whereIn('id', $params['insurance_policies'])->first();
+                                        ->whereIn('id', $params['insurance_policies'] ?? [])->first();
             $this->policyOther = $this->patient->insurancePolicies
-                                        ->whereIn('id', $params['insurance_policies'])->skip(1)->first();
+                                        ->whereIn('id', $params['insurance_policies'] ?? [])->skip(1)->first();
             if ($this->policyPrimary) {
                 $this->insuranceCompany = $this->policyPrimary->insurancePlan->insuranceCompany;
             }
@@ -290,7 +290,7 @@ class ReportRepository implements ReportInterface
         });
     }
 
-    public function setBody($body, $isHTML = true, $htmlParams = [], $storeAction = 'E')
+    public function setBody($body, $isHTML = true, $htmlParams = [], $storeAction = 'E', $end = true)
     {
         /** @var string Contenido del reporte */
         $htmlContent = $body;
@@ -793,7 +793,9 @@ class ReportRepository implements ReportInterface
          * FD: Es equivalente a las opciones F + D
          * E: Devuelve el documento del tipo mime base64 para ser adjuntado en correos electrónicos
          */
-    return $this->pdf->Output($this->filename, $storeAction);
+        if ($end == true) {
+            return $this->pdf->Output($this->filename, $storeAction);
+        }
     }
 
     public function setFooter($pages = true, $footerText = '')
