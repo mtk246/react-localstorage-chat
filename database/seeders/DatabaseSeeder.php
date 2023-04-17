@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             ClaimDataSeeder::class,
             AddressTypeSeeder::class,
             KeyboardShortcutSeeder::class,
+            CountrySubdivisionSeeder::class,
             DataTestSeeder::class,
             ProcedureSeeder::class,
         ]);
