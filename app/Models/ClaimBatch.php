@@ -137,7 +137,7 @@ class ClaimBatch extends Model implements Auditable
                 ->whereIn("claim_status_claim.claim_status_id", $statuses)
                 ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
         });
-        return count($data);
+        return count($data->get());
     }
 
     public function getTotalClaimsAttribute()
