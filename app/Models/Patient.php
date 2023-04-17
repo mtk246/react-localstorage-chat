@@ -169,7 +169,7 @@ class Patient extends Model implements Auditable
     }
 
     /**
-     * Patient has one Marital.
+     * Patient has many Marital.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
