@@ -109,6 +109,13 @@ final class UpdateCompany
         StoreExectionICRequestCast $request
     ): AnonymousResourceCollection {
         return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
+            $company->exceptionInsuranceCompanies()
+                ->whereNotIn('id', $request->getStore()->map(
+                    fn (ExectionInsuranceCompanyCast $statement) => $statement->getId(),
+                )->toArray())
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->delete();
+
             $request->getStore()
                 ->each(function (ExectionInsuranceCompanyCast $store) use ($company, $request): void {
                     $company->exceptionInsuranceCompanies()
@@ -117,11 +124,6 @@ final class UpdateCompany
                             'billing_company_id' => $request->getBillingCompanyId(),
                         ], ['insurance_company_id' => $store->getInsuranceCompanyId()]);
                 });
-
-            $company->exceptionInsuranceCompanies()
-                ->whereIn('id', $request->getDelete())
-                ->where('billing_company_id', $request->getBillingCompanyId())
-                ->delete();
 
             return ExectionICResource::collection(
                 $company->exceptionInsuranceCompanies()
