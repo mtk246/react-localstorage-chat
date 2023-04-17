@@ -73,6 +73,13 @@ final class UpdateCompany
     public function statement(Company $company, StoreStatementRequestCast $request): AnonymousResourceCollection
     {
         return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
+            $company->companyStatements()
+                ->whereNotIn('id', $request->getStore()->map(
+                    fn (StatementCast $statement) => $statement->getId(),
+                )->toArray())
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->delete();
+
             $request->getStore()->each(function (StatementCast $statement) use ($company, $request): void {
                 $company->companyStatements()
                     ->updateOrCreate([
@@ -86,11 +93,6 @@ final class UpdateCompany
                         'apply_to_ids' => $statement->getApplyToIds(),
                     ]);
             });
-
-            $company->companyStatements()
-                ->whereIn('id', $request->getDelete())
-                ->where('billing_company_id', $request->getBillingCompanyId())
-                ->delete();
 
             return StatementResource::collection(
                 $company->companyStatements()
