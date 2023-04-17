@@ -8,13 +8,14 @@ use Illuminate\Contracts\Validation\Rule;
 
 final class CountInArray implements Rule
 {
-    public function __construct(private string $column, private mixed $value, private int $count)
-    {
+    public function __construct(
+        private readonly string $column,
+        private readonly mixed $value,
+        private readonly int $count,
+    ) {
     }
 
     /**
-     * Determine if the validation rule passes.
-     *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      *
      * @param string $attribute
