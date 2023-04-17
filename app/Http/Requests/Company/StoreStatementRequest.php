@@ -49,8 +49,6 @@ final class StoreStatementRequest extends FormRequest
             ],
             'store.*.start_date' => 'nullable|date|before:store.*.end_date',
             'store.*.end_date' => 'nullable|date',
-            'delete' => 'nullable|array',
-            'delete.*' => 'nullable|integer',
         ];
     }
 }
