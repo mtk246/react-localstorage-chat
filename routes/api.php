@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
@@ -285,6 +286,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
         Route::get('/get-list-health-professional-types', [\App\Http\Controllers\DoctorController::class, 'getListTypes']);
         Route::get('/get-list-authorizations', [\App\Http\Controllers\DoctorController::class, 'getListAuthorizations']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\DoctorController::class, 'getListBillingCompanies']);
@@ -292,7 +294,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-all-server', [\App\Http\Controllers\DoctorController::class, 'getServerAll']);
         Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'updateDoctor']);
-        Route::get('/{id}', [\App\Http\Controllers\DoctorController::class, 'getOneDoctor']);
+        Route::get('/{doctor}', [\App\Http\Controllers\DoctorController::class, 'getOneDoctor']);
         Route::get('/', [\App\Http\Controllers\DoctorController::class, 'getAllDoctors']);
         Route::get('/{npi}/get-by-npi', [\App\Http\Controllers\DoctorController::class, 'getOneByNpi']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\DoctorController::class, 'changeStatus']);

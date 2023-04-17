@@ -181,12 +181,12 @@ class HealthProfessional extends Model implements Auditable
      */
     public function getStatusAttribute()
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies?->first();
         if (is_null($billingCompany)) {
             return false;
         }
 
-        return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
+        return $this->billingCompanies?->find($billingCompany->id)->pivot->status ?? false;
     }
 
     public function getVerifiedOnNppesAttribute()
