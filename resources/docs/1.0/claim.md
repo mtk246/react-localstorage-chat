@@ -122,7 +122,10 @@
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",
@@ -1202,7 +1205,10 @@ subStatus optional <array>    //[1,2]
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",
@@ -1317,7 +1323,10 @@ subStatus optional <array>    //[1,2]
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",
@@ -1420,7 +1429,10 @@ subStatus optional <array>    //[1,2]
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",
@@ -1718,7 +1730,10 @@ subStatus optional <array>    //[1,2]
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",
@@ -1843,7 +1858,10 @@ subStatus optional <array>    //[1,2]
             "diagnosis_id": 3
         }
     ],
-    "insurance_policies": [8,10],
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
     "claim_services": [
         {
             "from_service": "2022-07-05",

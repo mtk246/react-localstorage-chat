@@ -240,7 +240,7 @@ class Claim extends Model implements Auditable
      */
     public function insurancePolicies()
     {
-        return $this->belongsToMany(InsurancePolicy::class, 'claim_insurance_policy', 'claim_id', 'insurance_policy_id')->withTimestamps();
+        return $this->belongsToMany(InsurancePolicy::class, 'claim_insurance_policy', 'claim_id', 'insurance_policy_id')->withPivot('order')->withTimestamps();
     }
 
     /**
