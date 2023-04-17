@@ -395,8 +395,8 @@ class ClaimBatchRepository
             $claimBatch = ClaimBatch::find($id);
             $claimBatchStatus = ClaimBatchStatus::whereStatus('Submitted')->first();
             $claimBatch->update([
-                "claim_status_id" => $claimBatchStatus->id,
-                "shipping_date"   => now(),
+                "claim_batch_status_id" => $claimBatchStatus->id,
+                "shipping_date" => now(),
             ]);
             foreach ($claimBatch->claims as $claim) {
                 $claimRepository->claimSubmit($token, $claim->id, $claimBatch->id);
