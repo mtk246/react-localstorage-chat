@@ -821,16 +821,8 @@ class ClaimRepository
                 "user.profile"
             ])->find($claim->patient_id);
             $insurancePolicies = [];
-            $policies = $patient->insurancePolicies->toArray();
-            $order = ['P', 'S', 'T'];
 
-            usort($policies, function ($a, $b) use ($order) {
-                $a_index = array_search($a['type_responsibility']['code'], $order);
-                $b_index = array_search($b['type_responsibility']['code'], $order);
-                return $a_index - $b_index;
-            });
-
-            foreach ($policies ?? [] as $insurancePolicy) {
+            foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
                 $newCode = 1;
                 $targetModel = ClaimEligibility::select("id", "control_number")->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
                 
@@ -850,7 +842,7 @@ class ClaimRepository
 
                     $dataReal = [
                         'controlNumber'           => $newCode,
-                        'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
+                        'tradingPartnerServiceId' => $insurancePolicy[insurancePlan]->insuranceCompany->payer_id ?? null,
                         'tradingPartnerName'      => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                         'provider' => [
                             'organizationName'        => $claim->company->name ?? null,
@@ -951,6 +943,13 @@ class ClaimRepository
                 
                 array_push($insurancePolicies, $insurancePolicy);
             }
+            $order = ['P', 'S', 'T'];
+
+            usort($insurancePolicies, function ($a, $b) use ($order) {
+                $a_index = array_search($a->typeResponsibility->code, $order);
+                $b_index = array_search($b->typeResponsibility->code, $order);
+                return $a_index - $b_index;
+            });
 
             return [
                 "claim_id" => $claim->id,
