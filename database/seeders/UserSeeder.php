@@ -46,6 +46,20 @@ class UserSeeder extends Seeder
 
             ],
             [
+                "email"      => "salcantara3@gmail.com",
+                "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                "role"       => "billingmanager",
+                "profile"    => [
+                                    "ssn"           => "176423970",
+                                    "first_name"    => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "middle_name"   => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "last_name"     => Faker\Provider\en_US\Person::firstNameMale(),
+                                    "sex"           => "M",
+                                    "date_of_birth" => "1990-04-01",
+                                ],
+
+            ],
+            [
                 "email"      => "healthprofessional@billing.com",
                 "password"   => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
                 "role"       => "healthprofessional",
