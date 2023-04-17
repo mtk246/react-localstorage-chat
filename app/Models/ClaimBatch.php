@@ -129,7 +129,15 @@ class ClaimBatch extends Model implements Auditable
 
     public function getTotalProcessedAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Approved')
+            ->orWhere('status', 'Rejected')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas("claimStatusClaims", function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn("claim_status_claim.claim_status_id", $statuses)
+                ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+        });
+        return count($data);
     }
 
     public function getTotalClaimsAttribute()
