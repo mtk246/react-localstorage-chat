@@ -102,9 +102,10 @@ class ClaimBatchController extends Controller
             }
         ])->find($id);
 
-        $claim = $batch->claims->first();
-
-        if (isset($claim)) {
+        $claims = $batch->claims;
+        $total = count($claims);
+        $pdf->setHeader('');
+        foreach ($claims as $key => $claim) {
             $insurancePolicies = [];
 
             foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
@@ -127,13 +128,14 @@ class ClaimBatchController extends Controller
                 'insurance_policies' => $insurancePolicies ?? [],
                 'diagnoses' => $claim->diagnoses ?? [],
             ]);
-
+            if(($total-1) == $key) {
+                return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
+                    'pdf'      => $pdf
+                ], 'E', true))[1];
+            } else {
+                $pdf->setBody('pdf.837P', true, ['pdf' => $pdf], 'E', false);
+            }
+    
         }
-        $pdf->setHeader('');
-        //$pdf->setFooter();
-        return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
-            'pdf'      => $pdf
-        ]))[1];
-        /**$pdf->setBody('pdf.837P', true, ['pdf' => $pdf]);*/
     }
 }

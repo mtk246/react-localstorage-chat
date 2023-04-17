@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace Database\Seeders;
 
@@ -2199,7 +2199,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '13004 Southwest 88th Terrace North',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2312,7 +2312,7 @@ class DataTestSeeder extends Seeder
                 'profile' => [
                     'ssn' => '767121246',
                     'avatar' => 'http://31.220.55.211:81/img-profile/1675263673png',
-                    'first_name' => 'Maria del Carmen',
+                    'first_name' => 'Maria',
                     'last_name' => 'Alfonso',
                     'middle_name' => null,
                     'date_of_birth' => '1934-09-02',
@@ -2334,7 +2334,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '16000 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2469,7 +2469,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '1571 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2571,7 +2571,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '1570 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2673,7 +2673,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '3600 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2775,7 +2775,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '16089 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -2910,7 +2910,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '160879 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -3045,7 +3045,7 @@ class DataTestSeeder extends Seeder
 
                 'addresses' => [
                     [
-                        // 'address_type_id' => AddressType::whereName('principal')->first()->id,
+                        'address_type_id' => AddressType::whereName('House / Residence')->first()->id,
                         'address' => '1760879 SW 103 PL',
                         'city' => 'Miami',
                         'state' => 'FL - Florida',
@@ -3300,15 +3300,19 @@ class DataTestSeeder extends Seeder
 
             /* Create Marital */
             if (isset($dataP['marital']['spuse_name'])) {
+                $dataP['marital']['patient_id'] = $patient->id;
                 $marital = Marital::firstOrCreate([
                     'patient_id' => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataP['marital']);
             }
 
             /* Create Guarantor */
             if (isset($dataP['guarantor']['name'])) {
+                $data['guarantor']['patient_id'] = $patient->id;
                 $guarantor = Guarantor::firstOrCreate([
                     'patient_id' => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataP['guarantor']);
             }
 
@@ -3316,7 +3320,10 @@ class DataTestSeeder extends Seeder
             if (isset($dataP['employments'])) {
                 foreach ($dataP['employments'] as $employment) {
                     $employment['patient_id'] = $patient->id;
-                    Employment::updateOrCreate($employment);
+                    Employment::firstOrCreate([
+                        'patient_id' => $patient->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ], $employment);
                 }
             }
 
@@ -3358,6 +3365,7 @@ class DataTestSeeder extends Seeder
                 if (is_null($patient->companies()->find($company->id))) {
                     $patient->companies()->attach($company->id, [
                         'med_num' => $dataP['company_med_num'] ?? '',
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]);
                 }
             }
@@ -3385,9 +3393,12 @@ class DataTestSeeder extends Seeder
                     $insurancePlan = InsurancePlan::find($insurance_policy['insurance_plan']);
 
                     $insurancePolicy = InsurancePolicy::updateOrCreate([
+                        'patient_id' => $patient->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         'policy_number' => $insurance_policy['policy_number'],
                         'insurance_plan_id' => $insurancePlan->id,
                     ], [
+                        'own' =>  $insurance_policy['own_insurance'] ?? false,
                         'group_number' => $insurance_policy['group_number'] ?? '',
                         'eff_date' => $insurance_policy['eff_date'],
                         'end_date' => $insurance_policy['end_date'] ?? null,
@@ -3396,17 +3407,6 @@ class DataTestSeeder extends Seeder
                         'release_info' => $insurance_policy['release_info'],
                         'assign_benefits' => $insurance_policy['assign_benefits'],
                     ]);
-
-                    /* Attach insurance policy to patient */
-                    if (is_null($patient->insurancePolicies()->find($insurancePolicy->id))) {
-                        $patient->insurancePolicies()->attach($insurancePolicy->id, [
-                            'own_insurance' => $insurance_policy['own_insurance'],
-                        ]);
-                    } else {
-                        $patient->insurancePolicies()->updateExistingPivot($insurancePolicy->id, [
-                            'own_insurance' => $insurance_policy['own_insurance'],
-                        ]);
-                    }
 
                     if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
                         $patient->insurancePlans()->attach($insurancePlan->id);
