@@ -181,7 +181,7 @@ class CompanyRepository
                     $resultado[] = [
                         'id' => $object['id'],
                         'name' => $object['name'],
-                        'name_batch' => $object['abbreviation'] . '-' . date('Ymd'),
+                        'name_batch' => ($object['abbreviation'] != '') ? ($object['abbreviation'] . '-' . date('Ymd')) : '',
                     ];
                     return $resultado;
                 }, []);
