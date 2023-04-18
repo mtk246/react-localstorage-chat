@@ -1,24 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Rules\IUnique;
 use App\Models\Facility;
+use App\Rules\CountInArray;
+use App\Rules\IUnique;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class UpdateFacilityRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,32 +21,47 @@ class UpdateFacilityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                 => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
-            'npi'                  => ['required', 'string'],
-            'facility_type_id'     => ['required', 'integer'],
-            'companies'            => ['required', 'array'],
-            'nickname'             => ['nullable', 'string'],
-            'abbreviation'         => ['required', 'string', 'max:20'],
-            'place_of_services'    => ['nullable', 'array'],
+            'name' => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
+            'npi' => ['required', 'string'],
+            'facility_type_id' => ['required', 'integer'],
+            'companies' => [
+                'required',
+                'array',
+                'exists:\App\Models\Company,id',
+            ],
+            'nickname' => ['nullable', 'string'],
+            'abbreviation' => ['required', 'string', 'max:20'],
+            'place_of_services' => ['nullable', 'array'],
 
-            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'billing_company_id' => [
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
+                'integer',
+                'exists:\App\Models\BillingCompany,id',
+            ],
 
-            'taxonomies'           => ['required', 'array'],
-            'taxonomies.*.tax_id'  => ['required', 'string'],
-            'taxonomies.*.name'    => ['required', 'string'],
+            'taxonomies' => [
+                'required',
+                'array',
+                new CountInArray('primary', true, 1),
+            ],
+            'taxonomies.*.tax_id' => ['required', 'string'],
+            'taxonomies.*.name' => ['required', 'string'],
             'taxonomies.*.primary' => ['required', 'boolean'],
 
-            'address'               => ['required', 'array'],
-            'address.address'       => ['required', 'string'],
-            'address.city'          => ['required', 'string'],
-            'address.state'         => ['required', 'string'],
-            'address.zip'           => ['required', 'string'],
-            
-            'contact'               => ['required', 'array'],
-            'contact.phone'         => ['nullable', 'string'],
-            'contact.mobile'        => ['nullable', 'string'],
-            'contact.fax'           => ['nullable', 'string'],
-            'contact.email'         => ['required', 'email:rfc']
+            'address' => ['required', 'array'],
+            'address.address' => ['required', 'string'],
+            'address.city' => ['required', 'string'],
+            'address.state' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
+            'address.zip' => ['required', 'string'],
+
+            'contact' => ['required', 'array'],
+            'contact.name' => ['nullable', 'string'],
+            'contact.phone' => ['nullable', 'string'],
+            'contact.mobile' => ['nullable', 'string'],
+            'contact.fax' => ['nullable', 'string'],
+            'contact.email' => ['required', 'email:rfc'],
         ];
     }
 }
