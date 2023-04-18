@@ -107,10 +107,16 @@ class FacilityRepository
                 Address::create($data['address']);
             }
             if (isset($data['contact']['email'])) {
-                $data['contact']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
-                $data['contact']['contactable_id'] = $facility->id;
-                $data['contact']['contactable_type'] = Facility::class;
-                Contact::create($data['contact']);
+                Contact::create([
+                    'contact_name' => $data['contact']['name'],
+                    'phone' => $data['contact']['phone'],
+                    'fax' => $data['contact']['fax'],
+                    'email' => $data['contact']['email'],
+                    'mobile' => $data['contact']['mobile'],
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'contactable_id' => $facility->id,
+                    'contactable_type' => Facility::class,
+                ]);
             }
 
             DB::commit();
@@ -405,7 +411,7 @@ class FacilityRepository
                 'addressable_type' => Facility::class,
                 'billing_company_id' => $billingCompany->id ?? $bC,
             ])->first();
-            $contact = Contact::where([
+            $contact = Contact::query()->where([
                 'contactable_id' => $facility->id,
                 'contactable_type' => Facility::class,
                 'billing_company_id' => $billingCompany->id ?? $bC,
@@ -425,6 +431,7 @@ class FacilityRepository
 
             if (isset($contact)) {
                 $facility_contact = [
+                    'name' => $contact->contact_name,
                     'fax' => $contact->fax,
                     'email' => $contact->email,
                     'phone' => $contact->phone,
@@ -468,10 +475,6 @@ class FacilityRepository
                 'facility_type_id' => $data['facility_type_id'],
             ]);
 
-            if (isset($data['companies'])) {
-                $facility->companies()->sync($data['companies']);
-            }
-
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
                 foreach ($data['taxonomies'] as $taxonomy) {
@@ -487,6 +490,15 @@ class FacilityRepository
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (isset($data['companies'])) {
+                $companies = collect($data['companies'])
+                    ->mapWithKeys(fn ($facility) => [$facility => [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]])->toArray();
+
+                $facility->companies()->sync($companies);
             }
 
             if (isset($data['place_of_services'])) {
@@ -537,12 +549,17 @@ class FacilityRepository
                 ], $data['contact']);
             }
 
-            if (isset($data['address'])) {
-                Address::updateOrCreate([
+            if (isset($data['contact']['email'])) {
+                Contact::create([
+                    'contact_name' => $data['contact']['name'],
+                    'phone' => $data['contact']['phone'],
+                    'fax' => $data['contact']['fax'],
+                    'email' => $data['contact']['email'],
+                    'mobile' => $data['contact']['mobile'],
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'addressable_id' => $facility->id,
-                    'addressable_type' => Facility::class,
-                ], $data['address']);
+                    'contactable_id' => $facility->id,
+                    'contactable_type' => Facility::class,
+                ]);
             }
 
             DB::commit();
