@@ -168,6 +168,23 @@ class CompanyRepository
                     [],
                     ['med_num' => ['relationship' => 'patients', 'where' => ['patients.id' => $request->patient_id]]]
                 );
+            } elseif ($request->batch) {
+                $companies = getList(
+                    Company::class,
+                    ['name'],
+                    ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+                    null,
+                    [],
+                    ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
+                );
+                return array_reduce($companies, function ($resultado, $object) {
+                    $resultado[] = [
+                        'id' => $object['id'],
+                        'name' => $object['name'],
+                        'name_batch' => $object['abbreviation'] . '-' . date('Ymd'),
+                    ];
+                    return $resultado;
+                }, []);
             } else {
                 return getList(
                     Company::class,
