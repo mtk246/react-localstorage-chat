@@ -38,9 +38,11 @@ class UpdateFacilityRequest extends FormRequest
             'address.address' => ['required', 'string'],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
 
             'contact' => ['required', 'array'],
+            'contact.name' => ['nullable', 'string'],
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
