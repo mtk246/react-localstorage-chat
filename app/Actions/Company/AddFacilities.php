@@ -6,6 +6,7 @@ namespace App\Actions\Company;
 
 use App\Http\Resources\Company\FacilityResource;
 use App\Models\Company;
+use App\Models\Facility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
@@ -48,6 +49,13 @@ final class AddFacilities
                     ])
                     ->toArray()
                 );
+
+                Facility::query()
+                    ->whereIn('id', $facilities->toArray())
+                    ->get()
+                    ->each(function (Facility $facility) use ($billingCompanyId): void {
+                        $facility->billingCompanies()->attach($billingCompanyId);
+                    });
             });
     }
 }
