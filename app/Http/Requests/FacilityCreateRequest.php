@@ -35,7 +35,8 @@ final class FacilityCreateRequest extends FormRequest
             'place_of_services' => ['nullable', 'array'],
 
             'billing_company_id' => [
-                Rule::requiredIf(Gate::check('is-admin')),
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
