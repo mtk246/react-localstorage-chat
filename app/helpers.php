@@ -136,7 +136,7 @@ if (!function_exists('getList')) {
                         $relationship = $pivotOther['relationship'];
                         $rec->load($relationship);
                         $object = $rec->$relationship()->where($pivotOther['where'])->first();
-                        $fieldPush[$name] = $object->pivot[$name] ?? '';
+                        $fieldPush[$name] = $object->pivot[$name] ?? $object->$name ?? '';
                     } else {
                         $object = $rec->$relationship()->where($filters['where'])->first();
                         if (isset($object)) {
