@@ -18,6 +18,7 @@ final class AddFacilities
     public function invoke(Collection $facilities, Company $company): AnonymousResourceCollection
     {
         return DB::transaction(function () use ($facilities, $company): AnonymousResourceCollection {
+            $this->syncBillingCompanies($company, $facilities);
             $this->syncFacilities($company, $facilities);
 
             $records = $company->facilities()
@@ -49,13 +50,25 @@ final class AddFacilities
                     ])
                     ->toArray()
                 );
+            });
+    }
 
-                Facility::query()
-                    ->whereIn('id', $facilities->toArray())
-                    ->get()
-                    ->each(function (Facility $facility) use ($billingCompanyId): void {
-                        $facility->billingCompanies()->attach($billingCompanyId);
-                    });
+    private function syncBillingCompanies(Company $company, Collection $facilities): void
+    {
+        $groupByFacilities = $facilities->mapToGroups(fn ($facility) => [
+            $facility->getId() => $facility->getBillingCompanyId(),
+        ]);
+
+        $company->facilities()
+            ->wherePivot('company_id', $company->id)
+            ->when(Gate::denies('is-admin'), function (Builder $query) use ($facilities): void {
+                $query->where('billing_company_id', $facilities->first()->getBillingCompanyId());
+            })
+            ->get()
+            ->each(function (Facility $facility) use ($groupByFacilities) {
+                $facility
+                    ->billingCompanies()
+                    ->sync($groupByFacilities->get($facility->id)?->toArray() ?? []);
             });
     }
 }
