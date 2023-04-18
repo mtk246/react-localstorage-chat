@@ -551,7 +551,7 @@ class Claim extends Model implements Auditable
         $claimForm = $this->claimFormattable;
         if (ClaimFormP::class == $this->claim_formattable_type) {
             foreach ($claimForm->claimFormServices ?? [] as $service) {
-                $billed += (($service->price ?? 0) - ($service->copay ?? 0));
+                $billed += ($service->price ?? 0);
             }
         }
 
@@ -567,6 +567,7 @@ class Claim extends Model implements Auditable
 
     public function getPastDueDateAttribute()
     {
+        /** @todo Esta fecha viene del insurance company Tyme Filing */
         $date = '';
         $claimForm = $this->claimFormattable;
         if (ClaimFormP::class == $this->claim_formattable_type) {
