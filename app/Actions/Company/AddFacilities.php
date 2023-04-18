@@ -17,11 +17,7 @@ final class AddFacilities
     public function invoke(Collection $facilities, Company $company): AnonymousResourceCollection
     {
         return DB::transaction(function () use ($facilities, $company): AnonymousResourceCollection {
-            $groupByBilling = $facilities->mapToGroups(fn ($facility) => [$facility->getBillingCompanyId() => $facility->getId()]);
-
-            $groupByBilling->each(
-                fn (Collection $facilities, int $billingCompanyId) => $this->syncFacilities($company, $facilities, $billingCompanyId)
-            );
+            $this->syncFacilities($company, $facilities);
 
             $records = $company->facilities()
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($facilities): void {
@@ -32,17 +28,26 @@ final class AddFacilities
         });
     }
 
-    private function syncFacilities(Company $company, Collection $facilities, int $billingCompanyId): void
+    private function syncFacilities(Company $company, Collection $facilities): void
     {
         $company->facilities()
             ->wherePivot('company_id', $company->id)
-            ->wherePivot('billing_company_id', $billingCompanyId)
+            ->when(Gate::denies('is-admin'), function (Builder $query) use ($facilities): void {
+                $query->where('billing_company_id', $facilities->first()->getBillingCompanyId());
+            })
             ->detach();
 
-        $company->facilities()->attach($facilities->mapWithKeys(
-            fn ($facility) => [$facility => [
-                'billing_company_id' => $billingCompanyId,
-            ],
-        ])->toArray());
+        $facilities
+            ->mapToGroups(fn ($facility) => [$facility->getBillingCompanyId() => $facility->getId()])
+            ->each(function (Collection $facilities, int $billingCompanyId) use ($company) {
+                $company->facilities()->attach(
+                    $facilities->mapWithKeys(fn ($facility) => [
+                        $facility => [
+                            'billing_company_id' => $billingCompanyId,
+                        ],
+                    ])
+                    ->toArray()
+                );
+            });
     }
 }
