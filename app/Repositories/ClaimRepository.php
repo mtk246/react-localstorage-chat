@@ -842,7 +842,7 @@ class ClaimRepository
 
                     $dataReal = [
                         'controlNumber'           => $newCode,
-                        'tradingPartnerServiceId' => $insurancePolicy[insurancePlan]->insuranceCompany->payer_id ?? null,
+                        'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
                         'tradingPartnerName'      => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                         'provider' => [
                             'organizationName'        => $claim->company->name ?? null,
