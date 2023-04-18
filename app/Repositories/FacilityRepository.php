@@ -36,10 +36,6 @@ class FacilityRepository
                 'nppes_verified_at' => now(),
             ]);
 
-            if (isset($data['companies'])) {
-                $facility->companies()->sync($data['companies']);
-            }
-
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
                 foreach ($data['taxonomies'] as $taxonomy) {
@@ -53,6 +49,15 @@ class FacilityRepository
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (isset($data['companies'])) {
+                $companies = collect($data['companies'])
+                    ->mapWithKeys(fn ($facility) => [$facility => [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]])->toArray();
+
+                $facility->companies()->sync($companies);
             }
 
             /* Attach billing company */
