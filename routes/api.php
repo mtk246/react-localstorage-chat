@@ -459,6 +459,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
         Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
+        Route::post('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'storeCheckEligibility']);
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
@@ -471,6 +472,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::post('/draft-check-eligibility', [\App\Http\Controllers\ClaimController::class, 'saveAsDraftAndEligibility']);
         Route::put('/verify-register/{id}', [\App\Http\Controllers\ClaimController::class, 'verifyAndRegister']);
+        Route::post('/verify-register', [\App\Http\Controllers\ClaimController::class, 'storeVerifyAndRegister']);
 
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
