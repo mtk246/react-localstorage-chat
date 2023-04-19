@@ -721,6 +721,17 @@ class UserRepository{
         return $user;
     }
 
+    public function getListLangs() {
+        try {
+            return [
+                ['id' => 1, 'code' => 'en', 'name' => 'English'],
+                ['id' => 2, 'code' => 'es', 'name' => 'Spanish'],
+            ];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getListNameSuffix()
     {
         try {
