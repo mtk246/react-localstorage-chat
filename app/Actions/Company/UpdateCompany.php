@@ -142,7 +142,10 @@ final class UpdateCompany
                 'billing_company_id' => $request->getBillingCompanyId(),
             ], ['note' => $request->getPrivateNote()]);
 
-            $company->publicNote()->updateOrCreate([], ['note' => $request->getPublicNote()]);
+            $company->publicNote()->updateOrCreate([
+                'publishable_type' => Company::class,
+                'publishable_id' => $company->id,
+            ], ['note' => $request->getPublicNote()]);
 
             return new NotesResource($company, $request);
         });
