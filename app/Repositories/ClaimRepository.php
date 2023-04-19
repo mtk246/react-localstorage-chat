@@ -525,7 +525,7 @@ class ClaimRepository
                     }
                 }
             }
-           DB::commit();
+            DB::commit();
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -726,7 +726,7 @@ class ClaimRepository
                     'organizationName'        => $claim->company->name ?? null,
                     'npi'                     => $claim->company->npi ?? null,
                     'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
-                    'providerCode'            => $claim->company->code ?? null,
+                    'providerCode'            => "AD", //$claim->company->code ?? null,
                     'referenceIdentification' => $claim->company->reference_identification ?? null
                 ],
                 'subscriber' => [
@@ -761,14 +761,14 @@ class ClaimRepository
                 "response" => $responseData,
             ];
         } catch (\Exception $e) {
-            DB::rollBack();
             return null;
         }
     }
 
     public function storeCheckEligibility($token, array $data) {
         try {
-            $data = [
+            DB::beginTransaction();
+            $dataENV = [
                 "sandbox" => [
                     "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3",
                     "body" => [
@@ -835,7 +835,7 @@ class ClaimRepository
                     $serviceCodes = [];
 
                     foreach ($data['claim_services'] ?? [] as $service) {
-                        $typeOfService = TypeOfService::find($service['type_of_service']);
+                        $typeOfService = TypeOfService::find($service['type_of_service_id']);
                         $encounter["beginningDateOfService"] = str_replace("-", "", $service['from_service']);
                         $encounter["endDateOfService"] = str_replace("-", "", $service['to_service']);
                         array_push($serviceCodes, $typeOfService->code);
@@ -850,7 +850,7 @@ class ClaimRepository
                             'organizationName'        => $company->name ?? null,
                             'npi'                     => $company->npi ?? null,
                             'serviceProviderNumber'   => $company->sevices_number ?? null,
-                            'providerCode'            => $company->code ?? null,
+                            'providerCode'            => "AD", //$company->code ?? null,
                             'referenceIdentification' => $company->reference_identification ?? null
                         ],
                         'subscriber' => [
@@ -875,8 +875,8 @@ class ClaimRepository
                     ];
 
                     $response = Http::withToken($token)->acceptJson()->post(
-                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
-                        $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
+                        $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
+                        $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
                     $responseData = json_decode($response->body());
 
@@ -935,6 +935,7 @@ class ClaimRepository
                 return $a_index - $b_index;
             });
 
+            DB::commit();
             return [
                 "insurance_policies" => $insurancePolicies
             ];
@@ -946,6 +947,7 @@ class ClaimRepository
 
     public function checkEligibility($token, $id) {
         try {
+            DB::beginTransaction();
             $data = [
                 "sandbox" => [
                     "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3",
@@ -1027,7 +1029,7 @@ class ClaimRepository
                             'organizationName'        => $claim->company->name ?? null,
                             'npi'                     => $claim->company->npi ?? null,
                             'serviceProviderNumber'   => $claim->company->sevices_number ?? null,
-                            'providerCode'            => $claim->company->code ?? null,
+                            'providerCode'            => "AD", //$claim->company->code ?? null,
                             'referenceIdentification' => $claim->company->reference_identification ?? null
                         ],
                         'subscriber' => [
@@ -1130,6 +1132,7 @@ class ClaimRepository
                 return $a_index - $b_index;
             });
 
+            DB::commit();
             return [
                 "claim_id" => $claim->id,
                 "insurance_policies" => $insurancePolicies
@@ -1142,6 +1145,7 @@ class ClaimRepository
 
     public function claimValidation($token, $id) {
         try {
+            DB::beginTransaction();
             $data = [
                 "sandbox" => [
                     "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation",
@@ -1505,6 +1509,7 @@ class ClaimRepository
                 
                 array_push($insurancePolicies, $insurancePolicy);
             }
+            DB::commit();
             return [
                 "claim_id"           => $claim->id,
                 "insurance_policies" => $insurancePolicies
@@ -1517,6 +1522,7 @@ class ClaimRepository
 
     public function claimSubmit($token, $claimId, $batchId) {
         try {
+            DB::beginTransaction();
             $data = [
                 "sandbox" => [
                     "url"  => "https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission",
@@ -1883,6 +1889,7 @@ class ClaimRepository
                     "response_details"             => isset($response) ? $response->body() : null,
                 ]);
             }
+            DB::commit();
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();

@@ -194,7 +194,7 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error claim eligibility"), 400);
     }
 
-    public function StorecheckEligibility(ClaimEligibilityRequest $request)
+    public function storeCheckEligibility(ClaimEligibilityRequest $request)
     {
         $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
 
