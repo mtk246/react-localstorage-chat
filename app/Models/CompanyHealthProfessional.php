@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\HealthProfessional\AuthorizationType;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -52,7 +54,7 @@ class CompanyHealthProfessional extends Pivot
      * @var array
      */
     protected $casts = [
-        'authorization' => 'array',
+        'authorization' => AsEnumCollection::class.':'.AuthorizationType::class,
     ];
 
     public function company()
@@ -63,5 +65,10 @@ class CompanyHealthProfessional extends Pivot
     public function healthProfessional()
     {
         return $this->belongsTo(HealthProfessional::class);
+    }
+
+    public function billingCompany()
+    {
+        return $this->belongsTo(BillingCompany::class, 'billing_company_id');
     }
 }
