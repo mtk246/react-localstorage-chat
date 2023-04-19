@@ -401,4 +401,11 @@ class UserController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating language'), 400);
     }
+
+    public function getListLangs()
+    {
+        $rs = $this->userRepository->getListLangs();
+
+        return response()->json($rs);
+    }
 }

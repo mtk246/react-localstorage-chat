@@ -106,6 +106,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::delete('{id}', [\App\Http\Controllers\IpRestrictionController::class, 'destroy']);
         });
         Route::patch('/lang', [\App\Http\Controllers\UserController::class, 'updateLang']);
+        Route::get('/get-list-langs', [\App\Http\Controllers\UserController::class, 'getListLangs']);
     });
 
     Route::middleware([
