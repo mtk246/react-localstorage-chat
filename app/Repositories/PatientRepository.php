@@ -150,7 +150,7 @@ class PatientRepository
                 $patient = Patient::firstOrCreate([
                     "user_id"           => $user->id
                 ], [
-                    "code"              => generateNewCode("PA", 5, date("y"), Patient::class, "code"),
+                    "code"              => generateNewCode("PA", 5, date("Y"), Patient::class, "code"),
                     "driver_license"    => $data["driver_license"] ?? '',
                     "marital_status_id" => $data["marital_status_id"] ?? null,
                     "user_id"           => $user->id
