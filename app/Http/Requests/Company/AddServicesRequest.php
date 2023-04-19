@@ -36,7 +36,7 @@ final class AddServicesRequest extends FormRequest
                 'exists:\App\Models\Procedure,id',
             ],
             'services.*.modifier_id' => ['nullable', 'integer'],
-            'services.*.price' => ['nullable', 'numeric'],
+            'services.*.price' => ['nullable', 'numeric', 'money', 'regex:/^\d*(\.\d{1,2})?$/'],
             'services.*.mac' => ['nullable', 'string'],
             'services.*.locality_number' => ['nullable', 'numeric'],
             'services.*.state' => ['nullable', 'string'],
