@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Repositories\ClaimRepository;
@@ -193,6 +194,17 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__("Error claim eligibility"), 400);
     }
 
+    public function StorecheckEligibility(ClaimEligibilityRequest $request)
+    {
+        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+
+        if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
+        
+        $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());
+
+        return $rs ? response()->json($rs) : response()->json(__("Error claim eligibility"), 400);
+    }
+
     /**
      * Validation
      *
@@ -239,6 +251,34 @@ class ClaimController extends Controller
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
         $claim = Claim::find($id);
+        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        if (($request->validate ?? false) == true) {
+            if (isset($request->insurance_policies)) {
+                $claim->insurancePolicies()->sync($request->insurance_policies);
+            }
+
+            $rs = $this->claimValidation($claim->id);
+            $this->claimRepository->changeStatus([
+                "status_id"    => $statusVerify->id,
+                "private_note" => "API verification"
+            ], $claim->id);
+        } else {
+            if (isset($request->insurance_policies)) {
+                $claim->insurancePolicies()->sync($request->insurance_policies);
+            }
+
+            $this->claimRepository->changeStatus([
+                "status_id"    => $statusVerify->id,
+                "private_note" => "Manual verification"
+            ], $claim->id);
+        }
+
+        return $claim ? response()->json($claim) : response()->json(__("Error save claim"), 400);
+    }
+
+    public function storeVerifyAndRegister(ClaimVerifyRequest $request)
+    {
+        $claim = $this->claimRepository->createClaim($request->validated());
         $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
         if (($request->validate ?? false) == true) {
             if (isset($request->insurance_policies)) {
