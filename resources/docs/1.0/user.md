@@ -53,7 +53,7 @@
 | 19|GET | `get list users`   | `/user/get-list?biling_company_id={ID?}&authorization={NameAuth?}` |yes|Get list users |
 | 20 |GET | `Get list name suffix`          | `/user/get-list-name-suffix`|yes|Get all name suffix|
 | 21 |GET | `Get list gender`          | `/user/get-list-gender`|yes|Get all gender|
-| 22 |GET | `Get list language`          | `/user/get-list-langs`|yes|Get all language|
+| 22 |GET | `Get list language`          | `/setting/get-list-langs`|yes|Get all language|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -1372,14 +1372,6 @@
 ```json
 {
     "Authorization": bearer <token>
-}
-```
-
-### Param in path
-
-```json
-{
-    "id": <integer>
 }
 ```
 
