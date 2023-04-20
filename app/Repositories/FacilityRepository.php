@@ -499,6 +499,7 @@ class FacilityRepository
 
             if (isset($data['companies'])) {
                 $companies = collect($data['companies'])
+                    ->unique()
                     ->mapWithKeys(fn ($facility) => [$facility => [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]])->toArray();
@@ -511,7 +512,7 @@ class FacilityRepository
                 ->detach();
 
             if (isset($data['place_of_services'])) {
-                foreach ($data['place_of_services'] as $pos) {
+                foreach (array_unique($data['place_of_services']) as $pos) {
                     $facility->placeOfServices()->attach($pos, [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]);
