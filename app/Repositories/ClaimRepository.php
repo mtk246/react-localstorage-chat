@@ -1360,7 +1360,7 @@ class ClaimRepository
                             "address" => [
                                 "address1" => $addressPatient->address ?? null,
                                 "city" => $addressPatient->city ?? null,
-                                "state" => substr(($addressPatient->state ?? ''), 0, 3) ?? null,
+                                "state" => substr(($addressPatient->state ?? ''), 0, 2) ?? null,
                                 "postalCode" => $addressPatient->zip
                             ]
                         ];
@@ -1821,11 +1821,11 @@ class ClaimRepository
                             "address" => [
                                 "address1" => $addressCompany->address ?? null,
                                 "city" => $addressCompany->city ?? null,
-                                "state" => substr(($addressCompany->state ?? ''), 0, 3),
+                                "state" => substr(($addressCompany->state ?? ''), 0, 2),
                                 "postalCode" => $addressCompany->zip ?? null
                             ],
                             "contactInformation" => [
-                                "name" => $contactCompany->contact_name ?? null,
+                                "name" => $contactCompany->contact_name ?? $claim->company->name ?? 'Company',
                                 "phoneNumber" => $contactCompany->phone ?? null
                             ]
                         ],
