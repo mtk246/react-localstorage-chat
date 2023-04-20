@@ -878,7 +878,8 @@ class ClaimRepository
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = json_decode($response->body());
+                    $responseData = $response->body();
+                    $responseData['request'] = $dataReal;
 
                     if ($response->successful()) {
                         $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
@@ -906,7 +907,7 @@ class ClaimRepository
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
                     "insurance_policy_id"  => $insurancePolicy->id,
                     "claim_eligibility_status_id"  => $claimEligibilityStatus->id,
-                    "response_details"     => isset($response) ? $response->body() : null,
+                    "response_details"     => isset($responseData) ? $responseData : null,
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
 
@@ -1485,14 +1486,15 @@ class ClaimRepository
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = json_decode($response->body());
+                    $responseData = $response->body();
+                    $responseData['request'] = $dataReal;
                 }
 
                 $claimValidation = ClaimValidation::updateOrCreate([
                     "control_number"       => $newCode,
                     "claim_id"             => $claim->id,
                     "insurance_policy_id"  => $insurancePolicy->id,
-                    "response_details"     => isset($response) ? $response->body() : null,
+                    "response_details"     => isset($responseData) ? $responseData : null,
                 ]);
 
                 if (isset($claimValidation)) {
@@ -1795,7 +1797,7 @@ class ClaimRepository
                         "organizationName" => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                     ],
                     "subscriber" => [
-                        "memberId"    => $subscriber->member_id ?? null,
+                        "memberId"    => $subscriber->member_id ?? $subscriber->id ?? null,
                         "paymentResponsibilityLevelCode" => $insurancePolicy->payment_responsibility_level_code ?? "P",
                         "firstName"    => $subscriber->first_name ?? $subscriber->profile->first_name,
                         "lastName"     => $subscriber->last_name ?? $subscriber->profile->last_name,
@@ -1856,7 +1858,8 @@ class ClaimRepository
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                 );
-                $responseData = json_decode($response->body());
+                $responseData = $response->body();
+                $responseData['request'] = $dataReal;
 
                 if ($response->successful()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Success')->first();
@@ -1886,7 +1889,7 @@ class ClaimRepository
                     "claim_id"                     => $claim->id,
                     "claim_batch_id"               => $batchId,
                     "claim_transmission_status_id" => $claimTransmissionStatus->id,
-                    "response_details"             => isset($response) ? $response->body() : null,
+                    "response_details"             => isset($responseData) ? $responseData : null,
                 ]);
             }
             DB::commit();
