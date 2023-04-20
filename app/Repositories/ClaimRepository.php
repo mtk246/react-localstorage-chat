@@ -1435,7 +1435,7 @@ class ClaimRepository
                             "address" => [
                                 "address1" => $addressSubscriber->address ?? null,
                                 "city" => $addressSubscriber->city ?? null,
-                                "state" => substr(($addressSubscriber->state ?? ''), 0, 3) ?? null,
+                                "state" => substr(($addressSubscriber->state ?? ''), 0, 2) ?? null,
                                 "postalCode" => $addressSubscriber->zip
                             ]
                         ],
@@ -1449,7 +1449,7 @@ class ClaimRepository
                                 "address" => [
                                     "address1" => $addressCompany->address ?? null,
                                     "city" => $addressCompany->city ?? null,
-                                    "state" => substr(($addressCompany->state ?? ''), 0, 3),
+                                    "state" => substr(($addressCompany->state ?? ''), 0, 2),
                                     "postalCode" => $addressCompany->zip ?? null
                                 ],
                                 "contactInformation" => [
@@ -1524,6 +1524,18 @@ class ClaimRepository
 
     public function claimSubmit($token, $claimId, $batchId) {
         try {
+            $pointers = array(
+                'A' => 1,
+                'B' => 2,
+                'C' => 3,
+                'D' => 4,
+                'E' => 5,
+                'F' => 6,
+                'G' => 7,
+                'H' => 8,
+                'I' => 9,
+                'J' => 10,
+            );
             DB::beginTransaction();
             $data = [
                 "sandbox" => [
@@ -1732,8 +1744,8 @@ class ClaimRepository
                         "address" => [
                             "address1" => $addressPatient->address ?? null,
                             "city" => $addressPatient->city ?? null,
-                            "state" => substr(($addressPatient->state ?? ''), 0, 3) ?? null,
-                            "postalCode" => $addressPatient->zip
+                            "state" => substr(($addressPatient->state ?? ''), 0, 2) ?? null,
+                            "postalCode" => str_replace("-", "", $addressPatient->zip)
                         ]
                     ];
                 $claimServiceLinePrincipal = $claim->claimFormattable->claimFormServices->first();
@@ -1766,6 +1778,10 @@ class ClaimRepository
                 $serviceLines = [];
 
                 foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                    $valuesPoint = [];
+                    foreach($service->diagnostic_pointers as $point) {
+                        array_push($valuesPoint, $pointers[$point]);
+                    }
                     array_push($serviceLines, [
                         "serviceDate" => str_replace("-", "", $claim->date_of_service,),
                         "professionalService" => [
@@ -1775,7 +1791,7 @@ class ClaimRepository
                             "measurementUnit" => "UN",
                             "serviceUnitCount" => "1",
                             "compositeDiagnosisCodePointers" => [
-                                "diagnosisCodePointers" => $service->diagnostic_pointers ?? []
+                                "diagnosisCodePointers" => $valuesPoint ?? []
                             ]
                         ]
                     ]);
@@ -1789,7 +1805,7 @@ class ClaimRepository
                     "submitter" => [ /** Billing Company*/
                         "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
                         "contactInformation" => [
-                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? "BEGENTOOS",
+                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? $claim->claimFormattable->billingCompany->name ?? "Contact Billing",
                             "phoneNumber" => $claim->claimFormattable->billingCompany->contact->phone ?? null
                         ]
                     ],
@@ -1807,8 +1823,8 @@ class ClaimRepository
                         "address" => [
                             "address1" => $addressSubscriber->address ?? null,
                             "city" => $addressSubscriber->city ?? null,
-                            "state" => substr(($addressSubscriber->state ?? ''), 0, 3) ?? null,
-                            "postalCode" => $addressSubscriber->zip
+                            "state" => substr(($addressSubscriber->state ?? ''), 0, 2) ?? null,
+                            "postalCode" => str_replace("-", "", $addressSubscriber->zip)
                         ]
                     ],
                     "dependent" => $dependent ?? null,
@@ -1816,16 +1832,16 @@ class ClaimRepository
                         [
                             "providerType" => "BillingProvider",
                             "npi" => $claim->company->npi ?? null,
-                            "employerId" => $claim->company->ein ?? $claim->company->npi,
+                            "employerId" => str_replace("-", "", $claim->company->ein ?? $claim->company->npi),
                             "organizationName" => $claim->company->name ?? null,
                             "address" => [
                                 "address1" => $addressCompany->address ?? null,
                                 "city" => $addressCompany->city ?? null,
                                 "state" => substr(($addressCompany->state ?? ''), 0, 2),
-                                "postalCode" => $addressCompany->zip ?? null
+                                "postalCode" => str_replace("-", "", $addressCompany->zip)
                             ],
                             "contactInformation" => [
-                                "name" => $contactCompany->contact_name ?? $claim->company->name ?? 'Company',
+                                "name" => $contactCompany->contact_name ?? $claim->company->name ?? 'Contact company',
                                 "phoneNumber" => $contactCompany->phone ?? null
                             ]
                         ],
