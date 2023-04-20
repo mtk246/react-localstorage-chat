@@ -878,7 +878,7 @@ class ClaimRepository
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = $response->body();
+                    $responseData['response'] = json_decode($response->body());
                     $responseData['request'] = $dataReal;
 
                     if ($response->successful()) {
@@ -907,7 +907,7 @@ class ClaimRepository
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
                     "insurance_policy_id"  => $insurancePolicy->id,
                     "claim_eligibility_status_id"  => $claimEligibilityStatus->id,
-                    "response_details"     => isset($responseData) ? $responseData : null,
+                    "response_details"     => isset($responseData) ? json_encode($responseData) : null,
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
 
@@ -1486,7 +1486,7 @@ class ClaimRepository
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = $response->body();
+                    $responseData['response'] = json_decode($response->body());
                     $responseData['request'] = $dataReal;
                 }
 
@@ -1494,7 +1494,7 @@ class ClaimRepository
                     "control_number"       => $newCode,
                     "claim_id"             => $claim->id,
                     "insurance_policy_id"  => $insurancePolicy->id,
-                    "response_details"     => isset($responseData) ? $responseData : null,
+                    "response_details"     => isset($responseData) ? json_encode($responseData) : null,
                 ]);
 
                 if (isset($claimValidation)) {
@@ -1858,7 +1858,7 @@ class ClaimRepository
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                 );
-                $responseData = $response->body();
+                $responseData['response'] = json_decode($response->body());
                 $responseData['request'] = $dataReal;
 
                 if ($response->successful()) {
@@ -1889,7 +1889,7 @@ class ClaimRepository
                     "claim_id"                     => $claim->id,
                     "claim_batch_id"               => $batchId,
                     "claim_transmission_status_id" => $claimTransmissionStatus->id,
-                    "response_details"             => isset($responseData) ? $responseData : null,
+                    "response_details"             => isset($responseData) ? json_encode($responseData) : null,
                 ]);
             }
             DB::commit();
