@@ -1789,7 +1789,7 @@ class ClaimRepository
                     "submitter" => [ /** Billing Company*/
                         "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
                         "contactInformation" => [
-                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? null,
+                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? "BEGENTOOS",
                             "phoneNumber" => $claim->claimFormattable->billingCompany->contact->phone ?? null
                         ]
                     ],
@@ -1816,7 +1816,7 @@ class ClaimRepository
                         [
                             "providerType" => "BillingProvider",
                             "npi" => $claim->company->npi ?? null,
-                            "employerId" => $claim->company->ein ?? null,
+                            "employerId" => $claim->company->ein ?? $claim->company->npi,
                             "organizationName" => $claim->company->name ?? null,
                             "address" => [
                                 "address1" => $addressCompany->address ?? null,
