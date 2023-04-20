@@ -492,19 +492,25 @@ class FacilityRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
+            $facility->companies()
+                ->wherePivot('facility_id', $facility->id)
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->detach();
+
             if (isset($data['companies'])) {
                 $companies = collect($data['companies'])
                     ->mapWithKeys(fn ($facility) => [$facility => [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ]])->toArray();
 
-                $facility->companies()->sync($companies);
+                $facility->companies()->attach($companies);
             }
 
-            if (isset($data['place_of_services'])) {
-                $facility->placeOfServices()
-                         ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
+            $facility->placeOfServices()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->detach();
 
+            if (isset($data['place_of_services'])) {
                 foreach ($data['place_of_services'] as $pos) {
                     $facility->placeOfServices()->attach($pos, [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
