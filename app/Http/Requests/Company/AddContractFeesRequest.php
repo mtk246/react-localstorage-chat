@@ -52,8 +52,16 @@ final class AddContractFeesRequest extends FormRequest
             ],
             'contract_fees.*.price' => ['nullable', 'numeric'],
             'contract_fees.*.type_id' => ['nullable', 'integer'],
-            'contract_fees.*.start_date' => ['nullable', 'date', 'before:contract_fees.*.end_date'],
-            'contract_fees.*.end_date' => ['nullable', 'date', 'after:contract_fees.*.start_date'],
+            'contract_fees.*.start_date' => [
+                'nullable',
+                'date',
+                'before:contract_fees.*.end_date',
+            ],
+            'contract_fees.*.end_date' => [
+                'nullable',
+                'date',
+                'after:contract_fees.*.start_date',
+            ],
             'contract_fees.*.mac' => ['nullable', 'string'],
             'contract_fees.*.locality_number' => ['nullable', 'numeric'],
             'contract_fees.*.state' => ['nullable', 'string'],
@@ -62,10 +70,18 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.insurance_label_fee_id' => ['nullable', 'integer'],
             'contract_fees.*.price_percentage' => ['nullable', 'numeric'],
             'contract_fees.*.private_note' => ['nullable', 'string'],
-            'contract_fees.*.patien.*' => ['required_if:*.type_id,18', 'array'],
-            'contract_fees.*.patien.*.user_id' => ['required', 'integer'],
-            'contract_fees.*.patien.*.start_date' => ['nullable', 'date'],
-            'contract_fees.*.patien.*.end_date' => ['nullable', 'date'],
+            'contract_fees.*.patiens' => ['required_if:*.type_id,18', 'array'],
+            'contract_fees.*.patiens.*.user_id' => ['required', 'integer'],
+            'contract_fees.*.patiens.*.start_date' => [
+                'required',
+                'date',
+                'before:contract_fees.*.patiens.*.end_date',
+            ],
+            'contract_fees.*.patiens.*.end_date' => [
+                'nullable',
+                'date',
+                'after:contract_fees.*.patien.*.start_date',
+            ],
         ];
     }
 }
