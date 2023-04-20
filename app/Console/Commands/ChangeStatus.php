@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Modifier;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ChangeStatus extends Command
 {
@@ -21,7 +24,6 @@ class ChangeStatus extends Command
      */
     protected $description = 'Change the status of the modules when they reach their expiration date';
 
-    
     public function __construct()
     {
         parent::__construct();
@@ -34,9 +36,18 @@ class ChangeStatus extends Command
      */
     public function handle()
     {
-        Modifier::whereNotNull('end_date')->where('end_date', '<=', now())->where('active', true)->update([
-            'active' => false
-        ]);
-        return 0;
+        $modifiersQuery = Modifier::query()
+            ->whereNot('end_date')
+            ->where('end_date', '<=', now())
+            ->where('active', true);
+
+        Log::info("[schedule: status:change] Updating {$modifiersQuery->count()} modifiers");
+
+        $modifiersQuery
+            ->update([
+                'active' => false,
+            ]);
+
+        return command::SUCCESS;
     }
 }
