@@ -19,7 +19,7 @@ return new class() extends Migration {
             $table->longText('response_details')->nullable();
             $table->foreignId('claim_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('claim_batch_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->unsignedBigInteger('claim_transmission_status_id');
+            $table->unsignedBigInteger('claim_transmission_status_id')->nullable();
             $table->foreign('claim_transmission_status_id', 'fk_ctr_cts_id')
                 ->references('id')
                 ->on('claim_transmission_statuses')
