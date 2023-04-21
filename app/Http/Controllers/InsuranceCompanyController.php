@@ -52,7 +52,7 @@ final class InsuranceCompanyController extends Controller
                 }
             }
         } else {
-            response()->json(__('Error, insurance company not found'), 404);
+            return response()->json(__('Error, insurance company not found'), 404);
         }
     }
 
