@@ -405,7 +405,31 @@ class InsuranceCompanyRepository
 
 
     public function getByPayer(string $payer) {
-        $insurance = InsuranceCompany::wherePayerId($payer)->with("publicNote")->first();
+        $insurance = InsuranceCompany::query()
+            ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])
+            ->with("publicNote")
+            ->first();
+        if ($insurance) {
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompaniesException = BillingCompany::query()
+                ->where('status', true)
+                ->get()
+                ->pluck('id')
+                ->toArray();
+            } else {
+                $billingCompaniesException = auth()->user()->billingCompanies->first();
+            }
+            
+            $billingCompanies = $insurance->billingCompanies()
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+            if (empty($billingCompanies)) {
+                return ['result' => false];
+            }
+        }
+
         return !is_null($insurance) ? $insurance : null;
     }
 
