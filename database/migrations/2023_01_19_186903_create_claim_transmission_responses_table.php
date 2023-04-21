@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +19,12 @@ return new class extends Migration
             $table->longText('response_details')->nullable();
             $table->foreignId('claim_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('claim_batch_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('claim_transmission_status_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedBigInteger('claim_transmission_status_id');
+            $table->foreign('claim_transmission_status_id', 'fk_ctr_cts_id')
+                ->references('id')
+                ->on('claim_transmission_statuses')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
