@@ -168,7 +168,11 @@ class InsurancePlanController extends Controller
             if (isset($rs['result']) && $rs['result']) {
                 return response()->json($rs['data']);
             } else {
-                return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
+                if (auth()->user()->hasRole('superuser')) {
+                    return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
+                } else {
+                    return response()->json(__('Forbidden, The insurance plan has already been associated with the billing company of your insurance company'), 403);
+                }
             }
         } else {
             return response()->json(__('Error, insurance plan not found'), 404);

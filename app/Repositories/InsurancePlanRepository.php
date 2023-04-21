@@ -626,11 +626,15 @@ class InsurancePlanRepository
         $insurance = InsurancePlan::query()->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])->first();
 
         if ($insurance) {
-            $billingCompaniesException = $insurance->insuranceCompany
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompaniesException = $insurance->insuranceCompany
                 ->billingCompanies()
                 ->get()
                 ->pluck('id')
                 ->toArray();
+            } else {
+                $billingCompaniesException = auth()->user()->billingCompanies->first();
+            }
             
             $billingCompanies = $insurance->billingCompanies()
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
