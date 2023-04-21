@@ -28,7 +28,7 @@ return new class() extends Migration {
             $table->string('benefits_date_information')->nullable();
             $table->string('additional_information')->nullable();
             $table->unsignedBigInteger('claim_eligibility_id');
-            $table->foreign('claim_eligibility_id', 'fk_cebio_claim_eligibility_id')
+            $table->foreign('claim_eligibility_id', 'fk_cebi_claim_eligibility_id')
                 ->references('id')
                 ->on('claim_eligibilities')
                 ->onDelete('restrict')
