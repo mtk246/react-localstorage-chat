@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,12 @@ class CreateInsurancePlanServiceAliancesTable extends Migration
             $table->id();
             $table->double('price');
             $table->boolean('percentage')->default(false);
-            $table->foreignId('insurance_plan_service_id')->constrained('insurance_plan_service')->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedBigInteger('insurance_plan_service_id');
+            $table->foreign('insurance_plan_service_id')
+                ->references('id')
+                ->on('insurance_plan_service')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
