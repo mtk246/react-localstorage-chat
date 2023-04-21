@@ -20,7 +20,7 @@ class CreateInsurancePlanServiceAliancesTable extends Migration
             $table->double('price');
             $table->boolean('percentage')->default(false);
             $table->unsignedBigInteger('insurance_plan_service_id');
-            $table->foreign('ip_service_id')
+            $table->foreign('insurance_plan_service_id', 'fk_ipsa_ips_id')
                 ->references('id')
                 ->on('insurance_plan_service')
                 ->onDelete('restrict')
