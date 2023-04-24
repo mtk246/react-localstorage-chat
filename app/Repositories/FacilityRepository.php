@@ -108,7 +108,7 @@ class FacilityRepository
             }
             if (isset($data['contact']['email'])) {
                 Contact::create([
-                    'contact_name' => $data['contact']['name'],
+                    'contact_name' => $data['contact']['contac_name'],
                     'phone' => $data['contact']['phone'],
                     'fax' => $data['contact']['fax'],
                     'email' => $data['contact']['email'],
@@ -431,7 +431,6 @@ class FacilityRepository
 
             if (isset($contact)) {
                 $facility_contact = [
-                    'name' => $contact->contact_name,
                     'fax' => $contact->fax,
                     'email' => $contact->email,
                     'phone' => $contact->phone,
@@ -558,7 +557,7 @@ class FacilityRepository
 
             if (isset($data['contact']['email'])) {
                 Contact::create([
-                    'contact_name' => $data['contact']['name'],
+                    'contact_name' => $data['contact']['contact_name'],
                     'phone' => $data['contact']['phone'],
                     'fax' => $data['contact']['fax'],
                     'email' => $data['contact']['email'],
