@@ -408,7 +408,7 @@ class ReportRepository implements ReportInterface
                 }
 
                 /** 7. Insured address and contact */
-                $address = $this->subscriber->addresses->first() ?? null;
+                $address = $this->subscriber?->addresses->first() ?? null;
                 $this->pdf->SetFont($this->fontFamily, '', 10);
                 $this->pdf->MultiCell(70, 5.8, substr($address->address ?? '', 0, 28), 0, 'L', false, 1, 135, 56.5, true, 0, false, true, 0, 'T', true);
                 $this->pdf->MultiCell(70, 5.8, substr($address->city ?? '', 0, 24), 0, 'L', false, 1, 135, 64.5, true, 0, false, true, 0, 'T', true);
@@ -416,7 +416,7 @@ class ReportRepository implements ReportInterface
                 $this->pdf->SetFont($this->fontFamily, '', 9);
                 $this->pdf->MultiCell(70, 5.8, substr($address->zip ?? '', 0, 12), 0, 'L', false, 1, 135, 74, true, 0, false, true, 0, 'T', true);
 
-                $contact = $this->subscriber->contacts->first() ?? null;
+                $contact = $this->subscriber?->contacts->first() ?? null;
                 $this->pdf->MultiCell(70, 5.8, substr($contact->phone ?? '', 0, 3), 0, 'L', false, 1, 170, 74, true, 0, false, true, 0, 'T', true);
                 $this->pdf->MultiCell(70, 5.8, substr($contact->phone ?? '', 3, 135), 0, 'L', false, 1, 178.5, 74, true, 0, false, true, 0, 'T', true);
 
