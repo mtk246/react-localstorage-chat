@@ -8,7 +8,7 @@ pipelines:
             script:
               - ln -f -s .env.example .env
               - composer install
-              -  php artisan test
+              - php artisan test
             caches:
               - composer
             services:
