@@ -74,8 +74,6 @@ pipelines:
                     - composer
                   services:
                     - pgsql
-                  caches:
-                    - composer
       - stage:
           name: Test app
           steps:
@@ -101,10 +99,10 @@ pipelines:
                     - composer
       - stage:
           name: Deploy
-          script:
-            - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
-          caches:
-            - composer
+          steps:
+              - step:
+                  script:
+                    - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
 definitions:
   services:
     pgsql:
