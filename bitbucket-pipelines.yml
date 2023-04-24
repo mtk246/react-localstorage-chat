@@ -60,7 +60,7 @@ pipelines:
           caches:
             - composer
     forge-integration:
-      - step: *build-env
+      - step: *build
       - step:
           name: Deploy
           script:
@@ -76,7 +76,7 @@ definitions:
         POSTGRES_USER: 'user'
         POSTGRES_PASSWORD: '123'
   steps:
-    - step: &build-env
+    - step: &build
         name: Build environment
         script:
           - ln -f -s .env.example .env
