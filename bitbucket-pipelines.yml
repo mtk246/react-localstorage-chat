@@ -6,7 +6,6 @@ pipelines:
           name: Test
           script:
             - ln -f -s .env.example .env
-            - php -v
             - composer install
             - php artisan test
           caches:
