@@ -39,7 +39,6 @@ pipelines:
     master:
       - step:
           name: Deploy
-          deployment: production
           script:
             - composer install --no-dev
             - php artisan migrate --force
@@ -48,7 +47,6 @@ pipelines:
     v100:
       - step:
           name: Deploy
-          deployment: version
           script:
             - composer install --no-dev
             - php artisan migrate --force
@@ -57,7 +55,6 @@ pipelines:
     staging:
       - step:
           name: Deploy
-          deployment: staging
           script:
             - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
           caches:
@@ -65,7 +62,6 @@ pipelines:
     forge-integration:
       - step:
           name: Deploy
-          deployment: testing
           script:
             - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
           caches:
