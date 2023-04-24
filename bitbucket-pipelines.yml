@@ -53,7 +53,6 @@ definitions:
     pgsql:
       image: postgres:13-alpine
       environment:
-        MYSQL_DATABASE: 'medical'
-        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-        MYSQL_USER: 'user'
-        MYSQL_PASSWORD: '123'
+        POSTGRES_DB: 'medical'
+        POSTGRES_USER: 'user'
+        POSTGRES_PASSWORD: '123'
