@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 use App\Facades\Pagination;
@@ -33,7 +34,6 @@ use App\Models\Subscriber;
 use App\Models\User;
 use App\Roles\Models\Role;
 use App\Models\TypeCatalog;
-use Arr;
 
 class PatientRepository
 {
@@ -44,7 +44,7 @@ class PatientRepository
     public function createPatient(array $data) {
         try {
             DB::beginTransaction();
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::allows('is-admin')) {
                 $billingCompany = $data["billing_company_id"];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -54,21 +54,33 @@ class PatientRepository
                 $patient = Patient::find($data['id']);
                 $user = $patient->user;
                 $profile = $user->profile;
+            } elseif (isset($data['user_id'])) {
+                $user = User::find($data['user_id']);
+                $profile = $user->profile;
             }
 
             if (!isset($profile)) {
                 /** Create Profile */
-                $profile = Profile::firstOrCreate([
-                    "ssn"           => $data["profile"]["ssn"] ?? '',
-                ], [
-                    "ssn"           => $data["profile"]["ssn"] ?? '',
-                    "first_name"    => $data["profile"]["first_name"],
-                    "middle_name"   => $data["profile"]["middle_name"] ?? '',
-                    "last_name"     => $data["profile"]["last_name"],
-                    "sex"           => $data["profile"]["sex"],
-                    'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
-                    "date_of_birth" => $data["profile"]["date_of_birth"]
-                ]);
+                if (isset($data["profile"]["ssn"])) {
+                    $profile = Profile::create([
+                        "ssn"           => $data["profile"]["ssn"] ?? '',
+                        "first_name"    => $data["profile"]["first_name"],
+                        "middle_name"   => $data["profile"]["middle_name"] ?? '',
+                        "last_name"     => $data["profile"]["last_name"],
+                        "sex"           => $data["profile"]["sex"],
+                        'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
+                        "date_of_birth" => $data["profile"]["date_of_birth"]
+                    ]);
+                } else {
+                    $profile->update([
+                        "first_name"    => $data["profile"]["first_name"],
+                        "middle_name"   => $data["profile"]["middle_name"] ?? '',
+                        "last_name"     => $data["profile"]["last_name"],
+                        "sex"           => $data["profile"]["sex"],
+                        'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
+                        "date_of_birth" => $data["profile"]["date_of_birth"]
+                    ]);
+                }
             }
 
             if (isset($data["profile"]["social_medias"]) && !empty(filter_array_empty($data["profile"]["social_medias"]))) {
@@ -108,7 +120,7 @@ class PatientRepository
                 $user = User::firstOrCreate([
                     "email"      => $data['contact']['email'],
                 ], [
-                    "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
+                    "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                     "email"      => $data['contact']['email'],
                     "language"   => $data['language'] ?? 'en',
                     "userkey"    => encrypt(uniqid("", true)),
@@ -117,7 +129,9 @@ class PatientRepository
             }
 
             /** Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            if (is_null($user->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+                $user->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            }
             
             /** Create Contact */
             if (isset($data['contact'])) {
@@ -303,7 +317,7 @@ class PatientRepository
     public function getOnePatient(int $id) {
         $patient = Patient::find($id);
         
-        if (auth()->user()->hasRole('superuser')) {
+        if (Gate::allows('is-admin')) {
             $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
@@ -785,7 +799,7 @@ class PatientRepository
             $patient = Patient::find($id);
             $user = $patient->user;
             
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::allows('is-admin')) {
                 $billingCompany = $data["billing_company_id"];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -1018,7 +1032,7 @@ class PatientRepository
      */
     public function getAllSubscribers(array $data) {
         $patient_id = $data['patient_id'];
-        if (!auth()->user()->hasRole('superuser')) {
+        if (!Gate::allows('is-admin')) {
             $billingCompany = auth()->user()->billingCompanies->first();
         } else {
             $billingCompany = $data['billing_company_id'] ?? null;
@@ -1108,7 +1122,7 @@ class PatientRepository
             DB::beginTransaction();
 
             $patient = Patient::find($id);
-            if (!auth()->user()->hasRole('superuser')) {
+            if (!Gate::allows('is-admin')) {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
@@ -1200,7 +1214,7 @@ class PatientRepository
         $patient = Patient::find($patient_id);
         $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
 
-        if (!auth()->user()->hasRole('superuser')) {
+        if (!Gate::allows('is-admin')) {
             $billingCompany = auth()->user()->billingCompanies->first();
         }
 
@@ -1391,7 +1405,7 @@ class PatientRepository
         $billingCompanyId = $request->billing_company_id ?? null;
         $companyId = $request->company_id ?? null;
 
-        if (auth()->user()->hasRole('superuser')) {
+        if (Gate::allows('is-admin')) {
             $billingCompany = $billingCompanyId;
         } else {
             $billingCompany = auth()->user()->billingCompanies->first();
@@ -1465,6 +1479,27 @@ class PatientRepository
         }
     }
 
+    public function getListBillingCompanies(Request $request)
+    {
+        $patientId = $request->patient_id ?? null;
+        $edit = $request->edit ?? 'false';
+
+        if (is_null($patientId)) {
+            return getList(BillingCompany::class, 'name', ['status' => true]);
+        } else {
+            $ids = [];
+            $billingCompanies = Patient::find($patientId)->billingCompanies;
+            foreach ($billingCompanies as $field) {
+                array_push($ids, $field->id);
+            }
+            if ('true' == $edit) {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'patients', 'whereHas' => ['relationship' => 'patients', 'where' => ['patient_id' => $patientId]]]);
+            } else {
+                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'patients', 'orWhereHas' => ['relationship' => 'patients', 'where' => ['billing_company_id', $ids]]]);
+            }
+        }
+    }
+
     public function search(Request $request) {
         $date_of_birth = $request->date_of_birth ?? '';
         $first_name = upperCaseWords($request->first_name ?? '');
@@ -1507,7 +1542,7 @@ class PatientRepository
             DB::beginTransaction();
             $patient = Patient::find($id);
             
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::allows('is-admin')) {
                 $companies = $patient->companies()->get();
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -1548,7 +1583,7 @@ class PatientRepository
                 }
             }
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::allows('is-admin')) {
                 $dataCompany = $patient->companies;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();

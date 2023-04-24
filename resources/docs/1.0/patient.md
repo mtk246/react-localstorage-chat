@@ -25,6 +25,7 @@
 - [Get list relationship](#get-list-relationship)
 - [Get list responsibility type](#get-list-responsibility-type)
 - [Get list insurance policy type](#get-list-insurance-policy-type)
+- [Get list billing companies](#get-list-billing-companies)
 - [Search](#search)
 - [Add companies to patient](#add-company)
 
@@ -55,8 +56,9 @@
 | 17  |GET     | `Get list relationship`  | `/patient/get-list-relationship`     | yes    | Get list relationship |
 | 18  |GET     | `Get list responsibility type`  | `/patient/get-list-responsibility-type`     | yes    | Get list responsibility type |
 | 18  |GET     | `Get list insurance policy type`  | `/patient/get-list-insurance-policy-type`     | yes    | Get list insurance policy type |
-| 19|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
-| 20 |PATCH | `Add company to patient`           | `/patient/add-companies-to-patient/{patient_id}`|yes|add company to patient|
+| 19 |GET    | `Get list billing companies` | `/patient/get-list-billing-companies?patient_id={patientID?}&edit={edit?}`|yes|Get list biling companies|
+| 20|GET | `search`   | `/patient/search?date_of_birth={date}&last_name={last_name}&first_name={fisrt_name}&ssn={ssn?}` |yes|Get patients |
+| 21 |PATCH | `Add company to patient`           | `/patient/add-companies-to-patient/{patient_id}`|yes|add company to patient|
 
 
 
@@ -1977,6 +1979,59 @@
 ```
 #
 
+<a name="get-list-billing-companies"></a>
+## Get list billing companies
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+### Param in path
+
+```json
+{
+    "patient_id": <integer>
+    "edit": <boolean>
+}
+```
+
+## Example path
+
+>{primary} /get-list-billing-companies?patient_id=2&edit=false
+
+> /get-list-billing-companies?patient_id=2&edit=true
+
+## Response
+
+> {success} 200 Billing Companies found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Fay-Hahn"
+    },
+    {
+        "id": 2,
+        "name": "Balistreri-Yost"
+    },
+    {
+        "id": 3,
+        "name": "Langosh Ltd"
+    },
+    {
+        "id": 4,
+        "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+#
 
 <a name="search"></a>
 ## Search
