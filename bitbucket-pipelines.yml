@@ -29,6 +29,7 @@ pipelines:
           - step:
               name: syntax test
               script:
+                - echo 'todo:run test'
                 #- ./vendor/bin/pint --test
                 #- ./vendor/bin/phpcs
               caches:
