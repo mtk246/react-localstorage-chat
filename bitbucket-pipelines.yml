@@ -3,24 +3,37 @@ image: composer:2.5.5
 pipelines:
   default:
       - step:
-          name: Test
+          name: Build environment
           script:
             - ln -f -s .env.example .env
             - composer install --ignore-platform-reqs
             - php artisan key:generate
             - php artisan jwt:secret
-            - php artisan test
           caches:
             - composer
           services:
             - pgsql
-      - step:
-          name: syntax test
-          script:
-            #- ./vendor/bin/pint --test
-            #- ./vendor/bin/phpcs
-          caches:
-            - composer
+      - parallel:
+          - step:
+              name: Test
+              script:
+                - ln -f -s .env.example .env
+                - composer install --ignore-platform-reqs
+                - php artisan key:generate
+                - php artisan jwt:secret
+                - php artisan test
+              caches:
+                - composer
+              services:
+                - pgsql
+          - step:
+              name: syntax test
+              script:
+                #- ./vendor/bin/pint --test
+                #- ./vendor/bin/phpcs
+              caches:
+                - composer
+
   branches:
     master:
       - step:
