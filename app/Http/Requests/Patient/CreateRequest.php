@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Patient;
 
 use App\Models\MaritalStatus;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 
@@ -26,13 +28,19 @@ class CreateRequest extends FormRequest
      */
     public function rules()
     {
+        $user = User::find($this->input('user_id') ?? null);
         return [
             'id' => ['nullable', 'integer'],
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'billing_company_id' => [
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
+                'integer',
+                'exists:\App\Models\BillingCompany,id',
+            ],
             'driver_license' => ['nullable', 'string'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => ['nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($user->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
@@ -63,7 +71,7 @@ class CreateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'string', 'email:rfc'],
+            'contact.email' => ['required', Rule::unique('users', 'email')->ignore($user->id ?? null), 'string', 'email:rfc'],
 
             'addresses' => ['required', 'array'],
             'addresses.*.address_type_id' => ['required', 'integer'],
