@@ -60,7 +60,46 @@ pipelines:
           caches:
             - composer
     forge-integration:
-      - step:
+      - stage:
+          name: Build environment
+          steps:
+              - step:
+                  name: Build environment
+                  script:
+                    - ln -f -s .env.example .env
+                    - composer install --ignore-platform-reqs
+                    - php artisan key:generate
+                    - php artisan jwt:secret
+                  caches:
+                    - composer
+                  services:
+                    - pgsql
+                  caches:
+                    - composer
+      - stage:
+          name: Test app
+          steps:
+              - step:
+                  name: Test
+                  script:
+                    - ln -f -s .env.example .env
+                    - composer install --ignore-platform-reqs
+                    - php artisan key:generate
+                    - php artisan jwt:secret
+                    - php artisan test
+                  caches:
+                    - composer
+                  services:
+                    - pgsql
+              - step:
+                  name: syntax test
+                  script:
+                    - echo 'todo:run test'
+                    #- ./vendor/bin/pint --test
+                    #- ./vendor/bin/phpcs
+                  caches:
+                    - composer
+      - stage:
           name: Deploy
           script:
             - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
