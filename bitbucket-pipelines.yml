@@ -45,8 +45,7 @@ pipelines:
           name: Deploy
           deployment: staging
           script:
-            - composer install --no-dev
-            - php artisan migrate --force
+            - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
           caches:
             - composer
 definitions:
