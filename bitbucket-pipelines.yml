@@ -60,7 +60,6 @@ pipelines:
           caches:
             - composer
     forge-integration:
-      - step: *build
       - step:
           name: Deploy
           script:
@@ -75,15 +74,3 @@ definitions:
         POSTGRES_DB: 'medical'
         POSTGRES_USER: 'user'
         POSTGRES_PASSWORD: '123'
-  steps:
-    - step: &build
-        name: Build environment
-        script:
-          - ln -f -s .env.example .env
-          - composer install --ignore-platform-reqs
-          - php artisan key:generate
-          - php artisan jwt:secret
-        caches:
-          - composer
-        services:
-          - pgsql
