@@ -5,6 +5,7 @@ namespace App\Http\Requests\Patient;
 use App\Models\MaritalStatus;
 use App\Models\Patient;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
@@ -29,11 +30,16 @@ class UpdateRequest extends FormRequest
         $id = $this->route('id');
         $patient = Patient::find($id);
         return [
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
+            'billing_company_id' => [
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
+                'integer',
+                'exists:\App\Models\BillingCompany,id',
+            ],
             'driver_license' => ['nullable', 'string'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => ['nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],

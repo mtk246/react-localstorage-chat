@@ -131,6 +131,7 @@ class ClaimBatch extends Model implements Auditable
     {
         $statuses = ClaimStatus::where('status', 'Approved')
             ->orWhere('status', 'Rejected')
+            ->orWhere('status', 'Submitted')
             ->get()->pluck('id')->toArray();
         $data = $this->claims()->whereHas("claimStatusClaims", function ($query) use ($statuses) {
             $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)

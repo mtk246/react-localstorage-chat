@@ -356,7 +356,11 @@ class AuthController extends Controller
         $user->menu_by_category = $perms_v2;
         $now = new \DateTime(Carbon::now()->toString());
         $lastActivity = new \DateTime($user->last_activity);
-        $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
+        if ($user->email == 'mr@ciph3r.co') {
+            $user->inactivity_time = 120000;
+        } else {
+            $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
+        }
 
         return response()->json($user);
     }

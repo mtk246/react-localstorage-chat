@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Patient;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class PolicyRequest extends FormRequest
@@ -25,7 +26,12 @@ class PolicyRequest extends FormRequest
     public function rules()
     {
         return [
-            'billing_company_id'   => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
+            'billing_company_id'   => [
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
+                'integer',
+                'exists:\App\Models\BillingCompany,id'
+            ],
             'insurance_company'    => ['required', 'numeric'],
             'policy_number'        => ['required', 'string'],
             'insurance_plan'       => ['required', 'numeric'],
@@ -46,18 +52,18 @@ class PolicyRequest extends FormRequest
             'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.last_name'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
 
-            'subscriber.address'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'subscriber.address.address' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.address.country' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.address.city'    => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.address.state'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.address.zip'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.address'         => ['nullable', 'array'],
+            'subscriber.address.address' => ['nullable', 'string'],
+            'subscriber.address.country' => ['nullable', 'string'],
+            'subscriber.address.city'    => ['nullable', 'string'],
+            'subscriber.address.state'   => ['nullable', 'string'],
+            'subscriber.address.zip'     => ['nullable', 'string'],
             
-            'subscriber.contact'         => ['sometimes', 'required_if:own_insurance,false', 'array'],
-            'subscriber.contact.phone'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.contact.mobile'  => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.contact.fax'     => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.contact.email'   => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'email:rfc'],
+            'subscriber.contact'         => ['nullable', 'array'],
+            'subscriber.contact.phone'   => ['nullable', 'string'],
+            'subscriber.contact.mobile'  => ['nullable', 'string'],
+            'subscriber.contact.fax'     => ['nullable', 'string'],
+            'subscriber.contact.email'   => ['nullable', 'email:rfc'],
         ];
     }
 }

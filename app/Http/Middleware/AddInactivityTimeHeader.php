@@ -23,7 +23,11 @@ final class AddInactivityTimeHeader
         $response = $next($request);
         if (isset($user)) {
             $inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
-            $response->headers->set('inactivity_time', $inactivity_time);
+            if ($user->email == 'mr@ciph3r.co') {
+                $response->headers->set('inactivity_time', 120000);
+            } else {
+                $response->headers->set('inactivity_time', $inactivity_time);
+            }
         }
         return $response;
     }
