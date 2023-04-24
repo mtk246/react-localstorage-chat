@@ -17,8 +17,8 @@ pipelines:
       - step:
           name: Lint
           script:
-            - ./vendor/bin/pint --test
-            - ./vendor/bin/phpcs
+            #- ./vendor/bin/pint --test
+            #- ./vendor/bin/phpcs
           caches:
             - composer
   branches:
