@@ -77,14 +77,13 @@ definitions:
         POSTGRES_PASSWORD: '123'
   steps:
     - step: &build-env
+        name: Build environment
         script:
-          name: Build environment
-          script:
-            - ln -f -s .env.example .env
-            - composer install --ignore-platform-reqs
-            - php artisan key:generate
-            - php artisan jwt:secret
-          caches:
-            - composer
-          services:
-            - pgsql
+          - ln -f -s .env.example .env
+          - composer install --ignore-platform-reqs
+          - php artisan key:generate
+          - php artisan jwt:secret
+        caches:
+          - composer
+        services:
+          - pgsql
