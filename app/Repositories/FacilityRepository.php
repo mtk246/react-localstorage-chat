@@ -555,17 +555,12 @@ class FacilityRepository
                 ], $data['contact']);
             }
 
-            if (isset($data['contact']['email'])) {
-                Contact::create([
-                    'contact_name' => $data['contact']['contact_name'],
-                    'phone' => $data['contact']['phone'],
-                    'fax' => $data['contact']['fax'],
-                    'email' => $data['contact']['email'],
-                    'mobile' => $data['contact']['mobile'],
+            if (isset($data['address'])) {
+                Address::updateOrCreate([
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'contactable_id' => $facility->id,
-                    'contactable_type' => Facility::class,
-                ]);
+                    'addressable_id' => $facility->id,
+                    'addressable_type' => Facility::class,
+                ], $data['address']);
             }
 
             DB::commit();
