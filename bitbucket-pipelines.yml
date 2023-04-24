@@ -17,7 +17,6 @@ pipelines:
       - step:
           name: Lint
           script:
-            - composer install --ignore-platform-reqs
             - ./vendor/bin/pint --test
             - ./vendor/bin/phpcs
           caches:
