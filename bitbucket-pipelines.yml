@@ -2,53 +2,52 @@ image: composer:2.5.5
 
 pipelines:
   default:
-    - parallel:
-        - step:
-            name: Test
-            script:
-              - ln -f -s .env.example .env
-              - composer install
-              - php artisan test
-            caches:
-              - composer
-            services:
-              - pgsql
-        - step:
-            name: Lint
-            script:
-              - composer install
-              - ./vendor/bin/pint --test
-              - ./vendor/bin/phpcs
-            caches:
-              - composer
+    - step:
+      name: Test
+      script:
+        - ln -f -s .env.example .env
+        - composer install
+        - php artisan test
+      caches:
+        - composer
+      services:
+        - pgsql
+    - step:
+      name: Lint
+      script:
+        - composer install
+        - ./vendor/bin/pint --test
+        - ./vendor/bin/phpcs
+      caches:
+        - composer
   branches:
     master:
       - step:
-          name: Deploy
-          deployment: production
-          script:
-            - composer install --no-dev
-            - php artisan migrate --force
-          caches:
-            - composer
+        name: Deploy
+        deployment: production
+        script:
+          - composer install --no-dev
+          - php artisan migrate --force
+        caches:
+          - composer
     v100:
       - step:
-          name: Deploy
-          deployment: staging
-          script:
-            - composer install --no-dev
-            - php artisan migrate --force
-          caches:
-            - composer
+        name: Deploy
+        deployment: staging
+        script:
+          - composer install --no-dev
+          - php artisan migrate --force
+        caches:
+          - composer
     staging:
       - step:
-          name: Deploy
-          deployment: staging
-          script:
-            - composer install --no-dev
-            - php artisan migrate --force
-          caches:
-            - composer
+        name: Deploy
+        deployment: staging
+        script:
+          - composer install --no-dev
+          - php artisan migrate --force
+        caches:
+          - composer
 definitions:
   services:
     pgsql:
