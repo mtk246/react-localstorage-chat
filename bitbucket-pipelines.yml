@@ -6,7 +6,7 @@ pipelines:
           name: Test
           script:
             - ln -f -s .env.example .env
-            - composer install
+            - composer install --ignore-platform-reqs
             - php artisan test
           caches:
             - composer
@@ -15,7 +15,7 @@ pipelines:
       - step:
           name: Lint
           script:
-            - composer install
+            - composer install --ignore-platform-reqs
             - ./vendor/bin/pint --test
             - ./vendor/bin/phpcs
           caches:
