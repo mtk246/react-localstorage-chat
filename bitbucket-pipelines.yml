@@ -15,7 +15,7 @@ pipelines:
           services:
             - pgsql
       - step:
-          name: Lint
+          name: syntax test
           script:
             #- ./vendor/bin/pint --test
             #- ./vendor/bin/phpcs
