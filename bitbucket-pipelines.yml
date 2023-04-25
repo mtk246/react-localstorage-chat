@@ -75,7 +75,7 @@ pipelines:
                   services:
                     - pgsql
                   artifacts:
-                    - ./**
+                    - vendor/**
               - step:
                   name: Test
                   script:
