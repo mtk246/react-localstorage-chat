@@ -623,9 +623,30 @@ class InsurancePlanRepository
     }
     
     public function getByPayer(string $payer) {
-        $insurance = InsurancePlan::wherePayerId($payer)->first();
+        $insurance = InsurancePlan::query()->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])->first();
 
         if ($insurance) {
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompaniesException = $insurance->insuranceCompany
+                ->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
+            } else {
+                $billingCompaniesException = auth()->user()->billingCompanies
+                    ->first()
+                    ->pluck('id')
+                    ->toArray();
+            }
+            
+            $billingCompanies = $insurance->billingCompanies()
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+            if (empty($billingCompanies)) {
+                return ['result' => false];
+            }
             $record = [
                 'id' => $insurance->id,
                 'code' => $insurance->code,
@@ -653,7 +674,7 @@ class InsurancePlanRepository
                 'contract_fees' => [],
             ];
         }
-        return !is_null($insurance) ? $record : null;
+        return !is_null($insurance) ? ['data' => $record, 'result' => true] : null;
     }
 
     public function getByCompany(string $nameCompany) {

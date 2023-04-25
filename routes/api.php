@@ -314,6 +314,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-insurance-policy-type', [\App\Http\Controllers\PatientController::class, 'getListInsurancePolicyType']);
         Route::get('/get-list-responsibility-type', [\App\Http\Controllers\PatientController::class, 'getListResponsibilityType']);
         Route::get('/get-list-relationship', [\App\Http\Controllers\PatientController::class, 'getListRelationship']);
+        Route::get('/get-list-billing-companies', [\App\Http\Controllers\PatientController::class, 'getListBillingCompanies']);
         Route::post('/', [\App\Http\Controllers\PatientController::class, 'createPatient']);
         Route::get('/', [\App\Http\Controllers\PatientController::class, 'getAllPatient']);
         Route::get('/get-subscribers', [\App\Http\Controllers\PatientController::class, 'getAllSubscribers']);

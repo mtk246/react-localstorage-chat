@@ -164,7 +164,19 @@ class InsurancePlanController extends Controller
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+        if ($rs) {
+            if (isset($rs['result']) && $rs['result']) {
+                return response()->json($rs['data']);
+            } else {
+                if (auth()->user()->hasRole('superuser')) {
+                    return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
+                } else {
+                    return response()->json(__('Forbidden, The insurance plan has already been associated with the billing company of your insurance company'), 403);
+                }
+            }
+        } else {
+            return response()->json(__('Error, insurance plan not found'), 404);
+        }
     }
 
     /**

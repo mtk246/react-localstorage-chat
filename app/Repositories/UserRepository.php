@@ -81,7 +81,7 @@ class UserRepository{
 
             /** Create User */
             $user = User::create([
-                "usercode"   => generateNewCode("US", 5, date("y"), User::class, "usercode"),
+                "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                 "email"      => $data['email'],
                 "language"   => $data['language'] ?? 'en',
                 "status"     => true,

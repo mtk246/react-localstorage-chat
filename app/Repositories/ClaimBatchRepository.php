@@ -37,7 +37,7 @@ class ClaimBatchRepository
             $status = (isset($data["send"]) && $data["send"] == true) ? $claimBatchSubmitted : $claimBatchNotSubmitted;
 
             $claimBatch = ClaimBatch::create([
-                "code"                  => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClaimBatch::class, "code"),
+                "code"                  => generateNewCode(getPrefix($data["name"]), 5, date("Y"), ClaimBatch::class, "code"),
                 "name"                  => $data["name"],
                 "claim_batch_status_id" => $status->id,
                 "shipping_date"         => ($status->status == 'Not submitted') ? null : now(),

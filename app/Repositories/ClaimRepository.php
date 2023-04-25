@@ -878,7 +878,8 @@ class ClaimRepository
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = json_decode($response->body());
+                    $responseData['response'] = json_decode($response->body());
+                    $responseData['request'] = $dataReal;
 
                     if ($response->successful()) {
                         $claimEligibilityStatus = ClaimEligibilityStatus::whereStatus('Eligible policy')->first();
@@ -906,7 +907,7 @@ class ClaimRepository
                     "subscriber_id"        => $insurancePolicy->subscriber->id ?? null,
                     "insurance_policy_id"  => $insurancePolicy->id,
                     "claim_eligibility_status_id"  => $claimEligibilityStatus->id,
-                    "response_details"     => isset($response) ? $response->body() : null,
+                    "response_details"     => isset($responseData) ? json_encode($responseData) : null,
                     "insurance_company_id" => $insurancePolicy->insurance_company_id
                 ]);
 
@@ -1359,7 +1360,7 @@ class ClaimRepository
                             "address" => [
                                 "address1" => $addressPatient->address ?? null,
                                 "city" => $addressPatient->city ?? null,
-                                "state" => substr(($addressPatient->state ?? ''), 0, 3) ?? null,
+                                "state" => substr(($addressPatient->state ?? ''), 0, 2) ?? null,
                                 "postalCode" => $addressPatient->zip
                             ]
                         ];
@@ -1434,7 +1435,7 @@ class ClaimRepository
                             "address" => [
                                 "address1" => $addressSubscriber->address ?? null,
                                 "city" => $addressSubscriber->city ?? null,
-                                "state" => substr(($addressSubscriber->state ?? ''), 0, 3) ?? null,
+                                "state" => substr(($addressSubscriber->state ?? ''), 0, 2) ?? null,
                                 "postalCode" => $addressSubscriber->zip
                             ]
                         ],
@@ -1448,7 +1449,7 @@ class ClaimRepository
                                 "address" => [
                                     "address1" => $addressCompany->address ?? null,
                                     "city" => $addressCompany->city ?? null,
-                                    "state" => substr(($addressCompany->state ?? ''), 0, 3),
+                                    "state" => substr(($addressCompany->state ?? ''), 0, 2),
                                     "postalCode" => $addressCompany->zip ?? null
                                 ],
                                 "contactInformation" => [
@@ -1485,14 +1486,15 @@ class ClaimRepository
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                         $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                     );
-                    $responseData = json_decode($response->body());
+                    $responseData['response'] = json_decode($response->body());
+                    $responseData['request'] = $dataReal;
                 }
 
                 $claimValidation = ClaimValidation::updateOrCreate([
                     "control_number"       => $newCode,
                     "claim_id"             => $claim->id,
                     "insurance_policy_id"  => $insurancePolicy->id,
-                    "response_details"     => isset($response) ? $response->body() : null,
+                    "response_details"     => isset($responseData) ? json_encode($responseData) : null,
                 ]);
 
                 if (isset($claimValidation)) {
@@ -1522,6 +1524,18 @@ class ClaimRepository
 
     public function claimSubmit($token, $claimId, $batchId) {
         try {
+            $pointers = array(
+                'A' => 1,
+                'B' => 2,
+                'C' => 3,
+                'D' => 4,
+                'E' => 5,
+                'F' => 6,
+                'G' => 7,
+                'H' => 8,
+                'I' => 9,
+                'J' => 10,
+            );
             DB::beginTransaction();
             $data = [
                 "sandbox" => [
@@ -1730,8 +1744,8 @@ class ClaimRepository
                         "address" => [
                             "address1" => $addressPatient->address ?? null,
                             "city" => $addressPatient->city ?? null,
-                            "state" => substr(($addressPatient->state ?? ''), 0, 3) ?? null,
-                            "postalCode" => $addressPatient->zip
+                            "state" => substr(($addressPatient->state ?? ''), 0, 2) ?? null,
+                            "postalCode" => str_replace("-", "", $addressPatient->zip)
                         ]
                     ];
                 $claimServiceLinePrincipal = $claim->claimFormattable->claimFormServices->first();
@@ -1740,12 +1754,12 @@ class ClaimRepository
                 foreach ($claim->diagnoses ?? [] as $diagnosis) {
                     if (count($claimDiagnoses) == 0) {
                         array_push($claimDiagnoses, [
-                            "diagnosisTypeCode" => "BK",
+                            "diagnosisTypeCode" => "ABK",
                             "diagnosisCode" => $diagnosis->code
                         ]);
                     } else {
                         array_push($claimDiagnoses, [
-                            "diagnosisTypeCode" => "BF",
+                            "diagnosisTypeCode" => "ABF",
                             "diagnosisCode" => $diagnosis->code
                         ]);
                     }
@@ -1764,6 +1778,10 @@ class ClaimRepository
                 $serviceLines = [];
 
                 foreach ($claim->claimFormattable->claimFormServices ?? [] as $service) {
+                    $valuesPoint = [];
+                    foreach($service->diagnostic_pointers as $point) {
+                        array_push($valuesPoint, $pointers[$point]);
+                    }
                     array_push($serviceLines, [
                         "serviceDate" => str_replace("-", "", $claim->date_of_service,),
                         "professionalService" => [
@@ -1773,7 +1791,7 @@ class ClaimRepository
                             "measurementUnit" => "UN",
                             "serviceUnitCount" => "1",
                             "compositeDiagnosisCodePointers" => [
-                                "diagnosisCodePointers" => $service->diagnostic_pointers ?? []
+                                "diagnosisCodePointers" => $valuesPoint ?? []
                             ]
                         ]
                     ]);
@@ -1787,7 +1805,7 @@ class ClaimRepository
                     "submitter" => [ /** Billing Company*/
                         "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
                         "contactInformation" => [
-                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? null,
+                            "name" => $claim->claimFormattable->billingCompany->contact->contact_name ?? $claim->claimFormattable->billingCompany->name ?? "Contact Billing",
                             "phoneNumber" => $claim->claimFormattable->billingCompany->contact->phone ?? null
                         ]
                     ],
@@ -1795,7 +1813,7 @@ class ClaimRepository
                         "organizationName" => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                     ],
                     "subscriber" => [
-                        "memberId"    => $subscriber->member_id ?? null,
+                        "memberId"    => $subscriber->member_id ?? $subscriber->id ?? null,
                         "paymentResponsibilityLevelCode" => $insurancePolicy->payment_responsibility_level_code ?? "P",
                         "firstName"    => $subscriber->first_name ?? $subscriber->profile->first_name,
                         "lastName"     => $subscriber->last_name ?? $subscriber->profile->last_name,
@@ -1805,8 +1823,8 @@ class ClaimRepository
                         "address" => [
                             "address1" => $addressSubscriber->address ?? null,
                             "city" => $addressSubscriber->city ?? null,
-                            "state" => substr(($addressSubscriber->state ?? ''), 0, 3) ?? null,
-                            "postalCode" => $addressSubscriber->zip
+                            "state" => substr(($addressSubscriber->state ?? ''), 0, 2) ?? null,
+                            "postalCode" => str_replace("-", "", $addressSubscriber->zip)
                         ]
                     ],
                     "dependent" => $dependent ?? null,
@@ -1814,16 +1832,16 @@ class ClaimRepository
                         [
                             "providerType" => "BillingProvider",
                             "npi" => $claim->company->npi ?? null,
-                            "employerId" => $claim->company->ein ?? null,
+                            "employerId" => str_replace("-", "", $claim->company->ein ?? $claim->company->npi),
                             "organizationName" => $claim->company->name ?? null,
                             "address" => [
                                 "address1" => $addressCompany->address ?? null,
                                 "city" => $addressCompany->city ?? null,
-                                "state" => substr(($addressCompany->state ?? ''), 0, 3),
-                                "postalCode" => $addressCompany->zip ?? null
+                                "state" => substr(($addressCompany->state ?? ''), 0, 2),
+                                "postalCode" => str_replace("-", "", $addressCompany->zip)
                             ],
                             "contactInformation" => [
-                                "name" => $contactCompany->contact_name ?? null,
+                                "name" => $contactCompany->contact_name ?? $claim->company->name ?? 'Contact company',
                                 "phoneNumber" => $contactCompany->phone ?? null
                             ]
                         ],
@@ -1831,7 +1849,7 @@ class ClaimRepository
                     "claimInformation" => [
                         "claimFilingCode" => "CI",
                         "patientControlNumber" => $claim->control_number, /**Preguntar xq no el el codePAtient Loop2300*/
-                        "claimChargeAmount" => $claim->amount_paid ?? "28.75",
+                        "claimChargeAmount" => $claim->billed_amount ?? "0.00",
                         "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                         "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
                         "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)
@@ -1856,7 +1874,8 @@ class ClaimRepository
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["url"],
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]["body"] ?? $dataReal
                 );
-                $responseData = json_decode($response->body());
+                $responseData['response'] = json_decode($response->body());
+                $responseData['request'] = $dataReal;
 
                 if ($response->successful()) {
                     $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Success')->first();
@@ -1886,7 +1905,7 @@ class ClaimRepository
                     "claim_id"                     => $claim->id,
                     "claim_batch_id"               => $batchId,
                     "claim_transmission_status_id" => $claimTransmissionStatus->id,
-                    "response_details"             => isset($response) ? $response->body() : null,
+                    "response_details"             => isset($responseData) ? json_encode($responseData) : null,
                 ]);
             }
             DB::commit();

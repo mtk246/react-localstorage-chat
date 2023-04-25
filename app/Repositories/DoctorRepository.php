@@ -66,7 +66,7 @@ class DoctorRepository
             }
             /** Create User */
             $user = User::create([
-                'usercode' => generateNewCode('US', 5, date('y'), User::class, 'usercode'),
+                'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'email' => $data['email'],
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
@@ -133,7 +133,7 @@ class DoctorRepository
                     $company = Company::where('npi', $data['npi_company'])->first();
                     if (!isset($company)) {
                         $company = Company::create([
-                            'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
+                            'code' => generateNewCode(getPrefix($data['name_company']), 5, date('Y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
                             'ein' => $data['ein'] ?? null,
@@ -169,7 +169,7 @@ class DoctorRepository
                     $company = Company::where('npi', $data['npi'])->first();
                     if (!isset($company)) {
                         $company = Company::create([
-                            'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
+                            'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('Y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
                             'ein' => $data['ein'] ?? null,
@@ -208,7 +208,7 @@ class DoctorRepository
                     'npi' => $data['npi'],
                 ],
                 [
-                    'code' => generateNewCode('HP', 5, date('y'), HealthProfessional::class, 'code'),
+                    'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
                     'health_professional_type_id' => $data['health_professional_type_id'],
                     'is_provider' => $data['is_provider'] ?? false,
                     'npi_company' => $data['npi_company'] ?? '',
@@ -449,7 +449,7 @@ class DoctorRepository
                     $company = Company::where('npi', $data['npi_company'])->first();
                     if (!isset($company)) {
                         $company = Company::create([
-                            'code' => generateNewCode(getPrefix($data['name_company']), 5, date('y'), Company::class, 'code'),
+                            'code' => generateNewCode(getPrefix($data['name_company']), 5, date('Y'), Company::class, 'code'),
                             'name' => $data['name_company'],
                             'npi' => $data['npi_company'],
                             'ein' => $data['ein'] ?? null,
@@ -485,7 +485,7 @@ class DoctorRepository
                     $company = Company::where('npi', $data['npi'])->first();
                     if (!isset($company)) {
                         $company = Company::create([
-                            'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('y'), Company::class, 'code'),
+                            'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name']), 5, date('Y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                             'npi' => $data['npi'],
                             'ein' => $data['ein'] ?? null,
