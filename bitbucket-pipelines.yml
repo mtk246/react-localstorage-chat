@@ -60,19 +60,20 @@ pipelines:
           caches:
             - composer
     forge-integration:
-      - step:
-          name: Build environment
-          script:
-            - ln -f -s .env.example .env
-            - composer install --ignore-platform-reqs
-            - php artisan key:generate
-            - php artisan jwt:secret
-          caches:
-            - composer
-          services:
-            - pgsql
-      - parallel:
+      - stage:
+          name: Test app
           steps:
+              - step:
+                  name: Build environment
+                  script:
+                    - ln -f -s .env.example .env
+                    - composer install --ignore-platform-reqs
+                    - php artisan key:generate
+                    - php artisan jwt:secret
+                  caches:
+                    - composer
+                  services:
+                    - pgsql
               - step:
                   name: Test
                   script:
