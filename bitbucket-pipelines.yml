@@ -107,9 +107,8 @@ pull-requests:
               - step:
                   name: syntax test
                   script:
-                    - echo 'todo:run test'
-                    #- ./vendor/bin/pint --test
-                    #- ./vendor/bin/phpcs
+                    - ./vendor/bin/pint --test
+                    - ./vendor/bin/phpcs
 
 definitions:
   services:
