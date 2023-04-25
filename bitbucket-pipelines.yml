@@ -1,94 +1,22 @@
 image: composer:2.5.5
 
 pipelines:
-  default:
-      - step:
-          name: Build environment
-          script:
-            - ln -f -s .env.example .env
-            - composer install --ignore-platform-reqs
-            - php artisan key:generate
-            - php artisan jwt:secret
-          caches:
-            - composer
-          services:
-            - pgsql
-      - parallel:
-          - step:
-              name: Test
-              script:
-                - ln -f -s .env.example .env
-                - composer install --ignore-platform-reqs
-                - php artisan key:generate
-                - php artisan jwt:secret
-                - php artisan test
-              caches:
-                - composer
-              services:
-                - pgsql
-          - step:
-              name: syntax test
-              script:
-                - echo 'todo:run test'
-                #- ./vendor/bin/pint --test
-                #- ./vendor/bin/phpcs
-              caches:
-                - composer
-
   branches:
     master:
       - step:
-          name: Deploy
+          name: Run Deployment Trigger
           script:
-            - composer install --no-dev
-            - php artisan migrate --force
-          caches:
-            - composer
+            - echo "no deployment trigger set"
     v100:
       - step:
-          name: Deploy
+          name: Run Deployment Trigger
           script:
-            - composer install --no-dev
-            - php artisan migrate --force
-          caches:
-            - composer
+            - echo "no deployment trigger set"
     staging:
       - step:
-          name: Deploy
+          name: Run Deployment Trigger
           script:
             - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
-          caches:
-            - composer
-    forge-integration:
-      - stage:
-          name: Test app
-          steps:
-              - step:
-                  name: Testing app
-                  script:
-                    - ln -f -s .env.example .env
-                    - composer install --ignore-platform-reqs
-                    - php artisan key:generate
-                    - php artisan jwt:secret
-                    - php artisan test
-                  caches:
-                    - composer
-                  services:
-                    - pgsql
-              - step:
-                  name: syntax test
-                  script:
-                    - echo 'todo:run test'
-                    #- ./vendor/bin/pint --test
-                    #- ./vendor/bin/phpcs
-                  caches:
-                    - composer
-      - stage:
-          name: Deploy
-          steps:
-              - step:
-                  script:
-                    - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
 pull-requests:
   default:
       - stage:
