@@ -64,7 +64,7 @@ pipelines:
           name: Test app
           steps:
               - step:
-                  name: Build environment
+                  name: Testing app
                   script:
                     - ln -f -s .env.example .env
                     - composer install --ignore-platform-reqs
