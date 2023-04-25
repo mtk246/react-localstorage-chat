@@ -89,6 +89,32 @@ pipelines:
               - step:
                   script:
                     - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
+pull-requests:
+  default:
+      - stage:
+          name: Test app
+          steps:
+              - step:
+                  name: Testing app
+                  script:
+                    - ln -f -s .env.example .env
+                    - composer install --ignore-platform-reqs
+                    - php artisan key:generate
+                    - php artisan jwt:secret
+                    - php artisan test
+                  caches:
+                    - composer
+                  services:
+                    - pgsql
+              - step:
+                  name: syntax test
+                  script:
+                    - echo 'todo:run test'
+                    #- ./vendor/bin/pint --test
+                    #- ./vendor/bin/phpcs
+                  caches:
+                    - composer
+
 definitions:
   services:
     pgsql:
