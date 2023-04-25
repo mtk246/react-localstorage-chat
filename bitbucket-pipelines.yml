@@ -61,7 +61,7 @@ pipelines:
             - composer
     forge-integration:
       - stage:
-          name: Build environment
+          name: Test app
           steps:
               - step:
                   name: Build environment
@@ -74,9 +74,6 @@ pipelines:
                     - composer
                   services:
                     - pgsql
-      - stage:
-          name: Test app
-          steps:
               - step:
                   name: Test
                   script:
