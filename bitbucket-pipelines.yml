@@ -3,10 +3,33 @@ image: composer:2.5.5
 pipelines:
   branches:
     master:
+      - stage:
+          name: Test app
+          steps:
+              - step:
+                  name: Testing app
+                  script:
+                    - ln -f -s .env.example .env
+                    - composer install --ignore-platform-reqs
+                    - php artisan key:generate
+                    - php artisan jwt:secret
+                    - php artisan test
+                  services:
+                    - pgsql
+              - step:
+                  name: syntax test
+                  script:
+                    - ./vendor/bin/pint --test
+                    - ./vendor/bin/phpcs
       - step:
           name: Run Deployment Trigger
           script:
             - echo "no deployment trigger set"
+      - step:
+          name: Test success deployment
+          deployment: staging
+          script:
+            - echo "todo: test success deployment"
     v100:
       - step:
           name: Run Deployment Trigger
