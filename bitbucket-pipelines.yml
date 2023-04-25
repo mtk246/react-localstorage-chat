@@ -102,8 +102,6 @@ pull-requests:
                     - php artisan key:generate
                     - php artisan jwt:secret
                     - php artisan test
-                  caches:
-                    - composer
                   services:
                     - pgsql
               - step:
@@ -112,8 +110,6 @@ pull-requests:
                     - echo 'todo:run test'
                     #- ./vendor/bin/pint --test
                     #- ./vendor/bin/phpcs
-                  caches:
-                    - composer
 
 definitions:
   services:
