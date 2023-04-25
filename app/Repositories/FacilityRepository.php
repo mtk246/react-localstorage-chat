@@ -52,12 +52,30 @@ class FacilityRepository
             }
 
             if (isset($data['companies'])) {
-                $companies = collect($data['companies'])
-                    ->mapWithKeys(fn ($facility) => [$facility => [
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]])->toArray();
+                $companies = $facility->companies()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                    ->get();
+                foreach ($companies ?? [] as $companyDB) {
+                    $validated = false;
+                    foreach ($data['companies'] as $index => $company) {
+                        if ($companyDB['id'] == $company) {
+                            $validated = true;
+                            unset($data['companies'][$index]);
+                            break;
+                        }
+                    }
+                    if (!$validated) {
+                        $companyDB->facilities()->wherePivot(
+                            'billing_company_id', $billingCompany->id ?? $billingCompany,
+                        )->detach($facility->id);
+                    }
+                }
 
-                $facility->companies()->sync($companies);
+                foreach ($data['companies'] as $company) {
+                    $facility->companies()->attach($company, [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]);
+                }
             }
 
             /* Attach billing company */
@@ -491,19 +509,29 @@ class FacilityRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            $facility->companies()
-                ->wherePivot('facility_id', $facility->id)
+            $companies = $facility->companies()
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
-                ->detach();
+                ->get();
+            foreach ($companies ?? [] as $companyDB) {
+                $validated = false;
+                foreach ($data['companies'] as $index => $company) {
+                    if ($companyDB['id'] == $company) {
+                        $validated = true;
+                        unset($data['companies'][$index]);
+                        break;
+                    }
+                }
+                if (!$validated) {
+                    $companyDB->facilities()->wherePivot(
+                        'billing_company_id', $billingCompany->id ?? $billingCompany,
+                    )->detach($facility->id);
+                }
+            }
 
-            if (isset($data['companies'])) {
-                $companies = collect($data['companies'])
-                    ->unique()
-                    ->mapWithKeys(fn ($facility) => [$facility => [
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]])->toArray();
-
-                $facility->companies()->attach($companies);
+            foreach ($data['companies'] as $company) {
+                $facility->companies()->attach($company, [
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
             }
 
             $facility->placeOfServices()
@@ -580,7 +608,6 @@ class FacilityRepository
             }
         } catch (\Exception $e) {
             DB::rollBack();
-
             return null;
         }
     }
