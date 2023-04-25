@@ -80,10 +80,6 @@ pipelines:
               - step:
                   name: Test
                   script:
-                    - ln -f -s .env.example .env
-                    - composer install --ignore-platform-reqs
-                    - php artisan key:generate
-                    - php artisan jwt:secret
                     - php artisan test
                   caches:
                     - composer
