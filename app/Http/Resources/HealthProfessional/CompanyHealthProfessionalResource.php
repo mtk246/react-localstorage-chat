@@ -19,11 +19,9 @@ final class CompanyHealthProfessionalResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'company_id' => $this->resource->company_id,
-            'company_name' => $this->resource->company->name,
-            'billing_company_id' => $this->resource->billing_company_id,
-            'billing_company_name' => $this->resource->billingCompany->name,
-            'health_professional_id' => $this->resource->health_professional_id,
+            'company' => $this->resource->company,
+            'billing_company' => $this->resource->billingCompany,
+            'health_professional' => $this->resource->healthProfessional,
             'authorization' => AuthorizationResource::collection($this->resource->authorization),
         ];
     }
