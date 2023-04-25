@@ -74,6 +74,8 @@ pipelines:
                     - composer
                   services:
                     - pgsql
+                  artifacts:
+                    - ./**
               - step:
                   name: Test
                   script:
