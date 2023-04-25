@@ -57,7 +57,7 @@ class UpdateFacilityRequest extends FormRequest
             'address.zip' => ['required', 'string'],
 
             'contact' => ['required', 'array'],
-            'contact.name' => ['nullable', 'string'],
+            'contact.contact_name' => ['nullable', 'string'],
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],

@@ -7,9 +7,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Profile.
@@ -73,15 +73,23 @@ final class Profile extends Model implements Auditable
         'name_suffix_id',
     ];
 
+    protected $appends = [
+        'name_suffix',
+    ];
+
+    public function getNameSuffixAttribute(): ?TypeCatalog
+    {
+        return $this->nameSuffix()->first();
+    }
+
     /**
-     * Get the nameSuffix that owns the Profile
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the nameSuffix that owns the Profile.
      */
     public function nameSuffix(): BelongsTo
     {
         return $this->belongsTo(TypeCatalog::class, 'name_suffix_id');
     }
+
     /**
      * Profile has many User.
      *

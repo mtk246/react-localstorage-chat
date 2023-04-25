@@ -168,6 +168,13 @@ class PatientController extends Controller
         );
     }
 
+    public function getListBillingCompanies(Request $request)
+    {
+        $rs = $this->patientRepository->getListBillingCompanies($request);
+
+        return response()->json($rs);
+    }
+
     public function search(ValidateSearchRequest $request): JsonResponse
     {
         $rs = $this->patientRepository->search($request);

@@ -1754,12 +1754,12 @@ class ClaimRepository
                 foreach ($claim->diagnoses ?? [] as $diagnosis) {
                     if (count($claimDiagnoses) == 0) {
                         array_push($claimDiagnoses, [
-                            "diagnosisTypeCode" => "BK",
+                            "diagnosisTypeCode" => "ABK",
                             "diagnosisCode" => $diagnosis->code
                         ]);
                     } else {
                         array_push($claimDiagnoses, [
-                            "diagnosisTypeCode" => "BF",
+                            "diagnosisTypeCode" => "ABF",
                             "diagnosisCode" => $diagnosis->code
                         ]);
                     }
@@ -1849,7 +1849,7 @@ class ClaimRepository
                     "claimInformation" => [
                         "claimFilingCode" => "CI",
                         "patientControlNumber" => $claim->control_number, /**Preguntar xq no el el codePAtient Loop2300*/
-                        "claimChargeAmount" => $claim->amount_paid ?? "28.75",
+                        "claimChargeAmount" => $claim->billed_amount ?? "0.00",
                         "placeOfServiceCode" => $claimServiceLinePrincipal->placeOfService->code ?? "11",
                         "claimFrequencyCode" => "1", /** Porque siempre 1 ?? */
                         "signatureIndicator" => isset($claim->claimFormattable->patientOrInsuredInformation)

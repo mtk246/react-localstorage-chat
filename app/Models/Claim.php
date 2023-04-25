@@ -555,9 +555,7 @@ class Claim extends Model implements Auditable
             }
         }
 
-        return $billed;
-
-        return '0.00';
+        return number_format($billed, 2);
     }
 
     public function getAmountPaidAttribute()

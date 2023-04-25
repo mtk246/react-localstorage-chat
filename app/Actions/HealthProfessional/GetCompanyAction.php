@@ -19,7 +19,7 @@ final class GetCompanyAction
             ->where('health_professional_id', $doctor->id)
             ->when(
                 Gate::denies('is-admin'),
-                fn ($query) => $query->where('billing_company_id', $user->profile->billing_company_id),
+                fn ($query) => $query->where('billing_company_id', $user->billing_company_id),
             )
             ->with([
                 'company',

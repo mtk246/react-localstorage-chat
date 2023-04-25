@@ -25,7 +25,7 @@ class ClearingHouseRepository
         try {
             DB::beginTransaction();
             $clearing = ClearingHouse::create([
-                "code"                   => generateNewCode(getPrefix($data["name"]), 5, date("y"), ClearingHouse::class, "code"),
+                "code"                   => generateNewCode(getPrefix($data["name"]), 5, date("Y"), ClearingHouse::class, "code"),
                 "name"                   => $data["name"],
                 "org_type_id"            => $data["org_type_id"],
                 "transmission_format_id" => $data["transmission_format_id"]
