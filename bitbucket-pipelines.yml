@@ -70,16 +70,6 @@ pipelines:
                     - composer install --ignore-platform-reqs
                     - php artisan key:generate
                     - php artisan jwt:secret
-                  caches:
-                    - composer
-                  services:
-                    - pgsql
-                  artifacts:
-                    - vendor/**
-                    - ./.env
-              - step:
-                  name: Test
-                  script:
                     - php artisan test
                   caches:
                     - composer
