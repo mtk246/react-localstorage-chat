@@ -19,17 +19,11 @@ definitions:
           - php artisan test
         services:
           - pgsql
-        caches:
-          - composer
     - step: &syntax-test
         name: syntax test
         script:
-          - ln -f -s .env.example .env
-          - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
           - ./vendor/bin/phpcs
-        caches:
-          - composer
 
 pipelines:
   default:
