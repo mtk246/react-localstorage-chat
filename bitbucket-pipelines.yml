@@ -40,6 +40,7 @@ pipelines:
           name: Run Deployment Trigger
           script:
             - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
+
 pull-requests:
   default:
       - stage:
