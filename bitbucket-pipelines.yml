@@ -76,7 +76,7 @@ pipelines:
                     - pgsql
                   artifacts:
                     - vendor/**
-                    - .env
+                    - ./.env
               - step:
                   name: Test
                   script:
