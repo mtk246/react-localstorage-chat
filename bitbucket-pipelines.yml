@@ -64,12 +64,19 @@ pipelines:
           name: Test app
           steps:
               - step:
-                  name: Testing app
+                  name: Build environment
                   script:
                     - ln -f -s .env.example .env
                     - composer install --ignore-platform-reqs
                     - php artisan key:generate
                     - php artisan jwt:secret
+                  caches:
+                    - composer
+                  services:
+                    - pgsql
+              - step:
+                  name: Test
+                  script:
                     - php artisan test
                   caches:
                     - composer
