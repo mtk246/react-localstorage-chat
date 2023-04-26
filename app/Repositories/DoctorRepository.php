@@ -352,6 +352,7 @@ class DoctorRepository
                 'last_name' => $data['profile']['last_name'],
                 'sex' => $data['profile']['sex'],
                 'date_of_birth' => $data['profile']['date_of_birth'],
+                'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
