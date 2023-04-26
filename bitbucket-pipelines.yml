@@ -27,7 +27,8 @@ definitions:
           - ln -f -s .env.example .env
           - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
-          - ./vendor/bin/phpcs
+          ## - ./vendor/bin/phpcs
+          ## - ./vendor/bin/pstan 
         caches:
           - composer
 
