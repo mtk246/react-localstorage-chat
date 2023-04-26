@@ -411,11 +411,10 @@ class InsuranceCompanyRepository
             ->first();
         if ($insurance) {
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompaniesException = BillingCompany::query()
-                ->where('status', true)
-                ->get()
-                ->pluck('id')
-                ->toArray();
+                $billingCompaniesException = $insurance->billingCompanies()
+                    ->get()
+                    ->pluck('id')
+                    ->toArray();
             } else {
                 $billingCompaniesException = auth()->user()->billingCompanies
                     ->first()
@@ -423,11 +422,13 @@ class InsuranceCompanyRepository
                     ->toArray();
             }
             
-            $billingCompanies = $insurance->billingCompanies()
+            $billingCompanies = BillingCompany::query()
+                ->where('status', true)
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
                 ->get()
                 ->pluck('id')
                 ->toArray();
+
             if (empty($billingCompanies)) {
                 return ['result' => false];
             }
