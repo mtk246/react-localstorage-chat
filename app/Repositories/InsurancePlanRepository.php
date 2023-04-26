@@ -627,11 +627,10 @@ class InsurancePlanRepository
 
         if ($insurance) {
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompaniesException = $insurance->insuranceCompany
-                ->billingCompanies()
-                ->get()
-                ->pluck('id')
-                ->toArray();
+                $billingCompaniesException = $insurance->billingCompanies()
+                    ->get()
+                    ->pluck('id')
+                    ->toArray();
             } else {
                 $billingCompaniesException = auth()->user()->billingCompanies
                     ->first()
@@ -639,7 +638,8 @@ class InsurancePlanRepository
                     ->toArray();
             }
             
-            $billingCompanies = $insurance->billingCompanies()
+            $billingCompanies = $insurance->insuranceCompany
+                ->billingCompanies()
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
                 ->get()
                 ->pluck('id')

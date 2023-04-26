@@ -921,7 +921,9 @@ class DoctorRepository
         foreach ($healthProfessionals as $healthProfessional) {
             if ('true' == $authorization) {
                 foreach ($healthProfessional->companies_providers as $provider) {
-                    $auth = $provider->authorization ?? [];
+                    $auth = $provider->authorization->map(function ($item) {
+                        return $item->value;
+                    })->toArray() ?? [];
                     if (in_array($billing_provider->id, $auth)) {
                         array_push($records['billing_provider'], [
                             'id' => $healthProfessional->id,
