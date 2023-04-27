@@ -13,8 +13,10 @@ return new class() extends Migration {
         Schema::create('custom_keyboard_shortcuts', function (Blueprint $table) {
             $table->id();
             $table->string('key', 20);
-            $table->foreignId('keyboard_shortcut_id')
-                ->constrained()
+            $table->unsignedBigInteger('keyboard_shortcut_id');
+            $table->foreign('keyboard_shortcut_id', 'fk_cks_keyboard_shortcut_id')
+                ->references('id')
+                ->on('keyboard_shortcuts')
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
             $table->morphs('shortcutable');

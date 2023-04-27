@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +15,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('company_health_professional', function (Blueprint $table) {
-            $table->foreignId('company_health_professional_type_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedBigInteger('company_health_professional_type_id');
+            $table->foreign('company_health_professional_type_id', 'fk_company_health_professional_type_id')
+                ->references('id')
+                ->on('company_health_professional_types')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 
@@ -26,7 +32,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('company_health_professional', function (Blueprint $table) {
-            $table->dropForeign(['company_health_professional_type_id']);
+            $table->dropForeign('fk_company_health_professional_type_id');
             $table->dropColumn('company_health_professional_type_id');
         });
     }
