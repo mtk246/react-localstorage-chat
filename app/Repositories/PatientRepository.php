@@ -50,8 +50,8 @@ class PatientRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data['id'])) {
-                $patient = Patient::find($data['id']);
+            if (isset($data['patient_id'])) {
+                $patient = Patient::find($data['patient_id']);
                 $user = $patient->user;
                 $profile = $user->profile;
             } elseif (isset($data['user_id'])) {
@@ -117,9 +117,7 @@ class PatientRepository
 
             /** Create User */
             if (!isset($user)) {
-                $user = User::firstOrCreate([
-                    "email"      => $data['contact']['email'],
-                ], [
+                $user = User::create([
                     "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                     "email"      => $data['contact']['email'],
                     "language"   => $data['language'] ?? 'en',
@@ -161,9 +159,7 @@ class PatientRepository
 
             /** Create Patient */
             if (!isset($patient)) {
-                $patient = Patient::firstOrCreate([
-                    "user_id"           => $user->id
-                ], [
+                $patient = Patient::create([
                     "code"              => generateNewCode("PA", 5, date("Y"), Patient::class, "code"),
                     "driver_license"    => $data["driver_license"] ?? '',
                     "marital_status_id" => $data["marital_status_id"] ?? null,
