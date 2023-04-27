@@ -30,7 +30,8 @@ class CreateRequest extends FormRequest
     {
         $user = User::find($this->input('user_id') ?? null);
         return [
-            'id' => ['nullable', 'integer'],
+            'patient_id' => ['nullable', 'integer'],
+            'user_id' => ['nullable', 'integer'],
             'billing_company_id' => [
                 Rule::excludeIf(Gate::denies('is-admin')),
                 'required',
