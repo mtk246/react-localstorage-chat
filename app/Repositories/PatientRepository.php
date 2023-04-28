@@ -54,8 +54,8 @@ class PatientRepository
                 $patient = Patient::find($data['patient_id']);
                 $user = $patient->user;
                 $profile = $user->profile;
-            } elseif (isset($data['user_id'])) {
-                $user = User::find($data['user_id']);
+            } elseif (isset($data['id'])) {
+                $user = User::find($data['id']);
                 $profile = $user->profile;
             }
 
@@ -400,6 +400,7 @@ class PatientRepository
 
         $record = [
             "id"                => $patient->id,
+            "user_id"           => $patient->user_id,
             "code"              => $patient->code,
             "profile"           => [
                 "avatar"           => $patient->user->profile->avatar ?? null,
