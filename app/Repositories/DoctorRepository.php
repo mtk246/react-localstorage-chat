@@ -776,6 +776,9 @@ class DoctorRepository
                 'privateNotes',
                 'publicNote',
             ])->first();
+            $healthP->user->profile->socialMedias->groupBy('billing_company_id');
+            $healthP->user->addresses->groupBy('billing_company_id');
+            $healthP->user->contacts->groupBy('billing_company_id');
         } else {
             $healthP = HealthProfessional::whereNpi($npi)->with([
                 'user' => function ($query) {
