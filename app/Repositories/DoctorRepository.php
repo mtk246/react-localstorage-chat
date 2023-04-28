@@ -763,10 +763,18 @@ class DoctorRepository
                         'addresses',
                         'contacts',
                         'billingCompanies',
-                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
+                'companies' => function ($query) {
+                    $query->with(['taxonomies', 'nicknames']);
+                },
+                'healthProfessionalType',
+                'company' => function ($query) {
+                    $query->with(['taxonomies', 'nicknames']);
+                },
+                'privateNotes',
+                'publicNote',
             ])->first();
         } else {
             $healthP = HealthProfessional::whereNpi($npi)->with([
@@ -783,10 +791,26 @@ class DoctorRepository
                             $query->where('billing_company_id', $bC);
                         },
                         'billingCompanies',
-                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
+                'companies' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC)
+                        ->with(['taxonomies', 'nicknames']);
+                },
+                'healthProfessionalType',
+                'company' => function ($query) use ($bC) {
+                    $query->with([
+                            'taxonomies',
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                },
+                'privateNotes' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'publicNote',
             ])->first();
         }
 
