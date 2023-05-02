@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimFormP
+ * App\Models\ClaimFormP.
  *
  * @property int $id
  * @property bool $head_benefit_plan_other
@@ -21,19 +23,20 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\BillingCompany|null $billingCompany
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
- * @property-read int|null $claim_form_services_count
- * @property-read \App\Models\Facility $facility
- * @property-read \App\Models\InsurancePolicy $insurancePolicy
- * @property-read \App\Models\Patient $patient
- * @property-read \App\Models\PatientOrInsuredInformation|null $patientOrInsuredInformation
- * @property-read \App\Models\PhysicianOrSupplierInformation|null $physicianOrSupplierInformation
- * @property-read \App\Models\RelationshipToInsured|null $relationshipToInsured
- * @property-read \App\Models\TypeForm|null $typeForm
- * @property-read \App\Models\TypeInsurance|null $typeInsurance
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ * @property int|null $claim_form_services_count
+ * @property \App\Models\Facility $facility
+ * @property \App\Models\InsurancePolicy $insurancePolicy
+ * @property \App\Models\Patient $patient
+ * @property \App\Models\PatientOrInsuredInformation|null $patientOrInsuredInformation
+ * @property \App\Models\PhysicianOrSupplierInformation|null $physicianOrSupplierInformation
+ * @property \App\Models\RelationshipToInsured|null $relationshipToInsured
+ * @property \App\Models\TypeForm|null $typeForm
+ * @property \App\Models\TypeInsurance|null $typeInsurance
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP query()
@@ -47,34 +50,35 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeFormId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeInsuranceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
+ *
  * @mixin \Eloquent
  */
 class ClaimFormP extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
-    protected $table = "claim_forms_p";
+    protected $table = 'claim_forms_p';
 
     protected $fillable = [
-        "head_benefit_plan_other",
-        "date_of_current",
-        "total_charge",
-        "type_form_id",
-        "type_insurance_id",
-        "relationship_to_insured_id",
-        "billing_company_id"
+        'head_benefit_plan_other',
+        'date_of_current',
+        'total_charge',
+        'type_form_id',
+        'type_insurance_id',
+        'relationship_to_insured_id',
+        'billing_company_id',
     ];
 
-    protected $with = ["claimFormServices", "physicianOrSupplierInformation", "patientOrInsuredInformation"];
+    protected $with = ['claimFormServices', 'physicianOrSupplierInformation', 'patientOrInsuredInformation'];
 
     /**
      * TypeForm belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function typeForm(): BelongsTo
     {
@@ -83,8 +87,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * TypeInsurance belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function typeInsurance(): BelongsTo
     {
@@ -93,8 +95,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * InsurancePolicy belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function insurancePolicy(): BelongsTo
     {
@@ -103,8 +103,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * Facility belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function facility(): BelongsTo
     {
@@ -113,8 +111,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * Patient belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function patient(): BelongsTo
     {
@@ -123,8 +119,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * RelationshipToInsured belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function relationshipToInsured(): BelongsTo
     {
@@ -133,8 +127,6 @@ class ClaimFormP extends Model implements Auditable
 
     /**
      * BillingCompany belongs to ClaimFormP.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billingCompany(): BelongsTo
     {

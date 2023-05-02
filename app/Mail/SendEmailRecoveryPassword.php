@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class SendEmailRecoveryPassword extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
-    public $completeName, $url;
+    public $completeName;
+    public $url;
 
-    /**
-     * @param $completeName
-     * @param $url
-     */
-    public function __construct($completeName,$url)
+    public function __construct($completeName, $url)
     {
         $this->completeName = $completeName;
         $this->url = $url;
@@ -31,6 +30,6 @@ class SendEmailRecoveryPassword extends Mailable
     public function build()
     {
         return $this->view('emails.rescue_password')
-            ->subject("Recovery Password");
+            ->subject('Recovery Password');
     }
 }

@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\FacilityType
+ * App\Models\FacilityType.
  *
  * @property int $id
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
- * @property-read int|null $facilities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property int|null $facilities_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType query()
@@ -21,8 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ *
  * @mixin \Eloquent
  */
 class FacilityType extends Model

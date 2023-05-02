@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Diagnosis;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\IUnique;
-use App\Models\Diagnosis;
 
 class DiagnosisUpdateRequest extends FormRequest
 {
@@ -26,11 +26,11 @@ class DiagnosisUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date'  => ['required', 'date'],
-            'end_date'    => ['nullable', 'date'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['nullable', 'date'],
             'description' => ['required', 'string', 'max:255'],
             'injury_date_required' => ['nullable', 'boolean'],
-            'note'        => ['required', 'string'],
+            'note' => ['required', 'string'],
         ];
     }
 }

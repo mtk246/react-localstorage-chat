@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 use BenSampo\Enum\Enum;
@@ -11,7 +13,7 @@ use BenSampo\Enum\Enum;
  */
 final class ResponseRepository extends Enum
 {
-    const OptionOne =   0;
-    const OptionTwo =   1;
-    const OptionThree = 2;
+    public const OptionOne = 0;
+    public const OptionTwo = 1;
+    public const OptionThree = 2;
 }

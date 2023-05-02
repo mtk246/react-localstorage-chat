@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Exceptions;
 
 /**
  * @class RoleDeniedException
+ *
  * @brief Excepciones para los roles de acceso denegados
  *
  * Gestiona las excepciones para los roles de acceso denegados

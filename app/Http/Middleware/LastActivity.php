@@ -1,45 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class LastActivity
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
         if (isset($request->email)) {
             if (str_contains($request->route()->uri, 'api/v1/auth/login')) {
                 $user = User::whereEmail($request->email)->first();
                 if (isset($user)) {
-                    if ($user->status == false) {
-                        return response()->json(['error' => __("Your user is inactive, for more information contact the administrator.")], 401);
+                    if (false == $user->status) {
+                        return response()->json(['error' => __('Your user is inactive, for more information contact the administrator.')], 401);
                     }
-                    if ($user->isLogged == true) {
+                    if (true == $user->isLogged) {
                         $lastActivity = new \DateTime($user->last_activity);
                         $inactivity_time = 120 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
-                        if ($inactivity_time <= 0 ) {
+                        if ($inactivity_time <= 0) {
                             $user->isLogged = false;
-                            //$user->last_login = Carbon::now();
+                            // $user->last_login = Carbon::now();
                             $now = Carbon::now();
                             $user->last_activity = Carbon::now();
                             $user->save();
+
                             return $next($request);
                         }
                     } else {
                         $now = Carbon::now();
                         $user->last_activity = Carbon::now();
                         $user->save();
+
                         return $next($request);
                     }
                 }
@@ -49,11 +52,12 @@ class LastActivity
             if (isset($user)) {
                 $now = Carbon::now();
                 if (str_contains($request->userAgent(), 'Mobile')) {
-                    if (($user->last_activity == null) || ($user->last_activity > $now->subMinute(21600))) {
+                    if ((null == $user->last_activity) || ($user->last_activity > $now->subMinute(21600))) {
                         if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
                             $user->last_activity = Carbon::now();
                             $user->save();
                         }
+
                         return $next($request);
                     } else {
                         $user->isLogged = false;
@@ -61,20 +65,22 @@ class LastActivity
                         $user->save();
                     }
                 } else {
-                    /** @todo validación mike */
-                    if ($user->email == 'mr@ciph3r.co') {
+                    /* @todo validación mike */
+                    if ('mr@ciph3r.co' == $user->email) {
                         $inactivity_time = 60 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
-                        if ($inactivity_time <= 0 ) {
+                        if ($inactivity_time <= 0) {
                             auth()->logout();
-                            return response()->json(__("Your session has expired due to inactivity"), 401);
+
+                            return response()->json(__('Your session has expired due to inactivity'), 401);
                         }
                     }
-                        
-                    if (($user->last_activity == null) || ($user->last_activity > $now->subMinute(65))) {
+
+                    if ((null == $user->last_activity) || ($user->last_activity > $now->subMinute(65))) {
                         if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
                             $user->last_activity = Carbon::now();
                             $user->save();
                         }
+
                         return $next($request);
                     } else {
                         $user->isLogged = false;
@@ -82,10 +88,11 @@ class LastActivity
                         $user->save();
                     }
                 }
-                return response()->json(__("Your session has expired due to inactivity"), 401);
+
+                return response()->json(__('Your session has expired due to inactivity'), 401);
             }
         }
-        return $next($request);
 
+        return $next($request);
     }
 }

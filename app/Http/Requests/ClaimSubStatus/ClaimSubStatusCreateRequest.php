@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\ClaimSubStatus;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Rules\IUnique;
 use App\Models\ClaimSubStatus;
+use App\Rules\IUnique;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ClaimSubStatusCreateRequest extends FormRequest
 {
@@ -27,12 +28,12 @@ class ClaimSubStatusCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'                     => ['required', 'string', 'max:20', new IUnique(ClaimSubStatus::class, 'code')],
-            'name'                     => ['required', 'string', 'max:50', new IUnique(ClaimSubStatus::class, 'name')],
-            'description'              => ['nullable', 'string'],
-            'claim_statuses'           => ['required', 'array'],
-            'billing_companies'        => ['nullable', 'array'],
-            'specific_billing_company' => ['nullable', 'boolean']
+            'code' => ['required', 'string', 'max:20', new IUnique(ClaimSubStatus::class, 'code')],
+            'name' => ['required', 'string', 'max:50', new IUnique(ClaimSubStatus::class, 'name')],
+            'description' => ['nullable', 'string'],
+            'claim_statuses' => ['required', 'array'],
+            'billing_companies' => ['nullable', 'array'],
+            'specific_billing_company' => ['nullable', 'boolean'],
         ];
     }
 }

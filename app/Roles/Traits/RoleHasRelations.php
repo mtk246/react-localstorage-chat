@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Traits;
 
+use App\Roles\Models\Permission;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Roles\Models\Permission;
 
 /**
- * Trait para la gestión de roles y sus relaciones
+ * Trait para la gestión de roles y sus relaciones.
  *
  * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
  */
@@ -37,6 +39,7 @@ trait RoleHasRelations
      * Attach permission to a role.
      *
      * @param int|Permission $permission
+     *
      * @return void|bool
      */
     public function attachPermission($permission)
@@ -50,6 +53,7 @@ trait RoleHasRelations
      * Detach permission from a role.
      *
      * @param int|Permission $permission
+     *
      * @return int
      */
     public function detachPermission($permission)
@@ -71,6 +75,7 @@ trait RoleHasRelations
      * Sync permissions for a role.
      *
      * @param array|Permission[]|Collection $permissions
+     *
      * @return array
      */
     public function syncPermissions($permissions)

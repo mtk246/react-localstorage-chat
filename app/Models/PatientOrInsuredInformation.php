@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\PatientOrInsuredInformation
+ * App\Models\PatientOrInsuredInformation.
  *
  * @property int $id
  * @property bool $employment_related_condition
@@ -22,9 +22,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $claim_form_p_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimFormP $claimFormP
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimFormP $claimFormP
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation query()
@@ -38,24 +39,27 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation whereOtherAccidentRelatedCondition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation wherePatientSignature($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PatientOrInsuredInformation whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class PatientOrInsuredInformation extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $table = 'patient_or_insured_informations';
 
     protected $fillable = [
-        "employment_related_condition",
-        "auto_accident_related_condition",
-        "auto_accident_place_state",
-        "other_accident_related_condition",
-        "patient_signature",
-        "insured_signature",
-        "claim_form_p_id"
+        'employment_related_condition',
+        'auto_accident_related_condition',
+        'auto_accident_place_state',
+        'other_accident_related_condition',
+        'patient_signature',
+        'insured_signature',
+        'claim_form_p_id',
     ];
 
     /**

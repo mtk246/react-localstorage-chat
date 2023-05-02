@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Modifier
+ * App\Models\Modifier.
  *
  * @property int $id
  * @property string $modifier
@@ -19,16 +21,17 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property-read int|null $modifier_considerations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
- * @property-read int|null $modifier_invalid_combinations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read int|null $procedures_count
- * @property-read \App\Models\PublicNote|null $publicNote
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property int|null $modifier_considerations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
+ * @property int|null $modifier_invalid_combinations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property int|null $procedures_count
+ * @property \App\Models\PublicNote|null $publicNote
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier query()
@@ -41,26 +44,29 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereSpecialCodingInstructions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
  * @mixin \Eloquent
  */
 class Modifier extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "modifier",
-        "start_date",
-        "end_date",
-        "special_coding_instructions",
-        "active"
+        'modifier',
+        'start_date',
+        'end_date',
+        'special_coding_instructions',
+        'active',
     ];
 
     /**
@@ -91,7 +97,7 @@ class Modifier extends Model implements Auditable
     }
 
     /**
-     * The procedures that belong to the Modifier. 
+     * The procedures that belong to the Modifier.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -112,8 +118,6 @@ class Modifier extends Model implements Auditable
 
     /**
      * Interact with the modifier's special_coding_instructions.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function specialCodingInstructions(): Attribute
     {
@@ -126,19 +130,20 @@ class Modifier extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -146,7 +151,7 @@ class Modifier extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereRaw('LOWER(modifier) LIKE (?)', [strtolower("%$search%")])
                          ->orWhereRaw('LOWER(special_coding_instructions) LIKE (?)', [strtolower("%$search%")]);
         }

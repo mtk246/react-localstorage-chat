@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +18,7 @@ class UpdateFieldsToClearingHousesTable extends Migration
         Schema::table('clearing_houses', function (Blueprint $table) {
             $table->string('org_type')->nullable();
             $table->boolean('ack_required')->default(false);
-            $table->string("name")->unique()->change();
+            $table->string('name')->unique()->change();
         });
     }
 
@@ -28,7 +30,6 @@ class UpdateFieldsToClearingHousesTable extends Migration
     public function down()
     {
         Schema::table('clearing_houses', function (Blueprint $table) {
-            //
         });
     }
 }

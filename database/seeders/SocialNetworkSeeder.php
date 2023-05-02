@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\SocialNetwork;
+use Illuminate\Database\Seeder;
 
 class SocialNetworkSeeder extends Seeder
 {
@@ -20,13 +22,11 @@ class SocialNetworkSeeder extends Seeder
             ['name' => 'LinkedIn'],
             ['name' => 'YouTube'],
             ['name' => 'Instagram'],
-            ['name' => 'TikTok']
+            ['name' => 'TikTok'],
         ];
 
         foreach ($socialNetworks as $name) {
-
             SocialNetwork::updateOrCreate($name, $name);
-
         }
     }
 }

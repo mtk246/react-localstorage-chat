@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Patient;
 
 use App\Models\MaritalStatus;
@@ -7,7 +9,6 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-
 
 class CreateRequest extends FormRequest
 {
@@ -29,6 +30,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         $user = User::find($this->input('id') ?? null);
+
         return [
             'patient_id' => ['nullable', 'integer'],
             'id' => ['nullable', 'integer'],
@@ -48,17 +50,19 @@ class CreateRequest extends FormRequest
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.date_of_birth' => ['required', 'date'],
             'profile.sex' => ['required', 'string', 'max:1'],
-            
+
             'marital_status_id' => ['nullable', 'integer'],
             'marital' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
-                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+
+                    return isset($maritalStatus) && 'Single' !== $maritalStatus->name;
                 }), 'nullable', 'array'],
             'marital.spuse_name' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
-                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+
+                    return isset($maritalStatus) && 'Single' !== $maritalStatus->name;
                 }), 'nullable', 'string'],
             'marital.spuse_work' => ['nullable', 'string'],
             'marital.spuse_work_phone' => ['nullable', 'string'],
@@ -104,7 +108,7 @@ class CreateRequest extends FormRequest
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],
             'save_as_draft' => ['nullable', 'boolean'],
-            'draft_note' => ['nullable', 'string']
+            'draft_note' => ['nullable', 'string'],
         ];
     }
 }

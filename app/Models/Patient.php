@@ -237,9 +237,7 @@ class Patient extends Model implements Auditable
     }
 
     /**
-     * Get all of the claims for the Patient
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the claims for the Patient.
      */
     public function claims(): HasMany
     {
@@ -297,9 +295,7 @@ class Patient extends Model implements Auditable
     }
 
     /**
-     * Get all of the insurancePolicies for the Patient
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the insurancePolicies for the Patient.
      */
     public function insurancePolicies(): HasMany
     {

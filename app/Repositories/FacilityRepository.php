@@ -608,6 +608,7 @@ class FacilityRepository
             }
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }

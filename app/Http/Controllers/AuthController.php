@@ -356,7 +356,7 @@ class AuthController extends Controller
         $user->menu_by_category = $perms_v2;
         $now = new \DateTime(Carbon::now()->toString());
         $lastActivity = new \DateTime($user->last_activity);
-        if ($user->email == 'mr@ciph3r.co') {
+        if ('mr@ciph3r.co' == $user->email) {
             $user->inactivity_time = 120000;
         } else {
             $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
@@ -454,38 +454,38 @@ class AuthController extends Controller
         // User::whereId($user->id)->update(["isLogged" => true]);
         // $device = DeviceController::searchDeviceByIp($ip);
 
-//        if( !$device ){
-//            DeviceController::logNewDevice([
-//                "email" => $user->email,
-//                "ip"    => $ip,
-//                "os"    => $os,
-//                "code_temp" => Str::random(6),
-//                "user_id"   => $user->id
-//            ]);
-//
-//            User::whereId($user->id)->update([
-//                "isBlocked" => true
-//            ]);
-//
-//            return response()->json(
-//                $token,
-//                403
-//            );
-//        }
-//        else{
-//            if(!$device->status){
-//                $ctrlDevice = new DeviceController();
-//                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
-//                User::whereId($user->id)->update([
-//                    "isBlocked" => true
-//                ]);
-//
-//                return response()->json(
-//                    $token,
-//                    403
-//                );
-//            }
-//        }
+        //        if( !$device ){
+        //            DeviceController::logNewDevice([
+        //                "email" => $user->email,
+        //                "ip"    => $ip,
+        //                "os"    => $os,
+        //                "code_temp" => Str::random(6),
+        //                "user_id"   => $user->id
+        //            ]);
+        //
+        //            User::whereId($user->id)->update([
+        //                "isBlocked" => true
+        //            ]);
+        //
+        //            return response()->json(
+        //                $token,
+        //                403
+        //            );
+        //        }
+        //        else{
+        //            if(!$device->status){
+        //                $ctrlDevice = new DeviceController();
+        //                $ctrlDevice->sendEmailNewDevice($user->email,$device->ip,$device->os,$device->code_temp);
+        //                User::whereId($user->id)->update([
+        //                    "isBlocked" => true
+        //                ]);
+        //
+        //                return response()->json(
+        //                    $token,
+        //                    403
+        //                );
+        //            }
+        //        }
 
         return response()->json([
             'user' => $user->load('permissions')->load('roles'),

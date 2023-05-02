@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ProcedureConsideration
+ * App\Models\ProcedureConsideration.
  *
  * @property int $id
  * @property int $procedure_id
@@ -18,11 +20,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $discriminatory_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Discriminatory $discriminatory
- * @property-read \App\Models\Gender $gender
- * @property-read \App\Models\Procedure $procedure
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Discriminatory $discriminatory
+ * @property \App\Models\Gender $gender
+ * @property \App\Models\Procedure $procedure
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration query()
@@ -34,20 +37,23 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ProcedureConsideration extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "procedure_id",
-        "gender_id",
-        "age_init",
-        "age_end",
-        "discriminatory_id"
+        'procedure_id',
+        'gender_id',
+        'age_init',
+        'age_end',
+        'discriminatory_id',
     ];
 
     /**

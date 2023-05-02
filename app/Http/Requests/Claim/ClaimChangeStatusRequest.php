@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Claim;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -23,11 +25,10 @@ class ClaimChangeStatusRequest extends FormRequest
      */
     public function rules()
     {
-        return [      
-            "status_id"     => ['required', 'integer'],
-            "sub_status_id" => ['nullable', 'integer'],
-            "private_note"  => ['nullable', 'string']
+        return [
+            'status_id' => ['required', 'integer'],
+            'sub_status_id' => ['nullable', 'integer'],
+            'private_note' => ['nullable', 'string'],
         ];
     }
 }
-

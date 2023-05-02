@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'default' => 'default',
     'documentations' => [
@@ -41,7 +43,6 @@ return [
                 'annotations' => [
                     base_path('app'),
                 ],
-
             ],
         ],
     ],
@@ -103,21 +104,21 @@ return [
         ],
 
         'scanOptions' => [
-            /**
+            /*
              * analyser: defaults to \OpenApi\StaticAnalyser .
              *
              * @see \OpenApi\scan
              */
             'analyser' => null,
 
-            /**
+            /*
              * analysis: defaults to a new \OpenApi\Analysis .
              *
              * @see \OpenApi\scan
              */
             'analysis' => null,
 
-            /**
+            /*
              * Custom query path processors classes.
              *
              * @link https://github.com/zircote/swagger-php/tree/master/Examples/schema-query-parameter-processor
@@ -127,7 +128,7 @@ return [
                 // new \App\SwaggerProcessors\SchemaQueryParameter(),
             ],
 
-            /**
+            /*
              * pattern: string       $pattern File pattern(s) to scan (default: *.php) .
              *
              * @see \OpenApi\scan
@@ -255,7 +256,7 @@ return [
          * Uncomment to add constants which can be used in annotations
          */
          'constants' => [
-         'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST',),
+         'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST'),
          ],
     ],
 ];

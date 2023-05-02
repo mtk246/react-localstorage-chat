@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +16,7 @@ class AddCodeBillingCompaniesTable extends Migration
     public function up()
     {
         Schema::table('billing_companies', function (Blueprint $table) {
-            $table->string("code")->nullable();
+            $table->string('code')->nullable();
         });
     }
 
@@ -26,7 +28,7 @@ class AddCodeBillingCompaniesTable extends Migration
     public function down()
     {
         Schema::table('billing_companies', function (Blueprint $table) {
-            $table->dropColumn("code");
+            $table->dropColumn('code');
         });
     }
 }

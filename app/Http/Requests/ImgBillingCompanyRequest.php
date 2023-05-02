@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,8 +26,8 @@ class ImgBillingCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'logo'               => ['required', 'file', 'mimes:jpg,png', 'max:1024'],
-            "billing_company_id" => ["required", "integer"]
+            'logo' => ['required', 'file', 'mimes:jpg,png', 'max:1024'],
+            'billing_company_id' => ['required', 'integer'],
         ];
     }
 }

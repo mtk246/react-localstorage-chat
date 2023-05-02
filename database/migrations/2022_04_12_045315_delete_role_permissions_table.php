@@ -1,7 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class DeleteRolePermissionsTable extends Migration
@@ -17,7 +18,7 @@ class DeleteRolePermissionsTable extends Migration
         Schema::dropIfExists('model_has_roles');
         Schema::dropIfExists('role_has_permissions');
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('permissions'); 
+        Schema::dropIfExists('permissions');
     }
 
     /**
@@ -27,6 +28,5 @@ class DeleteRolePermissionsTable extends Migration
      */
     public function down()
     {
-        //
     }
 }

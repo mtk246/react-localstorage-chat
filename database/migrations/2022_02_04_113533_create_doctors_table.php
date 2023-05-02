@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +17,9 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->string("npi")->unique();
-            $table->string("taxonomia");
-            $table->string("speciality");
+            $table->string('npi')->unique();
+            $table->string('taxonomia');
+            $table->string('speciality');
             $table->timestamps();
         });
     }

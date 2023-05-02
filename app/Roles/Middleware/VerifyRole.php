@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Middleware;
 
-use Closure;
+use App\Roles\Exceptions\RoleDeniedException;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use App\Roles\Exceptions\RoleDeniedException;
 
 /**
  * @class VerifyRole
+ *
  * @brief Verifica roles de acceso
  *
  * Gestiona la verificación del rol de acceso
@@ -24,8 +26,6 @@ class VerifyRole
 
     /**
      * Create a new filter instance.
-     *
-     * @param Guard $auth
      */
     public function __construct(Guard $auth)
     {
@@ -36,12 +36,13 @@ class VerifyRole
      * Handle an incoming request.
      *
      * @param Request $request
-     * @param \Closure $next
      * @param string $role
+     *
      * @return mixed
+     *
      * @throws RoleDeniedException
      */
-    public function handle($request, Closure $next, $role)
+    public function handle($request, \Closure $next, $role)
     {
         if ($this->auth->check() && $this->auth->user()->hasRole($role)) {
             return $next($request);

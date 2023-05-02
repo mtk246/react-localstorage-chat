@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\InsurancePlan;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,12 +26,12 @@ class AddCopaysRequest extends FormRequest
     public function rules()
     {
         return [
-            'copays'                      => ['required', 'array'],
+            'copays' => ['required', 'array'],
             'copays.*.billing_company_id' => ['nullable', 'integer'],
-            'copays.*.procedure_ids'      => ['required', 'array'],
-            'copays.*.company_id'         => ['nullable', 'integer'],
-            'copays.*.copay'              => ['nullable', 'numeric'],
-            'copays.*.private_note'       => ['nullable', 'string'],
+            'copays.*.procedure_ids' => ['required', 'array'],
+            'copays.*.company_id' => ['nullable', 'integer'],
+            'copays.*.copay' => ['nullable', 'numeric'],
+            'copays.*.private_note' => ['nullable', 'string'],
         ];
     }
 }

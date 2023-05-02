@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +26,7 @@ class ImgProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            "img" => "required|file|mimes:jpg,png|max:1024"
+            'img' => 'required|file|mimes:jpg,png|max:1024',
         ];
     }
 }

@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\MacLocality
+ * App\Models\MacLocality.
  *
  * @property int $id
  * @property string $mac
@@ -19,13 +21,14 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $locality_number
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read Attribute $modifier
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read int|null $procedure_fees_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read int|null $procedures_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property Attribute $modifier
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property int|null $procedure_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property int|null $procedures_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality query()
@@ -37,24 +40,27 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereMac($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
  * @mixin \Eloquent
  */
 class MacLocality extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "mac",
-        "locality_number",
-        "state",
-        "fsa",
-        "counties"
+        'mac',
+        'locality_number',
+        'state',
+        'fsa',
+        'counties',
     ];
 
     /**
@@ -65,7 +71,7 @@ class MacLocality extends Model implements Auditable
     protected $appends = ['modifier'];
 
     /**
-     * The procedures that belong to the MacLocality. 
+     * The procedures that belong to the MacLocality.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -86,8 +92,6 @@ class MacLocality extends Model implements Auditable
 
     /**
      * Interact with the macLocality's state.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function state(): Attribute
     {
@@ -99,8 +103,6 @@ class MacLocality extends Model implements Auditable
 
     /**
      * Interact with the macLocality's fsa.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function fsa(): Attribute
     {
@@ -112,8 +114,6 @@ class MacLocality extends Model implements Auditable
 
     /**
      * Interact with the macLocality's counties.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function counties(): Attribute
     {
@@ -132,5 +132,4 @@ class MacLocality extends Model implements Auditable
     {
         return Modifier::find($this->pivot->modifier_id ?? null);
     }
-
 }

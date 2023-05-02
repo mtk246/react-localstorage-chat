@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +17,10 @@ class CreateInsuranceCompaniesTable extends Migration
     {
         Schema::create('insurance_companies', function (Blueprint $table) {
             $table->id();
-            $table->string("code")->unique();
-            $table->string("name")->unique();
-            $table->string("file_method");
-            $table->string("naic");
+            $table->string('code')->unique();
+            $table->string('name')->unique();
+            $table->string('file_method');
+            $table->string('naic');
             $table->timestamps();
         });
     }

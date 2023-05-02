@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +16,7 @@ class RemoveFieldStatusToInsuranceCompaniesTable extends Migration
     public function up()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->dropColumn("status");
+            $table->dropColumn('status');
         });
     }
 
@@ -26,7 +28,7 @@ class RemoveFieldStatusToInsuranceCompaniesTable extends Migration
     public function down()
     {
         Schema::table('insurance_companies', function (Blueprint $table) {
-            $table->boolean("status")->default(false);
+            $table->boolean('status')->default(false);
         });
     }
 }

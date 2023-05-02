@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http;
 
 use App\Http\Middleware\AuditoryMiddleware;
@@ -46,7 +48,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            'localization'
+            'localization',
         ],
     ];
 
@@ -68,17 +70,17 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'localization' => \App\Http\Middleware\Localization::class,
-        
-        /**
+
+        /*
          * App Roles and Permissions
          */
         'role' => \App\Roles\Middleware\VerifyRole::class,
         'permission' => \App\Roles\Middleware\VerifyPermission::class,
         'level' => \App\Roles\Middleware\VerifyLevel::class,
-        
+
         'audit' => AuditoryMiddleware::class,
         'checkAvailable' => CheckAvailableUser::class,
         'restrictIpAddress' => \App\Http\Middleware\RestrictIpAddress::class,
-        'lastActivity' => \App\Http\Middleware\LastActivity::class
+        'lastActivity' => \App\Http\Middleware\LastActivity::class,
     ];
 }

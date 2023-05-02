@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,10 +26,10 @@ class CreateRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string",
-            "slug" => "required|string",
-            "description" => "required|string",
-            "level" => "required|integer"
+            'name' => 'required|string',
+            'slug' => 'required|string',
+            'description' => 'required|string',
+            'level' => 'required|integer',
         ];
     }
 }

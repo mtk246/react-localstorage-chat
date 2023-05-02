@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\InsuranceCompanyBillingIncompleteReason
+ * App\Models\InsuranceCompanyBillingIncompleteReason.
  *
  * @property int $id
  * @property int $billing_incomplete_reason_id
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason query()
@@ -22,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyBillingIncompleteReason whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class InsuranceCompanyBillingIncompleteReason extends Pivot
@@ -34,8 +38,8 @@ class InsuranceCompanyBillingIncompleteReason extends Pivot
     public $incrementing = true;
 
     protected $fillable = [
-        "insurance_company_id",
-        "billing_incomplete_reason_id",
-        "billing_company_id"
+        'insurance_company_id',
+        'billing_incomplete_reason_id',
+        'billing_company_id',
     ];
 }

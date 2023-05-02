@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\SocialMedia
+ * App\Models\SocialMedia.
  *
  * @property int $id
  * @property string $link
@@ -17,10 +19,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $social_network_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Profile $profile
- * @property-read \App\Models\SocialNetwork|null $socialNetwork
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Profile $profile
+ * @property \App\Models\SocialNetwork|null $socialNetwork
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia query()
@@ -30,13 +33,16 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereSocialNetworkId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SocialMedia whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class SocialMedia extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'link',
@@ -46,16 +52,14 @@ class SocialMedia extends Model implements Auditable
     ];
 
     /**
-     * Lista de relaciones a incorporar en las consultas
+     * Lista de relaciones a incorporar en las consultas.
      *
-     * @var    array
+     * @var array
      */
     protected $with = ['socialNetwork'];
 
     /**
-     * Get the billingCompany that owns the SocialMedia
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the billingCompany that owns the SocialMedia.
      */
     public function billingCompany(): BelongsTo
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -31,4 +33,4 @@ class AddFieldsToCompanyProcedureTable extends Migration
             $table->dropColumn('price_percentage');
         });
     }
-};
+}

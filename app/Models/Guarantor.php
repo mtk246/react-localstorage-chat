@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Guarantor
+ * App\Models\Guarantor.
  *
  * @property int $id
  * @property string $name
@@ -18,9 +20,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $patient_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Patient $patient
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Patient $patient
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor query()
@@ -30,13 +33,16 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guarantor whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class Guarantor extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'name',
@@ -56,9 +62,7 @@ class Guarantor extends Model implements Auditable
     }
 
     /**
-     * Get the billingCompany that owns the Guarantor
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the billingCompany that owns the Guarantor.
      */
     public function billingCompany(): BelongsTo
     {
@@ -67,8 +71,6 @@ class Guarantor extends Model implements Auditable
 
     /**
      * Interact with the guarantor's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {

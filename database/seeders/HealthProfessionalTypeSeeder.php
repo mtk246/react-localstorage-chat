@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\HealthProfessionalType;
 use App\Models\CompanyHealthProfessionalType;
+use App\Models\HealthProfessionalType;
+use Illuminate\Database\Seeder;
 
 class HealthProfessionalTypeSeeder extends Seeder
 {
@@ -33,7 +35,7 @@ class HealthProfessionalTypeSeeder extends Seeder
         $companyHealthProfessionalTypes = [
             ['type' => 'Service Provider'],
             ['type' => 'Billing Provider'],
-            ['type' => 'Referred']
+            ['type' => 'Referred'],
         ];
 
         foreach ($companyHealthProfessionalTypes as $type) {

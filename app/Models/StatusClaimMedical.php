@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\StatusClaimMedical
+ * App\Models\StatusClaimMedical.
  *
  * @property int $id
  * @property string $status_category_code
@@ -30,9 +31,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $claim_status_medical_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimStatusMedical $claimStatusMedical
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimStatusMedical $claimStatusMedical
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical query()
@@ -55,31 +57,34 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical whereTrackingNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical whereTradingPartnerClaimNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StatusClaimMedical whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class StatusClaimMedical extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "status_category_code",
-        "status_category_code_value",
-        "status_code",
-        "status_code_value",
-        "entity_code",
-        "entity",
-        "effective_date",
-        "submitted_amount",
-        "amount_paid",
-        "paid_date",
-        "check_issue_date",
-        "check_number",
-        "tracking_number",
-        "claim_service_date",
-        "trading_partner_claim_number",
-        "claim_status_medical_id",
+        'status_category_code',
+        'status_category_code_value',
+        'status_code',
+        'status_code_value',
+        'entity_code',
+        'entity',
+        'effective_date',
+        'submitted_amount',
+        'amount_paid',
+        'paid_date',
+        'check_issue_date',
+        'check_number',
+        'tracking_number',
+        'claim_service_date',
+        'trading_partner_claim_number',
+        'claim_status_medical_id',
     ];
 
     /**

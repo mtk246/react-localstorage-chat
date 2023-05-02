@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\InsurancePlan;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\TypeCatalog;
+use Illuminate\Foundation\Http\FormRequest;
 
 class AddContractFeesRequest extends FormRequest
 {

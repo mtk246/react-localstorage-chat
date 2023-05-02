@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Claim;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,13 +27,13 @@ class ClaimBatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'               => ['required', 'string'],
-            'claims_reconciled'  => ['nullable', 'boolean'],
-            'fake_transmission'  => ['nullable', 'boolean'],
-            'company_id'         => ['required', 'integer'],
+            'name' => ['required', 'string'],
+            'claims_reconciled' => ['nullable', 'boolean'],
+            'fake_transmission' => ['nullable', 'boolean'],
+            'company_id' => ['required', 'integer'],
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            'claim_ids'          => ['required', 'array'],
-            'send'               => ['nullable', 'boolean']
+            'claim_ids' => ['required', 'array'],
+            'send' => ['nullable', 'boolean'],
         ];
     }
 }

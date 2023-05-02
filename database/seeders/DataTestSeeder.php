@@ -1,6 +1,8 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
+
+// declare(strict_types=1);
 
 namespace Database\Seeders;
 
@@ -3398,7 +3400,7 @@ class DataTestSeeder extends Seeder
                         'policy_number' => $insurance_policy['policy_number'],
                         'insurance_plan_id' => $insurancePlan->id,
                     ], [
-                        'own' =>  $insurance_policy['own_insurance'] ?? false,
+                        'own' => $insurance_policy['own_insurance'] ?? false,
                         'group_number' => $insurance_policy['group_number'] ?? '',
                         'eff_date' => $insurance_policy['eff_date'],
                         'end_date' => $insurance_policy['end_date'] ?? null,

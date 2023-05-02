@@ -1,22 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\CompanyHealthProfessionalType
+ * App\Models\CompanyHealthProfessionalType.
  *
  * @property int $id
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType query()
@@ -24,22 +27,23 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessionalType whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class CompanyHealthProfessionalType extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
-    
+    use HasFactory;
+    use AuditableTrait;
+
     protected $fillable = [
-        "type"
+        'type',
     ];
 
     /**
      * Interact with the CompanyHealthProfessionalType's type.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function type(): Attribute
     {

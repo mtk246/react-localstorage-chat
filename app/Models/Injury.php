@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Injury
+ * App\Models\Injury.
  *
  * @property int $id
  * @property string $diag_date
@@ -16,11 +18,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int|null $type_diag_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Diagnosis $diagnosis
- * @property-read \App\Models\PublicNote $publicNote
- * @property-read \App\Models\TypeDiag|null $typeDiag
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Diagnosis $diagnosis
+ * @property \App\Models\PublicNote $publicNote
+ * @property \App\Models\TypeDiag|null $typeDiag
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Injury newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Injury newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Injury query()
@@ -30,18 +33,21 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Injury whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Injury whereTypeDiagId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Injury whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class Injury extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "diag_date",
-        "diagnosis_id",
-        "type_diag_id"
+        'diag_date',
+        'diagnosis_id',
+        'type_diag_id',
     ];
 
     /**

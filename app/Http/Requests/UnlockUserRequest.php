@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,8 +26,8 @@ class UnlockUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "userkey" => ["required"],
-            "email"   => ["required", "email:rfc"]
+            'userkey' => ['required'],
+            'email' => ['required', 'email:rfc'],
         ];
     }
 }

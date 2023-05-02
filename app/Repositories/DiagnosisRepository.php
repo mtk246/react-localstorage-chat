@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use App\Models\Diagnosis;
@@ -7,42 +9,44 @@ use App\Models\PublicNote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DiagnosisRepository
 {
     /**
-     * @param array $data
      * @return Diagnosis|Model
      */
-    public function createDiagnosis(array $data) {
+    public function createDiagnosis(array $data)
+    {
         try {
             DB::beginTransaction();
             $diagnosis = Diagnosis::create([
-                "code"        => $data["code"],
-                "start_date"  => $data["start_date"],
-                "description" => $data["description"]
+                'code' => $data['code'],
+                'start_date' => $data['start_date'],
+                'description' => $data['description'],
             ]);
-            
+
             if (isset($data['note'])) {
                 PublicNote::create([
                     'publishable_type' => Diagnosis::class,
-                    'publishable_id'   => $diagnosis->id,
-                    'note'             => $data['note'],
+                    'publishable_id' => $diagnosis->id,
+                    'note' => $data['note'],
                 ]);
             }
 
             DB::commit();
+
             return $diagnosis;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
 
-    
-    public function getListDiagnoses($id = null) {
+    public function getListDiagnoses($id = null)
+    {
         try {
             return getList(Diagnosis::class, ['code', '-', 'description']);
         } catch (\Exception $e) {
@@ -53,119 +57,123 @@ class DiagnosisRepository
     /**
      * @return Diagnosis[]|Collection
      */
-    public function getAllDiagnoses() {
+    public function getAllDiagnoses()
+    {
         $diagnoses = Diagnosis::with([
-            "publicNote",
-        ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
-        
+            'publicNote',
+        ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
+
         return is_null($diagnoses) ? null : $diagnoses;
     }
 
-    public function getServerAllDiagnoses(Request $request) {
+    public function getServerAllDiagnoses(Request $request)
+    {
         $data = Diagnosis::with([
-            "publicNote",
+            'publicNote',
         ]);
-        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
         }
-        
+
         if ($request->sortBy) {
-            $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
         } else {
-            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data'          => $data->items(),
+            'data' => $data->items(),
             'numberOfPages' => $data->lastPage(),
-            'count'         => $data->total()
+            'count' => $data->total(),
         ], 200);
     }
 
     /**
-     * @param int $id
      * @return Diagnosis|Builder|Model|object|null
      */
-    public function getOneDiagnosis(int $id) {
+    public function getOneDiagnosis(int $id)
+    {
         $diagnosis = Diagnosis::whereId($id)->with([
-                "publicNote",
+                'publicNote',
             ])->first();
 
         return !is_null($diagnosis) ? $diagnosis : null;
     }
 
     /**
-     * @param string $code
      * @return Diagnosis|Builder|Model|object|null
      */
-    public function getByCode(string $code) {
+    public function getByCode(string $code)
+    {
         $diagnosis = Diagnosis::whereCode($code)->with([
-                "publicNote",
+                'publicNote',
             ])->first();
 
         return !is_null($diagnosis) ? $diagnosis : null;
     }
 
     /**
-     * @param array $data
-     * @param int $id
      * @return Diagnosis|Builder|Model|object|null
      */
-    public function updateDiagnosis(array $data, int $id) {
+    public function updateDiagnosis(array $data, int $id)
+    {
         try {
             DB::beginTransaction();
             $diagnosis = Diagnosis::find($id);
 
             $diagnosis->update([
-                "start_date"  => $data["start_date"],
-                "end_date"    => $data["end_date"] ?? null,
-                "description" => $data["description"]
+                'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
+                'description' => $data['description'],
             ]);
 
             if (isset($data['note'])) {
-                /** PublicNote */
+                /* PublicNote */
                 PublicNote::updateOrCreate([
                     'publishable_type' => Diagnosis::class,
-                    'publishable_id'   => $diagnosis->id,
+                    'publishable_id' => $diagnosis->id,
                 ], [
-                    'note'             => $data['note'],
+                    'note' => $data['note'],
                 ]);
             }
 
             DB::commit();
+
             return Diagnosis::whereId($id)->with([
-                "publicNote",
+                'publicNote',
             ])->first();
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
 
     /**
-     * @param bool $status
-     * @param int $id
      * @return bool|int|null
      */
-    public function changeStatus(bool $status, int $id) {
+    public function changeStatus(bool $status, int $id)
+    {
         $diagnosis = Diagnosis::find($id);
 
-        if (is_null($diagnosis)) return null;
+        if (is_null($diagnosis)) {
+            return null;
+        }
 
         if ($status) {
             return $diagnosis->update(
                 [
-                    "active"   => $status,
-                    "end_date" => null
+                    'active' => $status,
+                    'end_date' => null,
                 ]
             );
         } else {
             return $diagnosis->update(
                 [
-                    "active"   => $status,
-                    "end_date" => now()
+                    'active' => $status,
+                    'end_date' => now(),
                 ]
             );
         }

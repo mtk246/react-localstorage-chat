@@ -1,23 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-use App\Models\IpRestriction;
 use App\Models\IpRestrictionMult;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class RestrictIpAddress
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, \Closure $next)
     {
         if (isset($request->email)) {
             $user = User::whereEmail($request->email)->first();
@@ -35,35 +35,41 @@ class RestrictIpAddress
 
             $restrictions = IpRestrictionMult::where([
                 'ip_beginning' => $request->ip(),
-                'rank'         => false
+                'rank' => false,
             ])->orWhere([
                 ['ip_beginning', '<=', $request->ip()],
                 ['ip_finish',    '>=', $request->ip()],
-                ['rank',         '=',  true]
+                ['rank',         '=',  true],
             ])->get();
 
             foreach ($restrictions as $restriction) {
                 $ipRestriction = $restriction->ipRestriction;
-                if ($ipRestriction->entity == 'user') {
+                if ('user' == $ipRestriction->entity) {
                     /** Restriction by user */
                     $validate = $ipRestriction->users->where('id', $user->id)->first();
-                    if (isset($validate)) break;
-
+                    if (isset($validate)) {
+                        break;
+                    }
                 }
-                /** Restriction by billing company */
-                else if ($ipRestriction->entity == 'role') {
+                /* Restriction by billing company */
+                elseif ('role' == $ipRestriction->entity) {
                     /** Restriction by roles */
                     $roles = $user->roles;
                     foreach ($roles as $role) {
                         $validate = $ipRestriction->roles->where('id', $role->id)->first();
-                        if (isset($validate)) break;
+                        if (isset($validate)) {
+                            break;
+                        }
+                    }
+                } else {
+                    $validate = ($ipRestriction->billing_company_id == ($billingCompany->id ?? null)) ? true : null;
+                    if (isset($validate)) {
+                        break;
                     }
                 }
-                else {
-                    $validate = ($ipRestriction->billing_company_id == ($billingCompany->id ?? null)) ? true : null;
-                    if (isset($validate)) break;
+                if (isset($validate)) {
+                    break;
                 }
-                if (isset($validate)) break;
             }
             if ($validate) {
                 return response()->json([
@@ -71,6 +77,7 @@ class RestrictIpAddress
                     'ip_restriction' => true], 403);
             }
         }
+
         return $next($request);
     }
 }

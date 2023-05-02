@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\TypeOfService;
 use App\Models\RevCenter;
+use App\Models\TypeOfService;
+use Illuminate\Database\Seeder;
 
 class ServiceDataSeeder extends Seeder
 {
@@ -147,11 +149,10 @@ class ServiceDataSeeder extends Seeder
             ['code' => 'PR'],
             ['code' => 'RA'],
             ['code' => 'SP'],
-            ['code' => 'SU']
+            ['code' => 'SU'],
         ];
 
         foreach ($serviceRevCenters as $revCenter) {
-
             RevCenter::updateOrCreate($revCenter, $revCenter);
         }
 

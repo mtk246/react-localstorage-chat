@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimStatusMedical
+ * App\Models\ClaimStatusMedical.
  *
  * @property int $id
  * @property string $control_number
@@ -19,11 +19,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Company $company
- * @property-read \App\Models\InsuranceCompany $insuranceCompany
- * @property-read \App\Models\Subscriber $subscriber
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Company $company
+ * @property \App\Models\InsuranceCompany $insuranceCompany
+ * @property \App\Models\Subscriber $subscriber
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical query()
@@ -34,19 +35,22 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereSubscriberId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimStatusMedical extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "control_number",
-        "company_id",
-        "subscriber_id",
-        "insurance_company_id"
+        'control_number',
+        'company_id',
+        'subscriber_id',
+        'insurance_company_id',
     ];
 
     /**

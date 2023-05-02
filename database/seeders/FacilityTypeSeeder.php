@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\FacilityType;
+use Illuminate\Database\Seeder;
 
 class FacilityTypeSeeder extends Seeder
 {
@@ -29,9 +31,7 @@ class FacilityTypeSeeder extends Seeder
         ];
 
         foreach ($facilityTypes as $type) {
-
             FacilityType::updateOrCreate($type, $type);
-
         }
     }
 }

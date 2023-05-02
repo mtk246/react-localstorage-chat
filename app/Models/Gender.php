@@ -1,24 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Gender
+ * App\Models\Gender.
  *
  * @property int $id
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property-read int|null $modifier_considerations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property int|null $modifier_considerations_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Gender newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Gender newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Gender query()
@@ -26,18 +29,21 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Gender whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Gender whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Gender whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
+ *
  * @mixin \Eloquent
  */
 class Gender extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
-    
+    use HasFactory;
+    use AuditableTrait;
+
     protected $fillable = [
-        "description"
+        'description',
     ];
 
     /**
@@ -52,8 +58,6 @@ class Gender extends Model implements Auditable
 
     /**
      * Interact with the gender's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function description(): Attribute
     {

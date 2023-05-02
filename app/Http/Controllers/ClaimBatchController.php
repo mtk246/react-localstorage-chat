@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-
 use App\Http\Requests\Claim\ClaimBatchRequest;
+use App\Models\ClaimBatch;
 use App\Repositories\ClaimBatchRepository;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ReportRepository;
-use App\Models\ClaimBatch;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ClaimBatchController extends Controller
 {
@@ -25,26 +24,25 @@ class ClaimBatchController extends Controller
     }
 
     /**
-     * @param ClaimBatchRequest $request
      * @return JsonResponse
      */
     public function createBatch(ClaimBatchRequest $request)
     {
         $rs = $this->claimBatchRepository->createBatch($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json(__("Error creating claim batch"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error creating claim batch'), 400);
     }
 
     /**
-     * @param ClaimBatchRequest $request
-     * @param integer $id
+     * @param int $id
+     *
      * @return JsonResponse
      */
     public function updateBatch(ClaimBatchRequest $request, $id)
     {
         $rs = $this->claimBatchRepository->updateBatch($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error updating claim batch"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error updating claim batch'), 400);
     }
 
     public function getServerAll(Request $request)
@@ -58,48 +56,50 @@ class ClaimBatchController extends Controller
     }
 
     /**
-     * @param int $id
      * @return JsonResponse
      */
     public function getOneClaimBatch(int $id)
     {
         $rs = $this->claimBatchRepository->getOneBatch($id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, claim batch not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, claim batch not found'), 404);
     }
 
     /**
-     * @param integer $id
      * @return JsonResponse
      */
     public function deleteBatch(int $id)
     {
         $rs = $this->claimBatchRepository->deleteBatch($id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error erasing claim batch"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error erasing claim batch'), 400);
     }
 
     /**
-     * @param integer $id
+     * @param int $id
+     *
      * @return JsonResponse
      */
     public function submitToClearingHouse($id)
     {
         $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
 
-        if (!isset($token)) return response()->json(__("Error get security authorization access token"), 400);
+        if (!isset($token)) {
+            return response()->json(__('Error get security authorization access token'), 400);
+        }
 
         $rs = $this->claimBatchRepository->submitToClearingHouse($token->access_token ?? '', $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error submitting claim batch"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error submitting claim batch'), 400);
     }
 
-    public function showReport(Request $request, int $id) {
+    public function showReport(Request $request, int $id)
+    {
         $pdf = new ReportRepository();
         $batch = ClaimBatch::with([
             'claims' => function ($query) {
                 $query->with('claimFormattable', 'insurancePolicies', 'claimFormattable');
-            }
+            },
         ])->find($id);
 
         $claims = $batch->claims;
@@ -128,14 +128,13 @@ class ClaimBatchController extends Controller
                 'insurance_policies' => $insurancePolicies ?? [],
                 'diagnoses' => $claim->diagnoses ?? [],
             ]);
-            if(($total-1) == $key) {
+            if (($total - 1) == $key) {
                 return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
-                    'pdf'      => $pdf
+                    'pdf' => $pdf,
                 ], 'E', true))[1];
             } else {
                 $pdf->setBody('pdf.837P', true, ['pdf' => $pdf], 'E', false);
             }
-    
         }
     }
 }

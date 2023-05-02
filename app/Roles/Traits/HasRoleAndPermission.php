@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Traits;
 
+use App\Roles\Models\Permission;
+use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
-use App\Roles\Models\Permission;
-use App\Roles\Models\Role;
 
 /**
- * Trait para la gestión de roles y permisos
+ * Trait para la gestión de roles y permisos.
  *
  * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
  */
@@ -67,6 +68,7 @@ trait HasRoleAndPermission
      *
      * @param int|string|array $role
      * @param bool $all
+     *
      * @return bool
      */
     public function hasRole($role, $all = false)
@@ -86,6 +88,7 @@ trait HasRoleAndPermission
      * Check if the user has at least one of the given roles.
      *
      * @param int|string|array $role
+     *
      * @return bool
      */
     public function hasOneRole($role)
@@ -103,6 +106,7 @@ trait HasRoleAndPermission
      * Check if the user has all roles.
      *
      * @param int|string|array $role
+     *
      * @return bool
      */
     public function hasAllRoles($role)
@@ -120,6 +124,7 @@ trait HasRoleAndPermission
      * Check if the user has role.
      *
      * @param int|string $role
+     *
      * @return bool
      */
     public function checkRole($role)
@@ -133,7 +138,8 @@ trait HasRoleAndPermission
      * Attach role to a user.
      *
      * @param int|Role $role
-     * @return null|bool
+     *
+     * @return bool|null
      */
     public function attachRole($role)
     {
@@ -141,6 +147,7 @@ trait HasRoleAndPermission
             return true;
         }
         $this->roles = null;
+
         return $this->roles()->attach($role);
     }
 
@@ -148,6 +155,7 @@ trait HasRoleAndPermission
      * Detach role from a user.
      *
      * @param int|Role $role
+     *
      * @return int
      */
     public function detachRole($role)
@@ -173,6 +181,7 @@ trait HasRoleAndPermission
      * Sync roles for a user.
      *
      * @param array|\App\Roles\Models\Role[]|\Illuminate\Database\Eloquent\Collection $roles
+     *
      * @return array
      */
     public function syncRoles($roles)
@@ -202,15 +211,12 @@ trait HasRoleAndPermission
         $permissionModel = app(config('roles.models.permission'));
 
         if (!$permissionModel instanceof Model) {
-            throw new InvalidArgumentException(
-                '[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model'
-            );
+            throw new \InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
         }
 
-        return $permissionModel
-            ::select([
+        return $permissionModel::select([
                 'permissions.*', 'permission_role.created_at as pivot_created_at',
-                'permission_role.updated_at as pivot_updated_at'
+                'permission_role.updated_at as pivot_updated_at',
             ])
             ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')
             ->join('roles', 'roles.id', '=', 'permission_role.role_id')
@@ -219,7 +225,7 @@ trait HasRoleAndPermission
             ->groupBy([
                 'permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description',
                 'permissions.module', 'permissions.created_at', 'permissions.updated_at',
-                'permission_role.created_at', 'permission_role.updated_at'
+                'permission_role.created_at', 'permission_role.updated_at',
             ]);
     }
 
@@ -250,6 +256,7 @@ trait HasRoleAndPermission
      *
      * @param int|string|array $permission
      * @param bool $all
+     *
      * @return bool
      */
     public function hasPermission($permission, $all = false)
@@ -269,6 +276,7 @@ trait HasRoleAndPermission
      * Check if the user has at least one of the given permissions.
      *
      * @param int|string|array $permission
+     *
      * @return bool
      */
     public function hasOnePermission($permission)
@@ -286,6 +294,7 @@ trait HasRoleAndPermission
      * Check if the user has all permissions.
      *
      * @param int|string|array $permission
+     *
      * @return bool
      */
     public function hasAllPermissions($permission)
@@ -303,6 +312,7 @@ trait HasRoleAndPermission
      * Check if the user has a permission.
      *
      * @param int|string $permission
+     *
      * @return bool
      */
     public function checkPermission($permission)
@@ -316,7 +326,8 @@ trait HasRoleAndPermission
      * Attach permission to a user.
      *
      * @param int|Permission $permission
-     * @return null|bool
+     *
+     * @return bool|null
      */
     public function attachPermission($permission)
     {
@@ -324,6 +335,7 @@ trait HasRoleAndPermission
             return true;
         }
         $this->permissions = null;
+
         return $this->userPermissions()->attach($permission);
     }
 
@@ -331,6 +343,7 @@ trait HasRoleAndPermission
      * Detach permission from a user.
      *
      * @param int|Permission $permission
+     *
      * @return int
      */
     public function detachPermission($permission)
@@ -356,6 +369,7 @@ trait HasRoleAndPermission
      * Sync permissions for a user.
      *
      * @param array|\App\Roles\Models\Permission[]|\Illuminate\Database\Eloquent\Collection $permissions
+     *
      * @return array
      */
     public function syncPermissions($permissions)
@@ -379,17 +393,19 @@ trait HasRoleAndPermission
      * Allows to pretend or simulate package behavior.
      *
      * @param string $option
+     *
      * @return bool
      */
     private function pretend($option)
     {
-        return (bool) config('roles.pretend.options.' . $option);
+        return (bool) config('roles.pretend.options.'.$option);
     }
 
     /**
      * Get an array from argument.
      *
      * @param int|string|array $argument
+     *
      * @return array
      */
     private function getArrayFrom($argument)
@@ -398,14 +414,14 @@ trait HasRoleAndPermission
     }
 
     /**
-     * Determina si el usuario dispone del role o permiso
+     * Determina si el usuario dispone del role o permiso.
      *
      * @method    callMagic
      *
-     * @param     string       $method        Método para el cual se evalúa el permiso
-     * @param     array        $parameters    Lista de parámetros
+     * @param string $method Método para el cual se evalúa el permiso
+     * @param array $parameters Lista de parámetros
      *
-     * @return    boolean      Devuelve verdadero si dispone de permisos de acceso, de lo contrario devuelve falso
+     * @return bool Devuelve verdadero si dispone de permisos de acceso, de lo contrario devuelve falso
      */
     public function callMagic($method, $parameters)
     {

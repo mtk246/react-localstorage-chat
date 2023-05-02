@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,21 +27,21 @@ class IpRestrictionRequest extends FormRequest
     public function rules()
     {
         $entity = $this->entity;
+
         return [
-            'ip_restriction_mults'                => ['required', 'array'],
+            'ip_restriction_mults' => ['required', 'array'],
             'ip_restriction_mults.*.ip_beginning' => ['required', 'string'],
-            'ip_restriction_mults.*.ip_finish'    => ['nullable', 'string'],
-            'ip_restriction_mults.*.rank'         => ['required', 'boolean'],
+            'ip_restriction_mults.*.ip_finish' => ['nullable', 'string'],
+            'ip_restriction_mults.*.rank' => ['required', 'boolean'],
 
+            'entity' => ['required', 'string'],
+            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
 
-            'entity'             => ['required', 'string'],
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
-
-            'users'              => [Rule::requiredIf(function () use ($entity) {
-                return ($entity == 'user');
+            'users' => [Rule::requiredIf(function () use ($entity) {
+                return 'user' == $entity;
             }), 'array'],
-            'roles'              => [Rule::requiredIf(function () use ($entity) {
-                return ($entity == 'role');
+            'roles' => [Rule::requiredIf(function () use ($entity) {
+                return 'role' == $entity;
             }), 'array'],
         ];
     }

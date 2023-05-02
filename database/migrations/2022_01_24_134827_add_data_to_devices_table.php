@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +16,8 @@ class AddDataToDevicesTable extends Migration
     public function up()
     {
         Schema::table('devices', function (Blueprint $table) {
-            $table->boolean("status")->default(false);
-            $table->string("code_temp")->nullable();
+            $table->boolean('status')->default(false);
+            $table->string('code_temp')->nullable();
         });
     }
 
@@ -27,8 +29,8 @@ class AddDataToDevicesTable extends Migration
     public function down()
     {
         Schema::table('devices', function (Blueprint $table) {
-            $table->dropColumn("status");
-            $table->dropColumn("code_temp");
+            $table->dropColumn('status');
+            $table->dropColumn('code_temp');
         });
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Package Connection
@@ -56,7 +57,6 @@ return [
     */
 
     'pretend' => [
-
         'enabled' => false,
 
         'options' => [
@@ -64,7 +64,5 @@ return [
             'hasPermission' => true,
             'allowed' => true,
         ],
-
     ],
-
 ];

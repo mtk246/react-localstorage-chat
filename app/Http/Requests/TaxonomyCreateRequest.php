@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\RequiredIf;
 
 class TaxonomyCreateRequest extends FormRequest
 {
@@ -25,10 +26,10 @@ class TaxonomyCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"       => "required|string",
-            "isPrimary"  => "required|boolean",
-            "user_id"    => "sometimes|integer",
-            "company_id" => "sometimes|integer",
+            'name' => 'required|string',
+            'isPrimary' => 'required|boolean',
+            'user_id' => 'sometimes|integer',
+            'company_id' => 'sometimes|integer',
         ];
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\User;
 use App\Roles\Models\Permission;
 use App\Roles\Models\Role;
-use App\Models\User;
+use Illuminate\Database\Seeder;
 
-use DB;
-
-class  PermissionSeeder extends Seeder
+class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -37,770 +37,770 @@ class  PermissionSeeder extends Seeder
                 'slug' => 'permission.manage.role',
                 'module' => 'Permission Management',
                 'constraint' => '',
-                'description' => 'Manage permissions for each role'
+                'description' => 'Manage permissions for each role',
             ],
             [
                 'name' => 'Manage permissions for each user',
                 'slug' => 'permission.manage.user',
                 'module' => 'Permission Management',
                 'constraint' => 'user.view',
-                'description' => 'Manage permissions for each role'
+                'description' => 'Manage permissions for each role',
             ],
             [
                 'name' => 'View Restrictions',
                 'slug' => 'setting.restriction.view',
                 'module' => 'User Restriction by IP',
                 'constraint' => '',
-                'description' => 'View Restrictions'
+                'description' => 'View Restrictions',
             ],
             [
                 'name' => 'Create Restriction',
                 'slug' => 'setting.restriction.create',
                 'module' => 'User Restriction by IP',
                 'constraint' => 'setting.restriction.view',
-                'description' => 'Create Restrictions'
+                'description' => 'Create Restrictions',
             ],
             [
                 'name' => 'Show Restriction',
                 'slug' => 'setting.restriction.show',
                 'module' => 'User Restriction by IP',
                 'constraint' => 'setting.restriction.view',
-                'description' => 'Show Restrictions'
+                'description' => 'Show Restrictions',
             ],
             [
                 'name' => 'Edit Restriction',
                 'slug' => 'setting.restriction.edit',
                 'module' => 'User Restriction by IP',
                 'constraint' => 'setting.restriction.show',
-                'description' => 'Edit Restrictions'
+                'description' => 'Edit Restrictions',
             ],
             [
                 'name' => 'Remove Restriction',
                 'slug' => 'setting.restriction.remove',
                 'module' => 'User Restriction by IP',
                 'constraint' => 'setting.restriction.show',
-                'description' => 'Remove Restrictions'
+                'description' => 'Remove Restrictions',
             ],
             [
                 'name' => 'View Users',
                 'slug' => 'user.view',
                 'module' => 'User Management',
                 'constraint' => '',
-                'description' => 'View Users'
+                'description' => 'View Users',
             ],
             [
                 'name' => 'Create User',
                 'slug' => 'user.create',
                 'module' => 'User Management',
                 'constraint' => 'user.view',
-                'description' => 'Create User'
+                'description' => 'Create User',
             ],
             [
                 'name' => 'Show User',
                 'slug' => 'user.show',
                 'module' => 'User Management',
                 'constraint' => 'user.view',
-                'description' => 'Show User'
+                'description' => 'Show User',
             ],
             [
                 'name' => 'Edit User',
                 'slug' => 'user.edit',
                 'module' => 'User Management',
                 'constraint' => 'user.show',
-                'description' => 'Edit User'
+                'description' => 'Edit User',
             ],
             [
                 'name' => 'Disable User',
                 'slug' => 'user.disable',
                 'module' => 'User Management',
                 'constraint' => 'user.show',
-                'description' => 'Disable User'
+                'description' => 'Disable User',
             ],
             [
                 'name' => 'View a User Change History',
                 'slug' => 'user.history',
                 'module' => 'User Management',
                 'constraint' => 'user.show',
-                'description' => 'View a User Change History'
+                'description' => 'View a User Change History',
             ],
             [
                 'name' => 'View Blocked Users',
                 'slug' => 'user.view.lock',
                 'module' => 'User Management',
                 'constraint' => '',
-                'description' => 'View Blocked Users'
+                'description' => 'View Blocked Users',
             ],
             [
                 'name' => 'Unlock Users',
                 'slug' => 'user.unlock',
                 'module' => 'User Management',
                 'constraint' => 'user.view.lock',
-                'description' => 'Unlock Users'
+                'description' => 'Unlock Users',
             ],
             [
                 'name' => 'Show Profile',
                 'slug' => 'setting.profile.show',
                 'module' => 'Profile',
                 'constraint' => '',
-                'description' => 'Show Profile'
+                'description' => 'Show Profile',
             ],
             [
                 'name' => 'Edit Profile',
                 'slug' => 'setting.profile.edit',
                 'module' => 'Profile',
                 'constraint' => 'setting.profile.show',
-                'description' => 'Edit Profile'
+                'description' => 'Edit Profile',
             ],
             [
                 'name' => 'View Billing Companies',
                 'slug' => 'billingcompany.view',
                 'module' => 'Billing Company Management',
                 'constraint' => '',
-                'description' => 'View Billing Companies'
+                'description' => 'View Billing Companies',
             ],
             [
                 'name' => 'Create Billing Company',
                 'slug' => 'billingcompany.create',
                 'module' => 'Billing Company Management',
                 'constraint' => 'billingcompany.view',
-                'description' => 'Create Billing Company'
+                'description' => 'Create Billing Company',
             ],
             [
                 'name' => 'Show Billing Company',
                 'slug' => 'billingcompany.show',
                 'module' => 'Billing Company Management',
                 'constraint' => 'billingcompany.view',
-                'description' => 'Show Billing Company'
+                'description' => 'Show Billing Company',
             ],
             [
                 'name' => 'Edit Billing Company',
                 'slug' => 'billingcompany.edit',
                 'module' => 'Billing Company Management',
                 'constraint' => '',
-                'description' => 'Edit Billing Company'
+                'description' => 'Edit Billing Company',
             ],
             [
                 'name' => 'Disable Billing Company',
                 'slug' => 'billingcompany.disable',
                 'module' => 'Billing Company Management',
                 'constraint' => '',
-                'description' => 'Disable Billing Company'
+                'description' => 'Disable Billing Company',
             ],
             [
                 'name' => 'View a Billing Company Change History',
                 'slug' => 'billingcompany.history',
                 'module' => 'Billing Company Management',
                 'constraint' => 'billingcompany.view',
-                'description' => 'View a Billing Company Change History'
+                'description' => 'View a Billing Company Change History',
             ],
             [
                 'name' => 'View Companies',
                 'slug' => 'company.view',
                 'module' => 'Company Management',
                 'constraint' => '',
-                'description' => 'View Companies'
+                'description' => 'View Companies',
             ],
             [
                 'name' => 'Create Company',
                 'slug' => 'company.create',
                 'module' => 'Company Management',
                 'constraint' => 'company.view',
-                'description' => 'Create Company'
+                'description' => 'Create Company',
             ],
             [
                 'name' => 'Show Company',
                 'slug' => 'company.show',
                 'module' => 'Company Management',
                 'constraint' => 'company.view',
-                'description' => 'Show Company'
+                'description' => 'Show Company',
             ],
             [
                 'name' => 'Edit Company',
                 'slug' => 'company.edit',
                 'module' => 'Company Management',
                 'constraint' => 'company.show',
-                'description' => 'Edit Company'
+                'description' => 'Edit Company',
             ],
             [
                 'name' => 'Disable Company',
                 'slug' => 'company.disable',
                 'module' => 'Company Management',
                 'constraint' => 'company.show',
-                'description' => 'Disable Company'
+                'description' => 'Disable Company',
             ],
             [
                 'name' => 'Assign Company',
                 'slug' => 'company.assign',
                 'module' => 'Company Management',
                 'constraint' => 'company.show',
-                'description' => 'Assign Company to a Worker'
+                'description' => 'Assign Company to a Worker',
             ],
             [
                 'name' => 'View a Company Change History',
                 'slug' => 'company.history',
                 'module' => 'Company Management',
                 'constraint' => 'company.show',
-                'description' => 'View a Company Change History'
+                'description' => 'View a Company Change History',
             ],
             [
                 'name' => 'View Facilities',
                 'slug' => 'facility.view',
                 'module' => 'Facility Management',
                 'constraint' => '',
-                'description' => 'View Facilities'
+                'description' => 'View Facilities',
             ],
             [
                 'name' => 'Create Facility',
                 'slug' => 'facility.create',
                 'module' => 'Facility Management',
                 'constraint' => 'facility.view',
-                'description' => 'Create Facility'
+                'description' => 'Create Facility',
             ],
             [
                 'name' => 'Show Facility',
                 'slug' => 'facility.show',
                 'module' => 'Facility Management',
                 'constraint' => 'facility.view',
-                'description' => 'Show Facility'
+                'description' => 'Show Facility',
             ],
             [
                 'name' => 'Edit Facility',
                 'slug' => 'facility.edit',
                 'module' => 'Facility Management',
                 'constraint' => 'facility.show',
-                'description' => 'Edit Facility'
+                'description' => 'Edit Facility',
             ],
             [
                 'name' => 'Disable Facility',
                 'slug' => 'facility.disable',
                 'module' => 'Facility Management',
                 'constraint' => 'facility.show',
-                'description' => 'Disable Facility'
+                'description' => 'Disable Facility',
             ],
             [
                 'name' => 'View a Facility Change History',
                 'slug' => 'facility.history',
                 'module' => 'Facility Management',
                 'constraint' => 'facility.show',
-                'description' => 'View a Facility Change History'
+                'description' => 'View a Facility Change History',
             ],
             [
                 'name' => 'View Clearing Houses',
                 'slug' => 'clearinghouse.view',
                 'module' => 'Clearing House Management',
                 'constraint' => '',
-                'description' => 'View Clearing Houses'
+                'description' => 'View Clearing Houses',
             ],
             [
                 'name' => 'Create Clearing House',
                 'slug' => 'clearinghouse.create',
                 'module' => 'Clearing House Management',
                 'constraint' => 'clearinghouse.view',
-                'description' => 'Create Clearing House'
+                'description' => 'Create Clearing House',
             ],
             [
                 'name' => 'Show Clearing House',
                 'slug' => 'clearinghouse.show',
                 'module' => 'Clearing House Management',
                 'constraint' => 'clearinghouse.view',
-                'description' => 'Show Clearing House'
+                'description' => 'Show Clearing House',
             ],
             [
                 'name' => 'Edit Clearing House',
                 'slug' => 'clearinghouse.edit',
                 'module' => 'Clearing House Management',
                 'constraint' => 'clearinghouse.show',
-                'description' => 'Edit Clearing House'
+                'description' => 'Edit Clearing House',
             ],
             [
                 'name' => 'Disable Clearing House',
                 'slug' => 'clearinghouse.disable',
                 'module' => 'Clearing House Management',
                 'constraint' => 'clearinghouse.show',
-                'description' => 'Disable Clearing House'
+                'description' => 'Disable Clearing House',
             ],
             [
                 'name' => 'View a Clearing House Change History',
                 'slug' => 'clearinghouse.history',
                 'module' => 'Clearing House Management',
                 'constraint' => 'clearinghouse.show',
-                'description' => 'View a Clearing House Change History'
+                'description' => 'View a Clearing House Change History',
             ],
             [
                 'name' => 'View Insurance Companies',
                 'slug' => 'insurancecompany.view',
                 'module' => 'Insurance Management',
                 'constraint' => '',
-                'description' => 'View Insurance Companies'
+                'description' => 'View Insurance Companies',
             ],
             [
                 'name' => 'Create Insurance Company',
                 'slug' => 'insurancecompany.create',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.view',
-                'description' => 'Create Insurance Company'
+                'description' => 'Create Insurance Company',
             ],
             [
                 'name' => 'Show Insurance Company',
                 'slug' => 'insurancecompany.show',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.view',
-                'description' => 'Show Insurance Company'
+                'description' => 'Show Insurance Company',
             ],
             [
                 'name' => 'Edit Insurance Company',
                 'slug' => 'insurancecompany.edit',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.show',
-                'description' => 'Edit Insurance Company'
+                'description' => 'Edit Insurance Company',
             ],
             [
                 'name' => 'Disable Insurance Company',
                 'slug' => 'insurancecompany.disable',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.show',
-                'description' => 'Disable Insurance Company'
+                'description' => 'Disable Insurance Company',
             ],
             [
                 'name' => 'View a Insurance Company Change History',
                 'slug' => 'insurancecompany.history',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.show',
-                'description' => 'View a Insurance Company Change History'
+                'description' => 'View a Insurance Company Change History',
             ],
             [
                 'name' => 'View Insurance Plans',
                 'slug' => 'insurancecompany.insuranceplan.view',
                 'module' => 'Insurance Management',
                 'constraint' => '',
-                'description' => 'View Insurance Plans'
+                'description' => 'View Insurance Plans',
             ],
             [
                 'name' => 'Create Insurance Plan',
                 'slug' => 'insurancecompany.insuranceplan.create',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.insuranceplan.view',
-                'description' => 'Create Insurance Plan'
+                'description' => 'Create Insurance Plan',
             ],
             [
                 'name' => 'Show Insurance Plan',
                 'slug' => 'insurancecompany.insuranceplan.show',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.insuranceplan.view',
-                'description' => 'Show Insurance Plan'
+                'description' => 'Show Insurance Plan',
             ],
             [
                 'name' => 'Edit Insurance Plan',
                 'slug' => 'insurancecompany.insuranceplan.edit',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.insuranceplan.show',
-                'description' => 'Edit Insurance Plan'
+                'description' => 'Edit Insurance Plan',
             ],
             [
                 'name' => 'Disable Insurance Plan',
                 'slug' => 'insurancecompany.insuranceplan.disable',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.insuranceplan.show',
-                'description' => 'Disable Insurance Plan'
+                'description' => 'Disable Insurance Plan',
             ],
             [
                 'name' => 'View a Insurance Plan Change History',
                 'slug' => 'insurancecompany.insuranceplan.history',
                 'module' => 'Insurance Management',
                 'constraint' => 'insurancecompany.insuranceplan.show',
-                'description' => 'View a Insurance Plan Change History'
+                'description' => 'View a Insurance Plan Change History',
             ],
             [
                 'name' => 'View Health Professionals',
                 'slug' => 'heatlhprofessional.view',
                 'module' => 'Health Professional Management',
                 'constraint' => '',
-                'description' => 'View Health Professionals'
+                'description' => 'View Health Professionals',
             ],
             [
                 'name' => 'Create Heatlh Professional',
                 'slug' => 'heatlhprofessional.create',
                 'module' => 'Health Professional Management',
                 'constraint' => 'heatlhprofessional.view',
-                'description' => 'Create Heatlh Professional'
+                'description' => 'Create Heatlh Professional',
             ],
             [
                 'name' => 'Show Heatlh Professional',
                 'slug' => 'heatlhprofessional.show',
                 'module' => 'Health Professional Management',
                 'constraint' => 'heatlhprofessional.view',
-                'description' => 'Show Heatlh Professional'
+                'description' => 'Show Heatlh Professional',
             ],
             [
                 'name' => 'Edit Heatlh Professional',
                 'slug' => 'heatlhprofessional.edit',
                 'module' => 'Health Professional Management',
                 'constraint' => 'heatlhprofessional.show',
-                'description' => 'Edit Heatlh Professional'
+                'description' => 'Edit Heatlh Professional',
             ],
             [
                 'name' => 'Disable Heatlh Professional',
                 'slug' => 'heatlhprofessional.disable',
                 'module' => 'Health Professional Management',
                 'constraint' => 'heatlhprofessional.show',
-                'description' => 'Disable Heatlh Professional'
+                'description' => 'Disable Heatlh Professional',
             ],
             [
                 'name' => 'View a Heatlh Professional Change History',
                 'slug' => 'heatlhprofessional.history',
                 'module' => 'Health Professional Management',
                 'constraint' => 'heatlhprofessional.show',
-                'description' => 'View a Heatlh Professional Change History'
+                'description' => 'View a Heatlh Professional Change History',
             ],
             [
                 'name' => 'View Patients',
                 'slug' => 'patient.view',
                 'module' => 'Patient Management',
                 'constraint' => '',
-                'description' => 'View Patients'
+                'description' => 'View Patients',
             ],
             [
                 'name' => 'Create Patient',
                 'slug' => 'patient.create',
                 'module' => 'Patient Management',
                 'constraint' => 'patient.view',
-                'description' => 'Create Patient'
+                'description' => 'Create Patient',
             ],
             [
                 'name' => 'Show Patient',
                 'slug' => 'patient.show',
                 'module' => 'Patient Management',
                 'constraint' => 'patient.view',
-                'description' => 'Show Patient'
+                'description' => 'Show Patient',
             ],
             [
                 'name' => 'Edit Patient',
                 'slug' => 'patient.edit',
                 'module' => 'Patient Management',
                 'constraint' => 'patient.show',
-                'description' => 'Edit Patient'
+                'description' => 'Edit Patient',
             ],
             [
                 'name' => 'Disable Patient',
                 'slug' => 'patient.disable',
                 'module' => 'Patient Management',
                 'constraint' => 'patient.show',
-                'description' => 'Disable Patient'
+                'description' => 'Disable Patient',
             ],
             [
                 'name' => 'View a Patient Change History',
                 'slug' => 'patient.history',
                 'module' => 'Patient Management',
                 'constraint' => 'patient.show',
-                'description' => 'View a Patient Change History'
+                'description' => 'View a Patient Change History',
             ],
             [
                 'name' => 'View Procedure',
                 'slug' => 'procedure.view',
                 'module' => 'Procedure Management',
                 'constraint' => '',
-                'description' => 'View Procedure'
+                'description' => 'View Procedure',
             ],
             [
                 'name' => 'Create Procedure',
                 'slug' => 'procedure.create',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.view',
-                'description' => 'Create Procedure'
+                'description' => 'Create Procedure',
             ],
             [
                 'name' => 'Show Procedure',
                 'slug' => 'procedure.show',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.view',
-                'description' => 'Show Procedure Management'
+                'description' => 'Show Procedure Management',
             ],
             [
                 'name' => 'Edit Procedure',
                 'slug' => 'procedure.edit',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.show',
-                'description' => 'Edit Procedure'
+                'description' => 'Edit Procedure',
             ],
             [
                 'name' => 'Disable Procedure',
                 'slug' => 'procedure.disable',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.show',
-                'description' => 'Disable Procedure'
+                'description' => 'Disable Procedure',
             ],
             [
                 'name' => 'View a Procedure Change History',
                 'slug' => 'procedure.history',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.show',
-                'description' => 'View a Procedure Change History'
+                'description' => 'View a Procedure Change History',
             ],
             [
                 'name' => 'Validity Period Procedure',
                 'slug' => 'procedure.validityperiod',
                 'module' => 'Procedure Management',
                 'constraint' => 'procedure.view',
-                'description' => 'Validity Period Procedure'
+                'description' => 'Validity Period Procedure',
             ],
             [
                 'name' => 'View Audits',
                 'slug' => 'audit.view',
                 'module' => 'Audit Management',
                 'constraint' => '',
-                'description' => 'View Audits'
+                'description' => 'View Audits',
             ],
             [
                 'name' => 'Show Audit',
                 'slug' => 'audit.show',
                 'module' => 'Audit Management',
                 'constraint' => 'audit.view',
-                'description' => 'Show Audit'
+                'description' => 'Show Audit',
             ],
             [
                 'name' => 'View Audits for User',
                 'slug' => 'audit.user.view',
                 'module' => 'Audit Management',
                 'constraint' => 'user.view',
-                'description' => 'View Audits for user'
+                'description' => 'View Audits for user',
             ],
             [
                 'name' => 'View Claims',
                 'slug' => 'claim.view',
                 'module' => 'Claims Management',
                 'constraint' => '',
-                'description' => 'View Claims'
+                'description' => 'View Claims',
             ],
             [
                 'name' => 'Create Claim',
                 'slug' => 'claim.create',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.view',
-                'description' => 'Create Claim'
+                'description' => 'Create Claim',
             ],
             [
                 'name' => 'Show Claim',
                 'slug' => 'claim.show',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.view',
-                'description' => 'Show Claim'
+                'description' => 'Show Claim',
             ],
             [
                 'name' => 'Verification and debuggin claim',
                 'slug' => 'claim.verifydebug',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.view',
-                'description' => 'Verification and debuggin claim'
+                'description' => 'Verification and debuggin claim',
             ],
             [
                 'name' => 'Manage users responsible for a claims',
                 'slug' => 'claim.manageusers',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.show',
-                'description' => 'Manage users responsible for a claims'
+                'description' => 'Manage users responsible for a claims',
             ],
             [
                 'name' => 'Correct and re-submit claim',
                 'slug' => 'claim.correctsubmit',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.show',
-                'description' => 'Correct and re-submit claim'
+                'description' => 'Correct and re-submit claim',
             ],
             [
                 'name' => 'Generate Appeal',
                 'slug' => 'claim.generateappeal',
                 'module' => 'Claims Management',
                 'constraint' => 'claim.show',
-                'description' => 'Generate Appeal'
+                'description' => 'Generate Appeal',
             ],
             [
                 'name' => 'Register Payment',
                 'slug' => 'payment.create',
                 'module' => 'Payments Management',
                 'constraint' => '',
-                'description' => 'Register Payment'
+                'description' => 'Register Payment',
             ],
             [
                 'name' => 'Generate patient accounts statements',
                 'slug' => 'payment.generatepatientaccount',
                 'module' => 'Payments Management',
                 'constraint' => '',
-                'description' => 'Generate patient accounts statements'
+                'description' => 'Generate patient accounts statements',
             ],
             [
                 'name' => 'Send co-pays and co-insurance',
                 'slug' => 'payment.sendcopayscoinsurance',
                 'module' => 'Payments Management',
                 'constraint' => '',
-                'description' => 'Send co-pays and co-insurance'
+                'description' => 'Send co-pays and co-insurance',
             ],
             [
                 'name' => 'Generate Report',
                 'slug' => 'report.create',
                 'module' => 'Reports Management',
                 'constraint' => '',
-                'description' => 'Generate Reports'
+                'description' => 'Generate Reports',
             ],
             [
                 'name' => 'View Reports',
                 'slug' => 'report.view',
                 'module' => 'Reports Management',
                 'constraint' => '',
-                'description' => 'View Reports'
+                'description' => 'View Reports',
             ],
             [
                 'name' => 'Generate error report',
                 'slug' => 'setting.errorreport.create',
                 'module' => 'Development Support',
                 'constraint' => '',
-                'description' => 'Generate error report'
+                'description' => 'Generate error report',
             ],
             [
                 'name' => 'Manage responses in the FAQ forum',
                 'slug' => 'setting.responses.manage',
                 'module' => 'Development Support',
                 'constraint' => '',
-                'description' => 'Manage responses in the FAQ forum'
+                'description' => 'Manage responses in the FAQ forum',
             ],
             [
                 'name' => 'View Modifier',
                 'slug' => 'modifier.view',
                 'module' => 'Modifier Management',
                 'constraint' => '',
-                'description' => 'View Modifier'
+                'description' => 'View Modifier',
             ],
             [
                 'name' => 'Create Modifier',
                 'slug' => 'modifier.create',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.view',
-                'description' => 'Create Modifier'
+                'description' => 'Create Modifier',
             ],
             [
                 'name' => 'Show Modifier',
                 'slug' => 'modifier.show',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.view',
-                'description' => 'Show Modifier'
+                'description' => 'Show Modifier',
             ],
             [
                 'name' => 'Edit Modifier',
                 'slug' => 'modifier.edit',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.show',
-                'description' => 'Edit Modifier'
+                'description' => 'Edit Modifier',
             ],
             [
                 'name' => 'Disable Modifier',
                 'slug' => 'modifier.disable',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.show',
-                'description' => 'Disable Modifier'
+                'description' => 'Disable Modifier',
             ],
             [
                 'name' => 'View a Modifier Change History',
                 'slug' => 'modifier.history',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.show',
-                'description' => 'View a Modifier Change History'
+                'description' => 'View a Modifier Change History',
             ],
             [
                 'name' => 'Validity Period Modifier',
                 'slug' => 'modifier.validityperiod',
                 'module' => 'Modifier Management',
                 'constraint' => 'modifier.view',
-                'description' => 'Validity Period Modifier'
+                'description' => 'Validity Period Modifier',
             ],
             [
                 'name' => 'View Diagnosis',
                 'slug' => 'diagnosis.view',
                 'module' => 'Diagnosis Management',
                 'constraint' => '',
-                'description' => 'View Diagnosis'
+                'description' => 'View Diagnosis',
             ],
             [
                 'name' => 'Create Diagnosis',
                 'slug' => 'diagnosis.create',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.view',
-                'description' => 'Create Diagnosis'
+                'description' => 'Create Diagnosis',
             ],
             [
                 'name' => 'Show Diagnosis',
                 'slug' => 'diagnosis.show',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.view',
-                'description' => 'Show Diagnosis'
+                'description' => 'Show Diagnosis',
             ],
             [
                 'name' => 'Edit Diagnosis',
                 'slug' => 'diagnosis.edit',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.show',
-                'description' => 'Edit Diagnosis'
+                'description' => 'Edit Diagnosis',
             ],
             [
                 'name' => 'Disable Diagnosis',
                 'slug' => 'diagnosis.disable',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.show',
-                'description' => 'Disable Diagnosis'
+                'description' => 'Disable Diagnosis',
             ],
             [
                 'name' => 'View a Diagnosis Change History',
                 'slug' => 'diagnosis.history',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.show',
-                'description' => 'View a Diagnosis Change History'
+                'description' => 'View a Diagnosis Change History',
             ],
             [
                 'name' => 'Validity Period Diagnosis',
                 'slug' => 'diagnosis.validityperiod',
                 'module' => 'Diagnosis Management',
                 'constraint' => 'diagnosis.view',
-                'description' => 'Validity Period Diagnosis'
+                'description' => 'Validity Period Diagnosis',
             ],
             [
                 'name' => 'View Status',
                 'slug' => 'status.view',
                 'module' => 'Status Management',
                 'constraint' => '',
-                'description' => 'View Status'
+                'description' => 'View Status',
             ],
             [
                 'name' => 'Create Status',
                 'slug' => 'status.create',
                 'module' => 'Status Management',
                 'constraint' => 'status.view',
-                'description' => 'Create Status'
+                'description' => 'Create Status',
             ],
             [
                 'name' => 'Show Status',
                 'slug' => 'status.show',
                 'module' => 'Status Management',
                 'constraint' => 'status.view',
-                'description' => 'Show Status'
+                'description' => 'Show Status',
             ],
             [
                 'name' => 'Edit Status',
                 'slug' => 'status.edit',
                 'module' => 'Status Management',
                 'constraint' => 'status.show',
-                'description' => 'Edit Status'
+                'description' => 'Edit Status',
             ],
             [
                 'name' => 'Disable Status',
                 'slug' => 'status.disable',
                 'module' => 'Status Management',
                 'constraint' => 'status.show',
-                'description' => 'Disable Status'
+                'description' => 'Disable Status',
             ],
             [
                 'name' => 'View a Status Change History',
                 'slug' => 'status.history',
                 'module' => 'Status Management',
                 'constraint' => 'status.show',
-                'description' => 'View a Status Change History'
+                'description' => 'View a Status Change History',
             ],
         ];
 
@@ -1160,11 +1160,10 @@ class  PermissionSeeder extends Seeder
 
         $oldPermissions = Permission::all();
 
-        DB::transaction(function () use ($permissions, $defaultPermissions, $oldPermissions, $superUserRole,
-                                         $billingManagerRole, $billerRole, $paymentProcessorRole, $collectorRole,
-                                         $accountManagerRole, $auditorRole, $auditorBCRole, $healthProfessionalRole, $patientRole,
-                                         $clientRole, $developmentSupportRole) {
-
+        \DB::transaction(function () use ($permissions, $defaultPermissions, $oldPermissions, $superUserRole,
+            $billingManagerRole, $billerRole, $paymentProcessorRole, $collectorRole,
+            $accountManagerRole, $auditorRole, $auditorBCRole, $healthProfessionalRole, $patientRole,
+            $clientRole, $developmentSupportRole) {
             $superUserRole->detachAllPermissions();
             $billingManagerRole->detachAllPermissions();
             $billerRole->detachAllPermissions();
@@ -1177,23 +1176,22 @@ class  PermissionSeeder extends Seeder
             $patientRole->detachAllPermissions();
             $clientRole->detachAllPermissions();
             $developmentSupportRole->detachAllPermissions();
-            
+
             foreach ($oldPermissions as $perm) {
                 $perm->delete();
             }
 
-            /** Assign permissions to role */
+            /* Assign permissions to role */
 
             foreach ($permissions as $permission) {
-
                 $per = Permission::updateOrCreate([
-                    'slug' => $permission['slug']
+                    'slug' => $permission['slug'],
                     ],
                     [
                         'name' => $permission['name'],
                         'module' => $permission['module'] ?? '',
                         'constraint' => $permission['constraint'] ?? '',
-                        'description' => $permission['description']
+                        'description' => $permission['description'],
                     ]
                 );
                 if ($superUserRole && in_array($permission['slug'], $defaultPermissions['superuser'])) {
@@ -1233,7 +1231,7 @@ class  PermissionSeeder extends Seeder
                     $developmentSupportRole->attachPermission($per);
                 }
             }
-            /** Assign permissions to users */
+            /* Assign permissions to users */
             foreach (User::all() as $usr) {
                 $usr->detachAllPermissions();
                 if ($usr->hasRole('superuser')) {

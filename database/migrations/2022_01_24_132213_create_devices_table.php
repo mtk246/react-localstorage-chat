@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +17,9 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->string("ip");
-            $table->string("os");
-            $table->string("name");
+            $table->string('ip');
+            $table->string('os');
+            $table->string('name');
             $table->foreignIdFor(\App\Models\User::class);
             $table->timestamps();
         });

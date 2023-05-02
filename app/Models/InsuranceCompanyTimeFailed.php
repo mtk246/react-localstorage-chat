@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\InsuranceCompanyTimeFailed
+ * App\Models\InsuranceCompanyTimeFailed.
  *
  * @property int $id
  * @property int|null $days
@@ -18,11 +19,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\BillingCompany $billingCompany
- * @property-read \App\Models\TypeCatalog|null $from
- * @property-read \App\Models\InsuranceCompany $insuranceCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany $billingCompany
+ * @property \App\Models\TypeCatalog|null $from
+ * @property \App\Models\InsuranceCompany $insuranceCompany
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed query()
@@ -33,19 +35,22 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class InsuranceCompanyTimeFailed extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "days",
-        "from_id",
-        "billing_company_id",
-        "insurance_company_id",
+        'days',
+        'from_id',
+        'billing_company_id',
+        'insurance_company_id',
     ];
 
     /**

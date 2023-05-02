@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\InsuranceCompany
+ * App\Models\InsuranceCompany.
  *
  * @property int $id
  * @property string $code
@@ -21,13 +22,14 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string $naic
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Address|null $address
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property-read int|null $billing_companies_count
- * @property-read \App\Models\Contact|null $contact
- * @property-read string $status
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlan
- * @property-read int|null $insurance_plan_count
+ * @property \App\Models\Address|null $address
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
+ * @property int|null $billing_companies_count
+ * @property \App\Models\Contact|null $contact
+ * @property string $status
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlan
+ * @property int|null $insurance_plan_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany query()
@@ -38,74 +40,79 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereNaic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereUpdatedAt($value)
+ *
  * @property string|null $payer_id
  * @property int|null $file_method_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read int|null $abbreviations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read int|null $addresses_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
- * @property-read int|null $appeal_reasons_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
- * @property-read int|null $billing_incomplete_reasons_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read int|null $claim_eligibilities_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read int|null $contacts_count
- * @property-read \App\Models\TypeCatalog|null $fileMethod
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
- * @property-read int|null $insurance_company_time_faileds_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read int|null $insurance_plans_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read int|null $nicknames_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property-read int|null $private_notes_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read int|null $procedures_count
- * @property-read \App\Models\PublicNote $publicNote
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property int|null $abbreviations_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property int|null $addresses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
+ * @property int|null $appeal_reasons_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
+ * @property int|null $billing_incomplete_reasons_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property int|null $claim_eligibilities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property int|null $contacts_count
+ * @property \App\Models\TypeCatalog|null $fileMethod
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
+ * @property int|null $insurance_company_time_faileds_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property int|null $nicknames_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property int|null $private_notes_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property int|null $procedures_count
+ * @property \App\Models\PublicNote $publicNote
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereFileMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany wherePayerId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
  * @mixin \Eloquent
  */
 class InsuranceCompany extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "code",
-        "name",
-        "naic",
-        "payer_id",
-        "file_method_id"
+        'code',
+        'name',
+        'naic',
+        'payer_id',
+        'file_method_id',
     ];
 
     /**
@@ -127,8 +134,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * InsuranceCompany has many claim eligibilities.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function claimEligibilities(): HasMany
     {
@@ -137,8 +142,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * InsuranceCompany has many InsurancePlans.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function insurancePlans(): HasMany
     {
@@ -157,8 +160,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * The billingCompanies that belong to the insuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
@@ -167,8 +168,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * The procedures that belongs to the InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function procedures(): BelongsToMany
     {
@@ -177,8 +176,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * The billing incomplete reasons that belongs to the InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function billingIncompleteReasons(): BelongsToMany
     {
@@ -187,8 +184,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * The billing incomplete reasons that belongs to the InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function appealReasons(): BelongsToMany
     {
@@ -258,32 +253,37 @@ class InsuranceCompany extends Model implements Auditable
     /**
      * Get the insuranceCompany's status.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public function getStatusAttribute()
     {
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (is_null($billingCompany)) return false;
+        if (is_null($billingCompany)) {
+            return false;
+        }
+
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -291,8 +291,6 @@ class InsuranceCompany extends Model implements Auditable
 
     /**
      * Interact with the insuranceCompany's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {
@@ -304,10 +302,10 @@ class InsuranceCompany extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereHas('contacts', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
                           ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 

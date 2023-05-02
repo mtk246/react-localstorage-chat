@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -13,7 +15,7 @@ class OnlyRoleIf implements Rule
      *
      * @return void
      */
-    public function __construct($exceptRole=['Super User'])
+    public function __construct($exceptRole = ['Super User'])
     {
         $this->exceptRole = $exceptRole;
     }
@@ -21,14 +23,15 @@ class OnlyRoleIf implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
     {
         if (count($value) > 1) {
-            return (!in_array_any($this->exceptRole, $value));
+            return !in_array_any($this->exceptRole, $value);
         } else {
             return true;
         }

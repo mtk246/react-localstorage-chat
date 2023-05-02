@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * Interface para la gestión de permisos y sus relaciones
+ * Interface para la gestión de permisos y sus relaciones.
  *
  * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
  */

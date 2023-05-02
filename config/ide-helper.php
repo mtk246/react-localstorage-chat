@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Filename & Format
@@ -11,7 +12,7 @@ return [
     |
     */
 
-    'filename'  => '_ide_helper.php',
+    'filename' => '_ide_helper.php',
 
     /*
     |--------------------------------------------------------------------------
@@ -111,7 +112,7 @@ return [
     'include_helpers' => true,
 
     'helper_files' => [
-        base_path() . '/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+        base_path().'/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
     ],
 
     /*
@@ -141,7 +142,6 @@ return [
     */
 
     'ignored_models' => [
-
     ],
 
     /*
@@ -186,7 +186,6 @@ return [
     */
 
     'interfaces' => [
-
     ],
 
     /*
@@ -216,7 +215,6 @@ return [
     |
     */
     'custom_db_types' => [
-
     ],
 
     /*
@@ -304,5 +302,4 @@ return [
     'post_migrate' => [
         'ide-helper:models --nowrite',
     ],
-
 ];

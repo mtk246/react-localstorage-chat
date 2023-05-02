@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimValidation
+ * App\Models\ClaimValidation.
  *
  * @property int $id
  * @property string $control_number
@@ -19,10 +19,11 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $insurance_policy_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Claim $claim
- * @property-read \App\Models\InsurancePolicy $insurancePolicy
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claim $claim
+ * @property \App\Models\InsurancePolicy $insurancePolicy
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation query()
@@ -33,19 +34,22 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereInsurancePolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimValidation extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "control_number",
-        "claim_id",
-        "insurance_policy_id",
-        "response_details",
+        'control_number',
+        'claim_id',
+        'insurance_policy_id',
+        'response_details',
     ];
 
     /**

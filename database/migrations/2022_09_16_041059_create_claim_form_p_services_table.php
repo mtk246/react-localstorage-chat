@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->integer('epstd')->nullable();
             $table->integer('rev')->nullable();
             $table->string('diagnostic_pointers', 20)->nullable();
-            
+
             $table->foreignId('claim_form_p_id')->constrained('claim_forms_p')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('modifier_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('procedure_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');

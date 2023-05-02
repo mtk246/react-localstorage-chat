@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\IpRestrictionMult
+ * App\Models\IpRestrictionMult.
  *
  * @property int $id
  * @property string $ip_beginning
@@ -18,9 +19,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $ip_restriction_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\IpRestriction $ipRestriction
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\IpRestriction $ipRestriction
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult query()
@@ -31,13 +33,16 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult whereIpRestrictionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult whereRank($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
-class IpRestrictionMult  extends Model implements Auditable
+class IpRestrictionMult extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = ['ip_beginning', 'ip_finish', 'rank', 'ip_restriction_id'];
 

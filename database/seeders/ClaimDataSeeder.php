@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\TypeForm;
-use App\Models\TypeDiag;
-use App\Models\ClaimStatus;
 use App\Models\ClaimBatchStatus;
-use App\Models\ClaimTransmissionStatus;
-use App\Models\TypeOfService;
-use App\Models\PlaceOfService;
-use App\Models\PayerResponsibility;
 use App\Models\ClaimEligibilityStatus;
+use App\Models\ClaimStatus;
+use App\Models\ClaimTransmissionStatus;
+use App\Models\PayerResponsibility;
+use App\Models\PlaceOfService;
+use App\Models\TypeDiag;
+use App\Models\TypeForm;
+use App\Models\TypeOfService;
+use Illuminate\Database\Seeder;
 
 class ClaimDataSeeder extends Seeder
 {
@@ -38,13 +40,13 @@ class ClaimDataSeeder extends Seeder
             ['status' => 'Approved',                 'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
             ['status' => 'Rejected',                 'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
             ['status' => 'Denied',                   'background_color' => '#FFDEDC', 'font_color' => '#A72821'],
-            ['status' => 'Complete',                 'background_color' => '#D1FFE5', 'font_color' => '#1B6D49']
-            //['status' => 'Appel',                    'background_color' => '#E3F8FF', 'font_color' => '#018ECC']
+            ['status' => 'Complete',                 'background_color' => '#D1FFE5', 'font_color' => '#1B6D49'],
+            // ['status' => 'Appel',                    'background_color' => '#E3F8FF', 'font_color' => '#018ECC']
         ];
 
         foreach ($claimStatus as $status) {
             ClaimStatus::updateOrCreate([
-                'status' => $status['status']
+                'status' => $status['status'],
             ], $status);
         }
 
@@ -79,7 +81,7 @@ class ClaimDataSeeder extends Seeder
             ['code' => 'T', 'name' => 'Outpatient Mental Health Treatment Limitation'],
             ['code' => 'U', 'name' => 'Occupational Therapy'],
             ['code' => 'V', 'name' => 'Pneumococcal/Flu Vaccine'],
-            ['code' => 'W', 'name' => 'Physical Therapy']
+            ['code' => 'W', 'name' => 'Physical Therapy'],
         ];
 
         foreach ($serviceTypeOfServices as $typeOfService) {
@@ -154,12 +156,12 @@ class ClaimDataSeeder extends Seeder
         $eligibilityStatuses = [
             ['status' => 'Eligible policy',   'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
             ['status' => 'Ineligible policy', 'background_color' => '#FBECDD', 'font_color' => '#B04D12'],
-            ['status' => 'Unknow',            'background_color' => '#FFF1F1', 'font_color' => '#A72821']
+            ['status' => 'Unknow',            'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
         ];
 
         foreach ($eligibilityStatuses as $eligibilityStatus) {
             ClaimEligibilityStatus::updateOrCreate([
-                'status' => $eligibilityStatus
+                'status' => $eligibilityStatus,
             ], $eligibilityStatus);
         }
 
@@ -170,13 +172,12 @@ class ClaimDataSeeder extends Seeder
             ['code' => 'O', 'description' => 'Other'],
             ['code' => 'P', 'description' => 'Pre Existing Condition'],
             ['code' => 'S', 'description' => 'Self Limiting'],
-            ['code' => 'U', 'description' => 'Acute']
+            ['code' => 'U', 'description' => 'Acute'],
         ];
 
         foreach ($typeDiags as $type) {
             TypeDiag::updateOrCreate($type, $type);
         }
-
 
         $claimTransmissionStatus = [
             ['status' => 'Success',    'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
@@ -186,19 +187,19 @@ class ClaimDataSeeder extends Seeder
 
         foreach ($claimTransmissionStatus as $transmissionStatus) {
             ClaimTransmissionStatus::updateOrCreate([
-                'status' => $status['status']
+                'status' => $status['status'],
             ], $transmissionStatus);
         }
 
         $claimBatchStatus = [
             ['status' => 'Completed',     'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
             ['status' => 'Submitted',     'background_color' => '#FFFAEC', 'font_color' => '#B04D12'],
-            ['status' => 'Not submitted', 'background_color' => '#FFF1F1', 'font_color' => '#A72821']
+            ['status' => 'Not submitted', 'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
         ];
 
         foreach ($claimBatchStatus as $batchStatus) {
             ClaimBatchStatus::updateOrCreate([
-                'status' => $status['status']
+                'status' => $status['status'],
             ], $batchStatus);
         }
     }

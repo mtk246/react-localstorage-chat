@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +16,7 @@ class AddFieldCodeToHealthProfessionalsTable extends Migration
     public function up()
     {
         Schema::table('health_professionals', function (Blueprint $table) {
-            $table->string("code")->unique()->nullable();
+            $table->string('code')->unique()->nullable();
         });
     }
 
@@ -30,4 +32,4 @@ class AddFieldCodeToHealthProfessionalsTable extends Migration
             $table->dropColumn('code');
         });
     }
-};
+}

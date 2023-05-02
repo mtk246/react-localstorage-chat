@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ProcedureFee
+ * App\Models\ProcedureFee.
  *
  * @property int $id
  * @property float $fee
@@ -19,11 +21,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $mac_locality_id
  * @property string|null $fee_start_date
  * @property string|null $fee_end_date
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\InsuranceLabelFee $insuranceLabelFee
- * @property-read \App\Models\MacLocality $macLocality
- * @property-read \App\Models\Procedure $procedure
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\InsuranceLabelFee $insuranceLabelFee
+ * @property \App\Models\MacLocality $macLocality
+ * @property \App\Models\Procedure $procedure
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee query()
@@ -36,21 +39,24 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereMacLocalityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ProcedureFee extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "fee",
-        "insurance_label_fee_id",
-        "procedure_id",
-        "mac_locality_id",
-        "fee_start_date",
-        "fee_end_date"
+        'fee',
+        'insurance_label_fee_id',
+        'procedure_id',
+        'mac_locality_id',
+        'fee_start_date',
+        'fee_end_date',
     ];
 
     /**

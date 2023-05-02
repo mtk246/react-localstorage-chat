@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Patient;
 
 use App\Models\MaritalStatus;
@@ -29,6 +31,7 @@ class UpdateRequest extends FormRequest
     {
         $id = $this->route('id');
         $patient = Patient::find($id);
+
         return [
             'billing_company_id' => [
                 Rule::excludeIf(Gate::denies('is-admin')),
@@ -46,17 +49,19 @@ class UpdateRequest extends FormRequest
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.date_of_birth' => ['required', 'date'],
             'profile.sex' => ['required', 'string', 'max:1'],
-            
+
             'marital_status_id' => ['nullable', 'integer'],
             'marital' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
-                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+
+                    return isset($maritalStatus) && 'Single' !== $maritalStatus->name;
                 }), 'nullable', 'array'],
             'marital.spuse_name' => [
                 Rule::requiredIf(function () {
                     $maritalStatus = MaritalStatus::find($this->input('marital_status_id'));
-                    return (isset($maritalStatus) && $maritalStatus->name !== 'Single');
+
+                    return isset($maritalStatus) && 'Single' !== $maritalStatus->name;
                 }), 'nullable', 'string'],
             'marital.spuse_work' => ['nullable', 'string'],
             'marital.spuse_work_phone' => ['nullable', 'string'],
@@ -99,7 +104,7 @@ class UpdateRequest extends FormRequest
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],
             'save_as_draft' => ['nullable', 'boolean'],
-            'draft_note' => ['nullable', 'string']
+            'draft_note' => ['nullable', 'string'],
         ];
     }
 }

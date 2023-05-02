@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\morphMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\morphMany;
 
 /**
- * App\Models\ClaimStatus
+ * App\Models\ClaimStatus.
  *
  * @property int $id
  * @property string $status
@@ -16,10 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $background_color
  * @property string|null $font_color
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read int|null $claim_status_claims_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
- * @property-read int|null $claim_sub_statuses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property int|null $claim_status_claims_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
+ * @property int|null $claim_sub_statuses_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus query()
@@ -29,10 +32,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
+ *
  * @mixin \Eloquent
  */
 class ClaimStatus extends Model
@@ -40,13 +45,11 @@ class ClaimStatus extends Model
     use HasFactory;
 
     protected $fillable = [
-        "status", "background_color", "font_color"
+        'status', 'background_color', 'font_color',
     ];
 
     /**
      * ClaimStatus has many ClaimStatusClaim.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\morphMany
      */
     public function claimStatusClaims(): morphMany
     {
@@ -55,8 +58,6 @@ class ClaimStatus extends Model
 
     /**
      * The claimStatus that belong to the claimSubStatus.
-     *
-     * @return BelongsToMany
      */
     public function claimSubStatuses(): BelongsToMany
     {

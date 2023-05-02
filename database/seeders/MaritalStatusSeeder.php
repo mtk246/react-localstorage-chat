@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\MaritalStatus;
+use Illuminate\Database\Seeder;
 
 class MaritalStatusSeeder extends Seeder
 {
@@ -16,7 +18,7 @@ class MaritalStatusSeeder extends Seeder
     {
         $maritalStatus = [
             ['name' => 'Single'],
-            ['name' => 'Married']
+            ['name' => 'Married'],
         ];
 
         foreach ($maritalStatus as $name) {

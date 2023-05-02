@@ -1,17 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 return [
-    'page_format'           => 'LETTER',
-    'page_orientation'      => 'P',
-    'page_units'            => 'mm',
-    'unicode'               => true,
-    'encoding'              => 'UTF-8',
-    'font_directory'        => '',
-    'image_directory'       => public_path('images'),
+    'page_format' => 'LETTER',
+    'page_orientation' => 'P',
+    'page_units' => 'mm',
+    'unicode' => true,
+    'encoding' => 'UTF-8',
+    'font_directory' => '',
+    'image_directory' => public_path('images'),
     'tcpdf_throw_exception' => true,
-    'use_fpdi'              => false,
-    'use_original_header'   => false,
-    'use_original_footer'   => false,
-    'pdfa'                  => false, // Options: false, 1, 3
+    'use_fpdi' => false,
+    'use_original_header' => false,
+    'use_original_footer' => false,
+    'pdfa' => false, // Options: false, 1, 3
 
     // See more info at the tcpdf_config.php file in TCPDF (if you do not set this here, TCPDF will use it default)
     // https://raw.githubusercontent.com/tecnickcom/TCPDF/master/config/tcpdf_config.php

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,7 @@ class UpdateFieldsToTaxonomiesTable extends Migration
             $table->dropColumn('user_id');
             $table->dropColumn('company_id');
             $table->dropColumn('isPrimary');
-            
+
             $table->string('tax_id');
             $table->boolean('primary')->defautl('false');
         });
@@ -31,7 +33,6 @@ class UpdateFieldsToTaxonomiesTable extends Migration
     public function down()
     {
         Schema::table('taxonomies', function (Blueprint $table) {
-            //
         });
     }
 }

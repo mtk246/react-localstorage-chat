@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimEligibilityPayer
+ * App\Models\ClaimEligibilityPayer.
  *
  * @property int $id
  * @property string $name
@@ -18,9 +20,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $claim_eligibility_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimEligibility $claimEligibility
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimEligibility $claimEligibility
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer query()
@@ -31,26 +34,27 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityPayer whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimEligibilityPayer extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "name",
-        "entity_type",
-        "entity_identifier",
-        "claim_eligibility_id"
+        'name',
+        'entity_type',
+        'entity_identifier',
+        'claim_eligibility_id',
     ];
 
     /**
      * ClaimEligibilityPayer belongs to ClaimEligibility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function claimEligibility(): BelongsTo
     {

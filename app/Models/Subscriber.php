@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Subscriber
+ * App\Models\Subscriber.
  *
  * @property int $id
  * @property string|null $ssn
@@ -22,17 +24,18 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $date_of_birth
  * @property int|null $relationship_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read int|null $addresses_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read int|null $claim_eligibilities_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read int|null $contacts_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property-read int|null $patients_count
- * @property-read \App\Models\TypeCatalog|null $relationship
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property int|null $addresses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property int|null $claim_eligibilities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property int|null $patients_count
+ * @property \App\Models\TypeCatalog|null $relationship
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber query()
@@ -45,31 +48,34 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereRelationshipId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereSsn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property-read int|null $insurance_policies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property int|null $insurance_policies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ *
  * @mixin \Eloquent
  */
 class Subscriber extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "ssn",
-        "member_id",
-        "last_name",
-        "first_name",
-        "date_of_birth",
-        "relationship_id",
+        'ssn',
+        'member_id',
+        'last_name',
+        'first_name',
+        'date_of_birth',
+        'relationship_id',
     ];
 
     /**
@@ -84,8 +90,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Subscriber has many claim eligibilities.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function claimEligibilities(): HasMany
     {
@@ -94,8 +98,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Subscriber belongs to Patients.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function patients(): BelongsToMany
     {
@@ -104,8 +106,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Subscriber belongs to InsurancePolicy.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function insurancePolicies(): BelongsToMany
     {
@@ -134,8 +134,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Interact with the subscriber's first_name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function firstName(): Attribute
     {
@@ -147,8 +145,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Interact with the subscriber's last_name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function lastName(): Attribute
     {

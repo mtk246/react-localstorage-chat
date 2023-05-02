@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class LogNewDevice extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $fullName;
     public $ip;
@@ -19,9 +21,9 @@ class LogNewDevice extends Mailable
     public function __construct($fullName, $ip, $code, $os)
     {
         $this->fullName = $fullName;
-        $this->ip       = $ip;
-        $this->code     = $code;
-        $this->os       = $os;
+        $this->ip = $ip;
+        $this->code = $code;
+        $this->os = $os;
     }
 
     /**
@@ -31,6 +33,6 @@ class LogNewDevice extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.log-new-device')->subject("Login with new Device");
+        return $this->view('emails.log-new-device')->subject('Login with new Device');
     }
 }

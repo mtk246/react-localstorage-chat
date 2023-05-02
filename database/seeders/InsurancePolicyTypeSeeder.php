@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\InsurancePolicyType;
+use Illuminate\Database\Seeder;
 
 class InsurancePolicyTypeSeeder extends Seeder
 {
@@ -20,7 +22,7 @@ class InsurancePolicyTypeSeeder extends Seeder
             ['code' => '3', 'name' => 'Work Comp'],
             ['code' => 'I', 'name' => 'Industrial'],
             ['code' => 'L', 'name' => 'Liability'],
-            ['code' => 'O', 'name' => 'Other']
+            ['code' => 'O', 'name' => 'Other'],
         ];
 
         foreach ($insurancePolicyTypes as $type) {

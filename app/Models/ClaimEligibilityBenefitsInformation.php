@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimEligibilityBenefitsInformation
+ * App\Models\ClaimEligibilityBenefitsInformation.
  *
  * @property int $id
  * @property string $code
@@ -26,9 +28,10 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $claim_eligibility_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimEligibility $claimEligibility
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimEligibility $claimEligibility
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation query()
@@ -47,28 +50,31 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation whereTimeQualifer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation whereTimeQualiferCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibilityBenefitsInformation whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimEligibilityBenefitsInformation extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "code",
-        "name",
-        "service_type_codes",
-        "service_types",
-        "insurance_type_code",
-        "insurance_type",
-        "time_qualifer_code",
-        "time_qualifer",
-        "benefit_amount",
-        "benefits_date_information",
-        "additional_information",
-        "claim_eligibility_id",
+        'code',
+        'name',
+        'service_type_codes',
+        'service_types',
+        'insurance_type_code',
+        'insurance_type',
+        'time_qualifer_code',
+        'time_qualifer',
+        'benefit_amount',
+        'benefits_date_information',
+        'additional_information',
+        'claim_eligibility_id',
     ];
 
     /**
@@ -77,16 +83,14 @@ class ClaimEligibilityBenefitsInformation extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'service_type_codes'        => 'array',
-        "service_types"             => 'array',
-        "benefits_date_information" => 'array',
-        "additional_information"    => 'array'
+        'service_type_codes' => 'array',
+        'service_types' => 'array',
+        'benefits_date_information' => 'array',
+        'additional_information' => 'array',
     ];
 
     /**
      * ClaimEligibilityBenefitsInformation belongs to ClaimEligibility.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function claimEligibility(): BelongsTo
     {

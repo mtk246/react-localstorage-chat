@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,11 +26,10 @@ class UpdateFieldsToUsersTable extends Migration
             $table->dropColumn('ssn');
             $table->dropColumn('dateOfBirth');
 
-            $table->string("userkey")->nullable();
+            $table->string('userkey')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamp('last_login')->nullable();
             $table->foreignId('profile_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-
         });
     }
 
@@ -40,7 +41,6 @@ class UpdateFieldsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
         });
     }
 }

@@ -23,14 +23,14 @@ final class ClaimResource extends JsonResource
             $insurancePolicy['type_responsibility'] = $insurancePolicy->typeResponsibility;
             $insurancePolicies[$key] = $insurancePolicy;
             $claimEligibilityCurrent = $insurancePolicy->claimEligibilities()
-                                                        //->where('claim_id', $this->id)
+                                                        // ->where('claim_id', $this->id)
                                                         ->orderBy('created_at', 'desc')
                                                         ->orderBy('id', 'asc')->first();
 
             $insurancePolicies[$key]['claim_eligibility'] = isset($claimEligibilityCurrent)
                 ? [
                     'control_number' => $claimEligibilityCurrent->control_number ?? null,
-                    //'claim_id' => $claimEligibilityCurrent->claim_id ?? null,
+                    // 'claim_id' => $claimEligibilityCurrent->claim_id ?? null,
                     'insurance_policy' => $claimEligibilityCurrent->insurancePolicy ?? null,
                     'insurance_policy_id' => $claimEligibilityCurrent->insurance_policy_id ?? null,
                     'response_details' => json_decode($claimEligibilityCurrent->response_details ?? ''),
@@ -44,6 +44,7 @@ final class ClaimResource extends JsonResource
         usort($insurancePolicies, function ($a, $b) use ($order) {
             $a_index = array_search($a['type_responsibility']['code'], $order);
             $b_index = array_search($b['type_responsibility']['code'], $order);
+
             return $a_index - $b_index;
         });
 

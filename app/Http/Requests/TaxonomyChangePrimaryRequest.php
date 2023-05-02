@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,9 +26,9 @@ class TaxonomyChangePrimaryRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"    => "sometimes|integer",
-            "company_id" => "sometimes|integer",
-            "primary"    => "required|boolean",
+            'user_id' => 'sometimes|integer',
+            'company_id' => 'sometimes|integer',
+            'primary' => 'required|boolean',
         ];
     }
 }

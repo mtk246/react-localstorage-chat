@@ -1,24 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\PlanStatusServiceTypeCode
+ * App\Models\PlanStatusServiceTypeCode.
  *
  * @property int $id
  * @property string $service_type_code
  * @property int $claim_eligibility_plan_status_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimEligibilityPlanStatus $claimEligibilityPlanStatus
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimEligibilityPlanStatus $claimEligibilityPlanStatus
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode query()
@@ -27,23 +30,24 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode whereServiceTypeCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanStatusServiceTypeCode whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class PlanStatusServiceTypeCode extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "service_type_code",
-        "claim_eligibility_plan_status_id"
+        'service_type_code',
+        'claim_eligibility_plan_status_id',
     ];
 
     /**
      * PlanStatusServiceTypeCode belongs to ClaimEligibilityPlanStatus.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function claimEligibilityPlanStatus(): BelongsTo
     {

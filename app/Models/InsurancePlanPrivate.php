@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\InsurancePlanPrivate
+ * App\Models\InsurancePlanPrivate.
  *
  * @property int $id
  * @property string|null $naic
@@ -19,12 +21,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\BillingCompany|null $billingCompany
- * @property-read \App\Models\TypeCatalog|null $fileMethod
- * @property-read \App\Models\TypeCatalog|null $format
- * @property-read \App\Models\InsurancePlan|null $insurancePlan
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\TypeCatalog|null $fileMethod
+ * @property \App\Models\TypeCatalog|null $format
+ * @property \App\Models\InsurancePlan|null $insurancePlan
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate query()
@@ -37,35 +40,39 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $format_professional_id
  * @property int|null $format_cms_id
  * @property int|null $format_institutional_id
  * @property int|null $format_ub_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \App\Models\TypeCatalog|null $formatCMS
- * @property-read \App\Models\TypeCatalog|null $formatInstitutional
- * @property-read \App\Models\TypeCatalog|null $formatProfessional
- * @property-read \App\Models\TypeCatalog|null $formatUB
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \App\Models\TypeCatalog|null $formatCMS
+ * @property \App\Models\TypeCatalog|null $formatInstitutional
+ * @property \App\Models\TypeCatalog|null $formatProfessional
+ * @property \App\Models\TypeCatalog|null $formatUB
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatCmsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatInstitutionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatProfessionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatUbId($value)
+ *
  * @mixin \Eloquent
  */
 class InsurancePlanPrivate extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "naic",
-        "format_professional_id",
-        "format_institutional_id",
-        "format_cms_id",
-        "format_ub_id",
-        "file_method_id",
-        "billing_company_id",
-        "insurance_plan_id"
+        'naic',
+        'format_professional_id',
+        'format_institutional_id',
+        'format_cms_id',
+        'format_ub_id',
+        'file_method_id',
+        'billing_company_id',
+        'insurance_plan_id',
     ];
 
     /**
@@ -97,7 +104,7 @@ class InsurancePlanPrivate extends Model implements Auditable
     {
         return $this->belongsTo(TypeCatalog::class, 'format_professional_id');
     }
-    
+
     /**
      * InsurancePlanPrivate belongs to FormatInstitutional.
      *
@@ -107,6 +114,7 @@ class InsurancePlanPrivate extends Model implements Auditable
     {
         return $this->belongsTo(TypeCatalog::class, 'format_institutional_id');
     }
+
     /**
      * InsurancePlanPrivate belongs to FormatCMS.
      *
@@ -116,6 +124,7 @@ class InsurancePlanPrivate extends Model implements Auditable
     {
         return $this->belongsTo(TypeCatalog::class, 'format_cms_id');
     }
+
     /**
      * InsurancePlanPrivate belongs to FormatUB.
      *

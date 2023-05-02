@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\AddressType;
+use Illuminate\Database\Seeder;
 
 class AddressTypeSeeder extends Seeder
 {
@@ -17,7 +19,7 @@ class AddressTypeSeeder extends Seeder
         $addressTypes = [
             ['name' => 'Work'],
             ['name' => 'House / Residence'],
-            ['name' => 'Other']
+            ['name' => 'Other'],
         ];
 
         foreach ($addressTypes as $name) {

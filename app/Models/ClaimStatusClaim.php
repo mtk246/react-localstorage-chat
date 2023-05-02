@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimStatusClaim
+ * App\Models\ClaimStatusClaim.
  *
  * @property int $id
  * @property int $claim_id
@@ -18,13 +20,14 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $claim_status_type
  * @property int|null $claim_status_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Claim $claim
- * @property-read Model|\Eloquent $claimStatus
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property-read int|null $private_notes_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claim $claim
+ * @property Model|\Eloquent $claimStatus
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property int|null $private_notes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim query()
@@ -34,22 +37,25 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ *
  * @mixin \Eloquent
  */
 class ClaimStatusClaim extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
-    protected $table = "claim_status_claim";
-    
+    protected $table = 'claim_status_claim';
+
     protected $fillable = [
-        "claim_id",
-        "claim_status_type",
-        "claim_status_id"
+        'claim_id',
+        'claim_status_type',
+        'claim_status_id',
     ];
 
     /**
@@ -61,8 +67,6 @@ class ClaimStatusClaim extends Model implements Auditable
 
     /**
      * ClaimStatusClaim belongs to Claim.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function claim(): BelongsTo
     {
@@ -70,9 +74,7 @@ class ClaimStatusClaim extends Model implements Auditable
     }
 
     /**
-     * Get all of the claimCheckStatus for the ClaimStatusClaim
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the claimCheckStatus for the ClaimStatusClaim.
      */
     public function claimCheckStatus(): HasMany
     {
@@ -81,8 +83,6 @@ class ClaimStatusClaim extends Model implements Auditable
 
     /**
      * ClaimStatusClaim belongs to ClaimStatus.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function claimStatus(): BelongsTo
     {
@@ -102,19 +102,20 @@ class ClaimStatusClaim extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }

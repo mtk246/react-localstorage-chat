@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ExceptionInsuranceCompany
+ * App\Models\ExceptionInsuranceCompany.
  *
  * @property int $id
  * @property int $company_id
@@ -18,11 +18,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\BillingCompany $billingCompany
- * @property-read \App\Models\Company $company
- * @property-read \App\Models\InsuranceCompany $insuranceCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany $billingCompany
+ * @property \App\Models\Company $company
+ * @property \App\Models\InsuranceCompany $insuranceCompany
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany query()
@@ -32,18 +33,21 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ExceptionInsuranceCompany extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "company_id",
-        "billing_company_id",
-        "insurance_company_id",
+        'company_id',
+        'billing_company_id',
+        'insurance_company_id',
     ];
 
     /**

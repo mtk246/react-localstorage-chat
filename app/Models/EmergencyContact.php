@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\EmergencyContact
+ * App\Models\EmergencyContact.
  *
  * @property int $id
  * @property string $name
@@ -18,7 +20,8 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string $relationship
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Patient|null $patient
+ * @property \App\Models\Patient|null $patient
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact query()
@@ -28,19 +31,24 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationship($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereUpdatedAt($value)
+ *
  * @property int $patient_id
  * @property int|null $relationship_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationshipId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class EmergencyContact extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'name',
@@ -52,8 +60,6 @@ class EmergencyContact extends Model implements Auditable
 
     /**
      * EmergencyContact belongs to patient.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function patient(): BelongsTo
     {
@@ -62,8 +68,6 @@ class EmergencyContact extends Model implements Auditable
 
     /**
      * Relationship belongs to patient.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function relationship(): BelongsTo
     {
@@ -71,9 +75,7 @@ class EmergencyContact extends Model implements Auditable
     }
 
     /**
-     * Get the billingCompany that owns the EmergencyContact
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the billingCompany that owns the EmergencyContact.
      */
     public function billingCompany(): BelongsTo
     {
@@ -82,8 +84,6 @@ class EmergencyContact extends Model implements Auditable
 
     /**
      * Interact with the emergencyContact's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {

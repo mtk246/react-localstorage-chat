@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Diagnosis
+ * App\Models\Diagnosis.
  *
  * @property int $id
  * @property string $code
@@ -20,12 +22,13 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string|null $start_date
  * @property string|null $end_date
  * @property bool $injury_date_required
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read mixed $last_modified
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read int|null $procedures_count
- * @property-read \App\Models\PublicNote $publicNote
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property int|null $procedures_count
+ * @property \App\Models\PublicNote $publicNote
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis query()
@@ -39,25 +42,28 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereInjuryDateRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ *
  * @mixin \Eloquent
  */
 class Diagnosis extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
-    
+    use HasFactory;
+    use AuditableTrait;
+
     protected $table = 'diagnoses';
-    
+
     protected $fillable = [
-        "code",
-        "start_date",
-        "end_date",
-        "description",
-        "active",
-        "injury_date_required"
+        'code',
+        'start_date',
+        'end_date',
+        'description',
+        'active',
+        'injury_date_required',
     ];
 
     /**
@@ -78,7 +84,7 @@ class Diagnosis extends Model implements Auditable
     }
 
     /**
-     * The procedures that belong to the Diagnosis. 
+     * The procedures that belong to the Diagnosis.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -89,8 +95,6 @@ class Diagnosis extends Model implements Auditable
 
     /**
      * Interact with the diagnosis's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function description(): Attribute
     {
@@ -103,19 +107,20 @@ class Diagnosis extends Model implements Auditable
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -123,7 +128,7 @@ class Diagnosis extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
                          ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
         }

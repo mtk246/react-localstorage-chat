@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\HealthProfessional;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,10 +27,10 @@ class UpdateCompaniesRequest extends FormRequest
     public function rules()
     {
         return [
-            'companies'                      => ['required', 'array'],
+            'companies' => ['required', 'array'],
             'companies.*.billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            'companies.*.company_id'         => ['required', 'integer'],
-            'companies.*.authorization'      => ['nullable', 'array'],
+            'companies.*.company_id' => ['required', 'integer'],
+            'companies.*.authorization' => ['nullable', 'array'],
         ];
     }
 }

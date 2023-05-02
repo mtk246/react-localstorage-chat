@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\TypeCatalog
+ * App\Models\TypeCatalog.
  *
  * @property int $id
  * @property string $code
@@ -15,7 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $type_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Type $type
+ * @property \App\Models\Type $type
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog query()
@@ -26,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog whereTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class TypeCatalog extends Model
@@ -44,4 +48,3 @@ class TypeCatalog extends Model
         return $this->belongsTo(Type::class);
     }
 }
-

@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -108,5 +109,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

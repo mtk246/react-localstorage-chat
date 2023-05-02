@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Service\CreateServiceRequest;
 use App\Http\Requests\Service\UpdateServiceRequest;
-use App\Http\Requests\ChangeStatusRequest;
 use App\Repositories\ServiceRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
@@ -20,13 +21,14 @@ class ServiceController extends Controller
 
     /**
      * @param serviceCreateRequest $request
+     *
      * @return JsonResponse
      */
     public function create(CreateServiceRequest $request)
     {
         $rs = $this->serviceRepository->create($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json(__("Error creating service"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error creating service'), 400);
     }
 
     /**
@@ -40,94 +42,83 @@ class ServiceController extends Controller
     }
 
     /**
-     * @param int $id
      * @return JsonResponse
      */
     public function getOneService(int $id)
     {
         $rs = $this->serviceRepository->getOneService($id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error, service not found"), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, service not found'), 404);
     }
 
     /**
-     * @param UpdateServiceRequest $request
-     * @param int $id
      * @return JsonResponse
      */
     public function update(UpdateServiceRequest $request, int $id)
     {
         $rs = $this->serviceRepository->updateService($request->validated(), $id);
 
-        return $rs ? response()->json($rs) : response()->json(__("Error updating service"), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error updating service'), 400);
     }
 
     /**
      * @param ChangeStatus $request
-     * @param int $id
+     *
      * @return JsonResponse
      */
     public function changeStatus(ChangeStatusRequest $request, int $id)
     {
-        $rs = $this->serviceRepository->changeStatus($request->input("status"), $id);
+        $rs = $this->serviceRepository->changeStatus($request->input('status'), $id);
 
-        return $rs ? response()->json([], 204) : response()->json(__("Error updating status"), 404);
+        return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 404);
     }
 
     public function getAllServiceApplicableTo()
     {
         $rs = $this->serviceRepository->getAllServiceApplicableTo();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service applicable to"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service applicable to'), 400);
     }
 
     public function getAllServiceGroups()
     {
         $rs = $this->serviceRepository->getAllServiceGroups();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service groups"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service groups'), 400);
     }
 
     public function getAllServiceRevCenters()
     {
         $rs = $this->serviceRepository->getAllServiceRevCenters();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service rev centers"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service rev centers'), 400);
     }
 
     public function getAllServiceTypes()
     {
         $rs = $this->serviceRepository->getAllServiceTypes();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service types"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service types'), 400);
     }
 
     public function getAllServiceTypeOfServices()
     {
         $rs = $this->serviceRepository->getAllServiceTypeOfServices();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service type of service"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service type of service'), 400);
     }
 
     public function getAllServiceStmtDescriptions()
     {
         $rs = $this->serviceRepository->getAllServiceStmtDescriptions();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service stmt descriptions"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service stmt descriptions'), 400);
     }
 
     public function getAllServiceSpecialInstructions()
     {
         $rs = $this->serviceRepository->getAllServiceSpecialInstructions();
 
-        return $rs ? response()->json($rs) : response()->json(__("Error get all service special instruction"), 400);
-
+        return $rs ? response()->json($rs) : response()->json(__('Error get all service special instruction'), 400);
     }
-
 }

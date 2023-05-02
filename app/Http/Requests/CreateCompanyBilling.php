@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\IUnique;
 use App\Models\BillingCompany;
+use App\Rules\IUnique;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateCompanyBilling extends FormRequest
 {
@@ -26,15 +28,15 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
-            'name'           => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
-            'address'        => ['nullable', 'array'],
-            'contact'        => ['required', 'array'],
-            'contact.phone'  => ['nullable', 'string'],
+            'name' => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
+            'address' => ['nullable', 'array'],
+            'contact' => ['required', 'array'],
+            'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
-            'contact.fax'    => ['nullable', 'string'],
-            'contact.email'  => ['required', 'email:rfc'],
-            'logo'           => ['nullable', 'file', 'mimes:jpg,png', 'max:1024'],
-            'abbreviation'   => ['nullable', 'string'],
+            'contact.fax' => ['nullable', 'string'],
+            'contact.email' => ['required', 'email:rfc'],
+            'logo' => ['nullable', 'file', 'mimes:jpg,png', 'max:1024'],
+            'abbreviation' => ['nullable', 'string'],
         ];
     }
 }

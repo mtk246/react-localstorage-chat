@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use \OwenIt\Auditing\Models\Audit as BaseAudit;
+use OwenIt\Auditing\Models\Audit as BaseAudit;
 
 /**
- * App\Models\Audit
+ * App\Models\Audit.
  *
  * @property int $id
  * @property string|null $user_type
@@ -21,8 +23,9 @@ use \OwenIt\Auditing\Models\Audit as BaseAudit;
  * @property string|null $tags
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $auditable
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $user
+ * @property \Illuminate\Database\Eloquent\Model|\Eloquent $auditable
+ * @property \Illuminate\Database\Eloquent\Model|\Eloquent $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit query()
@@ -42,40 +45,43 @@ use \OwenIt\Auditing\Models\Audit as BaseAudit;
  * @method static \Illuminate\Database\Eloquent\Builder|Audit whereUserAgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit whereUserType($value)
+ *
  * @mixin \Eloquent
  */
 class Audit extends BaseAudit
 {
-
     /**
      * Query scope SearchAudit.
      *
      * @param  \Illuminate\Database\Eloquent\Builder
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearchAudit($query, $search)
     {
         return $query;
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereHas('user', function ($q) use ($search) {
-                                $q->whereRaw('LOWER(abbreviation) LIKE (?) ',[strtolower("%$search%")])
-                                ->orWhereRaw('LOWER(first_name) LIKE (?) ',[strtolower("%$search%")])
-                                ->orWhereRaw('LOWER(last_name) LIKE (?) ',[strtolower("%$search%")]);
-                          })->orWhereRaw('LOWER(volume) LIKE (?) ',[strtolower("%$search%")])
-                            ->orWhereRaw('LOWER(title) LIKE (?) ',[strtolower("%$search%")])
+                $q->whereRaw('LOWER(abbreviation) LIKE (?) ', [strtolower("%$search%")])
+                ->orWhereRaw('LOWER(first_name) LIKE (?) ', [strtolower("%$search%")])
+                ->orWhereRaw('LOWER(last_name) LIKE (?) ', [strtolower("%$search%")]);
+            })->orWhereRaw('LOWER(volume) LIKE (?) ', [strtolower("%$search%")])
+                            ->orWhereRaw('LOWER(title) LIKE (?) ', [strtolower("%$search%")])
                             ->orWhere('year', 'like', "%$search%");
         }
-            return $query;
+
+        return $query;
     }
 
     /**
      * Query scope sortAudit.
      *
      * @param  \Illuminate\Database\Eloquent\Builder
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortAudit($query, $orderBy, $desc)
     {
-        return $query->orderBy($orderBy, ($desc == 'true') ? 'desc' : 'asc');
+        return $query->orderBy($orderBy, ('true' == $desc) ? 'desc' : 'asc');
     }
 }

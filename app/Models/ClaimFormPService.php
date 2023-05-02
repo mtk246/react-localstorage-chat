@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
-
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimFormPService
+ * App\Models\ClaimFormPService.
  *
  * @property int $id
  * @property string|null $from_service
@@ -30,15 +29,16 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property bool $emg
  * @property int|null $epsdt_id
  * @property int|null $family_planning_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimFormP $claimFormP
- * @property-read \App\Models\TypeCatalog|null $epsdt
- * @property-read \App\Models\TypeCatalog|null $familyPlanning
- * @property-read mixed $modifiers
- * @property-read \App\Models\PlaceOfService|null $placeOfService
- * @property-read \App\Models\Procedure|null $procedure
- * @property-read \App\Models\TypeOfService|null $typeOfService
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimFormP $claimFormP
+ * @property \App\Models\TypeCatalog|null $epsdt
+ * @property \App\Models\TypeCatalog|null $familyPlanning
+ * @property mixed $modifiers
+ * @property \App\Models\PlaceOfService|null $placeOfService
+ * @property \App\Models\Procedure|null $procedure
+ * @property \App\Models\TypeOfService|null $typeOfService
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService query()
@@ -59,29 +59,32 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService whereToService($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService whereTypeOfServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormPService whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimFormPService extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "from_service",
-        "to_service",
-        "procedure_id",
-        "modifier_ids",
-        "place_of_service_id",
-        "type_of_service_id",
-        "diagnostic_pointers",
-        "days_or_units",
-        "price",
-        "copay",
-        "emg",
-        "epsdt_id",
-        "family_planning_id",
-        "claim_form_p_id",
+        'from_service',
+        'to_service',
+        'procedure_id',
+        'modifier_ids',
+        'place_of_service_id',
+        'type_of_service_id',
+        'diagnostic_pointers',
+        'days_or_units',
+        'price',
+        'copay',
+        'emg',
+        'epsdt_id',
+        'family_planning_id',
+        'claim_form_p_id',
     ];
 
     /**
@@ -90,8 +93,8 @@ class ClaimFormPService extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'modifier_ids'        => 'array',
-        'diagnostic_pointers' => 'array'
+        'modifier_ids' => 'array',
+        'diagnostic_pointers' => 'array',
     ];
 
     /**
@@ -167,14 +170,15 @@ class ClaimFormPService extends Model implements Auditable
         foreach ($this->modifier_ids ?? [] as $modId) {
             $mod = Modifier::find($modId);
             array_push($modifiers, [
-                "id"                          => $mod["id"] ?? '',
-                "name"                        => $mod["modifier"] ?? '',
-                "start_date"                  => $mod["start_date"] ?? '',
-                "end_date"                    => $mod["end_date"] ?? '',
-                "special_coding_instructions" => $mod["special_coding_instructions"] ?? '',
-                "active"                      => $mod["active"] ?? ''
+                'id' => $mod['id'] ?? '',
+                'name' => $mod['modifier'] ?? '',
+                'start_date' => $mod['start_date'] ?? '',
+                'end_date' => $mod['end_date'] ?? '',
+                'special_coding_instructions' => $mod['special_coding_instructions'] ?? '',
+                'active' => $mod['active'] ?? '',
             ]);
         }
+
         return $modifiers;
     }
 }

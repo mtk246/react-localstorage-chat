@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimEligibility
+ * App\Models\ClaimEligibility.
  *
  * @property int $id
  * @property string $control_number
@@ -24,13 +25,14 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property array|null $response_details
  * @property int|null $claim_id
  * @property int|null $claim_eligibility_status_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\ClaimEligibilityStatus|null $claimEligibilityStatus
- * @property-read \App\Models\Company $company
- * @property-read \App\Models\InsuranceCompany $insuranceCompany
- * @property-read \App\Models\Patient $patient
- * @property-read \App\Models\Subscriber|null $subscriber
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\ClaimEligibilityStatus|null $claimEligibilityStatus
+ * @property \App\Models\Company $company
+ * @property \App\Models\InsuranceCompany $insuranceCompany
+ * @property \App\Models\Patient $patient
+ * @property \App\Models\Subscriber|null $subscriber
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility query()
@@ -46,33 +48,34 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereSubscriberId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 class ClaimEligibility extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "control_number",
-        "claim_id",
-        "company_id",
-        "patient_id",
-        "subscriber_id",
-        "insurance_policy_id",
-        "insurance_company_id",
-        "response_details",
-        "claim_eligibility_status_id",
+        'control_number',
+        'claim_id',
+        'company_id',
+        'patient_id',
+        'subscriber_id',
+        'insurance_policy_id',
+        'insurance_company_id',
+        'response_details',
+        'claim_eligibility_status_id',
     ];
 
     protected $with = ['claimEligibilityStatus'];
 
     /**
      * ClaimEligibility belongs to Company.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function company(): BelongsTo
     {
@@ -81,8 +84,6 @@ class ClaimEligibility extends Model implements Auditable
 
     /**
      * ClaimEligibility belongs to Patient.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function patient(): BelongsTo
     {
@@ -91,8 +92,6 @@ class ClaimEligibility extends Model implements Auditable
 
     /**
      * ClaimEligibility belongs to Subscriber.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function subscriber(): BelongsTo
     {
@@ -101,8 +100,6 @@ class ClaimEligibility extends Model implements Auditable
 
     /**
      * ClaimEligibility belongs to InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function insuranceCompany(): BelongsTo
     {

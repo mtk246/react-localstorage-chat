@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Metadata
+ * App\Models\Metadata.
  *
  * @property int $id
  * @property string|null $dataset_name
@@ -22,7 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $user
+ * @property \App\Models\User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata query()
@@ -39,30 +42,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Metadata whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Metadata extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
-        "dataset_name",
-        "description",
-        "machine_used",
-        "start_date",
-        "end_date",
-        "time",
-        "location",
-        "user_id",
-        "ip_machine",
-        "mac_machine",
+    protected $fillable = [
+        'dataset_name',
+        'description',
+        'machine_used',
+        'start_date',
+        'end_date',
+        'time',
+        'location',
+        'user_id',
+        'ip_machine',
+        'mac_machine',
     ];
 
-    protected $table = "metadata";
+    protected $table = 'metadata';
 
-    /**
-     * @return BelongsTo
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

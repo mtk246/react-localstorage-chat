@@ -1,54 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\Contact;
-use App\Models\EntityNickname;
 use App\Models\EntityAbbreviation;
+use App\Models\EntityNickname;
 use App\Models\InsuranceCompany;
 use App\Models\InsuranceCompanyTimeFailed;
-use App\Models\TypeCatalog;
 use App\Models\PrivateNote;
 use App\Models\PublicNote;
-use Illuminate\Http\Request;
+use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class InsuranceCompanyRepository
 {
     /**
-     * @param array $data
      * @return null
      */
-    public function createInsurance(array $data) {
+    public function createInsurance(array $data)
+    {
         try {
             DB::beginTransaction();
-            $insurance = InsuranceCompany::where('payer_id', $data["insurance"]["payer_id"])->first();
+            $insurance = InsuranceCompany::where('payer_id', $data['insurance']['payer_id'])->first();
             if (isset($insurance)) {
                 $insurance->update([
-                    "naic"           => $data["insurance"]["naic"] ?? '',
-                    "file_method_id" => $data["insurance"]["file_method_id"]
+                    'naic' => $data['insurance']['naic'] ?? '',
+                    'file_method_id' => $data['insurance']['file_method_id'],
                 ]);
             } else {
                 $insurance = InsuranceCompany::create([
-                    "code"           => generateNewCode("IC", 5, date("Y"), InsuranceCompany::class, "code"),
-                    "name"           => $data["insurance"]["name"],
-                    "naic"           => $data["insurance"]["naic"] ?? '',
-                    "payer_id"       => $data["insurance"]["payer_id"],
-                    "file_method_id" => $data["insurance"]["file_method_id"]
+                    'code' => generateNewCode('IC', 5, date('Y'), InsuranceCompany::class, 'code'),
+                    'name' => $data['insurance']['name'],
+                    'naic' => $data['insurance']['naic'] ?? '',
+                    'payer_id' => $data['insurance']['payer_id'],
+                    'file_method_id' => $data['insurance']['file_method_id'],
                 ]);
             }
 
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
+                $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            /** Attach billing company */
+            /* Attach billing company */
             $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
 
             if (isset($data['billing_incomplete_reasons'])) {
@@ -87,65 +89,67 @@ class InsuranceCompanyRepository
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 InsuranceCompanyTimeFailed::create([
-                    'days'                 => $data['time_failed']['days'],
-                    'from_id'              => $data['time_failed']['from_id'],
-                    'billing_company_id'   => $billingCompany->id ?? $billingCompany,
-                    'insurance_company_id' => $insurance->id
+                    'days' => $data['time_failed']['days'],
+                    'from_id' => $data['time_failed']['from_id'],
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'insurance_company_id' => $insurance->id,
                 ]);
             }
 
             if (isset($data['insurance']['nickname'])) {
                 EntityNickname::create([
-                    'nickname'           => $data['insurance']['nickname'],
-                    'nicknamable_id'     => $insurance->id,
-                    'nicknamable_type'   => InsuranceCompany::class,
+                    'nickname' => $data['insurance']['nickname'],
+                    'nicknamable_id' => $insurance->id,
+                    'nicknamable_type' => InsuranceCompany::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['insurance']['abbreviation'])) {
                 EntityAbbreviation::create([
-                    'abbreviation'       => $data['insurance']['abbreviation'],
-                    'abbreviable_id'     => $insurance->id,
-                    'abbreviable_type'   => InsuranceCompany::class,
+                    'abbreviation' => $data['insurance']['abbreviation'],
+                    'abbreviable_id' => $insurance->id,
+                    'abbreviable_type' => InsuranceCompany::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ]);
             }
 
             if (isset($data['address']['address'])) {
-                $data["address"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                $data["address"]["addressable_id"]     = $insurance->id;
-                $data["address"]["addressable_type"]   = InsuranceCompany::class;
-                Address::create($data["address"]);
+                $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['address']['addressable_id'] = $insurance->id;
+                $data['address']['addressable_type'] = InsuranceCompany::class;
+                Address::create($data['address']);
             }
-            if (isset($data["contact"]["email"])) {
-                $data["contact"]["billing_company_id"] = $billingCompany->id ?? $billingCompany;
-                $data["contact"]["contactable_id"]     = $insurance->id;
-                $data["contact"]["contactable_type"]   = InsuranceCompany::class;
-                Contact::create($data["contact"]);
+            if (isset($data['contact']['email'])) {
+                $data['contact']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['contact']['contactable_id'] = $insurance->id;
+                $data['contact']['contactable_type'] = InsuranceCompany::class;
+                Contact::create($data['contact']);
             }
 
             if (isset($data['private_note'])) {
                 PrivateNote::create([
-                    'publishable_type'   => InsuranceCompany::class,
-                    'publishable_id'     => $insurance->id,
+                    'publishable_type' => InsuranceCompany::class,
+                    'publishable_id' => $insurance->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'note'               => $data['private_note']
+                    'note' => $data['private_note'],
                 ]);
             }
 
             if (isset($data['public_note'])) {
                 PublicNote::create([
-                    'publishable_type'   => InsuranceCompany::class,
-                    'publishable_id'     => $insurance->id,
-                    'note'               => $data['public_note']
+                    'publishable_type' => InsuranceCompany::class,
+                    'publishable_id' => $insurance->id,
+                    'note' => $data['public_note'],
                 ]);
             }
 
             DB::commit();
+
             return $insurance;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -153,190 +157,193 @@ class InsuranceCompanyRepository
     /**
      * @return Builder[]|Collection
      */
-    public function getAllInsurance() {
+    public function getAllInsurance()
+    {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $insuranceCompanies = InsuranceCompany::with([
-                "addresses",
-                "contacts",
-                "nicknames",
-                "abbreviations",
-                "fileMethod"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+                'addresses',
+                'contacts',
+                'nicknames',
+                'abbreviations',
+                'fileMethod',
+            ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         } else {
-            $insuranceCompanies = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
+            $insuranceCompanies = InsuranceCompany::whereHas('billingCompanies', function ($query) use ($bC) {
+                $query->where('billing_company_id', $bC);
+            })->with([
+                'addresses' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
-                })->with([
-                    "addresses" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "contacts" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "nicknames" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "abbreviations" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "fileMethod"
-            ])->orderBy("created_at", "desc")->orderBy("id", "asc")->get();
+                },
+                'contacts' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'nicknames' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'abbreviations' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'fileMethod',
+            ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         }
 
         return !is_null($insuranceCompanies) ? $insuranceCompanies : null;
     }
 
-    public function getServerAllInsurance(Request $request) {
+    public function getServerAllInsurance(Request $request)
+    {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $data = InsuranceCompany::with([
-                "addresses",
-                "contacts",
-                "nicknames",
-                "abbreviations",
-                "fileMethod",
-                "billingCompanies"
+                'addresses',
+                'contacts',
+                'nicknames',
+                'abbreviations',
+                'fileMethod',
+                'billingCompanies',
             ]);
         } else {
-            $data = InsuranceCompany::whereHas("billingCompanies", function ($query) use ($bC) {
+            $data = InsuranceCompany::whereHas('billingCompanies', function ($query) use ($bC) {
+                $query->where('billing_company_id', $bC);
+            })->with([
+                'addresses' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
-                })->with([
-                    "addresses" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "contacts" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "nicknames" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "abbreviations" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "billingCompanies" => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    "fileMethod"
+                },
+                'contacts' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'nicknames' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'abbreviations' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'billingCompanies' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'fileMethod',
             ]);
         }
-        
-        if (!empty($request->query('query')) && $request->query('query')!=="{}") {
+
+        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
         }
-        
+
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'billingcompany')) {
                 $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'insurance_companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'insurance_companies.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
             } /**elseif (str_contains($request->sortBy, 'email')) {
                 $data = $data->orderBy(
                     Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } */else {
-                $data = $data->orderBy($request->sortBy, (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            } */ else {
+                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
             }
         } else {
-            $data = $data->orderBy("created_at", "desc")->orderBy("id", "asc");
+            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data'          => $data->items(),
+            'data' => $data->items(),
             'numberOfPages' => $data->lastPage(),
-            'count'         => $data->total()
+            'count' => $data->total(),
         ], 200);
     }
 
-    public function getOneInsurance(int $id) {
+    public function getOneInsurance(int $id)
+    {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $insurance = InsuranceCompany::whereId($id)->with([
-                "addresses",
-                "contacts",
-                "nicknames",
-                "abbreviations",
-                "billingCompanies",
-                "billingIncompleteReasons",
-                "appealReasons",
-                "fileMethod",
-                "publicNote",
-                "privateNotes"
+                'addresses',
+                'contacts',
+                'nicknames',
+                'abbreviations',
+                'billingCompanies',
+                'billingIncompleteReasons',
+                'appealReasons',
+                'fileMethod',
+                'publicNote',
+                'privateNotes',
             ])->first();
         } else {
             $insurance = InsuranceCompany::whereId($id)->with([
-                "addresses" => function ($query) use ($bC) {
+                'addresses' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "contacts" => function ($query) use ($bC) {
+                'contacts' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "nicknames" => function ($query) use ($bC) {
+                'nicknames' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "abbreviations" => function ($query) use ($bC) {
+                'abbreviations' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "billingIncompleteReasons" => function ($query) use ($bC) {
+                'billingIncompleteReasons' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "appealReasons" => function ($query) use ($bC) {
+                'appealReasons' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "billingCompanies" => function ($query) use ($bC) {
+                'billingCompanies' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                "fileMethod",
-                "publicNote",
-                "privateNotes" => function ($query) use ($bC) {
+                'fileMethod',
+                'publicNote',
+                'privateNotes' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
             ])->first();
         }
 
         $record = [
-            "id" => $insurance->id,
-            "code" => $insurance->code,
-            "name" => $insurance->name,
-            "naic" => $insurance->naic,
-            "payer_id" => $insurance->payer_id,
-            "file_method_id" => $insurance->file_method_id,
-            "file_method" => isset($insurance->fileMethod) ? $insurance->fileMethod->code . ' - ' . $insurance->fileMethod->description : null,
-            "created_at" => $insurance->created_at,
-            "updated_at" => $insurance->updated_at,
-            "last_modified" => $insurance->last_modified,
-            "public_note" => isset($insurance->publicNote) ? $insurance->publicNote->note : null
+            'id' => $insurance->id,
+            'code' => $insurance->code,
+            'name' => $insurance->name,
+            'naic' => $insurance->naic,
+            'payer_id' => $insurance->payer_id,
+            'file_method_id' => $insurance->file_method_id,
+            'file_method' => isset($insurance->fileMethod) ? $insurance->fileMethod->code.' - '.$insurance->fileMethod->description : null,
+            'created_at' => $insurance->created_at,
+            'updated_at' => $insurance->updated_at,
+            'last_modified' => $insurance->last_modified,
+            'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : null,
         ];
         $record['billing_companies'] = [];
 
         foreach ($insurance->billingCompanies as $billingCompany) {
             $abbreviation = EntityAbbreviation::where([
-                'abbreviable_id'     => $insurance->id,
-                'abbreviable_type'   => InsuranceCompany::class,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany
+                'abbreviable_id' => $insurance->id,
+                'abbreviable_type' => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $nickname = EntityNickname::where([
-                'nicknamable_id'     => $insurance->id,
-                'nicknamable_type'   => InsuranceCompany::class,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany
+                'nicknamable_id' => $insurance->id,
+                'nicknamable_type' => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $address = Address::where([
-                "addressable_id"     => $insurance->id,
-                "addressable_type"   => InsuranceCompany::class,
-                "billing_company_id" => $billingCompany->id ?? $billingCompany
+                'addressable_id' => $insurance->id,
+                'addressable_type' => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $contact = Contact::where([
-                "contactable_id"     => $insurance->id,
-                "contactable_type"   => InsuranceCompany::class,
-                "billing_company_id" => $billingCompany->id ?? $billingCompany
+                'contactable_id' => $insurance->id,
+                'contactable_type' => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $time_failed = InsuranceCompanyTimeFailed::where([
-                "insurance_company_id" => $insurance->id,
-                "billing_company_id"   => $billingCompany->id ?? $billingCompany
+                'insurance_company_id' => $insurance->id,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $private_note = PrivateNote::where([
-                "publishable_id"     => $insurance->id,
-                "publishable_type"   => InsuranceCompany::class,
-                "billing_company_id" => $billingCompany->id ?? $billingCompany
+                'publishable_id' => $insurance->id,
+                'publishable_type' => InsuranceCompany::class,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
 
             $billing_incomplete_reasons = $insurance->billingIncompleteReasons()
@@ -345,69 +352,69 @@ class InsuranceCompanyRepository
                                         ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
             foreach ($appeal_reasons as $key => $field) {
                 $appeal_reasons[$key]['rules_for_appeal'] = PrivateNote::where([
-                    "billing_company_id" => null,
-                    "publishable_type"   => TypeCatalog::class,
-                    "publishable_id"     => $field->id
+                    'billing_company_id' => null,
+                    'publishable_type' => TypeCatalog::class,
+                    'publishable_id' => $field->id,
                 ])->first()->note ?? null;
             }
 
             if (isset($address)) {
                 $insurance_address = [
-                    "zip"                      => $address->zip,
-                    "city"                     => $address->city,
-                    "state"                    => $address->state,
-                    "address"                  => $address->address,
-                    "country"                  => $address->country,
-                    "address_type_id"          => $address->address_type_id,
-                    "country_subdivision_code" => $address->country_subdivision_code,
+                    'zip' => $address->zip,
+                    'city' => $address->city,
+                    'state' => $address->state,
+                    'address' => $address->address,
+                    'country' => $address->country,
+                    'address_type_id' => $address->address_type_id,
+                    'country_subdivision_code' => $address->country_subdivision_code,
                 ];
-            };
+            }
 
             if (isset($contact)) {
                 $insurance_contact = [
-                    "fax"          => $contact->fax,
-                    "email"        => $contact->email,
-                    "phone"        => $contact->phone,
-                    "mobile"       => $contact->mobile,
-                    "contact_name" => $contact->contact_name,
+                    'fax' => $contact->fax,
+                    'email' => $contact->email,
+                    'phone' => $contact->phone,
+                    'mobile' => $contact->mobile,
+                    'contact_name' => $contact->contact_name,
                 ];
-            };
+            }
             if (isset($time_failed)) {
                 $insurance_company_time_failed = [
-                    "days"    => $time_failed->days,
-                    "from"    => $time_failed->from,
-                    "from_id" => $time_failed->from_id,
+                    'days' => $time_failed->days,
+                    'from' => $time_failed->from,
+                    'from_id' => $time_failed->from_id,
                 ];
             }
             array_push($record['billing_companies'], [
-                "id"   => $billingCompany->id,
-                "name" => $billingCompany->name,
-                "code" => $billingCompany->code,
-                "abbreviation" => $billingCompany->abbreviation,
-                "private_insurance" => [
-                    "status"       => $billingCompany->pivot->status ?? false,
-                    "edit_name"    => isset($nickname->nickname) ? true : false,
-                    "nickname"     => $nickname->nickname ?? '',
-                    "abbreviation" => $abbreviation->abbreviation ?? '',
-                    "private_note" => $private_note->note ?? '',
-                    "address" => isset($insurance_address) ? $insurance_address : null,
-                    "contact" => isset($insurance_contact) ? $insurance_contact : null,
+                'id' => $billingCompany->id,
+                'name' => $billingCompany->name,
+                'code' => $billingCompany->code,
+                'abbreviation' => $billingCompany->abbreviation,
+                'private_insurance' => [
+                    'status' => $billingCompany->pivot->status ?? false,
+                    'edit_name' => isset($nickname->nickname) ? true : false,
+                    'nickname' => $nickname->nickname ?? '',
+                    'abbreviation' => $abbreviation->abbreviation ?? '',
+                    'private_note' => $private_note->note ?? '',
+                    'address' => isset($insurance_address) ? $insurance_address : null,
+                    'contact' => isset($insurance_contact) ? $insurance_contact : null,
 
-                    "insurance_company_time_failed" => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null,
-                    "billing_incomplete_reasons" => $billing_incomplete_reasons ?? [],
-                    "appeal_reasons" => $appeal_reasons ?? [],
-                ]
+                    'insurance_company_time_failed' => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null,
+                    'billing_incomplete_reasons' => $billing_incomplete_reasons ?? [],
+                    'appeal_reasons' => $appeal_reasons ?? [],
+                ],
             ]);
         }
 
         return !is_null($insurance) ? $record : null;
     }
 
-
-    public function getByPayer(string $payer) {
+    public function getByPayer(string $payer)
+    {
         $insurance = InsuranceCompany::query()
             ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])
-            ->with("publicNote")
+            ->with('publicNote')
             ->first();
         if ($insurance) {
             if (auth()->user()->hasRole('superuser')) {
@@ -421,7 +428,7 @@ class InsuranceCompanyRepository
                     ->pluck('id')
                     ->toArray();
             }
-            
+
             $billingCompanies = BillingCompany::query()
                 ->where('status', true)
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
@@ -437,13 +444,15 @@ class InsuranceCompanyRepository
         return !is_null($insurance) ? $insurance : null;
     }
 
-    public function getList(array $data) {
+    public function getList(array $data)
+    {
         try {
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'] ?? null;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
+
             return getList(
                 InsuranceCompany::class,
                 ['payer_id', '-', 'name'],
@@ -454,7 +463,8 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function getListBillingCompanies(Request $request) {
+    public function getListBillingCompanies(Request $request)
+    {
         $insuranceCompanyId = $request->insurance_company_id ?? null;
         $edit = $request->edit ?? 'false';
 
@@ -466,7 +476,7 @@ class InsuranceCompanyRepository
             foreach ($billingCompanies as $field) {
                 array_push($ids, $field->id);
             }
-            if ($edit == 'true') {
+            if ('true' == $edit) {
                 return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
             } else {
                 return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['billing_company_id', $ids]]]);
@@ -474,7 +484,8 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function getListFileMethods() {
+    public function getListFileMethods()
+    {
         try {
             return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'File method']]);
         } catch (\Exception $e) {
@@ -482,7 +493,8 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function getListFromTheDate() {
+    public function getListFromTheDate()
+    {
         try {
             return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'From']]);
         } catch (\Exception $e) {
@@ -490,7 +502,8 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function getListBillingIncompleteReasons() {
+    public function getListBillingIncompleteReasons()
+    {
         try {
             return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Billing incomplete reasons']]);
         } catch (\Exception $e) {
@@ -498,7 +511,8 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function getListAppealReasons() {
+    public function getListAppealReasons()
+    {
         try {
             return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Appeal reasons']], null);
         } catch (\Exception $e) {
@@ -506,27 +520,30 @@ class InsuranceCompanyRepository
         }
     }
 
-
     /**
-     * @param string $name
      * @return mixed
      */
-    public function searchByName(string $name) {
-        return InsuranceCompany::where("name","ILIKE","%${name}%")
+    public function searchByName(string $name)
+    {
+        return InsuranceCompany::where('name', 'ILIKE', "%{$name}%")
             ->with([
-                "addresses",
-                "contacts",
-                "billingCompanies"
+                'addresses',
+                'contacts',
+                'billingCompanies',
             ])->get();
     }
 
-    public function changeStatus(bool $status, int $id) {
+    public function changeStatus(bool $status, int $id)
+    {
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (is_null($billingCompany)) return null;
-        
+        if (is_null($billingCompany)) {
+            return null;
+        }
+
         $insuranceCompany = InsuranceCompany::find($id);
         if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
             $insuranceCompany->billingCompanies()->attach($billingCompany->id);
+
             return $insuranceCompany;
         } else {
             return $insuranceCompany->billingCompanies()->updateExistingPivot($billingCompany->id, [
@@ -535,23 +552,24 @@ class InsuranceCompanyRepository
         }
     }
 
-    public function updateInsurance(array $data, int $id) {
+    public function updateInsurance(array $data, int $id)
+    {
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::find($id);
 
             $insurance->update([
-                "naic"        => $data["insurance"]["naic"],
-                "file_method" => $data["insurance"]["file_method_id"]
+                'naic' => $data['insurance']['naic'],
+                'file_method' => $data['insurance']['file_method_id'],
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data["billing_company_id"];
+                $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            /** Attach billing company */
+            /* Attach billing company */
             if (is_null($insurance->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
                 $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
             } else {
@@ -563,7 +581,7 @@ class InsuranceCompanyRepository
             if (isset($data['billing_incomplete_reasons'])) {
                 $insurance->billingIncompleteReasons()
                           ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
-                
+
                 foreach ($data['billing_incomplete_reasons'] as $bir) {
                     $insurance->billingIncompleteReasons()->attach($bir, [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -574,7 +592,7 @@ class InsuranceCompanyRepository
             if (isset($data['appeal_reasons'])) {
                 $insurance->appealReasons()
                           ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
-                
+
                 foreach ($data['appeal_reasons'] as $ar) {
                     $insurance->appealReasons()->attach($ar, [
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -584,90 +602,97 @@ class InsuranceCompanyRepository
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 InsuranceCompanyTimeFailed::updateOrCreate([
-                    'billing_company_id'   => $billingCompany->id ?? $billingCompany,
-                    'insurance_company_id' => $insurance->id
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'insurance_company_id' => $insurance->id,
                 ], [
-                    'days'                 => $data['time_failed']['days'],
-                    'from_id'              => $data['time_failed']['from_id'],
+                    'days' => $data['time_failed']['days'],
+                    'from_id' => $data['time_failed']['from_id'],
                 ]);
             }
 
             if (isset($data['insurance']['nickname'])) {
                 EntityNickname::updateOrCreate([
-                    'nicknamable_id'     => $insurance->id,
-                    'nicknamable_type'   => InsuranceCompany::class,
+                    'nicknamable_id' => $insurance->id,
+                    'nicknamable_type' => InsuranceCompany::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
-                    'nickname'           => $data['insurance']['nickname'],
+                    'nickname' => $data['insurance']['nickname'],
                 ]);
             }
 
             if (isset($data['insurance']['abbreviation'])) {
                 EntityAbbreviation::updateOrCreate([
-                    'abbreviable_id'     => $insurance->id,
-                    'abbreviable_type'   => InsuranceCompany::class,
+                    'abbreviable_id' => $insurance->id,
+                    'abbreviable_type' => InsuranceCompany::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
-                    'abbreviation'       => $data['insurance']['abbreviation'],
+                    'abbreviation' => $data['insurance']['abbreviation'],
                 ]);
             }
 
             if (isset($data['address']['address'])) {
                 Address::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
-                    "addressable_id"     => $insurance->id,
-                    "addressable_type"   => InsuranceCompany::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'addressable_id' => $insurance->id,
+                    'addressable_type' => InsuranceCompany::class,
                 ],
-                $data["address"]);
+                    $data['address']);
             }
-            if (isset($data["contact"]["email"])) {
+            if (isset($data['contact']['email'])) {
                 Contact::updateOrCreate([
-                    "billing_company_id" => $billingCompany->id ?? $billingCompany,
-                    "contactable_id"     => $insurance->id,
-                    "contactable_type"   => InsuranceCompany::class,
-                ], $data["contact"]);
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'contactable_id' => $insurance->id,
+                    'contactable_type' => InsuranceCompany::class,
+                ], $data['contact']);
             }
 
             if (isset($data['private_note'])) {
                 PrivateNote::updateOrCreate([
-                    'publishable_type'   => InsuranceCompany::class,
-                    'publishable_id'     => $insurance->id,
+                    'publishable_type' => InsuranceCompany::class,
+                    'publishable_id' => $insurance->id,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], [
-                    'note'               => $data['private_note']
+                    'note' => $data['private_note'],
                 ]);
             }
 
             if (isset($data['public_note'])) {
                 PublicNote::updateOrCreate([
-                    'publishable_type'   => InsuranceCompany::class,
-                    'publishable_id'     => $insurance->id,
+                    'publishable_type' => InsuranceCompany::class,
+                    'publishable_id' => $insurance->id,
                 ], [
-                    'note'               => $data['public_note']
+                    'note' => $data['public_note'],
                 ]);
             }
             DB::commit();
+
             return $this->getOneInsurance($id);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return $e;
         }
     }
 
     /**
-     * @param  int $id
      * @return InsuranceCompany|Builder|Model|object|null
      */
-    public function addToBillingCompany(int $id) {
+    public function addToBillingCompany(int $id)
+    {
         $insuranceCompany = InsuranceCompany::find($id);
-        if (is_null($insuranceCompany)) return null;
-        
+        if (is_null($insuranceCompany)) {
+            return null;
+        }
+
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (is_null($billingCompany)) return null;
-        
+        if (is_null($billingCompany)) {
+            return null;
+        }
+
         if (is_null($insuranceCompany->billingCompanies()->find($billingCompany->id))) {
             $insuranceCompany->billingCompanies()->attach($billingCompany->id);
         }
+
         return $insuranceCompany;
     }
 }

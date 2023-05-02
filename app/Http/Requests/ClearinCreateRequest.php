@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use App\Models\ClearingHouse;
+use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Rules\IUnique;
-use App\Models\ClearingHouse;
 
 class ClearinCreateRequest extends FormRequest
 {
@@ -27,24 +29,24 @@ class ClearinCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'               => ['required', 'string', new IUnique(ClearingHouse::class, 'name')],
-            'org_type_id'        => ['required', 'integer'],
-            'nickname'           => ['nullable', 'string'],
+            'name' => ['required', 'string', new IUnique(ClearingHouse::class, 'name')],
+            'org_type_id' => ['required', 'integer'],
+            'nickname' => ['nullable', 'string'],
             'transmission_format_id' => ['required', 'integer'],
-            'abbreviation'         => ['required', 'string', 'max:20'],
+            'abbreviation' => ['required', 'string', 'max:20'],
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            
-            'address'            => ['required', 'array'],
-            'address.address'    => ['required', 'string'],
-            'address.city'       => ['required', 'string'],
-            'address.state'      => ['required', 'string'],
-            'address.zip'        => ['required', 'string'],
-            
-            'contact'            => ['required', 'array'],
-            'contact.phone'      => ['required', 'string'],
-            'contact.fax'        => ['nullable', 'string'],
-            'contact.email'      => ['required', 'email:rfc'],
+
+            'address' => ['required', 'array'],
+            'address.address' => ['required', 'string'],
+            'address.city' => ['required', 'string'],
+            'address.state' => ['required', 'string'],
+            'address.zip' => ['required', 'string'],
+
+            'contact' => ['required', 'array'],
+            'contact.phone' => ['required', 'string'],
+            'contact.fax' => ['nullable', 'string'],
+            'contact.email' => ['required', 'email:rfc'],
         ];
     }
 }

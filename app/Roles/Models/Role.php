@@ -1,22 +1,27 @@
 <?php
 
-namespace App\Roles\Models;
+declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
+namespace App\Roles\Models;
 
 use App\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 use App\Roles\Traits\RoleHasRelations;
 use App\Roles\Traits\Slugable;
+use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
+
 /**
- * App\Roles\Models\Role
+ * App\Roles\Models\Role.
  *
  * @class Role
+ *
  * @brief Modelo para la gestión de roles
- * 
+ *
  * Gestiona información sobre los roles de acceso
+ *
  * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
+ *
  * @property int $id
  * @property string $name
  * @property string $slug
@@ -24,14 +29,15 @@ use App\Roles\Traits\Slugable;
  * @property int $level
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read int|null $ip_restrictions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property-read int|null $users_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property int|null $ip_restrictions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
+ * @property int|null $permissions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role query()
@@ -42,21 +48,24 @@ use App\Roles\Traits\Slugable;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ *
  * @mixin \Eloquent
  */
 class Role extends Model implements RoleHasRelationsContract, Auditable
 {
-    use Slugable, RoleHasRelations;
+    use Slugable;
+    use RoleHasRelations;
     use AuditableTrait;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -66,8 +75,6 @@ class Role extends Model implements RoleHasRelationsContract, Auditable
 
     /**
      * Create a new model instance.
-     *
-     * @param array $attributes
      */
     public function __construct(array $attributes = [])
     {

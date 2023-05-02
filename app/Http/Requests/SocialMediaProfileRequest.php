@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +26,7 @@ class SocialMediaProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'social_medias'        => ['required', 'array'],
+            'social_medias' => ['required', 'array'],
             'social_medias.*.name' => ['required', 'string'],
             'social_medias.*.link' => ['required', 'string'],
         ];

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Roles\Exceptions;
+declare(strict_types=1);
 
-use Exception;
+namespace App\Roles\Exceptions;
 
 /**
  * @class AccessDeniedException
+ *
  * @brief Excepciones para accesos denegados
  *
  * Gestiona las excepciones para los accesos denegados
  *
  * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
  */
-class AccessDeniedException extends Exception
+class AccessDeniedException extends \Exception
 {
-    //
 }

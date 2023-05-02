@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
-
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\HealthProfessionalType
+ * App\Models\HealthProfessionalType.
  *
  * @property int $id
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read int|null $health_professionals_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property int|null $health_professionals_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType query()
@@ -27,18 +29,21 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
+ *
  * @mixin \Eloquent
  */
 class HealthProfessionalType extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
-    
+    use HasFactory;
+    use AuditableTrait;
+
     protected $fillable = [
-        "type"
+        'type',
     ];
 
     /**
@@ -53,8 +58,6 @@ class HealthProfessionalType extends Model implements Auditable
 
     /**
      * Interact with the healthProfessionalType's type.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function type(): Attribute
     {

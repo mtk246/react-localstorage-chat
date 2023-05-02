@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * @class RolesServiceProvider
+ *
  * @brief Service Provider para la gestión de roles y permisos
  *
  * Incorpora extensiones de blade para el uso de roles y permisos

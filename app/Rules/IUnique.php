@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -7,26 +9,30 @@ use Illuminate\Contracts\Validation\Rule;
 class IUnique implements Rule
 {
     /**
-     * Cadena de texto con el nombre del campo para el mensaje
-     * @var    string    $field_name
+     * Cadena de texto con el nombre del campo para el mensaje.
+     *
+     * @var string
      */
     protected $field_name;
 
     /**
-     * clase del modelo en el cual se realizara la validacion
-     * @var    string    $model
+     * clase del modelo en el cual se realizara la validacion.
+     *
+     * @var string
      */
     protected $model;
 
     /**
-     * id del cual se hara excepcion de coincidencia de ser necesario
-     * @var    string    $id_exception
+     * id del cual se hara excepcion de coincidencia de ser necesario.
+     *
+     * @var string
      */
     protected $id_exception;
 
     /**
-     * nombre del atributo a considerar, si el valor dado es un objeto
-     * @var    string    $id_exception
+     * nombre del atributo a considerar, si el valor dado es un objeto.
+     *
+     * @var string
      */
     protected $attr;
 
@@ -37,17 +43,18 @@ class IUnique implements Rule
      */
     public function __construct($model, $field_name, $id_exception = null, $attr = '')
     {
-        $this->model        = $model;
-        $this->field_name   = $field_name;
+        $this->model = $model;
+        $this->field_name = $field_name;
         $this->id_exception = $id_exception;
-        $this->attr         = $attr;
+        $this->attr = $attr;
     }
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
@@ -72,6 +79,6 @@ class IUnique implements Rule
      */
     public function message()
     {
-        return __('The field ' . $this->field_name . ' is already registered.');
+        return __('The field '.$this->field_name.' is already registered.');
     }
 }

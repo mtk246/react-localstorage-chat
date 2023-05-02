@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\ClaimSubStatus
+ * App\Models\ClaimSubStatus.
  *
  * @property int $id
  * @property string $code
@@ -18,15 +20,16 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property-read int|null $billing_companies_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
- * @property-read int|null $claim_statuses_count
- * @property-read mixed $last_modified
- * @property-read mixed $specific_billing_company
- * @property-read mixed $status
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ * @property int|null $claim_statuses_count
+ * @property mixed $last_modified
+ * @property mixed $specific_billing_company
+ * @property mixed $status
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus query()
@@ -37,22 +40,25 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
+ *
  * @mixin \Eloquent
  */
 class ClaimSubStatus extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "code",
-        "name",
-        "description",
+        'code',
+        'name',
+        'description',
     ];
 
     /**
@@ -64,8 +70,6 @@ class ClaimSubStatus extends Model implements Auditable
 
     /**
      * The billingCompanies that belong to the company.
-     *
-     * @return BelongsToMany
      */
     public function billingCompanies(): BelongsToMany
     {
@@ -74,8 +78,6 @@ class ClaimSubStatus extends Model implements Auditable
 
     /**
      * The claimStatus that belong to the claimSubStatus.
-     *
-     * @return BelongsToMany
      */
     public function claimStatuses(): BelongsToMany
     {
@@ -91,26 +93,30 @@ class ClaimSubStatus extends Model implements Auditable
     public function getStatusAttribute()
     {
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (is_null($billingCompany)) return false;
+        if (is_null($billingCompany)) {
+            return false;
+        }
+
         return $this->billingCompanies->find($billingCompany->id)->pivot->status ?? false;
     }
 
     public function getLastModifiedAttribute()
     {
         $record = [
-            'user'  => '',
+            'user' => '',
             'roles' => [],
         ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
-                'user'  => 'Console',
+                'user' => 'Console',
                 'roles' => [],
             ];
         } else {
             $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
             return [
-                'user'  => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
         }
@@ -123,8 +129,6 @@ class ClaimSubStatus extends Model implements Auditable
 
     /**
      * Interact with the claimSubStatus's name.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function name(): Attribute
     {
@@ -136,8 +140,6 @@ class ClaimSubStatus extends Model implements Auditable
 
     /**
      * Interact with the claimSubStatus's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function description(): Attribute
     {
@@ -157,12 +159,12 @@ class ClaimSubStatus extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ($search != "") {
+        if ('' != $search) {
             return $query->whereHas('billingCompanies', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereHas('claimStatuses', function ($q) use ($search) {
-                            $q->whereRaw('LOWER(status) LIKE (?)', [strtolower("%$search%")]);
-                        })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('claimStatuses', function ($q) use ($search) {
+                $q->whereRaw('LOWER(status) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
                           ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 

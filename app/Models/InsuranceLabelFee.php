@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\InsuranceLabelFee
+ * App\Models\InsuranceLabelFee.
  *
  * @property int $id
  * @property string $description
  * @property int $insurance_type_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\InsuranceType $insuranceType
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read int|null $procedure_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\InsuranceType $insuranceType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property int|null $procedure_fees_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee query()
@@ -29,19 +32,22 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee whereInsuranceTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceLabelFee whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
+ *
  * @mixin \Eloquent
  */
 class InsuranceLabelFee extends Model implements Auditable
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
-        "description",
-        "insurance_type_id"
+        'description',
+        'insurance_type_id',
     ];
 
     /**
@@ -66,8 +72,6 @@ class InsuranceLabelFee extends Model implements Auditable
 
     /**
      * Interact with the insuranceLabelFee's description.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function description(): Attribute
     {

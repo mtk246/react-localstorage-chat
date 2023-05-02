@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Patient;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,9 +27,9 @@ class AddCompaniesRequest extends FormRequest
     public function rules()
     {
         return [
-            '*.billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')),'integer', 'nullable'],
-            '*.company_id'         => ['sometimes', 'integer'],
-            '*.med_num'            => ['sometimes', 'string'],
+            '*.billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            '*.company_id' => ['sometimes', 'integer'],
+            '*.med_num' => ['sometimes', 'string'],
         ];
     }
 }

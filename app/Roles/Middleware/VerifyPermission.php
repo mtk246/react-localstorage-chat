@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Roles\Middleware;
 
-use Closure;
+use App\Roles\Exceptions\PermissionDeniedException;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use App\Roles\Exceptions\PermissionDeniedException;
 
 /**
  * @class VerifyPermission
+ *
  * @brief Verifica permisos de acceso
  *
  * Gestiona la verificación del permiso de acceso
@@ -24,8 +26,6 @@ class VerifyPermission
 
     /**
      * Create a new filter instance.
-     *
-     * @param Guard $auth
      */
     public function __construct(Guard $auth)
     {
@@ -36,12 +36,13 @@ class VerifyPermission
      * Handle an incoming request.
      *
      * @param Request $request
-     * @param \Closure $next
      * @param string $permission
+     *
      * @return mixed
+     *
      * @throws \App\Roles\Exceptions\PermissionDeniedException
      */
-    public function handle($request, Closure $next, $permission)
+    public function handle($request, \Closure $next, $permission)
     {
         if ($this->auth->check() && $this->auth->user()->hasPermission($permission)) {
             return $next($request);
