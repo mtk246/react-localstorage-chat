@@ -191,6 +191,7 @@ class CompanyRepository
                 if (isset($request->except_ids)) {
                     $except_ids = ((is_array($request->except_ids)) ? $request->except_ids : json_decode($request->except_ids)) ?? null;
                 }
+
                 return getList(
                     Company::class,
                     ['name'],
