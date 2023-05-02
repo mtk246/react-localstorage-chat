@@ -69,17 +69,6 @@ class PrivateNote extends Model implements Auditable
         return $this->morphTo();
     }
 
-    /**
-     * Interact with the privateNote's note.
-     */
-    protected function note(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst(strtolower($value)),
-            set: fn ($value) => ucfirst(strtolower($value)),
-        );
-    }
-
     public function getLastModifiedAttribute()
     {
         $record = [
