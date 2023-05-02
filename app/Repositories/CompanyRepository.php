@@ -188,10 +188,15 @@ class CompanyRepository
                     return $resultado;
                 }, []);
             } else {
+                if (isset($request->except_ids)) {
+                    $except_ids = ((is_array($request->except_ids)) ? $request->except_ids : json_decode($request->except_ids)) ?? null;
+                }
+
                 return getList(
                     Company::class,
                     ['name'],
                     ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+                    $except_ids ?? null
                 );
             }
         } catch (\Exception $e) {
