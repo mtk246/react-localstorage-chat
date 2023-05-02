@@ -50,12 +50,12 @@ class PatientRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            if (isset($data['id'])) {
-                $patient = Patient::find($data['id']);
+            if (isset($data['patient_id'])) {
+                $patient = Patient::find($data['patient_id']);
                 $user = $patient->user;
                 $profile = $user->profile;
-            } elseif (isset($data['user_id'])) {
-                $user = User::find($data['user_id']);
+            } elseif (isset($data['id'])) {
+                $user = User::find($data['id']);
                 $profile = $user->profile;
             }
 
@@ -117,9 +117,7 @@ class PatientRepository
 
             /** Create User */
             if (!isset($user)) {
-                $user = User::firstOrCreate([
-                    "email"      => $data['contact']['email'],
-                ], [
+                $user = User::create([
                     "usercode"   => generateNewCode("US", 5, date("Y"), User::class, "usercode"),
                     "email"      => $data['contact']['email'],
                     "language"   => $data['language'] ?? 'en',
@@ -161,9 +159,7 @@ class PatientRepository
 
             /** Create Patient */
             if (!isset($patient)) {
-                $patient = Patient::firstOrCreate([
-                    "user_id"           => $user->id
-                ], [
+                $patient = Patient::create([
                     "code"              => generateNewCode("PA", 5, date("Y"), Patient::class, "code"),
                     "driver_license"    => $data["driver_license"] ?? '',
                     "marital_status_id" => $data["marital_status_id"] ?? null,
@@ -404,6 +400,7 @@ class PatientRepository
 
         $record = [
             "id"                => $patient->id,
+            "user_id"           => $patient->user_id,
             "code"              => $patient->code,
             "profile"           => [
                 "avatar"           => $patient->user->profile->avatar ?? null,
@@ -1505,35 +1502,134 @@ class PatientRepository
         $first_name = upperCaseWords($request->first_name ?? '');
         $last_name = upperCaseWords($request->last_name ?? '');
         $ssn = $request->ssn ?? '';
-        $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
+        if ((auth()->user()->email == 'test.edgar17@gmail.com') || (auth()->user()->email == 'ec@ciph3r.co')) {
+            if (!empty($ssn)) {
+                $ssnFormated = substr($ssn, 0,1) . '-' . substr($ssn, 1, strlen($ssn));
+                $users = User::with('profile')->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                    $query->whereDateOfBirth($date_of_birth)
+                          ->where("first_name", "ilike", "%{$first_name}%")
+                          ->where("last_name", "ilike", "%{$last_name}%")
+                          ->where("ssn", "ilike", "%{$ssn}")
+                          ->orWhere("ssn", "ilike", "%{$ssnFormated}");
+                })->get();
+            } else {
+                $users = User::with('profile')->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name) {
+                    $query->whereDateOfBirth($date_of_birth)
+                          ->where("first_name", "ilike", "%{$first_name}%")
+                          ->where("last_name", "ilike", "%{$last_name}%");
+                })->get()
+                ->map(function ($user) {
+                    $billingCompanies = $user->billingCompanies->map(function($billingCompany) {
+                        return [
+                            'id' => $billingCompany->id,
+                            'name' => $billingCompany->name,
+                            'roles' => ['Patient', 'Billing manager'],
+                        ];
+                    })->toArray();
+    
+                    if (Gate::allows('is-admin')) {
+                        $billingCompaniesException = Patient::whereUserId($user->id)->first()?->billingCompanies()
+                            ->get()
+                            ->pluck('id')
+                            ->toArray();
+                        
+                        $billingCompaniesRole = Patient::whereUserId($user->id)->first()?->billingCompanies
+                            ->map(function ($bC) use ($user) {
+                                return [
+                                    'id' => $bC->id,
+                                    'name' => $bC->name,
+                                    'roles' => $user->roles->pluck('name')->toArray(),
+                                ];
+                            })
+                            ->toArray();
+                    } else {
+                        $billingCompaniesException = auth()->user()->billingCompanies
+                            ->first()
+                            ->pluck('id')
+                            ->toArray();
+                        $billingCompaniesRole = auth()->user()->billingCompanies
+                            ->map(function ($bC) use ($user) {
+                                return [
+                                    'id' => $bC->id,
+                                    'name' => $bC->name,
+                                    'roles' => $user->roles->pluck('name')->toArray(),
+                                ];
+                            })
+                            ->toArray();
+                    }
+                    $billingCompanies = BillingCompany::query()
+                        ->where('status', true)
+                        ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                        ->get()
+                        ->pluck('id')
+                        ->toArray();
+    
+                    return [
+                        'id' => $user->id,
+                        'email'  => $user->email,
+                        'profile_id' => $user->profile_id,
+                        'patient_id' => Patient::whereUserId($user->id)->first()?->id,
+                        'forbidden' => empty($billingCompanies)
+                            ? 'The patient has already been associated with all the billing companies registered'
+                            : null,
+                        'profile' => [
+                            'ssn' => $user->profile->ssn,
+                            'first_name' => $user->profile->first_name,
+                            'middle_name' => $user->profile->middle_name,
+                            'last_name' => $user->profile->last_name,
+                            'sex' => $user->profile->sex,
+                            'date_of_birth' => $user->profile->date_of_birth,
+                            'avatar' => $user->profile->avatar,
+                            'credit_score' => $user->profile->credit_score,
+                            'name_suffix_id' => $user->profile->name_suffix_id,
+                            'name_suffix' => $user->profile->nameSuffix
+                        ],
+                        'language' => $user->language,
+                        'billing_companies' => $billingCompaniesRole,
+                    ];
+                })->toArray();
+            };
+            return (count($users) == 0) ? null : $users;
+        } else {
+            $patients = Patient::with([
+                "user" => function ($query) {
+                    $query->with(["profile" => function ($q) {
+                        $q->with("socialMedias");
+                    }, "roles", "addresses", "contacts", "billingCompanies"]);
+                },
+                "maritalStatus",
+                "companies",
+                "insurancePolicies",
+                "insurancePlans" => function ($query) {
+                    $query->with([
+                        "insuranceCompany"
+                    ]);
+                },
+                "emergencyContacts",
+                "employments",
+                "publicNote",
+                "privateNotes"
+            ]);
+            if (!empty($ssn)) {
+                $ssnFormated = substr($ssn, 0, 1) . '-' . substr($ssn, 1, strlen($ssn));
+                $patients = $patients->whereHas('user.profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                    $query->whereDateOfBirth($date_of_birth)
+                          ->where("first_name", "ilike", "%{$first_name}%")
+                          ->where("last_name", "ilike", "%{$last_name}%")
+                          ->where("ssn", "ilike", "%{$ssn}")
+                          ->orWhere("ssn", "ilike", "%{$ssnFormated}");
+                })->get();
+            } else {
+                $patients = $patients->whereHas('user.profile', function ($query) use ($date_of_birth, $first_name, $last_name) {
+                    $query->whereDateOfBirth($date_of_birth)
+                          ->where("first_name", "ilike", "%{$first_name}%")
+                          ->where("last_name", "ilike", "%{$last_name}%");
+                })->get();
 
-        $patients = Patient::with([
-            "user" => function ($query) {
-                $query->with(["profile" => function ($q) {
-                    $q->with("socialMedias");
-                }, "roles", "addresses", "contacts", "billingCompanies"]);
-            },
-            "maritalStatus",
-            "companies",
-            "insurancePolicies",
-            "insurancePlans" => function ($query) {
-                $query->with([
-                    "insuranceCompany"
-                ]);
-            },
-            "emergencyContacts",
-            "employments",
-            "publicNote",
-            "privateNotes"
-        ])->whereHas('user.profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-            $query->whereDateOfBirth($date_of_birth)
-                  ->where("first_name", "ilike", "%{$first_name}%")
-                  ->where("last_name", "ilike", "%{$last_name}%")
-                  ->where("ssn", "ilike", "%{$ssn}")
-                  ->orWhere("ssn", "ilike", "%{$ssnFormated}");
-        })->get();
-
-        return (count($patients) == 0) ? null : $patients;
+            }
+    
+            return (count($patients) == 0) ? null : $patients;
+        }
     }
 
     public function addCompanies(array $data, int $id)

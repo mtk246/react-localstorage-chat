@@ -1535,6 +1535,8 @@ class ClaimRepository
                 'H' => 8,
                 'I' => 9,
                 'J' => 10,
+                'K' => 11,
+                'L'=> 12,
             );
             DB::beginTransaction();
             $data = [
@@ -1787,9 +1789,9 @@ class ClaimRepository
                         "professionalService" => [
                             "procedureIdentifier" => "HC" /** No esta, Loop2400 SV101-01 **/,
                             "lineItemChargeAmount" => $service->price,
-                            "procedureCode" => "E0570",
-                            "measurementUnit" => "UN",
-                            "serviceUnitCount" => "1",
+                            "procedureCode" => $service->procedure->code,
+                            "measurementUnit" => "UN", /**Si es el mismo dias se expresa en min 'MJ' */
+                            "serviceUnitCount" => $service->days_or_units ?? "1",
                             "compositeDiagnosisCodePointers" => [
                                 "diagnosisCodePointers" => $valuesPoint ?? []
                             ]
@@ -1801,7 +1803,7 @@ class ClaimRepository
                     "controlNumber" => $claim->control_number,
                     "tradingPartnerServiceId" => "9496", /** Caso de prueba */
                     "usageIndicator" => "T",  /** Caso de prueba */
-                    "tradingPartnerName" => "BEGENTOOS",
+                    "tradingPartnerName" => "Begento Technologies LLC",
                     "submitter" => [ /** Billing Company*/
                         "organizationName" => $claim->claimFormattable->billingCompany->name ?? null,
                         "contactInformation" => [

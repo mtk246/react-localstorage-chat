@@ -352,6 +352,7 @@ class DoctorRepository
                 'last_name' => $data['profile']['last_name'],
                 'sex' => $data['profile']['sex'],
                 'date_of_birth' => $data['profile']['date_of_birth'],
+                'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
             ]);
 
             if (auth()->user()->hasRole('superuser')) {
@@ -762,11 +763,22 @@ class DoctorRepository
                         'addresses',
                         'contacts',
                         'billingCompanies',
-                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
+                'companies' => function ($query) {
+                    $query->with(['taxonomies', 'nicknames']);
+                },
+                'healthProfessionalType',
+                'company' => function ($query) {
+                    $query->with(['taxonomies', 'nicknames']);
+                },
+                'privateNotes',
+                'publicNote',
             ])->first();
+            $healthP->user->profile->socialMedias->groupBy('billing_company_id');
+            $healthP->user->addresses->groupBy('billing_company_id');
+            $healthP->user->contacts->groupBy('billing_company_id');
         } else {
             $healthP = HealthProfessional::whereNpi($npi)->with([
                 'user' => function ($query) {
@@ -782,10 +794,26 @@ class DoctorRepository
                             $query->where('billing_company_id', $bC);
                         },
                         'billingCompanies',
-                        'taxonomies',
                     ]);
                 },
                 'taxonomies',
+                'companies' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC)
+                        ->with(['taxonomies', 'nicknames']);
+                },
+                'healthProfessionalType',
+                'company' => function ($query) use ($bC) {
+                    $query->with([
+                            'taxonomies',
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                },
+                'privateNotes' => function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
+                'publicNote',
             ])->first();
         }
 
@@ -920,7 +948,9 @@ class DoctorRepository
         foreach ($healthProfessionals as $healthProfessional) {
             if ('true' == $authorization) {
                 foreach ($healthProfessional->companies_providers as $provider) {
-                    $auth = $provider->authorization ?? [];
+                    $auth = $provider->authorization->map(function ($item) {
+                        return $item->value;
+                    })->toArray() ?? [];
                     if (in_array($billing_provider->id, $auth)) {
                         array_push($records['billing_provider'], [
                             'id' => $healthProfessional->id,

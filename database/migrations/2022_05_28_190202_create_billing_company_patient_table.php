@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +17,7 @@ class CreateBillingCompanyPatientTable extends Migration
     {
         Schema::create('billing_company_patient', function (Blueprint $table) {
             $table->id();
-            $table->boolean('status')->default('true');
+            $table->boolean('status')->default(true);
             $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('patient_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();

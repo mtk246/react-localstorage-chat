@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +17,7 @@ class CreateBillingCompanyInsuranceCompanyTable extends Migration
     {
         Schema::create('billing_company_insurance_company', function (Blueprint $table) {
             $table->id();
-            $table->boolean("status")->default("true");
+            $table->boolean('status')->default(true);
             $table->foreignIdFor(\App\Models\BillingCompany::class);
             $table->foreignIdFor(\App\Models\InsuranceCompany::class);
             $table->timestamps();

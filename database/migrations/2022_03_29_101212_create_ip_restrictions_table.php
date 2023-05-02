@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +19,7 @@ class CreateIpRestrictionsTable extends Migration
             $table->id();
             $table->ipAddress('ip_beginning');
             $table->ipAddress('ip_finish')->nullable();
-            $table->boolean('rank')->default('true');
+            $table->boolean('rank')->default(true);
             $table->foreignId('billing_company_id')->constrained()->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();

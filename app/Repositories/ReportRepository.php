@@ -627,7 +627,7 @@ class ReportRepository implements ReportInterface
 
                     $this->pdf->MultiCell(70, 10, $fromDate[2] ?? '', 0, 'L', false, 1, 15.5, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(70, 10, $fromDate[1] ?? '', 0, 'L', false, 1, 9, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
-                    $this->pdf->MultiCell(70, 10, substr($fromDate[0] ?? '', 3, 2), 0, 'L', false, 1, 23, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
+                    $this->pdf->MultiCell(70, 10, substr($fromDate[0] ?? '', 2, 2), 0, 'L', false, 1, 23, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
 
                     $this->pdf->MultiCell(70, 10, $toDate[2] ?? '', 0, 'L', false, 1, 38, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
                     $this->pdf->MultiCell(70, 10, $toDate[1] ?? '', 0, 'L', false, 1, 31, (191 + ($lineSpaceY*$index)-(0.3*$index)), true, 0, false, true, 0, 'T', true);
