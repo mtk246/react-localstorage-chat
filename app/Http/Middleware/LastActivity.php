@@ -65,13 +65,18 @@ class LastActivity
                         $user->save();
                     }
                 } else {
-                    /* @todo validación mike */
-                    if ('mr@ciph3r.co' == $user->email) {
-                        $inactivity_time = 60 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
-                        if ($inactivity_time <= 0) {
+                    /** @todo validación mike */
+                    if (($user->email == 'mr@ciph3r.co') || ($user->email == 'hp@ciph3r.co')) {
+                        if (($user->last_activity == null) || ($user->last_activity > $now->subMinute(2))) {
+                            if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
+                                $user->last_activity = Carbon::now();
+                                $user->save();
+                            }
+                            return $next($request);
+                        } else {
+                            $user->isLogged = false;
                             auth()->logout();
-
-                            return response()->json(__('Your session has expired due to inactivity'), 401);
+                            $user->save();
                         }
                     }
 
