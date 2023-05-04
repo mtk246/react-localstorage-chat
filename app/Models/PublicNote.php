@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -64,17 +63,6 @@ class PublicNote extends Model implements Auditable
     public function publishable(): MorphTo
     {
         return $this->morphTo();
-    }
-
-    /**
-     * Interact with the publicNote's note.
-     */
-    protected function note(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst(strtolower($value)),
-            set: fn ($value) => ucfirst(strtolower($value)),
-        );
     }
 
     public function getLastModifiedAttribute()
