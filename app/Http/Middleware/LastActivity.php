@@ -28,7 +28,7 @@ class LastActivity
                     }
                     if (true == $user->isLogged) {
                         $lastActivity = new \DateTime($user->last_activity);
-                        $inactivity_time = 120 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
+                        $inactivity_time = 120 - (\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity));
                         if ($inactivity_time <= 0) {
                             $user->isLogged = false;
                             // $user->last_login = Carbon::now();
