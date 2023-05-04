@@ -38,7 +38,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::post('audit-one', [\App\Http\Controllers\AuditController::class, 'getAuditOne'])->middleware('auth:api');
 
     Route::prefix('auth')->group(function () {
-        Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+        Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
         Route::post('send-email-code', [\App\Http\Controllers\AuthController::class, 'sendEmailCode']);
         Route::get('check-token', [\App\Http\Controllers\AuthController::class, 'checkToken']);
         Route::get('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:api');
