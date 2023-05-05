@@ -8,18 +8,13 @@ use App\Http\Resources\ModifierResource;
 use App\Models\Modifier;
 use App\Models\ModifierInvalidCombination;
 use App\Models\PublicNote;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 class ModifierRepository
 {
-    /**
-     * @return modifier|Model
-     */
-    public function createModifier(array $data)
+    public function createModifier(array $data): ModifierResource
     {
         try {
             DB::beginTransaction();
@@ -52,11 +47,14 @@ class ModifierRepository
 
             DB::commit();
 
-            return $modifier;
+            return new ModifierResource($modifier->load([
+                'publicNote',
+                'modifierInvalidCombinations',
+            ]));
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
@@ -99,42 +97,33 @@ class ModifierRepository
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data' => $data->items(),
+            'data' => ModifierResource::collection($data->items()),
             'numberOfPages' => $data->lastPage(),
             'count' => $data->total(),
         ], 200);
     }
 
-    /**
-     * @return modifier|Builder|Model|object|null
-     */
-    public function getOneModifier(int $id)
+    public function getOneModifier(int $id): ModifierResource
     {
         $modifier = Modifier::whereId($id)->with([
             'publicNote',
             'modifierInvalidCombinations',
         ])->first();
 
-        return !is_null($modifier) ? $modifier : null;
+        return new ModifierResource($modifier);
     }
 
-    /**
-     * @return Modifier|Builder|Model|object|null
-     */
-    public function getByCode(string $code)
+    public function getByCode(string $code): ModifierResource
     {
         $modifier = Modifier::whereModifier($code)->with([
                 'publicNote',
                 'modifierInvalidCombinations',
             ])->first();
 
-        return !is_null($modifier) ? $modifier : null;
+        return new ModifierResource($modifier);
     }
 
-    /**
-     * @return modifier|Builder|Model|object|null
-     */
-    public function updateModifier(array $data, int $id)
+    public function updateModifier(array $data, int $id): ModifierResource
     {
         try {
             DB::beginTransaction();
@@ -189,10 +178,12 @@ class ModifierRepository
 
             DB::commit();
 
-            return Modifier::whereId($id)->with([
+            $record = Modifier::whereId($id)->with([
                 'publicNote',
                 'modifierInvalidCombinations',
             ])->first();
+
+            return new ModifierResource($record);
         } catch (\Exception $e) {
             DB::rollBack();
 
