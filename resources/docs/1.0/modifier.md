@@ -83,10 +83,52 @@
     "name": "Informative"
   },
   "description": "short modifier description",
-  "public_note": null,
-  "modifier_invalid_combinations": null,
-  "created_at": "2023-05-05T12:21:06.000000Z",
-  "updated_at": "2023-05-05T12:21:06.000000Z",
+  "public_note": {
+    "id": 17,
+    "note": "Note modifier 1",
+    "publishable_type": "App\\Models\\Modifier",
+    "publishable_id": 357,
+    "created_at": "2023-05-05T12:35:00.000000Z",
+    "updated_at": "2023-05-05T12:35:00.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
+        {
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
+        }
+      ]
+    }
+  },
+  "modifier_invalid_combinations": [
+    {
+      "id": 103,
+      "invalid_combination": "M2",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    },
+    {
+      "id": 104,
+      "invalid_combination": "M1",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    }
+  ],
+  "created_at": "2023-05-05T12:35:00.000000Z",
+  "updated_at": "2023-05-05T12:35:00.000000Z",
   "last_modified": {
     "user": "Maikel Bello",
     "roles": [
@@ -133,33 +175,92 @@
 
 ```json
 [
-    {
-        "id": 1,
-        "modifier": "M1",
-        "special_coding_instructions": "Especial coding instructions modifier 1",
-        "active": true,
-        "created_at": "2022-06-13T11:39:28.000000Z",
-        "updated_at": "2022-06-13T11:39:28.000000Z",
-        "start_date": "2022-07-05",
-        "end_date": "2022-08-05",
-        "public_note": {
-            "id": 11,
-            "note": "Note modifier 1",
-            "publishable_type": "App\\Models\\Modifier",
-            "publishable_id": 1,
-            "created_at": "2022-06-13T11:39:28.000000Z",
-            "updated_at": "2022-06-13T11:39:28.000000Z"
-        },
-        "modifier_invalid_combinations": [
-            {
-                "id": 1,
-                "invalid_combination": "M2",
-                "modifier_id": 1,
-                "created_at": "2022-06-13T11:39:28.000000Z",
-                "updated_at": "2022-06-13T11:39:28.000000Z"
+  {
+    "id": 356,
+    "modifier": "z6",
+    "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+    "active": true,
+    "start_date": "2022-07-05",
+    "end_date": null,
+    "classification": {
+      "id": 1,
+      "color": "#FFFFFF",
+      "name": "General"
+    },
+    "type": {
+      "id": 1,
+      "color": "#FFFAEC",
+      "name": "Informative"
+    },
+    "description": "short modifier description",
+    "public_note": {
+      "id": 16,
+      "note": "Note modifier 1",
+      "publishable_type": "App\\Models\\Modifier",
+      "publishable_id": 356,
+      "created_at": "2023-05-05T12:21:06.000000Z",
+      "updated_at": "2023-05-05T12:21:06.000000Z",
+      "last_modified": {
+        "user": "Maikel Bello",
+        "roles": [
+          {
+            "id": 1,
+            "name": "Super User",
+            "slug": "superuser",
+            "description": "Allows you to administer and manage all the functions of the application",
+            "level": 1,
+            "created_at": "2023-04-28T11:21:30.000000Z",
+            "updated_at": "2023-04-28T11:21:30.000000Z",
+            "pivot": {
+              "user_id": 12,
+              "role_id": 1,
+              "created_at": "2023-04-28T11:21:50.000000Z",
+              "updated_at": "2023-04-28T11:21:50.000000Z"
             }
+          }
         ]
+      }
+    },
+    "modifier_invalid_combinations": [
+      {
+        "id": 101,
+        "invalid_combination": "M2",
+        "modifier_id": 356,
+        "created_at": "2023-05-05T12:21:06.000000Z",
+        "updated_at": "2023-05-05T12:21:06.000000Z"
+      },
+      {
+        "id": 102,
+        "invalid_combination": "M1",
+        "modifier_id": 356,
+        "created_at": "2023-05-05T12:21:06.000000Z",
+        "updated_at": "2023-05-05T12:21:06.000000Z"
+      }
+    ],
+    "created_at": "2023-05-05T12:21:06.000000Z",
+    "updated_at": "2023-05-05T12:21:06.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
+        {
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
+        }
+      ]
     }
+  },
+  ...
 ]
 ```
 
