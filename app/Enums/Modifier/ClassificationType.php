@@ -7,9 +7,10 @@ namespace App\Enums\Modifier;
 use App\Enums\Attributes\ColorAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\ColorTypeInterface;
 use App\Enums\Traits\HasColorAttributes;
 
-enum ClassificationType: int
+enum ClassificationType: int implements ColorTypeInterface
 {
     use HasColorAttributes;
 

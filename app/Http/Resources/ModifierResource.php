@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Enums\ColorsTypeResource;
 use App\Http\Resources\Enums\ColorTypeResource;
 use App\Models\Modifier;
 
@@ -29,7 +30,7 @@ final class ModifierResource extends RequestWrapedResource
             'start_date' => $this->resource->start_date,
             'end_date' => $this->resource->end_date,
             'classification' => new ColorTypeResource($this->resource->classification),
-            'type' => new ColorTypeResource($this->resource->type),
+            'type' => new ColorsTypeResource($this->resource->type),
             'description' => $this->resource->description,
             'public_note' => $this->resource->publicNote,
             'modifier_invalid_combinations' => $this->resource->modifierInvalidCombinations,
