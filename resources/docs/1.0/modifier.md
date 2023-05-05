@@ -9,6 +9,8 @@
 - [Get one modifier](#get-one-modifier)
 - [Get one modifier by code](#get-one-modifier-by-code)
 - [Get list modifiers](#get-list-modifiers)
+- [Get list types](#get-list-type)
+- [Get list classifications](#get-list-classification)
 - [Update modifier](#update-modifier)
 - [Change status modifier](#change-status-modifier)
 
@@ -26,8 +28,10 @@
 | 4 |GET     | `Get one Modifier` | `/modifier/{id}` | yes            | Get one Modifier |
 | 5 |GET     | `Get one Modifier by code` | `/modifier/get-by-code/{code}` | yes            | Get one Modifier by code|
 | 6 |GET     | `Get list modifiers `| `/modifier/get-list`        |yes            |Get list modifier|
-| 7 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
-| 8 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
+| 7 |GET|`Get list types`|`/modifier/type`|yes|get list of types|
+| 8 |GET|`Get list classifications`|`/modifier/classification`|yes|get list of classifications|
+| 9 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
+| 10 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
 
 
 <a name="create-modifier"></a>
@@ -587,6 +591,67 @@
         "id": 2,
         "name": "M2"
     }
+]
+```
+
+<a name="get-list-type"></a>
+## Get list of types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Modifiers found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "colors": {
+      "background": "#FFFAEC",
+      "text": "#FFFAEC"
+    },
+    "name": "Informative"
+  },
+  ...
+]
+```
+
+<a name="get-list-classification"></a>
+## Get list of all classifications
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Modifiers found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  ...
 ]
 ```
 
