@@ -13,8 +13,6 @@ class LastActivity
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, \Closure $next)
@@ -27,8 +25,8 @@ class LastActivity
                         return response()->json(['error' => __('Your user is inactive, for more information contact the administrator.')], 401);
                     }
                     if (true == $user->isLogged) {
-                        $lastActivity = new \DateTime($user->last_activity);
-                        $inactivity_time = 120 - (\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity));
+                        $lastActivity = new \DateTime((string) $user->last_activity);
+                        $inactivity_time = 120 - (\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity));
                         if ($inactivity_time <= 0) {
                             $user->isLogged = false;
                             // $user->last_login = Carbon::now();
