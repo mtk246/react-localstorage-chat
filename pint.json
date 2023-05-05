@@ -9,10 +9,6 @@
     },
     "exclude": [
         "app/Repositories",
-        "app/Http/Controllers/ApiController.php",
-        "app/Http/Controllers/AuthController.php",
-        "app/Http/Controllers/DeviceController.php",
-        "app/Http/Controllers/PatientController.php",
-        "app/Http/Controllers/UserController.php"
+        "app/Http/Controllers"
     ]
 }
