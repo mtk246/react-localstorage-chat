@@ -25,7 +25,11 @@ class ModifierRepository
             $modifier = Modifier::create([
                 'modifier' => $data['modifier'],
                 'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
                 'special_coding_instructions' => $data['special_coding_instructions'],
+                'classification' => $data['classification'],
+                'type' => $data['type'],
+                'description' => $data['description'],
             ]);
 
             if (isset($data['modifier_invalid_combinations'])) {
