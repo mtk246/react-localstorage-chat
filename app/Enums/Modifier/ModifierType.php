@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Enums\Modifier;
 
-use App\Enums\Attributes\ColorAttribute as BackgroundCollorAttribute;
-use App\Enums\Attributes\ColorAttribute as TextCollorAttribute;
+use App\Enums\Attributes\BackgroundCollorAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Attributes\TextCollorAttribute;
 use App\Enums\Interfaces\ColorsTypeInterface;
 use App\Enums\Traits\HasColorsAttributes;
 
