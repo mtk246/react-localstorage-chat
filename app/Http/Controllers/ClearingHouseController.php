@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusClearingHouseRequest;
@@ -34,9 +32,6 @@ class ClearingHouseController extends Controller
         );
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->clearingRepository->getServerAllClearingHouse($request);
