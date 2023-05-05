@@ -13,8 +13,6 @@ class LastActivity
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, \Closure $next)
@@ -27,8 +25,8 @@ class LastActivity
                         return response()->json(['error' => __('Your user is inactive, for more information contact the administrator.')], 401);
                     }
                     if (true == $user->isLogged) {
-                        $lastActivity = new \DateTime($user->last_activity);
-                        $inactivity_time = 120 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
+                        $lastActivity = new \DateTime((string) $user->last_activity);
+                        $inactivity_time = 120 - (\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity));
                         if ($inactivity_time <= 0) {
                             $user->isLogged = false;
                             // $user->last_login = Carbon::now();
@@ -48,7 +46,7 @@ class LastActivity
                 }
             }
         } else {
-            $user = auth()->user();
+            $user = \Auth::user();
             if (isset($user)) {
                 $now = Carbon::now();
                 if (str_contains($request->userAgent(), 'Mobile')) {
@@ -66,12 +64,18 @@ class LastActivity
                     }
                 } else {
                     /* @todo validación mike */
-                    if ('mr@ciph3r.co' == $user->email) {
-                        $inactivity_time = 60 - (\strtotime(Carbon::now()) - \strtotime($user->last_activity));
-                        if ($inactivity_time <= 0) {
-                            auth()->logout();
+                    if (('mr@ciph3r.co' == $user->email) || ('hp@ciph3r.co' == $user->email)) {
+                        if ((null == $user->last_activity) || ($user->last_activity > $now->subMinute(2))) {
+                            if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
+                                $user->last_activity = Carbon::now();
+                                $user->save();
+                            }
 
-                            return response()->json(__('Your session has expired due to inactivity'), 401);
+                            return $next($request);
+                        } else {
+                            $user->isLogged = false;
+                            auth()->logout();
+                            $user->save();
                         }
                     }
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusFacilityRequest;
@@ -48,9 +46,6 @@ class FacilityController extends Controller
         );
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->facilityRepository->getServerAllFacilities($request);

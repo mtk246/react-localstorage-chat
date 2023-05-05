@@ -4,25 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Modifier;
 
+use App\Enums\Modifier\ClassificationType;
+use App\Enums\Modifier\ModifierType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ModifierUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    /** @return array<key, string|array<object|string>> */
     public function rules()
     {
         return [
@@ -31,6 +20,9 @@ class ModifierUpdateRequest extends FormRequest
             'special_coding_instructions' => ['required', 'string'],
             'modifier_invalid_combinations' => ['nullable', 'array'],
             'modifier_invalid_combinations.*' => ['nullable', 'string', 'max:2'],
+            'classification' => ['required', new Enum(ClassificationType::class)],
+            'type' => ['required', new Enum(ModifierType::class)],
+            'description' => ['required', 'string'],
             'note' => ['required', 'string'],
         ];
     }

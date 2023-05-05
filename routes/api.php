@@ -38,7 +38,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::post('audit-one', [\App\Http\Controllers\AuditController::class, 'getAuditOne'])->middleware('auth:api');
 
     Route::prefix('auth')->group(function () {
-        Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+        Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
         Route::post('send-email-code', [\App\Http\Controllers\AuthController::class, 'sendEmailCode']);
         Route::get('check-token', [\App\Http\Controllers\AuthController::class, 'checkToken']);
         Route::get('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:api');
@@ -391,10 +391,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list', [\App\Http\Controllers\ModifierController::class, 'getList']);
         Route::post('/', [\App\Http\Controllers\ModifierController::class, 'createModifier']);
         Route::get('/', [\App\Http\Controllers\ModifierController::class, 'getAllModifiers']);
-        Route::get('/{id}', [\App\Http\Controllers\ModifierController::class, 'getOneModifier']);
         Route::get('/get-by-code/{code}', [\App\Http\Controllers\ModifierController::class, 'getByCode']);
-        Route::put('/{id}', [\App\Http\Controllers\ModifierController::class, 'updateModifier']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ModifierController::class, 'changeStatus']);
+        Route::get('/type', [\App\Http\Controllers\ModifierController::class, 'getTypes']);
+        Route::get('/classification', [\App\Http\Controllers\ModifierController::class, 'getClassifications']);
+        Route::get('/{id}', [\App\Http\Controllers\ModifierController::class, 'getOneModifier']);
+        Route::put('/{id}', [\App\Http\Controllers\ModifierController::class, 'updateModifier']);
     });
 
     Route::prefix('procedure')->middleware([

@@ -9,6 +9,8 @@
 - [Get one modifier](#get-one-modifier)
 - [Get one modifier by code](#get-one-modifier-by-code)
 - [Get list modifiers](#get-list-modifiers)
+- [Get list types](#get-list-type)
+- [Get list classifications](#get-list-classification)
 - [Update modifier](#update-modifier)
 - [Change status modifier](#change-status-modifier)
 
@@ -26,8 +28,10 @@
 | 4 |GET     | `Get one Modifier` | `/modifier/{id}` | yes            | Get one Modifier |
 | 5 |GET     | `Get one Modifier by code` | `/modifier/get-by-code/{code}` | yes            | Get one Modifier by code|
 | 6 |GET     | `Get list modifiers `| `/modifier/get-list`        |yes            |Get list modifier|
-| 7 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
-| 8 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
+| 7 |GET|`Get list types`|`/modifier/type`|yes|get list of types|
+| 8 |GET|`Get list classifications`|`/modifier/classification`|yes|get list of classifications|
+| 9 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
+| 10 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
 
 
 <a name="create-modifier"></a>
@@ -39,8 +43,12 @@
 {
     "modifier": "M1",
     "start_date": "2022-07-05",
+    "end_date": "2022-01-05", // not required
     "special_coding_instructions": "Especial coding instructions modifier 1",
     "modifier_invalid_combinations": ["M2", "M1"],
+    "classification": 1,
+    "type": 1,
+    "description": "short modifier description",
     "note": "Note modifier 1"
 }
 ```
@@ -62,13 +70,89 @@
 
 ```json
 {
-    "modifier": "M1",
-    "start_date": "2022-07-05",
-    "end_date": null,
-    "special_coding_instructions": "Especial coding instructions modifier 1",
-    "updated_at": "2022-06-13T11:39:28.000000Z",
-    "created_at": "2022-06-13T11:39:28.000000Z",
-    "id": 1
+  "id": 356,
+  "modifier": "M1",
+  "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+  "active": null,
+  "start_date": "2022-07-05",
+  "end_date": null,
+  "classification": {
+    "id": 1,
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  "type": {
+    "id": 1,
+    "color": "#FFFAEC",
+    "name": "Informative"
+  },
+  "description": "short modifier description",
+  "public_note": {
+    "id": 17,
+    "note": "Note modifier 1",
+    "publishable_type": "App\\Models\\Modifier",
+    "publishable_id": 357,
+    "created_at": "2023-05-05T12:35:00.000000Z",
+    "updated_at": "2023-05-05T12:35:00.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
+        {
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
+        }
+      ]
+    }
+  },
+  "modifier_invalid_combinations": [
+    {
+      "id": 103,
+      "invalid_combination": "M2",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    },
+    {
+      "id": 104,
+      "invalid_combination": "M1",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    }
+  ],
+  "created_at": "2023-05-05T12:35:00.000000Z",
+  "updated_at": "2023-05-05T12:35:00.000000Z",
+  "last_modified": {
+    "user": "Maikel Bello",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2023-04-28T11:21:30.000000Z",
+        "updated_at": "2023-04-28T11:21:30.000000Z",
+        "pivot": {
+          "user_id": 12,
+          "role_id": 1,
+          "created_at": "2023-04-28T11:21:50.000000Z",
+          "updated_at": "2023-04-28T11:21:50.000000Z"
+        }
+      }
+    ]
+  }
 }
 ```
 
@@ -95,33 +179,92 @@
 
 ```json
 [
-    {
-        "id": 1,
-        "modifier": "M1",
-        "special_coding_instructions": "Especial coding instructions modifier 1",
-        "active": true,
-        "created_at": "2022-06-13T11:39:28.000000Z",
-        "updated_at": "2022-06-13T11:39:28.000000Z",
-        "start_date": "2022-07-05",
-        "end_date": "2022-08-05",
-        "public_note": {
-            "id": 11,
-            "note": "Note modifier 1",
-            "publishable_type": "App\\Models\\Modifier",
-            "publishable_id": 1,
-            "created_at": "2022-06-13T11:39:28.000000Z",
-            "updated_at": "2022-06-13T11:39:28.000000Z"
-        },
-        "modifier_invalid_combinations": [
-            {
-                "id": 1,
-                "invalid_combination": "M2",
-                "modifier_id": 1,
-                "created_at": "2022-06-13T11:39:28.000000Z",
-                "updated_at": "2022-06-13T11:39:28.000000Z"
+  {
+    "id": 356,
+    "modifier": "z6",
+    "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+    "active": true,
+    "start_date": "2022-07-05",
+    "end_date": null,
+    "classification": {
+      "id": 1,
+      "color": "#FFFFFF",
+      "name": "General"
+    },
+    "type": {
+      "id": 1,
+      "color": "#FFFAEC",
+      "name": "Informative"
+    },
+    "description": "short modifier description",
+    "public_note": {
+      "id": 16,
+      "note": "Note modifier 1",
+      "publishable_type": "App\\Models\\Modifier",
+      "publishable_id": 356,
+      "created_at": "2023-05-05T12:21:06.000000Z",
+      "updated_at": "2023-05-05T12:21:06.000000Z",
+      "last_modified": {
+        "user": "Maikel Bello",
+        "roles": [
+          {
+            "id": 1,
+            "name": "Super User",
+            "slug": "superuser",
+            "description": "Allows you to administer and manage all the functions of the application",
+            "level": 1,
+            "created_at": "2023-04-28T11:21:30.000000Z",
+            "updated_at": "2023-04-28T11:21:30.000000Z",
+            "pivot": {
+              "user_id": 12,
+              "role_id": 1,
+              "created_at": "2023-04-28T11:21:50.000000Z",
+              "updated_at": "2023-04-28T11:21:50.000000Z"
             }
+          }
         ]
+      }
+    },
+    "modifier_invalid_combinations": [
+      {
+        "id": 101,
+        "invalid_combination": "M2",
+        "modifier_id": 356,
+        "created_at": "2023-05-05T12:21:06.000000Z",
+        "updated_at": "2023-05-05T12:21:06.000000Z"
+      },
+      {
+        "id": 102,
+        "invalid_combination": "M1",
+        "modifier_id": 356,
+        "created_at": "2023-05-05T12:21:06.000000Z",
+        "updated_at": "2023-05-05T12:21:06.000000Z"
+      }
+    ],
+    "created_at": "2023-05-05T12:21:06.000000Z",
+    "updated_at": "2023-05-05T12:21:06.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
+        {
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
+        }
+      ]
     }
+  },
+  ...
 ]
 ```
 
@@ -220,31 +363,89 @@
 
 ```json
 {
+  "id": 357,
+  "modifier": "z5",
+  "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+  "active": null,
+  "start_date": "2022-07-05",
+  "end_date": null,
+  "classification": {
     "id": 1,
-    "modifier": "M1",
-    "special_coding_instructions": "Especial coding instructions modifier 1",
-    "active": true,
-    "created_at": "2022-06-13T11:39:28.000000Z",
-    "updated_at": "2022-06-13T11:39:28.000000Z",
-    "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
-    "public_note": {
-        "id": 11,
-        "note": "Note modifier 1",
-        "publishable_type": "App\\Models\\Modifier",
-        "publishable_id": 1,
-        "created_at": "2022-06-13T11:39:28.000000Z",
-        "updated_at": "2022-06-13T11:39:28.000000Z"
-    },
-    "modifier_invalid_combinations": [
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  "type": {
+    "id": 1,
+    "color": "#FFFAEC",
+    "name": "Informative"
+  },
+  "description": "short modifier description",
+  "public_note": {
+    "id": 17,
+    "note": "Note modifier 1",
+    "publishable_type": "App\\Models\\Modifier",
+    "publishable_id": 357,
+    "created_at": "2023-05-05T12:35:00.000000Z",
+    "updated_at": "2023-05-05T12:35:00.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
         {
-            "id": 1,
-            "invalid_combination": "M2",
-            "modifier_id": 1,
-            "created_at": "2022-06-13T11:39:28.000000Z",
-            "updated_at": "2022-06-13T11:39:28.000000Z"
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
         }
+      ]
+    }
+  },
+  "modifier_invalid_combinations": [
+    {
+      "id": 103,
+      "invalid_combination": "M2",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    },
+    {
+      "id": 104,
+      "invalid_combination": "M1",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    }
+  ],
+  "created_at": "2023-05-05T12:35:00.000000Z",
+  "updated_at": "2023-05-05T12:35:00.000000Z",
+  "last_modified": {
+    "user": "Maikel Bello",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2023-04-28T11:21:30.000000Z",
+        "updated_at": "2023-04-28T11:21:30.000000Z",
+        "pivot": {
+          "user_id": 12,
+          "role_id": 1,
+          "created_at": "2023-04-28T11:21:50.000000Z",
+          "updated_at": "2023-04-28T11:21:50.000000Z"
+        }
+      }
     ]
+  }
 }
 ```
 
@@ -276,31 +477,89 @@
 
 ```json
 {
+  "id": 357,
+  "modifier": "z5",
+  "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+  "active": null,
+  "start_date": "2022-07-05",
+  "end_date": null,
+  "classification": {
     "id": 1,
-    "modifier": "M1",
-    "special_coding_instructions": "Especial coding instructions modifier 1",
-    "active": true,
-    "created_at": "2022-06-13T11:39:28.000000Z",
-    "updated_at": "2022-06-13T11:39:28.000000Z",
-    "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
-    "public_note": {
-        "id": 11,
-        "note": "Note modifier 1",
-        "publishable_type": "App\\Models\\Modifier",
-        "publishable_id": 1,
-        "created_at": "2022-06-13T11:39:28.000000Z",
-        "updated_at": "2022-06-13T11:39:28.000000Z"
-    },
-    "modifier_invalid_combinations": [
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  "type": {
+    "id": 1,
+    "color": "#FFFAEC",
+    "name": "Informative"
+  },
+  "description": "short modifier description",
+  "public_note": {
+    "id": 17,
+    "note": "Note modifier 1",
+    "publishable_type": "App\\Models\\Modifier",
+    "publishable_id": 357,
+    "created_at": "2023-05-05T12:35:00.000000Z",
+    "updated_at": "2023-05-05T12:35:00.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
         {
-            "id": 1,
-            "invalid_combination": "M2",
-            "modifier_id": 1,
-            "created_at": "2022-06-13T11:39:28.000000Z",
-            "updated_at": "2022-06-13T11:39:28.000000Z"
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
         }
+      ]
+    }
+  },
+  "modifier_invalid_combinations": [
+    {
+      "id": 103,
+      "invalid_combination": "M2",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    },
+    {
+      "id": 104,
+      "invalid_combination": "M1",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    }
+  ],
+  "created_at": "2023-05-05T12:35:00.000000Z",
+  "updated_at": "2023-05-05T12:35:00.000000Z",
+  "last_modified": {
+    "user": "Maikel Bello",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2023-04-28T11:21:30.000000Z",
+        "updated_at": "2023-04-28T11:21:30.000000Z",
+        "pivot": {
+          "user_id": 12,
+          "role_id": 1,
+          "created_at": "2023-04-28T11:21:50.000000Z",
+          "updated_at": "2023-04-28T11:21:50.000000Z"
+        }
+      }
     ]
+  }
 }
 ```
 
@@ -335,6 +594,67 @@
 ]
 ```
 
+<a name="get-list-type"></a>
+## Get list of types
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Modifiers found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "colors": {
+      "background": "#FFFAEC",
+      "text": "#FFFAEC"
+    },
+    "name": "Informative"
+  },
+  ...
+]
+```
+
+<a name="get-list-classification"></a>
+## Get list of all classifications
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Modifiers found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  ...
+]
+```
+
 <a name="update-modifier"></a>
 ## Update Modifier
 
@@ -346,6 +666,9 @@
     "end_date": "2022-08-05",
     "special_coding_instructions": "Especial coding instructions modifier 1 Edited",
     "modifier_invalid_combinations": ["M2"],
+    "classification": 1,
+    "type": 1,
+    "description": "short modifier description",
     "note": "Note modifier 1 edited"
 }
 ```
@@ -374,14 +697,89 @@
 
 ```json
 {
+  "id": 357,
+  "modifier": "z5",
+  "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+  "active": null,
+  "start_date": "2022-07-05",
+  "end_date": null,
+  "classification": {
     "id": 1,
-    "modifier": "M1",
-    "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
-    "special_coding_instructions": "Especial coding instructions modifier 1 Edited",
-    "active": true,
-    "created_at": "2022-06-13T11:39:28.000000Z",
-    "updated_at": "2022-06-20T07:25:12.000000Z"
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  "type": {
+    "id": 1,
+    "color": "#FFFAEC",
+    "name": "Informative"
+  },
+  "description": "short modifier description",
+  "public_note": {
+    "id": 17,
+    "note": "Note modifier 1",
+    "publishable_type": "App\\Models\\Modifier",
+    "publishable_id": 357,
+    "created_at": "2023-05-05T12:35:00.000000Z",
+    "updated_at": "2023-05-05T12:35:00.000000Z",
+    "last_modified": {
+      "user": "Maikel Bello",
+      "roles": [
+        {
+          "id": 1,
+          "name": "Super User",
+          "slug": "superuser",
+          "description": "Allows you to administer and manage all the functions of the application",
+          "level": 1,
+          "created_at": "2023-04-28T11:21:30.000000Z",
+          "updated_at": "2023-04-28T11:21:30.000000Z",
+          "pivot": {
+            "user_id": 12,
+            "role_id": 1,
+            "created_at": "2023-04-28T11:21:50.000000Z",
+            "updated_at": "2023-04-28T11:21:50.000000Z"
+          }
+        }
+      ]
+    }
+  },
+  "modifier_invalid_combinations": [
+    {
+      "id": 103,
+      "invalid_combination": "M2",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    },
+    {
+      "id": 104,
+      "invalid_combination": "M1",
+      "modifier_id": 357,
+      "created_at": "2023-05-05T12:35:00.000000Z",
+      "updated_at": "2023-05-05T12:35:00.000000Z"
+    }
+  ],
+  "created_at": "2023-05-05T12:35:00.000000Z",
+  "updated_at": "2023-05-05T12:35:00.000000Z",
+  "last_modified": {
+    "user": "Maikel Bello",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2023-04-28T11:21:30.000000Z",
+        "updated_at": "2023-04-28T11:21:30.000000Z",
+        "pivot": {
+          "user_id": 12,
+          "role_id": 1,
+          "created_at": "2023-04-28T11:21:50.000000Z",
+          "updated_at": "2023-04-28T11:21:50.000000Z"
+        }
+      }
+    ]
+  }
 }
 ```
 

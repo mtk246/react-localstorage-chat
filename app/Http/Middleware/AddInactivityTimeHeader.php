@@ -23,12 +23,12 @@ final class AddInactivityTimeHeader
         $user = auth()->user();
         $response = $next($request);
         if (isset($user)) {
-            $inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
-            if ('mr@ciph3r.co' == $user->email) {
-                $response->headers->set('inactivity-time', 120000);
+            if (('mr@ciph3r.co' == $user->email) || ('hp@ciph3r.co' == $user->email)) {
+                $inactivity_time = 120000 - ((\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity ?? '')) * 1000);
             } else {
-                $response->headers->set('inactivity-time', $inactivity_time);
+                $inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity ?? '')) * 1000);
             }
+            $response->headers->set('inactivity-time', (string) $inactivity_time);
         }
 
         return $response;

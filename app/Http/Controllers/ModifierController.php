@@ -1,12 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
+use App\Enums\Modifier\ClassificationType;
+use App\Enums\Modifier\ModifierType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Modifier\ModifierCreateRequest;
 use App\Http\Requests\Modifier\ModifierUpdateRequest;
+use App\Http\Resources\Enums\ColorTypeResource;
+use App\Http\Resources\Enums\ColorsTypeResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Repositories\ModifierRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,9 +54,6 @@ class ModifierController extends Controller
         );
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->modifierRepository->getServerAllModifiers($request);
@@ -77,6 +77,20 @@ class ModifierController extends Controller
     {
         return response()->json(
             $this->modifierRepository->getListModifiers()
+        );
+    }
+
+    public function getTypes(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(ModifierType::cases()), ColorsTypeResource::class),
+        );
+    }
+
+    public function getClassifications(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(ClassificationType::cases()), ColorTypeResource::class),
         );
     }
 }

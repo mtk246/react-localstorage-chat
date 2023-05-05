@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
@@ -355,11 +353,11 @@ class AuthController extends Controller
         $user->menu = $perms;
         $user->menu_by_category = $perms_v2;
         $now = new \DateTime(Carbon::now()->toString());
-        $lastActivity = new \DateTime($user->last_activity);
-        if ('mr@ciph3r.co' == $user->email) {
-            $user->inactivity_time = 120000;
+        $lastActivity = new \DateTime((string) $user->last_activity);
+        if (('mr@ciph3r.co' == $user->email) || ('hp@ciph3r.co' == $user->email)) {
+            $user->inactivity_time = 120000 - ((\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity)) * 1000);
         } else {
-            $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime($user->last_activity)) * 1000);
+            $user->inactivity_time = $this->webDowntime - ((\strtotime(Carbon::now()->toString()) - \strtotime((string) $user->last_activity)) * 1000);
         }
 
         return response()->json($user);
