@@ -81,11 +81,7 @@ class Modifier extends Model implements Auditable
      */
     protected $appends = ['last_modified'];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<key, string>
-     */
+    /** @var array<key, string> */
     protected $casts = [
         'classification' => ClassificationType::class,
         'type' => ModifierType::class,
