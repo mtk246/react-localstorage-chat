@@ -15,14 +15,14 @@ enum ModifierType: int implements ColorsTypeInterface
 {
     use HasColorsAttributes;
 
-    #[TextCollorAttribute('#FFFAEC')]
-    #[BackgroundCollorAttribute('#804D12')]
+    #[TextCollorAttribute('#804D12')]
+    #[BackgroundCollorAttribute('#FFFAEC')]
     #[NameAttribute('Informative')]
     #[PublicAttribute(true)]
     case Informative = 1;
 
-    #[TextCollorAttribute('#E9FDF2')]
-    #[BackgroundCollorAttribute('#1B6D49')]
+    #[TextCollorAttribute('#1B6D49')]
+    #[BackgroundCollorAttribute('#E9FDF2')]
     #[NameAttribute('Price')]
     #[PublicAttribute(true)]
     case PPRICE = 2;
