@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Modifier\ClassificationType;
+use App\Enums\Modifier\ModifierType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -66,6 +68,9 @@ class Modifier extends Model implements Auditable
         'start_date',
         'end_date',
         'special_coding_instructions',
+        'classification',
+        'type',
+        'description',
         'active',
     ];
 
@@ -75,6 +80,16 @@ class Modifier extends Model implements Auditable
      * @var array
      */
     protected $appends = ['last_modified'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<key, string>
+     */
+    protected $casts = [
+        'classification' => ClassificationType::class,
+        'type' => ModifierType::class,
+    ];
 
     /**
      * Modifier has many ModifierInvalidCombinations.
