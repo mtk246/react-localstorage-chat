@@ -3,8 +3,12 @@
     "rules": {
         "declare_strict_types": true,
         "fully_qualified_strict_types": true,
-        "phpdoc_align": { 
-            "align":"left"
+        "phpdoc_align": {
+            "align": "left"
         }
-    }
+    },
+    "exclude": [
+        "app/Repositories",
+        "app/Http/Controllers"
+    ]
 }

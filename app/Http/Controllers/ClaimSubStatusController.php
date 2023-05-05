@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusRequest;
@@ -32,9 +30,6 @@ class ClaimSubStatusController extends Controller
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating claim sub-status'), 400);
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->claimSubStatusRepository->getServerAll($request);

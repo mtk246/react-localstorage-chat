@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusInsurancePlanRequest;
@@ -55,9 +53,6 @@ class InsurancePlanController extends Controller
         return response()->json($this->insurancePlanRepository->getAllInsurancePlan());
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->insurancePlanRepository->getServerAllInsurancePlan($request);

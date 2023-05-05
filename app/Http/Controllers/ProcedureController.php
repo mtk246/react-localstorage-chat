@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangeStatusRequest;
@@ -52,9 +50,6 @@ class ProcedureController extends Controller
         );
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->procedureRepository->getServerAllProcedures($request);

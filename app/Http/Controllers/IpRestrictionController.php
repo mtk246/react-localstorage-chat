@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IpRestrictionRequest;
@@ -46,9 +44,6 @@ class IpRestrictionController extends Controller
         return response()->json($this->ipRestrictionRepository->getAllRestrictions());
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->ipRestrictionRepository->getServerAllRestrictions($request);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 // declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -79,9 +77,6 @@ final class InsuranceCompanyController extends Controller
         return response()->json($rs);
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->insuranceRepository->getServerAllInsurance($request);

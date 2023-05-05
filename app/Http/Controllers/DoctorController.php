@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Http\Controllers;
 
 use App\Actions\HealthProfessional\GetDoctorAction;
@@ -42,9 +40,6 @@ class DoctorController extends Controller
         return response()->json($this->doctorRepository->getAllDoctors());
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->doctorRepository->getServerAllDoctors($request);
