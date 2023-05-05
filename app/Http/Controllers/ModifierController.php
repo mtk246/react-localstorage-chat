@@ -51,9 +51,6 @@ class ModifierController extends Controller
         );
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAll(Request $request): JsonResponse
     {
         return $this->modifierRepository->getServerAllModifiers($request);
