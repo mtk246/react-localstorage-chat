@@ -63,10 +63,10 @@ class IUnique implements Rule
         if (is_array($val)) {
             $attrValue = $val[$this->attr];
             $record = $this->model::whereRaw("LOWER($this->attr) LIKE (?)", [strtolower("$attrValue")])
-                                  ->whereNot('id', $this->id_exception)->first();
+                ->whereNot('id', $this->id_exception)->first();
         } else {
             $record = $this->model::whereRaw("LOWER($attribute) LIKE (?)", [strtolower("$value")])
-                                  ->whereNot('id', $this->id_exception)->first();
+                ->whereNot('id', $this->id_exception)->first();
         }
 
         return ($record) ? false : true;
