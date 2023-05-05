@@ -48,7 +48,7 @@ class LastActivity
                 }
             }
         } else {
-            $user = auth()->user();
+            $user = \Auth::user();
             if (isset($user)) {
                 $now = Carbon::now();
                 if (str_contains($request->userAgent(), 'Mobile')) {
