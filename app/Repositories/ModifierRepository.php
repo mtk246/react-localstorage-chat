@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Http\Resources\ModifierResource;
 use App\Models\Modifier;
 use App\Models\ModifierInvalidCombination;
 use App\Models\PublicNote;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 class ModifierRepository
@@ -68,17 +69,14 @@ class ModifierRepository
         }
     }
 
-    /**
-     * @return modifier[]|Collection
-     */
-    public function getAllModifiers()
+    public function getAllModifiers(): AnonymousResourceCollection
     {
         $modifiers = Modifier::with([
             'publicNote',
             'modifierInvalidCombinations',
         ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
 
-        return is_null($modifiers) ? null : $modifiers;
+        return ModifierResource::collection($modifiers);
     }
 
     public function getServerAllModifiers(Request $request)
