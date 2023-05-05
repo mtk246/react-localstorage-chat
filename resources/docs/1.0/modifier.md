@@ -39,8 +39,12 @@
 {
     "modifier": "M1",
     "start_date": "2022-07-05",
+    "end_date": "2022-01-05", // not required
     "special_coding_instructions": "Especial coding instructions modifier 1",
     "modifier_invalid_combinations": ["M2", "M1"],
+    "classification": 1,
+    "type": 1,
+    "description": "short modifier description",
     "note": "Note modifier 1"
 }
 ```
@@ -62,13 +66,47 @@
 
 ```json
 {
-    "modifier": "M1",
-    "start_date": "2022-07-05",
-    "end_date": null,
-    "special_coding_instructions": "Especial coding instructions modifier 1",
-    "updated_at": "2022-06-13T11:39:28.000000Z",
-    "created_at": "2022-06-13T11:39:28.000000Z",
-    "id": 1
+  "id": 356,
+  "modifier": "M1",
+  "special_coding_instructions": "Especial Coding Instructions Modifier 1",
+  "active": null,
+  "start_date": "2022-07-05",
+  "end_date": null,
+  "classification": {
+    "id": 1,
+    "color": "#FFFFFF",
+    "name": "General"
+  },
+  "type": {
+    "id": 1,
+    "color": "#FFFAEC",
+    "name": "Informative"
+  },
+  "description": "short modifier description",
+  "public_note": null,
+  "modifier_invalid_combinations": null,
+  "created_at": "2023-05-05T12:21:06.000000Z",
+  "updated_at": "2023-05-05T12:21:06.000000Z",
+  "last_modified": {
+    "user": "Maikel Bello",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Super User",
+        "slug": "superuser",
+        "description": "Allows you to administer and manage all the functions of the application",
+        "level": 1,
+        "created_at": "2023-04-28T11:21:30.000000Z",
+        "updated_at": "2023-04-28T11:21:30.000000Z",
+        "pivot": {
+          "user_id": 12,
+          "role_id": 1,
+          "created_at": "2023-04-28T11:21:50.000000Z",
+          "updated_at": "2023-04-28T11:21:50.000000Z"
+        }
+      }
+    ]
+  }
 }
 ```
 
