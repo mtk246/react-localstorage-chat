@@ -36,6 +36,8 @@ class ProcedureRepository
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'description' => $data['description'],
+                'type' => $data['type'],
+                'clasifications' => $data['clasifications'],
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
@@ -287,6 +289,8 @@ class ProcedureRepository
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
+                'type' => $data['type'],
+                'clasifications' => $data['clasifications'],
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
