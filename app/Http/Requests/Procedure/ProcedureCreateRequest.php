@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Procedure;
 
-use App\Enums\Procedure\ClasificationType;
+use App\Enums\Procedure\ProcedureType;
 use App\Models\Procedure;
 use App\Rules\IUnique;
 use App\Rules\MacLocalityFeeRequired;
@@ -27,7 +27,7 @@ class ProcedureCreateRequest extends FormRequest
             'specific_insurance_company' => ['boolean', 'nullable'],
             'start_date' => ['required', 'date'],
 
-            'type' => ['required', new Enum(ClasificationType::class)],
+            'type' => ['required', new Enum(ProcedureType::class)],
             'clasifications' => ['required', 'array'],
             'clasifications.general' => ['required', 'integer'],
             'clasifications.specific' => ['required', 'integer'],
