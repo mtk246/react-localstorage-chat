@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Procedure;
 
+use App\Enums\Procedure\ClasificationType;
 use App\Models\Procedure;
 use App\Rules\IUnique;
 use App\Rules\MacLocalityFeeRequired;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ProcedureCreateRequest extends FormRequest
 {
@@ -24,6 +26,12 @@ class ProcedureCreateRequest extends FormRequest
             'insurance_companies' => ['nullable', 'array'],
             'specific_insurance_company' => ['boolean', 'nullable'],
             'start_date' => ['required', 'date'],
+
+            'type' => ['required', new Enum(ClasificationType::class)],
+            'clasifications' => ['required', 'array'],
+            'clasifications.general' => ['required', 'integer'],
+            'clasifications.specific' => ['required', 'integer'],
+            'clasifications.sub_specific' => ['nullable', 'integer'],
 
             'mac_localities' => ['nullable', 'array', new MacLocalityFeeRequired()],
             'mac_localities.*.mac' => ['sometimes', 'string'],
