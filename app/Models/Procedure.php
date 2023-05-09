@@ -89,6 +89,7 @@ class Procedure extends Model implements Auditable
         'code',
         'start_date',
         'end_date',
+        'short_description',
         'description',
         'type',
         'clasifications',
