@@ -35,6 +35,7 @@ class ProcedureRepository
             $procedure = Procedure::create([
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
+                'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
                 'clasifications' => $data['clasifications'],
@@ -110,7 +111,10 @@ class ProcedureRepository
                         'gender_id' => $data['procedure_considerations']['gender_id'],
                         'age_init' => $data['procedure_considerations']['age_init'],
                         'age_end' => $data['procedure_considerations']['age_end'] ?? null,
+                        'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
+                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
+                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
                     ]);
                 }
             }
@@ -288,6 +292,7 @@ class ProcedureRepository
             $procedure->update([
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
+                'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
                 'clasifications' => $data['clasifications'],
@@ -367,7 +372,10 @@ class ProcedureRepository
                         'gender_id' => $data['procedure_considerations']['gender_id'],
                         'age_init' => $data['procedure_considerations']['age_init'],
                         'age_end' => $data['procedure_considerations']['age_end'] ?? null,
+                        'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
+                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
+                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
                     ]);
                 }
             }
