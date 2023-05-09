@@ -19,6 +19,7 @@ class ProcedureUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],
             'insurance_companies' => ['nullable', 'array'],
             'specific_insurance_company' => ['boolean', 'nullable'],
@@ -52,7 +53,10 @@ class ProcedureUpdateRequest extends FormRequest
             'procedure_considerations.gender_id' => ['nullable', 'integer'],
             'procedure_considerations.age_init' => ['nullable', 'numeric'],
             'procedure_considerations.age_end' => ['nullable', 'numeric'],
+            'procedure_considerations.age_type' => ['nullable', 'numeric'],
             'procedure_considerations.discriminatory_id' => ['nullable', 'numeric'],
+            'procedure_considerations.frequent_diagnoses' => ['nullable', 'array'],
+            'procedure_considerations.frequent_modifiers' => ['nullable', 'array'],
 
             'modifiers' => ['nullable', 'array'],
             'diagnoses' => ['nullable', 'array'],
