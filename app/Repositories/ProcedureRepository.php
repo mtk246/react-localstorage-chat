@@ -115,6 +115,9 @@ class ProcedureRepository
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
                         'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
                         'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
+                        'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
+                        'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
+                        'authorization' => $data['procedure_considerations']['authorization'] ?? false,
                     ]);
                 }
             }
@@ -376,6 +379,9 @@ class ProcedureRepository
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
                         'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
                         'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
+                        'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
+                        'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
+                        'authorization' => $data['procedure_considerations']['authorization'] ?? false,
                     ]);
                 }
             }
