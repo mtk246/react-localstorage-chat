@@ -10,7 +10,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('procedures', function (Blueprint $table) {
-            $table->string('classification_type')->nullable();
+            $table->string('type')->nullable();
             $table->json('clasifications')->nullable();
         });
     }
@@ -18,7 +18,7 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table('procedures', function (Blueprint $table) {
-            $table->dropColumn(['classification_type', 'clasifications']);
+            $table->dropColumn(['type', 'clasifications']);
         });
     }
 };
