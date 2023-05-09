@@ -57,12 +57,18 @@ class ProcedureConsideration extends Model implements Auditable
         'discriminatory_id',
         'frequent_diagnoses',
         'frequent_modifiers',
+        'claim_note',
+        'supervisor',
+        'authorization',
     ];
 
     /** @var array<key, string> */
     protected $casts = [
         'frequent_diagnoses' => 'array',
         'frequent_modifiers' => 'array',
+        'claim_note' => 'boolean',
+        'supervisor' => 'boolean',
+        'authorization' => 'boolean',
     ];
 
     /**
