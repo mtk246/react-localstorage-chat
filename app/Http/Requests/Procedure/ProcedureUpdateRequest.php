@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Procedure;
 
+use App\Enums\Procedure\ProcedureType;
 use App\Rules\MacLocalityFeeRequired;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ProcedureUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,11 +19,18 @@ class ProcedureUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],
             'insurance_companies' => ['nullable', 'array'],
             'specific_insurance_company' => ['boolean', 'nullable'],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+
+            'type' => ['required', new Enum(ProcedureType::class)],
+            'clasifications' => ['required', 'array'],
+            'clasifications.general' => ['required', 'integer'],
+            'clasifications.specific' => ['required', 'integer'],
+            'clasifications.sub_specific' => ['nullable', 'integer'],
 
             'mac_localities' => ['nullable', 'array', new MacLocalityFeeRequired()],
             'mac_localities.*.mac' => ['sometimes', 'string'],
@@ -54,7 +53,10 @@ class ProcedureUpdateRequest extends FormRequest
             'procedure_considerations.gender_id' => ['nullable', 'integer'],
             'procedure_considerations.age_init' => ['nullable', 'numeric'],
             'procedure_considerations.age_end' => ['nullable', 'numeric'],
+            'procedure_considerations.age_type' => ['nullable', 'numeric'],
             'procedure_considerations.discriminatory_id' => ['nullable', 'numeric'],
+            'procedure_considerations.frequent_diagnoses' => ['nullable', 'array'],
+            'procedure_considerations.frequent_modifiers' => ['nullable', 'array'],
 
             'modifiers' => ['nullable', 'array'],
             'diagnoses' => ['nullable', 'array'],
