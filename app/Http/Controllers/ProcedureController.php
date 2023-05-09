@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Procedure\ProcedureType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Company\AddProcedureRequest;
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
+use App\Http\Resources\Enums\ColorTypeResource;
+use App\Http\Resources\Enums\EnumResource;
+use App\Http\Resources\Procedure\ClassificationResource;
 use App\Repositories\ProcedureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -181,5 +185,19 @@ class ProcedureController extends Controller
     public function getToCompany(int $id): JsonResponse
     {
         return response()->json($this->procedureRepository->getToCompany($id));
+    }
+
+    public function getType(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(ProcedureType::cases()), ColorTypeResource::class)
+        );
+    }
+
+    public function getClassifications(int $type): JsonResponse
+    {
+        return response()->json(
+            new ClassificationResource($type)
+        );
     }
 }
