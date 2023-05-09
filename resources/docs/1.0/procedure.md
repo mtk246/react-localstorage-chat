@@ -58,10 +58,18 @@
 ```json
 {
     "code": "Code procedure 1",
-    "description": "Description procedure 1",
+    "short_description":"Description procedure 1",
+    "description": "long and detailed description of procedure 1",
     "insurance_companies": [1, 2],
     "specific_insurance_company": true,
     "start_date": "2022-07-05",
+    "end_date": "2022-07-06", // nullable
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "general": 1,
+        "specific": 3, // not required
+        "sub_specific": null, // not required
+    },
     "mac_localities": [
         {
             "modifier_id": 1,
@@ -84,7 +92,9 @@
         "gender_id": 1,
         "age_init": "2020",
         "age_end": null,
-        "discriminatory_id": 1
+        "discriminatory_id": 1,
+        "frequent_diagnoses": [1,2],
+        "frequent_modifiers": [1,2]
     },
     "modifiers": [1,2,3],
     "diagnoses": [5,6,7],
@@ -999,10 +1009,18 @@
 
 ```json
 {    
-    "description": "Description procedure edit",
+    "short_description":"Description procedure 1",
+    "description": "long and detailed description of procedure 1",
     "insurance_companies": [1, 2],
     "specific_insurance_company": true,
     "start_date": "2022-07-05",
+    "end_date": "2022-07-06", // nullable
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "general": 1,
+        "specific": 3, // not required
+        "sub_specific": null, // not required
+    },
     "mac_localities": [
         {
             "modifier_id": 1,
@@ -1025,7 +1043,9 @@
         "gender_id": 1,
         "age_init": "2020",
         "age_end": null,
-        "discriminatory_id": 1
+        "discriminatory_id": 1,
+        "frequent_diagnoses": [1,2],
+        "frequent_modifiers": [1,2]
     },
     "modifiers": [1,2,3],
     "diagnoses": [1],
