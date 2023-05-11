@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\Procedure\ListModifierResource;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Discriminatory;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -558,17 +560,15 @@ class ProcedureRepository
         }
     }
 
-    public function getListModifiers($code = '')
+    public function getListModifiers(?string $modifier): AnonymousResourceCollection
     {
-        try {
-            if ('' == $code) {
-                return getList(Modifier::class, 'modifier');
-            } else {
-                return getList(Modifier::class, 'modifier', ['whereRaw' => ['search' => $code]]);
-            }
-        } catch (\Exception $e) {
-            return [];
-        }
+        $records = Modifier::query()
+            ->when($modifier, function ($query) use ($modifier) {
+                $query->where('modifier', 'like', "%{$modifier}%");
+            })
+            ->get();
+
+        return ListModifierResource::collection($records);
     }
 
     public function getListInsuranceCompanies($procedure_id = null)
