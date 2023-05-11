@@ -145,7 +145,7 @@ class CompanyRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
