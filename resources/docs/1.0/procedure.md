@@ -15,6 +15,7 @@
 - [Get list modifiers](#get-list-modifiers)
 - [Get list diagnoses](#get-list-diagnoses)
 - [Update procedure](#update-procedure)
+- [Update Procedure Note](#update-procedure-note)
 - [Change status procedure](#change-status-procedure)
 - [Get list procedure](#get-list)
 - [Get list insurance label fees](#get-list-insurance-label-fees)
@@ -22,15 +23,13 @@
 - [Add to company](#add-to-company)
 - [Get to company](#get-procedures-to-company)
 
-
-
 <a name="basic-data"></a>
 ## Basic data to make request
 
 
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |  
-| 1 |POST    | `Create procedure`  | `/procedure/`     | yes            | Create procedure  |         
+| 1 |POST    |`Create procedure` | `/procedure/`   | yes            | Create procedure|         
 | 2 |GET     | `Get all procedure` | `/procedure/`     | yes            | Get all procedures |
 | 3 |GET     | `Get all procedure from server`         | `/procedure/get-all-server`|yes|Get all procedure from server|
 | 4 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
@@ -42,12 +41,13 @@
 | 10 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
 | 11 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
 | 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 13 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 14 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
-| 15 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 16 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 17 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 18 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 13 |PUT|`Update procedure note`|`/procedure/{id}/note` |yes|Update procedure note|
+| 14 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 15 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
+| 16 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 17 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 18 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 19 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 
 
 <a name="create-procedure"></a>
@@ -945,14 +945,17 @@
 [
     {
         "id": 1,
+        "color": "#018ECC",
         "name": "M1"
     },
     {
         "id": 2,
+        "color": "#FFFFFF",
         "name": "M2"
     },
     {
         "id": 3,
+        "color": "#018ECC",
         "name": "M3"
     }
 ]
@@ -1054,7 +1057,17 @@
         "authorization": null
     },
     "modifiers": [1,2,3],
-    "diagnoses": [1],
+    "diagnoses": [1]
+}
+```
+
+<a name="update-procedure-note"></a>
+## Update procedure note
+
+### Body request example
+
+```json
+{    
     "note": "Note procedure 1"
 }
 ```
