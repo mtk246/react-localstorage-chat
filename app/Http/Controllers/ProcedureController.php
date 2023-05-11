@@ -6,10 +6,12 @@ use App\Enums\Procedure\ProcedureType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Company\AddProcedureRequest;
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
+use App\Http\Requests\Procedure\ProcedureNoteUpdateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
 use App\Http\Resources\Enums\ColorTypeResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Procedure\ClassificationResource;
+use App\Models\Procedure;
 use App\Repositories\ProcedureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -64,6 +66,13 @@ class ProcedureController extends Controller
         $rs = $this->procedureRepository->updateProcedure($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
+    }
+
+    public function updateProcedureNote(ProcedureNoteUpdateRequest $request, Procedure $procedure): JsonResponse
+    {
+        $rs = $this->procedureRepository->updateProcedureNote($procedure, $request->validated()?->note ?? '');
+
+        return $rs ? response()->json($rs) : response()->json(__('Error updating procedure note'), 400);
     }
 
     public function changeStatus(ChangeStatusRequest $request, int $id): JsonResponse
