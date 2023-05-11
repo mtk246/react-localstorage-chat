@@ -136,7 +136,7 @@ class ProcedureController extends Controller
         );
     }
 
-    public function getListModifiers(string $code = ''): JsonResponse
+    public function getListModifiers(?string $code = null): JsonResponse
     {
         return response()->json(
             $this->procedureRepository->getListModifiers($code)
