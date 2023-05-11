@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\Procedure\ListModifierResource;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Discriminatory;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -394,16 +396,6 @@ class ProcedureRepository
                 $procedure->diagnoses()->sync($data['diagnoses']);
             }
 
-            if (isset($data['note'])) {
-                /* PublicNote */
-                PublicNote::updateOrCreate([
-                    'publishable_type' => Procedure::class,
-                    'publishable_id' => $procedure->id,
-                ], [
-                    'note' => $data['note'],
-                ]);
-            }
-
             DB::commit();
 
             return Procedure::whereId($id)->first();
@@ -412,6 +404,15 @@ class ProcedureRepository
 
             return null;
         }
+    }
+
+    public function updateProcedureNote(Procedure $procedure, string $note)
+    {
+        $procedure->publicNote()->updateOrCreate([
+            'note' => $note,
+        ]);
+
+        return $procedure->load(['publicNote']);
     }
 
     /**
@@ -564,17 +565,15 @@ class ProcedureRepository
         }
     }
 
-    public function getListModifiers($code = '')
+    public function getListModifiers(?string $modifier): AnonymousResourceCollection
     {
-        try {
-            if ('' == $code) {
-                return getList(Modifier::class, 'modifier');
-            } else {
-                return getList(Modifier::class, 'modifier', ['whereRaw' => ['search' => $code]]);
-            }
-        } catch (\Exception $e) {
-            return [];
-        }
+        $records = Modifier::query()
+            ->when($modifier, function ($query) use ($modifier) {
+                $query->where('modifier', 'like', "%{$modifier}%");
+            })
+            ->get();
+
+        return ListModifierResource::collection($records);
     }
 
     public function getListInsuranceCompanies($procedure_id = null)
