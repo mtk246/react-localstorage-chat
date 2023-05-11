@@ -10,7 +10,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('procedures', function (Blueprint $table) {
-            $table->tinyText('short_description')->default('');
+            $table->tinyText('short_description');
         });
     }
 
