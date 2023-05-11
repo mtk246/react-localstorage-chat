@@ -390,16 +390,6 @@ class ProcedureRepository
                 $procedure->diagnoses()->sync($data['diagnoses']);
             }
 
-            if (isset($data['note'])) {
-                /* PublicNote */
-                PublicNote::updateOrCreate([
-                    'publishable_type' => Procedure::class,
-                    'publishable_id' => $procedure->id,
-                ], [
-                    'note' => $data['note'],
-                ]);
-            }
-
             DB::commit();
 
             return Procedure::whereId($id)->first();
@@ -408,6 +398,15 @@ class ProcedureRepository
 
             return null;
         }
+    }
+
+    public function updateProcedureNote(Procedure $procedure, string $note)
+    {
+        $procedure->publicNote()->updateOrCreate([
+            'note' => $note,
+        ]);
+
+        return $procedure->load(['publicNote']);
     }
 
     /**
