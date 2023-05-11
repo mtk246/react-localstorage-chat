@@ -942,14 +942,17 @@
 [
     {
         "id": 1,
+        "color": "#018ECC",
         "name": "M1"
     },
     {
         "id": 2,
+        "color": "#FFFFFF",
         "name": "M2"
     },
     {
         "id": 3,
+        "color": "#018ECC",
         "name": "M3"
     }
 ]
