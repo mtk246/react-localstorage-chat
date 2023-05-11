@@ -95,9 +95,9 @@
         "discriminatory_id": 1,
         "frequent_diagnoses": [1,2],
         "frequent_modifiers": [1,2],
-        "procedure_considerations.claim_note": true,
-        "procedure_considerations.supervisor": 0,
-        "procedure_considerations.authorization": null
+        "claim_note": true,
+        "supervisor": 0,
+        "authorization": null
     },
     "modifiers": [1,2,3],
     "diagnoses": [5,6,7],
@@ -1052,9 +1052,9 @@
         "discriminatory_id": 1,
         "frequent_diagnoses": [1,2],
         "frequent_modifiers": [1,2],
-        "procedure_considerations.claim_note": false,
-        "procedure_considerations.supervisor": 1,
-        "procedure_considerations.authorization": null
+        "claim_note": false,
+        "supervisor": 1,
+        "authorization": null
     },
     "modifiers": [1,2,3],
     "diagnoses": [1]
