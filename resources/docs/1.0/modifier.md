@@ -12,6 +12,7 @@
 - [Get list types](#get-list-type)
 - [Get list classifications](#get-list-classification)
 - [Update modifier](#update-modifier)
+- [Update modifier note](#update-modifier-note)
 - [Change status modifier](#change-status-modifier)
 
 
@@ -31,6 +32,7 @@
 | 7 |GET|`Get list types`|`/modifier/type`|yes|get list of types|
 | 8 |GET|`Get list classifications`|`/modifier/classification`|yes|get list of classifications|
 | 9 |PUT     | `Update Modifier`  | `/modifier/{id}` | yes            | Update Modifier  |
+| 9 |PUT     | `Update Modifier Note`  | `/modifier/{id}/note` | yes            | Update Modifier note |
 | 10 |PATCH   | `Change status Modifier`  | `/modifier/change-status/{id}` | yes            | Change status Modifier  |
 
 
@@ -585,10 +587,12 @@
 [
     {
         "id": 1,
+        "color": "#018ECC",
         "name": "M1"
     },
     {
         "id": 2,
+        "color": "#FFFFFF",
         "name": "M2"
     }
 ]
@@ -668,7 +672,17 @@
     "modifier_invalid_combinations": ["M2"],
     "classification": 1,
     "type": 1,
-    "description": "short modifier description",
+    "description": "short modifier description"
+}
+```
+
+<a name="update-modifier-note"></a>
+## Update Modifier Note
+
+### Body request example
+
+```json
+{
     "note": "Note modifier 1 edited"
 }
 ```
