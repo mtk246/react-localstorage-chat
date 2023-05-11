@@ -11,8 +11,8 @@ return new class() extends Migration {
     {
         Schema::table('procedure_considerations', function (Blueprint $table) {
             $table->tinyInteger('age_type')->default(1);
-            $table->json('frequent_diagnoses')->default('[]');
-            $table->json('frequent_modifiers')->default('[]');
+            $table->json('frequent_diagnoses');
+            $table->json('frequent_modifiers');
         });
     }
 
