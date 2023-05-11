@@ -60,7 +60,6 @@ class ProcedureUpdateRequest extends FormRequest
 
             'modifiers' => ['nullable', 'array'],
             'diagnoses' => ['nullable', 'array'],
-            'note' => ['nullable', 'string'],
         ];
     }
 }
