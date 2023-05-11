@@ -29,7 +29,7 @@ class ProcedureUpdateRequest extends FormRequest
             'type' => ['required', new Enum(ProcedureType::class)],
             'clasifications' => ['required', 'array'],
             'clasifications.general' => ['required', 'integer'],
-            'clasifications.specific' => ['required', 'integer'],
+            'clasifications.specific' => ['nullable', 'integer'],
             'clasifications.sub_specific' => ['nullable', 'integer'],
 
             'mac_localities' => ['nullable', 'array', new MacLocalityFeeRequired()],
@@ -57,6 +57,9 @@ class ProcedureUpdateRequest extends FormRequest
             'procedure_considerations.discriminatory_id' => ['nullable', 'numeric'],
             'procedure_considerations.frequent_diagnoses' => ['nullable', 'array'],
             'procedure_considerations.frequent_modifiers' => ['nullable', 'array'],
+            'procedure_considerations.claim_note' => ['nullable', 'boolean'],
+            'procedure_considerations.supervisor' => ['nullable', 'boolean'],
+            'procedure_considerations.authorization' => ['nullable', 'boolean'],
 
             'modifiers' => ['nullable', 'array'],
             'diagnoses' => ['nullable', 'array'],

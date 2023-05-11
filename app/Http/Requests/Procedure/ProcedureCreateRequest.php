@@ -32,7 +32,7 @@ class ProcedureCreateRequest extends FormRequest
             'type' => ['required', new Enum(ProcedureType::class)],
             'clasifications' => ['required', 'array'],
             'clasifications.general' => ['required', 'integer'],
-            'clasifications.specific' => ['required', 'integer'],
+            'clasifications.specific' => ['nullable', 'integer'],
             'clasifications.sub_specific' => ['nullable', 'integer'],
 
             'mac_localities' => ['nullable', 'array', new MacLocalityFeeRequired()],
@@ -56,10 +56,12 @@ class ProcedureCreateRequest extends FormRequest
             'procedure_considerations.gender_id' => ['nullable', 'integer'],
             'procedure_considerations.age_init' => ['nullable', 'numeric'],
             'procedure_considerations.age_end' => ['nullable', 'numeric'],
-            'procedure_considerations.age_type' => ['nullable', 'numeric'],
             'procedure_considerations.discriminatory_id' => ['nullable', 'numeric'],
             'procedure_considerations.frequent_diagnoses' => ['nullable', 'array'],
             'procedure_considerations.frequent_modifiers' => ['nullable', 'array'],
+            'procedure_considerations.claim_note' => ['nullable', 'boolean'],
+            'procedure_considerations.supervisor' => ['nullable', 'boolean'],
+            'procedure_considerations.authorization' => ['nullable', 'boolean'],
 
             'modifiers' => ['nullable', 'array'],
             'diagnoses' => ['nullable', 'array'],
