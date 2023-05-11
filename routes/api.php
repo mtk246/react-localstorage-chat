@@ -397,6 +397,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/classification', [\App\Http\Controllers\ModifierController::class, 'getClassifications']);
         Route::get('/{id}', [\App\Http\Controllers\ModifierController::class, 'getOneModifier']);
         Route::put('/{id}', [\App\Http\Controllers\ModifierController::class, 'updateModifier']);
+        Route::put('/{modifier}/note', [\App\Http\Controllers\ModifierController::class, 'updateModifierNote']);
     });
 
     Route::prefix('procedure')->middleware([
