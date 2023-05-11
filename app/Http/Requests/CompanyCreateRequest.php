@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\Company\ApplyToType;
 use App\Models\Company;
 use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class CompanyCreateRequest extends FormRequest
 {
@@ -75,6 +77,7 @@ class CompanyCreateRequest extends FormRequest
             'statements.*.rule_id' => ['nullable', 'integer'],
             'statements.*.when_id' => ['nullable', 'integer'],
             'statements.*.apply_to_ids' => ['nullable', 'array'],
+            'statements.*.apply_to_ids.*' => ['integer', new Enum(ApplyToType::class)],
             'statements.*.start_date' => ['nullable', 'date'],
             'statements.*.end_date' => ['nullable', 'date'],
 
