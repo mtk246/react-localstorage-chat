@@ -180,6 +180,9 @@ class ModifierRepository
     public function updateModifierNote(Modifier $modifier, string $note)
     {
         $modifier->publicNote()->updateOrCreate([
+            'publishable_type' => Modifier::class,
+            'publishable_id' => $modifier->id,
+        ], [
             'note' => $note,
         ]);
 
