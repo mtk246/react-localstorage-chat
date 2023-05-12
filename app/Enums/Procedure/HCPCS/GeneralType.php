@@ -6,13 +6,13 @@ namespace App\Enums\Procedure\HCPCS;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Interfaces\ColorTypeInterface;
+use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\HasChildAttribute;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements ColorTypeInterface
+enum GeneralType: int implements TypeInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
     use HasChildAttribute;
 
     #[NameAttribute('Ambulance and Other Transport Services and Supplies')]

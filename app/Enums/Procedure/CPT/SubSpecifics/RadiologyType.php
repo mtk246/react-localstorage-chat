@@ -8,11 +8,11 @@ use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\HasChildAttribute;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Traits\HasTypeAttributes;
 
 enum RadiologyType: int implements TypeInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
     use HasChildAttribute;
 
     #[NameAttribute('Diagnostic Radiology (Diagnostic Imaging) Procedures')]

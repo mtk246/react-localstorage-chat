@@ -7,11 +7,11 @@ namespace App\Enums\Procedure\CPT\Specifics;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\TypeInterface;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Traits\HasTypeAttributes;
 
 enum CategoryIIIType: int implements TypeInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
 
     #[NameAttribute('Various Services - Category III Codes')]
     #[PublicAttribute(true)]

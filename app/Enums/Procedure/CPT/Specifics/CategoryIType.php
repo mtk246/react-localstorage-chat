@@ -15,11 +15,11 @@ use App\Enums\Procedure\CPT\SubSpecifics\PathologyAndLaboratoryType;
 use App\Enums\Procedure\CPT\SubSpecifics\RadiologyType;
 use App\Enums\Procedure\CPT\SubSpecifics\SurgeryType;
 use App\Enums\Traits\HasChildAttribute;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Traits\HasTypeAttributes;
 
 enum CategoryIType: int implements TypeInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
     use HasChildAttribute;
 
     #[NameAttribute('Anesthesia')]
