@@ -1849,7 +1849,7 @@ class ClaimRepository
                         'organizationName' => $claim->claimFormattable->billingCompany->name ?? null,
                         'contactInformation' => [
                             'name' => $claim->claimFormattable->billingCompany->contact->contact_name ?? $claim->claimFormattable->billingCompany->name ?? 'Contact Billing',
-                            'phoneNumber' => $claim->claimFormattable->billingCompany->contact->phone ?? null,
+                            'phoneNumber' => str_replace('-', '', $claim->claimFormattable->billingCompany->contact->phone ?? ''),
                         ],
                     ],
                     'receiver' => [/**Insurance Company */
@@ -1885,7 +1885,7 @@ class ClaimRepository
                             ],
                             'contactInformation' => [
                                 'name' => $contactCompany->contact_name ?? $claim->company->name ?? 'Contact company',
-                                'phoneNumber' => $contactCompany->phone ?? null,
+                                'phoneNumber' => str_replace('-', '', $contactCompany->phone ?? ''),
                             ],
                         ],
                     ],
