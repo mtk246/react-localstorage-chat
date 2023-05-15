@@ -452,10 +452,15 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);
-        Route::get('/get-list-rev-centers', [\App\Http\Controllers\ClaimController::class, 'getListRevCenters']);
+        Route::get('/get-list-revenue-codes', [\App\Http\Controllers\ClaimController::class, 'getListRevenueCodes']);
+        Route::get('/get-list-admission-types', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionTypes']);
+        Route::get('/get-list-admission-sources', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionSources']);
+        Route::get('/get-list-patient-statuses', [\App\Http\Controllers\ClaimController::class, 'getListPatientStatuses']);
+        Route::get('/get-list-bill-classifications', [\App\Http\Controllers\ClaimController::class, 'getListBillClassifications']);
+        Route::get('/get-list-diagnosis-related-groups', [\App\Http\Controllers\ClaimController::class, 'getListDiagnosisRelatedGroups']);
         Route::get('/get-list-type-formats', [\App\Http\Controllers\ClaimController::class, 'getListTypeFormats']);
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
-        Route::get('/get-list-qualifier-by-field/{field_id}', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
+        Route::get('/get-list-qualifier-by-field', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
