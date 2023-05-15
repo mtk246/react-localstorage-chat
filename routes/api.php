@@ -397,6 +397,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/classification', [\App\Http\Controllers\ModifierController::class, 'getClassifications']);
         Route::get('/{id}', [\App\Http\Controllers\ModifierController::class, 'getOneModifier']);
         Route::put('/{id}', [\App\Http\Controllers\ModifierController::class, 'updateModifier']);
+        Route::put('/{modifier}/note', [\App\Http\Controllers\ModifierController::class, 'updateModifierNote']);
     });
 
     Route::prefix('procedure')->middleware([
@@ -419,6 +420,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
         Route::put('/{id}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
+        Route::put('/{procedure}/note', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureNote']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
         Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
         Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);

@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CompanyRepository
 {
@@ -31,7 +32,7 @@ class CompanyRepository
     {
         try {
             DB::beginTransaction();
-            $company = Company::create([
+            $company = Company::query()->create([
                 'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
                 'name' => $data['name'],
                 'npi' => $data['npi'],
@@ -145,7 +146,10 @@ class CompanyRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            Log::error($e->getMessage());
+            Log::error(json_encode($data));
+
+            throw $e;
         }
     }
 
