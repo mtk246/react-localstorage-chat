@@ -12,7 +12,7 @@ final class SearchController extends Controller
     public function search(Request $request, string $query): JsonResponse
     {
         $results = $this->getModels($request)
-            ->mapWithKeys(fn (string $model) => [class_basename($model) => $model::search($query)->get()])
+            ->map(fn (string $model) => $model::search($query)->get())
             ->filter(fn (Collection $results) => $results->isNotEmpty());
 
         return response()->json($results);
