@@ -20,13 +20,10 @@ use Illuminate\Http\Request;
 
 class ClaimController extends Controller
 {
-    private $claimRepository;
-    private $procedureRepository;
-
-    public function __construct()
-    {
-        $this->claimRepository = new ClaimRepository();
-        $this->procedureRepository = new ProcedureRepository();
+    public function __construct(
+        private ClaimRepository $claimRepository,
+        private ProcedureRepository $procedureRepository,
+    ) {
     }
 
     /**
