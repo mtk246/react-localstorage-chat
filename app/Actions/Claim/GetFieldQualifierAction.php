@@ -7,7 +7,6 @@ namespace App\Actions\Claim;
 use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\TypeCatalog;
 
-
 final class GetFieldQualifierAction
 {
     public function all(array $data)
@@ -29,6 +28,7 @@ final class GetFieldQualifierAction
                     $typeCatalog[$key]['except'] = [];
                 }
             }
+
             return $typeCatalog;
         } else {
             return [];

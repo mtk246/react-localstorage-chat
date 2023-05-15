@@ -34,7 +34,7 @@ enum FieldInformationInstitutional: int implements PublicInterface
     #[NameAttribute('35. Ocurrence')]
     #[PublicAttribute(true)]
     case FIELD_35 = 5;
-    
+
     #[NameAttribute('36. Ocurrence')]
     #[PublicAttribute(true)]
     case FIELD_36 = 6;
