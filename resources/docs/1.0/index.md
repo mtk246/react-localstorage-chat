@@ -73,8 +73,12 @@
 - ## Report
     - [Report](/{{route}}/{{version}}/report)
 
+- ## Spotlight
+    - [Spotlight](/{{route}}/{{version}}/spotlight)
+
 - ## Tableau
     - [Oauth](/{{route}}/{{version}}/tableau/oauth)
+
 - ## Reports
     - [get report data](/{{route}}/{{version}}/reports/get)
     - [update report](/{{route}}/{{version}}/reports/update)
