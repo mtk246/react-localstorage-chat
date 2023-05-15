@@ -28,13 +28,9 @@
 | # | METHOD | Name | URL | Token required | Description |
 | : | : | :- | : | :- | :- |
 | 1 | POST | `Create claim` | `/claim/` | yes | Create claim |
-
-
 | 4 | GET | `Get list types formats` | `/claim/get-list-type-formats` | yes | Get list type formats |
 | 7 | GET | `Get list claim field information` | `/claim/get-list-claim-field-informations` | yes | Get list claim field informations |
 | 8 | GET | `Get list claim qualifier` | `/claim/get-list-qualifier-by-field/{field_id?}` | yes | Get list claim field informations |
-
-
 | 2 | GET | `Get list revenue codes` | `/claim/get-list-revenue-codes` | yes | Get list revenue-codes |
 | 3 | GET | `Get list admission types` | `/claim/get-list-admission-types` | yes | Get list admission types |
 | 4 | GET | `Get list admission sources` | `/claim/get-list-admission-sources` | yes | Get list admission sources |
@@ -66,20 +62,20 @@
 {
     "billing_company_id": 1, /** Only by superuser */
     "format": 2,
-    "type of medical assistance": "inpatient", //outpatient
+    "type_of_medical_assistance": "inpatient", //outpatient
     "validate": false,
     "automatic_eligibility": false,
     "company_id": 1,
     "facility_id": 1,
     "patient_id": 2,
-    "attending_health_professional_id"
-    "attending_qualifier_id"
-    "open_attending_health_professional_id"
-    "open_attending_qualifier_id"
-    "other_health_professional_id"
-    "other_qualifier_id"
-    "health_professional_id"
-    "qualifier_id"
+    "attending_health_professional_id": 1,
+    "attending_qualifier_id": 1,
+    "open_attending_health_professional_id": 1,
+    "open_attending_qualifier_id": 1,
+    "other_health_professional_id": 1,
+    "other_qualifier_id": 1,
+    "health_professional_id": 1,
+    "qualifier_id": 1,
     
     "prior_authorization_number": "1234567890A",
     "employment_related_condition": true,
