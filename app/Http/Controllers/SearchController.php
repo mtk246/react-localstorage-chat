@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BillingCompany;
-use App\Models\Claim;
-use App\Models\Company;
-use App\Models\Facility;
-use App\Models\HealthProfessional;
+use App\Enums\SearchFilterType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 final class SearchController extends Controller
 {
-    public function __invoke(Request $request, string $query): JsonResponse
+    public function search(Request $request, string $query): JsonResponse
     {
         $results = $this->getModels($request)
             ->mapWithKeys(fn (string $model) => [class_basename($model) => $model::search($query)->get()])
             ->filter(fn (Collection $results) => $results->isNotEmpty());
 
         return response()->json($results);
+    }
+
+    public function filters(): JsonResponse
+    {
+        return response()->json(SearchFilterType::cases());
     }
 
     private function getModels(Request $request): Collection
