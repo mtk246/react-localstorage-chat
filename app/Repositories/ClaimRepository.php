@@ -604,6 +604,24 @@ class ClaimRepository
         }
     }
 
+    public function getListAdmissionTypes()
+    {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Admission type code']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getListAdmissionSources()
+    {
+        try {
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Admission source code']], null);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getListFieldQualifiers($id = null)
     {
         try {

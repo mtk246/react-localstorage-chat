@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\GetFieldAction;
+use App\Actions\Claim\GetFieldQualifierAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -11,6 +13,7 @@ use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Models\Claim;
 use App\Models\ClaimStatus;
 use App\Repositories\ClaimRepository;
+use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,10 +21,12 @@ use Illuminate\Http\Request;
 class ClaimController extends Controller
 {
     private $claimRepository;
+    private $procedureRepository;
 
     public function __construct()
     {
         $this->claimRepository = new ClaimRepository();
+        $this->procedureRepository = new ProcedureRepository();
     }
 
     /**
@@ -111,11 +116,82 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all service place of service'), 400);
     }
 
-    public function getListRevCenters()
+    public function getListRevenueCodes(Request $request, int $company_id = null): JsonResponse
     {
-        $rs = $this->claimRepository->getListRevCenters();
+        /**@todo Consultar clasificacion de procedures by revenue codes */
+        $search = $request->search ?? '';
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all service rev. Centers'), 400);
+        return response()->json(
+            $this->procedureRepository->getList($company_id, $search)
+        );
+    }
+
+    public function getListAdmissionTypes(): JsonResponse
+    {
+        return response()->json(
+            $this->claimRepository->getListAdmissionTypes()
+        );
+    }
+
+    public function getListAdmissionSources(): JsonResponse
+    {
+        return response()->json(
+            $this->claimRepository->getListAdmissionSources()
+        );
+    }
+
+    public function getListBillClassifications(): JsonResponse
+    {
+        /** @todo Confirmar listado con monser */
+        $rs = [
+            [
+                'id' => '1',
+                'code' => '0',
+                'name' => 'Non-payment/Zero Claim',
+            ],
+            [
+                'id' => '2',
+                'code' => '1',
+                'name' => 'Admit Through Discharge',
+            ],
+            [
+                'id' => '3',
+                'code' => '2',
+                'name' => 'Interim - First Claim',
+            ],
+            [
+                'id' => '4',
+                'code' => '3',
+                'name' => 'Interim-Continuing Claims',
+            ],
+            [
+                'id' => '5',
+                'code' => '4',
+                'name' => 'Interim - Last Claim',
+            ],
+            [
+                'id' => '6',
+                'code' => '5',
+                'name' => 'Late Charge Only',
+            ],
+            [
+                'id' => '7',
+                'code' => '7',
+                'name' => 'Replacement of Prior Claim (See adjustment third digit)',
+            ],
+            [
+                'id' => '8',
+                'code' => '8',
+                'name' => 'Void/Cancel of Prior Claim (See adjustment third digit)',
+            ],
+            [
+                'id' => '9',
+                'code' => '9',
+                'name' => 'Final claim for a Home Health PPS Period',
+            ],
+        ];
+
+        return $rs ? response()->json($rs) : response()->json(__('Error get all bill classifications'), 400);
     }
 
     public function getListTypeFormats()
@@ -125,18 +201,21 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all type formats'), 400);
     }
 
-    public function getListClaimFieldInformations()
+    public function getListClaimFieldInformations(Request $request, GetFieldAction $field): JsonResponse
     {
-        $rs = $this->claimRepository->getListClaimFieldInformations();
+        $rs = $field->all($request->type);
 
         return response()->json($rs);
     }
 
-    public function getListFieldQualifiers(int $id)
+    public function getListFieldQualifiers(Request $request, GetFieldQualifierAction $qualifier): JsonResponse
     {
-        $rs = $this->claimRepository->getListFieldQualifiers($id);
+        $rs = $qualifier->all($request->input());
 
         return response()->json($rs);
+        /**$rs = $this->claimRepository->getListFieldQualifiers($id);
+
+        return response()->json($rs);*/
     }
 
     public function getListTypeDiags()
