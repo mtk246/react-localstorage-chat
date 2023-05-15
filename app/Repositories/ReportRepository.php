@@ -629,7 +629,7 @@ class ReportRepository implements ReportInterface
                 }
 
                 /** 24d. Procedures services or suppliers */
-                $cpt = Procedure::find($claimService->place_of_service_id ?? null);
+                $cpt = Procedure::find($claimService->procedure_id ?? null);
                 $this->pdf->MultiCell(70, 10, $cpt->code ?? '', 0, 'L', false, 1, 70, 191 + ($lineSpaceY * $index) - (0.3 * $index), true, 0, false, true, 0, 'T', true);
                 $lineSpaceX = 8;
                 foreach ($claimService->modifiers ?? [] as $key => $mod) {
