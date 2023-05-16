@@ -528,7 +528,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
-    Route::get('/search', SearchController::class)->middleware('auth:api');
+    Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
+    Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });

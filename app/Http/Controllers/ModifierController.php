@@ -11,6 +11,7 @@ use App\Http\Requests\Modifier\ModifierUpdateRequest;
 use App\Http\Resources\Enums\ColorTypeResource;
 use App\Http\Resources\Enums\ColorsTypeResource;
 use App\Http\Resources\Enums\EnumResource;
+use App\Models\Modifier;
 use App\Repositories\ModifierRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -67,9 +68,9 @@ class ModifierController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error updating modifier'), 400);
     }
 
-    public function updateModifierNote(ModifierNoteUpdateRequest $request, int $id): JsonResponse
+    public function updateModifierNote(ModifierNoteUpdateRequest $request, Modifier $modifier): JsonResponse
     {
-        $rs = $this->modifierRepository->updateModifierNote($request->validated(), $id);
+        $rs = $this->modifierRepository->updateModifierNote($modifier, $request->validated()['note'] ?? '');
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating modifier'), 400);
     }
