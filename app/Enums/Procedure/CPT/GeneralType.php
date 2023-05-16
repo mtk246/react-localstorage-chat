@@ -4,24 +4,31 @@ declare(strict_types=1);
 
 namespace App\Enums\Procedure\CPT;
 
+use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\TypeInterface;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Procedure\CPT\Specifics\CategoryIIIType;
+use App\Enums\Procedure\CPT\Specifics\CategoryIIType;
+use App\Enums\Procedure\CPT\Specifics\CategoryIType;
+use App\Enums\Traits\HasTypeAttributes;
 
 enum GeneralType: int implements TypeInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
 
     #[NameAttribute('Category I Codes')]
+    #[ChildAttribute(CategoryIType::class)]
     #[PublicAttribute(true)]
     case CATEGORY_I = 1;
 
     #[NameAttribute('Category II Codes')]
+    #[ChildAttribute(CategoryIIType::class)]
     #[PublicAttribute(true)]
     case CATEGORY_II = 2;
 
     #[NameAttribute('Category III Codes')]
+    #[ChildAttribute(CategoryIIIType::class)]
     #[PublicAttribute(true)]
     case CATEGORY_III = 3;
 

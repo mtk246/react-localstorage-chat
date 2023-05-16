@@ -108,19 +108,20 @@ class ProcedureRepository
                 if (isset($data['procedure_considerations']['gender_id']) &&
                     isset($data['procedure_considerations']['age_init']) &&
                     isset($data['procedure_considerations']['discriminatory_id'])) {
-                    ProcedureConsideration::create([
+                    $considetation = ProcedureConsideration::create([
                         'procedure_id' => $procedure->id,
                         'gender_id' => $data['procedure_considerations']['gender_id'],
                         'age_init' => $data['procedure_considerations']['age_init'],
                         'age_end' => $data['procedure_considerations']['age_end'] ?? null,
                         'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
-                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
-                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
                         'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
                         'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
                         'authorization' => $data['procedure_considerations']['authorization'] ?? false,
                     ]);
+
+                    $considetation->frecuentDiagnoses()->sync($data['procedure_considerations']['frequent_diagnoses'] ?? []);
+                    $considetation->frecuentModifiers()->sync($data['procedure_considerations']['frequent_modifiers'] ?? []);
                 }
             }
 
@@ -367,35 +368,6 @@ class ProcedureRepository
                 }
             }
 
-            if (isset($data['procedure_considerations'])) {
-                if (isset($data['procedure_considerations']['gender_id']) &&
-                    isset($data['procedure_considerations']['age_init']) &&
-                    isset($data['procedure_considerations']['discriminatory_id'])) {
-                    ProcedureConsideration::updateOrCreate([
-                        'procedure_id' => $procedure->id,
-                    ], [
-                        'gender_id' => $data['procedure_considerations']['gender_id'],
-                        'age_init' => $data['procedure_considerations']['age_init'],
-                        'age_end' => $data['procedure_considerations']['age_end'] ?? null,
-                        'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
-                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
-                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
-                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
-                        'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
-                        'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
-                        'authorization' => $data['procedure_considerations']['authorization'] ?? false,
-                    ]);
-                }
-            }
-
-            if (isset($data['modifiers'])) {
-                $procedure->modifiers()->sync($data['modifiers']);
-            }
-
-            if (isset($data['diagnoses'])) {
-                $procedure->diagnoses()->sync($data['diagnoses']);
-            }
-
             DB::commit();
 
             return Procedure::whereId($id)->first();
@@ -403,6 +375,41 @@ class ProcedureRepository
             DB::rollBack();
 
             return null;
+        }
+    }
+
+    public function updateProcedureConsiderations(Procedure $procedure, array $data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $considetation = ProcedureConsideration::updateOrCreate([
+                'procedure_id' => $procedure->id,
+            ], [
+                'gender_id' => $data['gender_id'],
+                'age_init' => $data['age_init'],
+                'age_end' => $data['age_end'] ?? null,
+                'age_type' => $data['age_type'] ?? 1,
+                'discriminatory_id' => $data['discriminatory_id'],
+                'claim_note' => $data['claim_note'] ?? false,
+                'supervisor' => $data['supervisor'] ?? false,
+                'authorization' => $data['authorization'] ?? false,
+            ]);
+
+            $considetation->frecuentDiagnoses()->sync($data['frequent_diagnoses'] ?? []);
+            $considetation->frecuentModifiers()->sync($data['frequent_modifiers'] ?? []);
+
+            DB::commit();
+
+            return $procedure->load([
+                'procedureCosiderations' => function ($query) {
+                    $query->with(['frecuentDiagnoses', 'frecuentModifiers']);
+                },
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $e;
         }
     }
 

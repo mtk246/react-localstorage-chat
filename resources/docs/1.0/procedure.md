@@ -15,6 +15,7 @@
 - [Get list modifiers](#get-list-modifiers)
 - [Get list diagnoses](#get-list-diagnoses)
 - [Update procedure](#update-procedure)
+- [Update procedure considerations](#update-procedure-consideration)
 - [Update Procedure Note](#update-procedure-note)
 - [Change status procedure](#change-status-procedure)
 - [Get list procedure](#get-list)
@@ -41,13 +42,14 @@
 | 10 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
 | 11 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
 | 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 13 |PUT|`Update procedure note`|`/procedure/{id}/note` |yes|Update procedure note|
-| 14 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 15 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
-| 16 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 17 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 18 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 19 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 13 |PUT     | `Update procedure considerations`|`/procedure/{id}/considerations`|yes|Update procedure considerations|
+| 14 |PUT|`Update procedure note`|`/procedure/{id}/note` |yes|Update procedure note|
+| 15 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 16 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
+| 17 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 18 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 19 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 20 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 
 
 <a name="create-procedure"></a>
@@ -99,8 +101,6 @@
         "supervisor": 0,
         "authorization": null
     },
-    "modifiers": [1,2,3],
-    "diagnoses": [5,6,7],
     "note": "Note procedure 1"
 }
 ```
@@ -1045,19 +1045,25 @@
             }
         }
     ],
-    "procedure_considerations": {
-        "gender_id": 1,
-        "age_init": "2020",
-        "age_end": null,
-        "discriminatory_id": 1,
-        "frequent_diagnoses": [1,2],
-        "frequent_modifiers": [1,2],
-        "claim_note": false,
-        "supervisor": 1,
-        "authorization": null
-    },
-    "modifiers": [1,2,3],
-    "diagnoses": [1]
+}
+```
+
+<a name="update-procedure-consideration"></a>
+## Update procedure consideration
+
+### Body request example
+
+```json
+{
+    "gender_id": 1,
+    "age_init": "2020",
+    "age_end": null,
+    "discriminatory_id": 1,
+    "frequent_diagnoses": [1,2],
+    "frequent_modifiers": [1,2],
+    "claim_note": false,
+    "supervisor": 1,
+    "authorization": null
 }
 ```
 
