@@ -108,19 +108,20 @@ class ProcedureRepository
                 if (isset($data['procedure_considerations']['gender_id']) &&
                     isset($data['procedure_considerations']['age_init']) &&
                     isset($data['procedure_considerations']['discriminatory_id'])) {
-                    ProcedureConsideration::create([
+                    $considetation = ProcedureConsideration::create([
                         'procedure_id' => $procedure->id,
                         'gender_id' => $data['procedure_considerations']['gender_id'],
                         'age_init' => $data['procedure_considerations']['age_init'],
                         'age_end' => $data['procedure_considerations']['age_end'] ?? null,
                         'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
-                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
-                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
                         'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
                         'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
                         'authorization' => $data['procedure_considerations']['authorization'] ?? false,
                     ]);
+
+                    $considetation->frecuentDiagnoses()->sync($data['procedure_considerations']['frequent_diagnoses'] ?? []);
+                    $considetation->frecuentModifiers()->sync($data['procedure_considerations']['frequent_modifiers'] ?? []);
                 }
             }
 
