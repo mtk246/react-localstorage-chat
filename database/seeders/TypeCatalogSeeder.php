@@ -1047,6 +1047,92 @@ class TypeCatalogSeeder extends Seeder
                 ],
             ],
             [
+                'description' => 'Admission type code',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Emergency',
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Urgent',
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Elective',
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Newborn',
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'Trauma',
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'Information not available',
+                    ],
+                ],
+            ],
+            [
+                'description' => 'Admission source code',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Non-Health Facility Point of Origin',
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Clinic',
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Reserved for assignment by the NUBC',
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Transfer From a Hospital (Different Facility)',
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'Transfer From a Skilled Nursing Facility (SNF) or Intermediate Care Facility (ICF)',
+                    ],
+                    [
+                        'code' => '6',
+                        'description' => 'Transfer From Another Health Care Facility',
+                    ],
+                    [
+                        'code' => '7',
+                        'description' => 'Emergency Room',
+                    ],
+                    [
+                        'code' => '8',
+                        'description' => 'Court/Law Enforcement',
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'Information Not Available',
+                    ],
+                    [
+                        'code' => 'A',
+                        'description' => 'Transfer from a Rural Primary Care Hospital (Only valid for discharges prior to 10/1/2007)',
+                    ],
+                    [
+                        'code' => 'D',
+                        'description' => 'Transfer from One Distinct Unit of the Hospital to another Distinct Unit of the Same Hospital Resulting in a Separate Claim to the Payer',
+                    ],
+                    [
+                        'code' => 'E',
+                        'description' => 'Transfer from Ambulatory Surgery Center (Effective 10/1/2007)',
+                    ],
+                    [
+                        'code' => 'F',
+                        'description' => 'Transfer from Hospice and is Under a Hospice Plan of Care or Enrolled in a Hospice Program (Effective 10/1/2007)',
+                    ],
+                ],
+            ],
+            [
                 'description' => 'Report form claim',
                 'type_catalogs' => [
                     [
