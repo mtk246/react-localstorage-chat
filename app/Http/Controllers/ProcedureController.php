@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Procedure\ProcedureType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Company\AddProcedureRequest;
+use App\Http\Requests\Procedure\ProcedureConsiderationsUpdateRequest;
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
 use App\Http\Requests\Procedure\ProcedureNoteUpdateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
@@ -64,6 +65,13 @@ class ProcedureController extends Controller
     public function updateProcedure(ProcedureUpdateRequest $request, int $id): JsonResponse
     {
         $rs = $this->procedureRepository->updateProcedure($request->validated(), $id);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
+    }
+
+    public function updateProcedureConsiderations(ProcedureConsiderationsUpdateRequest $request, Procedure $procedure): JsonResponse
+    {
+        $rs = $this->procedureRepository->updateProcedureConsiderations($procedure, $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
     }
