@@ -11,16 +11,18 @@ return new class() extends Migration {
     {
         Schema::create('modifier_procedure_consideration', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('modifier_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
-            $table->foreignId('procedure_consideration_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
+            $table->unsignedBigInteger('modifier_id');
+            $table->foreign('modifier_id', 'mpc_modifier_id')
+                ->references('id')
+                ->on('modifiers')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->unsignedBigInteger('procedure_consideration_id');
+            $table->foreign('procedure_consideration_id', 'mpc_p_consideration_id')
+                ->references('id')
+                ->on('procedure_considerations')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }

@@ -11,16 +11,18 @@ return new class() extends Migration {
     {
         Schema::create('diagnosis_procedure_consideration', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('diagnosis_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
-            $table->foreignId('procedure_consideration_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
+            $table->unsignedBigInteger('diagnosis_id');
+            $table->foreign('diagnosis_id', 'dpc_diagnosis_id')
+                ->references('id')
+                ->on('diagnoses')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->unsignedBigInteger('procedure_consideration_id');
+            $table->foreign('procedure_consideration_id', 'dpc_p_consideration_id')
+                ->references('id')
+                ->on('procedure_considerations')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }
