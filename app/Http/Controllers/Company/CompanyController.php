@@ -239,7 +239,7 @@ final class CompanyController extends Controller
     ): JsonResponse {
         $request->validated();
 
-        $rs = $addContractFees->invoke($request->castedCollect('contract_fees'), $company);
+        $rs = $addContractFees->invoke($request->castedCollect('contract_fees'), $company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }
