@@ -6,12 +6,15 @@ namespace App\Enums\Procedure\CPT\Specifics;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum CategoryIIIType: int implements TypeInterface
+enum CategoryIIIType: int implements TypeInterface, HasChildInterface
 {
     use HasTypeAttributes;
+    use HasChildAttribute;
 
     #[NameAttribute('Various Services - Category III Codes')]
     #[PublicAttribute(true)]

@@ -7,6 +7,7 @@ namespace App\Enums\Procedure\CPT\Specifics;
 use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Procedure\CPT\SubSpecifics\AnesthesiaType;
 use App\Enums\Procedure\CPT\SubSpecifics\EvaluationAndManagementType;
@@ -17,7 +18,7 @@ use App\Enums\Procedure\CPT\SubSpecifics\SurgeryType;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum CategoryIType: int implements TypeInterface
+enum CategoryIType: int implements TypeInterface, HasChildInterface
 {
     use HasTypeAttributes;
     use HasChildAttribute;
