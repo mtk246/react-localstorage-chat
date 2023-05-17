@@ -404,6 +404,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
+        Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
         Route::get('/get-all-server', [\App\Http\Controllers\ProcedureController::class, 'getServerAll']);
         Route::get('/get-by-code/{code}', [\App\Http\Controllers\ProcedureController::class, 'getByCode']);
         Route::get('/get-list-mac-localities', [\App\Http\Controllers\ProcedureController::class, 'getListMacLocalities']);
@@ -415,9 +417,11 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-insurance-companies/{procedure_id?}', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceCompanies']);
         Route::get('/get-list-insurance-label-fees', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceLabelFees']);
         Route::get('/get-list/{company_id?}', [\App\Http\Controllers\ProcedureController::class, 'getList']);
-
-        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
-        Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
+        Route::get('/type', [\App\Http\Controllers\ProcedureController::class, 'getType']);
+        Route::get('/type/{type}/classification', [\App\Http\Controllers\ProcedureController::class, 'getClassifications']);
+        Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
+        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
+        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
         Route::put('/{id}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
         Route::put('/{procedure}/considerations', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureConsiderations']);
