@@ -7,13 +7,11 @@ namespace App\Enums\Procedure\CPT\SubSpecifics;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\TypeInterface;
-use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
 enum MedicineAndProcedureType: int implements TypeInterface
 {
     use HasTypeAttributes;
-    use HasChildAttribute;
 
     #[NameAttribute('Immune Globulins, Serum or Recombinant Products')]
     #[PublicAttribute(true)]

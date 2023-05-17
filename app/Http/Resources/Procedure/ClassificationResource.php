@@ -26,10 +26,10 @@ final class ClassificationResource extends RequestWrapedResource
         return [
             'general' => new ChildTypeResource($type, TypeResource::class),
             'specific' => $request->general
-                ? new ChildTypeResource($type->getChild()::from($request->general), TypeResource::class)
+                ? new ChildTypeResource($type->getChild()::from((int) $request->general), TypeResource::class)
                 : null,
-            'sub_specific' => $request->specific
-                ? new ChildTypeResource($type->getChild()::from($request->general)->getChild()::from($request->specific), TypeResource::class)
+            'sub_specific' => $request->general && $request->specific
+                ? new ChildTypeResource($type->getChild()::from((int) $request->general)?->getChild()::from((int) $request->specific), TypeResource::class)
                 : null,
         ];
     }
