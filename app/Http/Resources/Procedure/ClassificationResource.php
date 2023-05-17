@@ -13,24 +13,26 @@ use App\Http\Resources\RequestWrapedResource;
 final class ClassificationResource extends RequestWrapedResource
 {
     /**
-     * Transform the resource into an array.
-     *
      * @param \Illuminate\Http\Request $request
      *
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array<key, string>
      */
     public function toArray($request)
     {
         $type = ProcedureType::from($this->resource);
 
+        $general = $request->general && $type->getChild()
+            ? $type->getChild()::from((int) $request->general)
+            : null;
+
+        $specific = $request->general && $request->specific && $general && $general->getChild()
+            ? $general->getChild()::from((int) $request->specific)
+            : null;
+
         return [
             'general' => new ChildTypeResource($type, TypeResource::class),
-            'specific' => $request->general
-                ? new ChildTypeResource($type->getChild()::from((int) $request->general), TypeResource::class)
-                : null,
-            'sub_specific' => $request->general && $request->specific
-                ? new ChildTypeResource($type->getChild()::from((int) $request->general)?->getChild()::from((int) $request->specific), TypeResource::class)
-                : null,
+            'specific' => new ChildTypeResource($general, TypeResource::class),
+            'sub_specific' => new ChildTypeResource($specific, TypeResource::class),
         ];
     }
 }
