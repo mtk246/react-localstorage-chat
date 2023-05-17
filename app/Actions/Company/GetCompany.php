@@ -46,6 +46,7 @@ final class GetCompany
                 $contracFees = $company->contracFees()
                     ->with([
                         'procedures',
+                        'modifiers',
                         'patiens',
                         'macLocality',
                         'insuranceCompany',
@@ -70,6 +71,7 @@ final class GetCompany
                 $contracFees = $company->contracFees()
                     ->with([
                         'procedures',
+                        'modifiers',
                         'patiens',
                         'macLocality',
                         'insuranceCompany',
