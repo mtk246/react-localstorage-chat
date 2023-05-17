@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace App\Enums\Procedure\HIPPS;
 
-use App\Enums\Attributes\ColorAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Interfaces\ColorTypeInterface;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Interfaces\HasChildInterface;
+use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Traits\HasChildAttribute;
+use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements ColorTypeInterface
+enum GeneralType: int implements TypeInterface, HasChildInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
+    use HasChildAttribute;
 
-    #[ColorAttribute('#FF9B95')]
-    #[NameAttribute('CPT')]
+    #[NameAttribute('Ambulance and Other Transport Services and Supplies')]
     #[PublicAttribute(true)]
-    case CPT = 1;
+    case AMBULANCE_AND_OTHER_TRANSPORT = 1;
 
-    #[ColorAttribute('#FCC084')]
-    #[NameAttribute('HCPCS')]
+    #[NameAttribute('Matrix for Wound Management (Placental, Equine, Synthetic)')]
     #[PublicAttribute(true)]
-    case HCPCS = 2;
+    case MATRIX_FOR_WOUND_MANAGEMENT = 2;
 
-    #[ColorAttribute('#93F9C1')]
-    #[NameAttribute('HIPPS')]
+    #[NameAttribute('Skin Substitute Device')]
     #[PublicAttribute(true)]
-    case HIPPS = 3;
+    case SKIN_SUBSTITUTE_DEVICE = 3;
 }

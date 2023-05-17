@@ -7,15 +7,18 @@ namespace App\Enums\Procedure\CPT;
 use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Procedure\CPT\Specifics\CategoryIIIType;
 use App\Enums\Procedure\CPT\Specifics\CategoryIIType;
 use App\Enums\Procedure\CPT\Specifics\CategoryIType;
+use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements TypeInterface
+enum GeneralType: int implements TypeInterface, HasChildInterface
 {
     use HasTypeAttributes;
+    use HasChildAttribute;
 
     #[NameAttribute('Category I Codes')]
     #[ChildAttribute(CategoryIType::class)]
