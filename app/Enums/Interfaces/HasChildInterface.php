@@ -7,5 +7,5 @@ namespace App\Enums\Interfaces;
 interface HasChildInterface extends PublicInterface
 {
     /** @return RelatedEnumsInterface */
-    public function getChild(): string;
+    public function getChild(): ?string;
 }
