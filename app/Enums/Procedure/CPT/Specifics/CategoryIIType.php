@@ -6,12 +6,15 @@ namespace App\Enums\Procedure\CPT\Specifics;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum CategoryIIType: int implements TypeInterface
+enum CategoryIIType: int implements TypeInterface, HasChildInterface
 {
     use HasTypeAttributes;
+    use HasChildAttribute;
 
     #[NameAttribute('Composite Measures')]
     #[PublicAttribute(true)]

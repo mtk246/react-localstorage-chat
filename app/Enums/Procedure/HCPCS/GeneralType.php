@@ -6,11 +6,12 @@ namespace App\Enums\Procedure\HCPCS;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
+use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements TypeInterface
+enum GeneralType: int implements TypeInterface, HasChildInterface
 {
     use HasTypeAttributes;
     use HasChildAttribute;

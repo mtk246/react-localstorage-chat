@@ -26,6 +26,6 @@ final class ChildTypeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return EnumResource::collection(collect($this->resource->getChild()::cases()), $this->resourceClass);
+        return new EnumResource(collect($this->resource->getChild()::cases()), $this->resourceClass);
     }
 }
