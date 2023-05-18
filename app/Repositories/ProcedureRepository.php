@@ -37,6 +37,7 @@ class ProcedureRepository
             $procedure = Procedure::create([
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
