@@ -150,20 +150,6 @@ class DataTestSeeder extends Seeder
             }
         }
 
-        /** Billing Manager */
-        $billingCompanyUsers = [
-            [
-                'user' => 'billingmanager@billing.com',
-                'billingCompany' => 'MCC',
-            ],
-        ];
-
-        foreach ($billingCompanyUsers as $user_bc) {
-            $user = User::whereEmail($user_bc['user'])->first();
-            $bCompany = BillingCompany::whereAbbreviation($user_bc['billingCompany'])->first();
-            $user->billingCompanies()->sync($bCompany->id);
-        }
-
         /****** SEDEER DE COMPANIES - FACILITIES *****/
 
         /** Crear Company */
