@@ -252,9 +252,9 @@ class HealthProfessional extends Model implements Auditable
             'user.email' => $this->user->email,
             'user.ssn' => $this->user->profile->ssn,
             'user.phone' => $this->user->profile->phone,
-            'company.name' => $this->company->name,
-            'company.npi' => $this->company->npi,
-            'company.code' => $this->company->code,
+            'company.name' => $this->company?->name,
+            'company.npi' => $this->company?->npi,
+            'company.code' => $this->company?->code,
         ];
     }
 }
