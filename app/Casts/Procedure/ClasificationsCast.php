@@ -12,13 +12,17 @@ final class ClasificationsCast implements CastsAttributes
 {
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @param mixed $value
+     * @param string|null $value
      *
      * @return mixed
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        $clasifications = json_decode($value ?? '{}');
+        if (is_null($value)) {
+            return null;
+        }
+
+        $clasifications = json_decode($value);
 
         $type = ProcedureType::from((int) $model->type->value);
 
