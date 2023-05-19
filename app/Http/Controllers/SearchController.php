@@ -2,28 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BillingCompany;
-use App\Models\Claim;
-use App\Models\Company;
-use App\Models\Facility;
-use App\Models\HealthProfessional;
+use App\Enums\SearchFilterType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 final class SearchController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    public function search(Request $request, string $query): JsonResponse
     {
-        $search = $request->input('query', '');
-
-        $results = collect()
-            ->merge(BillingCompany::search($search)->get())
-            ->merge(Claim::search($search)->get())
-            ->merge(Company::search($search)->get())
-            ->merge(Facility::search($search)->get())
-            ->merge(HealthProfessional::search($search)->get())
-            ->groupBy(fn ($result) => class_basename($result));
+        $results = $this->getModels($request)
+            ->map(fn (string $model) => $model::search($query)->get())
+            ->filter(fn (Collection $results) => $results->isNotEmpty());
 
         return response()->json($results);
+    }
+
+    public function filters(): JsonResponse
+    {
+        return response()->json(SearchFilterType::cases());
+    }
+
+    private function getModels(Request $request): Collection
+    {
+        $filters = $request->get('filters', []);
+
+        return config('scout.index')
+            ? collect(config('scout.index'))
+                ->filter(fn (string $value, string $key) => array_empty($filters) || in_array($key, $filters))
+            : throw new \Exception('No "index" key found in config/scout.php');
     }
 }

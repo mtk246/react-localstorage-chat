@@ -290,7 +290,7 @@ class BillingCompany extends Model implements Auditable
             'name' => $this->name,
             'code' => $this->code,
             'abbreviation' => $this->abbreviation,
-            'contact.email' => $this->contact->email ?? null,
+            'contact.email' => $this->contact?->email ?? null,
         ];
     }
 }

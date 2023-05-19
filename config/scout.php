@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\SearchFilterType;
 use App\Models\BillingCompany;
 use App\Models\Claim;
 use App\Models\Company;
@@ -9,6 +10,13 @@ use App\Models\Facility;
 use App\Models\HealthProfessional;
 
 return [
+    'index' => [
+        SearchFilterType::BILLING_COMPANY->value => BillingCompany::class,
+        SearchFilterType::CLAIM->value => Claim::class,
+        SearchFilterType::COMPANY->value => Company::class,
+        SearchFilterType::FACILITY->value => Facility::class,
+        SearchFilterType::HEALTH_PROFESSIONAL->value => HealthProfessional::class,
+    ],
     /*
     |--------------------------------------------------------------------------
     | Default Search Engine

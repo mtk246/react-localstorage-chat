@@ -15,14 +15,16 @@
 - [Get list modifiers](#get-list-modifiers)
 - [Get list diagnoses](#get-list-diagnoses)
 - [Update procedure](#update-procedure)
+- [Update procedure considerations](#update-procedure-consideration)
+- [Update Procedure Note](#update-procedure-note)
 - [Change status procedure](#change-status-procedure)
 - [Get list procedure](#get-list)
 - [Get list insurance label fees](#get-list-insurance-label-fees)
 - [Get list insurance companies](#get-list-insurance-companies)
 - [Add to company](#add-to-company)
 - [Get to company](#get-procedures-to-company)
-
-
+- [Get procedure type](#get-type)
+- [Get classification type](#get-classification)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -30,7 +32,7 @@
 
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |  
-| 1 |POST    | `Create procedure`  | `/procedure/`     | yes            | Create procedure  |         
+| 1 |POST    |`Create procedure` | `/procedure/`   | yes            | Create procedure|         
 | 2 |GET     | `Get all procedure` | `/procedure/`     | yes            | Get all procedures |
 | 3 |GET     | `Get all procedure from server`         | `/procedure/get-all-server`|yes|Get all procedure from server|
 | 4 |GET     | `Get one procedure` | `/procedure/{id}` | yes            | Get one procedure |
@@ -42,12 +44,16 @@
 | 10 |GET     | `Get list modifiers` | `/procedure/get-list-modifiers/{code?}` | yes            | Get list modifiers|
 | 11 |GET     | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes            | Get list diagnoses|
 | 12 |PUT     | `Update procedure`  | `/procedure/{id}` | yes            | Update procedure  |
-| 13 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
-| 14 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
-| 15 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
-| 16 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 17 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 18 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 13 |PUT     | `Update procedure considerations`|`/procedure/{id}/considerations`|yes|Update procedure considerations|
+| 14 |PUT|`Update procedure note`|`/procedure/{id}/note` |yes|Update procedure note|
+| 15 |PATCH   | `Change status procedure`  | `/procedure/change-status/{id}` | yes            | Change status procedure  |
+| 16 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
+| 17 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
+| 18 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
+| 19 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
+| 20 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
+| 21 |GET |`Get procedure types`|`/procedure/type`|yes|Get procedure types|
+| 22 |GET | `Get classification types`| `/procedure/type/{type}/classification`|yes|Get classification types based on select|
 
 
 <a name="create-procedure"></a>
@@ -58,10 +64,18 @@
 ```json
 {
     "code": "Code procedure 1",
-    "description": "Description procedure 1",
+    "short_description":"Description procedure 1",
+    "description": "long and detailed description of procedure 1",
     "insurance_companies": [1, 2],
     "specific_insurance_company": true,
     "start_date": "2022-07-05",
+    "end_date": "2022-07-06", // nullable
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "general": 1,
+        "specific": 3, // not required
+        "sub_specific": null, // not required
+    },
     "mac_localities": [
         {
             "modifier_id": 1,
@@ -84,10 +98,13 @@
         "gender_id": 1,
         "age_init": "2020",
         "age_end": null,
-        "discriminatory_id": 1
+        "discriminatory_id": 1,
+        "frequent_diagnoses": [1,2],
+        "frequent_modifiers": [1,2],
+        "claim_note": true,
+        "supervisor": 0,
+        "authorization": null
     },
-    "modifiers": [1,2,3],
-    "diagnoses": [5,6,7],
     "note": "Note procedure 1"
 }
 ```
@@ -932,14 +949,17 @@
 [
     {
         "id": 1,
+        "color": "#018ECC",
         "name": "M1"
     },
     {
         "id": 2,
+        "color": "#FFFFFF",
         "name": "M2"
     },
     {
         "id": 3,
+        "color": "#018ECC",
         "name": "M3"
     }
 ]
@@ -999,10 +1019,18 @@
 
 ```json
 {    
-    "description": "Description procedure edit",
+    "short_description":"Description procedure 1",
+    "description": "long and detailed description of procedure 1",
     "insurance_companies": [1, 2],
     "specific_insurance_company": true,
     "start_date": "2022-07-05",
+    "end_date": "2022-07-06", // nullable
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "general": 1,
+        "specific": 3, // not required
+        "sub_specific": null, // not required
+    },
     "mac_localities": [
         {
             "modifier_id": 1,
@@ -1021,14 +1049,35 @@
             }
         }
     ],
-    "procedure_considerations": {
-        "gender_id": 1,
-        "age_init": "2020",
-        "age_end": null,
-        "discriminatory_id": 1
-    },
-    "modifiers": [1,2,3],
-    "diagnoses": [1],
+}
+```
+
+<a name="update-procedure-consideration"></a>
+## Update procedure consideration
+
+### Body request example
+
+```json
+{
+    "gender_id": 1,
+    "age_init": "2020",
+    "age_end": null,
+    "discriminatory_id": 1,
+    "frequent_diagnoses": [1,2],
+    "frequent_modifiers": [1,2],
+    "claim_note": false,
+    "supervisor": 1,
+    "authorization": null
+}
+```
+
+<a name="update-procedure-note"></a>
+## Update procedure note
+
+### Body request example
+
+```json
+{    
     "note": "Note procedure 1"
 }
 ```
@@ -1365,6 +1414,122 @@
         "selectedPriceContractFee": "Non Facility Rate"
     }
 ]
+```
+
+#
+
+>{warning} 404 Error, get procedures to company not found
+
+
+<a name="get-type"></a>
+## Get procedure type
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 
+
+```json
+[
+  {
+    "id": 1,
+    "color": "#FF9B95",
+    "name": "CPT"
+  },
+  {
+    "id": 2,
+    "color": "#FCC084",
+    "name": "HCPCS"
+  },
+  {
+    "id": 3,
+    "color": "#93F9C1",
+    "name": "HIPPS"
+  }
+]
+```
+
+#
+
+>{warning} 404 Error, get procedures to company not found
+
+
+<a name="get-classification"></a>
+## Get procedures classification types
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`general optional <general>`
+`specific optional <specific>`
+
+
+## Response
+
+> {success} 200 
+
+```json
+{
+  "general": [
+    {
+      "id": 1,
+      "name": "Category I Codes"
+    },
+    {
+      "id": 2,
+      "name": "Category II Codes"
+    },
+    {
+      "id": 3,
+      "name": "Category III Codes"
+    },
+    ...
+  ],
+  "specific": [ // null when general not passed
+    {
+      "id": 1,
+      "name": "Anesthesia"
+    },
+    {
+      "id": 2,
+      "name": "Surgery"
+    },
+    {
+      "id": 3,
+      "name": "Radiology Procedures"
+    },
+    ...
+  ],
+  "sub_specific": [ // null when general or specific not passed
+    {
+      "id": 1,
+      "name": "Anesthesia for Procedures on the Head"
+    },
+    {
+      "id": 2,
+      "name": "Anesthesia for Procedures on the Neck"
+    },
+    {
+      "id": 3,
+      "name": "Anesthesia for Procedures on the Thorax (Chest Wall and Shoulder Girdle)"
+    },
+    ...
+  ]
+}
 ```
 
 #

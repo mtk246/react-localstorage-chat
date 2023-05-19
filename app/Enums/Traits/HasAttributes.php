@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 trait HasAttributes
 {
-    public function getAttribute(string $Attribute): string|int|bool
+    public function getAttribute(string $Attribute): string|int|bool|null
     {
         $classAttributes = (new \ReflectionClassConstant(self::class, $this->name))->getAttributes();
 
@@ -18,7 +18,12 @@ trait HasAttributes
 
         return 0 < count($atribute)
             ? $atribute[array_key_first($atribute)]?->getArguments()[0]
-            : throw new \Exception($this->getErrorMessage($Attribute));
+            : null;
+    }
+
+    public function getAttributeOrFail(string $Attribute): string|int|bool
+    {
+        return $this->getAttribute($Attribute) ?? throw new \Exception($this->getErrorMessage($Attribute));
     }
 
     protected function getErrorMessage(string $Attribute): string

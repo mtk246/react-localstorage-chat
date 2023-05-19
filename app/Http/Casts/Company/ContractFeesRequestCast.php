@@ -18,6 +18,13 @@ final class ContractFeesRequestCast extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
+    public function getId(): int
+    {
+        return array_key_exists('contract_fee_id', $this->inputs)
+            ? (int) $this->inputs['contract_fee_id']
+            : 0;
+    }
+
     public function getInsurancePlanId(): ?int
     {
         return array_key_exists('insurance_plan_id', $this->inputs)
@@ -58,11 +65,9 @@ final class ContractFeesRequestCast extends CastsRequest
         return collect($this->inputs['procedure_id'] ?? []);
     }
 
-    public function getModifierId(): ?int
+    public function getModifierIds(): Collection
     {
-        return array_key_exists('modifier_id', $this->inputs)
-            ? (int) $this->inputs['modifier_id']
-            : null;
+        return collect($this->inputs['modifier_id'] ?? []);
     }
 
     public function getPrice(): ?int

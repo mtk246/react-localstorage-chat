@@ -23,7 +23,6 @@ class ModifierUpdateRequest extends FormRequest
             'classification' => ['required', new Enum(ClassificationType::class)],
             'type' => ['required', new Enum(ModifierType::class)],
             'description' => ['required', 'string'],
-            'note' => ['required', 'string'],
         ];
     }
 }

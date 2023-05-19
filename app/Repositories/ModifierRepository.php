@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Resources\ModifierResource;
+use App\Http\Resources\Procedure\ListModifierResource;
 use App\Models\Modifier;
 use App\Models\ModifierInvalidCombination;
 use App\Models\PublicNote;
@@ -58,11 +59,9 @@ class ModifierRepository
 
     public function getListModifiers($id = null)
     {
-        try {
-            return getList(Modifier::class, 'modifier');
-        } catch (\Exception $e) {
-            return [];
-        }
+        $records = Modifier::all();
+
+        return ListModifierResource::collection($records);
     }
 
     public function getAllModifiers(): AnonymousResourceCollection
@@ -164,20 +163,9 @@ class ModifierRepository
                 }
             }
 
-            if (isset($data['note'])) {
-                /* PublicNote */
-                PublicNote::updateOrCreate([
-                    'publishable_type' => Modifier::class,
-                    'publishable_id' => $modifier->id,
-                ], [
-                    'note' => $data['note'],
-                ]);
-            }
-
             DB::commit();
 
             $record = Modifier::whereId($id)->with([
-                'publicNote',
                 'modifierInvalidCombinations',
             ])->first();
 
@@ -187,6 +175,18 @@ class ModifierRepository
 
             return null;
         }
+    }
+
+    public function updateModifierNote(Modifier $modifier, string $note)
+    {
+        $modifier->publicNote()->updateOrCreate([
+            'publishable_type' => Modifier::class,
+            'publishable_id' => $modifier->id,
+        ], [
+            'note' => $note,
+        ]);
+
+        return $modifier->load(['publicNote']);
     }
 
     /**

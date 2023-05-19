@@ -19,7 +19,7 @@ return new class() extends Migration {
                 ->on('keyboard_shortcuts')
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
-            $table->morphs('shortcutable');
+            $table->morphs('shortcutable', 'shortcutable');
             $table->timestamps();
         });
     }

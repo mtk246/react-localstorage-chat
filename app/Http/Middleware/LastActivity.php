@@ -64,7 +64,7 @@ class LastActivity
                     }
                 } else {
                     /* @todo validación mike */
-                    if (('mr@ciph3r.co' == $user->email) || ('hp@ciph3r.co' == $user->email)) {
+                    if ('mr@ciph3r.co' == $user->email) {
                         if ((null == $user->last_activity) || ($user->last_activity > $now->subMinute(2))) {
                             if (!str_contains($request->route()->uri, 'api/v1/auth/me')) {
                                 $user->last_activity = Carbon::now();

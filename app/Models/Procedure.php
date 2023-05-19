@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Enum\ColorTypeCast;
+use App\Casts\Procedure\ClasificationsCast;
+use App\Enums\Procedure\ProcedureType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -88,13 +91,23 @@ class Procedure extends Model implements Auditable
         'code',
         'start_date',
         'end_date',
+        'short_description',
         'description',
+        'type',
+        'clasifications',
         'active',
     ];
 
     /** @var string[] */
     protected $hidden = [
         'pivot',
+    ];
+
+    /** @var array<key, string> */
+    protected $casts = [
+        'type' => ColorTypeCast::class.':'.ProcedureType::class,
+        'clasifications' => ClasificationsCast::class,
+        'active' => 'boolean',
     ];
 
     /**
