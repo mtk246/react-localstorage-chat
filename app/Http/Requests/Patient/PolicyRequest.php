@@ -49,8 +49,10 @@ class PolicyRequest extends FormRequest
             'subscriber' => ['nullable', 'required_if:own_insurance,false', 'array'],
             'subscriber.id' => ['nullable', 'integer'],
             'subscriber.relationship_id' => ['nullable', 'integer'],
-            'subscriber.ssn' => ['required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.ssn' => ['nullable', 'string'],
             'subscriber.date_of_birth' => ['nullable', 'date'],
+            'subscriber.name_suffix_id' => ['nullable', 'integer'],
+            'subscriber.sex' => ['nullable', 'string', 'max:1'],
             'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
             'subscriber.last_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
 
