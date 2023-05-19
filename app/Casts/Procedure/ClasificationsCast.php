@@ -18,7 +18,7 @@ final class ClasificationsCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        $clasifications = json_decode($value);
+        $clasifications = json_decode($value ?? '{}');
 
         $type = ProcedureType::from((int) $model->type->value);
 
