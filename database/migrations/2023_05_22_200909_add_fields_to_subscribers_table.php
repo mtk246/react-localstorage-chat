@@ -10,6 +10,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('subscribers', function (Blueprint $table) {
+            $table->dropUnique(['ssn']);
             $table->foreignId('name_suffix_id')
                 ->nullable()
                 ->constrained('type_catalogs')
