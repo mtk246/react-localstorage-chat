@@ -196,7 +196,14 @@ class ProcedureRepository
     {
         $procedure = Procedure::whereId($id)->with([
             'publicNote',
-            'procedureCosiderations',
+            'procedureCosiderations' => function($query) {
+                $query->with([
+                    'gender',
+                    'discriminatory',
+                    'frecuentDiagnoses',
+                    'frecuentModifiers',
+                ]);
+            },
             'insuranceCompanies',
             'diagnoses',
             'modifiers',

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
+use App\Http\Resources\Enums\TypeResource;
+use App\Models\CompanyHealthProfessional;
 use App\Models\HealthProfessional;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -34,7 +36,16 @@ final class DoctorBodyResource extends JsonResource
             'upin' => $this->resource->upin,
             'status' => $this->resource->status,
             'last_modified' => $this->resource->last_modified,
-            'companies_providers' => $this->resource->companies_providers,
+            'companies_providers' => $this->resource->companies_providers->map(
+                fn (CompanyHealthProfessional $companyProvider) => [
+                    'health_professional_id' => $companyProvider->health_professional_id,
+                    'company_id' => $companyProvider->company_id,
+                    'authorization' => TypeResource::collection($companyProvider->authorization),
+                    'billing_company_id' => $companyProvider->billing_company_id,
+                    'created_at' => $companyProvider->created_at,
+                    'updated_at' => $companyProvider->updated_at,
+                ],
+            ),
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
