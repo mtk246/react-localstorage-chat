@@ -1085,6 +1085,9 @@ class PatientRepository
                     'ssn' => $subscriber->ssn,
                     'first_name' => $subscriber->first_name,
                     'last_name' => $subscriber->last_name,
+                    'sex' => $subscriber->sex,
+                    'name_suffix_id' => $subscriber->name_suffix_id,
+                    'name_suffix' => $subscriber->nameSuffix->description ?? '',
                     'date_of_birth' => $subscriber->date_of_birth,
                     'relationship_id' => $subscriber->relationship_id,
                     'relationship' => $subscriber->relationship->description ?? '',
@@ -1162,8 +1165,10 @@ class PatientRepository
                     'id' => $data['subscriber']['id'] ?? null,
                 ], [
                     'ssn' => $data['subscriber']['ssn'],
+                    'sex' => $data['subscriber']['sex'] ?? null,
                     'first_name' => upperCaseWords($data['subscriber']['first_name']),
                     'last_name' => upperCaseWords($data['subscriber']['last_name']),
+                    'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['subscriber']['date_of_birth'],
                     'relationship_id' => $data['subscriber']['relationship_id'],
                 ]);
@@ -1249,6 +1254,8 @@ class PatientRepository
             ], [
                 'first_name' => upperCaseWords($data['subscriber']['first_name']),
                 'last_name' => upperCaseWords($data['subscriber']['last_name']),
+                'sex' => $data['subscriber']['sex'] ?? null,
+                'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['subscriber']['date_of_birth'],
                 'relationship_id' => $data['subscriber']['relationship_id'],
             ]);

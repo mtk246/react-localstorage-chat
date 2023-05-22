@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -74,6 +75,8 @@ class Subscriber extends Model implements Auditable
         'member_id',
         'last_name',
         'first_name',
+        'sex',
+        'name_suffix_id',
         'date_of_birth',
         'relationship_id',
     ];
@@ -86,6 +89,16 @@ class Subscriber extends Model implements Auditable
     public function relationship()
     {
         return $this->belongsTo(TypeCatalog::class, 'relationship_id');
+    }
+
+    /**
+     * Subscriber belongs to NameSuffix.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function nameSuffix(): BelongsTo
+    {
+        return $this->belongsTo(TypeCatalog::class, 'name_suffix_id');
     }
 
     /**
