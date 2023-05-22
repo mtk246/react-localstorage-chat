@@ -1113,7 +1113,9 @@
     "subscriber": {
         "id": 1, /** Optional */
         "relationship_id": 1, /** Optional */
-        "ssn": "ssn subscriber",
+        "ssn": "ssn subscriber", /** Optional */
+        "sex":"m", /** Optional */
+        "name_suffix_id": 1, /** Optional */
         "date_of_birth":"1990-11-11", /** Optional */
         "first_name" : "firstName subscriber", /** Required */
         "last_name"  : "lastName subscriber", /** Required */
@@ -1281,7 +1283,9 @@
     "subscriber": {
         "id": 1, /** Optional */
         "relationship_id": 1, /** Optional */
-        "ssn": "ssn subscriber",
+        "ssn": "ssn subscriber", /** Optional */
+        "sex":"m", /** Optional */
+        "name_suffix_id": 1, /** Optional */
         "date_of_birth":"1990-11-11", /** Optional */
         "first_name" : "firstName subscriber", /** Required */
         "last_name"  : "lastName subscriber", /** Required */
