@@ -7,8 +7,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -93,8 +93,6 @@ class Subscriber extends Model implements Auditable
 
     /**
      * Subscriber belongs to NameSuffix.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function nameSuffix(): BelongsTo
     {
