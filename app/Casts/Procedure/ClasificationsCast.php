@@ -26,11 +26,14 @@ final class ClasificationsCast implements CastsAttributes
 
         $type = ProcedureType::from((int) $model->type->value);
 
-        $general = $clasifications->general && $type->getChild()
+        $general = property_exists($clasifications, 'general') && $type->getChild()
             ? new TypeResource($type->getChild()::from((int) $clasifications->general))
             : null;
 
-        $specific = $clasifications->general && $clasifications->specific && $general && $general->getChild()
+        $specific = property_exists($clasifications, 'general')
+            && property_exists($clasifications, 'specific')
+            && $general
+            && $general->getChild()
             ? new TypeResource(
                 $type
                     ->getChild()::from((int) $clasifications->general)
