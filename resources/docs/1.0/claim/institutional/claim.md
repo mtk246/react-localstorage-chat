@@ -68,15 +68,28 @@
     "company_id": 1,
     "facility_id": 1,
     "patient_id": 2,
-    "attending_health_professional_id": 1,
-    "attending_qualifier_id": 1,
-    "open_attending_health_professional_id": 1,
-    "open_attending_qualifier_id": 1,
-    "other_health_professional_id": 1,
-    "other_qualifier_id": 1,
-    "health_professional_id": 1,
-    "qualifier_id": 1,
-    
+    "health_professional_qualifier": [
+        {
+            "field":76,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":77,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":78,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":79,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        }
+    ],
     "prior_authorization_number": "1234567890A",
     "employment_related_condition": true,
     "auto_accident_related_condition": true,
@@ -129,7 +142,7 @@
                 "amount": 200,
             }
         ],
-    }
+    },
     "insurance_policies": [
         {"insurance_policy_id": 8, "order": 1},
         {"insurance_policy_id": 10, "order": 2},
