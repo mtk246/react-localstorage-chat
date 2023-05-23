@@ -76,8 +76,4 @@ enum DurableMedicalEquipmentType: int implements TypeInterface
     // #[NameAttribute(':name:')]
     // #[PublicAttribute(true)]
     // case :capitalize_name: = :id:;
-
-    #[NameAttribute('Anesthesia for Procedures on the Head')]
-    #[PublicAttribute(true)]
-    case PROCEDURES_ON_HEAD = 1;
 }
