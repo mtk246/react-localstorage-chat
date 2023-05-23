@@ -429,6 +429,9 @@ class ProcedureRepository
     public function updateProcedureNote(Procedure $procedure, string $note)
     {
         $procedure->publicNote()->updateOrCreate([
+            'publishable_type' => Procedure::class,
+            'publishable_id' => $procedure->id,
+        ], [
             'note' => $note,
         ]);
 
