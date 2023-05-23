@@ -41,7 +41,7 @@ class ProcedureRepository
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
@@ -312,7 +312,7 @@ class ProcedureRepository
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             $procedure->insuranceCompanies()->sync(
