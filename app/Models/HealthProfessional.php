@@ -121,7 +121,7 @@ class HealthProfessional extends Model implements Auditable
      */
     public function healthProfessionalType()
     {
-        return $this->belongsTo(HealthProfessionalType::class);
+        return $this->hasMany(HealthProfessionalType::class);
     }
 
     /**
