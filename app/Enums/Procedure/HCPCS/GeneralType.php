@@ -4,10 +4,30 @@ declare(strict_types=1);
 
 namespace App\Enums\Procedure\HCPCS;
 
+use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Procedure\HCPCS\Specifics\AdmMisInvType;
+use App\Enums\Procedure\HCPCS\Specifics\AlcoholDrugTreatmentType;
+use App\Enums\Procedure\HCPCS\Specifics\DMEMACType;
+use App\Enums\Procedure\HCPCS\Specifics\DrugsOtherOralMethodType;
+use App\Enums\Procedure\HCPCS\Specifics\DurableMedicalEquipmentType;
+use App\Enums\Procedure\HCPCS\Specifics\EnteralParenteralTherapyType;
+use App\Enums\Procedure\HCPCS\Specifics\HearingServiceType;
+use App\Enums\Procedure\HCPCS\Specifics\MatrixWoundManagementType;
+use App\Enums\Procedure\HCPCS\Specifics\MedicalSurgicalSuppliesType;
+use App\Enums\Procedure\HCPCS\Specifics\NationalCodeType;
+use App\Enums\Procedure\HCPCS\Specifics\OrthoticProceduresType;
+use App\Enums\Procedure\HCPCS\Specifics\OutpatientPPSType;
+use App\Enums\Procedure\HCPCS\Specifics\PathologyLaboratoryType;
+use App\Enums\Procedure\HCPCS\Specifics\ProceduresProfessionalType;
+use App\Enums\Procedure\HCPCS\Specifics\ProstheticProcedureType;
+use App\Enums\Procedure\HCPCS\Specifics\ScreeningType;
+use App\Enums\Procedure\HCPCS\Specifics\TemporaryCodeNoMedicareType;
+use App\Enums\Procedure\HCPCS\Specifics\TemporaryCodeType;
+use App\Enums\Procedure\HCPCS\Specifics\VisionServiceType;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
@@ -21,6 +41,7 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case AMBULANCE_AND_OTHER_TRANSPORT = 1;
 
     #[NameAttribute('Matrix for Wound Management (Placental, Equine, Synthetic)')]
+    #[ChildAttribute(MatrixWoundManagementType::class)]
     #[PublicAttribute(true)]
     case MATRIX_FOR_WOUND_MANAGEMENT = 2;
 
@@ -29,38 +50,46 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case SKIN_SUBSTITUTE_DEVICE = 3;
 
     #[NameAttribute('Medical And Surgical Supplies')]
+    #[ChildAttribute(MedicalSurgicalSuppliesType::class)]
     #[PublicAttribute(true)]
     case MEDICAL_AND_SURGICAL_SUPPLIES = 4;
 
     #[NameAttribute('Administrative, Miscellaneous and Investigational')]
+    #[ChildAttribute(AdmMisInvType::class)]
     #[PublicAttribute(true)]
-    case ADMINISTRATIVE_MISCELLANEOUS_AND_INVESTIGATIONAL = 5;
+    case ADMINISTRATIVE_MISCELLANEOUS_INVESTIGATIONAL = 5;
 
     #[NameAttribute('Enteral and Parenteral Therapy')]
+    #[ChildAttribute(EnteralParenteralTherapyType::class)]
     #[PublicAttribute(true)]
-    case ENTERAL_AND_PARENTERAL_THERAPY = 6;
+    case ENTERAL_AND_PARENTAL_THERAPY = 6;
 
     #[NameAttribute('Other Therapeutic Procedures')]
     #[PublicAttribute(true)]
     case OTHER_THERAPEUTIC_PROCEDURES = 7;
 
     #[NameAttribute('Outpatient PPS')]
+    #[ChildAttribute(OutpatientPPSType::class)]
     #[PublicAttribute(true)]
     case OUTPATIENT_PPS = 8;
 
     #[NameAttribute('Durable Medical Equipment')]
+    #[ChildAttribute(DurableMedicalEquipmentType::class)]
     #[PublicAttribute(true)]
     case DURABLE_MEDICAL_EQUIPMENT = 9;
 
     #[NameAttribute('Procedures / Professional Services')]
+    #[ChildAttribute(ProceduresProfessionalType::class)]
     #[PublicAttribute(true)]
-    case PROCEDURES_AND_PROFESSIONAL_SERVICES = 10;
+    case PROCEDURES_PROFESSIONAL_SERVICES = 10;
 
     #[NameAttribute('Alcohol and Drug Abuse Treatment')]
+    #[ChildAttribute(AlcoholDrugTreatmentType::class)]
     #[PublicAttribute(true)]
     case ALCOHOL_AND_DRUG_ABUSE_TREATMENT = 11;
 
     #[NameAttribute('Drugs Administered Other than Oral Method')]
+    #[ChildAttribute(DrugsOtherOralMethodType::class)]
     #[PublicAttribute(true)]
     case DRUGS_ADMINISTERED_OTHER_THAN_ORAL_METHOD = 12;
 
@@ -69,18 +98,21 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case CHEMOTHERAPY_DRUGS = 13;
 
     #[NameAttribute('Durable medical equipment (DME) Medicare administrative contractors (MACs)')]
+    #[ChildAttribute(DMEMACType::class)]
     #[PublicAttribute(true)]
     case DURABLE_MEDICAL_EQUIPMENT_MACS = 14;
 
     #[NameAttribute('Components, Accessories and Supplies')]
     #[PublicAttribute(true)]
-    case COMPONENTS = 15;
+    case COMPONENTS_ACCESSORIES_AND_SUPPLIES = 15;
 
     #[NameAttribute('Orthotic Procedures and services')]
+    #[ChildAttribute(OrthoticProceduresType::class)]
     #[PublicAttribute(true)]
-    case ORTHOTIC_PROCEDURES = 16;
+    case ORTHOTIC_PROCEDURES_AND_SERVICES = 16;
 
     #[NameAttribute('Prosthetic Procedures')]
+    #[ChildAttribute(ProstheticProcedureType::class)]
     #[PublicAttribute(true)]
     case PROSTHETIC_PROCEDURES = 17;
 
@@ -90,13 +122,14 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
 
     #[NameAttribute('EOM (Enhancing Oncology Model) Enhanced Services')]
     #[PublicAttribute(true)]
-    case EOM_ENHANCED_SERVICES = 19;
+    case EOM_ENHANCING_ONCOLOGY_MODEL_ENHANCED_SERVICES = 19;
 
     #[NameAttribute('Miscellaneous Medical Services')]
     #[PublicAttribute(true)]
     case MISCELLANEOUS_MEDICAL_SERVICES = 20;
 
     #[NameAttribute('Screening Procedures')]
+    #[ChildAttribute(ScreeningType::class)]
     #[PublicAttribute(true)]
     case SCREENING_PROCEDURES = 21;
 
@@ -109,10 +142,12 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case OTHER_SERVICES = 23;
 
     #[NameAttribute('Pathology and Laboratory Services')]
+    #[ChildAttribute(PathologyLaboratoryType::class)]
     #[PublicAttribute(true)]
     case PATHOLOGY_AND_LABORATORY_SERVICES = 24;
 
     #[NameAttribute('Temporary Codes')]
+    #[ChildAttribute(TemporaryCodeType::class)]
     #[PublicAttribute(true)]
     case TEMPORARY_CODES = 25;
 
@@ -121,10 +156,12 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case DIAGNOSTIC_RADIOLOGY_SERVICES = 26;
 
     #[NameAttribute('Temporary National Codes (Non-Medicare)')]
+    #[ChildAttribute(TemporaryCodeNoMedicareType::class)]
     #[PublicAttribute(true)]
-    case TEMPORARY_NATIONAL_CODES = 27;
+    case TEMPORARY_NATIONAL_CODES_NON_MEDICARE = 27;
 
     #[NameAttribute('National Codes Established for State Medicaid Agencies')]
+    #[ChildAttribute(NationalCodeType::class)]
     #[PublicAttribute(true)]
     case NATIONAL_CODES_ESTABLISHED_FOR_STATE_MEDICAID_AGENCIES = 28;
 
@@ -133,10 +170,12 @@ enum GeneralType: int implements TypeInterface, HasChildInterface
     case CORONAVIRUS_DIAGNOSTIC_PANEL = 29;
 
     #[NameAttribute('Vision Services')]
+    #[ChildAttribute(VisionServiceType::class)]
     #[PublicAttribute(true)]
     case VISION_SERVICES = 30;
 
     #[NameAttribute('Hearing Services')]
+    #[ChildAttribute(HearingServiceType::class)]
     #[PublicAttribute(true)]
     case HEARING_SERVICES = 31;
 }
