@@ -303,7 +303,10 @@ class ProcedureRepository
             DB::beginTransaction();
             $procedure = Procedure::find($id);
 
+            assert($procedure instanceof Procedure);
+
             $procedure->update([
+                'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
@@ -312,11 +315,11 @@ class ProcedureRepository
                 'clasifications' => $data['clasifications'],
             ]);
 
-            if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
-                if ($data['specific_insurance_company']) {
-                    $procedure->insuranceCompanies()->sync($data['insurance_companies']);
-                }
-            }
+            $procedure->insuranceCompanies()->sync(
+                isset($data['specific_insurance_company']) && $data['specific_insurance_company'] && isset($data['insurance_companies'])
+                    ? $data['insurance_companies']
+                    : []
+            );
 
             if (isset($data['mac_localities'])) {
                 /* Delete mac localities */
@@ -334,6 +337,8 @@ class ProcedureRepository
                         /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
+                    $procedure->procedureFees()->delete();
+
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
                             /** insuranceType == Medicare */
@@ -382,7 +387,7 @@ class ProcedureRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
