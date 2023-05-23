@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CreateDoctorRequest extends FormRequest
@@ -18,15 +20,23 @@ class CreateDoctorRequest extends FormRequest
     public function rules()
     {
         $doctorTypeId = HealthProfessionalType::whereType('Medical doctor')->first('id');
+        $doctor = HealthProfessional::query()->where('npi', $this->npi)->first();
+        $user = $doctor?->user;
 
         return [
             'npi' => ['required', 'string'],
             'ein' => ['nullable', 'string', 'regex:/^\d{2}-\d{7}$/'],
             'upin' => ['nullable', 'string', 'max:50'],
-            'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')
+                    ->ignore($user->id),
+                'string',
+                'email:rfc',
+            ],
             'is_provider' => ['nullable', 'boolean'],
 
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'billing_company_id' => [Rule::requiredIf(Auth::user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required_unless:is_provider,true', 'integer', 'nullable'],
             'authorization' => [

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class DoctorRepository
@@ -39,45 +40,31 @@ class DoctorRepository
                     'last_name' => $data['profile']['last_name'],
                     'date_of_birth' => $data['profile']['date_of_birth'],
                     'ssn' => $data['profile']['ssn'],
-                ], [
-                    'ssn' => $data['profile']['ssn'],
-                    'first_name' => $data['profile']['first_name'],
-                    'middle_name' => $data['profile']['middle_name'] ?? '',
-                    'last_name' => $data['profile']['last_name'],
-                    'sex' => $data['profile']['sex'],
-                    'date_of_birth' => $data['profile']['date_of_birth'],
-                ]);
+                ], collect($data['profile'])->toArray());
             } else {
                 $profile = Profile::updateOrCreate([
                     'first_name' => $data['profile']['first_name'],
                     'last_name' => $data['profile']['last_name'],
                     'date_of_birth' => $data['profile']['date_of_birth'],
-                ], [
-                    'ssn' => $data['profile']['ssn'],
-                    'first_name' => $data['profile']['first_name'],
-                    'middle_name' => $data['profile']['middle_name'] ?? '',
-                    'last_name' => $data['profile']['last_name'],
-                    'sex' => $data['profile']['sex'],
-                    'date_of_birth' => $data['profile']['date_of_birth'],
-                    'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
-                ]);
+                ], collect($data['profile'])->toArray());
             }
             /** Create User */
-            $user = User::create([
-                'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+            $user = User::query()->updateOrCreate([
                 'email' => $data['email'],
+            ],[
+                'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
             ]);
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Auth::user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = Auth::user()->billingCompanies->first();
             }
 
             /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
@@ -297,7 +284,7 @@ class DoctorRepository
 
             \DB::commit();
 
-            return $healthP;
+            return $healthP->load(['billingCompanies']);
         } catch (\Exception $e) {
             \DB::rollBack();
             dd($e->getMessage());
@@ -312,7 +299,10 @@ class DoctorRepository
         try {
             \DB::beginTransaction();
 
-            $healthP = HealthProfessional::find($id);
+            $healthP = HealthProfessional::query()->find($id);
+
+            assert($healthP instanceof HealthProfessional);
+
             $healthP->update([
                 'npi' => $data['npi'],
                 'health_professional_type_id' => $data['health_professional_type_id'],
@@ -370,7 +360,7 @@ class DoctorRepository
                 );
             }
 
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
