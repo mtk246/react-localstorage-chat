@@ -31,6 +31,11 @@ definitions:
           ## - ./vendor/bin/pstan 
         caches:
           - composer
+    - step: &deploy-forge
+          name: Run Forge Quik Deployment
+          deployment: Test
+          script:
+            - curl -vk https://forge.laravel.com/servers/$SERVER_ID/sites/$SERVER_SITE/deploy/http?token=$DEPLOY_TOKEN
 
 pipelines:
   default:
@@ -62,10 +67,8 @@ pipelines:
               - step: *testin-app
               - step: *syntax-test
       - step:
-          name: Run Deployment Trigger
+          <<: *deploy-forge
           deployment: V100
-          script:
-            - curl -vk https://forge.laravel.com/servers/$SERVER_ID/sites/$SERVER_SITE/deploy/http?token=$DEPLOY_TOKEN
     staging:
       - stage:
           name: Test app
@@ -73,7 +76,5 @@ pipelines:
               - step: *testin-app
               - step: *syntax-test
       - step:
-          name: Run Deployment Trigger
+          <<: *deploy-forge
           deployment: Staging
-          script:
-            - curl -vk https://forge.laravel.com/servers/$SERVER_ID/sites/$SERVER_SITE/deploy/http?token=$DEPLOY_TOKEN
