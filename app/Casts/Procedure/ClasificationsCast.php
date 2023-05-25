@@ -26,11 +26,14 @@ final class ClasificationsCast implements CastsAttributes
 
         $type = ProcedureType::from((int) $model->type->value);
 
-        $general = $clasifications->general && $type->getChild()
+        $general = $this->checkProperty($clasifications, 'general') && $type->getChild()
             ? new TypeResource($type->getChild()::from((int) $clasifications->general))
             : null;
 
-        $specific = $clasifications->general && $clasifications->specific && $general && $general->getChild()
+        $specific = $this->checkProperty($clasifications, 'general')
+            && $this->checkProperty($clasifications, 'specific')
+            && $general
+            && $general->getChild()
             ? new TypeResource(
                 $type
                     ->getChild()::from((int) $clasifications->general)
@@ -38,9 +41,9 @@ final class ClasificationsCast implements CastsAttributes
             )
             : null;
 
-        $subSpecific = property_exists($clasifications, 'general')
-            && property_exists($clasifications, 'specific')
-            && property_exists($clasifications, 'sub_specific')
+        $subSpecific = $this->checkProperty($clasifications, 'general')
+            && $this->checkProperty($clasifications, 'specific')
+            && $this->checkProperty($clasifications, 'sub_specific')
             && $specific
             && $specific->getChild()
             ? new TypeResource(
@@ -67,5 +70,10 @@ final class ClasificationsCast implements CastsAttributes
     public function set($model, string $key, $value, array $attributes)
     {
         return json_encode($value);
+    }
+
+    private function checkProperty(object $object, string $property): bool
+    {
+        return property_exists($object, $property) && !is_null($object->{$property});
     }
 }

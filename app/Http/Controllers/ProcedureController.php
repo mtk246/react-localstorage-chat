@@ -78,7 +78,7 @@ class ProcedureController extends Controller
 
     public function updateProcedureNote(ProcedureNoteUpdateRequest $request, Procedure $procedure): JsonResponse
     {
-        $rs = $this->procedureRepository->updateProcedureNote($procedure, $request->validated()?->note ?? '');
+        $rs = $this->procedureRepository->updateProcedureNote($procedure, $request->validated()["note"]);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure note'), 400);
     }
