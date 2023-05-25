@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
@@ -1746,12 +1747,12 @@ class DataTestSeeder extends Seeder
                 'is_provider' => false,
 
                 'billing_company' => 'MCC',
-                'health_professional_type_id' => HealthProfessionalType::whereType('Medical doctor')->first()->id,
+                'health_professional_type_id' => HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value,
                 'company_id' => Company::whereName('Isle Of Palms Recovery Center, Llc')->first()->id,
                 'authorization' => [
-                                                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
-                                                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
-                                                  ],
+                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
+                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
+                ],
 
                 'taxonomies_company' => null,
                 'npi_company' => null,
@@ -1799,13 +1800,13 @@ class DataTestSeeder extends Seeder
                 'is_provider' => false,
 
                 'billing_company' => 'MCC',
-                'health_professional_type_id' => HealthProfessionalType::whereType('Medical doctor')->first()->id,
+                'health_professional_type_id' => HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value,
                 'company_id' => Company::whereName('Nexus Medical Centers, Llc')->first()->id,
                 'authorization' => [
-                                                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
-                                                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
-                                                    CompanyHealthProfessionalType::whereType('Referred')->first()->id,
-                                                  ],
+                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
+                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
+                    CompanyHealthProfessionalType::whereType('Referred')->first()->id,
+                ],
 
                 'taxonomies_company' => null,
                 'npi_company' => null,
@@ -1853,13 +1854,13 @@ class DataTestSeeder extends Seeder
                 'is_provider' => false,
 
                 'billing_company' => 'MCC',
-                'health_professional_type_id' => HealthProfessionalType::whereType('Medical doctor')->first()->id,
+                'health_professional_type_id' => HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value,
                 'company_id' => Company::whereName('Nexus Medical Centers, Llc')->first()->id,
                 'authorization' => [
-                                                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
-                                                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
-                                                    CompanyHealthProfessionalType::whereType('Referred')->first()->id,
-                                                  ],
+                    CompanyHealthProfessionalType::whereType('Service provider')->first()->id,
+                    CompanyHealthProfessionalType::whereType('Billing provider')->first()->id,
+                    CompanyHealthProfessionalType::whereType('Referred')->first()->id,
+                ],
 
                 'taxonomies_company' => null,
                 'npi_company' => null,
@@ -2076,12 +2077,18 @@ class DataTestSeeder extends Seeder
                 'npi' => $dataHP['npi'],
             ], [
                 'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
-                'health_professional_type_id' => $dataHP['health_professional_type_id'],
                 'is_provider' => $dataHP['is_provider'] ?? false,
                 'npi_company' => $dataHP['npi_company'] ?? '',
                 'company_id' => $company->id ?? $dataHP['company_id'],
                 'user_id' => $user->id,
             ]);
+
+            HealthProfessionalType::query()->create([
+                'type' => (string) $dataHP['health_professional_type_id'],
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'health_professional_id' => $healthP->id,
+            ]);
+
             $auth = [];
             foreach ($dataHP['authorization'] as $authorization) {
                 if (is_numeric($authorization)) {

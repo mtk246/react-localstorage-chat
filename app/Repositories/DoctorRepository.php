@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Http\Resources\Enums\EnumResource;
+use App\Http\Resources\Enums\TypeResource;
 use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\BillingCompany;
@@ -194,7 +197,6 @@ class DoctorRepository
                 ],
                 [
                     'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
-                    'health_professional_type_id' => $data['health_professional_type_id'],
                     'is_provider' => $data['is_provider'] ?? false,
                     'npi_company' => $data['npi_company'] ?? '',
                     'ein' => $data['ein'] ?? null,
@@ -203,6 +205,13 @@ class DoctorRepository
                     'user_id' => $user->id,
                 ],
             );
+
+            HealthProfessionalType::query()->updateOrCreate([
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'health_professional_id' => $healthP->id,
+            ], [
+                'type' => (string) $data['health_professional_type_id'],
+            ]);
 
             $auth = [];
 
@@ -284,10 +293,11 @@ class DoctorRepository
 
             \DB::commit();
 
-            return $healthP->load(['billingCompanies']);
+            return $healthP->load(['billingCompanies', 'healthProfessionalType', 'companies', 'taxonomies']);
         } catch (\Exception $e) {
             \DB::rollBack();
-            dd($e->getMessage());
+
+            throw $e;
         }
     }
 
@@ -303,14 +313,26 @@ class DoctorRepository
 
             assert($healthP instanceof HealthProfessional);
 
+            if (Auth::User()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'];
+            } else {
+                $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
             $healthP->update([
                 'npi' => $data['npi'],
-                'health_professional_type_id' => $data['health_professional_type_id'],
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'company_id' => $data['company_id'] ?? null,
                 'ein' => $data['ein'] ?? null,
                 'upin' => $data['upin'] ?? null,
+            ]);
+
+            HealthProfessionalType::query()->updateOrCreate([
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'health_professional_id' => $healthP->id,
+            ], [
+                'type' => (string) $data['health_professional_type_id'],
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -342,12 +364,6 @@ class DoctorRepository
                 'date_of_birth' => $data['profile']['date_of_birth'],
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
             ]);
-
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
 
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
                 $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
@@ -527,10 +543,11 @@ class DoctorRepository
 
             \DB::commit();
 
-            return $healthP;
+            return $healthP->load(['taxonomies', 'companies', 'healthProfessionalType', 'company']);
         } catch (\Exception $e) {
             \DB::rollBack();
-            dd($e->getMessage());
+
+            throw $e;
         }
     }
 
@@ -854,7 +871,7 @@ class DoctorRepository
 
     public function getListTypes()
     {
-        return getList(HealthProfessionalType::class, 'type');
+        return new EnumResource(collect(HealthProfessionalTypeEnum::cases()), TypeResource::class);
     }
 
     public function getListAuthorizations()
@@ -1006,7 +1023,8 @@ class DoctorRepository
             return $healthP;
         } catch (\Exception $e) {
             \DB::rollBack();
-            dd($e->getMessage());
+
+            throw $e;
         }
     }
 }

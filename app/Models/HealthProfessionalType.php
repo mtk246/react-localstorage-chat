@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Enum\TypeCast;
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +46,12 @@ class HealthProfessionalType extends Model implements Auditable
 
     protected $fillable = [
         'type',
+        'billing_company_id',
+        'health_professional_id',
+    ];
+
+    protected $casts = [
+        'type' => TypeCast::class.':'.HealthProfessionalTypeEnum::class,
     ];
 
     /**
@@ -51,9 +59,14 @@ class HealthProfessionalType extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function healthProfessionals()
+    public function healthProfessional()
     {
-        return $this->hasMany(HealthProfessional::class);
+        return $this->belongsTo(HealthProfessional::class);
+    }
+
+    public function billingCompany()
+    {
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**
