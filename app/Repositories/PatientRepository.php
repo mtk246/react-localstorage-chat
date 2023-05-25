@@ -1085,6 +1085,9 @@ class PatientRepository
                     'ssn' => $subscriber->ssn,
                     'first_name' => $subscriber->first_name,
                     'last_name' => $subscriber->last_name,
+                    'sex' => $subscriber->sex,
+                    'name_suffix_id' => $subscriber->name_suffix_id,
+                    'name_suffix' => $subscriber->nameSuffix->description ?? '',
                     'date_of_birth' => $subscriber->date_of_birth,
                     'relationship_id' => $subscriber->relationship_id,
                     'relationship' => $subscriber->relationship->description ?? '',
@@ -1162,8 +1165,10 @@ class PatientRepository
                     'id' => $data['subscriber']['id'] ?? null,
                 ], [
                     'ssn' => $data['subscriber']['ssn'],
+                    'sex' => $data['subscriber']['sex'] ?? null,
                     'first_name' => upperCaseWords($data['subscriber']['first_name']),
                     'last_name' => upperCaseWords($data['subscriber']['last_name']),
+                    'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['subscriber']['date_of_birth'],
                     'relationship_id' => $data['subscriber']['relationship_id'],
                 ]);
@@ -1249,6 +1254,8 @@ class PatientRepository
             ], [
                 'first_name' => upperCaseWords($data['subscriber']['first_name']),
                 'last_name' => upperCaseWords($data['subscriber']['last_name']),
+                'sex' => $data['subscriber']['sex'] ?? null,
+                'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['subscriber']['date_of_birth'],
                 'relationship_id' => $data['subscriber']['relationship_id'],
             ]);
@@ -1521,92 +1528,92 @@ class PatientRepository
         $first_name = upperCaseWords($request->first_name ?? '');
         $last_name = upperCaseWords($request->last_name ?? '');
         $ssn = $request->ssn ?? '';
-        if (!empty($ssn)) {
-            $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
-            $users = User::with('profile')->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                        ->where('first_name', 'ilike', "%{$first_name}%")
-                        ->where('last_name', 'ilike', "%{$last_name}%")
-                        ->where('ssn', 'ilike', "%{$ssn}")
-                        ->orWhere('ssn', 'ilike', "%{$ssnFormated}");
-            })->get();
-        } else {
-            $users = User::with('profile')->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                        ->where('first_name', 'ilike', "%{$first_name}%")
-                        ->where('last_name', 'ilike', "%{$last_name}%");
-            })->get()
-            ->map(function ($user) {
-                $billingCompanies = $user->billingCompanies->map(function ($billingCompany) {
-                    return [
-                        'id' => $billingCompany->id,
-                        'name' => $billingCompany->name,
-                        'roles' => ['Patient', 'Billing manager'],
-                    ];
-                })->toArray();
+        $query = User::with('profile')
+            ->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name, $ssn) {
+                $query
+                    ->whereDateOfBirth($date_of_birth)
+                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
+                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")]);
 
-                if (Gate::allows('is-admin')) {
-                    $billingCompaniesException = Patient::whereUserId($user->id)->first()?->billingCompanies()
-                        ->get()
-                        ->pluck('id')
-                        ->toArray();
-
-                    $billingCompaniesRole = Patient::whereUserId($user->id)->first()?->billingCompanies
-                        ->map(function ($bC) use ($user) {
-                            return [
-                                'id' => $bC->id,
-                                'name' => $bC->name,
-                                'roles' => $user->roles->pluck('name')->toArray(),
-                            ];
-                        })
-                        ->toArray();
-                } else {
-                    $billingCompaniesException = auth()->user()->billingCompanies
-                        ->first()
-                        ->pluck('id')
-                        ->toArray();
-                    $billingCompaniesRole = auth()->user()->billingCompanies
-                        ->map(function ($bC) use ($user) {
-                            return [
-                                'id' => $bC->id,
-                                'name' => $bC->name,
-                                'roles' => $user->roles->pluck('name')->toArray(),
-                            ];
-                        })
-                        ->toArray();
+                if (!empty($ssn)) {
+                    $ssnFormated = substr($ssn, 0, 1) . '-' . substr($ssn, 1, strlen($ssn));
+                    $query->where(function ($query) use ($ssn, $ssnFormated) {
+                        $query
+                            ->whereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssn%")])
+                            ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssnFormated")]);
+                    });
                 }
-                $billingCompanies = BillingCompany::query()
-                    ->where('status', true)
-                    ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+            });
+        $users = $query->get()->map(function ($user) {
+            $billingCompanies = $user->billingCompanies->map(function ($billingCompany) {
+                return [
+                    'id' => $billingCompany->id,
+                    'name' => $billingCompany->name,
+                    'roles' => ['Patient', 'Billing manager'],
+                ];
+            })->toArray();
+
+            if (Gate::allows('is-admin')) {
+                $billingCompaniesException = Patient::whereUserId($user->id)->first()?->billingCompanies()
                     ->get()
                     ->pluck('id')
                     ->toArray();
 
-                return [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                    'profile_id' => $user->profile_id,
-                    'patient_id' => Patient::whereUserId($user->id)->first()?->id,
-                    'forbidden' => empty($billingCompanies)
-                        ? 'The patient has already been associated with all the billing companies registered'
-                        : null,
-                    'profile' => [
-                        'ssn' => $user->profile->ssn,
-                        'first_name' => $user->profile->first_name,
-                        'middle_name' => $user->profile->middle_name,
-                        'last_name' => $user->profile->last_name,
-                        'sex' => $user->profile->sex,
-                        'date_of_birth' => $user->profile->date_of_birth,
-                        'avatar' => $user->profile->avatar,
-                        'credit_score' => $user->profile->credit_score,
-                        'name_suffix_id' => $user->profile->name_suffix_id,
-                        'name_suffix' => $user->profile->nameSuffix,
-                    ],
-                    'language' => $user->language,
-                    'billing_companies' => $billingCompaniesRole,
-                ];
-            })->toArray();
-        }
+                $billingCompaniesRole = Patient::whereUserId($user->id)->first()?->billingCompanies
+                    ->map(function ($bC) use ($user) {
+                        return [
+                            'id' => $bC->id,
+                            'name' => $bC->name,
+                            'roles' => $user->roles->pluck('name')->toArray(),
+                        ];
+                    })
+                    ->toArray();
+            } else {
+                $billingCompaniesException = auth()->user()->billingCompanies
+                    ->first()
+                    ->pluck('id')
+                    ->toArray();
+                $billingCompaniesRole = auth()->user()->billingCompanies
+                    ->map(function ($bC) use ($user) {
+                        return [
+                            'id' => $bC->id,
+                            'name' => $bC->name,
+                            'roles' => $user->roles->pluck('name')->toArray(),
+                        ];
+                    })
+                    ->toArray();
+            }
+            $billingCompanies = BillingCompany::query()
+                ->where('status', true)
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            return [
+                'id' => $user->id,
+                'email' => $user->email,
+                'profile_id' => $user->profile_id,
+                'patient_id' => Patient::whereUserId($user->id)->first()?->id,
+                'forbidden' => empty($billingCompanies)
+                    ? 'The patient has already been associated with all the billing companies registered'
+                    : null,
+                'profile' => [
+                    'ssn' => $user->profile->ssn,
+                    'first_name' => $user->profile->first_name,
+                    'middle_name' => $user->profile->middle_name,
+                    'last_name' => $user->profile->last_name,
+                    'sex' => $user->profile->sex,
+                    'date_of_birth' => $user->profile->date_of_birth,
+                    'avatar' => $user->profile->avatar,
+                    'credit_score' => $user->profile->credit_score,
+                    'name_suffix_id' => $user->profile->name_suffix_id,
+                    'name_suffix' => $user->profile->nameSuffix,
+                ],
+                'language' => $user->language,
+                'billing_companies' => $billingCompaniesRole,
+            ];
+        })->toArray();
 
         return (0 == count($users)) ? null : $users;
     }

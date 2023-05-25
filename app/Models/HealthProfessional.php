@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -31,7 +32,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \App\Models\Company|null $company
- * @property mixed $companies_providers
+ * @property \Illuminate\Support\collection $companies_providers
  * @property mixed $last_modified
  * @property mixed $status
  * @property mixed $verified_on_nppes
@@ -120,7 +121,7 @@ class HealthProfessional extends Model implements Auditable
      */
     public function healthProfessionalType()
     {
-        return $this->belongsTo(HealthProfessionalType::class);
+        return $this->hasMany(HealthProfessionalType::class);
     }
 
     /**
@@ -216,14 +217,17 @@ class HealthProfessional extends Model implements Auditable
         }
     }
 
-    public function getCompaniesProvidersAttribute()
+    public function getCompaniesProvidersAttribute(): Collection
     {
         $records = [];
         foreach ($this->companies ?? [] as $key => $company) {
             array_push($records, $company->pivot);
         }
 
-        return $records;
+        return collect($this->companies)
+            ->map(function ($company) {
+                return $company->pivot;
+            });
     }
 
     public function scopeSearch($query, $search)
@@ -252,9 +256,9 @@ class HealthProfessional extends Model implements Auditable
             'user.email' => $this->user->email,
             'user.ssn' => $this->user->profile->ssn,
             'user.phone' => $this->user->profile->phone,
-            'company.name' => $this->company->name,
-            'company.npi' => $this->company->npi,
-            'company.code' => $this->company->code,
+            'company.name' => $this->company?->name,
+            'company.npi' => $this->company?->npi,
+            'company.code' => $this->company?->code,
         ];
     }
 }
