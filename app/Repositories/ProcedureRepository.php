@@ -426,14 +426,22 @@ class ProcedureRepository
         }
     }
 
-    public function updateProcedureNote(Procedure $procedure, string $note)
+    public function updateProcedureNote(Procedure $procedure, ?string $note)
     {
-        $procedure->publicNote()->updateOrCreate([
-            'publishable_type' => Procedure::class,
-            'publishable_id' => $procedure->id,
-        ], [
-            'note' => $note,
-        ]);
+        PublicNote::query()->when(null !== $note, function (Builder $query) use ($procedure, $note): void {
+            $query->updateOrCreate([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ], [
+                'note' => $note,
+            ]);
+        },
+        function (Builder $query) use ($procedure): void {
+            $query->where([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ])->delete();
+        });
 
         return $procedure->load(['publicNote']);
     }
