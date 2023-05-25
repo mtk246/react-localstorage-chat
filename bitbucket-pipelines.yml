@@ -63,8 +63,9 @@ pipelines:
               - step: *syntax-test
       - step:
           name: Run Deployment Trigger
+          deployment: V100
           script:
-            - curl -vk https://forge.laravel.com/servers/675028/sites/1962572/deploy/http?token=K06EZkQmi3CeSRtLbGnS8v7jc85bkneyXYLnvDZP
+            - curl -vk https://forge.laravel.com/servers/$SERVER_ID/sites/$SERVER_SITE/deploy/http?token=$DEPLOY_TOKEN
     staging:
       - stage:
           name: Test app
@@ -73,5 +74,6 @@ pipelines:
               - step: *syntax-test
       - step:
           name: Run Deployment Trigger
+          deployment: Staging
           script:
-            - curl -vk https://forge.laravel.com/servers/675028/sites/1957954/deploy/http?token=rE2fyLL6v4TDMJSlDG84jKewgQnD4hr4FV5rP03x
+            - curl -vk https://forge.laravel.com/servers/$SERVER_ID/sites/$SERVER_SITE/deploy/http?token=$DEPLOY_TOKEN
