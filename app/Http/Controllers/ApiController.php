@@ -41,7 +41,6 @@ class ApiController extends Controller
         } elseif (isset($data->results[0])) {
             $r = $data->results[0];
 
-            dd($r);
             foreach ($r->addresses as $address) {
                 if ('MAILING' == $address->address_purpose) {
                     $mailingAddress = $address;
