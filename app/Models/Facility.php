@@ -100,7 +100,7 @@ class Facility extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
-    //use Searchable;
+    use Searchable;
 
     protected $table = 'facilities';
 
