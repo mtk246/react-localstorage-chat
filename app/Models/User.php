@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -143,6 +144,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     use Notifiable;
     use HasRoleAndPermission;
     use AuditableTrait;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -376,5 +378,19 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         }
 
         return $query;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'usercode' => $this->usercode,
+            'email' => $this->email,
+            'contacts' => $this->contacts->toArray(),
+            'addresses' => $this->addresses->toArray(),
+            'profile.first_name' => $this->profile->first_name,
+            'profile.last_name' => $this->profile->last_name,
+            'profile.ssn' => $this->profile->ssn,
+            'profile.phone' => $this->profile->phone,
+        ];
     }
 }
