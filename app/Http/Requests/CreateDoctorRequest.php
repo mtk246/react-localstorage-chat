@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\HealthProfessional\HealthProfessionalType;
 use App\Models\HealthProfessional;
+use App\Rules\company\NameCheckerRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -20,7 +21,8 @@ class CreateDoctorRequest extends FormRequest
     public function rules()
     {
         $doctorTypeId = HealthProfessionalType::MEDICAL_DOCTOR->value;
-        $doctor = HealthProfessional::query()->where('npi', $this->npi)->first();
+        $doctor = HealthProfessional::query()->where('npi', $this->npi)->with(['company'])->first();
+        $company = $doctor?->company;
         $user = $doctor?->user;
 
         return [
@@ -54,7 +56,15 @@ class CreateDoctorRequest extends FormRequest
             'taxonomies_company.*.primary' => ['required_unless:npi_company,null', 'boolean', 'nullable'],
 
             'npi_company' => ['nullable', 'string'],
-            'name_company' => ['required_unless:npi_company,null', 'nullable', 'string'],
+            'name_company' => [
+                new NameCheckerRule(
+                    $this->npi_company,
+                    $this->npi,
+                    $this->profile['first_name'],
+                    $this->profile['last_name'],
+                    $company,
+                ),
+            ],
             'nickname' => ['nullable', 'string'],
 
             'private_note' => ['nullable', 'string'],
