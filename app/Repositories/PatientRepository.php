@@ -858,6 +858,7 @@ class PatientRepository
             /** Create Profile */
             $profile = $user->profile;
             $profile->update([
+                'ssn' => $data['profile']['ssn'],
                 'first_name' => $data['profile']['first_name'],
                 'middle_name' => $data['profile']['middle_name'],
                 'last_name' => $data['profile']['last_name'],

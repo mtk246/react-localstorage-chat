@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -151,6 +152,7 @@ class InsurancePlan extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'code',
@@ -401,9 +403,20 @@ class InsurancePlan extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower('%$search%')])
-                         ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower('%$search%')]);
+                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower('%$search%')]);
         }
 
         return $query;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'name' => $this->name,
+            'public_note' => $this->publicNote?->note,
+            'contacts' => $this->contacts->toArray(),
+            'addresses' => $this->addresses->toArray(),
+        ];
     }
 }
