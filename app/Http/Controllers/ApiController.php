@@ -40,6 +40,7 @@ class ApiController extends Controller
             return response()->json(__('Field contains special character(s) or wrong number of characters'), 404);
         } elseif (isset($data->results[0])) {
             $r = $data->results[0];
+
             foreach ($r->addresses as $address) {
                 if ('MAILING' == $address->address_purpose) {
                     $mailingAddress = $address;
@@ -56,6 +57,7 @@ class ApiController extends Controller
                 'country' => $mailingAddress->country_name ?? '',
                 'city' => $mailingAddress->city ?? '',
                 'state' => $mailingAddress->state ?? '',
+                'zip' => $mailingAddress->postal_code ?? '',
             ];
 
             // unset($r->enumeration_type);
