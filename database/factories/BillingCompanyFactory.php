@@ -8,11 +8,10 @@ use App\Models\BillingCompany;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factorw<\App\Models\BillingCompany>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BillingCompany>
  */
 final class BillingCompanyFactory extends Factory
 {
-
     /**
      * The name of the factory's corresponding model.
      *
@@ -29,7 +28,7 @@ final class BillingCompanyFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'status' => $this->faker->boolean()
+            'status' => $this->faker->boolean(),
         ];
     }
 }

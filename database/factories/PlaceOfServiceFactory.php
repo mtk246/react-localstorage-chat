@@ -27,10 +27,10 @@ final class PlaceOfServiceFactory extends Factory
     public function definition()
     {
         return [
-            'code' => $this->faker->numberBetween(1,90),
+            'code' => $this->faker->numberBetween(1, 90),
             'name' => $this->faker->name(),
             'description' => $this->faker->word(),
-            'created_at' => $this->faker->date()
+            'created_at' => $this->faker->date(),
         ];
     }
 }

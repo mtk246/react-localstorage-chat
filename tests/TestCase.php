@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-
-use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -20,5 +18,4 @@ abstract class TestCase extends BaseTestCase
         $user = User::where('email', 'hp@ciph3r.co')->first();
         $this->actingAs($user);
     }
-
 }
