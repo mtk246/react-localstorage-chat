@@ -61,7 +61,6 @@ final class CreateFacilityTest extends TestCase
                 'zip' => '234',
             ],
             'contact' => [
-                'contac_name' => 'Luis',
                 'phone' => '34324234',
                 'mobile' => '34324234',
                 'fax' => '567674576457',

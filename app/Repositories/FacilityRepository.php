@@ -124,12 +124,16 @@ class FacilityRepository
             }
             if (isset($data['contact']['email'])) {
 
-                $data_contact = $data['contact'];
-                $data_contact['billing_company_id'] = $billingCompany->id ?? $billingCompany;
-                $data_contact['contactable_id'] = $facility->id;
-                $data_contact['contactable_type'] = Facility::class;
-
-                Contact::create($data_contact);
+                Contact::create([
+                    'contact_name' => $data['contact']['contac_name'] ?? null,
+                    'phone' => $data['contact']['phone'] ?? null,
+                    'fax' => $data['contact']['fax'] ?? null,
+                    'email' => $data['contact']['email'],
+                    'mobile' => $data['contact']['mobile'] ?? null,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'contactable_id' => $facility->id,
+                    'contactable_type' => Facility::class,
+                ]);
             }
 
             DB::commit();

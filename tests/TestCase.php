@@ -15,7 +15,10 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $user = User::where('email', 'hp@ciph3r.co')->first();
+        $user = User::with(['roles' => function ($query) {
+            return $query->where('roles.id', '=', 1);
+        }])->first();
+
         $this->actingAs($user);
     }
 }
