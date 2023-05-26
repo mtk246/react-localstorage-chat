@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -72,6 +73,7 @@ class ClearingHouse extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'code',
@@ -185,7 +187,7 @@ class ClearingHouse extends Model implements Auditable
             return $query->whereHas('contacts', function ($q) use ($search) {
                 $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
@@ -211,5 +213,15 @@ class ClearingHouse extends Model implements Auditable
                 'roles' => $user->roles,
             ];
         }
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'name' => $this->name,
+            'contacts' => $this->contacts->toArray(),
+            'addresses' => $this->addresses->toArray(),
+        ];
     }
 }

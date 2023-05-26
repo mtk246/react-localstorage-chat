@@ -9,6 +9,7 @@ use App\Enums\Modifier\ModifierType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -62,6 +63,7 @@ class Modifier extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'modifier',
@@ -164,9 +166,23 @@ class Modifier extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(modifier) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(special_coding_instructions) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(special_coding_instructions) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'modifier' => $this->modifier,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'special_coding_instructions' => $this->special_coding_instructions,
+            'classification' => $this->classification,
+            'type' => $this->type?->value,
+            'description' => $this->description,
+            'public_note' => $this->publicNote?->note,
+        ];
     }
 }

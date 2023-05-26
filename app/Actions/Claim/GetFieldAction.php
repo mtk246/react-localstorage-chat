@@ -7,8 +7,6 @@ namespace App\Actions\Claim;
 use App\Enums\Claim\FieldHealthCareInstitutional;
 use App\Enums\Claim\FieldInformationInstitutional;
 use App\Enums\Claim\FieldInformationProfessional;
-use App\Http\Resources\Enums\EnumResource;
-use App\Http\Resources\Enums\TypeResource;
 
 final class GetFieldAction
 {
@@ -20,6 +18,23 @@ final class GetFieldAction
                 ? FieldInformationInstitutional::cases()
                 : FieldInformationProfessional::cases());
 
-        return new EnumResource(collect($enum), TypeResource::class);
+        $exceptions = ('information-institutional' === $type)
+            ? [] : [
+                1 => ['to_date', 'description'],
+                2 => ['to_date', 'description'],
+                3 => ['qualifier_id', 'description'],
+                4 => ['qualifier_id', 'description'],
+                5 => [],
+            ];
+
+        $response = collect($enum)->map(function ($item) use ($exceptions) {
+            return [
+                'id' => $item->value,
+                'name' => $item->getName(),
+                'except' => $exceptions[$item->value] ?? [],
+            ];
+        })->toArray();
+
+        return $response;
     }
 }
