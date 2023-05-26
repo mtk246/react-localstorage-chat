@@ -42,7 +42,7 @@ class UpdateRequest extends FormRequest
             'driver_license' => ['nullable', 'string'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user_id ?? null), 'nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user?->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
