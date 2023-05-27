@@ -293,7 +293,7 @@ class DoctorRepository
 
             \DB::commit();
 
-            return $healthP->load(['billingCompanies', 'healthProfessionalType', 'companies', 'taxonomies']);
+            return $this->getOneDoctor($healthP->id);
         } catch (\Exception $e) {
             \DB::rollBack();
 
@@ -543,7 +543,7 @@ class DoctorRepository
 
             \DB::commit();
 
-            return $healthP->load(['taxonomies', 'companies', 'healthProfessionalType', 'company']);
+            return $this->getOneDoctor($healthP->id);
         } catch (\Exception $e) {
             \DB::rollBack();
 
