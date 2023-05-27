@@ -55,6 +55,7 @@ class ApiController extends Controller
                 'email' => '',
                 'address' => $mailingAddress->address_1 ?? '',
                 'country' => $mailingAddress->country_name ?? '',
+                'country_code' => $mailingAddress->country_code ?? '',
                 'city' => $mailingAddress->city ?? '',
                 'state' => $mailingAddress->state ?? '',
                 'zip' => $mailingAddress->postal_code ?? '',
