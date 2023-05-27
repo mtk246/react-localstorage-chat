@@ -12,7 +12,7 @@ definitions:
     - step: &testin-app
         name: Testing app
         script:
-          - ln -f -s .env.example .env
+          - ln -f -s .env.example .env.testing
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
@@ -28,7 +28,7 @@ definitions:
           - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
           ## - ./vendor/bin/phpcs
-          ## - ./vendor/bin/pstan 
+          ## - ./vendor/bin/pstan
         caches:
           - composer
     - step: &deploy-forge
