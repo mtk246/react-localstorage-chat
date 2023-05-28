@@ -213,28 +213,30 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
 
+            $auth = [];
+
             if(
                 HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value === $data['health_professional_type_id']
                 && ($data['is_provider'] ?? false)
             ){
-                $auth = [];
 
                 foreach ($data['authorization'] as $authorization) {
                     if (is_numeric($authorization)) {
                         array_push($auth, $authorization);
                     }
                 }
-                if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
-                    $healthP->companies()->attach($company->id ?? $data['company_id'], [
-                        'authorization' => $auth,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                } else {
-                    $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
-                        'authorization' => $auth,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                }
+            }
+
+            if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
+                $healthP->companies()->attach($company->id ?? $data['company_id'], [
+                    'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            } else {
+                $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
+                    'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
             }
 
             if (isset($data['private_note'])) {
@@ -529,27 +531,30 @@ class DoctorRepository
                 }
             }
 
+            $auth = [];
+
             if(
                 HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value === $data['health_professional_type_id']
                 && ($data['is_provider'] ?? false)
             ){
-                $auth = [];
                 foreach ($data['authorization'] as $authorization) {
                     if (is_numeric($authorization)) {
                         array_push($auth, $authorization);
                     }
                 }
-                if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
-                    $healthP->companies()->attach($company->id ?? $data['company_id'], [
-                        'authorization' => $auth,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                } else {
-                    $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
-                        'authorization' => $auth,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                }
+            }
+
+
+            if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
+                $healthP->companies()->attach($company->id ?? $data['company_id'], [
+                    'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
+            } else {
+                $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
+                    'authorization' => $auth,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
             }
 
             \DB::commit();
