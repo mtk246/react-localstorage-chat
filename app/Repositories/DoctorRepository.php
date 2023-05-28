@@ -757,8 +757,15 @@ class DoctorRepository
     public function getOneByNpi(string $npi)
     {
         $bC = auth()->user()->billing_company_id ?? null;
+        $query = HealthProfessional::whereNpi($npi);
+
+        if(!$query->exists())
+        {
+            return null;
+        }
+
         if (!$bC) {
-            $healthP = HealthProfessional::whereNpi($npi)->with([
+            $healthP = $query->with([
                 'user' => function ($query) {
                     $query->with([
                         'profile' => function ($query) {
@@ -786,7 +793,7 @@ class DoctorRepository
             $healthP->user->contacts->groupBy('billing_company_id');
         } else {
             $healthP = HealthProfessional::whereNpi($npi)->with([
-                'user' => function ($query) {
+                'user' => function ($query) use ($bC) {
                     $query->with([
                         'profile' => function ($query) {
                             $query->with('socialMedias');
@@ -822,7 +829,7 @@ class DoctorRepository
             ])->first();
         }
 
-        return !is_null($healthP) ? $healthP : null;
+        return $healthP;
     }
 
     /**
