@@ -12,6 +12,11 @@ final class BillingCompanyFactory extends Factory
 
     protected $model = BillingCompany::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition()
     {
         return [

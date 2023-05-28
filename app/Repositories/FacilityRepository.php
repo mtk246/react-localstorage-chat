@@ -404,7 +404,6 @@ class FacilityRepository
                 'facility_type_id' => $facility->facility_type_id,
                 'facility_type' => $facility->facilityType->type,
                 'taxonomies' => $taxonomies ?? [],
-                'place_of_services' => $placeOfServices ?? [],
                 'verified_on_nppes' => $facility->verified_on_nppes,
                 'nppes_verified_at' => $facility->nppes_verified_at,
                 'created_at' => $facility->created_at,
@@ -470,6 +469,7 @@ class FacilityRepository
                         'companies' => CompanyResource::collection($companies),
                         'address' => isset($facility_address) ? $facility_address : null,
                         'contact' => isset($facility_contact) ? $facility_contact : null,
+                        'place_of_services' => $placeOfServices ?? [],
                     ],
                 ]);
             }

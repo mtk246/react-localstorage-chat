@@ -12,6 +12,11 @@ final class PlaceOfServiceFactory extends Factory
 
     protected $model = PlaceOfService::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition()
     {
         return [

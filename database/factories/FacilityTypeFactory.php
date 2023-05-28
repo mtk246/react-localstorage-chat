@@ -12,6 +12,11 @@ final class FacilityTypeFactory extends Factory
 
     protected $model = FacilityType::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition()
     {
         return [
