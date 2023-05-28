@@ -5,9 +5,17 @@ declare(strict_types=1);
 use App\Enums\SearchFilterType;
 use App\Models\BillingCompany;
 use App\Models\Claim;
+use App\Models\ClearingHouse;
 use App\Models\Company;
+use App\Models\Diagnosis;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
+use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
+use App\Models\Modifier;
+use App\Models\Patient;
+use App\Models\Procedure;
+use App\Models\User;
 
 return [
     'index' => [
@@ -16,6 +24,14 @@ return [
         SearchFilterType::COMPANY->value => Company::class,
         SearchFilterType::FACILITY->value => Facility::class,
         SearchFilterType::HEALTH_PROFESSIONAL->value => HealthProfessional::class,
+        SearchFilterType::PATIENT->value => Patient::class,
+        SearchFilterType::INSURANCE_COMPANY->value => InsuranceCompany::class,
+        SearchFilterType::INSURANCE_PLAN->value => InsurancePlan::class,
+        SearchFilterType::PROCEDURE->value => Procedure::class,
+        SearchFilterType::DIACNOSIS->value => Diagnosis::class,
+        SearchFilterType::MODIFIER->value => Modifier::class,
+        SearchFilterType::USER->value => User::class,
+        SearchFilterType::CLEARING_HOUSE->value => ClearingHouse::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -185,6 +201,95 @@ return [
                     'company.name',
                     'company.npi',
                     'company.code',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Patient::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'driver_license',
+                    'marital_status',
+                    'user.code',
+                    'user.mail',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            InsuranceCompany::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'name',
+                    'naic',
+                    'public_note',
+                    'contacts',
+                    'addresses',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            InsurancePlan::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'name',
+                    'public_note',
+                    'contacts',
+                    'addresses',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Procedure::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'public_note',
+                    'start_date',
+                    'end_date',
+                    'short_description',
+                    'description',
+                    'type',
+                    'clasifications',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Diagnosis::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'start_date',
+                    'end_date',
+                    'description',
+                    'public_note',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            Modifier::class => [
+                'filterableAttributes' => [
+                    'modifier',
+                    'start_date',
+                    'end_date',
+                    'special_coding_instructions',
+                    'classification',
+                    'type',
+                    'description',
+                    'public_note',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            User::class => [
+                'filterableAttributes' => [
+                    'usercode',
+                    'email',
+                    'contacts',
+                    'addresses',
+                    'profile.first_name',
+                    'profile.last_name',
+                    'profile.ssn',
+                    'profile.phone',
+                ],
+                'sortableAttributes' => ['created_at'],
+            ],
+            ClearingHouse::class => [
+                'filterableAttributes' => [
+                    'code',
+                    'name',
+                    'contacts',
+                    'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
             ],
