@@ -5,9 +5,9 @@ definitions:
     pgsql:
       image: postgres:13-alpine
       environment:
-        POSTGRES_DB: 'medical'
-        POSTGRES_USER: 'user'
-        POSTGRES_PASSWORD: '123'
+        POSTGRES_DB: $DB_DATABASE
+        POSTGRES_USER: $DB_USERNAME
+        POSTGRES_PASSWORD: $DB_PASSWORD
   steps:
     - step: &testin-app
         name: Testing app
