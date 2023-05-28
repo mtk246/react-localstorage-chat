@@ -22,6 +22,8 @@ final class BillingCompanyFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'status' => $this->faker->boolean(),
+            'abbreviation' => $this->faker->randomElement(['MCC', 'BILLINGP']),
+            'status' => 1,
         ];
     }
 }

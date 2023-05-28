@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Models\User;
+use App\Roles\Models\Role;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -15,10 +17,14 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $user = User::with(['roles' => function ($query) {
-            return $query->where('roles.id', '=', 1);
-        }])->first();
+        Artisan::call('migrate:refresh');
+        Artisan::call('db:seed --class=RoleSeeder');
 
+        $user = User::factory()->withProfile()->create();
+
+        $role = Role::where('slug', 'superuser')->first();
+        $user->attachRole($role);
+        
         $this->actingAs($user);
     }
 }
