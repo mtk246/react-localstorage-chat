@@ -229,17 +229,10 @@ class DoctorRepository
                 }
             }
 
-            if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
-                $healthP->companies()->attach($company->id ?? $data['company_id'], [
-                    'authorization' => $auth,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
-            } else {
-                $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
-                    'authorization' => $auth,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
-            }
+            $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
+                'authorization' => $auth,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ]);
 
             if (isset($data['private_note'])) {
                 PrivateNote::create([
@@ -548,18 +541,10 @@ class DoctorRepository
                 }
             }
 
-
-            if (is_null($healthP->companies()->find($company->id ?? $data['company_id']))) {
-                $healthP->companies()->attach($company->id ?? $data['company_id'], [
-                    'authorization' => $auth,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
-            } else {
-                $healthP->companies()->updateExistingPivot($company->id ?? $data['company_id'], [
-                    'authorization' => $auth,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
-            }
+            $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
+                'authorization' => $auth,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ]);
 
             \DB::commit();
 
@@ -1032,7 +1017,6 @@ class DoctorRepository
         try {
             \DB::beginTransaction();
             $healthP = HealthProfessional::find($id);
-            $healthP->companies()->detach();
 
             if (isset($data['companies'])) {
                 foreach ($data['companies'] as $company) {
@@ -1042,17 +1026,11 @@ class DoctorRepository
                             array_push($auth, $authorization);
                         }
                     }
-                    if (is_null($healthP->companies()->find($company['company_id']))) {
-                        $healthP->companies()->attach($company['company_id'], [
-                            'authorization' => $auth,
-                            'billing_company_id' => $company['billing_company_id'],
-                        ]);
-                    } else {
-                        $healthP->companies()->updateExistingPivot($company['company_id'], [
-                            'authorization' => $auth,
-                            'billing_company_id' => $company['billing_company_id'],
-                        ]);
-                    }
+
+                    $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
+                        'authorization' => $auth,
+                        'billing_company_id' => $company['billing_company_id'],
+                    ]);
                 }
             }
 
