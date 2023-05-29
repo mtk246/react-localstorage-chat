@@ -12,7 +12,7 @@ definitions:
     - step: &testin-app
         name: Testing app
         script:
-          - ln -f -s .env.example .env
+          - ln -f -s .env.testing .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
