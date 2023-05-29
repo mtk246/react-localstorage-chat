@@ -394,7 +394,6 @@ class FacilityRepository
 
         if (!is_null($facility)) {
             $taxonomies = $facility->taxonomies;
-            $placeOfServices = $facility->placeOfServices;
 
             $record = [
                 'id' => $facility->id,
@@ -434,6 +433,9 @@ class FacilityRepository
                     'billing_company_id' => $billingCompany->id ?? $bC,
                 ])->first();
                 $companies = $facility->companies()
+                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+
+                $placeOfServices = $facility->placeOfServices()
                     ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
 
                 if (isset($address)) {
