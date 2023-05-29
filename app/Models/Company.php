@@ -312,7 +312,7 @@ final class Company extends Model implements Auditable
             return null;
         }
 
-        $status = $this->billingCompanies->find($billingCompany->id)->pivot->status;
+        $status = $this->billingCompanies->find($billingCompany->id)?->pivot->status;
 
         return $status
             ? (bool) $status
