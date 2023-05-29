@@ -217,7 +217,9 @@ class DoctorRepository
 
             if(
                 HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value === $data['health_professional_type_id']
-                && ($data['is_provider'] ?? false)
+                && isset($data['is_provider'])
+                    ? !$data['is_provider']
+                    : false
             ){
 
                 foreach ($data['authorization'] as $authorization) {
@@ -535,7 +537,9 @@ class DoctorRepository
 
             if(
                 HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value === $data['health_professional_type_id']
-                && ($data['is_provider'] ?? false)
+                && isset($data['is_provider'])
+                    ? !$data['is_provider']
+                    : false
             ){
                 foreach ($data['authorization'] as $authorization) {
                     if (is_numeric($authorization)) {
