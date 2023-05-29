@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 final class PlaceOfServiceFactory extends Factory
 {
     protected $model = PlaceOfService::class;
+
     /**
      * Define the model's default state.
      *

@@ -6,12 +6,13 @@ namespace Tests;
 
 use App\Models\User;
 use App\Roles\Models\Role;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -23,7 +24,7 @@ abstract class TestCase extends BaseTestCase
 
         $role = Role::where('slug', 'superuser')->first();
         $user->attachRole($role);
-        
+
         $this->actingAs($user);
     }
 }

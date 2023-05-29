@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class UserFactory extends Factory
 {
     protected $model = User::class;
+
     /**
      * Define the model's default state.
      *
@@ -22,9 +23,10 @@ class UserFactory extends Factory
         return [
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('helloworld'),
-            'status' => 1
+            'status' => 1,
         ];
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
@@ -32,7 +34,7 @@ class UserFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'profile_id' => Profile::factory()->create()->id
+                'profile_id' => Profile::factory()->create()->id,
             ];
         });
     }
