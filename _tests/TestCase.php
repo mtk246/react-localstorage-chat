@@ -12,18 +12,18 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
+    public function setUp(): void
+    {
+        parent::setUp();
 
-    //     Artisan::call('migrate:refresh');
-    //     Artisan::call('db:seed --class=RoleSeeder');
+        Artisan::call('migrate:refresh');
+        Artisan::call('db:seed --class=RoleSeeder');
 
-    //     $user = User::factory()->withProfile()->create();
+        $user = User::factory()->withProfile()->create();
 
-    //     $role = Role::where('slug', 'superuser')->first();
-    //     $user->attachRole($role);
+        $role = Role::where('slug', 'superuser')->first();
+        $user->attachRole($role);
         
-    //     $this->actingAs($user);
-    // }
+        $this->actingAs($user);
+    }
 }

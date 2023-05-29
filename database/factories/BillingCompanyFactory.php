@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 final class BillingCompanyFactory extends Factory
 {
-
     protected $model = BillingCompany::class;
-
     /**
      * Define the model's default state.
      *

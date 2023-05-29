@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserFactory extends Factory
 {
-
     protected $model = User::class;
-
     /**
      * Define the model's default state.
      *
@@ -27,7 +25,6 @@ class UserFactory extends Factory
             'status' => 1
         ];
     }
-
     /**
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */

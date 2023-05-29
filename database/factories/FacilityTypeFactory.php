@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 final class FacilityTypeFactory extends Factory
 {
-
     protected $model = FacilityType::class;
-
     /**
      * Define the model's default state.
      *

@@ -14,9 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class FacilityFactory extends Factory
 {
-   
     protected $model = Facility::class;
-
     /**
      * Define the model's default state.
      *
@@ -32,7 +30,6 @@ final class FacilityFactory extends Factory
             'abbreviation' => 'ABBFAC',
         ];
     }
-
     public function withFacilityType()
     {
         return $this->state(function (array $attributes) {
@@ -41,7 +38,6 @@ final class FacilityFactory extends Factory
             ];
         });
     }
-
     public function withBillingCompany()
     {
         return $this->state(function (array $attributes) {
@@ -50,7 +46,6 @@ final class FacilityFactory extends Factory
             ];
         });
     }
-
     public function withCompany()
     {
         return $this->state(function (array $attributes) {
@@ -61,7 +56,6 @@ final class FacilityFactory extends Factory
             ];
         });
     }
-
     public function withPlaceService()
     {
         return $this->state(function (array $attributes) {
