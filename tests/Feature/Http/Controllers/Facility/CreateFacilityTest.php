@@ -72,6 +72,8 @@ final class CreateFacilityTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('facilities', ['id' => $response['id']]);*/
-        $this->assertTrue(true);
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
     }
 }
