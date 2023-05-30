@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Services\Claim;
 
@@ -14,37 +14,36 @@ use Illuminate\Support\Facades\View;
 
 final class ClaimPreviewService implements ReportInterface
 {
-    /** @var string Establece la orientación de la página, los posibles valores son P o L */
     private string $orientation;
 
-    /** @var string Establece el formato de la página (A4, Letter, ...) */
+    /** Establece el formato de la página (A4, Letter, ...) */
     private string $format;
 
-    /** @var string Establece el tipo de fuente a usar en el reporte */
+    /** Establece el tipo de fuente a usar en el reporte */
     private string $fontFamily;
 
-    /** @var mixed[] Estilos a implementar en códigos QR a generar */
+    /** Estilos a implementar en códigos QR a generar */
     private array $qrCodeStyle;
 
-    /** @var mixed[] Estilos para líneas de separación entre encabezado cuerpo y pie de página */
+    /** Estilos para líneas de separación entre encabezado cuerpo y pie de página */
     private array $lineStyle;
 
-    /** @var string URL de verificación del reporte */
+    /** URL de verificación del reporte */
     private string $urlVerify;
 
-    /** @var string Fecha en la que se genera el reporte */
+    /** Fecha en la que se genera el reporte */
     private string $reportDate;
 
-    /** @var string Nombre del archivo a generar con el reporte */
+    /** Nombre del archivo a generar con el reporte */
     private string $filename;
 
-    /** @var bool Establece si el reporte pdf a generar va ser visualización o impresión */
+    /** Establece si el reporte pdf a generar va ser visualización o impresión */
     private bool $print;
 
-    /** @var mixed Tipo de formato del reporte */
+    /** @var string|null Tipo de formato del reporte */
     private mixed $typeForm;
 
-    /** @var mixed[] Contenido del reporte pdf */
+    /** @var \App\Http\Resources\Claim\PreviewResource|null Contenido del reporte pdf */
     private mixed $data;
 
     /**
@@ -166,7 +165,7 @@ final class ClaimPreviewService implements ReportInterface
         array $htmlParams = [],
         string $storeAction = 'E',
         bool $end = true,
-    ): mixed {
+    ): object|string|null {
         $this->pdf->AddPage($this->orientation, $this->format);
 
         foreach (config('claim-preview-837p') as $fieldName => $value) {
@@ -203,7 +202,7 @@ final class ClaimPreviewService implements ReportInterface
          * E: Devuelve el documento del tipo mime base64 para ser adjuntado en correos electrónicos
          */
         if (true === $end) {
-            return $this->pdf->Output($this->filename, 'I');
+            return $this->pdf->Output($this->filename, $storeAction);
         }
     }
 

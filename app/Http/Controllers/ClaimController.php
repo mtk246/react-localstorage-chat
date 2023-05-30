@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
-use App\Services\Claim\ClaimPreviewService;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -17,6 +18,7 @@ use App\Models\ClaimStatus;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
+use App\Services\Claim\ClaimPreviewService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -307,8 +309,6 @@ class ClaimController extends Controller
     {
         if (isset($request->claim_id)) {
             $claim = Claim::find($request->claim_id);
-        // $claim = $this->claimRepository->updateClaim($request->validated(), $claim->id);
-        // if (!isset($claim)) return response()->json(__("Error save claim"), 400);
         } else {
             $claim = $this->claimRepository->createClaim($request->validated());
             if (!isset($claim)) {
@@ -392,13 +392,12 @@ class ClaimController extends Controller
             'data' => $data->toArray($request),
         ]);
         $preview->setHeader('');
-        //$preview->setFooter();
-        //$preview->setBody('pdf.837P', true, ['pdf' => $preview]);
+
         return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
             'pdf' => $preview,
         ]))[1];
-
     }
+
     public function showReport(Request $request)
     {
         $pdf = new ReportRepository();
@@ -454,11 +453,10 @@ class ClaimController extends Controller
             ]);
         }
         $pdf->setHeader('');
-        // $pdf->setFooter();
+
         return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
             'pdf' => $pdf,
         ]))[1];
-        /**$pdf->setBody('pdf.837P', true, ['pdf' => $pdf]);*/
     }
 
     /**
