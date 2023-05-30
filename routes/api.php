@@ -423,7 +423,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
         Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
-        Route::put('/{id}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
+        Route::put('/{procedure}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
         Route::put('/{procedure}/considerations', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureConsiderations']);
         Route::put('/{procedure}/note', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureNote']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);

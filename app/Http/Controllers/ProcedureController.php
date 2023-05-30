@@ -62,9 +62,9 @@ class ProcedureController extends Controller
         return $this->procedureRepository->getServerAllProcedures($request);
     }
 
-    public function updateProcedure(ProcedureUpdateRequest $request, int $id): JsonResponse
+    public function updateProcedure(ProcedureUpdateRequest $request, Procedure $procedure): JsonResponse
     {
-        $rs = $this->procedureRepository->updateProcedure($request->validated(), $id);
+        $rs = $this->procedureRepository->updateProcedure($request->validated(), $procedure);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
     }

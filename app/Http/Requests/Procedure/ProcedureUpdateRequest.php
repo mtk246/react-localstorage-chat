@@ -28,7 +28,7 @@ class ProcedureUpdateRequest extends FormRequest
                 'string',
                 'max:50',
                 Rule::unique('procedures', 'code')
-                    ->ignore($procedure->id),
+                    ->ignore($procedure?->id ?? 0),
             ],
             'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],
