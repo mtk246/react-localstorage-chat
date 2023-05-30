@@ -10,6 +10,7 @@ use App\Models\Facility;
 use App\Models\HealthProfessional;
 use App\Models\Patient;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 final class PreviewResource extends JsonResource
 {
@@ -20,7 +21,9 @@ final class PreviewResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $bC = $request->billing_company_id ?? $this->resource->claimFormattable->billing_company_id ?? null;
+        $bC = (Gate::allows('is-admin'))
+            ? ($request->billing_company_id ?? $this->resource->claimFormattable?->billing_company_id)
+            : $this->user->billingCompanies->first()?->id;
 
         $patient = Patient::with([
             'user' => function ($query) use ($bC): void {
@@ -110,19 +113,23 @@ final class PreviewResource extends JsonResource
 
         $company = Company::find($request->company_id ?? $this->resource->company_id ?? null);
         $facility = Facility::find($request->facility_id ?? $this->resource->facility_id ?? null);
+        $insuranceCompanyAddress = isset($insuranceCompany)
+            ? $insuranceCompany->addresses()->select(
+                'country',
+                'address',
+                'city',
+                'state',
+                'zip',
+            )->first()?->toArray()
+            : null;
+        $patientBirthdate = explode('-', $patient->user->profile->date_of_birth ?? '');
 
         return [
             'insurance_company' => [
                 'name' => $insuranceCompany->name ?? '',
-                'address' => isset($insuranceCompany)
-                    ? $insuranceCompany->addresses()->select(
-                        'country',
-                        'address',
-                        'city',
-                        'state',
-                        'zip',
-                    )->first()?->toArray()
-                    : null,
+                'address1' => $insuranceCompanyAddress->address ?? '',
+                'address2' => $insuranceCompanyAddress->address ?? '',
+                'address3' => substr($insuranceCompanyAddress->city ?? '', 0, 24).' '.substr($insuranceCompanyAddress->state ?? '', 0, 3).substr($insuranceCompanyAddress->zip ?? '', 0, 12) ?? '',
             ],
             '1' => 'Medicare',
             '1a' => $higherOrderPolicy->policy_number ?? '',
@@ -134,7 +141,9 @@ final class PreviewResource extends JsonResource
                     : ''))
                 : '',
             '3' => [
-                'date' => $patient->user->profile->date_of_birth ?? '',
+                'year' => $patientBirthdate[0] ?? '',
+                'month' => $patientBirthdate[1] ?? '',
+                'day' => $patientBirthdate[2] ?? '',
                 'sex' => $patient->user->profile->sex ?? '',
             ],
             '4' => ($subscriber->last_name ?? $subscriber->profile->last_name).
