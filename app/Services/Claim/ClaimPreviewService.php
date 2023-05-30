@@ -1,6 +1,8 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
+
+// declare(strict_types=1);
 
 namespace App\Services\Claim;
 
@@ -58,17 +60,17 @@ final class ClaimPreviewService implements ReportInterface
      * Sets the configuration values for the TCPDF object.
      *
      * @param mixed[] $params An array of configuration parameters
-     *                      - reportDate: string The date to be used in the report (default: today's date)
-     *                      - orientation: string The orientation of the page (default: value from config file)
-     *                      - format: string The format of the page (default: value from config file)
-     *                      - fontFamily: string The font family to be used (default: value from config file)
-     *                      - qrCodeStyle: string The style of QR code (default: value from config file)
-     *                      - lineStyle: string The line style to be used (default: value from config file)
-     *                      - urlVerify: string|null The URL to verify the PDF (default: null)
-     *                      - filename: string The name of the PDF file (default: unique id + .pdf)
-     *                      - print: bool Whether or not to show the print dialog (default: false)
-     *                      - data: array The data to be used in the PDF (default: empty array)
-     *                      - typeForm: int The ID of the typeform (default: null)
+     *                        - reportDate: string The date to be used in the report (default: today's date)
+     *                        - orientation: string The orientation of the page (default: value from config file)
+     *                        - format: string The format of the page (default: value from config file)
+     *                        - fontFamily: string The font family to be used (default: value from config file)
+     *                        - qrCodeStyle: string The style of QR code (default: value from config file)
+     *                        - lineStyle: string The line style to be used (default: value from config file)
+     *                        - urlVerify: string|null The URL to verify the PDF (default: null)
+     *                        - filename: string The name of the PDF file (default: unique id + .pdf)
+     *                        - print: bool Whether or not to show the print dialog (default: false)
+     *                        - data: array The data to be used in the PDF (default: empty array)
+     *                        - typeForm: int The ID of the typeform (default: null)
      */
     public function setConfig(array $params = []): void
     {
@@ -170,7 +172,7 @@ final class ClaimPreviewService implements ReportInterface
         foreach (config('claim-preview-837p') as $fieldName => $value) {
             if (isset($value['properties'])) {
                 $this->setData($value['properties'], $fieldName);
-            } else if (isset($value['options'])) {
+            } elseif (isset($value['options'])) {
                 $this->setData($value['options'][$this->data[$fieldName]]['properties'], $fieldName, null, 'X');
             } else {
                 foreach ($value as $key => $val) {
