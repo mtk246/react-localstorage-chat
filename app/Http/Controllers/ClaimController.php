@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
+use App\Services\Claim\ClaimPreviewService;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
 use App\Models\ClaimStatus;
 use App\Repositories\ClaimRepository;
@@ -378,6 +380,25 @@ class ClaimController extends Controller
         return $claim ? response()->json($claim) : response()->json(__('Error save claim'), 400);
     }
 
+    public function showPreview(Request $request, ClaimPreviewService $preview)
+    {
+        $id = $request->id ?? null;
+        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
+        $data = new PreviewResource($claim);
+        $preview->setConfig([
+            'urlVerify' => 'www.google.com.ve',
+            'print' => $request->print ?? false,
+            'typeFormat' => $claim->format ?? null,
+            'data' => $data->toArray($request),
+        ]);
+        $preview->setHeader('');
+        //$preview->setFooter();
+        //$preview->setBody('pdf.837P', true, ['pdf' => $preview]);
+        return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
+            'pdf' => $preview,
+        ]))[1];
+
+    }
     public function showReport(Request $request)
     {
         $pdf = new ReportRepository();
