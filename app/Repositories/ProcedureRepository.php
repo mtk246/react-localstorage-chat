@@ -41,7 +41,7 @@ class ProcedureRepository
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
@@ -196,7 +196,14 @@ class ProcedureRepository
     {
         $procedure = Procedure::whereId($id)->with([
             'publicNote',
-            'procedureCosiderations',
+            'procedureCosiderations' => function($query) {
+                $query->with([
+                    'gender',
+                    'discriminatory',
+                    'frecuentDiagnoses',
+                    'frecuentModifiers',
+                ]);
+            },
             'insuranceCompanies',
             'diagnoses',
             'modifiers',
@@ -296,20 +303,23 @@ class ProcedureRepository
             DB::beginTransaction();
             $procedure = Procedure::find($id);
 
+            assert($procedure instanceof Procedure);
+
             $procedure->update([
+                'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
-            if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
-                if ($data['specific_insurance_company']) {
-                    $procedure->insuranceCompanies()->sync($data['insurance_companies']);
-                }
-            }
+            $procedure->insuranceCompanies()->sync(
+                isset($data['specific_insurance_company']) && $data['specific_insurance_company'] && isset($data['insurance_companies'])
+                    ? $data['insurance_companies']
+                    : []
+            );
 
             if (isset($data['mac_localities'])) {
                 /* Delete mac localities */
@@ -327,6 +337,8 @@ class ProcedureRepository
                         /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
+                    $procedure->procedureFees()->delete();
+
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
                             /** insuranceType == Medicare */
@@ -375,7 +387,7 @@ class ProcedureRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
@@ -414,11 +426,22 @@ class ProcedureRepository
         }
     }
 
-    public function updateProcedureNote(Procedure $procedure, string $note)
+    public function updateProcedureNote(Procedure $procedure, ?string $note)
     {
-        $procedure->publicNote()->updateOrCreate([
-            'note' => $note,
-        ]);
+        PublicNote::query()->when(null !== $note, function (Builder $query) use ($procedure, $note): void {
+            $query->updateOrCreate([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ], [
+                'note' => $note,
+            ]);
+        },
+        function (Builder $query) use ($procedure): void {
+            $query->where([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ])->delete();
+        });
 
         return $procedure->load(['publicNote']);
     }
