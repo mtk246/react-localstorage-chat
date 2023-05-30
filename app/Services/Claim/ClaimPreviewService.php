@@ -168,7 +168,7 @@ final class ClaimPreviewService implements ReportInterface
     ): object|string|null {
         $this->pdf->AddPage($this->orientation, $this->format);
 
-        foreach (config('claim-preview-837p') as $fieldName => $value) {
+        foreach (config('claim.preview_837p') as $fieldName => $value) {
             if (isset($value['properties'])) {
                 $this->setData($value['properties'], $fieldName);
             } elseif (isset($value['options'])) {
