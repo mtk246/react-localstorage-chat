@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests\Procedure;
 
 use App\Enums\Procedure\ProcedureType;
-use App\Models\Procedure;
 use App\Rules\MacLocalityFeeRequired;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -20,15 +19,13 @@ class ProcedureUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $procedure = Procedure::query()->find($this->id, ['id']);
-
         return [
             'code' => [
                 'required',
                 'string',
                 'max:50',
                 Rule::unique('procedures', 'code')
-                    ->ignore($procedure->id),
+                    ->ignore($this->procedure?->id ?? 0),
             ],
             'short_description' => ['required', 'string'],
             'description' => ['required', 'string'],

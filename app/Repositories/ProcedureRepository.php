@@ -297,13 +297,10 @@ class ProcedureRepository
     /**
      * @return Procedure|Builder|Model|object|null
      */
-    public function updateProcedure(array $data, int $id)
+    public function updateProcedure(array $data, Procedure $procedure)
     {
         try {
             DB::beginTransaction();
-            $procedure = Procedure::find($id);
-
-            assert($procedure instanceof Procedure);
 
             $procedure->update([
                 'code' => $data['code'],
@@ -324,6 +321,7 @@ class ProcedureRepository
             if (isset($data['mac_localities'])) {
                 /* Delete mac localities */
                 $procedure->macLocalities()->detach();
+                $procedure->procedureFees()->delete();
                 /* update or create new mac localities */
                 foreach ($data['mac_localities'] as $macL) {
                     $macLocality = MacLocality::where([
@@ -337,7 +335,6 @@ class ProcedureRepository
                         /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
-                    $procedure->procedureFees()->delete();
 
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
@@ -383,7 +380,7 @@ class ProcedureRepository
 
             DB::commit();
 
-            return Procedure::whereId($id)->first();
+            return Procedure::whereId($procedure->id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
 

@@ -8,22 +8,53 @@ use Illuminate\Support\Str;
 
 trait HasAttributes
 {
-    public function getAttribute(string $Attribute): string|int|bool|null
+    /** get attribute value */
+    public function getAttribute(string $attributeClass): string|int|bool|null
     {
-        $classAttributes = (new \ReflectionClassConstant(self::class, $this->name))->getAttributes();
+        $attributes = $this->getReflectionAttributes($attributeClass);
 
-        $atribute = array_filter($classAttributes, function ($classAttribute) use ($Attribute) {
-            return $classAttribute->getName() === $Attribute;
-        });
-
-        return 0 < count($atribute)
-            ? $atribute[array_key_first($atribute)]?->getArguments()[0]
+        return 0 < count($attributes)
+            ? $attributes[array_key_first($attributes)]?->getArguments()[0]
             : null;
     }
 
+    /**
+     * get attribute value or fail.
+     *
+     * @throws \Exception
+     */
     public function getAttributeOrFail(string $Attribute): string|int|bool
     {
         return $this->getAttribute($Attribute) ?? throw new \Exception($this->getErrorMessage($Attribute));
+    }
+
+    /** get attribute instance */
+    public function getAttributeInstance(string $attributeClass): object|null
+    {
+        $attributes = $this->getReflectionAttributes($attributeClass);
+
+        return 0 < count($attributes)
+            ? $attributes[array_key_first($attributes)]->newInstance()
+            : null;
+    }
+
+    /**
+     * get attribute insatance or fail.
+     *
+     * @throws \Exception
+     */
+    public function getAttributeInstanceOrFail(string $Attribute): object
+    {
+        return $this->getAttributeInstance($Attribute) ?? throw new \Exception($this->getErrorMessage($Attribute));
+    }
+
+    protected function getReflectionAttributes(string $attributeClass): array
+    {
+        $classAttributes = (new \ReflectionClassConstant(self::class, $this->name))->getAttributes();
+
+        return array_filter($classAttributes, function ($classAttribute) use ($attributeClass) {
+            return $classAttribute->getName() === $attributeClass;
+        });
     }
 
     protected function getErrorMessage(string $Attribute): string

@@ -5,14 +5,14 @@ definitions:
     pgsql:
       image: postgres:13-alpine
       environment:
-        POSTGRES_DB: 'medical'
-        POSTGRES_USER: 'user'
-        POSTGRES_PASSWORD: '123'
+        POSTGRES_DB: $DB_DATABASE
+        POSTGRES_USER: $DB_USERNAME
+        POSTGRES_PASSWORD: $DB_PASSWORD
   steps:
     - step: &testin-app
         name: Testing app
         script:
-          - ln -f -s .env.example .env
+          - ln -f -s .env.testing .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
@@ -28,7 +28,7 @@ definitions:
           - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
           ## - ./vendor/bin/phpcs
-          ## - ./vendor/bin/pstan 
+          ## - ./vendor/bin/pstan
         caches:
           - composer
     - step: &deploy-forge
