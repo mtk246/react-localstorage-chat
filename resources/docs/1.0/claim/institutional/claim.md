@@ -9,6 +9,8 @@
 - [Get list claim field information](#get-list-claim-field-informations)
 - [Get list qualifier by field](#get-list-qualifier)
 
+
+- [Get list condition codes](#get-list-condition-codes)
 - [Get list revenue codes](#get-list-revenue-codes)
 - [Get list admission types](#get-list-admission-types)
 - [Get list admission sources](#get-list-admission-sources)
@@ -31,12 +33,13 @@
 | 4 | GET | `Get list types formats` | `/claim/get-list-type-formats` | yes | Get list type formats |
 | 7 | GET | `Get list claim field information` | `/claim/get-list-claim-field-informations` | yes | Get list claim field informations |
 | 8 | GET | `Get list claim qualifier` | `/claim/get-list-qualifier-by-field/{field_id?}` | yes | Get list claim field informations |
-| 2 | GET | `Get list revenue codes` | `/claim/get-list-revenue-codes` | yes | Get list revenue-codes |
-| 3 | GET | `Get list admission types` | `/claim/get-list-admission-types` | yes | Get list admission types |
-| 4 | GET | `Get list admission sources` | `/claim/get-list-admission-sources` | yes | Get list admission sources |
-| 5 | GET | `Get list patient statuses` | `/claim/get-list-patient-statuses` | yes | Get list patient statuses |
-| 6 | GET | `Get list bill classifications` | `/claim/get-list-bill-classifications` | yes | Get list bill classifications |
-| 7 | GET | `Get list diagnosis related groups` | `/claim/get-list-diagnosis-related-groups` | yes | Get list diagnosis related groups |
+| 2 | GET | `Get list condition codes` | `/claim/get-list-condition-codes` | yes | Get list condition codes |
+| 3 | GET | `Get list revenue codes` | `/claim/get-list-revenue-codes` | yes | Get list revenue codes |
+| 4 | GET | `Get list admission types` | `/claim/get-list-admission-types` | yes | Get list admission types |
+| 5 | GET | `Get list admission sources` | `/claim/get-list-admission-sources` | yes | Get list admission sources |
+| 6 | GET | `Get list patient statuses` | `/claim/get-list-patient-statuses` | yes | Get list patient statuses |
+| 7 | GET | `Get list bill classifications` | `/claim/get-list-bill-classifications` | yes | Get list bill classifications |
+| 8 | GET | `Get list diagnosis related groups` | `/claim/get-list-diagnosis-related-groups` | yes | Get list diagnosis related groups |
 
 
 
@@ -317,6 +320,50 @@
     }
 ]
 ```
+
+<a name="get-list-revenue-codes"></a>
+## Get all revenue Codes
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Revenue codes found
+
+#
+
+```json
+[
+    {
+        "id": 415,
+        "code": "00",
+        "name": "Requested"
+    },
+    {
+        "id": 416,
+        "code": "000",
+        "name": "In Progress"
+    },
+    {
+        "id": 417,
+        "code": "0A",
+        "name": "Automated Export System - Post Departure Authorized Special Status (AES-PASS) Standard"
+    },
+    {
+        "id": 418,
+        "code": "0B",
+        "name": "Automated Export System - Post Departure Authorized Special Status (AES-PASS) Expanded"
+    },
+]
+```
+
 <a name="get-list-revenue-codes"></a>
 ## Get all revenue Codes
 

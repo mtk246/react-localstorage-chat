@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
@@ -199,6 +200,13 @@ class ClaimController extends Controller
     public function getListPatientStatuses(GetPatientStatusesAction $patientStatuses): JsonResponse
     {
         $rs = $patientStatuses->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListConditionCodes(Request $request, GetConditionCodeAction $conditionCode): JsonResponse
+    {
+        $rs = $conditionCode->all($request->input());
 
         return response()->json($rs);
     }

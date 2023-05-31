@@ -463,6 +463,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-admission-types', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionTypes']);
         Route::get('/get-list-admission-sources', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionSources']);
         Route::get('/get-list-patient-statuses', [\App\Http\Controllers\ClaimController::class, 'getListPatientStatuses']);
+        Route::get('/get-list-condition-codes', [\App\Http\Controllers\ClaimController::class, 'getListConditionCodes']);
         Route::get('/get-list-bill-classifications', [\App\Http\Controllers\ClaimController::class, 'getListBillClassifications']);
         Route::get('/get-list-diagnosis-related-groups', [\App\Http\Controllers\ClaimController::class, 'getListDiagnosisRelatedGroups']);
         Route::get('/get-list-type-formats', [\App\Http\Controllers\ClaimController::class, 'getListTypeFormats']);
