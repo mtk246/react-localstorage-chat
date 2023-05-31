@@ -214,9 +214,6 @@ class ClaimController extends Controller
         $rs = $qualifier->all($request->input());
 
         return response()->json($rs);
-        /**$rs = $this->claimRepository->getListFieldQualifiers($id);
-
-        return response()->json($rs);*/
     }
 
     public function getListTypeDiags()
