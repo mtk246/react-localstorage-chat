@@ -317,7 +317,7 @@
     }
 ]
 ```
-<a name="get-list-service-revenue-codes"></a>
+<a name="get-list-revenue-codes"></a>
 ## Get all revenue Codes
 
 
@@ -338,14 +338,256 @@
 ```json
 [
     {
-        "id":1,
-        "name":"Revenue code 1"
-    },
+    "id": 1,
+    "name": "99203",
+    "description": "Office o/p new low 30-44 min"
+  },
+  {
+    "id": 2,
+    "name": "99204",
+    "description": "Office o/p new mod 45-59 min"
+  },
+  {
+    "id": 3,
+    "name": "99205",
+    "description": "Office o/p new hi 60-74 min"
+  }
 ]
 ```
 
+<a name="get-list-admission-types"></a>
+## Get list admission types
 
 
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Admission types found
+
+#
+
+```json
+[
+  {
+    "id": 233,
+    "name": "Emergency"
+  },
+  {
+    "id": 234,
+    "name": "Urgent"
+  },
+  {
+    "id": 235,
+    "name": "Elective"
+  },
+  {
+    "id": 236,
+    "name": "Newborn"
+  },
+  {
+    "id": 237,
+    "name": "Trauma"
+  },
+  {
+    "id": 238,
+    "name": "Information not available"
+  }
+]
+```
+<a name="get-list-admission-sources"></a>
+## Get list admission sources
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Admission sources found
+
+#
+
+```json
+[
+  {
+    "id": 239,
+    "name": "Non-Health Facility Point of Origin"
+  },
+  {
+    "id": 240,
+    "name": "Clinic"
+  },
+  {
+    "id": 241,
+    "name": "Reserved for assignment by the NUBC"
+  },
+  {
+    "id": 242,
+    "name": "Transfer From a Hospital (Different Facility)"
+  },
+  {
+    "id": 243,
+    "name": "Transfer From a Skilled Nursing Facility (SNF) or Intermediate Care Facility (ICF)"
+  },
+  {
+    "id": 244,
+    "name": "Transfer From Another Health Care Facility"
+  },
+  {
+    "id": 245,
+    "name": "Emergency Room"
+  },
+  {
+    "id": 246,
+    "name": "Court/Law Enforcement"
+  },
+  {
+    "id": 247,
+    "name": "Information Not Available"
+  },
+  {
+    "id": 248,
+    "name": "Transfer from a Rural Primary Care Hospital (Only valid for discharges prior to 10/1/2007)"
+  },
+  {
+    "id": 249,
+    "name": "Transfer from One Distinct Unit of the Hospital to another Distinct Unit of the Same Hospital Resulting in a Separate Claim to the Payer"
+  },
+  {
+    "id": 250,
+    "name": "Transfer from Ambulatory Surgery Center (Effective 10/1/2007)"
+  },
+  {
+    "id": 251,
+    "name": "Transfer from Hospice and is Under a Hospice Plan of Care or Enrolled in a Hospice Program (Effective 10/1/2007)"
+  }
+]
+```
+
+#
+<a name="get-list-patient-statuses"></a>
+## Get list patient statuses
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Patient statuses found
+
+#
+
+```json
+
+```
+#
+<a name="get-list-bill-classifications"></a>
+## Get list bill clasifications
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Bill clasifications found
+
+#
+
+```json
+[
+  {
+    "id": "1",
+    "code": "0",
+    "name": "Non-payment/Zero Claim"
+  },
+  {
+    "id": "2",
+    "code": "1",
+    "name": "Admit Through Discharge"
+  },
+  {
+    "id": "3",
+    "code": "2",
+    "name": "Interim - First Claim"
+  },
+  {
+    "id": "4",
+    "code": "3",
+    "name": "Interim-Continuing Claims"
+  },
+  {
+    "id": "5",
+    "code": "4",
+    "name": "Interim - Last Claim"
+  },
+  {
+    "id": "6",
+    "code": "5",
+    "name": "Late Charge Only"
+  },
+  {
+    "id": "7",
+    "code": "7",
+    "name": "Replacement of Prior Claim (See adjustment third digit)"
+  },
+  {
+    "id": "8",
+    "code": "8",
+    "name": "Void/Cancel of Prior Claim (See adjustment third digit)"
+  },
+  {
+    "id": "9",
+    "code": "9",
+    "name": "Final claim for a Home Health PPS Period"
+  }
+]
+```
+#
+<a name="get-list-diagnosis-related-groups"></a>
+## Get list diagnosis related groups
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Diagnosis related groups found
+
+#
+
+```json
+
+```
 
 <a name="get-list-billing-companies"></a>
 ## Get list billing companies
