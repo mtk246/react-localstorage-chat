@@ -16,7 +16,7 @@ final class ProcedureSeeder extends Seeder
                 $procedure->start_date = '2023-01-1';
                 $procedure->end_date = null;
                 $procedure->active = true;
-                $procedure->type = 1;
+                $procedure->clasifications = json_encode($procedure->clasifications);
 
                 return (array) $procedure;
             })
