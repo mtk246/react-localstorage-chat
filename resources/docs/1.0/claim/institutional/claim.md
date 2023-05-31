@@ -321,8 +321,8 @@
 ]
 ```
 
-<a name="get-list-revenue-codes"></a>
-## Get all revenue Codes
+<a name="get-list-condition-codes"></a>
+## Get all condition Codes
 
 
 ### Param in header
@@ -333,9 +333,18 @@
 }
 ```
 
+### Param in path
+
+```json
+"search" <integer> optional
+```
+## Example path
+
+> {primary} /get-list-condition-codes?search=1
+
 ## Response
 
-> {success} 200 Revenue codes found
+> {success} 200 Condition codes found
 
 #
 
