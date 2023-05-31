@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
+use App\Actions\Claim\GetPatientStatusesAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -193,6 +194,13 @@ class ClaimController extends Controller
         ];
 
         return $rs ? response()->json($rs) : response()->json(__('Error get all bill classifications'), 400);
+    }
+
+    public function getListPatientStatuses(GetPatientStatusesAction $patientStatuses): JsonResponse
+    {
+        $rs = $patientStatuses->all();
+
+        return response()->json($rs);
     }
 
     public function getListTypeFormats()
