@@ -17,7 +17,6 @@ final class ConditionCodeSeeder extends Seeder
      */
     public function run()
     {
-
         $type = Type::updateOrCreate(['description' => 'Condition code']);
         collect(json_decode(\File::get('database/data/claim/ConditionCode.json')))
             ->chunk(1000)
