@@ -9,7 +9,6 @@
 - [Get list claim field information](#get-list-claim-field-informations)
 - [Get list qualifier by field](#get-list-qualifier)
 
-
 - [Get list condition codes](#get-list-condition-codes)
 - [Get list revenue codes](#get-list-revenue-codes)
 - [Get list admission types](#get-list-admission-types)
@@ -552,7 +551,23 @@
 #
 
 ```json
-
+[
+    {
+        "id": 252,
+        "code": "99",
+        "name": "Reserved for national assignment"
+    },
+    {
+        "id": 317,
+        "code": "1",
+        "name": "Discharged to home or self-care (routine discharge)"
+    },
+    {
+        "id": 318,
+        "code": "2",
+        "name": "Discharged/transferred to a short-term general hospital for inpatient care"
+    }
+]
 ```
 #
 <a name="get-list-bill-classifications"></a>
@@ -642,7 +657,33 @@
 #
 
 ```json
-
+[
+    {
+        "id": 1731,
+        "code": "008",
+        "name": "Simultaneous pancreas and kidney transplant"
+    },
+    {
+        "id": 1732,
+        "code": "010",
+        "name": "Pancreas transplant"
+    },
+    {
+        "id": 1733,
+        "code": "011",
+        "name": "Tracheostomy for face, mouth and neck diagnoses or laryngectomy with mcc"
+    },
+    {
+        "id": 1734,
+        "code": "012",
+        "name": "Tracheostomy for face, mouth and neck diagnoses or laryngectomy with cc"
+    },
+    {
+        "id": 1735,
+        "code": "013",
+        "name": "Tracheostomy for face, mouth and neck diagnoses or laryngectomy without cc/mcc"
+    }
+]
 ```
 
 <a name="get-list-billing-companies"></a>
