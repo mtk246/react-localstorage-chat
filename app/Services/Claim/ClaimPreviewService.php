@@ -124,7 +124,7 @@ final class ClaimPreviewService implements ReportInterface
                     if ('CMS-1500_837P_1' === $this->typeForm) {
                         $imgFile = storage_path('pictures').'/CMS-1500_837P_1_v3.png';
                     } elseif ('UB-04_837I_1' === $this->typeForm) {
-                        $imgFile = storage_path('pictures').'/UB-04_837I_1.png';
+                        $imgFile = storage_path('pictures').'/UB-04_837I_1.jpg';
                     }
                 }
 
