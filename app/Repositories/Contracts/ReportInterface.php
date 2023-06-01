@@ -4,7 +4,7 @@ namespace App\Repositories\Contracts;
 
 interface ReportInterface
 {
-    public function setHeader($title);
+    public function setHeader();
 
     public function setBody($body);
 

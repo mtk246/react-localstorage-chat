@@ -1133,6 +1133,869 @@ class TypeCatalogSeeder extends Seeder
                 ],
             ],
             [
+                'description' => 'Patient status code',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Discharged to home or self-care (routine discharge)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '2',
+                        'description' => 'Discharged/transferred to a short-term general hospital for inpatient care',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '3',
+                        'description' => 'Discharged/transferred to skilled nursing facility (SNF) with Medicare certification',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '4',
+                        'description' => 'Discharged/transferred to a facility that provides custodial or supportive care',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '5',
+                        'description' => "Discharged/transferred to a designated cancer center or children's hospital",
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '6',
+                        'description' => 'Discharged/transferred to home under care of organized home health service organization in anticipation of covered skilled care',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '7',
+                        'description' => 'Left against medical advice or discontinued care',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '8',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '9',
+                        'description' => 'Admitted as an inpatient to this hospital',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '10',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '11',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '12',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '13',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '14',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '15',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '16',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '17',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '18',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '19',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '20',
+                        'description' => 'Expired',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '21',
+                        'description' => 'Discharged/transferred to court/law enforcement',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '22',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '23',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '24',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '25',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '26',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '27',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '28',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '29',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '30',
+                        'description' => 'Still patient',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '31',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '32',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '33',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '34',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '35',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '36',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '37',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '38',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '39',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '40',
+                        'description' => 'Expired at home',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '41',
+                        'description' => 'Expired in a medical facility (e.g., hospital, SNF, ICF, or free-standing hospice)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '42',
+                        'description' => 'Expired - place unknown',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '43',
+                        'description' => 'Discharged/transferred to a federal health care facility',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '44',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '45',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '46',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '47',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '48',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '49',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '50',
+                        'description' => 'Hospice - home',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '51',
+                        'description' => 'Hospice - medical facility (certified) providing hospice level of care',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '52',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '53',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '54',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '55',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '56',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '57',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '58',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '59',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '60',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '61',
+                        'description' => 'Discharged/transferred to a hospital-based Medicare approved swing bed',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '62',
+                        'description' => 'Discharged/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '63',
+                        'description' => 'Discharged/transferred to a Medicare certified long term care hospital (LTCH)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '64',
+                        'description' => 'Discharged/transferred to a nursing facility certified under Medicaid but not certified under Medicare',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '65',
+                        'description' => 'Discharged/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '66',
+                        'description' => 'Discharged/transferred to a critical access hospital (CAH)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '67',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '68',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '69',
+                        'description' => 'Discharged/transferred to a designated disaster alternate care site (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '70',
+                        'description' => 'Discharged/transferred to another type of health care institution not defined elsewhere in this code list',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '71',
+                        'description' => 'Discontinued 4/1/03',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '72',
+                        'description' => 'Discontinued 4/1/03',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '73',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '74',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '75',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '76',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '77',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '78',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '79',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '80',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '81',
+                        'description' => 'Discharged to home or self-care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '82',
+                        'description' => 'Discharged/transferred to a short-term general hospital for inpatient care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '83',
+                        'description' => 'Discharged/transferred to a skilled nursing facility (SNF) with Medicare certification with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '84',
+                        'description' => 'Discharged/transferred to a facility that provides custodial or supportive care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '85',
+                        'description' => "Discharged/transferred to a designated cancer center or children's hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)",
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '86',
+                        'description' => 'Discharged/transferred to home under care of organized home health service organization in anticipation of covered skilled care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '87',
+                        'description' => 'Discharged/transferred to court/law enforcement with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '88',
+                        'description' => 'Discharged/transferred to a federal health care facility with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '89',
+                        'description' => 'Discharged/transferred to a hospital-based Medicare approved swing bed with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '90',
+                        'description' => 'Discharged/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '91',
+                        'description' => 'Discharged/transferred to a Medicare certified long term care hospital (LTCH) with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '92',
+                        'description' => 'Discharged/transferred to a nursing facility certified under Medicaid but not certified under Medicare with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '93',
+                        'description' => 'Discharged/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '94',
+                        'description' => 'Discharged/transferred to a critical access hospital (CAH) with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '95',
+                        'description' => 'Discharged/transferred to another type of health care institution not defined elsewhere in this code list with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '96',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '97',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '98',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+                'type_catalogs' => [
+                    [
+                        'code' => '99',
+                        'description' => 'Reserved for national assignment',
+                    ],
+                ],
+            ],
+            [
+                'description' => 'Occurrence code and date',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Accident/Medical Coverage',
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'No Fault Insurance Involved - Including Auto Accident/Other',
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Accident/Tort Liability',
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Accident/Employment Related',
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'Accident/No Medical or Liability Coverage.',
+                    ],
+                    [
+                        'code' => '6',
+                        'description' => 'Crime Victim',
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'Start of Infertility Treatment Cycle',
+                    ],
+                    [
+                        'code' => '10',
+                        'description' => 'Last Menstrual Period',
+                    ],
+                    [
+                        'code' => '11',
+                        'description' => 'Onset of Symptoms/Illness',
+                    ],
+                    [
+                        'code' => '16',
+                        'description' => 'Date of last Therapy',
+                    ],
+                    [
+                        'code' => '17',
+                        'description' => 'Date Outpatient Occupational Therapy Plan Established or Last Reviewed',
+                    ],
+                    [
+                        'code' => '18',
+                        'description' => 'Date of Retirement Patient/ Beneficiary',
+                    ],
+                    [
+                        'code' => '19',
+                        'description' => 'Date of Retirement Spouse',
+                    ],
+                    [
+                        'code' => '20',
+                        'description' => 'Date Guarantee of Payment Began',
+                    ],
+                    [
+                        'code' => '21',
+                        'description' => 'Date UR Notice Received',
+                    ],
+                    [
+                        'code' => '22',
+                        'description' => 'Date Active Care Ended',
+                    ],
+                    [
+                        'code' => '24',
+                        'description' => 'Date Insurance Denied',
+                    ],
+                    [
+                        'code' => '25',
+                        'description' => 'Date Benefits Terminated by Primary Payer',
+                    ],
+                    [
+                        'code' => '26',
+                        'description' => 'Date SNF Bed Became Available',
+                    ],
+                    [
+                        'code' => '28',
+                        'description' => 'Date Comprehensive Outpatient Rehabilitation Plan Established or Last Reviewed',
+                    ],
+                    [
+                        'code' => '29',
+                        'description' => 'Date Outpatient Physical Therapy Plan Established or Last Reviewed',
+                    ],
+                    [
+                        'code' => '30',
+                        'description' => 'Date Outpatient Speech Pathology Plan Established or Last Reviewed',
+                    ],
+                    [
+                        'code' => '31',
+                        'description' => 'Date Beneficiary Notified of Intent to Bill (Accommodations)',
+                    ],
+                    [
+                        'code' => '32',
+                        'description' => 'Date Beneficiary Notified of Intent to Bill (Procedures or Treatments)',
+                    ],
+                    [
+                        'code' => '33',
+                        'description' => 'First Day of the Coordination Period for ESRD Beneficiaries Covered by EGHP',
+                    ],
+                    [
+                        'code' => '34',
+                        'description' => 'Date of Election of Extended Care Facilities',
+                    ],
+                    [
+                        'code' => '35',
+                        'description' => 'Date Treatment Started for Physical Therapy',
+                    ],
+                    [
+                        'code' => '36',
+                        'description' => 'Date of Inpatient Hospital Discharge for Covered Transplant Patients',
+                    ],
+                    [
+                        'code' => '37',
+                        'description' => 'Date of Inpatient Hospital Discharge for Non-covered Transplant Patient',
+                    ],
+                    [
+                        'code' => '38',
+                        'description' => 'Date Treatment Started for Home IV Therapy',
+                    ],
+                    [
+                        'code' => '39',
+                        'description' => 'Date Discharged on a Continuous Course of IV Therapy',
+                    ],
+                    [
+                        'code' => '40',
+                        'description' => 'Scheduled Date of Admission',
+                    ],
+                    [
+                        'code' => '41',
+                        'description' => 'Date of First Test Pre-Admission Testing',
+                    ],
+                    [
+                        'code' => '42',
+                        'description' => 'Date of Discharge',
+                    ],
+                    [
+                        'code' => '43',
+                        'description' => 'Scheduled Date of Canceled Surgery',
+                    ],
+                    [
+                        'code' => '44',
+                        'description' => 'Date Treatment Started for Occupational Therapy',
+                    ],
+                    [
+                        'code' => '45',
+                        'description' => 'Date Treatment Started for Speech Therapy',
+                    ],
+                    [
+                        'code' => '46',
+                        'description' => 'Date Treatment Started for Cardiac Rehabilitation',
+                    ],
+                    [
+                        'code' => '47',
+                        'description' => 'Date Cost Outlier Status Begins',
+                    ],
+                    [
+                        'code' => 'A1',
+                        'description' => 'Birth Date - Insured A',
+                    ],
+                    [
+                        'code' => 'A2',
+                        'description' => 'Effective Date - Insured A Policy',
+                    ],
+                    [
+                        'code' => 'A3',
+                        'description' => 'Benefits Exhausted - Payer ALTC Hospitals ONLY (i.e. Chronic)',
+                    ],
+                    [
+                        'code' => 'A4',
+                        'description' => 'Split Bill Date',
+                    ],
+                    [
+                        'code' => 'B1',
+                        'description' => 'Birth Date - Insured B',
+                    ],
+                    [
+                        'code' => 'B2',
+                        'description' => 'Effective Date - Insured B Policy',
+                    ],
+                    [
+                        'code' => 'B3',
+                        'description' => 'Benefits Exhausted - Payer B',
+                    ],
+                    [
+                        'code' => 'C1',
+                        'description' => 'Birth Date - Insured C',
+                    ],
+                    [
+                        'code' => 'C2',
+                        'description' => 'Effective Date - Insured C Policy',
+                    ],
+                    [
+                        'code' => 'C3',
+                        'description' => 'Benefits Exhausted - Payer C',
+                    ],
+                ],
+            ],
+            [
+                'description' => 'Occurrence span code and date',
+                'type_catalogs' => [
+                    [
+                        'code' => '70',
+                        'description' => 'Qualifying Stay Dates For SNF Use ONLY',
+                    ],
+                    [
+                        'code' => '71',
+                        'description' => 'Prior Stay Dates',
+                    ],
+                    [
+                        'code' => '72',
+                        'description' => 'First/Last Visit Dates',
+                    ],
+                    [
+                        'code' => '73',
+                        'description' => 'Benefit Eligibility Period',
+                    ],
+                    [
+                        'code' => '74',
+                        'description' => 'Non-Covered Level of Care/Leave of Absence Dates',
+                    ],
+                    [
+                        'code' => '75',
+                        'description' => 'SNF Level of Care Dates',
+                    ],
+                    [
+                        'code' => '76',
+                        'description' => 'Patient Liability (Spend-down Amount Dates) Replaces Code 80 as of 7/31/07"',
+                    ],
+                    [
+                        'code' => '77',
+                        'description' => 'Provider Liability Period',
+                    ],
+                    [
+                        'code' => '78',
+                        'description' => 'SNF Prior Stay Dates',
+                    ],
+                    [
+                        'code' => 'M0',
+                        'description' => 'QIO/UR Approved Stay Dates',
+                    ],
+                    [
+                        'code' => 'M1',
+                        'description' => 'Provider Liability- No Utilization',
+                    ],
+                    [
+                        'code' => 'M2',
+                        'description' => 'Inpatient Respite Dates',
+                    ],
+                    [
+                        'code' => 'M3',
+                        'description' => 'ICF Level of Care',
+                    ],
+                    [
+                        'code' => 'M4',
+                        'description' => 'Residential Level of Care',
+                    ],
+                    [
+                        'code' => 'MR',
+                        'description' => 'Reserved - Disaster Related',
+                    ],
+                ],
+            ],
+            [
                 'description' => 'Report form claim',
                 'type_catalogs' => [
                     [

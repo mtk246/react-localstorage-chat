@@ -93,6 +93,7 @@ class CreateDoctorRequest extends FormRequest
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.phone' => ['nullable', 'string'],
