@@ -7,6 +7,7 @@ namespace App\Actions\Claim;
 use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class GetConditionCodeAction
 {
@@ -18,7 +19,7 @@ final class GetConditionCodeAction
             })
             ->when(isset($search), function (Builder $query) use ($search) {
                 $query->where('code', 'LIKE', strtoupper("%$search%"))
-                    ->orWhere('description', 'ILIKE', [strtolower("%$search%")]);
+                    ->orWhere(DB::Raw('LOWER(description)'), 'LIKE', [strtolower("%$search%")]);
             })
             ->get(['id', 'code', 'description as name']);
     }
