@@ -24,7 +24,7 @@ final class ServiceResource extends RequestWrapedResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
-            'procedure_id' => $this->resource->procedure_id,
+            'procedure' => $this->resource->procedure,
             'description' => $this->resource->procedure->description,
             'modifier_id' => $this->resource->modifier_id,
             'mac' => $this->resource->macLocality?->mac,
