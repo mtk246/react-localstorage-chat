@@ -85,6 +85,8 @@ class ClaimFormPService extends Model implements Auditable
         'epsdt_id',
         'family_planning_id',
         'claim_form_p_id',
+        'revenue_code_id',
+        'total_charge',
     ];
 
     /**
@@ -162,6 +164,16 @@ class ClaimFormPService extends Model implements Auditable
     public function familyPlanning()
     {
         return $this->belongsTo(TypeCatalog::class, 'family_planning_id');
+    }
+
+    /**
+     * ClaimFormPService belongs to RevenueCode.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function revenueCode()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'revenue_code_id');
     }
 
     public function getModifiersAttribute()

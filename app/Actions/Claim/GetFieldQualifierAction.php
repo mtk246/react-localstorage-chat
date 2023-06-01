@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
+use App\Enums\Claim\FieldInformationInstitutional;
 use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\TypeCatalog;
 
@@ -18,12 +19,27 @@ final class GetFieldQualifierAction
             return getList(
                 TypeCatalog::class,
                 ['code', '-', 'description'],
-                ['relationship' => 'type', 'where' => ['description' => $item->getName()]],
+                ['relationship' => 'type', 'where' => ['description' => $item?->getName()]],
                 null,
                 ['code'],
             );
-        } else {
-            return [];
+        } elseif ('information-institutional' === $data['type']) {
+            $enums = collect(FieldInformationInstitutional::cases());
+            $item = $enums->first(fn ($item) => $item->value === (int) $data['id']);
+
+            $description = (in_array($data['id'], [1, 2, 3, 4]))
+                ? 'Occurrence span code and date'
+                : ((in_array($data['id'], [5, 6]))
+                    ? 'Occurrence code and date'
+                    : '');
+
+            return getList(
+                TypeCatalog::class,
+                ['code', '-', 'description'],
+                ['relationship' => 'type', 'where' => ['description' => ($item) ? $description : null]],
+                null,
+                ['code'],
+            );
         }
     }
 }

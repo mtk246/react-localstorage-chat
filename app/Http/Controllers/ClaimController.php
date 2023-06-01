@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetConditionCodeAction;
+use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
+use App\Actions\Claim\GetPatientStatusesAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -141,58 +145,32 @@ class ClaimController extends Controller
         );
     }
 
-    public function getListBillClassifications(): JsonResponse
+    public function getListBillClassifications(GetBillClassificationAction $classification): JsonResponse
     {
-        /** @todo Confirmar listado con monser */
-        $rs = [
-            [
-                'id' => '1',
-                'code' => '0',
-                'name' => 'Non-payment/Zero Claim',
-            ],
-            [
-                'id' => '2',
-                'code' => '1',
-                'name' => 'Admit Through Discharge',
-            ],
-            [
-                'id' => '3',
-                'code' => '2',
-                'name' => 'Interim - First Claim',
-            ],
-            [
-                'id' => '4',
-                'code' => '3',
-                'name' => 'Interim-Continuing Claims',
-            ],
-            [
-                'id' => '5',
-                'code' => '4',
-                'name' => 'Interim - Last Claim',
-            ],
-            [
-                'id' => '6',
-                'code' => '5',
-                'name' => 'Late Charge Only',
-            ],
-            [
-                'id' => '7',
-                'code' => '7',
-                'name' => 'Replacement of Prior Claim (See adjustment third digit)',
-            ],
-            [
-                'id' => '8',
-                'code' => '8',
-                'name' => 'Void/Cancel of Prior Claim (See adjustment third digit)',
-            ],
-            [
-                'id' => '9',
-                'code' => '9',
-                'name' => 'Final claim for a Home Health PPS Period',
-            ],
-        ];
+        $rs = $classification->all();
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all bill classifications'), 400);
+        return response()->json($rs);
+    }
+
+    public function getListPatientStatuses(GetPatientStatusesAction $patientStatuses): JsonResponse
+    {
+        $rs = $patientStatuses->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListConditionCodes(Request $request, GetConditionCodeAction $conditionCode): JsonResponse
+    {
+        $rs = $conditionCode->all($request->input());
+
+        return response()->json($rs);
+    }
+
+    public function getListDiagnosisRelatedGroups(Request $request, GetDiagnosisRelatedGroupAction $drg): JsonResponse
+    {
+        $rs = $drg->all($request->input());
+
+        return response()->json($rs);
     }
 
     public function getListTypeFormats()
@@ -214,9 +192,6 @@ class ClaimController extends Controller
         $rs = $qualifier->all($request->input());
 
         return response()->json($rs);
-        /**$rs = $this->claimRepository->getListFieldQualifiers($id);
-
-        return response()->json($rs);*/
     }
 
     public function getListTypeDiags()
