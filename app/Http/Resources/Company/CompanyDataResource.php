@@ -24,6 +24,10 @@ final class CompanyDataResource extends RequestWrapedResource
             'upin' => $this->resource->upin,
             'clia' => $this->resource->clia,
             'name' => $this->resource->name,
+            'abbreviation' => $this->resource
+                ->abbreviations()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->first()?->abbreviation,
             'nickname' => $this->resource
                 ->nicknames()
                 ->where('billing_company_id', $request->getBillingCompanyId())
@@ -31,6 +35,7 @@ final class CompanyDataResource extends RequestWrapedResource
             'taxonomies' => TaxonomiesResource::collection(
                 $this->resource->taxonomies()->orderBy('id')->get()
             ),
+            
         ];
     }
 }
