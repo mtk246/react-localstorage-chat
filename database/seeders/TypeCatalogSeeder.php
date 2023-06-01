@@ -1800,6 +1800,27 @@ class TypeCatalogSeeder extends Seeder
                 ],
             ],
             [
+                'description' => 'Health care institutional qualifier reference',
+                'type_catalogs' => [
+                    [
+                        'code' => '0B',
+                        'description' => 'State License Number',
+                    ],
+                    [
+                        'code' => '1G',
+                        'description' => 'Provider UPIN Number',
+                    ],
+                    [
+                        'code' => 'G2',
+                        'description' => 'Provider Commercial Number',
+                    ],
+                    [
+                        'code' => 'LU',
+                        'description' => 'Location Number',
+                    ],
+                ],
+            ],
+            [
                 'description' => 'Report form claim',
                 'type_catalogs' => [
                     [
