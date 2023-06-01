@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Models\TypeCatalog;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 final class GetConditionCodeAction
 {
-    public function all(array $data)
+    public function all(?string $search): Collection
     {
-        $search = $data['search'] ?? null;
-        $response = isset($search)
-            ? TypeCatalog::query()->whereHas('type', function ($q) {
-                $q->where('description', 'Condition code');
-            })->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])->select('id', 'code', 'description as name')->get()->toArray()
-            : TypeCatalog::query()->whereHas('type', function ($q) {
-                $q->where('description', 'Condition code');
-            })->select('id', 'code', 'description as name')->get()->toArray();
-
-        return $response;
+        return TypeCatalog::query()
+            ->whereHas('type', function (Builder $query) {
+                $query->where('description', 'Condition code');
+            })
+            ->when(isset($search), function (Builder $query) use ($search) {
+                $query->where('code', 'LIKE', strtoupper("%$search%"))
+                    ->orWhere('description', 'ILIKE', [strtolower("%$search%")]);
+            })
+            ->get(['id', 'code', 'description as name']);
     }
 }

@@ -161,7 +161,7 @@ class ClaimController extends Controller
 
     public function getListConditionCodes(Request $request, GetConditionCodeAction $conditionCode): JsonResponse
     {
-        $rs = $conditionCode->all($request->input());
+        $rs = $conditionCode->all($request->search ?? null);
 
         return response()->json($rs);
     }

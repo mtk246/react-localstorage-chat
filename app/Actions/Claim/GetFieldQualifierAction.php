@@ -40,6 +40,14 @@ final class GetFieldQualifierAction
                 null,
                 ['code'],
             );
+        } else {
+            return getList(
+                TypeCatalog::class,
+                ['code', '-', 'description'],
+                ['relationship' => 'type', 'where' => ['description' => 'Health care institutional qualifier reference']],
+                null,
+                ['code'],
+            );
         }
     }
 }
