@@ -35,7 +35,6 @@ final class CompanyDataResource extends RequestWrapedResource
             'taxonomies' => TaxonomiesResource::collection(
                 $this->resource->taxonomies()->orderBy('id')->get()
             ),
-            
         ];
     }
 }
