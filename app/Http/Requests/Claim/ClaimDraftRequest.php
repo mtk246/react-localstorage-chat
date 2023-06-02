@@ -77,7 +77,7 @@ class ClaimDraftRequest extends FormRequest
             'additional_information.admission_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.discharge_date' => ['nullable', 'date'],
             'additional_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
-            'additional_information.condition_codes' => ['nullable', 'array'],
+            'additional_information.condition_code_ids' => ['nullable', 'array'],
             'additional_information.admission_type_id' => ['nullable', 'integer'],
             'additional_information.admission_source_id' => ['nullable', 'integer'],
             'additional_information.patient_status_id' => ['nullable', 'integer'],
