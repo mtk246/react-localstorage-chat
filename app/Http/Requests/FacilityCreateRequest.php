@@ -31,7 +31,7 @@ final class FacilityCreateRequest extends FormRequest
                 'exists:\App\Models\Company,id',
             ],
             'nickname' => ['nullable', 'string'],
-            'abbreviation' => ['required', 'string', 'max:20'],
+            'abbreviation' => ['string', 'max:20'],
             'place_of_services' => ['nullable', 'array'],
 
             'billing_company_id' => [
@@ -62,7 +62,7 @@ final class FacilityCreateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => ['email:rfc'],
         ];
     }
 }

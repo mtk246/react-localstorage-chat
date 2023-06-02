@@ -24,7 +24,6 @@ class FacilityRepository
      */
     public function create(array $data)
     {
-        try {
             DB::beginTransaction();
             $facility = Facility::query()->create([
                 'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), Facility::class, 'code'),
@@ -122,13 +121,12 @@ class FacilityRepository
                 $data['address']['addressable_type'] = Facility::class;
                 Address::create($data['address']);
             }
-            if (isset($data['contact']['email'])) {
-
+            if (isset($data['contact']['email']) || isset($data['contact']['phone']) || isset($data['contact']['fax'])) {
                 Contact::create([
                     'contact_name' => $data['contact']['contact_name'] ?? null,
                     'phone' => $data['contact']['phone'] ?? null,
                     'fax' => $data['contact']['fax'] ?? null,
-                    'email' => $data['contact']['email'],
+                    'email' => $data['contact']['email'] ?? "",
                     'mobile' => $data['contact']['mobile'] ?? null,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'contactable_id' => $facility->id,
@@ -139,11 +137,7 @@ class FacilityRepository
             DB::commit();
 
             return $facility;
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return null;
-        }
+        
     }
 
     /**
