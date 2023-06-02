@@ -50,9 +50,6 @@ class ClaimDraftRequest extends FormRequest
 
             'type_of_medical_assistance' => ['nullable', 'string'],
             'health_professional_qualifier' => ['nullable', 'array'],
-            'health_professional_qualifier.*.field_id' => ['nullable', 'integer'],
-            'health_professional_qualifier.*.health_professional_id' => ['nullable', 'integer'],
-            'health_professional_qualifier.*.qualifier_id' => ['nullable', 'integer'],
 
             'prior_authorization_number' => ['nullable', 'string'],
             'employment_related_condition' => ['nullable', 'boolean'],
@@ -76,13 +73,13 @@ class ClaimDraftRequest extends FormRequest
             'claim_services.*.copay' => ['nullable', 'numeric'],
 
             'additional_information' => ['nullable', 'array'],
-            'additional_information.admisison_date' => ['nullable', 'date'],
-            'additional_information.admisison_time' => ['nullable', 'date_format:H:i'],
+            'additional_information.admission_date' => ['nullable', 'date'],
+            'additional_information.admission_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.discharge_date' => ['nullable', 'date'],
-            'additional_information.discharge_time' => ['nullable', 'date_format:H:i'],
+            'additional_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.condition_codes' => ['nullable', 'array'],
-            'additional_information.admisison_type_id' => ['nullable', 'integer'],
-            'additional_information.admisison_source_id' => ['nullable', 'integer'],
+            'additional_information.admission_type_id' => ['nullable', 'integer'],
+            'additional_information.admission_source_id' => ['nullable', 'integer'],
             'additional_information.patient_status_id' => ['nullable', 'integer'],
             'additional_information.bill_classification_id' => ['nullable', 'integer'],
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
