@@ -12,13 +12,13 @@ final class ArrayCountRule implements Rule
         private readonly int $count = 0,
         private readonly int $operator = '>=',
         private readonly string $attribute = 'attribute',
-    )
-    {
+    ) {
     }
 
     /**
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
@@ -36,12 +36,12 @@ final class ArrayCountRule implements Rule
         $count = count($value);
 
         $operations = [
-            '='  => $count == $this->count,
-            '>'  => $count > $this->count,
+            '=' => $count == $this->count,
+            '>' => $count > $this->count,
             '>=' => $count >= $this->count,
-            '<'  => $count < $this->count,
+            '<' => $count < $this->count,
             '<=' => $count <= $this->count,
-            '<>' => $count <> $this->count,
+            '<>' => $count != $this->count,
         ];
 
         return array_key_exists($this->operator, $operations) && $operations[$this->operator];
