@@ -156,6 +156,13 @@ final class ClaimResource extends JsonResource
             'insurance_policies' => $insurancePolicies,
             'claim_formattable' => $claimFormattable,
             'diagnoses' => $this->diagnoses,
+            'health_professional_qualifier' => $this->healthProfessionals->transform(function ($hpq) {
+                return [
+                    'field_id' => $hpq->pivot->field_id,
+                    'qualifier_id' => $hpq->pivot->qualifier_id,
+                    'health_professional_id' => $hpq->pivot->health_professional_id,
+                ];
+            }),
 
             'format' => $this->claimFormattable->type_form_id ?? '',
             'last_modified' => $this->getLastModifiedAttribute(),
