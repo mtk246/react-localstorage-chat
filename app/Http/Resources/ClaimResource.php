@@ -95,6 +95,7 @@ final class ClaimResource extends JsonResource
             'charges' => $this->claimFormattable?->physicianOrSupplierInformation?->charges,
             'claim_services' => $this->claimFormattable?->claimFormServices->map(function ($service) {
                 return [
+                    'id' => $service->id,
                     'from_service' => $service->from_service,
                     'to_service' => $service->to_service,
                     'procedure_id' => $service->procedure_id,
@@ -120,6 +121,7 @@ final class ClaimResource extends JsonResource
                 'non_covered_charges' => $this->claimFormattable?->physicianOrSupplierInformation?->non_covered_charges,
                 'claim_date_informations' => $this->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations->map(function ($dateInfo) {
                     return [
+                        'id' => $dateInfo->id,
                         'field_id' => $dateInfo->field_id,
                         'field' => $dateInfo->field,
                         'qualifier_id' => $dateInfo->qualifier_id,
@@ -156,6 +158,13 @@ final class ClaimResource extends JsonResource
             'insurance_policies' => $insurancePolicies,
             'claim_formattable' => $claimFormattable,
             'diagnoses' => $this->diagnoses,
+            'health_professional_qualifier' => $this->healthProfessionals->transform(function ($hpq) {
+                return [
+                    'field_id' => $hpq->pivot->field_id,
+                    'qualifier_id' => $hpq->pivot->qualifier_id,
+                    'health_professional_id' => $hpq->pivot->health_professional_id,
+                ];
+            }),
 
             'format' => $this->claimFormattable->type_form_id ?? '',
             'last_modified' => $this->getLastModifiedAttribute(),
