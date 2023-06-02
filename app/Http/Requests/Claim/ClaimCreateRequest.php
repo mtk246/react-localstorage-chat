@@ -84,7 +84,7 @@ class ClaimCreateRequest extends FormRequest
             'additional_information.admission_date' => ['sometimes', 'date'],
             'additional_information.admission_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.discharge_date' => ['sometimes', 'date'],
-            'additional_information.discharge_time' => ['sometimes', 'date_format:H:i:s'],
+            'additional_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.condition_codes' => ['nullable', 'array'],
             'additional_information.admission_type_id' => ['required', 'integer'],
             'additional_information.admission_source_id' => ['required', 'integer'],
