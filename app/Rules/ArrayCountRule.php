@@ -8,11 +8,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 final class ArrayCountRule implements Rule
 {
+    private string $attribute = '';
+
     public function __construct(
         private readonly int $count = 0,
         private readonly int $operator = '>=',
-        private readonly string $attribute = 'attribute',
     ) {
+        if (is_null($this->getOperatorName())) {
+            throw new \Exception('Invalid operator');
+        }
     }
 
     /**
@@ -23,6 +27,8 @@ final class ArrayCountRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        $this->attribute = $attribute;
+
         return is_array($value) && $this->isCountValid($value);
     }
 
@@ -45,5 +51,21 @@ final class ArrayCountRule implements Rule
         ];
 
         return array_key_exists($this->operator, $operations) && $operations[$this->operator];
+    }
+
+    private function getOperatorName(): ?string
+    {
+        $operators = [
+            '=' => 'equal to',
+            '>' => 'greater than',
+            '>=' => 'greater than or equal to',
+            '<' => 'less than',
+            '<=' => 'less than or equal to',
+            '<>' => 'not equal to',
+        ];
+
+        return array_key_exists($this->operator, $operators)
+            ? $operators[$this->operator]
+            : null;
     }
 }
