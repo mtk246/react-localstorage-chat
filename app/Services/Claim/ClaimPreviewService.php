@@ -115,6 +115,7 @@ final class ClaimPreviewService implements ReportInterface
         $print = $this->print;
         $urlVerify = $this->urlVerify;
         $qrCodeStyle = $this->qrCodeStyle;
+        $hasQR = ('UB-04_837I_1' === $this->typeForm) ? false : $hasQR;
 
         $pdf->setHeaderCallback(function ($pdf) use ($print, $hasQR, $urlVerify, $qrCodeStyle): void {
             $pdf->SetAutoPageBreak(false, 0);
@@ -168,14 +169,28 @@ final class ClaimPreviewService implements ReportInterface
     ): object|string|null {
         $this->pdf->AddPage($this->orientation, $this->format);
 
-        foreach (config('claim.preview_837p') as $fieldName => $value) {
+        $previewFields = ('CMS-1500_837P_1' === $this->typeForm)
+            ? config('claim.preview_837p')
+            : (('UB-04_837I_1' === $this->typeForm)
+                ? config('claim.preview_837i')
+                : []);
+
+        foreach ($previewFields as $fieldName => $value) {
             if (isset($value['properties'])) {
                 $this->setData($value['properties'], $fieldName);
-            } elseif (isset($value['options'])) {
+            } elseif (isset($value['options']) && 1 === count($value)) {
                 $this->setData($value['options'][$this->data[$fieldName]]['properties'], $fieldName, null, 'X');
             } else {
                 foreach ($value as $key => $val) {
-                    $this->setData($val['properties'], $fieldName, $key);
+                    if ('options' === $key) {
+                        $this->setData($val[$this->data[$fieldName]['value']]['properties'], $fieldName, null, 'X');
+                    } elseif (isset($val['options'])) {
+                        if (isset($val['options'][$this->data[$fieldName][$key]])) {
+                            $this->setData($val['options'][$this->data[$fieldName][$key]]['properties'], $fieldName, null, 'X');
+                        }
+                    } else {
+                        $this->setData($val['properties'], $fieldName, $key);
+                    }
                 }
             }
         }

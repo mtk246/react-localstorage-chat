@@ -6,7 +6,6 @@ namespace App\Actions\Claim;
 
 use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
-use App\Models\TypeForm;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -25,10 +24,6 @@ final class GetClaimPreviewAction
                         ->orWhere('billing_company_id', $user->billingCompanies->first()?->id);
                 })
                 ->first();
-            $typeForm = $claim?->claimFormattable?->typeForm?->form
-                ?? TypeForm::findOrFail($data['format'])?->form;
-
-            /**@todo Falta validar el typeForm para el definir el preview de 837p o del 837i */
             return new PreviewResource($claim);
         });
     }

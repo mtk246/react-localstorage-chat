@@ -472,7 +472,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
-        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
+        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
         Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
