@@ -71,6 +71,7 @@ class ClaimCreateRequest extends FormRequest
             'charges' => ['nullable', 'numeric'],
 
             'claim_services' => ['nullable', 'array'],
+            'claim_services.*.id' => ['nullable', 'integer'],
             'claim_services.*.from_service' => ['sometimes', 'nullable', 'date'],
             'claim_services.*.to_service' => ['sometimes', 'nullable', 'date'],
             'claim_services.*.procedure_id' => ['sometimes', 'nullable', 'integer'],
@@ -94,6 +95,7 @@ class ClaimCreateRequest extends FormRequest
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
 
             'additional_information.claim_date_informations' => ['nullable', 'array'],
+            'additional_information.claim_date_informations.*.id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.field_id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.from_date' => ['sometimes', 'date'],
