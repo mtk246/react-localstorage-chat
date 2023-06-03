@@ -86,8 +86,9 @@ class ClaimRepository
 
                             if (isset($data['physician_or_supplier_information']['claim_date_informations'])) {
                                 foreach ($data['physician_or_supplier_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    $dateInf['physician_or_supplier_information_id'] = $physician->id;
                                     ClaimDateInformation::updateOrCreate([
-                                        'physician_or_supplier_information_id' => $physician->id,
+                                        'id' => $dateInf->id ?? null,
                                     ], $dateInf);
                                 }
                             }
@@ -129,7 +130,7 @@ class ClaimRepository
                             if (isset($data['additional_information']['claim_date_informations'])) {
                                 foreach ($data['additional_information']['claim_date_informations'] ?? [] as $dateInf) {
                                     ClaimDateInformation::updateOrCreate([
-                                        'physician_or_supplier_information_id' => $additional->id,
+                                        'id' => $dateInf['id'] ?? null,
                                     ], [
                                         'from_date_or_current' => $dateInf['from_date'],
                                         'to_date' => $dateInf['to_date'],
@@ -137,6 +138,7 @@ class ClaimRepository
                                         'qualifier_id' => $dateInf['qualifier_id'],
                                         'through' => $dateInf['through'],
                                         'amount' => $dateInf['amount'],
+                                        'physician_or_supplier_information_id' => $additional->id,
                                     ]);
                                 }
                             }
@@ -455,7 +457,7 @@ class ClaimRepository
                             foreach ($claimForm->claimFormServices ?? [] as $serviceDB) {
                                 $validated = false;
                                 foreach ($data['claim_services'] as $service) {
-                                    if ($service['id'] === $serviceDB->id) {
+                                    if ($service['id'] ?? null === $serviceDB->id) {
                                         $validated = true;
                                         break;
                                     }
@@ -467,7 +469,7 @@ class ClaimRepository
                             foreach ($data['claim_services'] as $service) {
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
-                                    'id' => $service['id']
+                                    'id' => $service['id'] ?? null
                                 ], $service);
                             }
                         }
