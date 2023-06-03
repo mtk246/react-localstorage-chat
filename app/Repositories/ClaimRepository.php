@@ -475,12 +475,12 @@ class ClaimRepository
                         }
                     } else {
                         $model = ClaimFormP::class;
+                        $claimForm->update([
+                            'type_form_id' => $data['format'],
+                            'type_of_medical_assistance' => $data['type_of_medical_assistance'] ?? null,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        ]);
                         if (isset($data['claim_services'])) {
-                            $claimForm->update([
-                                'type_form_id' => $data['format'],
-                                'type_of_medical_assistance' => $data['type_of_medical_assistance'] ?? null,
-                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                            ]);
                             foreach ($claimForm->claimFormServices ?? [] as $serviceDB) {
                                 $validated = false;
                                 foreach ($data['claim_services'] as $service) {
@@ -563,6 +563,18 @@ class ClaimRepository
                 'claim_formattable_type' => $model ?? null,
                 'claim_formattable_id' => $claimForm->id ?? null,
             ]);
+
+            if (isset($data['health_professional_qualifier'])) {
+                $claim->healthProfessionals()->detach();
+                foreach ($data['health_professional_qualifier'] as $hpq) {
+                    $claim->healthProfessionals()->attach(
+                        $hpq['health_professional_id'],
+                        [
+                            'field_id' => $hpq['field_id'] ?? null,
+                            'qualifier_id' => $hpq['qualifier_id'] ?? null,
+                        ]);
+                }
+            }
 
             if (isset($data['diagnoses'])) {
                 $claim->diagnoses()->detach();
