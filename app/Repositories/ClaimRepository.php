@@ -516,7 +516,7 @@ class ClaimRepository
                             ], $data['additional_information']);
 
                             if (isset($data['additional_information']['claim_date_informations'])) {
-                                foreach ($claimForm->hysicianOrSupplierInformation->claimDateInformations ?? [] as $dateInfDB) {
+                                foreach ($claimForm->physicianOrSupplierInformation->claimDateInformations ?? [] as $dateInfDB) {
                                     $validated = false;
                                     foreach ($data['additional_information']['claim_date_informations'] ?? [] as $dateInf) {
                                         if ($dateInf['id'] ?? null === $dateInfDB->id) {
