@@ -21,6 +21,6 @@ final class GetConditionCodeAction
                 $query->where('code', 'LIKE', strtoupper("%$search%"))
                     ->orWhere(DB::Raw('LOWER(description)'), 'LIKE', [strtolower("%$search%")]);
             })
-            ->get(['id', 'code', 'description as name']);
+            ->get(['id', 'code', DB::Raw("CONCAT(code, ' - ', description) AS name")]);
     }
 }
