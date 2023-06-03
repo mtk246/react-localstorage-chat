@@ -153,7 +153,7 @@ class PhysicianOrSupplierInformation extends Model implements Auditable
             array_push($condition_codes, [
                 'id' => $cond['id'] ?? '',
                 'code' => $cond['code'] ?? '',
-                'description' => $cond['description'] ?? '',
+                'name' => $cond['description'] ?? '',
             ]);
         }
 
