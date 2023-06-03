@@ -181,7 +181,8 @@ class ClaimRepository
                             'item' => $diagnosis['item'],
                             'admission' => $diagnosis['admission'] ?? null,
                             'poa' => $diagnosis['poa'] ?? null,
-                        ]);
+                        ]
+                    );
                 }
             }
 
@@ -564,7 +565,14 @@ class ClaimRepository
             if (isset($data['diagnoses'])) {
                 $claim->diagnoses()->detach();
                 foreach ($data['diagnoses'] as $diagnosis) {
-                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
+                    $claim->diagnoses()->attach(
+                        $diagnosis['diagnosis_id'],
+                        [
+                            'item' => $diagnosis['item'],
+                            'admission' => $diagnosis['admission'] ?? null,
+                            'poa' => $diagnosis['poa'] ?? null,
+                        ]
+                    );
                 }
             }
 

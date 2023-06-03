@@ -126,7 +126,7 @@ final class ClaimResource extends JsonResource
                         'field' => $dateInfo->field,
                         'qualifier_id' => $dateInfo->qualifier_id,
                         'qualifier' => $dateInfo->qualifier,
-                        'from_date' => $dateInfo->from_date,
+                        'from_date' => $dateInfo->from_date_or_current,
                         'to_date' => $dateInfo->to_date,
                         'through' => $dateInfo->through,
                         'amount' => $dateInfo->amount,
