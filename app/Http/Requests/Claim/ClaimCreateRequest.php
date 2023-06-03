@@ -96,7 +96,7 @@ class ClaimCreateRequest extends FormRequest
 
             'additional_information.claim_date_informations' => ['nullable', 'array'],
             'additional_information.claim_date_informations.*.id' => ['nullable', 'integer'],
-            'additional_information.claim_date_informations.*.field_id' => ['nullable', 'integer'],
+            'additional_information.claim_date_informations.*.field_id' => ['sometimes', 'integer'],
             'additional_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.from_date' => ['sometimes', 'date'],
             'additional_information.claim_date_informations.*.to_date' => ['nullable', 'date'],

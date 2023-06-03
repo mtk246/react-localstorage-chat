@@ -150,7 +150,7 @@ class ClaimVerifyRequest extends FormRequest
 
             'physician_or_supplier_information.claim_date_informations' => ['nullable', 'array'],
             'physician_or_supplier_information.claim_date_informations.*.field_id' => ['sometimes', 'integer'],
-            'physician_or_supplier_information.claim_date_informations.*.qualifier_id' => ['sometimes', 'integer'],
+            'physician_or_supplier_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'physician_or_supplier_information.claim_date_informations.*.from_date_or_current' => ['nullable', 'date'],
             'physician_or_supplier_information.claim_date_informations.*.to_date' => ['nullable', 'date'],
             'physician_or_supplier_information.claim_date_informations.*.description' => ['nullable', 'string'],
