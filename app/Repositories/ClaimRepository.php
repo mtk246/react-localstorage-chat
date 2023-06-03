@@ -102,6 +102,7 @@ class ClaimRepository
                             ]);
                             $claimForm->claimFormServices()->delete();
                             foreach ($data['claim_services'] as $service) {
+                                $service['days_or_units'] = $service['units_of_service'];
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::create($service);
                             }
@@ -490,6 +491,7 @@ class ClaimRepository
                                 }
                             }
                             foreach ($data['claim_services'] as $service) {
+                                $service['days_or_units'] = $service['units_of_service'];
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
                                     'id' => $service['id'] ?? null
