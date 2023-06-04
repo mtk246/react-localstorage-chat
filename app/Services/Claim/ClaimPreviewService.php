@@ -286,7 +286,7 @@ final class ClaimPreviewService implements ReportInterface
             $cellProperties['h'],
             $value,
             0,
-            'L',
+            $cellProperties['align'],
             false,
             1,
             $cellProperties['x'],
