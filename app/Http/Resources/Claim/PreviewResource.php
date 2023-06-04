@@ -11,6 +11,7 @@ use App\Models\Facility;
 use App\Models\HealthProfessional;
 use App\Models\Patient;
 use App\Models\TypeCatalog;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -110,14 +111,25 @@ final class PreviewResource extends JsonResource
                      * @todo Formato Correcto "QualifierIdentificators Descripcion   Qualifier.." MAX:71caracteres
                      * Preguntar por los ientificadores!!
                      * */
+                    $from_date = !empty($service->from_date_or_current)
+                        ? Carbon::createFromFormat('Y-m-d', $service->from_date_or_current)->format('m/d/Y')
+                        : '';
+                    $to_date = !empty($service->to_date)
+                        ? Carbon::createFromFormat('Y-m-d', $service->to_date)->format('m/d/Y')
+                        : '';
                     $additionalField .= ((empty($additionalField)
                         ? ''
                         : (isset($service->qualifier)
                             ? '   '
                             : '')).
-                        ($service->qualifier?->code.(empty($service->description) ? '' : ' '.$service->description)));
+                        ($service->qualifier?->code.(empty($service->description) ? '' : ' '.$service->description).
+                        ((!empty($service->from_date_or_current) || !empty($service->to_date)) ? ' ' : '').
+                        $from_date.
+                        ((!empty($service->from_date_or_current) && !empty($service->to_date)) ? ' - ' : '').
+                        $to_date));
                 }
             }
+
             $currentDate = explode('-', $currentField->from_date_or_current ?? '');
             $otherDate = explode('-', $otherField->from_date_or_current ?? '');
             $currentOccupationFrom = explode('-', $currentOccupationField->from_date_or_current ?? '');
@@ -135,19 +147,6 @@ final class PreviewResource extends JsonResource
             ? TypeCatalog::find($request->referred_provider_role_id)?->code
             : $this->resource->referredProviderRole?->code;
 
-        $billingProvider = HealthProfessional::find($request->billing_provider_id ?? $this->resource->billing_provider_id ?? null);
-        $billingProviderAddress = isset($billingProvider)
-            ? $billingProvider?->user->addresses()->select(
-                'country',
-                'address',
-                'city',
-                'state',
-                'zip',
-            )->first()
-            : null;
-        $billingProviderContact = $billingProvider->user->contacts()->select(
-            'phone'
-        )->first() ?? null;
         $claimServices = $request->claim_form_services ?? $this->resource->claimFormattable->claimFormServices ?? [];
 
         foreach ($request->diagnoses ?? $this->resource->diagnoses ?? [] as $diagnosis) {
@@ -156,6 +155,19 @@ final class PreviewResource extends JsonResource
         }
 
         $company = Company::find($request->company_id ?? $this->resource->company_id ?? null);
+        $companyAddress = isset($company)
+            ? $company?->addresses()->select(
+                'country',
+                'address',
+                'city',
+                'state',
+                'zip',
+            )->first()
+            : null;
+        $companyContact = $company->contacts()->select(
+            'phone'
+        )->first() ?? null;
+
         $facility = Facility::find($request->facility_id ?? $this->resource->facility_id ?? null);
         $facilityAddress = isset($facility)
             ? $facility->addresses()->select(
@@ -450,18 +462,14 @@ final class PreviewResource extends JsonResource
             '32a' => str_replace('-', '', $facility->npi ?? ''),
             '32b' => '',
             '33' => [
-                'name' => isset($billingProvider)
-                    ? ($billingProvider->user->profile->last_name.', '.
-                        $billingProvider->user->profile->first_name.', '.
-                        substr($billingProvider->user->profile->middle_name, 0, 1))
-                    : '',
-                'address1' => $billingProviderAddress->address ?? '',
-                'address2' => substr($billingProviderAddress->city ?? '', 0, 24).', '.substr($billingProviderAddress->state ?? '', 0, 3).substr(str_replace('-', '', $billingProviderAddress->zip ?? ''), 0, 12) ?? '',
-                'code_area' => str_replace('-', '', substr($billingProviderContact->phone ?? '', 0, 3)),
-                'phone' => str_replace('-', '', substr($billingProviderContact->phone ?? '', 3, 10)),
+                'name' => $company->name ?? '',
+                'address1' => $companyAddress->address ?? '',
+                'address2' => substr($companyAddress->city ?? '', 0, 24).', '.substr($companyAddress->state ?? '', 0, 3).substr(str_replace('-', '', $companyAddress->zip ?? ''), 0, 12) ?? '',
+                'code_area' => str_replace('-', '', substr($companyContact->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($companyContact->phone ?? '', 3, 10)),
             ],
-            '33a' => str_replace('-', '', $billingProvider->npi ?? ''),
-            '33b' => '',
+            '33a' => str_replace('-', '', $company->npi ?? ''),
+            '33b' => empty($company->npi) ? ((!empty($tax_id) ? 'ZZ' : '').str_replace('-', '', $tax_id)) : '',
         ];
     }
 
@@ -499,6 +507,7 @@ final class PreviewResource extends JsonResource
         )->first() ?? null;
 
         $company = Company::find($request->company_id ?? $this->resource->company_id ?? null);
+        $companyTax = $company->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
         $companyAddress = isset($company)
             ? $company->addresses()->select(
                 'country',
