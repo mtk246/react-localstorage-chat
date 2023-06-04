@@ -147,6 +147,11 @@ final class PreviewResource extends JsonResource
             ? TypeCatalog::find($request->referred_provider_role_id)?->code
             : $this->resource->referredProviderRole?->code;
 
+        $billingProvider = ($request->billing_provider_id)
+            ? HealthProfessional::find($request->billing_provider_id)
+            : $this->resource->billingProvider;
+        $billingProviderProfile = $billingProvider?->user?->profile;
+
         $claimServices = $request->claim_form_services ?? $this->resource->claimFormattable->claimFormServices ?? [];
 
         foreach ($request->diagnoses ?? $this->resource->diagnoses ?? [] as $diagnosis) {
@@ -221,10 +226,10 @@ final class PreviewResource extends JsonResource
             $fromService = explode('-', $item['from_service'] ?? '');
             $toService = explode('-', $item['to_service'] ?? '');
             /* 24A */
-            $resultServices['from_year_A'.($index + 1)] = $fromService[0] ?? '';
+            $resultServices['from_year_A'.($index + 1)] = substr($fromService[0] ?? '', 2, 2);
             $resultServices['from_month_A'.($index + 1)] = $fromService[1] ?? '';
             $resultServices['from_day_A'.($index + 1)] = $fromService[2] ?? '';
-            $resultServices['to_year_A'.($index + 1)] = $toService[0] ?? '';
+            $resultServices['to_year_A'.($index + 1)] = substr($toService[0] ?? '', 2, 2);
             $resultServices['to_month_A'.($index + 1)] = $toService[1] ?? '';
             $resultServices['to_day_A'.($index + 1)] = $toService[2] ?? '';
             /* 24B */
@@ -257,6 +262,12 @@ final class PreviewResource extends JsonResource
         }
         $arrayCharge = explode('.', (string) $totalCharge ?? '');
         $arrayCopay = explode('.', (string) $totalCopay ?? '');
+        $dateOfFirstService = !empty($claimServices[0]['from_service'] ?? '')
+            ? Carbon::createFromFormat('Y-m-d', $claimServices[0]['from_service'] ?? '')->format('m/d/Y')
+            : '';
+        $options = ['Medicare', 'Medicaid', 'Tricare', 'Champva', 'Group', 'Feca'];
+        $searchString = $higherOrderPolicy?->insurancePlan?->insType?->code ?? '';
+        $key = array_search(strtolower($searchString), array_map('strtolower', $options));
 
         return [
             'insurance_company' => [
@@ -265,7 +276,7 @@ final class PreviewResource extends JsonResource
                 'address2' => '',
                 'address3' => substr($insuranceCompanyAddress->city ?? '', 0, 24).', '.substr($insuranceCompanyAddress->state ?? '', 0, 3).substr(str_replace('-', '', $insuranceCompanyAddress->zip ?? ''), 0, 12) ?? '',
             ],
-            '1' => 'Medicare',
+            '1' => (false !== $key) ? $options[$key] : 'Other',
             '1a' => $higherOrderPolicy->policy_number ?? '',
             '2' => $patient
                 ? ($patient->user->profile->last_name.
@@ -350,7 +361,7 @@ final class PreviewResource extends JsonResource
             '11d' => ($lowerOrderPolicy) ? true : false,
             '12' => [
                 'signed' => ($patientOrInsuredInfo['patient_signature'] ?? false) ? 'Signature on File' : '',
-                'date' => ($patientOrInsuredInfo['patient_signature'] ?? false) ? now()->format('m/d/Y') : '',
+                'date' => ($patientOrInsuredInfo['patient_signature'] ?? false) ? $dateOfFirstService : '',
             ],
             '13' => ($patientOrInsuredInfo['insured_signature'] ?? false) ? 'Signature on File' : '',
             '14' => [
@@ -380,7 +391,7 @@ final class PreviewResource extends JsonResource
                 (!empty($providerProfile->middle_name)
                     ? ' '.substr($providerProfile->middle_name, 0, 1)
                     : '').
-                ' '.$providerProfile->first_name.
+                ' '.$providerProfile->last_name.
                 (isset($providerProfile->nameSuffix)
                     ? ' '.$providerProfile->nameSuffix->description
                     : ''))
@@ -435,7 +446,9 @@ final class PreviewResource extends JsonResource
                         ? 'SSN'
                         : ''),
             ],
-            '26' => $physicianOrSupplierInfo->patient_account_num ?? '',
+            '26' => $patient?->companies()
+                ?->wherePivot('billing_company_id', $bC)->first()
+                ?->pivot?->med_num ?? $patient->code,
             '27' => $physicianOrSupplierInfo->accept_assignment ?? false,
             '28' => [
                 'total_charge' => $arrayCharge[0] ?? '',
@@ -451,8 +464,18 @@ final class PreviewResource extends JsonResource
             ],
             '30' => '',
             '31' => [
+                'name' => isset($billingProviderProfile)
+                    ? ($billingProviderProfile->first_name.
+                    (!empty($billingProviderProfile->middle_name)
+                        ? ' '.substr($billingProviderProfile->middle_name, 0, 1)
+                        : '').
+                    ' '.$billingProviderProfile->last_name.
+                    (isset($billingProviderProfile->nameSuffix)
+                        ? ' '.$billingProviderProfile->nameSuffix->description
+                        : ''))
+                    : '',
                 'signed' => 'Signature on File',
-                'date' => now()->format('m/d/Y'),
+                'date' => $dateOfFirstService ?? '',
             ],
             '32' => [
                 'name' => $facility->name ?? '',
