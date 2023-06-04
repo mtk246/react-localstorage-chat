@@ -347,7 +347,7 @@ final class PreviewResource extends JsonResource
             '10d' => '',
             '11' => $higherOrderPolicy->group_number ?? '',
             '11a' => [
-                'year' => substr($subscriberBirthdate[0] ?? '',2 , 2),
+                'year' => substr($subscriberBirthdate[0] ?? '', 2, 2),
                 'month' => $subscriberBirthdate[1] ?? '',
                 'day' => $subscriberBirthdate[2] ?? '',
                 'sex' => strtoupper($subscriber->sex ?? ''),
