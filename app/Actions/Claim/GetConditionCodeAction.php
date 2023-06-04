@@ -18,9 +18,11 @@ final class GetConditionCodeAction
                 $query->where('description', 'Condition code');
             })
             ->when(isset($search), function (Builder $query) use ($search) {
-                $query->where('code', 'LIKE', strtoupper("%$search%"))
-                    ->orWhere(DB::Raw('LOWER(description)'), 'LIKE', [strtolower("%$search%")]);
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('code', 'LIKE', strtoupper("%$search%"))
+                        ->orWhere(DB::Raw('LOWER(description)'), 'LIKE', [strtolower("%$search%")]);
+                });
             })
-            ->get(['id', 'code', 'description as name']);
+            ->get(['id', 'code', DB::Raw("CONCAT(code, ' - ', description) AS name")]);
     }
 }
