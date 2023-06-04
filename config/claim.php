@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Enums\Claim\RuleFormatType;
+use App\Enums\Claim\RuleType;
+
 return [
     'preview_837p' => [
         'insurance_company' => [
@@ -472,5 +475,54 @@ return [
         // '10d' => '',
     ],
     'preview_837i' => [
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | claims rules
+    |--------------------------------------------------------------------------
+    |
+    | congig and formats for claims rules
+    |
+    */
+
+    'formats' => [
+        RuleFormatType::INSTITUTIONAL->value => [
+            'file' => [
+                '1a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'model' => 'value',
+                        'company' => 'id',
+                    ],
+                    'values' => [
+                        'common' => [
+                        ],
+                        'company' => [
+                        ],
+                        'billing_company' => [
+                        ],
+                    ],
+                ],
+                '2a' => [
+                    'type' => RuleType::BOOLEAN,
+                    'value' => false,
+                ],
+                '2b' => [
+                    'type' => RuleType::BOOLEAN,
+                    'value' => false,
+                    'values' => [
+                        'common' => [
+                        ],
+                        'company' => [
+                        ],
+                        'billing_company' => [
+                        ],
+                    ],
+                ],
+            ],
+            'digital' => [
+            ],
+        ],
     ],
 ];
