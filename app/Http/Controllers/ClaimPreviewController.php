@@ -30,6 +30,6 @@ final class ClaimPreviewController extends Controller
         ]))[1];
 
         /* @todo Consulta para poder visualizar el pdf desde postman */
-        /* return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I'); */
+        /**return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');*/
     }
 }

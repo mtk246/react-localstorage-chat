@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
 use App\Models\Patient;
-use App\Models\PlaceOfService;
-use App\Models\Procedure;
+use App\Models\TypeCatalog;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -77,6 +77,7 @@ final class PreviewResource extends JsonResource
         $physicianOrSupplierInfo = $this->resource->claimFormattable?->physicianOrSupplierInformation ?? $request->physician_or_supplier_information ?? null;
 
         if (isset($physicianOrSupplierInfo->claimDateInformations)) {
+            $enums = collect(FieldInformationProfessional::cases());
             $otherField = null;
             $currentField = null;
             $currentOccupationField = null;
@@ -84,26 +85,37 @@ final class PreviewResource extends JsonResource
             $additionalField = null;
 
             foreach ($physicianOrSupplierInfo->claimDateInformations ?? [] as $service) {
-                if (str_contains($service->field->description ?? '', '14.')) {
+                $item = $enums->first(fn ($item) => $item->value === (int) $service->field_id);
+                $field = is_null($item) ? TypeCatalog::find($service->field_id) : null;
+                $description = $item?->getName() ?? $field?->description ?? '';
+
+                if (str_contains($description, '14.')) {
                     if (!isset($currentField)) {
                         $currentField = $service;
                     }
-                } elseif (str_contains($service->field->description ?? '', '15.')) {
+                } elseif (str_contains($description, '15.')) {
                     if (!isset($otherField)) {
                         $otherField = $service;
                     }
-                } elseif (str_contains($service->field->description ?? '', '16.')) {
+                } elseif (str_contains($description, '16.')) {
                     if (!isset($currentOccupationField)) {
                         $currentOccupationField = $service;
                     }
-                } elseif (str_contains($service->field->description ?? '', '18.')) {
+                } elseif (str_contains($description, '18.')) {
                     if (!isset($hospitalizationField)) {
                         $hospitalizationField = $service;
                     }
-                } elseif (str_contains($service->field->description ?? '', '19.')) {
-                    if (!isset($additionalField)) {
-                        $additionalField = $service;
-                    }
+                } elseif (str_contains($description, '19.')) {
+                    /*
+                     * @todo Formato Correcto "QualifierIdentificators Descripcion   Qualifier.." MAX:71caracteres
+                     * Preguntar por los ientificadores!!
+                     * */
+                    $additionalField .= ((empty($additionalField)
+                        ? ''
+                        : (isset($service->qualifier)
+                            ? '   '
+                            : '')).
+                        ($service->qualifier?->code.(empty($service->description) ? '' : ' '.$service->description)));
                 }
             }
             $currentDate = explode('-', $currentField->from_date_or_current ?? '');
@@ -115,16 +127,16 @@ final class PreviewResource extends JsonResource
             $hospitalizationTo = explode('-', $hospitalizationField->to_date ?? '');
         }
 
-        if (isset($request->service_provider_id)) {
-            $provider = HealthProfessional::find($request->service_provider_id);
-            $providerCode = 'DN';
-        } elseif (isset($request->referred_id)) {
-            $provider = HealthProfessional::find($request->referred_id);
-            $providerCode = 'DK';
-        }
+        $provider = ($request->referred_id)
+            ? HealthProfessional::find($request->referred_id)
+            : $this->resource->referred;
+        $providerProfile = $provider?->user?->profile;
+        $providerCode = ($request->referred_provider_role_id)
+            ? TypeCatalog::find($request->referred_provider_role_id)?->code
+            : $this->resource->referredProviderRole?->code;
 
         $billingProvider = HealthProfessional::find($request->billing_provider_id ?? $this->resource->billing_provider_id ?? null);
-        $billingProviderAddress = isset($insuranceCompany)
+        $billingProviderAddress = isset($billingProvider)
             ? $billingProvider?->user->addresses()->select(
                 'country',
                 'address',
@@ -133,6 +145,9 @@ final class PreviewResource extends JsonResource
                 'zip',
             )->first()
             : null;
+        $billingProviderContact = $billingProvider->user->contacts()->select(
+            'phone'
+        )->first() ?? null;
         $claimServices = $request->claim_form_services ?? $this->resource->claimFormattable->claimFormServices ?? [];
 
         foreach ($request->diagnoses ?? $this->resource->diagnoses ?? [] as $diagnosis) {
@@ -142,7 +157,7 @@ final class PreviewResource extends JsonResource
 
         $company = Company::find($request->company_id ?? $this->resource->company_id ?? null);
         $facility = Facility::find($request->facility_id ?? $this->resource->facility_id ?? null);
-        $facilityAddress = isset($insuranceCompany)
+        $facilityAddress = isset($facility)
             ? $facility->addresses()->select(
                 'country',
                 'address',
@@ -171,7 +186,7 @@ final class PreviewResource extends JsonResource
         $patientContact = $patient->user->contacts()->select(
             'phone'
         )->first() ?? null;
-        $subscriberBirthdate = explode('-', $this->subscriber?->date_of_birth ?? '');
+        $subscriberBirthdate = explode('-', $subscriber?->date_of_birth ?? '');
         $subscriberAddress = $subscriber?->addresses()->select(
             'country',
             'address',
@@ -187,37 +202,63 @@ final class PreviewResource extends JsonResource
         $totalCharge = 0;
         $totalCopay = 0;
 
-        foreach ($claimServices->toArray() ?? [] as $index => $item) {
+        foreach ($claimServices ?? [] as $index => $item) {
             $arrayPrice = explode('.', $item['price'] ?? '');
             $totalCharge += $item['price'] ?? 0;
             $totalCopay += $item['copay'] ?? 0;
-            $resultServices['from_service'.($index + 1)] = $item['from_service'];
-            $resultServices['to_service'.($index + 1)] = $item['to_service'];
-            $resultServices['price'.($index + 1)] = $item['price'];
-            $resultServices['pointer1'.($index + 1)] = $item['diagnostic_pointers'][0] ?? '';
-            $resultServices['pointer2'.($index + 1)] = $item['diagnostic_pointers'][1] ?? '';
-            $resultServices['pointer3'.($index + 1)] = $item['diagnostic_pointers'][2] ?? '';
-            $resultServices['pointer4'.($index + 1)] = $item['diagnostic_pointers'][3] ?? '';
-            $resultServices['procedure'.($index + 1)] = Procedure::find($item['procedure_id'] ?? null)?->code;
-            $resultServices['pos'.($index + 1)] = PlaceOfService::find($item['place_of_service_id'] ?? null)?->code;
-            $resultServices['modifier1'.($index + 1)] = $item['modifiers'][0]['name'] ?? '';
-            $resultServices['modifier2'.($index + 1)] = $item['modifiers'][1]['name'] ?? '';
-            $resultServices['modifier3'.($index + 1)] = $item['modifiers'][2]['name'] ?? '';
-            $resultServices['modifier4'.($index + 1)] = $item['modifiers'][3]['name'] ?? '';
-            $resultServices['emg'.($index + 1)] = ($item['emg']) ? 'Y' : '';
+            $fromService = explode('-', $item['from_service'] ?? '');
+            $toService = explode('-', $item['to_service'] ?? '');
+            /* 24A */
+            $resultServices['from_year_A'.($index + 1)] = $fromService[0] ?? '';
+            $resultServices['from_month_A'.($index + 1)] = $fromService[1] ?? '';
+            $resultServices['from_day_A'.($index + 1)] = $fromService[2] ?? '';
+            $resultServices['to_year_A'.($index + 1)] = $toService[0] ?? '';
+            $resultServices['to_month_A'.($index + 1)] = $toService[1] ?? '';
+            $resultServices['to_day_A'.($index + 1)] = $toService[2] ?? '';
+            /* 24B */
+            $resultServices['pos_B'.($index + 1)] = $item->placeOfService?->code ?? '';
+            /* 24C */
+            $resultServices['emg_C'.($index + 1)] = ($item['emg']) ? 'Y' : '';
+            /* 24D */
+            $resultServices['procedure_D'.($index + 1)] = $item->procedure?->code;
+            $resultServices['modifier1_D'.($index + 1)] = $item['modifiers'][0]['name'] ?? '';
+            $resultServices['modifier2_D'.($index + 1)] = $item['modifiers'][1]['name'] ?? '';
+            $resultServices['modifier3_D'.($index + 1)] = $item['modifiers'][2]['name'] ?? '';
+            $resultServices['modifier4_D'.($index + 1)] = $item['modifiers'][3]['name'] ?? '';
+            /* 24E */
+            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
+            ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
+            /* 24F */
+            $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
+            $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '';
+            /* 24G */
+            $resultServices['days_G'.($index + 1)] = $item->days_or_units ?? '';
+            /* 24H */
+            $resultServices['epsdt_H'.($index + 1)] = $item->epsdt?->code ?? '';
+            $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
+            /** 24I */
+            $tax_id = $provider->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id) ? 'ZZ' : '';
+            /* 24J */
+            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $provider->npi ?? '');
+            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $tax_id);
         }
+        $arrayCharge = explode('.', (string) $totalCharge ?? '');
+        $arrayCopay = explode('.', (string) $totalCopay ?? '');
 
         return [
             'insurance_company' => [
                 'name' => $insuranceCompany->name ?? '',
                 'address1' => $insuranceCompanyAddress->address ?? '',
                 'address2' => '',
-                'address3' => substr($insuranceCompanyAddress->city ?? '', 0, 24).' '.substr($insuranceCompanyAddress->state ?? '', 0, 3).substr($insuranceCompanyAddress->zip ?? '', 0, 12) ?? '',
+                'address3' => substr($insuranceCompanyAddress->city ?? '', 0, 24).', '.substr($insuranceCompanyAddress->state ?? '', 0, 3).substr(str_replace('-', '', $insuranceCompanyAddress->zip ?? ''), 0, 12) ?? '',
             ],
             '1' => 'Medicare',
             '1a' => $higherOrderPolicy->policy_number ?? '',
             '2' => $patient
-                ? ($patient->user->profile->last_name.', '.
+                ? ($patient->user->profile->last_name.
+                ($patient->user?->profile?->nameSuffix?->description ? ' '.
+                $patient->user->profile->nameSuffix->description : '').', '.
                 $patient->user->profile->first_name.
                 ($patient->user->profile->middle_name
                     ? ', '.substr($patient->user->profile->middle_name, 0, 1)
@@ -238,9 +279,9 @@ final class PreviewResource extends JsonResource
                 'address' => substr($patientAddress->address ?? '', 0, 28),
                 'city' => substr($patientAddress->city ?? '', 0, 24),
                 'state' => substr($patientAddress->state ?? '', 0, 3),
-                'zip' => substr($patientAddress->zip ?? '', 0, 12),
-                'code_area' => substr($patientContact->phone ?? '', 0, 3),
-                'phone' => substr($patientContact->phone ?? '', 3, 10),
+                'zip' => str_replace('-', '', substr($patientAddress->zip ?? '', 0, 12)),
+                'code_area' => str_replace('-', '', substr($patientContact->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($patientContact->phone ?? '', 3, 10)),
             ],
             '6' => ($higherOrderPolicy->own ?? true)
                 ? 'self'
@@ -253,9 +294,9 @@ final class PreviewResource extends JsonResource
                 'address' => substr($subscriberAddress->address ?? '', 0, 28),
                 'city' => substr($subscriberAddress->city ?? '', 0, 24),
                 'state' => substr($subscriberAddress->state ?? '', 0, 3),
-                'zip' => substr($subscriberAddress->zip ?? '', 0, 12),
-                'code_area' => substr($subscriberContact->phone ?? '', 0, 3),
-                'phone' => substr($subscriberContact->phone ?? '', 3, 10),
+                'zip' => str_replace('-', '', substr($subscriberAddress->zip ?? '', 0, 12)),
+                'code_area' => str_replace('-', '', substr($subscriberContact->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($subscriberContact->phone ?? '', 3, 10)),
             ],
             '8' => '',
             '9' => ($subscriberOther->last_name ?? $subscriberOther->profile->last_name).
@@ -266,7 +307,12 @@ final class PreviewResource extends JsonResource
             '9a' => $lowerOrderPolicy->policy_number ?? '',
             '9b' => '',
             '9c' => '',
-            '9d' => $lowerOrderPolicy->insurancePlan->name ?? '',
+            '9d' => isset($lowerOrderPolicy->insurancePlan)
+                ? ((empty($lowerOrderPolicy->insurancePlan->payer_id ?? '')
+                    ? ''
+                    : ''/**$lowerOrderPolicy->insurancePlan->payer_id.' - '*/).
+                    ($lowerOrderPolicy->insurancePlan->name ?? ''))
+                : '',
             '10' => '',
             '10a' => $patientOrInsuredInfo['employment_related_condition'] ?? false,
             '10b' => [
@@ -275,9 +321,7 @@ final class PreviewResource extends JsonResource
             ],
             '10c' => $patientOrInsuredInfo['other_accident_related_condition'] ?? false,
             '10d' => '',
-            '11' => ('P' == $higherOrderPolicy?->typeResponsibility->code)
-                ? 'NONE'
-                : $higherOrderPolicy->group_number ?? '',
+            '11' => $higherOrderPolicy->group_number ?? '',
             '11a' => [
                 'year' => $subscriberBirthdate[0] ?? '',
                 'month' => $subscriberBirthdate[1] ?? '',
@@ -285,7 +329,12 @@ final class PreviewResource extends JsonResource
                 'sex' => strtoupper($subscriber->sex ?? ''),
             ],
             '11b' => '',
-            '11c' => $higherOrderPolicy->insurancePlan->name ?? '',
+            '11c' => isset($higherOrderPolicy->insurancePlan)
+                ? ((empty($higherOrderPolicy->insurancePlan->payer_id ?? '')
+                    ? ''
+                    : ''/**$higherOrderPolicy->insurancePlan->payer_id.' - '*/).
+                    ($higherOrderPolicy->insurancePlan->name ?? ''))
+                : '',
             '11d' => ($lowerOrderPolicy) ? true : false,
             '12' => [
                 'signed' => ($patientOrInsuredInfo['patient_signature'] ?? false) ? 'Signature on File' : '',
@@ -296,13 +345,13 @@ final class PreviewResource extends JsonResource
                 'year' => $currentDate[0] ?? '',
                 'month' => $currentDate[1] ?? '',
                 'day' => $currentDate[2] ?? '',
-                'qualifier' => $currentField->qualifier?->code ?? '',
+                'qualifier' => $currentField?->qualifier?->code ?? '',
             ],
             '15' => [
                 'year' => $otherDate[0] ?? '',
                 'month' => $otherDate[1] ?? '',
                 'day' => $otherDate[2] ?? '',
-                'qualifier' => $otherField->qualifier?->code ?? '',
+                'qualifier' => $otherField?->qualifier?->code ?? '',
             ],
             '16' => [
                 'from_year' => $currentOccupationFrom[0] ?? '',
@@ -314,21 +363,22 @@ final class PreviewResource extends JsonResource
             ],
             '17' => [
                 'code' => $providerCode ?? '',
-                'name' => $provider->user->profile->first_name ?? ''.
-                    (isset($provider->user->profile->middle_name)
-                        ? ' '.substr($provider->user->profile->middle_name, 0, 1).' '
-                        : ' ')
-                    .($provider->user->profile->last_name ?? '').
-                    ' '.($provider->user->profile->suffix_name ?? ''),
+                'name' => isset($providerProfile)
+                ? ($providerProfile->first_name.
+                (!empty($providerProfile->middle_name)
+                    ? ' '.substr($providerProfile->middle_name, 0, 1)
+                    : '').
+                ' '.$providerProfile->first_name.
+                (isset($providerProfile->nameSuffix)
+                    ? ' '.$providerProfile->nameSuffix->description
+                    : ''))
+                : '',
             ],
             '17a' => [
-                'code' => 'G2',
-                'value' => 'Por asignar',
+                'code' => (!isset($provider->npi) && isset($provider->upin)) ? 'G2' : '',
+                'value' => (!isset($provider->npi) && isset($provider->upin)) ? str_replace('-', '', $provider->upin ?? '') : '',
             ],
-            '17b' => [
-                'code' => 'NPI',
-                'value' => $provider->npi ?? '',
-            ],
+            '17b' => str_replace('-', '', $provider->npi ?? ''),
             '18' => [
                 'from_year' => $hospitalizationFrom[0] ?? '',
                 'from_month' => $hospitalizationFrom[1] ?? '',
@@ -337,10 +387,12 @@ final class PreviewResource extends JsonResource
                 'to_month' => $hospitalizationTo[1] ?? '',
                 'to_day' => $hospitalizationTo[2] ?? '',
             ],
-            '19' => 'Por asignar',
+            '19' => $additionalField ?? '',
             '20' => [
-                'outside_lab' => $physicianOrSupplierInfo->outside_lab ?? false,
-                'charges' => $physicianOrSupplierInfo->charges ?? '',
+                'value' => $physicianOrSupplierInfo->outside_lab ?? false,
+                'charges' => ($physicianOrSupplierInfo->outside_lab ?? false)
+                    ? str_replace([',', '.'], '', $physicianOrSupplierInfo->charges ?? '')
+                    : '',
             ],
             '21' => [
                 'indicator' => '0', // '9',
@@ -363,24 +415,28 @@ final class PreviewResource extends JsonResource
             ],
             '23' => $physicianOrSupplierInfo->prior_authorization_number ?? '',
             '24' => $resultServices,
-            '24a' => '',
-            '24b' => '',
-            '24c' => '',
-            '24d' => '',
-            '24e' => '',
-            '24f' => '',
-            '24g' => '',
-            '24h' => '',
-            '24i' => '',
-            '24j' => $provider->npi ?? '',
             '25' => [
-                'code' => 'EIN',
-                'value' => $company->ein ?? '',
+                'num' => str_replace('-', '', $company->ein ?? $company->ssn ?? ''),
+                'value' => !empty($company->ein)
+                    ? 'EIN'
+                    : (!empty($company->ssn)
+                        ? 'SSN'
+                        : ''),
             ],
             '26' => $physicianOrSupplierInfo->patient_account_num ?? '',
             '27' => $physicianOrSupplierInfo->accept_assignment ?? false,
-            '28' => $totalCharge ?? '',
-            '29' => $totalCopay ?? '',
+            '28' => [
+                'total_charge' => $arrayCharge[0] ?? '',
+                'total_charge_decimal' => (('' != $arrayCharge[0])
+                    ? (str_pad($arrayCharge[1] ?? '', 2, '0', STR_PAD_RIGHT) ?? '00')
+                    : ''),
+            ],
+            '29' => [
+                'total_copay' => $arrayCopay[0] ?? '',
+                'total_copay_decimal' => (('' != $arrayCopay[0])
+                    ? (str_pad($arrayCopay[1] ?? '', 2, '0', STR_PAD_RIGHT) ?? '00')
+                    : ''),
+            ],
             '30' => '',
             '31' => [
                 'signed' => 'Signature on File',
@@ -389,10 +445,9 @@ final class PreviewResource extends JsonResource
             '32' => [
                 'name' => $facility->name ?? '',
                 'address1' => $facilityAddress->address ?? '',
-                'address2' => '',
-                'address3' => substr($facilityAddress->city ?? '', 0, 24).' '.substr($facilityAddress->state ?? '', 0, 3).substr($facilityAddress->zip ?? '', 0, 12) ?? '',
+                'address2' => substr($facilityAddress->city ?? '', 0, 24).', '.substr($facilityAddress->state ?? '', 0, 3).substr(str_replace('-', '', $facilityAddress->zip ?? ''), 0, 12) ?? '',
             ],
-            '32a' => $facility->npi ?? '',
+            '32a' => str_replace('-', '', $facility->npi ?? ''),
             '32b' => '',
             '33' => [
                 'name' => isset($billingProvider)
@@ -400,11 +455,12 @@ final class PreviewResource extends JsonResource
                         $billingProvider->user->profile->first_name.', '.
                         substr($billingProvider->user->profile->middle_name, 0, 1))
                     : '',
-                    'address1' => $billingProviderAddress->address ?? '',
-                    'address2' => '',
-                    'address3' => substr($billingProviderAddress->city ?? '', 0, 24).' '.substr($billingProviderAddress->state ?? '', 0, 3).substr($billingProviderAddress->zip ?? '', 0, 12) ?? '',
+                'address1' => $billingProviderAddress->address ?? '',
+                'address2' => substr($billingProviderAddress->city ?? '', 0, 24).', '.substr($billingProviderAddress->state ?? '', 0, 3).substr(str_replace('-', '', $billingProviderAddress->zip ?? ''), 0, 12) ?? '',
+                'code_area' => str_replace('-', '', substr($billingProviderContact->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($billingProviderContact->phone ?? '', 3, 10)),
             ],
-            '33a' => $billingProvider->npi ?? '',
+            '33a' => str_replace('-', '', $billingProvider->npi ?? ''),
             '33b' => '',
         ];
     }
