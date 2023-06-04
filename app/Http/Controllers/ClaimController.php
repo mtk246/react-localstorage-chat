@@ -71,7 +71,7 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimCreateRequest $request, $id)
+    public function updateClaim(ClaimCreateRequest $request, int $id)
     {
         $rs = $this->claimRepository->updateClaim($request->validated(), $id);
 
@@ -244,10 +244,12 @@ class ClaimController extends Controller
 
     public function storeCheckEligibility(ClaimEligibilityRequest $request)
     {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+        if (true == ($request->automatic_eligibility ?? false)) {
+            $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
 
-        if (!isset($token)) {
-            return response()->json(__('Error get security authorization access token'), 400);
+            if (!isset($token)) {
+                return response()->json(__('Error get security authorization access token'), 400);
+            }
         }
 
         $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());

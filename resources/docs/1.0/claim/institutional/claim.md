@@ -4,6 +4,10 @@
 
 - [Basic data](#basic-data)
 - [Create claim](#create-claim)
+- [Update claim](#update-claim)
+- [verify and register claim](#verify-register)
+- [Save as draft claim](#save-as-draft-claim)
+- [Check eligibility](#check-eligibility-claim)
 
 - [Get list type formats](#get-list-type-formats)
 - [Get list claim field information](#get-list-claim-field-informations)
@@ -29,16 +33,21 @@
 | # | METHOD | Name | URL | Token required | Description |
 | : | : | :- | : | :- | :- |
 | 1 | POST | `Create claim` | `/claim/` | yes | Create claim |
-| 4 | GET | `Get list types formats` | `/claim/get-list-type-formats` | yes | Get list type formats |
-| 7 | GET | `Get list claim field information` | `/claim/get-list-claim-field-informations` | yes | Get list claim field informations |
-| 8 | GET | `Get list claim qualifier` | `/claim/get-list-qualifier-by-field/{field_id?}` | yes | Get list claim field informations |
-| 2 | GET | `Get list condition codes` | `/claim/get-list-condition-codes` | yes | Get list condition codes |
-| 3 | GET | `Get list revenue codes` | `/claim/get-list-revenue-codes` | yes | Get list revenue codes |
-| 4 | GET | `Get list admission types` | `/claim/get-list-admission-types` | yes | Get list admission types |
-| 5 | GET | `Get list admission sources` | `/claim/get-list-admission-sources` | yes | Get list admission sources |
-| 6 | GET | `Get list patient statuses` | `/claim/get-list-patient-statuses` | yes | Get list patient statuses |
-| 7 | GET | `Get list bill classifications` | `/claim/get-list-bill-classifications` | yes | Get list bill classifications |
-| 8 | GET | `Get list diagnosis related groups` | `/claim/get-list-diagnosis-related-groups` | yes | Get list diagnosis related groups |
+| 2  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
+| 13  |POST    | `Save as draft claim`  | `/claim/draft/`     | yes            | Save as draft claim  |
+| 14 |PUT     | `Update as draft claim`  | `/claim/draft/{id}` | yes            | Update as draft claim  |
+| 16 | POST     | `check eligibility claim`  | `/claim/check-eligibility`     | yes            | Check eligibility claim |
+| 18 |POST     | `Verify and register claim`  | `/claim/verify-register` | yes            | Verify and register claim  |
+| 3 | GET | `Get list types formats` | `/claim/get-list-type-formats` | yes | Get list type formats |
+| 4 | GET | `Get list claim field information` | `/claim/get-list-claim-field-informations` | yes | Get list claim field informations |
+| 5 | GET | `Get list claim qualifier` | `/claim/get-list-qualifier-by-field/{field_id?}` | yes | Get list claim field informations |
+| 6 | GET | `Get list condition codes` | `/claim/get-list-condition-codes` | yes | Get list condition codes |
+| 7 | GET | `Get list revenue codes` | `/claim/get-list-revenue-codes` | yes | Get list revenue codes |
+| 8 | GET | `Get list admission types` | `/claim/get-list-admission-types` | yes | Get list admission types |
+| 9 | GET | `Get list admission sources` | `/claim/get-list-admission-sources` | yes | Get list admission sources |
+| 10 | GET | `Get list patient statuses` | `/claim/get-list-patient-statuses` | yes | Get list patient statuses |
+| 11 | GET | `Get list bill classifications` | `/claim/get-list-bill-classifications` | yes | Get list bill classifications |
+| 12 | GET | `Get list diagnosis related groups` | `/claim/get-list-diagnosis-related-groups` | yes | Get list diagnosis related groups |
 
 
 
@@ -177,6 +186,421 @@
     "created_at": "2022-09-16T13:23:19.000000Z",
     "id": 1
 }
+```
+
+<a name="update-claim"></a>
+## Update claim
+
+### Body request example
+
+```json
+{
+    "billing_company_id": 1, /** Only by superuser */
+    "format": 2,
+    "type_of_medical_assistance": "inpatient", //outpatient
+    "validate": false,
+    "automatic_eligibility": false,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_qualifier": [
+        {
+            "field":76,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":77,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":78,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":79,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        }
+    ],
+    "prior_authorization_number": "1234567890A",
+    "employment_related_condition": true,
+    "auto_accident_related_condition": true,
+    "auto_accident_place_state": "AS",
+    "other_accident_related_condition": true,
+    "accept_assignment": false,
+    "patient_signature": false,
+    "insured_signature": false,
+    "outside_lab": true,
+    
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1,
+            "admission": true,
+            "poa": 1,
+        }
+    ],
+    "claim_services": [
+        {
+            "id": 1,
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "revenue_code_id": 3,
+            "price": 200,
+            "units_of_service": 1.5,
+            "total_charge": 200,
+            "copay": 200,
+        }
+    ],
+    "additional_information": {
+        "admisison_date": "2022-07-05",
+        "admisison_time": "07:05",
+        "discharge_date":"2022-07-05",
+        "discharge_time": "07:05",
+        "condition_codes": [1,2],
+        "admisison_type_id": 1,
+        "admisison_source_id": 2,
+        "patient_status_id": 2,
+        "bill_classification_id": 2,
+        "diagnosis_related_group_id": 1,
+        "non_covered_charges": 20.15,
+        "claim_date_informations": [
+            {
+                "id": 1,
+                "field_id": 1,
+                "code_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "through": "Lorem ipsum",
+                "amount": 200,
+            }
+        ],
+    },
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
+}
+```
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 claim updated
+
+#
+
+```json
+{
+    "id": 1,
+    "qr_claim": null,
+    "control_number": "000000001",
+    "submitter_name": null,
+    "submitter_contact": null,
+    "submitter_phone": null,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "insurance_company_id": null,
+    "claim_formattable_type": null,
+    "claim_formattable_id": null,
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "updated_at": "2022-09-16T13:23:19.000000Z"
+}
+```
+
+<a name="verify-register"></a>
+## Verify and register claim
+
+### Body request example
+
+```json
+{
+    "billing_company_id": 1, /** Only by superuser */
+    "format": 2,
+    "type_of_medical_assistance": "inpatient", //outpatient
+    "validate": false,
+    "automatic_eligibility": false,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_qualifier": [
+        {
+            "field":76,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":77,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":78,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":79,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        }
+    ],
+    "prior_authorization_number": "1234567890A",
+    "employment_related_condition": true,
+    "auto_accident_related_condition": true,
+    "auto_accident_place_state": "AS",
+    "other_accident_related_condition": true,
+    "accept_assignment": false,
+    "patient_signature": false,
+    "insured_signature": false,
+    "outside_lab": true,
+    
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1,
+            "admission": true,
+            "poa": 1,
+        }
+    ],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "revenue_code_id": 3,
+            "price": 200,
+            "units_of_service": 1.5,
+            "total_charge": 200,
+            "copay": 200,
+        }
+    ],
+    "additional_information": {
+        "admisison_date": "2022-07-05",
+        "admisison_time": "07:05",
+        "discharge_date":"2022-07-05",
+        "discharge_time": "07:05",
+        "condition_codes": [1,2],
+        "admisison_type_id": 1,
+        "admisison_source_id": 2,
+        "patient_status_id": 2,
+        "bill_classification_id": 2,
+        "diagnosis_related_group_id": 1,
+        "non_covered_charges": 20.15,
+        "claim_date_informations": [
+            {
+                "field_id": 1,
+                "code_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "through": "Lorem ipsum",
+                "amount": 200,
+            }
+        ],
+    },
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ]
+}
+```
+
+<a name="save-as-draft-claim"></a>
+## Save as draft claim
+
+### Body request example
+
+```json
+{
+    "billing_company_id": 1, /** Only by superuser */
+    "format": 2,
+    "type_of_medical_assistance": "inpatient", //outpatient
+    "validate": false,
+    "automatic_eligibility": false,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_qualifier": [
+        {
+            "field":76,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":77,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":78,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        },
+        {
+            "field":79,
+            "health_professional_id": 1,
+            "qualifier_id": 1,
+        }
+    ],
+    "prior_authorization_number": "1234567890A",
+    "employment_related_condition": true,
+    "auto_accident_related_condition": true,
+    "auto_accident_place_state": "AS",
+    "other_accident_related_condition": true,
+    "accept_assignment": false,
+    "patient_signature": false,
+    "insured_signature": false,
+    "outside_lab": true,
+    
+    "diagnoses": [
+        {
+            "item": "A",
+            "diagnosis_id": 1,
+            "admission": true,
+            "poa": 1,
+        }
+    ],
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "revenue_code_id": 3,
+            "price": 200,
+            "units_of_service": 1.5,
+            "total_charge": 200,
+            "copay": 200,
+        }
+    ],
+    "additional_information": {
+        "admisison_date": "2022-07-05",
+        "admisison_time": "07:05",
+        "discharge_date":"2022-07-05",
+        "discharge_time": "07:05",
+        "condition_codes": [1,2],
+        "admisison_type_id": 1,
+        "admisison_source_id": 2,
+        "patient_status_id": 2,
+        "bill_classification_id": 2,
+        "diagnosis_related_group_id": 1,
+        "non_covered_charges": 20.15,
+        "claim_date_informations": [
+            {
+                "field_id": 1,
+                "code_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "through": "Lorem ipsum",
+                "amount": 200,
+            }
+        ],
+    },
+    "insurance_policies": [
+        {"insurance_policy_id": 8, "order": 1},
+        {"insurance_policy_id": 10, "order": 2},
+    ],
+
+    "private_note": "Note claim",
+    "sub_status_id": 1
+}
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 201 claim created
+
+
+#
+
+```json
+{
+    "control_number": "000000001",
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    "health_professional_id": 1,
+    "updated_at": "2022-09-16T13:23:19.000000Z",
+    "created_at": "2022-09-16T13:23:19.000000Z",
+    "id": 1
+}
+```
+#
+<a name="check-eligibility-claim"></a>
+## Check eligibility claim
+
+### Body request example
+
+```json
+{
+    "billing_company_id": 1, /** Only by superuser */
+    "format": 2,
+    "type_of_medical_assistance": "inpatient", //outpatient
+    "validate": false,
+    "automatic_eligibility": false,
+    "company_id": 1,
+    "facility_id": 1,
+    "patient_id": 2,
+    
+    "claim_services": [
+        {
+            "from_service": "2022-07-05",
+            "to_service": "2022-07-05",
+            "procedure_id": 11,
+            "revenue_code_id": 3,
+            "price": 200,
+            "units_of_service": 1.5,
+            "total_charge": 200,
+            "copay": 200,
+        }
+    ]
+}
+```
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 claim found
+
+#
+
+
+```json
+
 ```
 #
 
@@ -335,7 +759,7 @@
 ### Param in path
 
 ```json
-"search" <integer> optional
+"search" <string> optional
 ```
 ## Example path
 
@@ -383,6 +807,16 @@
     "Authorization": bearer <token>
 }
 ```
+### Param in path
+
+```json
+"search" <string> optional
+```
+
+## Example path
+
+> {primary} /get-list-revenue-codes?search=1
+
 
 ## Response
 
