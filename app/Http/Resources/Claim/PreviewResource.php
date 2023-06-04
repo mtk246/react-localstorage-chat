@@ -249,7 +249,7 @@ final class PreviewResource extends JsonResource
             $resultServices['epsdt_H'.($index + 1)] = $item->epsdt?->code ?? '';
             $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
             /** 24I */
-            $tax_id = $provider->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $tax_id = $provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
             $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id) ? 'ZZ' : '';
             /* 24J */
             $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $provider->npi ?? '');
