@@ -255,10 +255,11 @@ final class PreviewResource extends JsonResource
             $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
             /** 24I */
             $tax_id = $provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
-            $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id) ? 'ZZ' : '';
+            $tax_id_BP = $billingProvider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id_BP) ? 'ZZ' : '';
             /* 24J */
-            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $provider->npi ?? '');
-            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $tax_id);
+            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $billingProvider->npi ?? '');
+            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $tax_id_BP);
         }
         $arrayCharge = explode('.', (string) $totalCharge ?? '');
         $arrayCopay = explode('.', (string) $totalCopay ?? '');
@@ -288,7 +289,7 @@ final class PreviewResource extends JsonResource
                     : ''))
                 : '',
             '3' => [
-                'year' => $patientBirthdate[0] ?? '',
+                'year' => substr($patientBirthdate[0] ?? '', 2, 2),
                 'month' => $patientBirthdate[1] ?? '',
                 'day' => $patientBirthdate[2] ?? '',
                 'sex' => strtoupper($patient->user->profile->sex ?? ''),
@@ -346,7 +347,7 @@ final class PreviewResource extends JsonResource
             '10d' => '',
             '11' => $higherOrderPolicy->group_number ?? '',
             '11a' => [
-                'year' => $subscriberBirthdate[0] ?? '',
+                'year' => substr($subscriberBirthdate[0] ?? '',2 , 2),
                 'month' => $subscriberBirthdate[1] ?? '',
                 'day' => $subscriberBirthdate[2] ?? '',
                 'sex' => strtoupper($subscriber->sex ?? ''),
@@ -365,22 +366,22 @@ final class PreviewResource extends JsonResource
             ],
             '13' => ($patientOrInsuredInfo['insured_signature'] ?? false) ? 'Signature on File' : '',
             '14' => [
-                'year' => $currentDate[0] ?? '',
+                'year' => substr($currentDate[0] ?? '', 2, 2),
                 'month' => $currentDate[1] ?? '',
                 'day' => $currentDate[2] ?? '',
                 'qualifier' => $currentField?->qualifier?->code ?? '',
             ],
             '15' => [
-                'year' => $otherDate[0] ?? '',
+                'year' => substr($otherDate[0] ?? '', 2, 2),
                 'month' => $otherDate[1] ?? '',
                 'day' => $otherDate[2] ?? '',
                 'qualifier' => $otherField?->qualifier?->code ?? '',
             ],
             '16' => [
-                'from_year' => $currentOccupationFrom[0] ?? '',
+                'from_year' => substr($currentOccupationFrom[0] ?? '', 2, 2),
                 'from_month' => $currentOccupationFrom[1] ?? '',
                 'from_day' => $currentOccupationFrom[2] ?? '',
-                'to_year' => $currentOccupationTo[0] ?? '',
+                'to_year' => substr($currentOccupationTo[0] ?? '', 2, 2),
                 'to_month' => $currentOccupationTo[1] ?? '',
                 'to_day' => $currentOccupationTo[2] ?? '',
             ],
@@ -403,10 +404,10 @@ final class PreviewResource extends JsonResource
             ],
             '17b' => str_replace('-', '', $provider->npi ?? ''),
             '18' => [
-                'from_year' => $hospitalizationFrom[0] ?? '',
+                'from_year' => substr($hospitalizationFrom[0] ?? '', 2, 2),
                 'from_month' => $hospitalizationFrom[1] ?? '',
                 'from_day' => $hospitalizationFrom[2] ?? '',
-                'to_year' => $hospitalizationTo[0] ?? '',
+                'to_year' => substr($hospitalizationTo[0] ?? '', 2, 2),
                 'to_month' => $hospitalizationTo[1] ?? '',
                 'to_day' => $hospitalizationTo[2] ?? '',
             ],
