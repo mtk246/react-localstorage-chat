@@ -220,6 +220,8 @@ final class ClaimPreviewService implements ReportInterface
          */
         if (true === $end) {
             return $this->pdf->Output($this->filename, $storeAction);
+        } else {
+            return $this->pdf;
         }
     }
 
