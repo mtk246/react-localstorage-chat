@@ -759,6 +759,8 @@ final class PreviewResource extends JsonResource
                     return $claimFormService->price ?? '';
                 })
                 ->toArray(),
+            '48' => '',
+            '49' => '',
             'ta' => '001',
             'tb' => [
                 'page' => '1',
@@ -771,8 +773,6 @@ final class PreviewResource extends JsonResource
                 })
                 ->sum(),
             'te' => '',
-            '48' => '',
-            '49' => '',
             '50' => '',
             '51' => '',
             '52' => '',
