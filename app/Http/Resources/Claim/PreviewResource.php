@@ -547,6 +547,8 @@ final class PreviewResource extends JsonResource
             'zip',
         )->first() ?? null;
 
+        $claimCreateDate = explode('-', $this->resource->created_at ?? '');
+
         $higherOrderPolicy = $this->resource->insurancePolicies()
             ->wherePivot('order', 1)->first();
 
@@ -749,10 +751,23 @@ final class PreviewResource extends JsonResource
                 ->toArray(),
             '46' => $claimServices
                 ->map(function (ClaimFormPService $claimFormService) {
-                    return explode('-', $claimFormService->procedure->start_date ?? '');
+                    return 1;
                 })
                 ->toArray(),
-            '47' => '',
+            '47' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->price ?? '';
+                })
+                ->toArray(),
+            'ta' => '001',
+            'tb' => '1',
+            'tc' => '1',
+            'td' => (($claimCreateDate[1] ?? '').' '.($claimCreateDate[2] ?? '').' '.substr($claimCreateDate[0] ?? '', 0, 2)),
+            'te' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return (int) $claimFormService->price ?? '';
+                })
+                ->sum(),
             '48' => '',
             '49' => '',
             '50' => '',
