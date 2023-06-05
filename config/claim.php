@@ -2926,9 +2926,9 @@ return [
             'name' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 10,
                     'y' => 4.5,
@@ -2937,9 +2937,9 @@ return [
             'address1' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 10,
                     'y' => 8.5,
@@ -2948,9 +2948,9 @@ return [
             'address2' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 10,
                     'y' => 13,
@@ -2959,7 +2959,7 @@ return [
             'state' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
                     'w' => 70,
                     'h' => 10,
@@ -2970,7 +2970,7 @@ return [
             'zip' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
                     'w' => 70,
                     'h' => 10,
@@ -2983,9 +2983,9 @@ return [
             'name' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 72,
                     'y' => 4.5,
@@ -2994,9 +2994,9 @@ return [
             'address1' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 72,
                     'y' => 8.5,
@@ -3005,9 +3005,9 @@ return [
             'address2' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
-                    'w' => 70,
+                    'w' => 60,
                     'h' => 10,
                     'x' => 72,
                     'y' => 13,
@@ -3016,7 +3016,7 @@ return [
             'state' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
                     'w' => 70,
                     'h' => 10,
@@ -3027,7 +3027,7 @@ return [
             'zip' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
+                    'fontSize' => '9px',
                     'align' => 'L',
                     'w' => 70,
                     'h' => 10,
