@@ -59,7 +59,7 @@ final class ClaimResource extends JsonResource
 
             return $a_index - $b_index;
         });
-        $this->claimFormattable->physicianOrSupplierInformation->claimDateInformations->transform(function ($dateInfo) {
+        $this->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations->transform(function ($dateInfo) {
             $enums = collect(FieldInformationInstitutional::cases());
             $item = $enums->first(fn ($item) => $item->value === (int) $dateInfo->field_id);
             if (is_null($item)) {
@@ -226,7 +226,7 @@ final class ClaimResource extends JsonResource
 
             return $a_index - $b_index;
         });
-        $this->claimFormattable->physicianOrSupplierInformation->claimDateInformations->transform(function ($dateInfo) {
+        $this->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations->transform(function ($dateInfo) {
             $enums = collect(FieldInformationProfessional::cases());
             $item = $enums->first(fn ($item) => $item->value === (int) $dateInfo->field_id);
             if (is_null($item)) {
