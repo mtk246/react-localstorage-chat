@@ -579,7 +579,7 @@ final class PreviewResource extends JsonResource
 
         $claimServices = collect($this->resource->claimFormattable->claimFormServices ?? []);
 
-        return [
+        return dd([
             '1' => [
                 'name' => $company->name ?? '',
                 'address1' => $companyAddress->address ?? '',
@@ -783,6 +783,6 @@ final class PreviewResource extends JsonResource
             '79' => '',
             '80' => '',
             '81' => '',
-        ];
+        ]);
     }
 }
