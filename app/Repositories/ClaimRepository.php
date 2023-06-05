@@ -722,9 +722,15 @@ class ClaimRepository
         return getList(TypeOfService::class, ['code', '-', 'name']);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        return getList(PlaceOfService::class, ['code', '-', 'name']);
+        return getList(
+            PlaceOfService::class,
+            ['code', '-', 'name'],
+            !empty($request->facility_id)
+                ? ['relationship' => 'facilities','where' => ['facility_id' => $request->facility_id]]
+                : []
+        );
     }
 
     public function getListRevCenters()
@@ -1907,15 +1913,15 @@ class ClaimRepository
 
             foreach ($patient->insurancePolicies()->whereIn('insurance_policies.id', $claimInsurancePolicies)->get() ?? [] as $insurancePolicy) {
                 $subscriber =
-                    (($insurancePolicy->own ?? true) == true)
+                    (($insurancePolicy->own ?? false) == true)
                         ? $patient->user
-                        : $insurancePolicy->subscriber;
+                        : $insurancePolicy?->subscriber;
                 $addressSubscriber = $subscriber->addresses->first();
                 $addressPatient = $patient->user->addresses->first();
                 $addressCompany = $claim->company->addresses->first();
                 $contactCompany = $claim->company->contacts->first();
 
-                $dependent = (($insurancePolicy->own ?? true) == true)
+                $dependent = (($insurancePolicy->own ?? false) == true)
                     ? null
                     : [
                         'memberId' => $patient->code ?? null,
@@ -1950,15 +1956,20 @@ class ClaimRepository
                     }
                 }
 
-                $serviceFacilityLocation = [
-                    'organizationName' => 'HAPPY DOCTORS GROUP',
-                    'address' => [
-                        'address1' => '000 address1',
-                        'city' => 'city2',
-                        'state' => 'tn',
-                        'postalCode' => '372030000',
-                    ],
-                ];
+                $facility = $claim->facility;
+                $addressFacility = $claim->facility?->addresses->first();
+
+                if (isset($facility) && isset($addressFacility)) {
+                    $serviceFacilityLocation = [
+                        'organizationName' => $facility->name,
+                        'address' => [
+                            'address1' => $addressFacility->address ?? null,
+                            'city' => $addressFacility->city ?? null,
+                            'state' => substr($addressFacility->state ?? '', 0, 2) ?? null,
+                            'postalCode' => str_replace('-', '', $addressFacility->zip),
+                        ],
+                    ];
+                }
 
                 $serviceLines = [];
 
@@ -1971,7 +1982,7 @@ class ClaimRepository
                         'serviceDate' => str_replace('-', '', $claim->date_of_service),
                         'professionalService' => [
                             'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
-                            'lineItemChargeAmount' => $service->price,
+                            'lineItemChargeAmount' => str_replace(',', '', $service->price),
                             'procedureCode' => $service->procedure->code,
                             'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                             'serviceUnitCount' => $service->days_or_units ?? '1',
@@ -1980,6 +1991,17 @@ class ClaimRepository
                             ],
                         ],
                     ]);
+                }
+                $provider = $claim->referred;
+                $providerProfile = $provider?->user?->profile;
+                if ($providerProfile) {
+                    $referred = [
+                        'providerType' => 'ReferringProvider',
+                        'npi' => str_replace('-', '', $provider->npi ?? ''),
+                        'firstName' => $providerProfile->first_name,
+                        'lastName' => $providerProfile->last_name,
+                        'employerId' => str_replace('-', '', $provider->ein ?? $provider->npi),
+                    ];
                 }
 
                 $dataReal = [
@@ -2002,8 +2024,8 @@ class ClaimRepository
                         'paymentResponsibilityLevelCode' => $insurancePolicy->payment_responsibility_level_code ?? 'P',
                         'firstName' => $subscriber->first_name ?? $subscriber->profile->first_name,
                         'lastName' => $subscriber->last_name ?? $subscriber->profile->last_name,
-                        'gender' => strtoupper($subscriber->profile->sex ?? 'M'), /**Agregar*/
-                        'dateOfBirth' => str_replace('-', '', $subscriber->profile->date_of_birth ?? $subscriber->date_of_birth),
+                        'gender' => strtoupper($subscriber?->sex ?? $subscriber?->profile?->sex ?? 'M'),
+                        'dateOfBirth' => str_replace('-', '', $subscriber->profile?->date_of_birth ?? $subscriber->date_of_birth),
                         'policyNumber' => $insurancePolicy->policy_number ?? null,
                         'address' => [
                             'address1' => $addressSubscriber->address ?? null,
@@ -2016,7 +2038,7 @@ class ClaimRepository
                     'providers' => [/* Company */
                         [
                             'providerType' => 'BillingProvider',
-                            'npi' => $claim->company->npi ?? null,
+                            'npi' => str_replace('-', '', $claim->company->npi ?? ''),
                             'employerId' => str_replace('-', '', $claim->company->ein ?? $claim->company->npi),
                             'organizationName' => $claim->company->name ?? null,
                             'address' => [
@@ -2034,7 +2056,7 @@ class ClaimRepository
                     'claimInformation' => [
                         'claimFilingCode' => 'CI',
                         'patientControlNumber' => $claim->control_number, /**Preguntar xq no el el codePAtient Loop2300*/
-                        'claimChargeAmount' => $claim->billed_amount ?? '0.00',
+                        'claimChargeAmount' => str_replace(',', '', $claim->billed_amount ?? '0.00'),
                         'placeOfServiceCode' => $claimServiceLinePrincipal->placeOfService->code ?? '11',
                         'claimFrequencyCode' => '1', /* Porque siempre 1 ?? */
                         'signatureIndicator' => isset($claim->claimFormattable->patientOrInsuredInformation)
@@ -2050,10 +2072,13 @@ class ClaimRepository
                             'claimNumber' => '12345', /* ?? */
                         ],
                         'healthCareCodeInformation' => $claimDiagnoses ?? null,
-                        'serviceFacilityLocation' => null,
+                        'serviceFacilityLocation' => $serviceFacilityLocation ?? null,
                         'serviceLines' => $serviceLines,
                     ],
                 ];
+                if (isset($referred)) {
+                    array_push($dataReal['providers'], $referred);
+                }
 
                 $response = Http::withToken($token)->acceptJson()->post(
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],
