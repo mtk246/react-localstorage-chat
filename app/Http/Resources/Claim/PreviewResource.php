@@ -583,7 +583,7 @@ final class PreviewResource extends JsonResource
 
         $claimServices = collect($this->resource->claimFormattable->claimFormServices ?? []);
 
-        return dd([
+        return [
             '1' => [
                 'name' => $company->name ?? '',
                 'address1' => $companyAddress->address ?? '',
@@ -609,8 +609,8 @@ final class PreviewResource extends JsonResource
                 .$this->resource->claimFormattable?->physicianOrSupplierInformation?->bill_classification_id,
             '5' => $company->npi,
             '6' => [
-                'from' => $patientDate,
-                'through' => $patientDischarge,
+                'from' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
+                'through' => (($$patientDischarge[1] ?? '').' '.($$patientDischarge[2] ?? '').' '.substr($$patientDischarge[0] ?? '', 0, 2)),
             ],
             '7' => '',
             '8a' => $patient->code ?? '',
@@ -787,6 +787,6 @@ final class PreviewResource extends JsonResource
             '79' => '',
             '80' => '',
             '81' => '',
-        ]);
+        ];
     }
 }
