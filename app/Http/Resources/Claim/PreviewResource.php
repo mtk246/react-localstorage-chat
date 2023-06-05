@@ -587,15 +587,15 @@ final class PreviewResource extends JsonResource
 
         return [
             '1' => [
-                'name' => $company->name ?? '',
-                'address1' => $companyAddress->address ?? '',
+                'name' => substr($company->name ?? '', 0, 30),
+                'address1' => substr($companyAddress->address ?? '', 0, 30),
                 'address2' => substr($companyAddress->city ?? '', 0, 24),
                 'state' => substr($companyAddress->state ?? '', 0, 3),
                 'zip' => substr($companyAddress->zip ?? '', 0, 5),
             ],
             '2' => [
-                'name' => $company->name ?? '',
-                'address1' => $companyAddress->address ?? '',
+                'name' => substr($company->name ?? '', 0, 30),
+                'address1' => substr($companyAddress->address ?? '', 0, 30),
                 'address2' => substr($companyAddress->city ?? '', 0, 24),
                 'state' => substr($companyAddress->state ?? '', 0, 3),
                 'zip' => substr($companyAddress->zip ?? '', 0, 5),
@@ -608,7 +608,7 @@ final class PreviewResource extends JsonResource
                     ? '1'
                     : '3'
                 )
-                .$this->resource->claimFormattable?->physicianOrSupplierInformation?->bill_classification_id,
+                .($this->resource->claimFormattable?->physicianOrSupplierInformation?->billClassification?->code ?? ''),
             '5' => $company->npi,
             '6' => [
                 'from' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
