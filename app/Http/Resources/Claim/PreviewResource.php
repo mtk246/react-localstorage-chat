@@ -314,9 +314,9 @@ final class PreviewResource extends JsonResource
             ],
             '6' => ($higherOrderPolicy->own ?? false)
                 ? 'self'
-                : (str_contains(strtolower($subscriber?->relationship?->description), 'spouse')
+                : (str_contains(strtolower($subscriber?->relationship?->description ?? ''), 'spouse')
                     ? 'spouse'
-                    : (str_contains(strtolower($subscriber?->relationship?->description), 'child')
+                    : (str_contains(strtolower($subscriber?->relationship?->description ?? ''), 'child')
                         ? 'child'
                         : 'other')),
             '7' => [
