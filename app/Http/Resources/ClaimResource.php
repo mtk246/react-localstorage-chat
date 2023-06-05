@@ -100,6 +100,13 @@ final class ClaimResource extends JsonResource
                     'to_service' => $service->to_service,
                     'procedure_id' => $service->procedure_id,
                     'revenue_code_id' => $service->revenue_code_id,
+                    'revenue_codes' => isset($service->revenueCode)
+                        ? [[
+                            'id' => $service->revenue_code_id,
+                            'name' => $service->revenueCode->code,
+                            'description' => $service->revenueCode->description,
+                        ]]
+                        : [],
                     'price' => $service->price,
                     'units_of_service' => $service->days_or_units,
                     'total_charge' => $service->total_charge,
@@ -126,7 +133,7 @@ final class ClaimResource extends JsonResource
                         'field' => $dateInfo->field,
                         'qualifier_id' => $dateInfo->qualifier_id,
                         'qualifier' => $dateInfo->qualifier,
-                        'from_date' => $dateInfo->from_date,
+                        'from_date' => $dateInfo->from_date_or_current,
                         'to_date' => $dateInfo->to_date,
                         'through' => $dateInfo->through,
                         'amount' => $dateInfo->amount,

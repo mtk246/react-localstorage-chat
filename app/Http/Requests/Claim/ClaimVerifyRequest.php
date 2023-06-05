@@ -49,10 +49,12 @@ class ClaimVerifyRequest extends FormRequest
             'patient_id' => ['required', 'integer'],
 
             'type_of_medical_assistance' => ['required', 'string'],
-            'health_professional_qualifier' => ['required', 'array'],
+            'health_professional_qualifier' => ['required', 'array', 'min:1'],
+            'health_professional_qualifier.*.field_id' => ['nullable', 'integer'],
+            'health_professional_qualifier.*.health_professional_id' => ['nullable', 'integer'],
+            'health_professional_qualifier.*.qualifier_id' => ['nullable', 'integer'],
             'health_professional_qualifier.0.field_id' => ['required', 'integer'],
             'health_professional_qualifier.0.health_professional_id' => ['required', 'integer'],
-            'health_professional_qualifier.0.qualifier_id' => ['required', 'integer'],
 
             'prior_authorization_number' => ['nullable', 'string'],
             'employment_related_condition' => ['nullable', 'boolean'],
@@ -150,7 +152,7 @@ class ClaimVerifyRequest extends FormRequest
 
             'physician_or_supplier_information.claim_date_informations' => ['nullable', 'array'],
             'physician_or_supplier_information.claim_date_informations.*.field_id' => ['sometimes', 'integer'],
-            'physician_or_supplier_information.claim_date_informations.*.qualifier_id' => ['sometimes', 'integer'],
+            'physician_or_supplier_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'physician_or_supplier_information.claim_date_informations.*.from_date_or_current' => ['nullable', 'date'],
             'physician_or_supplier_information.claim_date_informations.*.to_date' => ['nullable', 'date'],
             'physician_or_supplier_information.claim_date_informations.*.description' => ['nullable', 'string'],

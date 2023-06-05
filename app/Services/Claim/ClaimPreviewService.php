@@ -183,7 +183,9 @@ final class ClaimPreviewService implements ReportInterface
             } else {
                 foreach ($value as $key => $val) {
                     if ('options' === $key) {
-                        $this->setData($val[$this->data[$fieldName]['value']]['properties'], $fieldName, null, 'X');
+                        if (isset($val[$this->data[$fieldName]['value']]['properties'])) {
+                            $this->setData($val[$this->data[$fieldName]['value']]['properties'], $fieldName, null, 'X');
+                        }
                     } elseif (isset($val['options'])) {
                         if (isset($val['options'][$this->data[$fieldName][$key]])) {
                             $this->setData($val['options'][$this->data[$fieldName][$key]]['properties'], $fieldName, null, 'X');
@@ -274,8 +276,8 @@ final class ClaimPreviewService implements ReportInterface
     {
         if ('' === $value) {
             $value = (!is_null($index))
-                ? $this->data[$fieldName][$index]
-                : $this->data[$fieldName];
+                ? ($this->data[$fieldName][$index] ?? '')
+                : ($this->data[$fieldName] ?? '');
         }
 
         $this->pdf->SetFont($cellProperties['fontFamily'], '', $cellProperties['fontSize']);
@@ -284,7 +286,7 @@ final class ClaimPreviewService implements ReportInterface
             $cellProperties['h'],
             $value,
             0,
-            'L',
+            $cellProperties['align'],
             false,
             1,
             $cellProperties['x'],
