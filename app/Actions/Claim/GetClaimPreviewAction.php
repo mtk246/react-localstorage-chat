@@ -24,6 +24,7 @@ final class GetClaimPreviewAction
                         ->orWhere('billing_company_id', $user->billingCompanies->first()?->id);
                 })
                 ->first();
+
             return new PreviewResource($claim);
         });
     }
