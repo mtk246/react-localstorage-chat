@@ -760,14 +760,17 @@ final class PreviewResource extends JsonResource
                 })
                 ->toArray(),
             'ta' => '001',
-            'tb' => '1',
-            'tc' => '1',
-            'td' => (($claimCreateDate[1] ?? '').' '.($claimCreateDate[2] ?? '').' '.substr($claimCreateDate[0] ?? '', 0, 2)),
-            'te' => $claimServices
+            'tb' => [
+                'page' => '1',
+                'total' => '1',
+            ],
+            'tc' => (($claimCreateDate[1] ?? '').' '.($claimCreateDate[2] ?? '').' '.substr($claimCreateDate[0] ?? '', 0, 2)),
+            'td' => $claimServices
                 ->map(function (ClaimFormPService $claimFormService) {
                     return (int) $claimFormService->price ?? '';
                 })
                 ->sum(),
+            'te' => '',
             '48' => '',
             '49' => '',
             '50' => '',
