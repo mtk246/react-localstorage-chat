@@ -722,9 +722,15 @@ class ClaimRepository
         return getList(TypeOfService::class, ['code', '-', 'name']);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        return getList(PlaceOfService::class, ['code', '-', 'name']);
+        return getList(
+            PlaceOfService::class,
+            ['code', '-', 'name'],
+            !empty($request->facility_id)
+                ? ['relationship' => 'facilities','where' => ['facility_id' => $request->facility_id]]
+                : []
+        );
     }
 
     public function getListRevCenters()

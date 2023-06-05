@@ -114,11 +114,11 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all service type of service'), 400);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        $rs = $this->claimRepository->getListPlaceOfServices();
+        $rs = $this->claimRepository->getListPlaceOfServices($request);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all service place of service'), 400);
+        return response()->json($rs);
     }
 
     public function getListRevenueCodes(Request $request, int $company_id = null): JsonResponse
