@@ -606,7 +606,7 @@ final class PreviewResource extends JsonResource
             '5' => $company->npi,
             '6' => [
                 'from' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
-                'through' => (($$patientDischarge[1] ?? '').' '.($$patientDischarge[2] ?? '').' '.substr($$patientDischarge[0] ?? '', 0, 2)),
+                'through' => (($patientDischarge[1] ?? '').' '.($patientDischarge[2] ?? '').' '.substr($patientDischarge[0] ?? '', 0, 2)),
             ],
             '7' => '',
             '8a' => $patient->code ?? '',
