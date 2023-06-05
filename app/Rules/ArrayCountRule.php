@@ -12,7 +12,7 @@ final class ArrayCountRule implements Rule
 
     public function __construct(
         private readonly int $count = 0,
-        private readonly int $operator = '>=',
+        private readonly string $operator = '>=',
     ) {
         if (is_null($this->getOperatorName())) {
             throw new \Exception('Invalid operator');
