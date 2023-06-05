@@ -68,14 +68,14 @@ final class PreviewResource extends JsonResource
         }
 
         $subscriber =
-            $higherOrderPolicy->own ?? true
+            $higherOrderPolicy->own ?? false
                 ? $patient->user ?? null
-                : $higherOrderPolicy->subscribers->first();
+                : $higherOrderPolicy?->subscribers->first();
 
         $subscriberOther =
-            $lowerOrderPolicy->own ?? true
+            $lowerOrderPolicy->own ?? false
                 ? $patient->user ?? null
-                : $lowerOrderPolicy->subscribers->first();
+                : $lowerOrderPolicy?->subscribers->first();
 
         $patientOrInsuredInfo = $this->resource->claimFormattable?->patientOrInsuredInformation ?? $request->patient_or_insured_information ?? null;
         $physicianOrSupplierInfo = $this->resource->claimFormattable?->physicianOrSupplierInformation ?? $request->physician_or_supplier_information ?? null;
@@ -206,7 +206,7 @@ final class PreviewResource extends JsonResource
         $patientContact = $patient->user->contacts()->select(
             'phone'
         )->first() ?? null;
-        $subscriberBirthdate = explode('-', $subscriber?->date_of_birth ?? '');
+        $subscriberBirthdate = explode('-', $subscriber?->date_of_birth ?? $subscriber?->profile?->date_of_birth ?? '');
         $subscriberAddress = $subscriber?->addresses()->select(
             'country',
             'address',
@@ -214,7 +214,7 @@ final class PreviewResource extends JsonResource
             'state',
             'zip',
         )->first() ?? null;
-        $subscriberContact = $subscriber->contacts()->select(
+        $subscriberContact = $subscriber?->contacts()->select(
             'phone'
         )->first() ?? null;
 
@@ -297,11 +297,13 @@ final class PreviewResource extends JsonResource
                 'day' => $patientBirthdate[2] ?? '',
                 'sex' => strtoupper($patient->user->profile->sex ?? ''),
             ],
-            '4' => ($subscriber->last_name ?? $subscriber->profile->last_name).
+            '4' => isset($subscriber)
+                ? (($subscriber->last_name ?? $subscriber->profile->last_name).
                 ', '.($subscriber->first_name ?? $subscriber->profile->first_name).
                 ($subscriber->middle_name ?? $subscriber->profile->middle_name ?? null
                     ? ', '.substr($subscriber->middle_name ?? ($subscriber->profile->middle_name ?? ''), 0, 1)
-                    : ''),
+                    : ''))
+                : '',
             '5' => [
                 'address' => substr($patientAddress->address ?? '', 0, 28),
                 'city' => substr($patientAddress->city ?? '', 0, 24),
@@ -310,11 +312,11 @@ final class PreviewResource extends JsonResource
                 'code_area' => str_replace('-', '', substr($patientContact->phone ?? '', 0, 3)),
                 'phone' => str_replace('-', '', substr($patientContact->phone ?? '', 3, 10)),
             ],
-            '6' => ($higherOrderPolicy->own ?? true)
+            '6' => ($higherOrderPolicy->own ?? false)
                 ? 'self'
-                : (str_contains(strtolower($subscriber->relationship?->description), 'spouse')
+                : (str_contains(strtolower($subscriber?->relationship?->description), 'spouse')
                     ? 'spouse'
-                    : (str_contains(strtolower($subscriber->relationship?->description), 'child')
+                    : (str_contains(strtolower($subscriber?->relationship?->description), 'child')
                         ? 'child'
                         : 'other')),
             '7' => [
@@ -326,11 +328,13 @@ final class PreviewResource extends JsonResource
                 'phone' => str_replace('-', '', substr($subscriberContact->phone ?? '', 3, 10)),
             ],
             '8' => '',
-            '9' => ($subscriberOther->last_name ?? $subscriberOther->profile->last_name).
-            ', '.($subscriberOther->first_name ?? $subscriberOther->profile->first_name).
-            ($subscriberOther->middle_name ?? $subscriberOther->profile->middle_name ?? null
-                ? ', '.substr($subscriberOther->middle_name ?? ($subscriberOther->profile->middle_name ?? ''), 0, 1)
-                : ''),
+            '9' => isset($subscriberOther)
+                ? (($subscriberOther->last_name ?? $subscriberOther->profile->last_name).
+                ', '.($subscriberOther->first_name ?? $subscriberOther->profile->first_name).
+                ($subscriberOther->middle_name ?? $subscriberOther->profile->middle_name ?? null
+                    ? ', '.substr($subscriberOther->middle_name ?? ($subscriberOther->profile->middle_name ?? ''), 0, 1)
+                    : ''))
+                : '',
             '9a' => $lowerOrderPolicy->policy_number ?? '',
             '9b' => '',
             '9c' => '',
@@ -353,7 +357,7 @@ final class PreviewResource extends JsonResource
                 'year' => substr($subscriberBirthdate[0] ?? '', 2, 2),
                 'month' => $subscriberBirthdate[1] ?? '',
                 'day' => $subscriberBirthdate[2] ?? '',
-                'sex' => strtoupper($subscriber->sex ?? ''),
+                'sex' => strtoupper($subscriber?->sex ?? $subscriber?->profile?->sex ?? ''),
             ],
             '11b' => '',
             '11c' => isset($higherOrderPolicy->insurancePlan)
