@@ -6,6 +6,7 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\Claim;
+use App\Models\ClaimFormPService;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Facility;
@@ -580,6 +581,8 @@ final class PreviewResource extends JsonResource
             )->first()
             : null;
 
+        $claimServices = collect($this->resource->claimFormattable->claimFormServices ?? []);
+
         return [
             '1' => [
                 'name' => $company->name ?? '',
@@ -598,7 +601,7 @@ final class PreviewResource extends JsonResource
             '3a' => $this->resource->control_number ?? '',
             '3b' => $patient?->companies?->find($company->id ?? null)?->pivot?->med_num ?? '',
             '4' => '0'
-                .(string) $facility->facility_type_id
+                .(string) $facility->facilityType->type
                 .('inpatient' == $this->resource->claimFormattable->type_of_medical_assistance
                     ? '1'
                     : '3'
@@ -606,8 +609,8 @@ final class PreviewResource extends JsonResource
                 .$this->resource->claimFormattable?->physicianOrSupplierInformation?->bill_classification_id,
             '5' => $company->npi,
             '6' => [
-                'from' => $patientDate,
-                'through' => $patientDischarge,
+                'from' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
+                'through' => (($patientDischarge[1] ?? '').' '.($patientDischarge[2] ?? '').' '.substr($patientDischarge[0] ?? '', 0, 2)),
             ],
             '7' => '',
             '8a' => $patient->code ?? '',
@@ -724,19 +727,31 @@ final class PreviewResource extends JsonResource
                 'AMOUNT_C' => '',
                 'AMOUNT_D' => '',
             ],
-            '42' => [
-                0 => '',
-                1 => '',
-                2 => '',
-            ],
-            '43' => [
-                0 => '',
-                1 => '',
-                2 => '',
-            ],
-            '44' => '',
-            '45' => '',
-            '46' => '',
+            '42' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->revenueCode->code ?? '';
+                })
+                ->toArray(),
+            '43' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->procedure->description ?? '';
+                })
+                ->toArray(),
+            '44' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->price ?? '';
+                })
+                ->toArray(),
+            '45' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return explode('-', $claimFormService->procedure->start_date ?? '');
+                })
+                ->toArray(),
+            '46' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return explode('-', $claimFormService->procedure->start_date ?? '');
+                })
+                ->toArray(),
             '47' => '',
             '48' => '',
             '49' => '',
