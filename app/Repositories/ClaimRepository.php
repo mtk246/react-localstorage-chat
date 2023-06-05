@@ -1997,7 +1997,7 @@ class ClaimRepository
                 if ($providerProfile) {
                     $referred = [
                         'providerType' => 'ReferringProvider',
-                        'npi' => $provider->npi,
+                        'npi' => str_replace('-', '', $provider->npi ?? ''),
                         'firstName' => $providerProfile->first_name,
                         'lastName' => $providerProfile->last_name,
                         'employerId' => str_replace('-', '', $provider->ein ?? $provider->npi),
@@ -2038,7 +2038,7 @@ class ClaimRepository
                     'providers' => [/* Company */
                         [
                             'providerType' => 'BillingProvider',
-                            'npi' => $claim->company->npi ?? null,
+                            'npi' => str_replace('-', '', $claim->company->npi ?? ''),
                             'employerId' => str_replace('-', '', $claim->company->ein ?? $claim->company->npi),
                             'organizationName' => $claim->company->name ?? null,
                             'address' => [
