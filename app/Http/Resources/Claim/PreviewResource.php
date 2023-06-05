@@ -6,6 +6,7 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\Claim;
+use App\Models\ClaimFormPService;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Facility;
@@ -576,6 +577,8 @@ final class PreviewResource extends JsonResource
             )->first()
             : null;
 
+        $claimServices = collect($this->resource->claimFormattable->claimFormServices ?? []);
+
         return [
             '1' => [
                 'name' => $company->name ?? '',
@@ -720,19 +723,31 @@ final class PreviewResource extends JsonResource
                 'AMOUNT_C' => '',
                 'AMOUNT_D' => '',
             ],
-            '42' => [
-                0 => '',
-                1 => '',
-                2 => '',
-            ],
-            '43' => [
-                0 => '',
-                1 => '',
-                2 => '',
-            ],
-            '44' => '',
-            '45' => '',
-            '46' => '',
+            '42' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->revenueCode->code ?? '';
+                })
+                ->toArray(),
+            '43' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->procedure->description ?? '';
+                })
+                ->toArray(),
+            '44' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return $claimFormService->price ?? '';
+                })
+                ->toArray(),
+            '45' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return explode('-', $claimFormService->procedure->start_date ?? '');
+                })
+                ->toArray(),
+            '46' => $claimServices
+                ->map(function (ClaimFormPService $claimFormService) {
+                    return explode('-', $claimFormService->procedure->start_date ?? '');
+                })
+                ->toArray(),
             '47' => '',
             '48' => '',
             '49' => '',
