@@ -608,7 +608,7 @@ final class PreviewResource extends JsonResource
                     ? '1'
                     : '3'
                 )
-                .$this->resource->claimFormattable?->physicianOrSupplierInformation?->bill_classification_id,
+                .($this->resource->claimFormattable?->physicianOrSupplierInformation?->billClassification?->code ?? ''),
             '5' => $company->npi,
             '6' => [
                 'from' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
