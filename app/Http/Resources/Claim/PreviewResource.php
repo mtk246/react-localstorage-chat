@@ -601,7 +601,7 @@ final class PreviewResource extends JsonResource
             '3a' => $this->resource->control_number ?? '',
             '3b' => $patient?->companies?->find($company->id ?? null)?->pivot?->med_num ?? '',
             '4' => '0'
-                .(string) $facility->facility_type_id
+                .(string) $facility->facilityType->type
                 .('inpatient' == $this->resource->claimFormattable->type_of_medical_assistance
                     ? '1'
                     : '3'
