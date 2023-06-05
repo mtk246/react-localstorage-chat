@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\FieldInformationProfessional;
+use App\Models\Claim;
 use App\Models\Company;
 use App\Models\Diagnosis;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
+use App\Models\InsuranceCompany;
 use App\Models\Patient;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
+/** @property Claim $resource */
 final class PreviewResource extends JsonResource
 {
     /**
@@ -516,9 +519,21 @@ final class PreviewResource extends JsonResource
                 ]);
             },
         ])->find($request->patient_id ?? $this->resource->patient_id ?? null);
+
         $patientBirthdate = explode('-', $patient->user->profile->date_of_birth ?? '');
-        $patientDate = explode('-', $this->resource->claimFormattable?->physicianOrSupplierInformation?->admission_date ?? '');
-        $patientHour = explode(':', $this->resource->claimFormattable?->physicianOrSupplierInformation?->admission_time ?? '');
+        $patienAditionalInformation = $this->resource->claimFormattable?->physicianOrSupplierInformation;
+        $patientDate = explode('-', $patienAditionalInformation?->admission_date ?? '');
+        $patientHour = explode(':', $patienAditionalInformation?->admission_time ?? '');
+        $patientDischarge = explode('-', $patienAditionalInformation?->discharge_date ?? '');
+        $patientDischargeHour = explode(':', $patienAditionalInformation?->discharge_time ?? '');
+        $patienAdmissionType = $patienAditionalInformation?->admissionType?->code ?? '';
+        $patienAdmissionSource = $patienAditionalInformation?->admissionSource?->code ?? '';
+        $patienStatus = $patienAditionalInformation?->patientStatus?->code ?? '';
+        $patienConditionCodes = collect($patienAditionalInformation?->conditionCodes ?? [])
+            ->map(function ($item) {
+                return $item['code'];
+            })
+            ->pad(11, '');
         $patientAddress = $patient->user?->addresses()?->select(
             'country',
             'address',
@@ -526,6 +541,25 @@ final class PreviewResource extends JsonResource
             'state',
             'zip',
         )->first() ?? null;
+
+        $higherOrderPolicy = $this->resource->insurancePolicies()
+            ->wherePivot('order', 1)->first();
+
+        /** @var InsuranceCompany|null */
+        $insuranceCompany = $higherOrderPolicy?->insurancePlan?->insuranceCompany;
+
+        $facility = Facility::query()->find($request->facility_id ?? $this->resource->facility_id ?? null);
+
+        $insuranceCompanyAddress = isset($insuranceCompany)
+            ? $insuranceCompany->addresses()->select(
+                'country',
+                'address',
+                'city',
+                'state',
+                'zip',
+            )->first()
+            : null;
+
         $patientContact = $patient->user->contacts()->select(
             'phone'
         )->first() ?? null;
@@ -557,13 +591,19 @@ final class PreviewResource extends JsonResource
                 'state' => substr($companyAddress->state ?? '', 0, 3),
                 'zip' => substr($companyAddress->zip ?? '', 0, 5),
             ],
-            '3a' => '',
+            '3a' => $this->resource->control_number ?? '',
             '3b' => $patient?->companies?->find($company->id ?? null)?->pivot?->med_num ?? '',
-            '4' => '',
-            '5' => '',
+            '4' => '0'
+                .(string) $facility->facility_type_id
+                .('inpatient' == $this->resource->claimFormattable->type_of_medical_assistance
+                    ? '1'
+                    : '3'
+                )
+                .$this->resource->claimFormattable?->physicianOrSupplierInformation?->bill_classification_id,
+            '5' => $company->npi,
             '6' => [
-                'from' => '',
-                'through' => '',
+                'from' => $patientDate,
+                'through' => $patientDischarge,
             ],
             '7' => '',
             '8a' => $patient->code ?? '',
@@ -585,21 +625,23 @@ final class PreviewResource extends JsonResource
             '11' => strtoupper($patient->user->profile->sex ?? ''),
             '12' => (($patientDate[1] ?? '').' '.($patientDate[2] ?? '').' '.substr($patientDate[0] ?? '', 0, 2)),
             '13' => $patientHour[0] ?? '',
-            '14' => '',
-            '15' => '',
-            '16' => '',
-            '17' => '',
-            '18' => '',
-            '19' => '',
-            '20' => '',
-            '21' => '',
-            '22' => '',
-            '23' => '',
-            '24' => '',
-            '25' => '',
-            '26' => '',
-            '27' => '',
-            '28' => '',
+            '14' => $patienAdmissionType,
+            '15' => $patienAdmissionSource,
+            '16' => 'inpatient' == $this->resource->claimFormattable->type_of_medical_assistance
+                ? $patientDischargeHour
+                : '',
+            '17' => $patienStatus,
+            '18' => $patienConditionCodes->get(0),
+            '19' => $patienConditionCodes->get(1),
+            '20' => $patienConditionCodes->get(2),
+            '21' => $patienConditionCodes->get(3),
+            '22' => $patienConditionCodes->get(4),
+            '23' => $patienConditionCodes->get(5),
+            '24' => $patienConditionCodes->get(6),
+            '25' => $patienConditionCodes->get(7),
+            '26' => $patienConditionCodes->get(8),
+            '27' => $patienConditionCodes->get(9),
+            '28' => $patienConditionCodes->get(10),
             '29' => '',
             '30' => '',
             '31' => [
@@ -644,9 +686,9 @@ final class PreviewResource extends JsonResource
             ],
             '37' => '',
             '38' => [
-                'name' => '',
-                'address1' => '',
-                'address2' => '',
+                'name' => $insuranceCompany?->name ?? '',
+                'address1' => $insuranceCompanyAddress->address ?? '',
+                'address3' => substr($insuranceCompanyAddress->city ?? '', 0, 24).' '.substr($insuranceCompanyAddress->state ?? '', 0, 3).substr($insuranceCompanyAddress->zip ?? '', 0, 12) ?? '',
             ],
             '39' => [
                 'CODE_A' => '',
