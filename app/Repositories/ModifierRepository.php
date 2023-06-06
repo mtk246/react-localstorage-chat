@@ -159,18 +159,13 @@ class ModifierRepository
                 }
 
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-
-                    foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-
-                        ModifierInvalidCombination::updateOrCreate([
-                            'modifier_id' => $modifier->id,
-                            'invalid_combination' => $invalidCombination,
-                        ], [
-                            'modifier_id' => $modifier->id,
-                            'invalid_combination' => $invalidCombination,
-                        ]);
-                        
-                    }
+                    ModifierInvalidCombination::updateOrCreate([
+                        'modifier_id' => $modifier->id,
+                        'invalid_combination' => $invalidCombination,
+                    ], [
+                        'modifier_id' => $modifier->id,
+                        'invalid_combination' => $invalidCombination,
+                    ]);
                 }
             }
 
