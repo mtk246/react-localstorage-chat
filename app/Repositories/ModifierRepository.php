@@ -27,18 +27,19 @@ class ModifierRepository
                 'description' => $data['description'],
             ]);
 
-            if (isset($data['modifier_invalid_combinations'])) {
+            if (isset($data['modifier_invalid_combinations'])) {                
 
                 $modifier_invalid_combinations_data = [];
 
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
                     array_push($modifier_invalid_combinations_data, [
                         'modifier_id' => $modifier->id,
-                        'invalid_combination' => $invalidCombination['invalid_combination']
+                        'invalid_combination' => $invalidCombination
                     ]);
                 }
 
                 ModifierInvalidCombination::insert($modifier_invalid_combinations_data);
+
             }
 
             if (isset($data['note'])) {
@@ -160,7 +161,17 @@ class ModifierRepository
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
 
                     foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-                        foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
+
+                        ModifierInvalidCombination::updateOrCreate([
+                            'modifier_id' => $modifier->id,
+                            'invalid_combination' => $invalidCombination,
+                        ], [
+                            'modifier_id' => $modifier->id,
+                            'invalid_combination' => $invalidCombination,
+                        ]);
+
+                        
+                        /*foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
                            
                             ModifierInvalidCombination::updateOrCreate([
                                 'modifier_id' => $modifier->id,
@@ -169,7 +180,7 @@ class ModifierRepository
                                 'modifier_id' => $modifier->id,
                                 'invalid_combination' => $invalidCombination['invalid_combination'],
                             ]);
-                        }
+                        }*/
                     }
                 }
             }
