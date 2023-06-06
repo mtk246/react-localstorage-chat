@@ -10,14 +10,14 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('public_notes', function (Blueprint $table) {
-            $table->string('note')->nullable()->change();
+            $table->text('note')->nullable()->change();
         });
     }
 
     public function down(): void
     {
         Schema::table('public_notes', function (Blueprint $table) {
-            $table->string('note');
+            $table->text('note');
         });
     }
 };
