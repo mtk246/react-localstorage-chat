@@ -230,7 +230,17 @@ class Claim extends Model implements Auditable
      */
     public function diagnoses()
     {
-        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withPivot('item')->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withPivot(['item', 'poa', 'admission'])->withTimestamps();
+    }
+
+    /**
+     * The healthProfessionals that belong to the Claim.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function healthProfessionals()
+    {
+        return $this->belongsToMany(HealthProfessional::class, 'claim_health_professional', 'claim_id', 'health_professional_id')->withPivot(['field_id', 'qualifier_id'])->withTimestamps();
     }
 
     /**
