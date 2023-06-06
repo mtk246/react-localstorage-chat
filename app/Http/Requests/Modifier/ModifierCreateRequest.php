@@ -22,7 +22,7 @@ class ModifierCreateRequest extends FormRequest
             'end_date' => ['nullable', 'date'],
             'special_coding_instructions' => ['required', 'string'],
             'modifier_invalid_combinations' => ['nullable', 'array'],
-            'modifier_invalid_combinations.*.*' => ['nullable', 'string', 'max:2'],
+            'modifier_invalid_combinations.*' => ['nullable', 'string', 'max:2'],
             'classification' => ['required', new Enum(ClassificationType::class)],
             'type' => ['required', new Enum(ModifierType::class)],
             'description' => ['required', 'string'],
