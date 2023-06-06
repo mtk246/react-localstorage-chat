@@ -24,6 +24,7 @@ class FacilityRepository
      */
     public function create(array $data)
     {
+        try {
             DB::beginTransaction();
             $facility = Facility::query()->create([
                 'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), Facility::class, 'code'),
@@ -137,6 +138,11 @@ class FacilityRepository
             DB::commit();
 
             return $facility;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return null;
+        }
         
     }
 

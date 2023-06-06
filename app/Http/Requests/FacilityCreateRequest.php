@@ -62,7 +62,7 @@ final class FacilityCreateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['email:rfc'],
+            'contact.email' => ['nullable', 'email:rfc'],
         ];
     }
 }
