@@ -169,18 +169,7 @@ class ModifierRepository
                             'modifier_id' => $modifier->id,
                             'invalid_combination' => $invalidCombination,
                         ]);
-
                         
-                        /*foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-                           
-                            ModifierInvalidCombination::updateOrCreate([
-                                'modifier_id' => $modifier->id,
-                                'invalid_combination' => $invalidCombination['invalid_combination'],
-                            ], [
-                                'modifier_id' => $modifier->id,
-                                'invalid_combination' => $invalidCombination['invalid_combination'],
-                            ]);
-                        }*/
                     }
                 }
             }
