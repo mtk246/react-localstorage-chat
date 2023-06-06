@@ -69,6 +69,7 @@ class ClaimFormP extends Model implements Auditable
         'head_benefit_plan_other',
         'date_of_current',
         'total_charge',
+        'type_of_medical_assistance',
         'type_form_id',
         'type_insurance_id',
         'relationship_to_insured_id',
