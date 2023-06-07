@@ -9,7 +9,6 @@ use App\Http\Resources\Company\ServiceResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Models\Address;
-use App\Models\AddressType;
 use App\Models\Company;
 use App\Models\CompanyProcedure;
 use App\Models\Contact;
