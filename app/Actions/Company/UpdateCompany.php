@@ -155,6 +155,7 @@ final class UpdateCompany
     {
         $company->addresses()->updateOrCreate([
             'billing_company_id' => $request->getBillingCompanyId(),
+            'address_type_id' => '1',
         ], [
             'address' => $request->getAddress()->getAddress(),
             'city' => $request->getAddress()->getCity(),
@@ -162,7 +163,6 @@ final class UpdateCompany
             'zip' => $request->getAddress()->getZip(),
             'country' => $request->getAddress()->getCountry(),
             'country_subdivision_code' => $request->getAddress()->getCountrySubdivisionCode(),
-            'address_type_id' => '1',
         ]);
 
         if (!$request->getPaymentAddres()) {

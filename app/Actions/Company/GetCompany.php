@@ -126,21 +126,18 @@ final class GetCompany
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ])->first();
                 $address = Address::where([
-                    'address_type_id' => null,
+                    'address_type_id' => '1',
                     'addressable_id' => $company->id,
                     'addressable_type' => Company::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ])->first();
-                $addressType = AddressType::where('name', 'Other')->first();
 
-                if (isset($addressType)) {
-                    $payment_address = Address::where([
-                        'address_type_id' => $addressType->id,
-                        'addressable_id' => $company->id,
-                        'addressable_type' => Company::class,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ])->first();
-                }
+                $payment_address = Address::where([
+                    'address_type_id' => '3',
+                    'addressable_id' => $company->id,
+                    'addressable_type' => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ])->first();
 
                 $contact = Contact::where([
                     'contactable_id' => $company->id,
