@@ -638,29 +638,31 @@ class ProcedureRepository
                     return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
-                if ('' == $search) {
-                    return getList(
-                        Procedure::class,
-                        'code',
-                        ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
-                        null,
-                        ['description'],
-                        ['price']
-                    );
-                } else {
-                    return getList(
-                        Procedure::class,
-                        'code',
-                        [
-                            'whereRaw' => ['search' => $search],
-                            'relationship' => 'companies',
-                            'where' => ['company_id' => $company_id],
-                        ],
-                        null,
-                        ['description'],
-                        ['price']
-                    );
-                }
+                return Procedure::query()
+                    ->with(['companies' => function ($query) use ($company_id) {
+                        $query->where('company_id', $company_id)
+                            ->select('company_id', 'procedure_id', 'price');
+                    }])
+                    ->where(function ($query) use ($company_id) {
+                        $query->whereHas('companies', function ($query) use ($company_id) {
+                            $query->where('company_id', $company_id);
+                        })
+                        ->orWhereJsonContains('clasifications->general', 2);
+                    })
+                    ->when($search, function ($query) use ($search) {
+                        $query->where('code', 'like', "%$search%");
+                    })
+                    ->get()
+                    ->map(function ($procedure) use ($company_id) {
+                        $company = $procedure->companies->firstWhere('company_id', $company_id);
+                        $price = $company ? $company->pivot->price : 0;
+                        return [
+                            'id' => $procedure->id,
+                            'name' => $procedure->code,
+                            'description' => $procedure->description,
+                            'price' => $price,
+                        ];
+                    });
             }
         } catch (\Exception $e) {
             return [];
