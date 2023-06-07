@@ -359,6 +359,7 @@ class DataTestSeeder extends Seeder
 
             if (isset($data['address']['address'])) {
                 Address::firstOrCreate([
+                    'address_type_id' => '1',
                     'addressable_id' => $company->id,
                     'addressable_type' => Company::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -366,9 +367,8 @@ class DataTestSeeder extends Seeder
             }
 
             if (isset($data['payment_address']['address'])) {
-                $addressType = AddressType::where('name', 'Other')->first();
                 Address::firstOrCreate([
-                    'address_type_id' => $addressType->id ?? null,
+                    'address_type_id' => '3',
                     'addressable_id' => $company->id,
                     'addressable_type' => Company::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
