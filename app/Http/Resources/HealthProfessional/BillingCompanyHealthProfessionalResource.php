@@ -20,11 +20,13 @@ final class BillingCompanyHealthProfessionalResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'authorization' => AuthorizationResource::collection($this->resource->companies_providers[0]->authorization),
             'is_provider' => $this->resource->is_provider,
             'npi_company' => $this->resource->npi_company,
             'company_id' => $this->resource->company_id,
             'status' => $this->resource->status,
             'billing_companies' => $this->resource->billingCompanies,
+            'companies' => $this->resource->companies
         ];
     }
 }
