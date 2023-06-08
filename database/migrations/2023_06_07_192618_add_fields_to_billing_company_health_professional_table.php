@@ -13,7 +13,12 @@ return new class() extends Migration {
             $table->string('npi_company')->nullable();
             $table->boolean('is_provider')->default(false);
             $table->foreignId('company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('health_professional_type_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedBigInteger('health_professional_type_id')->nullable();
+            $table->foreign('health_professional_type_id', 'hp_type_id_fk')
+                ->references('id')
+                ->on('health_professional_types')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 
