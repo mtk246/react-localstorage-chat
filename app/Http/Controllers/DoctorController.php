@@ -109,7 +109,6 @@ class DoctorController extends Controller
     public function getDoctorBillingCompany(HealthProfessional $doctor, Request $request, GetBillingCompanyAction $getBillingCompany): JsonResponse {
         
         return response()->json($getBillingCompany->all($request->user(), $doctor));
-
     }
 
     

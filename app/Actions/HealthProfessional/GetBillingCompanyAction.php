@@ -15,8 +15,9 @@ final class GetBillingCompanyAction
 {
     public function all(User $user, HealthProfessional $doctor): AnonymousResourceCollection
     {
-        $billingCompanyCollection = $doctor
-            ->with('billingCompanies')
+        $billingCompanyCollection = HealthProfessional::query()
+            ->with('billingCompanies')    
+            ->where('id', $doctor->id)
             ->when(
                 Gate::denies('is-admin'),
                 fn ($query) => $query->whereHas('billingCompanies', function (Builder $query) use ($user) {

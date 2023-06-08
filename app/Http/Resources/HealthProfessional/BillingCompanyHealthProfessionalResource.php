@@ -18,6 +18,13 @@ final class BillingCompanyHealthProfessionalResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->resource->id,
+            "is_provider" => $this->resource->is_provider,
+            "npi_company" => $this->resource->npi_company,
+            "company_id" => $this->resource->company_id,
+            "status" => $this->resource->status,
+            'billing_companies' =>$this->resource->billingCompanies,
+        ];
     }
 }
