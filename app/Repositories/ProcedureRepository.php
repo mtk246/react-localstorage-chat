@@ -639,28 +639,37 @@ class ProcedureRepository
                 }
             } else {
                 return Procedure::query()
+                    ->when(('' !== $search), function ($query) use ($search, $company_id) {
+                        $query->where(function ($query) use ($search, $company_id) {
+                            $query->whereHas('companies', function ($query) use ($company_id) {
+                                $query->where('company_id', $company_id);
+                            })->where('code', 'like', "%$search%");
+                        })
+                        ->orWhere(function ($query) use ($search) {
+                            $search = str_replace(['f', 'F'], '', $search);
+                            $query->whereJsonContains('clasifications->general', 2)
+                                ->where('code', 'like', "%$search%F");
+                        });
+                    }, function ($query) use ($company_id) {
+                        $query->whereHas('companies', function ($query) use ($company_id) {
+                            $query->where('company_id', $company_id);
+                        });
+                    })
                     ->with(['companies' => function ($query) use ($company_id) {
                         $query->where('company_id', $company_id)
                             ->select('company_id', 'procedure_id', 'price');
-                    }])
-                    ->where(function ($query) use ($company_id) {
-                        $query->whereHas('companies', function ($query) use ($company_id) {
-                            $query->where('company_id', $company_id);
-                        })
-                        ->orWhereJsonContains('clasifications->general', 2);
-                    })
-                    ->when($search, function ($query) use ($search) {
-                        $query->where('code', 'like', "%$search%");
-                    })
-                    ->get()
-                    ->map(function ($procedure) use ($company_id) {
+                    }])->get()
+                    ->sortByDesc(function ($procedure) use ($company_id) {
                         $company = $procedure->companies->firstWhere('company_id', $company_id);
-                        $price = $company ? $company->pivot->price : 0;
+                        return $company ? $company->pivot->price : 0;
+                    })
+                    ->map(function ($procedure) use ($company_id) {
                         return [
                             'id' => $procedure->id,
                             'name' => $procedure->code,
                             'description' => $procedure->description,
-                            'price' => $price,
+                            'price' => $procedure->companies
+                                ->firstWhere('company_id', $company_id)?->pivot->price ?? 0,
                         ];
                     });
             }
