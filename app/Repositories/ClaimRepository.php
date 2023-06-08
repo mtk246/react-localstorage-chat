@@ -610,15 +610,24 @@ class ClaimRepository
                         'claim_status_type' => ClaimStatus::class,
                         'claim_status_id' => $claimStatus->id,
                     ]);
-                }
-                if (isset($data['private_note'])) {
-                    PrivateNote::updateOrCreate([
-                        'publishable_type' => ClaimStatusClaim::class,
-                        'publishable_id' => $claimStatusClaim->id ?? $status->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ], [
-                        'note' => $data['private_note'],
-                    ]);
+                    if (isset($data['private_note'])) {
+                        PrivateNote::updateOrCreate([
+                            'publishable_type' => ClaimStatusClaim::class,
+                            'publishable_id' => $claimStatusClaim->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        ], [
+                            'note' => $data['private_note'],
+                        ]);
+                    }
+                } else {
+                    if (isset($data['private_note'])) {
+                        PrivateNote::create([
+                            'publishable_type' => ClaimStatusClaim::class,
+                            'publishable_id' => $status->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'note' => $data['private_note'],
+                        ]);
+                    }
                 }
                 if (isset($data['sub_status_id'])) {
                     $this->changeStatus([
