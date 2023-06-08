@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
             DataTestSeeder::class,
             UserSeeder::class,
             ProcedureSeeder::class,
+            BillClassificationSeeder::class,
+            ConditionCodeSeeder::class,
+            DiagnosisRelatedGroupSeeder::class,
         ]);
     }
 }
