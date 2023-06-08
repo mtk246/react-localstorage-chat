@@ -20,13 +20,8 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table('billing_company_health_professional', function (Blueprint $table) {
-            $table->dropColumn(['npi_company', 'is_provider']);
-
-            $table->dropForeign(['health_professional_type_id']);
-            $table->dropColumn('health_professional_type_id');
-
-            $table->dropForeign(['company_id']);
-            $table->dropColumn('company_id');
+            $table->dropForeign(['health_professional_type_id', 'company_id']);
+            $table->dropColumn(['npi_company', 'is_provider', 'health_professional_type_id', 'company_id']);
         });
     }
 };
