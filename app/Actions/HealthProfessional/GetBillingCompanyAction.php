@@ -7,9 +7,9 @@ namespace App\Actions\HealthProfessional;
 use App\Http\Resources\HealthProfessional\BillingCompanyHealthProfessionalResource;
 use App\Models\HealthProfessional;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Builder;
 
 final class GetBillingCompanyAction
 {
@@ -19,13 +19,12 @@ final class GetBillingCompanyAction
             ->with('billingCompanies')
             ->when(
                 Gate::denies('is-admin'),
-                fn ($query) => $query->whereHas('billingCompanies', function (Builder $query) use ($user){
+                fn ($query) => $query->whereHas('billingCompanies', function (Builder $query) use ($user) {
                     $query->where('billing_company_id', $user->billing_company_id);
                 })
             )
             ->get();
 
-        
         return BillingCompanyHealthProfessionalResource::collection($billingCompanyCollection);
     }
 }
