@@ -640,13 +640,13 @@ class ProcedureRepository
             } else {
                 return Procedure::query()
                     ->when(('' !== $search), function ($query) use ($search, $company_id) {
-                        $search = str_replace(['f', 'F'], '', $search);
                         $query->where(function ($query) use ($search, $company_id) {
                             $query->whereHas('companies', function ($query) use ($company_id) {
                                 $query->where('company_id', $company_id);
                             })->where('code', 'like', "%$search%");
                         })
                         ->orWhere(function ($query) use ($search) {
+                            $search = str_replace(['f', 'F'], '', $search);
                             $query->whereJsonContains('clasifications->general', 2)
                                 ->where('code', 'like', "%$search%F");
                         });
