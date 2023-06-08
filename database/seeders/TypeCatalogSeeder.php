@@ -974,12 +974,40 @@ class TypeCatalogSeeder extends Seeder
                 'description' => '15. Other date',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => '15 Date 1',
+                        'code' => '454',
+                        'description' => 'Initial treatment',
                     ],
                     [
-                        'code' => '2',
-                        'description' => '15 Date 2',
+                        'code' => '304',
+                        'description' => 'Latest visit or consultation',
+                    ],
+                    [
+                        'code' => '453',
+                        'description' => 'Acute manifestation of a chronic condition',
+                    ],
+                    [
+                        'code' => '439',
+                        'description' => 'Accident',
+                    ],
+                    [
+                        'code' => '455',
+                        'description' => 'Last x-ray',
+                    ],
+                    [
+                        'code' => '471',
+                        'description' => 'Prescription',
+                    ],
+                    [
+                        'code' => '090',
+                        'description' => 'Report start (assumed care date)',
+                    ],
+                    [
+                        'code' => '091',
+                        'description' => 'Report end (relinquished care date)',
+                    ],
+                    [
+                        'code' => '444',
+                        'description' => 'First visit or consultation',
                     ],
                 ],
             ],
