@@ -15,28 +15,67 @@ enum ScreeningType: int implements TypeInterface
     use HasColorAttributes;
     use HasChildAttribute;
 
-    // TB Screening
-    // Evaluation AND Assessment
-    // Patient Status
-    // Adolescent Depression, Remission AND Management
-    // Head Imaging
-    // Pharmacotherapy for OUD
-    // Lumbar Spine Associated Conditions
-    // Functional STATUS Measurement
-    // Lumbar Spine Conditions
-    // Limb Pain Assessment
-    // Urgent Care Visit
-    // Anticoagulation Management
-    // Performance Assessment
-    // Hospice Services
-    // Mobility Status
-    // Fall Risk Assessment
-    //
-    // #[NameAttribute(':name:')]
-    // #[PublicAttribute(true)]
-    // case :capitalize_name: = :id:;
-
-    #[NameAttribute('Anesthesia for Procedures on the Head')]
+    #[NameAttribute('TB Screening')]
     #[PublicAttribute(true)]
-    case PROCEDURES_ON_HEAD = 1;
+    case TB_SCREENING = 1;
+
+    #[NameAttribute('Evaluation AND Assessment')]
+    #[PublicAttribute(true)]
+    case EVALUATION_AND_ASSESSMENT = 2;
+
+    #[NameAttribute('Patient Status')]
+    #[PublicAttribute(true)]
+    case PATIENT_STATUS = 3;
+
+    #[NameAttribute('Adolescent Depression, Remission AND Management')]
+    #[PublicAttribute(true)]
+    case ADOLESCENT_DEPRESSION_REMISSION_AND_MANAGEMENT = 4;
+
+    #[NameAttribute('Head Imaging')]
+    #[PublicAttribute(true)]
+    case HEAD_IMAGING = 5;
+
+    #[NameAttribute('Pharmacotherapy for OUD')]
+    #[PublicAttribute(true)]
+    case PHARMACOTHERAPY_FOR_OUD = 6;
+
+    #[NameAttribute('Lumbar Spine Associated Conditions')]
+    #[PublicAttribute(true)]
+    case LUMBAR_SPINE_ASSOCIATED_CONDITIONS = 7;
+
+    #[NameAttribute('Functional STATUS Measurement')]
+    #[PublicAttribute(true)]
+    case FUNCTIONAL_STATUS_MEASUREMENT = 8;
+
+    #[NameAttribute('Lumbar Spine Conditions')]
+    #[PublicAttribute(true)]
+    case LUMBAR_SPINE_CONDITIONS = 9;
+
+    #[NameAttribute('Limb Pain Assessment')]
+    #[PublicAttribute(true)]
+    case LIMB_PAIN_ASSESSMENT = 10;
+
+    #[NameAttribute('Urgent Care Visit')]
+    #[PublicAttribute(true)]
+    case URGENT_CARE_VISIT = 11;
+
+    #[NameAttribute('Anticoagulation Management')]
+    #[PublicAttribute(true)]
+    case ANTICOAGULATION_MANAGEMENT = 12;
+
+    #[NameAttribute('Performance Assessment')]
+    #[PublicAttribute(true)]
+    case PERFORMANCE_ASSESSMENT = 13;
+
+    #[NameAttribute('Hospice Services')]
+    #[PublicAttribute(true)]
+    case HOSPICE_SERVICES = 14;
+
+    #[NameAttribute('Mobility Status')]
+    #[PublicAttribute(true)]
+    case MOBILITY_STATUS = 15;
+
+    #[NameAttribute('Fall Risk Assessment')]
+    #[PublicAttribute(true)]
+    case FALL_RISK_ASSESSMENT = 16;
 }
