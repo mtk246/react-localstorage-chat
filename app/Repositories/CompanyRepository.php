@@ -78,6 +78,7 @@ class CompanyRepository
             }
 
             if (isset($data['address']['address'])) {
+                $data['address']['address_type_id'] = '1';
                 $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                 $data['address']['addressable_id'] = $company->id;
                 $data['address']['addressable_type'] = Company::class;
@@ -85,8 +86,7 @@ class CompanyRepository
             }
 
             if (isset($data['payment_address']['address'])) {
-                $addressType = AddressType::where('name', 'Other')->first();
-                $data['payment_address']['address_type_id'] = $addressType->id ?? null;
+                $data['payment_address']['address_type_id'] = '3';
                 $data['payment_address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                 $data['payment_address']['addressable_id'] = $company->id;
                 $data['payment_address']['addressable_type'] = Company::class;

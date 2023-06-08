@@ -1,27 +1,37 @@
 <?php
 
+//declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetConditionCodeAction;
+use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
+use App\Actions\Claim\GetFieldAction;
+use App\Actions\Claim\GetFieldQualifierAction;
+use App\Actions\Claim\GetPatientStatusesAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
 use App\Models\ClaimStatus;
 use App\Repositories\ClaimRepository;
+use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
+use App\Services\Claim\ClaimPreviewService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClaimController extends Controller
 {
-    private $claimRepository;
-
-    public function __construct()
-    {
-        $this->claimRepository = new ClaimRepository();
+    public function __construct(
+        private ClaimRepository $claimRepository,
+        private ProcedureRepository $procedureRepository,
+    ) {
     }
 
     /**
@@ -43,7 +53,9 @@ class ClaimController extends Controller
      */
     public function updateAsDraft(ClaimDraftRequest $request, $id)
     {
-        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+        $data = $request->validated();
+        $data['draft'] = true;
+        $rs = $this->claimRepository->updateClaim($data, $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
     }
@@ -61,11 +73,27 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimCreateRequest $request, $id)
+    public function updateClaim(ClaimCreateRequest $request, int $id)
     {
-        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+        $claim = $this->claimRepository->updateClaim($request->validated(), $id);
+        if (is_null($claim)) {
+            return response()->json(__('Error update claim'), 400);
+        }
+        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        if (($request->validate ?? false) == true) {
+            $rs = $this->claimValidation($claim->id);
+            $this->claimRepository->changeStatus([
+                'status_id' => $statusVerify->id,
+                'private_note' => 'API verification',
+            ], $claim->id);
+        } else {
+            $this->claimRepository->changeStatus([
+                'status_id' => $statusVerify->id,
+                'private_note' => 'Manual verification',
+            ], $claim->id);
+        }
 
-        return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
+        return $claim ? response()->json($claim) : response()->json(__('Error updating claim'), 400);
     }
 
     public function getAllClaims(Request $request)
@@ -104,18 +132,63 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all service type of service'), 400);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        $rs = $this->claimRepository->getListPlaceOfServices();
+        $rs = $this->claimRepository->getListPlaceOfServices($request);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all service place of service'), 400);
+        return response()->json($rs);
     }
 
-    public function getListRevCenters()
+    public function getListRevenueCodes(Request $request, int $company_id = null): JsonResponse
     {
-        $rs = $this->claimRepository->getListRevCenters();
+        /**@todo Consultar clasificacion de procedures by revenue codes */
+        $search = $request->search ?? '';
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all service rev. Centers'), 400);
+        return response()->json(
+            $this->procedureRepository->getList($company_id, $search)
+        );
+    }
+
+    public function getListAdmissionTypes(): JsonResponse
+    {
+        return response()->json(
+            $this->claimRepository->getListAdmissionTypes()
+        );
+    }
+
+    public function getListAdmissionSources(): JsonResponse
+    {
+        return response()->json(
+            $this->claimRepository->getListAdmissionSources()
+        );
+    }
+
+    public function getListBillClassifications(GetBillClassificationAction $classification): JsonResponse
+    {
+        $rs = $classification->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListPatientStatuses(GetPatientStatusesAction $patientStatuses): JsonResponse
+    {
+        $rs = $patientStatuses->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListConditionCodes(Request $request, GetConditionCodeAction $conditionCode): JsonResponse
+    {
+        $rs = $conditionCode->all($request->search ?? null);
+
+        return response()->json($rs);
+    }
+
+    public function getListDiagnosisRelatedGroups(Request $request, GetDiagnosisRelatedGroupAction $drg): JsonResponse
+    {
+        $rs = $drg->all($request->input());
+
+        return response()->json($rs);
     }
 
     public function getListTypeFormats()
@@ -125,16 +198,16 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all type formats'), 400);
     }
 
-    public function getListClaimFieldInformations()
+    public function getListClaimFieldInformations(Request $request, GetFieldAction $field): JsonResponse
     {
-        $rs = $this->claimRepository->getListClaimFieldInformations();
+        $rs = $field->all($request->type);
 
         return response()->json($rs);
     }
 
-    public function getListFieldQualifiers(int $id)
+    public function getListFieldQualifiers(Request $request, GetFieldQualifierAction $qualifier): JsonResponse
     {
-        $rs = $this->claimRepository->getListFieldQualifiers($id);
+        $rs = $qualifier->all($request->input());
 
         return response()->json($rs);
     }
@@ -189,10 +262,12 @@ class ClaimController extends Controller
 
     public function storeCheckEligibility(ClaimEligibilityRequest $request)
     {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+        if (true == ($request->automatic_eligibility ?? false)) {
+            $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
 
-        if (!isset($token)) {
-            return response()->json(__('Error get security authorization access token'), 400);
+            if (!isset($token)) {
+                return response()->json(__('Error get security authorization access token'), 400);
+            }
         }
 
         $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());
@@ -229,8 +304,6 @@ class ClaimController extends Controller
     {
         if (isset($request->claim_id)) {
             $claim = Claim::find($request->claim_id);
-        // $claim = $this->claimRepository->updateClaim($request->validated(), $claim->id);
-        // if (!isset($claim)) return response()->json(__("Error save claim"), 400);
         } else {
             $claim = $this->claimRepository->createClaim($request->validated());
             if (!isset($claim)) {
@@ -277,22 +350,18 @@ class ClaimController extends Controller
     public function storeVerifyAndRegister(ClaimVerifyRequest $request)
     {
         $claim = $this->claimRepository->createClaim($request->validated());
+        if (is_null($claim)) {
+            return response()->json(__('Error save claim'), 400);
+        }
+
         $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
         if (($request->validate ?? false) == true) {
-            if (isset($request->insurance_policies)) {
-                $claim->insurancePolicies()->sync($request->insurance_policies);
-            }
-
             $rs = $this->claimValidation($claim->id);
             $this->claimRepository->changeStatus([
                 'status_id' => $statusVerify->id,
                 'private_note' => 'API verification',
             ], $claim->id);
         } else {
-            if (isset($request->insurance_policies)) {
-                $claim->insurancePolicies()->sync($request->insurance_policies);
-            }
-
             $this->claimRepository->changeStatus([
                 'status_id' => $statusVerify->id,
                 'private_note' => 'Manual verification',
@@ -300,6 +369,24 @@ class ClaimController extends Controller
         }
 
         return $claim ? response()->json($claim) : response()->json(__('Error save claim'), 400);
+    }
+
+    public function showPreview(Request $request, ClaimPreviewService $preview)
+    {
+        $id = $request->id ?? null;
+        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
+        $data = new PreviewResource($claim);
+        $preview->setConfig([
+            'urlVerify' => 'www.google.com.ve',
+            'print' => $request->print ?? false,
+            'typeFormat' => $claim->format ?? null,
+            'data' => $data->toArray($request),
+        ]);
+        $preview->setHeader('');
+
+        return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
+            'pdf' => $preview,
+        ]))[1];
     }
 
     public function showReport(Request $request)
@@ -357,11 +444,10 @@ class ClaimController extends Controller
             ]);
         }
         $pdf->setHeader('');
-        // $pdf->setFooter();
+
         return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
             'pdf' => $pdf,
         ]))[1];
-        /**$pdf->setBody('pdf.837P', true, ['pdf' => $pdf]);*/
     }
 
     /**

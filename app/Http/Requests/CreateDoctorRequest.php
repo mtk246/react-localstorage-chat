@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Models\HealthProfessionalType;
+use App\Enums\HealthProfessional\HealthProfessionalType;
+use App\Models\HealthProfessional;
+use App\Rules\company\NameCheckerRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CreateDoctorRequest extends FormRequest
@@ -17,22 +20,31 @@ class CreateDoctorRequest extends FormRequest
      */
     public function rules()
     {
-        $doctorTypeId = HealthProfessionalType::whereType('Medical doctor')->first('id');
+        $doctorTypeId = HealthProfessionalType::MEDICAL_DOCTOR->value;
+        $doctor = HealthProfessional::query()->where('npi', $this->npi)->with(['company'])->first();
+        $company = $doctor?->company;
+        $user = $doctor?->user;
 
         return [
             'npi' => ['required', 'string'],
             'ein' => ['nullable', 'string', 'regex:/^\d{2}-\d{7}$/'],
             'upin' => ['nullable', 'string', 'max:50'],
-            'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')
+                    ->ignore($user?->id),
+                'string',
+                'email:rfc',
+            ],
             'is_provider' => ['nullable', 'boolean'],
 
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'billing_company_id' => [Rule::requiredIf(Auth::user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required_unless:is_provider,true', 'integer', 'nullable'],
             'authorization' => [
                 Rule::requiredIf(
                     !$this->is_provider
-                    && $doctorTypeId->id == $this->health_professional_type_id
+                    && $doctorTypeId == $this->health_professional_type_id
                 ),
                 'array',
                 'nullable',
@@ -44,7 +56,15 @@ class CreateDoctorRequest extends FormRequest
             'taxonomies_company.*.primary' => ['required_unless:npi_company,null', 'boolean', 'nullable'],
 
             'npi_company' => ['nullable', 'string'],
-            'name_company' => ['required_unless:npi_company,null', 'nullable', 'string'],
+            'name_company' => [
+                new NameCheckerRule(
+                    $this->npi_company,
+                    $this->npi,
+                    $this->profile['first_name'],
+                    $this->profile['last_name'],
+                    $company,
+                ),
+            ],
             'nickname' => ['nullable', 'string'],
 
             'private_note' => ['nullable', 'string'],
@@ -73,6 +93,7 @@ class CreateDoctorRequest extends FormRequest
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.phone' => ['nullable', 'string'],

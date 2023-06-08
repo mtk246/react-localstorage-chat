@@ -6,6 +6,7 @@ namespace App\Http\Requests\Company;
 
 use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Models\Modifier;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,6 +32,11 @@ final class AddContractFeesRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
+            'contract_fees.*.contract_fee_id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\ContractFee,id',
+            ],
             'contract_fees.*.insurance_company_id' => [
                 'nullable',
                 'integer',
@@ -47,8 +53,7 @@ final class AddContractFeesRequest extends FormRequest
             ],
             'contract_fees.*.modifier_id' => [
                 'nullable',
-                'integer',
-                'exists:\App\Models\Modifier,id',
+                new IntegerOrArrayKeyExists(Modifier::class),
             ],
             'contract_fees.*.price' => ['nullable', 'numeric'],
             'contract_fees.*.type_id' => ['nullable', 'integer'],

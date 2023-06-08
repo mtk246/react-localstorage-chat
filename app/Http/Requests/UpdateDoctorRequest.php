@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\HealthProfessional\HealthProfessionalType;
 use App\Models\HealthProfessional;
-use App\Models\HealthProfessionalType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +18,7 @@ class UpdateDoctorRequest extends FormRequest
      */
     public function rules()
     {
-        $doctorTypeId = HealthProfessionalType::whereType('Medical doctor')->first('id');
+        $doctorTypeId = HealthProfessionalType::MEDICAL_DOCTOR->value;
         $doctor = HealthProfessional::find($this->id);
         $user = $doctor->user;
 
@@ -47,7 +47,7 @@ class UpdateDoctorRequest extends FormRequest
             'authorization' => [
                 Rule::requiredIf(
                     !$this->is_provider
-                    && $doctorTypeId->id == $this->health_professional_type_id
+                    && $doctorTypeId == $this->health_professional_type_id
                 ),
                 'array',
                 'nullable',
@@ -88,6 +88,7 @@ class UpdateDoctorRequest extends FormRequest
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.phone' => ['nullable', 'string'],

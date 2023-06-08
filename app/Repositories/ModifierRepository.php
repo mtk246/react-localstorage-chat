@@ -27,13 +27,19 @@ class ModifierRepository
                 'description' => $data['description'],
             ]);
 
-            if (isset($data['modifier_invalid_combinations'])) {
+            if (isset($data['modifier_invalid_combinations'])) {                
+
+                $modifier_invalid_combinations_data = [];
+
                 foreach ($data['modifier_invalid_combinations'] as $invalidCombination) {
-                    ModifierInvalidCombination::create([
+                    array_push($modifier_invalid_combinations_data, [
                         'modifier_id' => $modifier->id,
-                        'invalid_combination' => $invalidCombination,
+                        'invalid_combination' => $invalidCombination
                     ]);
                 }
+
+                ModifierInvalidCombination::insert($modifier_invalid_combinations_data);
+
             }
 
             if (isset($data['note'])) {

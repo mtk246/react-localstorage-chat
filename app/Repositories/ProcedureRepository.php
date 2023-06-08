@@ -37,10 +37,11 @@ class ProcedureRepository
             $procedure = Procedure::create([
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
@@ -108,19 +109,20 @@ class ProcedureRepository
                 if (isset($data['procedure_considerations']['gender_id']) &&
                     isset($data['procedure_considerations']['age_init']) &&
                     isset($data['procedure_considerations']['discriminatory_id'])) {
-                    ProcedureConsideration::create([
+                    $considetation = ProcedureConsideration::create([
                         'procedure_id' => $procedure->id,
                         'gender_id' => $data['procedure_considerations']['gender_id'],
                         'age_init' => $data['procedure_considerations']['age_init'],
                         'age_end' => $data['procedure_considerations']['age_end'] ?? null,
                         'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
                         'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
-                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
-                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
                         'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
                         'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
                         'authorization' => $data['procedure_considerations']['authorization'] ?? false,
                     ]);
+
+                    $considetation->frecuentDiagnoses()->sync($data['procedure_considerations']['frequent_diagnoses'] ?? []);
+                    $considetation->frecuentModifiers()->sync($data['procedure_considerations']['frequent_modifiers'] ?? []);
                 }
             }
 
@@ -194,7 +196,14 @@ class ProcedureRepository
     {
         $procedure = Procedure::whereId($id)->with([
             'publicNote',
-            'procedureCosiderations',
+            'procedureCosiderations' => function($query) {
+                $query->with([
+                    'gender',
+                    'discriminatory',
+                    'frecuentDiagnoses',
+                    'frecuentModifiers',
+                ]);
+            },
             'insuranceCompanies',
             'diagnoses',
             'modifiers',
@@ -288,30 +297,31 @@ class ProcedureRepository
     /**
      * @return Procedure|Builder|Model|object|null
      */
-    public function updateProcedure(array $data, int $id)
+    public function updateProcedure(array $data, Procedure $procedure)
     {
         try {
             DB::beginTransaction();
-            $procedure = Procedure::find($id);
 
             $procedure->update([
+                'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => $data['clasifications'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
-            if (isset($data['specific_insurance_company']) && isset($data['insurance_companies'])) {
-                if ($data['specific_insurance_company']) {
-                    $procedure->insuranceCompanies()->sync($data['insurance_companies']);
-                }
-            }
+            $procedure->insuranceCompanies()->sync(
+                isset($data['specific_insurance_company']) && $data['specific_insurance_company'] && isset($data['insurance_companies'])
+                    ? $data['insurance_companies']
+                    : []
+            );
 
             if (isset($data['mac_localities'])) {
                 /* Delete mac localities */
                 $procedure->macLocalities()->detach();
+                $procedure->procedureFees()->delete();
                 /* update or create new mac localities */
                 foreach ($data['mac_localities'] as $macL) {
                     $macLocality = MacLocality::where([
@@ -325,6 +335,7 @@ class ProcedureRepository
                         /* Attach macLocality to procedure */
                         $procedure->macLocalities()->attach($macLocality->id, ['modifier_id' => $macL['modifier_id'] ?? null]);
                     }
+
                     foreach ($macL['procedure_fees'] as $procedureFees => $value) {
                         if (isset($value)) {
                             /** insuranceType == Medicare */
@@ -367,50 +378,67 @@ class ProcedureRepository
                 }
             }
 
-            if (isset($data['procedure_considerations'])) {
-                if (isset($data['procedure_considerations']['gender_id']) &&
-                    isset($data['procedure_considerations']['age_init']) &&
-                    isset($data['procedure_considerations']['discriminatory_id'])) {
-                    ProcedureConsideration::updateOrCreate([
-                        'procedure_id' => $procedure->id,
-                    ], [
-                        'gender_id' => $data['procedure_considerations']['gender_id'],
-                        'age_init' => $data['procedure_considerations']['age_init'],
-                        'age_end' => $data['procedure_considerations']['age_end'] ?? null,
-                        'age_type' => $data['procedure_considerations']['age_type'] ?? 1,
-                        'discriminatory_id' => $data['procedure_considerations']['discriminatory_id'],
-                        'frequent_diagnoses' => $data['procedure_considerations']['frequent_diagnoses'] ?? [],
-                        'frequent_modifiers' => $data['procedure_considerations']['frequent_modifiers'] ?? [],
-                        'claim_note' => $data['procedure_considerations']['claim_note'] ?? false,
-                        'supervisor' => $data['procedure_considerations']['supervisor'] ?? false,
-                        'authorization' => $data['procedure_considerations']['authorization'] ?? false,
-                    ]);
-                }
-            }
-
-            if (isset($data['modifiers'])) {
-                $procedure->modifiers()->sync($data['modifiers']);
-            }
-
-            if (isset($data['diagnoses'])) {
-                $procedure->diagnoses()->sync($data['diagnoses']);
-            }
-
             DB::commit();
 
-            return Procedure::whereId($id)->first();
+            return Procedure::whereId($procedure->id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
-    public function updateProcedureNote(Procedure $procedure, string $note)
+    public function updateProcedureConsiderations(Procedure $procedure, array $data)
     {
-        $procedure->publicNote()->updateOrCreate([
-            'note' => $note,
-        ]);
+        try {
+            DB::beginTransaction();
+
+            $considetation = ProcedureConsideration::updateOrCreate([
+                'procedure_id' => $procedure->id,
+            ], [
+                'gender_id' => $data['gender_id'],
+                'age_init' => $data['age_init'],
+                'age_end' => $data['age_end'] ?? null,
+                'age_type' => $data['age_type'] ?? 1,
+                'discriminatory_id' => $data['discriminatory_id'],
+                'claim_note' => $data['claim_note'] ?? false,
+                'supervisor' => $data['supervisor'] ?? false,
+                'authorization' => $data['authorization'] ?? false,
+            ]);
+
+            $considetation->frecuentDiagnoses()->sync($data['frequent_diagnoses'] ?? []);
+            $considetation->frecuentModifiers()->sync($data['frequent_modifiers'] ?? []);
+
+            DB::commit();
+
+            return $procedure->load([
+                'procedureCosiderations' => function ($query) {
+                    $query->with(['frecuentDiagnoses', 'frecuentModifiers']);
+                },
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $e;
+        }
+    }
+
+    public function updateProcedureNote(Procedure $procedure, ?string $note)
+    {
+        PublicNote::query()->when(null !== $note, function (Builder $query) use ($procedure, $note): void {
+            $query->updateOrCreate([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ], [
+                'note' => $note,
+            ]);
+        },
+        function (Builder $query) use ($procedure): void {
+            $query->where([
+                'publishable_type' => Procedure::class,
+                'publishable_id' => $procedure->id,
+            ])->delete();
+        });
 
         return $procedure->load(['publicNote']);
     }
@@ -610,29 +638,40 @@ class ProcedureRepository
                     return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
                 }
             } else {
-                if ('' == $search) {
-                    return getList(
-                        Procedure::class,
-                        'code',
-                        ['relationship' => 'companies', 'where' => ['company_id' => $company_id]],
-                        null,
-                        ['description'],
-                        ['price']
-                    );
-                } else {
-                    return getList(
-                        Procedure::class,
-                        'code',
-                        [
-                            'whereRaw' => ['search' => $search],
-                            'relationship' => 'companies',
-                            'where' => ['company_id' => $company_id],
-                        ],
-                        null,
-                        ['description'],
-                        ['price']
-                    );
-                }
+                return Procedure::query()
+                    ->when(('' !== $search), function ($query) use ($search, $company_id) {
+                        $query->where(function ($query) use ($search, $company_id) {
+                            $query->whereHas('companies', function ($query) use ($company_id) {
+                                $query->where('company_id', $company_id);
+                            })->where('code', 'like', "%$search%");
+                        })
+                        ->orWhere(function ($query) use ($search) {
+                            $search = str_replace(['f', 'F'], '', $search);
+                            $query->whereJsonContains('clasifications->general', 2)
+                                ->where('code', 'like', "%$search%F");
+                        });
+                    }, function ($query) use ($company_id) {
+                        $query->whereHas('companies', function ($query) use ($company_id) {
+                            $query->where('company_id', $company_id);
+                        });
+                    })
+                    ->with(['companies' => function ($query) use ($company_id) {
+                        $query->where('company_id', $company_id)
+                            ->select('company_id', 'procedure_id', 'price');
+                    }])->get()
+                    ->sortByDesc(function ($procedure) use ($company_id) {
+                        $company = $procedure->companies->firstWhere('company_id', $company_id);
+                        return $company ? $company->pivot->price : 0;
+                    })
+                    ->map(function ($procedure) use ($company_id) {
+                        return [
+                            'id' => $procedure->id,
+                            'name' => $procedure->code,
+                            'description' => $procedure->description,
+                            'price' => $procedure->companies
+                                ->firstWhere('company_id', $company_id)?->pivot->price ?? 0,
+                        ];
+                    });
             }
         } catch (\Exception $e) {
             return [];

@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PermissionSeeder::class,
-            UserSeeder::class,
             FacilityTypeSeeder::class,
             ModifierSeeder::class,
             DiagnosisSeeder::class,
@@ -36,7 +35,11 @@ class DatabaseSeeder extends Seeder
             KeyboardShortcutSeeder::class,
             CountrySubdivisionSeeder::class,
             DataTestSeeder::class,
+            UserSeeder::class,
             ProcedureSeeder::class,
+            BillClassificationSeeder::class,
+            ConditionCodeSeeder::class,
+            DiagnosisRelatedGroupSeeder::class,
         ]);
     }
 }

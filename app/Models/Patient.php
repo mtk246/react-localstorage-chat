@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -117,6 +118,7 @@ class Patient extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $fillable = [
         'code',
@@ -130,7 +132,7 @@ class Patient extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'last_modified'];
+    protected $appends = ['user', 'status', 'last_modified'];
 
     /**
      * Patient belongs to MaritalStatus.
@@ -166,6 +168,11 @@ class Patient extends Model implements Auditable
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getUserAttribute(): User
+    {
+        return $this->user()->sole();
     }
 
     /**
@@ -346,8 +353,8 @@ class Patient extends Model implements Auditable
             return $query->whereHas('user', function ($q) use ($search): void {
                 $q->whereHas('profile', function ($qq) use ($search) {
                     $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
-                      ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
-                      ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
+                        ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
+                        ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
                 })->orWhereHas('billingCompanies', function ($qq) use ($search) {
                     $qq->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
                 })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
@@ -365,5 +372,16 @@ class Patient extends Model implements Auditable
             ->using(ContractFeePatient::class)
             ->withPivot('start_date', 'end_date')
             ->withTimestamps();
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'driver_license' => $this->driver_license,
+            'marital_status' => $this->maritalStatus->name,
+            'user.code' => $this->user?->usercode,
+            'user.mail' => $this->user?->email,
+        ];
     }
 }

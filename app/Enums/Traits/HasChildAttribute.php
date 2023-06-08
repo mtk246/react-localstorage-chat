@@ -10,7 +10,7 @@ trait HasChildAttribute
 {
     use HasAttributes;
 
-    public function getChild(): string
+    public function getChild(): ?string
     {
         return $this->getAttribute(ChildAttribute::class);
     }

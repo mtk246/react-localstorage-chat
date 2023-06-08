@@ -57,14 +57,15 @@
     - [Procedure/Service](/{{route}}/{{version}}/procedure)
 
 - ## Claim
-    - [Claim](/{{route}}/{{version}}/claim)
+    - [Professional](/{{route}}/{{version}}/claim/professional/claim)
+    - [Institutional](/{{route}}/{{version}}/claim/institutional/claim)
     - [Address](/{{route}}/{{version}}/address)
 
 - ## Claim Batch
-    - [Claim Batch](/{{route}}/{{version}}/claim-batch)
+    - [Claim Batch](/{{route}}/{{version}}/claim/claim-batch)
 
 - ## Claim Sub-status
-    - [Claim Sub-status](/{{route}}/{{version}}/claim-sub-status)
+    - [Claim Sub-status](/{{route}}/{{version}}/claim/claim-sub-status)
 
 - ## Taxonomy
     - [Taxonomy](/{{route}}/{{version}}/taxonomy)
@@ -72,8 +73,12 @@
 - ## Report
     - [Report](/{{route}}/{{version}}/report)
 
+- ## Spotlight
+    - [Spotlight](/{{route}}/{{version}}/spotlight)
+
 - ## Tableau
     - [Oauth](/{{route}}/{{version}}/tableau/oauth)
+
 - ## Reports
     - [get report data](/{{route}}/{{version}}/reports/get)
     - [update report](/{{route}}/{{version}}/reports/update)

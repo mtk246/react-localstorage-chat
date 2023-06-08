@@ -225,9 +225,9 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/change-status/{id}', [CompanyController::class, 'changeStatus']);
             Route::patch('/add-to-billing-company/{id}', [CompanyController::class, 'addToBillingCompany']);
             Route::patch('/add-facilities-to-company/{company}', [CompanyController::class, 'addFacilities']);
-            Route::patch('/add-services-to-company/{company}', [CompanyController::class, 'addServices']);
-            Route::patch('/add-copays-to-company/{company}', [CompanyController::class, 'addCompanyCopays']);
-            Route::patch('/add-contract-fees-to-company/{company}', [CompanyController::class, 'addCompanyContractFees']);
+            Route::patch('/{company}/services', [CompanyController::class, 'addServices']);
+            Route::patch('/{company}/copays', [CompanyController::class, 'addCompanyCopays']);
+            Route::patch('/{company}/contract-fees', [CompanyController::class, 'addCompanyContractFees']);
             Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
             Route::put('/{id}', [CompanyController::class, 'updateCompany']);
         });
@@ -404,6 +404,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
+        Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
         Route::get('/get-all-server', [\App\Http\Controllers\ProcedureController::class, 'getServerAll']);
         Route::get('/get-by-code/{code}', [\App\Http\Controllers\ProcedureController::class, 'getByCode']);
         Route::get('/get-list-mac-localities', [\App\Http\Controllers\ProcedureController::class, 'getListMacLocalities']);
@@ -415,11 +417,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-insurance-companies/{procedure_id?}', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceCompanies']);
         Route::get('/get-list-insurance-label-fees', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceLabelFees']);
         Route::get('/get-list/{company_id?}', [\App\Http\Controllers\ProcedureController::class, 'getList']);
-
-        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
-        Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
+        Route::get('/type', [\App\Http\Controllers\ProcedureController::class, 'getType']);
+        Route::get('/type/{type}/classification', [\App\Http\Controllers\ProcedureController::class, 'getClassifications']);
+        Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
+        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
+        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
-        Route::put('/{id}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
+        Route::put('/{procedure}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
+        Route::put('/{procedure}/considerations', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureConsiderations']);
         Route::put('/{procedure}/note', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureNote']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
         Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
@@ -443,7 +448,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         ])->group(function () {
             Route::get('/get-all-server', [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get('/get-all-server-claims', [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
-            Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'showReport']);
+            Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatch']);
             Route::get('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'getOneClaimBatch']);
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
@@ -454,14 +459,20 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);
-        Route::get('/get-list-rev-centers', [\App\Http\Controllers\ClaimController::class, 'getListRevCenters']);
+        Route::get('/get-list-revenue-codes', [\App\Http\Controllers\ClaimController::class, 'getListRevenueCodes']);
+        Route::get('/get-list-admission-types', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionTypes']);
+        Route::get('/get-list-admission-sources', [\App\Http\Controllers\ClaimController::class, 'getListAdmissionSources']);
+        Route::get('/get-list-patient-statuses', [\App\Http\Controllers\ClaimController::class, 'getListPatientStatuses']);
+        Route::get('/get-list-condition-codes', [\App\Http\Controllers\ClaimController::class, 'getListConditionCodes']);
+        Route::get('/get-list-bill-classifications', [\App\Http\Controllers\ClaimController::class, 'getListBillClassifications']);
+        Route::get('/get-list-diagnosis-related-groups', [\App\Http\Controllers\ClaimController::class, 'getListDiagnosisRelatedGroups']);
         Route::get('/get-list-type-formats', [\App\Http\Controllers\ClaimController::class, 'getListTypeFormats']);
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
-        Route::get('/get-list-qualifier-by-field/{field_id}', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
+        Route::get('/get-list-qualifier-by-field', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
-        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
+        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
         Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
@@ -527,7 +538,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
-    Route::get('/search', SearchController::class)->middleware('auth:api');
+    Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
+    Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
 });

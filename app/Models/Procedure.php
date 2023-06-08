@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Enum\ColorTypeCast;
+use App\Casts\Procedure\ClasificationsCast;
 use App\Enums\Procedure\ProcedureType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -82,6 +85,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Procedure extends Model implements Auditable
 {
+    use Searchable;
     use HasFactory;
     use AuditableTrait;
 
@@ -103,8 +107,8 @@ class Procedure extends Model implements Auditable
 
     /** @var array<key, string> */
     protected $casts = [
-        'type' => ProcedureType::class,
-        'clasifications' => 'array',
+        'type' => ColorTypeCast::class.':'.ProcedureType::class,
+        'clasifications' => ClasificationsCast::class,
         'active' => 'boolean',
     ];
 
@@ -242,7 +246,7 @@ class Procedure extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
@@ -251,5 +255,19 @@ class Procedure extends Model implements Auditable
     public function copays(): BelongsToMany
     {
         return $this->belongsToMany(Copay::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'public_note' => $this->publicNote?->note,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'short_description' => $this->short_description,
+            'description' => $this->description,
+            'type' => $this->type->value,
+            'clasifications' => $this->clasifications,
+        ];
     }
 }

@@ -9,7 +9,6 @@ use App\Http\Resources\Company\ServiceResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Models\Address;
-use App\Models\AddressType;
 use App\Models\Company;
 use App\Models\CompanyProcedure;
 use App\Models\Contact;
@@ -46,6 +45,7 @@ final class GetCompany
                 $contracFees = $company->contracFees()
                     ->with([
                         'procedures',
+                        'modifiers',
                         'patiens',
                         'macLocality',
                         'insuranceCompany',
@@ -70,6 +70,7 @@ final class GetCompany
                 $contracFees = $company->contracFees()
                     ->with([
                         'procedures',
+                        'modifiers',
                         'patiens',
                         'macLocality',
                         'insuranceCompany',
@@ -124,21 +125,18 @@ final class GetCompany
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ])->first();
                 $address = Address::where([
-                    'address_type_id' => null,
+                    'address_type_id' => '1',
                     'addressable_id' => $company->id,
                     'addressable_type' => Company::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ])->first();
-                $addressType = AddressType::where('name', 'Other')->first();
 
-                if (isset($addressType)) {
-                    $payment_address = Address::where([
-                        'address_type_id' => $addressType->id,
-                        'addressable_id' => $company->id,
-                        'addressable_type' => Company::class,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ])->first();
-                }
+                $payment_address = Address::where([
+                    'address_type_id' => '3',
+                    'addressable_id' => $company->id,
+                    'addressable_type' => Company::class,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ])->first();
 
                 $contact = Contact::where([
                     'contactable_id' => $company->id,

@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -54,6 +55,7 @@ class Diagnosis extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $table = 'diagnoses';
 
@@ -130,9 +132,20 @@ class Diagnosis extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-                         ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(description) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'code' => $this->code,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'description' => $this->description,
+            'public_note' => $this->publicNote?->note,
+        ];
     }
 }

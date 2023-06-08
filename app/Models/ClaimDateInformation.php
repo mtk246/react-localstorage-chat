@@ -61,17 +61,11 @@ class ClaimDateInformation extends Model implements Auditable
         'field_id',
         'qualifier_id',
         'physician_or_supplier_information_id',
+        'through',
+        'amount',
     ];
 
-    protected $with = ['field', 'qualifier'];
-
-    /**
-     * ClaimDateInformation belongs to Field.
-     */
-    public function field(): BelongsTo
-    {
-        return $this->belongsTo(TypeCatalog::class, 'field_id');
-    }
+    protected $with = ['qualifier'];
 
     /**
      * ClaimDateInformation belongs to Qualifier.

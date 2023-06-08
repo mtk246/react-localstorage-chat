@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -55,8 +56,6 @@ class ProcedureConsideration extends Model implements Auditable
         'age_end',
         'age_type',
         'discriminatory_id',
-        'frequent_diagnoses',
-        'frequent_modifiers',
         'claim_note',
         'supervisor',
         'authorization',
@@ -64,8 +63,6 @@ class ProcedureConsideration extends Model implements Auditable
 
     /** @var array<key, string> */
     protected $casts = [
-        'frequent_diagnoses' => 'array',
-        'frequent_modifiers' => 'array',
         'claim_note' => 'boolean',
         'supervisor' => 'boolean',
         'authorization' => 'boolean',
@@ -99,5 +96,15 @@ class ProcedureConsideration extends Model implements Auditable
     public function discriminatory()
     {
         return $this->belongsTo(Discriminatory::class);
+    }
+
+    public function frecuentDiagnoses(): BelongsToMany
+    {
+        return $this->belongsToMany(Diagnosis::class);
+    }
+
+    public function frecuentModifiers(): BelongsToMany
+    {
+        return $this->belongsToMany(Modifier::class);
     }
 }

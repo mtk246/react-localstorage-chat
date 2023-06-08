@@ -122,13 +122,13 @@ class FacilityRepository
                 $data['address']['addressable_type'] = Facility::class;
                 Address::create($data['address']);
             }
-            if (isset($data['contact']['email'])) {
+            if (isset($data['contact']['email']) || isset($data['contact']['phone']) || isset($data['contact']['fax'])) {
                 Contact::create([
-                    'contact_name' => $data['contact']['contac_name'],
-                    'phone' => $data['contact']['phone'],
-                    'fax' => $data['contact']['fax'],
-                    'email' => $data['contact']['email'],
-                    'mobile' => $data['contact']['mobile'],
+                    'contact_name' => $data['contact']['contact_name'] ?? null,
+                    'phone' => $data['contact']['phone'] ?? null,
+                    'fax' => $data['contact']['fax'] ?? null,
+                    'email' => $data['contact']['email'] ?? "",
+                    'mobile' => $data['contact']['mobile'] ?? null,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'contactable_id' => $facility->id,
                     'contactable_type' => Facility::class,
@@ -138,11 +138,12 @@ class FacilityRepository
             DB::commit();
 
             return $facility;
+
         } catch (\Exception $e) {
             DB::rollBack();
-
             return null;
         }
+        
     }
 
     /**
@@ -391,85 +392,89 @@ class FacilityRepository
             ])->first();
         }
 
-        $taxonomies = $facility->taxonomies;
-        $placeOfServices = $facility->placeOfServices;
+        if (!is_null($facility)) {
+            $taxonomies = $facility->taxonomies;
 
-        $record = [
-            'id' => $facility->id,
-            'code' => $facility->code,
-            'name' => $facility->name,
-            'npi' => $facility->npi,
-            'facility_type_id' => $facility->facility_type_id,
-            'facility_type' => $facility->facilityType->type,
-            'taxonomies' => $taxonomies ?? [],
-            'place_of_services' => $placeOfServices ?? [],
-            'verified_on_nppes' => $facility->verified_on_nppes,
-            'nppes_verified_at' => $facility->nppes_verified_at,
-            'created_at' => $facility->created_at,
-            'updated_at' => $facility->updated_at,
-            'last_modified' => $facility->last_modified,
-        ];
-        $record['billing_companies'] = [];
+            $record = [
+                'id' => $facility->id,
+                'code' => $facility->code,
+                'name' => $facility->name,
+                'npi' => $facility->npi,
+                'facility_type_id' => $facility->facility_type_id,
+                'facility_type' => $facility->facilityType->type,
+                'taxonomies' => $taxonomies ?? [],
+                'verified_on_nppes' => $facility->verified_on_nppes,
+                'nppes_verified_at' => $facility->nppes_verified_at,
+                'created_at' => $facility->created_at,
+                'updated_at' => $facility->updated_at,
+                'last_modified' => $facility->last_modified,
+            ];
+            $record['billing_companies'] = [];
 
-        foreach ($facility->billingCompanies as $billingCompany) {
-            $abbreviation = EntityAbbreviation::where([
-                'abbreviable_id' => $facility->id,
-                'abbreviable_type' => Facility::class,
-                'billing_company_id' => $billingCompany->id ?? $bC,
-            ])->first();
-            $nickname = EntityNickname::where([
-                'nicknamable_id' => $facility->id,
-                'nicknamable_type' => Facility::class,
-                'billing_company_id' => $billingCompany->id ?? $bC,
-            ])->first();
-            $address = Address::where([
-                'addressable_id' => $facility->id,
-                'addressable_type' => Facility::class,
-                'billing_company_id' => $billingCompany->id ?? $bC,
-            ])->first();
-            $contact = Contact::query()->where([
-                'contactable_id' => $facility->id,
-                'contactable_type' => Facility::class,
-                'billing_company_id' => $billingCompany->id ?? $bC,
-            ])->first();
-            $companies = $facility->companies()
-                ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+            foreach ($facility->billingCompanies as $billingCompany) {
+                $abbreviation = EntityAbbreviation::where([
+                    'abbreviable_id' => $facility->id,
+                    'abbreviable_type' => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $bC,
+                ])->first();
+                $nickname = EntityNickname::where([
+                    'nicknamable_id' => $facility->id,
+                    'nicknamable_type' => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $bC,
+                ])->first();
+                $address = Address::where([
+                    'addressable_id' => $facility->id,
+                    'addressable_type' => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $bC,
+                ])->first();
+                $contact = Contact::query()->where([
+                    'contactable_id' => $facility->id,
+                    'contactable_type' => Facility::class,
+                    'billing_company_id' => $billingCompany->id ?? $bC,
+                ])->first();
+                $companies = $facility->companies()
+                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
 
-            if (isset($address)) {
-                $facility_address = [
-                    'zip' => $address->zip,
-                    'city' => $address->city,
-                    'state' => $address->state,
-                    'address' => $address->address,
-                    'country' => $address->country,
-                ];
+                $placeOfServices = $facility->placeOfServices()
+                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+
+                if (isset($address)) {
+                    $facility_address = [
+                        'zip' => $address->zip,
+                        'city' => $address->city,
+                        'state' => $address->state,
+                        'address' => $address->address,
+                        'country' => $address->country,
+                    ];
+                }
+
+                if (isset($contact)) {
+                    $facility_contact = [
+                        'fax' => $contact->fax,
+                        'email' => $contact->email,
+                        'phone' => $contact->phone,
+                        'mobile' => $contact->mobile,
+                        'contact_name' => $contact->contact_name,
+                    ];
+                }
+
+                array_push($record['billing_companies'], [
+                    'id' => $billingCompany->id,
+                    'name' => $billingCompany->name,
+                    'code' => $billingCompany->code,
+                    'abbreviation' => $billingCompany->abbreviation,
+                    'private_facility' => [
+                        'status' => $billingCompany->pivot->status ?? false,
+                        'edit_name' => isset($nickname->nickname) ? true : false,
+                        'nickname' => $nickname->nickname ?? '',
+                        'abbreviation' => $abbreviation->abbreviation ?? '',
+                        'companies' => CompanyResource::collection($companies),
+                        'address' => isset($facility_address) ? $facility_address : null,
+                        'contact' => isset($facility_contact) ? $facility_contact : null,
+                        'place_of_services' => $placeOfServices ?? [],
+                    ],
+                ]);
             }
-
-            if (isset($contact)) {
-                $facility_contact = [
-                    'fax' => $contact->fax,
-                    'email' => $contact->email,
-                    'phone' => $contact->phone,
-                    'mobile' => $contact->mobile,
-                    'contact_name' => $contact->contact_name,
-                ];
-            }
-
-            array_push($record['billing_companies'], [
-                'id' => $billingCompany->id,
-                'name' => $billingCompany->name,
-                'code' => $billingCompany->code,
-                'abbreviation' => $billingCompany->abbreviation,
-                'private_facility' => [
-                    'status' => $billingCompany->pivot->status ?? false,
-                    'edit_name' => isset($nickname->nickname) ? true : false,
-                    'nickname' => $nickname->nickname ?? '',
-                    'abbreviation' => $abbreviation->abbreviation ?? '',
-                    'companies' => CompanyResource::collection($companies),
-                    'address' => isset($facility_address) ? $facility_address : null,
-                    'contact' => isset($facility_contact) ? $facility_contact : null,
-                ],
-            ]);
         }
 
         return !is_null($facility) ? $record : null;

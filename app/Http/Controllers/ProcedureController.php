@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Procedure\ProcedureType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Company\AddProcedureRequest;
+use App\Http\Requests\Procedure\ProcedureConsiderationsUpdateRequest;
 use App\Http\Requests\Procedure\ProcedureCreateRequest;
 use App\Http\Requests\Procedure\ProcedureNoteUpdateRequest;
 use App\Http\Requests\Procedure\ProcedureUpdateRequest;
@@ -61,16 +62,23 @@ class ProcedureController extends Controller
         return $this->procedureRepository->getServerAllProcedures($request);
     }
 
-    public function updateProcedure(ProcedureUpdateRequest $request, int $id): JsonResponse
+    public function updateProcedure(ProcedureUpdateRequest $request, Procedure $procedure): JsonResponse
     {
-        $rs = $this->procedureRepository->updateProcedure($request->validated(), $id);
+        $rs = $this->procedureRepository->updateProcedure($request->validated(), $procedure);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
+    }
+
+    public function updateProcedureConsiderations(ProcedureConsiderationsUpdateRequest $request, Procedure $procedure): JsonResponse
+    {
+        $rs = $this->procedureRepository->updateProcedureConsiderations($procedure, $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure'), 400);
     }
 
     public function updateProcedureNote(ProcedureNoteUpdateRequest $request, Procedure $procedure): JsonResponse
     {
-        $rs = $this->procedureRepository->updateProcedureNote($procedure, $request->validated()?->note ?? '');
+        $rs = $this->procedureRepository->updateProcedureNote($procedure, $request->validated()["note"]);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating procedure note'), 400);
     }
