@@ -224,8 +224,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return $e;
+            return null;
         }
     }
 
@@ -638,7 +637,6 @@ class ClaimRepository
                 }
             }
 
-
             if (isset($data['will_report_injuries'])) {
                 if (isset($data['injuries'])) {
                     $injuries = $claim->injuries;
@@ -687,11 +685,9 @@ class ClaimRepository
                 }
             }
             DB::commit();
-
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
-
             return null;
         }
     }
