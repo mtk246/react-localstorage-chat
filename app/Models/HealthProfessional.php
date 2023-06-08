@@ -97,7 +97,7 @@ class HealthProfessional extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
+    protected $appends = ['user', 'status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
 
     /**
      * HealthProfessional belongs to User.
@@ -107,6 +107,11 @@ class HealthProfessional extends Model implements Auditable
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getUserAttribute(): User
+    {
+        return $this->user()->sole();
     }
 
     public function company()
