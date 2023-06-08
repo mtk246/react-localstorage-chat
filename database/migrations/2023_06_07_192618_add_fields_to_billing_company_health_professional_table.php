@@ -12,8 +12,18 @@ return new class() extends Migration {
         Schema::table('billing_company_health_professional', function (Blueprint $table) {
             $table->string('npi_company')->nullable();
             $table->boolean('is_provider')->default(false);
-            $table->foreignId('company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
-            $table->foreignId('health_professional_type_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id', 'bchp_company_id_fk')->references('id')
+                ->on('companies')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+
+            $table->unsignedBigInteger('health_professional_type_id')->nullable();
+            $table->foreign('health_professional_type_id', 'bchp_health_professional_type_id_fk')->references('id')
+                ->on('health_professional_types')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 
