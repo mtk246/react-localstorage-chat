@@ -252,12 +252,21 @@ class DoctorRepository
             }
 
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
-                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany, [
+                    'is_provider' => $data['is_provider'] ?? false,
+                    'npi_company' => $data['npi_company'] ?? '',
+                    'company_id' => $company->id ?? $data['company_id'],
+                    'health_professional_type_id' => $data['health_professional_type_id']
+                ]);
             } else {
                 $healthP->billingCompanies()->updateExistingPivot(
                     $billingCompany->id ?? $billingCompany,
                     [
                         'status' => true,
+                        'is_provider' => $data['is_provider'] ?? false,
+                        'npi_company' => $data['npi_company'] ?? '',
+                        'company_id' => $company->id ?? $data['company_id'],
+                        'health_professional_type_id' => $data['health_professional_type_id']
                     ]
                 );
             }
@@ -368,7 +377,12 @@ class DoctorRepository
             ]);
 
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
-                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+                $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany, [
+                    'is_provider' => $data['is_provider'] ?? false,
+                    'npi_company' => $data['npi_company'] ?? '',
+                    'company_id' => $data['company_id'] ?? null,
+                    'health_professional_type_id' => $data['health_professional_type_id']
+                ]);
             } else {
                 $healthP->billingCompanies()->updateExistingPivot(
                     $billingCompany->id ?? $billingCompany,
