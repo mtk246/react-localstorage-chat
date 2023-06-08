@@ -599,28 +599,36 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($order_values);
             }
 
-            $claimStatus = ClaimStatus::whereStatus('Draft')->first();
-            $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
-                'claim_id' => $claim->id,
-                'claim_status_type' => ClaimStatus::class,
-                'claim_status_id' => $claimStatus->id,
-            ]);
-            if (isset($data['private_note'])) {
-                PrivateNote::updateOrCreate([
-                    'publishable_type' => ClaimStatusClaim::class,
-                    'publishable_id' => $claimStatusClaim->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'note' => $data['private_note'],
-                ]);
+            if (isset($data['draft'])) {
+                $status = $claim->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
+                    ->orderBy('id', 'desc')->first() ?? null;
+                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+                if ($status->claimStatus->id != $claimStatus->id) {
+                    $claimStatusClaim = ClaimStatusClaim::create([
+                        'claim_id' => $claim->id,
+                        'claim_status_type' => ClaimStatus::class,
+                        'claim_status_id' => $claimStatus->id,
+                    ]);
+                }
+                if (isset($data['private_note'])) {
+                    PrivateNote::updateOrCreate([
+                        'publishable_type' => ClaimStatusClaim::class,
+                        'publishable_id' => $claimStatusClaim->id ?? $status->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ], [
+                        'note' => $data['private_note'],
+                    ]);
+                }
+                if (isset($data['sub_status_id'])) {
+                    $this->changeStatus([
+                        'status_id' => $claimStatus->id,
+                        'sub_status_id' => $data['sub_status_id'],
+                        'private_note' => $data['private_note'] ?? '',
+                    ], $claim->id);
+                }
             }
-            if (isset($data['sub_status_id'])) {
-                $this->changeStatus([
-                    'status_id' => $claimStatus->id,
-                    'sub_status_id' => $data['sub_status_id'],
-                    'private_note' => $data['private_note'] ?? '',
-                ], $claim->id);
-            }
+
 
             if (isset($data['will_report_injuries'])) {
                 if (isset($data['injuries'])) {
