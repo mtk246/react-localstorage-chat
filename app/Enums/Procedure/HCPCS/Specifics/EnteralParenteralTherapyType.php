@@ -6,40 +6,35 @@ namespace App\Enums\Procedure\HCPCS\Specifics;
 
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Attributes\RangeAttribute;
+use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
-use App\Enums\Traits\HasColorAttributes;
+use App\Enums\Traits\HasRangeAttribute;
+use App\Enums\Traits\HasTypeAttributes;
 
-enum EnteralParenteralTherapyType: int implements TypeInterface
+enum EnteralParenteralTherapyType: int implements ProcedureClassificationInterface
 {
-    use HasColorAttributes;
+    use HasTypeAttributes;
     use HasChildAttribute;
+    use HasRangeAttribute;
 
-    // Anesthesia for Procedures on the Head
-    // Anesthesia for Procedures on the Neck
-    // Anesthesia for Procedures on the Thorax (Chest Wall and Shoulder Girdle)
-    // Anesthesia for Intrathoracic Procedures
-    // Anesthesia for Procedures on the Spine and Spinal Cord
-    // Anesthesia for Procedures on the Upper Abdomen
-    // Anesthesia for Procedures on the Lower Abdomen
-    // Anesthesia for Procedures on the Perineum
-    // Anesthesia for Procedures on the Pelvis (Except Hip)
-    // Anesthesia for Procedures on the Upper Leg (Except Knee)
-    // Anesthesia for Procedures on the Knee and Popliteal Area
-    // Anesthesia for Procedures on the Lower Leg (Below Knee)
-    // Anesthesia for Procedures on the Shoulder and Axilla
-    // Anesthesia for Procedures on the Upper Arm and Elbow
-    // Anesthesia for Procedures on the Forearm, Wrist, and Hand
-    // Anesthesia for Radiological Procedures
-    // Anesthesia for Burn Excisions or Debridement Procedures
-    // Anesthesia for Obstetric Procedures
-    // Anesthesia for Other Procedures
-    //
-    // #[NameAttribute(':name:')]
-    // #[PublicAttribute(true)]
-    // case :capitalize_name: = :id:;
-
-    #[NameAttribute('Anesthesia for Procedures on the Head')]
+    #[NameAttribute('Enteral Feeding Supplies and Equipment')]
+    #[RangeAttribute('B4034', 'B4088')]
     #[PublicAttribute(true)]
-    case PROCEDURES_ON_HEAD = 1;
+    case ENTERAL_FEEDING_SUPPLIES_EQUIPMENT = 1;
+
+    #[NameAttribute('Enteral Formulas and Additives')]
+    #[RangeAttribute('B4100', 'B4162')]
+    #[PublicAttribute(true)]
+    case ENTERAL_FORMULAS_ADDITIVES = 2;
+
+    #[NameAttribute('Parenteral Solutions and Supplies')]
+    #[RangeAttribute('B4164', 'B5200')]
+    #[PublicAttribute(true)]
+    case PARENTERAL_SOLUTIONS_SUPPLIES = 3;
+
+    #[NameAttribute('Nutrition Infusion Pumps and Supplies Not Otherwise Classified, NOC')]
+    #[RangeAttribute('B9002', 'B9999')]
+    #[PublicAttribute(true)]
+    case NUTRITION_INFUSION_PUMPS_SUPPLIES_NOT_OTHERWISE_CLASSIFIED_NOC = 4;
 }

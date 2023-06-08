@@ -224,8 +224,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return $e;
+            return null;
         }
     }
 
@@ -599,27 +598,43 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($order_values);
             }
 
-            $claimStatus = ClaimStatus::whereStatus('Draft')->first();
-            $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
-                'claim_id' => $claim->id,
-                'claim_status_type' => ClaimStatus::class,
-                'claim_status_id' => $claimStatus->id,
-            ]);
-            if (isset($data['private_note'])) {
-                PrivateNote::updateOrCreate([
-                    'publishable_type' => ClaimStatusClaim::class,
-                    'publishable_id' => $claimStatusClaim->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'note' => $data['private_note'],
-                ]);
-            }
-            if (isset($data['sub_status_id'])) {
-                $this->changeStatus([
-                    'status_id' => $claimStatus->id,
-                    'sub_status_id' => $data['sub_status_id'],
-                    'private_note' => $data['private_note'] ?? '',
-                ], $claim->id);
+            if (isset($data['draft'])) {
+                $status = $claim->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
+                    ->orderBy('id', 'desc')->first() ?? null;
+                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+                if ($status->claimStatus->id != $claimStatus->id) {
+                    $claimStatusClaim = ClaimStatusClaim::create([
+                        'claim_id' => $claim->id,
+                        'claim_status_type' => ClaimStatus::class,
+                        'claim_status_id' => $claimStatus->id,
+                    ]);
+                    if (isset($data['private_note'])) {
+                        if (isset($data['private_note'])) {
+                            PrivateNote::create([
+                                'publishable_type' => ClaimStatusClaim::class,
+                                'publishable_id' => $claimStatusClaim->id,
+                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                                'note' => $data['private_note'],
+                            ]);
+                        }
+                    }
+                } else {
+                    PrivateNote::updateOrCreate([
+                        'publishable_type' => ClaimStatusClaim::class,
+                        'publishable_id' => $status->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ], [
+                        'note' => $data['private_note'],
+                    ]);
+                }
+                if (isset($data['sub_status_id'])) {
+                    $this->changeStatus([
+                        'status_id' => $claimStatus->id,
+                        'sub_status_id' => $data['sub_status_id'],
+                        'private_note' => $data['private_note'] ?? '',
+                    ], $claim->id);
+                }
             }
 
             if (isset($data['will_report_injuries'])) {
@@ -670,11 +685,9 @@ class ClaimRepository
                 }
             }
             DB::commit();
-
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
-
             return null;
         }
     }
@@ -1729,6 +1742,18 @@ class ClaimRepository
                 'K' => 11,
                 'L' => 12,
             ];
+            $qualifierFields = [
+                '431' => 'symptomDate',
+                '304' => 'lastSeenDate',
+                '444' => 'firstContactDate',
+                '453' => 'acuteManifestationDate',
+                '439' => 'accidentDate',
+                '455' => 'lastXRayDate',
+                '090' => 'assumedAndRelinquishedCareBeginDate',
+                '091' => 'assumedAndRelinquishedCareEndDate',
+                '454' => 'initialTreatmentDate',
+                '471' => 'hearingAndVisionPrescriptionDate',
+            ];
             DB::beginTransaction();
             $data = [
                 'sandbox' => [
@@ -2004,6 +2029,25 @@ class ClaimRepository
                     ];
                 }
 
+                $claimDateInfo = [];
+                foreach ($claim->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations ?? [] as $dateInfo) {
+                    $qualifier = $dateInfo?->qualifier?->code ?? '';
+                    if (isset($qualifierFields[$qualifier])) {
+                        if (1 == $dateInfo->field_id) {
+                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
+                        } else if (2 == $dateInfo->field_id) {
+                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
+                        } else if (3 == $dateInfo->field_id) {
+                            $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
+                            $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
+                        } else if (4 == $dateInfo->field_id) {
+                            $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
+                            $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
+                        }
+                    }
+
+                }
+
                 $dataReal = [
                     'controlNumber' => $claim->control_number,
                     'tradingPartnerServiceId' => '9496', /* Caso de prueba */
@@ -2078,6 +2122,9 @@ class ClaimRepository
                 ];
                 if (isset($referred)) {
                     array_push($dataReal['providers'], $referred);
+                }
+                if (isset($claimDateInfo)) {
+                    $dataReal['claimInformation']['claimDateInformation'] = $claimDateInfo;
                 }
 
                 $response = Http::withToken($token)->acceptJson()->post(
