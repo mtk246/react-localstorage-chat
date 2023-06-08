@@ -8,8 +8,7 @@ use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Attributes\RangeAttribute;
-use App\Enums\Interfaces\HasChildInterface;
-use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Procedure\HCPCS\Specifics\AdmMisInvType;
 use App\Enums\Procedure\HCPCS\Specifics\AlcoholDrugTreatmentType;
 use App\Enums\Procedure\HCPCS\Specifics\DMEMACType;
@@ -33,7 +32,7 @@ use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasRangeAttribute;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements TypeInterface, HasChildInterface
+enum GeneralType: int implements ProcedureClassificationInterface
 {
     use HasTypeAttributes;
     use HasChildAttribute;
