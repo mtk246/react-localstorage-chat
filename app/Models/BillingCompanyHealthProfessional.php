@@ -18,7 +18,7 @@ final class BillingCompanyHealthProfessional extends Pivot
      */
     public $incrementing = true;
 
-    protected $table = "billing_company_health_professional";
+    protected $table = 'billing_company_health_professional';
 
     protected $fillable = [
         'status',
@@ -27,7 +27,7 @@ final class BillingCompanyHealthProfessional extends Pivot
         'npi_company',
         'is_provider',
         'company_id',
-        'health_professional_type_id'
+        'health_professional_type_id',
     ];
 
     public function healthProfessional()
