@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -53,7 +53,9 @@ class ClaimController extends Controller
      */
     public function updateAsDraft(ClaimDraftRequest $request, $id)
     {
-        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+        $data = $request->validated();
+        $data['draft'] = true;
+        $rs = $this->claimRepository->updateClaim($data, $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
     }
