@@ -28,7 +28,7 @@ final class PreviewResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $typeFormat = $this->resource->claimFormattable?->typeForm?->form;
+        $typeFormat = $this->resource?->claimFormattable?->typeForm?->form ?? $request->format ?? '';
 
         return ('UB-04 / 837I' == $typeFormat)
             ? $this->getUB04PreviewResource($request)
