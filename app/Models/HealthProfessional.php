@@ -97,7 +97,7 @@ class HealthProfessional extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
+    protected $appends = ['user', 'status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
 
     /**
      * HealthProfessional belongs to User.
@@ -109,12 +109,17 @@ class HealthProfessional extends Model implements Auditable
         return $this->belongsTo(User::class);
     }
 
+    public function getUserAttribute(): User
+    {
+        return $this->user()->sole();
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    /**
+    /** private data
      * HealthProfessional belongs to HealthProfessionalType.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -151,7 +156,10 @@ class HealthProfessional extends Model implements Auditable
      */
     public function billingCompanies()
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(BillingCompanyHealthProfessional::class)
+            ->withPivot(['status', 'npi_company', 'is_provider', 'company_id', 'health_professional_type_id'])
+            ->withTimestamps();
     }
 
     /**

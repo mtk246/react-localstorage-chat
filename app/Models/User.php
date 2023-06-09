@@ -191,7 +191,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['billing_company_id', 'billing_company', 'last_modified'];
+    protected $appends = ['profile', 'billing_company_id', 'billing_company', 'last_modified'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -224,6 +224,14 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function profile(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Profile::class);
+    }
+
+    /**
+     * User belongs to Profile.
+     */
+    public function getProfileAttribute(): Profile
+    {
+        return $this->profile()->sole();
     }
 
     /**
