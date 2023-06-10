@@ -38,9 +38,9 @@ final class DoctorBodyResource extends JsonResource
                 ->map(function ($model) {
                     $model->private_health_professional = [
                         'socialMedias' => $this->getSocialMedias($model->id),
-                        'addresses' => $this->getAddresses($model->id),
-                        'contacts' => $this->getContacts($model->id),
-                        'privateNotes' => $this->getPrivateNotes($model->id),
+                        'address' => $this->getAddress($model->id),
+                        'contact' => $this->getContact($model->id),
+                        'privateNote' => $this->getPrivateNote($model->id),
 
                         /* @todo Mapear esta información como data privada */
                         'is_provider' => $this->resource->is_provider,
@@ -72,32 +72,32 @@ final class DoctorBodyResource extends JsonResource
             );
     }
 
-    private function getAddresses(int $billingCompanyId): Collection
+    private function getAddress(int $billingCompanyId)
     {
         return $this->resource
             ->user
             ->addresses
             ->filter(
                 fn ($address) => $address->billing_company_id === $billingCompanyId,
-            );
+            )[0] ?? null;
     }
 
-    private function getContacts(int $billingCompanyId): Collection
+    private function getContact(int $billingCompanyId)
     {
         return $this->resource
             ->user
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            );
+            )[0] ?? null;
     }
 
-    private function getPrivateNotes(int $billingCompanyId): Collection
+    private function getPrivateNote(int $billingCompanyId)
     {
         return $this->resource
             ->privateNotes
             ->filter(
                 fn ($privateNote) => $privateNote->billing_company_id === $billingCompanyId,
-            );
+            )[0] ?? null;
     }
 }
