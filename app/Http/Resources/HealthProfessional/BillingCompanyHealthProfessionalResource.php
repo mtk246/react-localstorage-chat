@@ -26,7 +26,7 @@ final class BillingCompanyHealthProfessionalResource extends JsonResource
             'company_id' => $this->resource->company_id,
             'status' => $this->resource->status,
             'billing_companies' => $this->resource->billingCompanies,
-            'companies' => $this->resource->companies
+            'companies' => $this->resource->companies,
         ];
     }
 }
