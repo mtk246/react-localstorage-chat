@@ -40,9 +40,6 @@ final class ClaimPreviewService implements ReportInterface
     /** Establece si el reporte pdf a generar va ser visualización o impresión */
     private bool $print;
 
-    /** @var string|null Tipo de formato del reporte */
-    private mixed $typeForm;
-
     /** @var \App\Http\Resources\Claim\PreviewResource|null Contenido del reporte pdf */
     private mixed $data;
 
@@ -51,7 +48,7 @@ final class ClaimPreviewService implements ReportInterface
      *
      * @param PDF $pdf the PDF object to be used
      */
-    public function __construct(private PDF $pdf)
+    public function __construct(private PDF $pdf, private string $backgroundFile = '', private string $typeForm = '')
     {
     }
 
@@ -84,14 +81,12 @@ final class ClaimPreviewService implements ReportInterface
         $this->print = $params['print'] ?? false;
         $this->data = $params['data'] ?? [];
 
-        $typeForm = TypeForm::find($params['typeFormat']);
+        $this->typeForm = TypeForm::find($params['typeFormat'] ?? null)?->form ?? '';
 
-        if (isset($typeForm)) {
-            if ('CMS-1500 / 837P' === $typeForm->form) {
-                $this->typeForm = 'CMS-1500_837P_1';
-            } elseif ('UB-04 / 837I' === $typeForm->form) {
-                $this->typeForm = 'UB-04_837I_1';
-            }
+        if ('CMS-1500 / 837P' === $this->typeForm) {
+            $this->backgroundFile = 'CMS-1500_837P_1_v3.png';
+        } elseif ('UB-04 / 837I' === $this->typeForm) {
+            $this->backgroundFile = 'UB-04_837I_1.jpg';
         }
 
         $this->pdf->SetAuthor(__('BegentoOS - :app', ['app' => config('app.name')]));
@@ -115,21 +110,16 @@ final class ClaimPreviewService implements ReportInterface
         $print = $this->print;
         $urlVerify = $this->urlVerify;
         $qrCodeStyle = $this->qrCodeStyle;
-        $hasQR = ('UB-04_837I_1' === $this->typeForm) ? false : $hasQR;
+        $hasQR = ('CMS-1500 / 837P' === $this->typeForm) ?: false;
 
         $pdf->setHeaderCallback(function ($pdf) use ($print, $hasQR, $urlVerify, $qrCodeStyle): void {
             $pdf->SetAutoPageBreak(false, 0);
-
             if (!$print) {
-                if (isset($this->typeForm)) {
-                    if ('CMS-1500_837P_1' === $this->typeForm) {
-                        $imgFile = storage_path('pictures').'/CMS-1500_837P_1_v3.png';
-                    } elseif ('UB-04_837I_1' === $this->typeForm) {
-                        $imgFile = storage_path('pictures').'/UB-04_837I_1.jpg';
-                    }
-                }
+                $imgFile = ('' !== $this->backgroundFile) ? storage_path('pictures').'/'.$this->backgroundFile : null;
 
-                $pdf->Image($imgFile, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+                if (isset($imgFile)) {
+                    $pdf->Image($imgFile, 0, 0, 216, 280, '', '', '', false, 300, '', false, false, 0);
+                }
 
                 if ($hasQR && null !== $urlVerify) {
                     $pdf->write2DBarcode(
@@ -169,9 +159,9 @@ final class ClaimPreviewService implements ReportInterface
     ): object|string|null {
         $this->pdf->AddPage($this->orientation, $this->format);
 
-        $previewFields = ('CMS-1500_837P_1' === $this->typeForm)
+        $previewFields = ('CMS-1500 / 837P' === $this->typeForm)
             ? config('claim.preview_837p')
-            : (('UB-04_837I_1' === $this->typeForm)
+            : (('UB-04 / 837I' === $this->typeForm)
                 ? config('claim.preview_837i')
                 : []);
 
@@ -179,19 +169,19 @@ final class ClaimPreviewService implements ReportInterface
             if (isset($value['properties'])) {
                 $this->setData($value['properties'], $fieldName);
             } elseif (isset($value['options']) && 1 === count($value)) {
-                $this->setData($value['options'][$this->data[$fieldName]]['properties'], $fieldName, null, 'X');
+                if (isset($value['options'][$this->data[$fieldName]]['properties'])) {
+                    $this->setData($value['options'][$this->data[$fieldName]]['properties'], $fieldName, null, 'X');
+                }
             } else {
                 foreach ($value as $key => $val) {
                     if ('options' === $key) {
                         if (isset($val[$this->data[$fieldName]['value']]['properties'])) {
                             $this->setData($val[$this->data[$fieldName]['value']]['properties'], $fieldName, null, 'X');
                         }
-                    } elseif (isset($val['options'])) {
-                        if (isset($val['options'][$this->data[$fieldName][$key]])) {
-                            $this->setData($val['options'][$this->data[$fieldName][$key]]['properties'], $fieldName, null, 'X');
-                        }
-                    } else {
+                    } elseif (isset($val['properties'])) {
                         $this->setData($val['properties'], $fieldName, $key);
+                    } elseif (isset($val['options'][$this->data[$fieldName][$key]]['properties'])) {
+                        $this->setData($val['options'][$this->data[$fieldName][$key]]['properties'], $fieldName, null, 'X');
                     }
                 }
             }
