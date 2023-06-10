@@ -19,10 +19,15 @@ final class StoreCompanyAction
     public function invoke(Collection $companies, HealthProfessional $doctor): AnonymousResourceCollection
     {
         return DB::transaction(function () use ($companies, $doctor): AnonymousResourceCollection {
-            $companies->mapToGroups(
+            $groups = $companies->mapToGroups(
                 fn (StoreCompanyRequestCast $services) => [$services->getBillingCompanyId() => $services]
-            )
-            ->each(
+            );
+            if (Gate::allows('is-admin')) {
+                $doctor->companies()
+                    ->wherePivotNotIn('billing_company_id', $groups->keys()->toArray())
+                    ->detach();
+            }
+            $groups->each(
                 fn (Collection $services, int $billingCompanyId) => $this->syncCompanies($doctor, $services, $billingCompanyId)
             );
 
@@ -39,7 +44,7 @@ final class StoreCompanyAction
 
     private function syncCompanies(HealthProfessional $doctor, Collection $companies, int $billingCompanyId): void
     {
-        $validIds = $companies->map(fn (StoreCompanyRequestCast $services) => $services->getId());
+        $validIds = $companies->map(fn (StoreCompanyRequestCast $services) => $services->getId() ?? 0);
 
         $doctor->companies()
             ->wherePivot('health_professional_id', $doctor->id)
