@@ -397,7 +397,7 @@ class Claim extends Model implements Auditable
             $record['claim_sub_statuses'] = getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $record->id]]);
         }
 
-        return $record;
+        return $record ?? null;
     }
 
     public function getNotesHistoryAttribute()
@@ -617,7 +617,38 @@ class Claim extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query;
+        return $query->when($search, function ($query, $search) {
+            return $query
+            ->where('control_number', $search)
+            ->orWhere(function ($query) use ($search) {
+                $query->with(['patient.user.profile', 'company'])
+                    ->whereHas('patient.user.profile', function ($q) use ($search) {
+                        $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
+                            ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
+                            ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
+                    })
+                    ->orWhereHas('company', function ($q) use ($search) {
+                        $q->whereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")]);
+                    });
+                })
+            ->orWhere(function ($query) use ($search) {
+                $query->with('claimFormattable.claimFormServices')
+                    ->orWhereHas('claimFormattable.claimFormServices', function ($subQuery) use ($search) {
+                        $subQuery->when($search, function ($query, $search) {
+                            return $query->where(function ($query) use ($search) {
+                                $query->where('from_service', 'LIKE', "%$search%");
+                            });
+                        })
+                        ->orderBy('from_service')
+                        ->limit(1);
+                    });
+            })
+            ->orWhereHas('insurancePolicies', function ($q) use ($search) {
+                $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
+                    $qq->where('code', 'LIKE', "%$search%");
+                });
+            });
+        });
     }
 
     public function toSearchableArray()
