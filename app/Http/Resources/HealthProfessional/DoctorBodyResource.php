@@ -45,10 +45,10 @@ final class DoctorBodyResource extends JsonResource
                         'privateNote' => $this->getPrivateNote($model->id),
                         'is_provider' => $model->pivot->is_provider,
                         'npi_company' => $model->pivot->npi_company,
-                        'health_professional_type_id' => $model->pivot?->health_professional_type_id,
+                        'health_professional_type_id' => $this->getHealthProfessionalTypeId($model->id)['id'],
                         'health_professional_type' => $this->getHealthProfessionalTypeId($model->id),
-                        'company_id' => $model->pivot->company_id,
-                        'company' => $this->getCompany($model->pivot->company_id)
+                        'company_id' => $model->pivotcompany_id,
+                        'company' => $this->getCompany($model->pivot->company_id, $model->id)
                     ];
 
                     return $model;
@@ -99,10 +99,9 @@ final class DoctorBodyResource extends JsonResource
     private function getHealthProfessionalTypeId(int $billingCompanyId)
     {
         $hpt =  HealthProfessionalType::where('health_professional_id', $this->resource->id)
-            ->where('billing_company_id', $billingCompanyId)->first();
+            ->where('billing_company_id', $billingCompanyId)->first()->type;
 
-        return $this->getHealthProfessionalType($hpt->id);
-
+        return $this->getHealthProfessionalType((int)$hpt);
         
     }
 
@@ -118,14 +117,16 @@ final class DoctorBodyResource extends JsonResource
             : null;
     }
 
-    private function getCompany(int $companyId)
+    private function getCompany(?int $companyId, int $billingCompanyId)
     {
         $company = Company::find($companyId);
 
         return [
             'id' => $company->id,
             'name' => $company->name,
-            'nickname' => $company->nicknames[0]->nickname ?? null,
+            'nickname' => $company->nicknames->filter(
+                fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
+            )[0]->nickname ?? null,
             'taxonomies' => $company->taxonomies ?? [],
         ];
     }
