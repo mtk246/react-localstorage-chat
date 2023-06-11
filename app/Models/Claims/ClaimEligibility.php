@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\v2;
+namespace App\Models\Claims;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
