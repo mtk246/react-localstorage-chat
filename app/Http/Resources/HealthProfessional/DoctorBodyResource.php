@@ -9,7 +9,7 @@ use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 /**  @property HealthProfessional $resource */
 final class DoctorBodyResource extends JsonResource
 {
@@ -22,7 +22,7 @@ final class DoctorBodyResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            /*'npi' => $this->resource->npi,
+            'npi' => $this->resource->npi,
             'user_id' => $this->resource->user_id,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
@@ -35,7 +35,7 @@ final class DoctorBodyResource extends JsonResource
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
-            'public_note' => $this->resource->publicNote,*/
+            'public_note' => $this->resource->publicNote,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $model->private_health_professional = [
@@ -45,8 +45,8 @@ final class DoctorBodyResource extends JsonResource
                         'privateNote' => $this->getPrivateNote($model->id),
                         'is_provider' => $model->pivot->is_provider,
                         'npi_company' => $model->pivot->npi_company,
-                        'health_professional_type_id' => $model->pivot->health_professional_type_id,
-                        'health_professional_type' => $this->getHpt($model->pivot->billing_company_id),
+                        'health_professional_type_id' => $model->pivot?->health_professional_type_id,
+                        'health_professional_type' => $this->getHealthProfessionalTypeId($model->id),
                         'company_id' => $model->pivot->company_id,
                         'company' => $this->getCompany($model->pivot->company_id)
                     ];
@@ -96,10 +96,26 @@ final class DoctorBodyResource extends JsonResource
             )[0] ?? null;
     }
 
-    private function getHpt(int $billingCompanyId)
+    private function getHealthProfessionalTypeId(int $billingCompanyId)
     {
-        return HealthProfessionalType::where('health_professional_id', $this->resource->id)
+        $hpt =  HealthProfessionalType::where('health_professional_id', $this->resource->id)
             ->where('billing_company_id', $billingCompanyId)->first();
+
+        return $this->getHealthProfessionalType($hpt->id);
+
+        
+    }
+
+    private function getHealthProfessionalType(?int $id)
+    {
+        $enums = collect(HealthProfessionalTypeEnum::cases());
+        $item = $enums->first(fn ($item) => $item->value === (int) $id);
+        return ($item)
+            ? [
+                'id' => $item->value,
+                'name' => $item->name
+            ] 
+            : null;
     }
 
     private function getCompany(int $companyId)
