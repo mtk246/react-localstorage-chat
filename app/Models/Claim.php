@@ -619,37 +619,76 @@ class Claim extends Model implements Auditable
     {
         return $query->when($search, function ($query, $search) {
             return $query
-            ->where('control_number', $search)
-            ->orWhere(function ($query) use ($search) {
-                $query->with(['patient.user.profile', 'company'])
-                    ->whereHas('patient.user.profile', function ($q) use ($search) {
-                        $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
-                            ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
-                            ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
-                    })
-                    ->orWhereHas('company', function ($q) use ($search) {
-                        $q->whereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")]);
+                ->where('control_number', $search)
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByUserProfile($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByClaimFormServices($query, $search);
+                })
+                ->orWhereHas('insurancePolicies', function ($q) use ($search) {
+                    $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
+                        $qq->where('code', 'LIKE', strtoupper("%$search%"));
                     });
                 })
-            ->orWhere(function ($query) use ($search) {
-                $query->with('claimFormattable.claimFormServices')
-                    ->orWhereHas('claimFormattable.claimFormServices', function ($subQuery) use ($search) {
-                        $subQuery->when($search, function ($query, $search) {
-                            return $query->where(function ($query) use ($search) {
-                                $query->where('from_service', 'LIKE', "%$search%");
-                            });
-                        })
-                        ->orderBy('from_service')
-                        ->limit(1);
-                    });
-            })
-            ->orWhereHas('insurancePolicies', function ($q) use ($search) {
-                $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
-                    $qq->where('code', 'LIKE', "%$search%");
+                ->orWhere(function ($query) use ($search) {
+                    $query->with('claimFormattable.claimFormServices')
+                        ->when(is_numeric($search), function ($query, $search) {
+                            $this->searchByClaimFormServicesTotalPrice($query, $search);
+                        });
                 });
+        });
+    }
+
+    protected function searchByUserProfile($query, $search)
+    {
+        $query->with(['patient.user.profile'])
+            ->whereHas('patient.user.profile', function ($q) use ($search) {
+                $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
+            });
+    }
+
+    protected function searchByCompany($query, $search)
+    {
+        $query->with(['company'])
+            ->orWhereHas('company', function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")]);
+            });
+    }
+
+    protected function searchByClaimFormServices($query, $search)
+    {
+        $query->with('claimFormattable.claimFormServices')
+            ->whereHas('claimFormattable.claimFormServices', function ($subQuery) use ($search) {
+                $subQuery->when($search, function ($query, $search) {
+                    $query->where(function ($query) {
+                        $query->orderBy('from_service', 'asc')
+                            ->orderBy('to_service', 'desc')
+                            ->limit(1);
+                    })
+                    ->where('from_service', 'LIKE', "%$search%")
+                    ->orWhere('to_service', 'LIKE', "%$search%");
+                });
+            })
+            ->limit(1);
+    }
+
+    protected function searchByClaimFormServicesTotalPrice($query, $search)
+    {
+        $query->whereHas('claimFormattable', function ($q) use ($search) {
+            $q->whereHas('claimFormServices', function ($subQuery) use ($search) {
+                $subQuery->selectRaw('SUM(price) as total_price')
+                    ->groupBy('claim_form_p_services.id')
+                    ->havingRaw('SUM(price) = ?', [$search]);
             });
         });
     }
+
 
     public function toSearchableArray()
     {
