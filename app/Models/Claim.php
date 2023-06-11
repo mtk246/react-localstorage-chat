@@ -619,7 +619,7 @@ class Claim extends Model implements Auditable
     {
         return $query->when($search, function ($query, $search) {
             return $query
-                ->where('control_number', $search)
+                ->where('control_number', 'LIKE', "%$search%")
                 ->orWhere(function ($query) use ($search) {
                     $this->searchByUserProfile($query, $search);
                 })
@@ -688,7 +688,6 @@ class Claim extends Model implements Auditable
             });
         });
     }
-
 
     public function toSearchableArray()
     {
