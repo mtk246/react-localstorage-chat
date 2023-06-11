@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
+use App\Models\Company;
 use App\Models\HealthProfessional;
+use App\Models\HealthProfessionalType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +22,7 @@ final class DoctorBodyResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'npi' => $this->resource->npi,
+            /*'npi' => $this->resource->npi,
             'user_id' => $this->resource->user_id,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
@@ -33,27 +35,22 @@ final class DoctorBodyResource extends JsonResource
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
-            'public_note' => $this->resource->publicNote,
+            'public_note' => $this->resource->publicNote,*/
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $model->private_health_professional = [
-                        'socialMedias' => $this->getSocialMedias($model->id),
+                        /*'socialMedias' => $this->getSocialMedias($model->id),
                         'addresses' => $this->getAddresses($model->id),
                         'contacts' => $this->getContacts($model->id),
-                        'privateNotes' => $this->getPrivateNotes($model->id),
+                        'privateNotes' => $this->getPrivateNotes($model->id),*/
 
                         /* @todo Mapear esta información como data privada */
-                        'is_provider' => $this->resource->is_provider,
-                        'npi_company' => $this->resource->npi_company,
-                        'health_professional_type_id' => $this->resource->health_professional_type_id,
-                        'health_professional_type' => $this->resource->healthProfessionalType,
-                        'company_id' => $this->resource->company_id,
-                        'company' => [
-                            'id' => $this->resource->company->id,
-                            'name' => $this->resource->company->name,
-                            'nickname' => '',
-                            'taxonomies' => $this->resource->company->taxonomies ?? [],
-                        ],
+                        'is_provider' => $model->pivot->is_provider,
+                        'npi_company' => $model->pivot->npi_company,
+                        'health_professional_type_id' => $model->pivot->health_professional_type_id,
+                        'health_professional_type' => $this->getHpt($model->pivot->billing_company_id),
+                        'company_id' => $model->pivot->company_id,
+                        'company' => $this->getCompany($model->pivot->company_id)
                     ];
 
                     return $model;
@@ -92,12 +89,30 @@ final class DoctorBodyResource extends JsonResource
             );
     }
 
-    private function getPrivateNotes(int $billingCompanyId): Collection
+    private function getPrivateNotes(int $billingCompanyId)
     {
         return $this->resource
             ->privateNotes
             ->filter(
                 fn ($privateNote) => $privateNote->billing_company_id === $billingCompanyId,
             );
+    }
+
+    private function getHpt(int $billingCompanyId)
+    {
+        return HealthProfessionalType::where('health_professional_id', $this->resource->id)
+            ->where('billing_company_id', $billingCompanyId)->first();
+    }
+
+    private function getCompany(int $companyId)
+    {
+        $company = Company::find($companyId);
+
+        return [
+            'id' => $company->id,
+            'name' => $company->name,
+            'nickname' => $company->nicknames[0]->nickname ?? null,
+            'taxonomies' => $company->taxonomies ?? [],
+        ];
     }
 }
