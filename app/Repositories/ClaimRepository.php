@@ -2129,9 +2129,9 @@ class ClaimRepository
                 if (isset($referred)) {
                     array_push($dataReal['providers'], $referred);
                 }
-                if (isset($claimDateInfo)) {
-                    $dataReal['claimInformation']['claimDateInformation'] = $claimDateInfo;
-                }
+                $dataReal['claimInformation']['claimDateInformation'] = !empty($claimDateInfo)
+                    ? $claimDateInfo
+                    : null;
 
                 $response = Http::withToken($token)->acceptJson()->post(
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],
