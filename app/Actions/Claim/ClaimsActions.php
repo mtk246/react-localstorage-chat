@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
+use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimServices;
@@ -21,7 +22,7 @@ abstract class ClaimsActions
             );
     }
 
-    protected function setServices(Claim $claim, ServicesWrapper $services): void
+    protected function setServices(Claim $claim, ClaimServicesWrapper $services): void
     {
         /** @var ClaimServices */
         $claimService = $claim
@@ -31,7 +32,7 @@ abstract class ClaimsActions
                 $services->getData()
             );
 
-        Services::upsert($services->getDiagnoses()->getData());
+        Services::upsert($services->getService()->getData(), ['id']);
 
         $claimService->diagnoses()->syncWithPivotValues(
             $services->getDiagnoses()->getIds(),
@@ -39,7 +40,7 @@ abstract class ClaimsActions
         );
     }
 
-    protected function policiesInsurances(Claim $claim, PoliciesInsurancesWrapper $policiesInsurances): void
+    protected function setPoliciesInsurances(Claim $claim, PoliciesInsurancesWrapper $policiesInsurances): void
     {
         $claim
             ->policiesInsurances()
