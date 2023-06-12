@@ -2010,7 +2010,10 @@ class ClaimRepository
                         array_push($valuesPoint, $pointers[$point]);
                     }
                     array_push($serviceLines, [
-                        'serviceDate' => str_replace('-', '', $claim->date_of_service),
+                        'serviceDate' => str_replace('-', '', $service->from_service),
+                        'serviceDateEnd' => !empty($service->to_service)
+                            ? str_replace('-', '', $service->to_service)
+                            : null,
                         'professionalService' => [
                             'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
                             'lineItemChargeAmount' => str_replace(',', '', $service->price),
