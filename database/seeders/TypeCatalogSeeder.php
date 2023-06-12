@@ -1914,8 +1914,8 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Male',
                     ],
                     [
-                        'code' => 'B',
-                        'description' => 'Both',
+                        'code' => 'O',
+                        'description' => 'Other',
                     ],
                 ],
             ],

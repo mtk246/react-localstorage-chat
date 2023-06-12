@@ -241,8 +241,8 @@ final class ClaimResource extends JsonResource
             if (is_null($item)) {
                 $field = TypeCatalog::find($dateInfo->field_id);
                 $item = $enums->first(fn ($item) => $item->getName() === $field?->description);
-                $dateInfo->field_id = $item->value;
             }
+            $dateInfo->field_id = $item->value ?? '';
             $dateInfo->field = ($item) ? [
                 'id' => $item,
                 'code' => $item->value,
@@ -250,6 +250,19 @@ final class ClaimResource extends JsonResource
             ] : null;
 
             return $dateInfo;
+        });
+        $this->claimFormattable?->claimFormServices->transform(function ($service) {
+            $service->procedures = ($service->procedure_id)
+                ? [[
+                    'id' => $service->procedure_id,
+                    'name' => $service->procedure->code,
+                    'description' => $service->procedure->description,
+                    'price' => $service->procedure->companies
+                        ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                ]]
+                : [];
+
+            return $service;
         });
 
         return [
@@ -288,19 +301,7 @@ final class ClaimResource extends JsonResource
             'claim_formattable_id' => $this->claim_formattable_id,
 
             'insurance_policies' => $insurancePolicies,
-            'claim_formattable' => $this->claimFormattable?->claimFormServices->transform(function ($service) {
-                $service->procedures = ($service->procedure_id)
-                    ? [[
-                        'id' => $service->procedure_id,
-                        'name' => $service->procedure->code,
-                        'description' => $service->procedure->description,
-                        'price' => $service->procedure->companies
-                            ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
-                    ]]
-                    : [];
-
-                return $service;
-            }),
+            'claim_formattable' => $this->claimFormattable,
             'diagnoses' => $this->diagnoses,
 
             'format' => $this->claimFormattable->type_form_id ?? '',
