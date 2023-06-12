@@ -39,6 +39,7 @@ final class DoctorBodyResource extends JsonResource
             'public_note' => $this->resource->publicNote,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
+                    $type = $this->getHealthProfessionalType($model->id);
                     $model->private_health_professional = [
                         'socialMedias' => $this->getSocialMedias($model->id),
                         'address' => $this->getAddress($model->id),
@@ -46,9 +47,9 @@ final class DoctorBodyResource extends JsonResource
                         'privateNote' => $this->getPrivateNote($model->id),
                         'is_provider' => $model->pivot->is_provider,
                         'npi_company' => $model->pivot->npi_company,
-                        'health_professional_type_id' => $this->getHealthProfessionalTypeId($model->id)['id'],
-                        'health_professional_type' => $this->getHealthProfessionalTypeId($model->id),
-                        'company_id' => $model->pivotcompany_id,
+                        'health_professional_type_id' => $type['id'] ?? null,
+                        'health_professional_type' => $type,
+                        'company_id' => $model->pivot->company_id,
                         'company' => $this->getCompany($model->pivot->company_id, $model->id),
                     ];
 
@@ -97,23 +98,20 @@ final class DoctorBodyResource extends JsonResource
             )[0] ?? null;
     }
 
-    private function getHealthProfessionalTypeId(int $billingCompanyId)
+    private function getHealthProfessionalType(int $billingCompanyId)
     {
-        $hpt = HealthProfessionalType::where('health_professional_id', $this->resource->id)
-            ->where('billing_company_id', $billingCompanyId)->first()->type;
+        $type = HealthProfessionalType::query()
+            ->where('health_professional_id', $this->resource->id)
+            ->where('billing_company_id', $billingCompanyId)
+            ->first()?->type;
 
-        return $this->getHealthProfessionalType((int) $hpt);
-    }
-
-    private function getHealthProfessionalType(?int $id)
-    {
         $enums = collect(HealthProfessionalTypeEnum::cases());
-        $item = $enums->first(fn ($item) => $item->value === (int) $id);
+        $item = $enums->first(fn ($item) => $item->value === (int) $type);
 
         return ($item)
             ? [
                 'id' => $item->value,
-                'name' => $item->name,
+                'name' => $item->getName(),
             ]
             : null;
     }
@@ -127,7 +125,7 @@ final class DoctorBodyResource extends JsonResource
             'name' => $company->name,
             'nickname' => $company->nicknames->filter(
                 fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
-            )[0]->nickname ?? null,
+            )[0]->nickname ?? '',
             'taxonomies' => $company->taxonomies ?? [],
         ];
     }
