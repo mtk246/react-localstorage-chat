@@ -9,6 +9,31 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * App\Models\Claims\ClaimValidation
+ *
+ * @property int $id
+ * @property string $control_number
+ * @property array|null $response_details
+ * @property int $claim_id
+ * @property int $insurance_policy_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Claims\Claim $claim
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereClaimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereControlNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereInsurancePolicyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereResponseDetails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 final class ClaimValidation extends Model implements Auditable
 {
     use HasFactory;

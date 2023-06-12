@@ -10,6 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * App\Models\Claims\ClaimDateInformation
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Claims\ClaimAdditionalInformation|null $claimAdditionalInformation
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation query()
+ * @mixin \Eloquent
+ */
 final class ClaimDateInformation extends Model implements Auditable
 {
     use HasFactory;

@@ -7,6 +7,17 @@ namespace App\Models\Claims;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Claims\Services.
+ *
+ * @property mixed $modifiers
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services query()
+ *
+ * @mixin \Eloquent
+ */
 final class Services extends Model
 {
     use HasFactory;

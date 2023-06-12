@@ -7,6 +7,19 @@ namespace App\Models\Claims;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Claims\ClaimDemographicInformation
+ *
+ * @property-read \App\Models\Claims\Claim $claim
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property-read int|null $claim_status_claims_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property-read int|null $claim_transmission_responses_count
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()
+ * @mixin \Eloquent
+ */
 final class ClaimDemographicInformation extends Model
 {
     use HasFactory;
