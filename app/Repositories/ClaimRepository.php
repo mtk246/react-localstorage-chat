@@ -345,30 +345,36 @@ class ClaimRepository
                 });
             }
         } else {
-            $data = Claim::query()->with([
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                        'nicknames' => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        },
-                    ]);
-                },
-                'patient' => function ($query) use ($bC) {
-                    $query->with([
-                        'user' => function ($q) use ($bC) {
-                            $q->with([
-                                'profile',
-                                'addresses' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
-                    ]);
-                },
-            ]);
+            $data = Claim::query()
+                ->whereHas('claimFormattable', function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    'company' => function ($query) use ($bC) {
+                        $query->with([
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                    },
+                    'patient' => function ($query) use ($bC) {
+                        $query->with([
+                            'user' => function ($q) use ($bC) {
+                                $q->with([
+                                    'profile',
+                                    'addresses' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                    'contacts' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                ]);
+                            },
+                        ]);
+                    },
+                    'claimFormattable' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                ]);
             if (count($subStatus) > 0) {
                 $data = $data->whereHas('claimStatusClaims', function ($query) use ($subStatus) {
                     $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
@@ -2004,7 +2010,10 @@ class ClaimRepository
                         array_push($valuesPoint, $pointers[$point]);
                     }
                     array_push($serviceLines, [
-                        'serviceDate' => str_replace('-', '', $claim->date_of_service),
+                        'serviceDate' => str_replace('-', '', $service->from_service),
+                        'serviceDateEnd' => !empty($service->to_service)
+                            ? str_replace('-', '', $service->to_service)
+                            : null,
                         'professionalService' => [
                             'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
                             'lineItemChargeAmount' => str_replace(',', '', $service->price),
@@ -2123,9 +2132,9 @@ class ClaimRepository
                 if (isset($referred)) {
                     array_push($dataReal['providers'], $referred);
                 }
-                if (isset($claimDateInfo)) {
-                    $dataReal['claimInformation']['claimDateInformation'] = $claimDateInfo;
-                }
+                $dataReal['claimInformation']['claimDateInformation'] = !empty($claimDateInfo)
+                    ? $claimDateInfo
+                    : null;
 
                 $response = Http::withToken($token)->acceptJson()->post(
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],

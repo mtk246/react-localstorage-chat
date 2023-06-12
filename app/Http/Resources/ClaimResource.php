@@ -99,6 +99,15 @@ final class ClaimResource extends JsonResource
                     'from_service' => $service->from_service,
                     'to_service' => $service->to_service,
                     'procedure_id' => $service->procedure_id,
+                    'procedures' => isset($service->procedure)
+                        ? [[
+                            'id' => $service->procedure_id,
+                            'name' => $service->procedure->code,
+                            'description' => $service->procedure->description,
+                            'price' => $service->procedure->companies
+                                ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                        ]]
+                        : [],
                     'revenue_code_id' => $service->revenue_code_id,
                     'revenue_codes' => isset($service->revenueCode)
                         ? [[
@@ -232,8 +241,8 @@ final class ClaimResource extends JsonResource
             if (is_null($item)) {
                 $field = TypeCatalog::find($dateInfo->field_id);
                 $item = $enums->first(fn ($item) => $item->getName() === $field?->description);
-                $dateInfo->field_id = $item->value;
             }
+            $dateInfo->field_id = $item->value ?? '';
             $dateInfo->field = ($item) ? [
                 'id' => $item,
                 'code' => $item->value,
@@ -241,6 +250,19 @@ final class ClaimResource extends JsonResource
             ] : null;
 
             return $dateInfo;
+        });
+        $this->claimFormattable?->claimFormServices->transform(function ($service) {
+            $service->procedures = ($service->procedure_id)
+                ? [[
+                    'id' => $service->procedure_id,
+                    'name' => $service->procedure->code,
+                    'description' => $service->procedure->description,
+                    'price' => $service->procedure->companies
+                        ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                ]]
+                : [];
+
+            return $service;
         });
 
         return [
