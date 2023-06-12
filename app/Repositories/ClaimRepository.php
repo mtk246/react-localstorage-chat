@@ -345,30 +345,36 @@ class ClaimRepository
                 });
             }
         } else {
-            $data = Claim::query()->with([
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                        'nicknames' => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        },
-                    ]);
-                },
-                'patient' => function ($query) use ($bC) {
-                    $query->with([
-                        'user' => function ($q) use ($bC) {
-                            $q->with([
-                                'profile',
-                                'addresses' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
-                    ]);
-                },
-            ]);
+            $data = Claim::query()
+                ->whereHas('claimFormattable', function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    'company' => function ($query) use ($bC) {
+                        $query->with([
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                    },
+                    'patient' => function ($query) use ($bC) {
+                        $query->with([
+                            'user' => function ($q) use ($bC) {
+                                $q->with([
+                                    'profile',
+                                    'addresses' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                    'contacts' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                ]);
+                            },
+                        ]);
+                    },
+                    'claimFormattable' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                ]);
             if (count($subStatus) > 0) {
                 $data = $data->whereHas('claimStatusClaims', function ($query) use ($subStatus) {
                     $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
