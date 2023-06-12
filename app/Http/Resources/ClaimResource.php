@@ -40,6 +40,7 @@ final class ClaimResource extends JsonResource
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'asc')->first();
 
+            $insurancePolicies[$key]['order'] = $insurancePolicy->pivot?->order ?? 0;
             $insurancePolicies[$key]['claim_eligibility'] = isset($claimEligibilityCurrent)
                 ? [
                     'control_number' => $claimEligibilityCurrent->control_number ?? null,
@@ -216,6 +217,7 @@ final class ClaimResource extends JsonResource
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'asc')->first();
 
+            $insurancePolicies[$key]['order'] = $insurancePolicy->pivot?->order ?? 0;
             $insurancePolicies[$key]['claim_eligibility'] = isset($claimEligibilityCurrent)
                 ? [
                     'control_number' => $claimEligibilityCurrent->control_number ?? null,
