@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
+use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
+use App\Http\Casts\Claims\PoliciesInsurancesWrapper;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimServices;
 use App\Models\Claims\Services;
