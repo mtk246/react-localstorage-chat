@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class InsurancePlanRepository
 {
@@ -72,7 +73,7 @@ class InsurancePlanRepository
                 ]);
             }
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -186,7 +187,7 @@ class InsurancePlanRepository
                 'insurance_company_id' => $data['insurance_company_id'],
             ]);
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -642,7 +643,7 @@ class InsurancePlanRepository
         $insurance = InsurancePlan::query()->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])->first();
 
         if ($insurance) {
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompaniesException = $insurance->billingCompanies()
                     ->get()
                     ->pluck('id')
@@ -775,26 +776,24 @@ class InsurancePlanRepository
         }
     }
 
-    /** @todo Cambiar relacion entre copays y company muchos a muchos */
     public function addCopays(array $data, int $id)
     {
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::find($id);
-            $records = [];
             if (is_null($insurancePlan)) {
                 return null;
             }
 
             $billingCompany = auth()->user()->billingCompanies->first();
-            if (!auth()->user()->hasRole('superuser')) {
+            if (Gate::denies('is-admin')) {
                 if (is_null($billingCompany)) {
                     return null;
                 }
             }
 
             if (isset($data['copays'])) {
-                if (auth()->user()->hasRole('superuser')) {
+                if (Gate::check('is-admin')) {
                     $copays = $insurancePlan->copays;
                 } else {
                     $copays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
@@ -836,35 +835,9 @@ class InsurancePlanRepository
                 }
             }
 
-            /* Get data response */
-            if (auth()->user()->hasRole('superuser')) {
-                $insurancePlanCopays = $insurancePlan->copays;
-            } else {
-                $insurancePlanCopays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
-            }
-
-            foreach ($insurancePlanCopays ?? [] as $insurancePlanCopay) {
-                $procedure_ids = [];
-                foreach ($insurancePlanCopay->procedures ?? [] as $procedure) {
-                    array_push($procedure_ids, $procedure->id);
-                }
-                $private_note = PrivateNote::where([
-                    'publishable_id' => $insurancePlanCopay->id,
-                    'publishable_type' => Copay::class,
-                    'billing_company_id' => $insurancePlanCopay->billing_company_id,
-                ])->first();
-
-                array_push($records, [
-                    'billing_company_id' => $insurancePlanCopay->billing_company_id ?? null,
-                    'company_id' => $insurancePlanCopay->company_id ?? null,
-                    'procedure_ids' => $procedure_ids,
-                    'copay' => (float) $insurancePlanCopay->copay ?? null,
-                    'private_note' => $private_note->note ?? '',
-                ]);
-            }
             DB::commit();
 
-            return $records;
+            return $this->getCopays($id);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -877,13 +850,12 @@ class InsurancePlanRepository
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::find($id);
-            $records = [];
             if (is_null($insurancePlan)) {
                 return null;
             }
 
             $billingCompany = auth()->user()->billingCompanies->first();
-            if (!auth()->user()->hasRole('superuser')) {
+            if (Gate::denies('is-admin')) {
                 if (is_null($billingCompany)) {
                     return null;
                 }
@@ -903,7 +875,7 @@ class InsurancePlanRepository
 
                     return $ids;
                 }, []);
-                if (auth()->user()->hasRole('superuser')) {
+                if (Gate::check('is-admin')) {
                     $contractFeesDelete = $insurancePlan
                         ->contractFees()
                         ->whereNotIn('id', $excludedIds);
@@ -942,7 +914,6 @@ class InsurancePlanRepository
                         'insurance_company_id' => $insurancePlan->insurance_company_id,
                         'private_note' => $contract['private_note'],
                         'billing_company_id' => $billingCompany->id ?? $contract['billing_company_id'],
-                        // 'modifier_id' => $contract['modifier_id'] ?? null,
                         'mac_locality_id' => $macLocality->id ?? null,
                         'insurance_label_fee_id' => $contract['insurance_label_fee_id'] ?? null,
                         'contract_fee_type_id' => $contract['type_id'] ?? null,
@@ -994,63 +965,9 @@ class InsurancePlanRepository
                 }
             }
 
-            /* Get data response */
-            if (auth()->user()->hasRole('superuser')) {
-                $insurancePlanContracts = $insurancePlan->contractFees;
-            } else {
-                $insurancePlanContracts = $insurancePlan
-                    ->contractFees()
-                    ->where('billing_company_id', $billingCompany->id)
-                    ->get();
-            }
-
-            foreach ($insurancePlanContracts ?? [] as $insurancePlanContract) {
-                $procedure_ids = $insurancePlanContract
-                    ->procedures()
-                    ->select('procedures.id')
-                    ->get()
-                    ->pluck('id');
-                $modifier_ids = $insurancePlanContract
-                    ->modifiers()
-                    ->select('modifiers.id')
-                    ->get()
-                    ->pluck('id');
-                $patients = $insurancePlanContract
-                    ->patiens()
-                    ->get()
-                    ->map(function ($patient) {
-                        return [
-                            'patient_id' => $patient->id,
-                            'start_date' => $patient->pivot->start_date,
-                            'end_date' => $patient->pivot->end_date,
-                        ];
-                    })->toArray();
-
-                array_push($records, [
-                    'id' => $insurancePlanContract->id,
-                    'price' => (float) $insurancePlanContract->price ?? null,
-                    'company_id' => $insurancePlanContract->company_id ?? '',
-                    'private_note' => $insurancePlanContract->private_note ?? '',
-                    'billing_company_id' => $insurancePlanContract->billing_company_id ?? '',
-                    // 'modifier_id' => $insurancePlanContract->modifier_id ?? '',
-                    'insurance_label_fee_id' => $insurancePlanContract->insurance_label_fee_id ?? '',
-                    'type_id' => $insurancePlanContract->contract_fee_type_id ?? '',
-                    'start_date' => $insurancePlanContract->start_date ?? '',
-                    'end_date' => $insurancePlanContract->end_date ?? '',
-                    'price_percentage' => $insurancePlanContract->price_percentage ?? '',
-                    'modifier_ids' => $modifier_ids,
-                    'procedure_ids' => $procedure_ids,
-                    'mac' => $insurancePlanContract->macLocality->mac ?? '',
-                    'locality_number' => $insurancePlanContract->macLocality->locality_number ?? '',
-                    'state' => $insurancePlanContract->macLocality->state ?? '',
-                    'fsa' => $insurancePlanContract->macLocality->fsa ?? '',
-                    'counties' => $insurancePlanContract->macLocality->counties ?? '',
-                    'patients' => $patients,
-                ]);
-            }
             DB::commit();
 
-            return $records;
+            return $this->getContractFees($id);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -1063,12 +980,12 @@ class InsurancePlanRepository
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (!auth()->user()->hasRole('superuser')) {
+        if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;
             }
         }
-        if (auth()->user()->hasRole('superuser')) {
+        if (Gate::check('is-admin')) {
             $insurancePlanCopays = $insurancePlan->copays;
         } else {
             $insurancePlanCopays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
@@ -1103,12 +1020,12 @@ class InsurancePlanRepository
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
         $billingCompany = auth()->user()->billingCompanies->first();
-        if (!auth()->user()->hasRole('superuser')) {
+        if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;
             }
         }
-        if (auth()->user()->hasRole('superuser')) {
+        if (Gate::check('is-admin')) {
             $insurancePlanContracts = $insurancePlan->contractFees;
         } else {
             $insurancePlanContracts = $insurancePlan
