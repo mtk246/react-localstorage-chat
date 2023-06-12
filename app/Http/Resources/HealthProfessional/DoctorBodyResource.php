@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 use App\Models\Company;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+
 /**  @property HealthProfessional $resource */
 final class DoctorBodyResource extends JsonResource
 {
@@ -48,7 +49,7 @@ final class DoctorBodyResource extends JsonResource
                         'health_professional_type_id' => $this->getHealthProfessionalTypeId($model->id)['id'],
                         'health_professional_type' => $this->getHealthProfessionalTypeId($model->id),
                         'company_id' => $model->pivotcompany_id,
-                        'company' => $this->getCompany($model->pivot->company_id, $model->id)
+                        'company' => $this->getCompany($model->pivot->company_id, $model->id),
                     ];
 
                     return $model;
@@ -98,22 +99,22 @@ final class DoctorBodyResource extends JsonResource
 
     private function getHealthProfessionalTypeId(int $billingCompanyId)
     {
-        $hpt =  HealthProfessionalType::where('health_professional_id', $this->resource->id)
+        $hpt = HealthProfessionalType::where('health_professional_id', $this->resource->id)
             ->where('billing_company_id', $billingCompanyId)->first()->type;
 
-        return $this->getHealthProfessionalType((int)$hpt);
-        
+        return $this->getHealthProfessionalType((int) $hpt);
     }
 
     private function getHealthProfessionalType(?int $id)
     {
         $enums = collect(HealthProfessionalTypeEnum::cases());
         $item = $enums->first(fn ($item) => $item->value === (int) $id);
+
         return ($item)
             ? [
                 'id' => $item->value,
-                'name' => $item->name
-            ] 
+                'name' => $item->name,
+            ]
             : null;
     }
 
