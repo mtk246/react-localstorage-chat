@@ -4,9 +4,23 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\Diagnosis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\Claims\ClaimServices.
+ *
+ * @property \App\Models\Claims\Claim $claim
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServices newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServices newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimServices query()
+ *
+ * @mixin \Eloquent
+ */
 final class ClaimServices extends Model
 {
     use HasFactory;
@@ -35,13 +49,13 @@ final class ClaimServices extends Model
         return $this->belongsTo(TypeCatalog::class, 'diagnosis_related_group_id');
     }
 
-    /**
-     * ClaimServices has many Service.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function services()
+    public function services(): HasMany
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Services::class)->withTimestamps();
+    }
+
+    public function diagnoses(): BelongsToMany
+    {
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withPivot(['item', 'poa', 'admission'])->withTimestamps();
     }
 }
