@@ -2010,7 +2010,10 @@ class ClaimRepository
                         array_push($valuesPoint, $pointers[$point]);
                     }
                     array_push($serviceLines, [
-                        'serviceDate' => str_replace('-', '', $claim->date_of_service),
+                        'serviceDate' => str_replace('-', '', $service->from_service),
+                        'serviceDateEnd' => !empty($service->to_service)
+                            ? str_replace('-', '', $service->to_service)
+                            : null,
                         'professionalService' => [
                             'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
                             'lineItemChargeAmount' => str_replace(',', '', $service->price),
@@ -2129,9 +2132,9 @@ class ClaimRepository
                 if (isset($referred)) {
                     array_push($dataReal['providers'], $referred);
                 }
-                if (isset($claimDateInfo)) {
-                    $dataReal['claimInformation']['claimDateInformation'] = $claimDateInfo;
-                }
+                $dataReal['claimInformation']['claimDateInformation'] = !empty($claimDateInfo)
+                    ? $claimDateInfo
+                    : null;
 
                 $response = Http::withToken($token)->acceptJson()->post(
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],
