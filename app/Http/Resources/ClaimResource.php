@@ -298,6 +298,7 @@ final class ClaimResource extends JsonResource
                             ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
                     ]]
                     : [];
+
                 return $service;
             }),
             'diagnoses' => $this->diagnoses,
