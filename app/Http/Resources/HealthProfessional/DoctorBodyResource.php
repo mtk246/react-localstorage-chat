@@ -74,9 +74,9 @@ final class DoctorBodyResource extends JsonResource
         return $this->resource
             ->user
             ->addresses
-            ->filter(
+            ->first(
                 fn ($address) => $address->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            ) ?? null;
     }
 
     private function getContact(int $billingCompanyId)
@@ -93,9 +93,9 @@ final class DoctorBodyResource extends JsonResource
     {
         return $this->resource
             ->privateNotes
-            ->filter(
+            ->first(
                 fn ($privateNote) => $privateNote->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            ) ?? null;
     }
 
     private function getHealthProfessionalType(int $billingCompanyId)
