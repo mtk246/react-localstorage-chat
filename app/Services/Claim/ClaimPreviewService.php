@@ -169,18 +169,18 @@ final class ClaimPreviewService implements ReportInterface
             if (isset($value['properties'])) {
                 $this->setData($value['properties'], $fieldName);
             } elseif (isset($value['options']) && 1 === count($value)) {
-                if (isset($value['options'][$this->data[$fieldName]]['properties'])) {
+                if (isset($this->data[$fieldName]) && isset($value['options'][$this->data[$fieldName]]['properties'])) {
                     $this->setData($value['options'][$this->data[$fieldName]]['properties'], $fieldName, null, 'X');
                 }
             } else {
                 foreach ($value as $key => $val) {
                     if ('options' === $key) {
-                        if (isset($val[$this->data[$fieldName]['value']]['properties'])) {
+                        if (isset($this->data[$fieldName]) && isset($val[$this->data[$fieldName]['value']]['properties'])) {
                             $this->setData($val[$this->data[$fieldName]['value']]['properties'], $fieldName, null, 'X');
                         }
                     } elseif (isset($val['properties'])) {
                         $this->setData($val['properties'], $fieldName, $key);
-                    } elseif (isset($val['options'][$this->data[$fieldName][$key]]['properties'])) {
+                    } elseif (isset($this->data[$fieldName]) && isset($val['options'][$this->data[$fieldName][$key]]['properties'])) {
                         $this->setData($val['options'][$this->data[$fieldName][$key]]['properties'], $fieldName, null, 'X');
                     }
                 }
