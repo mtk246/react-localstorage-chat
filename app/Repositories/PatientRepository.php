@@ -740,29 +740,32 @@ class PatientRepository
                 },
             ]);
         } else {
-            $data = Patient::with([
-                'user' => function ($query) {
-                    $query->with(['profile' => function ($q) {
-                        $q->with('socialMedias');
-                    }, 'roles', 'addresses', 'contacts',
-                    'billingCompanies',
-                    ]);
-                },
-                // "marital",
-                // "guarantor",
-                'employments',
-                'companies',
-                'emergencyContacts',
-                'publicNote',
-                'privateNotes',
-                'insurancePolicies',
-                'billingCompanies' => function ($query) use ($bC) {
+            $data = Patient::query()
+                ->whereHas('billingCompanies', function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
-                },
-                'insurancePlans' => function ($query) {
-                    $query->with('insuranceCompany');
-                },
-            ]);
+                })->with([
+                    'user' => function ($query) {
+                        $query->with(['profile' => function ($q) {
+                            $q->with('socialMedias');
+                        }, 'roles', 'addresses', 'contacts',
+                        'billingCompanies',
+                        ]);
+                    },
+                    // "marital",
+                    // "guarantor",
+                    'employments',
+                    'companies',
+                    'emergencyContacts',
+                    'publicNote',
+                    'privateNotes',
+                    'insurancePolicies',
+                    'billingCompanies' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'insurancePlans' => function ($query) {
+                        $query->with('insuranceCompany');
+                    },
+                ]);
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
