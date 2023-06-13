@@ -1385,7 +1385,7 @@ class PatientRepository
                 ->paginate(Pagination::itemsPerPage());
         } else {
             $data = $patient->insurancePolicies()
-                ->wherePivot('billing_company_id', $bC)
+                ->where('billing_company_id', $bC)
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         }
