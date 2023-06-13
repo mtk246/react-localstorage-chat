@@ -478,6 +478,25 @@ class ClaimRepository
                                 ], $service);
                             }
                         }
+                        if (isset($data['patient_or_insured_information'])) {
+                            PatientOrInsuredInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id,
+                            ], $data['patient_or_insured_information']);
+                        }
+                        if (isset($data['physician_or_supplier_information'])) {
+                            $physician = PhysicianOrSupplierInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id,
+                            ], $data['physician_or_supplier_information']);
+
+                            if (isset($data['physician_or_supplier_information']['claim_date_informations'])) {
+                                foreach ($data['physician_or_supplier_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    $dateInf['physician_or_supplier_information_id'] = $physician->id;
+                                    ClaimDateInformation::updateOrCreate([
+                                        'id' => $dateInf->id ?? null,
+                                    ], $dateInf);
+                                }
+                            }
+                        }
                     } else {
                         $model = ClaimFormP::class;
                         $claimForm->update([
@@ -615,17 +634,15 @@ class ClaimRepository
                         'claim_status_type' => ClaimStatus::class,
                         'claim_status_id' => $claimStatus->id,
                     ]);
-                    if (isset($data['private_note'])) {
-                        if (isset($data['private_note'])) {
-                            PrivateNote::create([
-                                'publishable_type' => ClaimStatusClaim::class,
-                                'publishable_id' => $claimStatusClaim->id,
-                                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                                'note' => $data['private_note'],
-                            ]);
-                        }
+                    if (!empty($data['private_note'])) {
+                        PrivateNote::create([
+                            'publishable_type' => ClaimStatusClaim::class,
+                            'publishable_id' => $claimStatusClaim->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'note' => $data['private_note'],
+                        ]);
                     }
-                } else {
+                } elseif (!empty($data['private_note'])) {
                     PrivateNote::updateOrCreate([
                         'publishable_type' => ClaimStatusClaim::class,
                         'publishable_id' => $status->id,
