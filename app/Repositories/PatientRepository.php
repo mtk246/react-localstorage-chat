@@ -355,11 +355,11 @@ class PatientRepository
         foreach ($dataCompany as $company) {
             array_push($companyRecords, [
                 'billing_company_id' => $company->pivot->billing_company_id,
-                'company_id' => $company->id,
-                'med_num' => $company->pivot->med_num,
-                'company' => $company->name,
+                'company_id' => $company->id ?? '',
+                'med_num' => $company->pivot->med_num ?? '',
+                'company' => $company->name ?? '',
                 'billing_company' => $company->billingCompanies()
-                    ->find($company->pivot->billing_company_id)->name ?? null,
+                    ->find($company->pivot->billing_company_id)->name ?? '',
             ]);
         }
 
@@ -386,8 +386,8 @@ class PatientRepository
                 'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
                 'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
                 'status' => $patient_policy->status ?? false,
-                'eff_date' => $patient_policy->eff_date,
-                'end_date' => $patient_policy->end_date,
+                'eff_date' => $patient_policy->eff_date ?? '',
+                'end_date' => $patient_policy->end_date ?? '',
                 'assign_benefits' => $patient_policy->assign_benefits ?? false,
                 'release_info' => $patient_policy->release_info ?? false,
                 'own' => $patient_policy->own ?? false,
@@ -480,8 +480,8 @@ class PatientRepository
             }
             if (isset($guarantor)) {
                 $patient_guarantor = [
-                    'name' => $guarantor->name,
-                    'phone' => $guarantor->phone,
+                    'name' => $guarantor->name ?? '',
+                    'phone' => $guarantor->phone ?? '',
                 ];
             }
             if (isset($emergency_contacts)) {
@@ -500,10 +500,10 @@ class PatientRepository
                 $patient_employments = [];
                 foreach ($employments as $employment) {
                     array_push($patient_employments, [
-                        'employer_name' => $employment->employer_name,
-                        'employer_address' => $employment->employer_address,
-                        'employer_phone' => $employment->employer_phone,
-                        'position' => $employment->position,
+                        'employer_name' => $employment->employer_name ?? '',
+                        'employer_address' => $employment->employer_address ?? '',
+                        'employer_phone' => $employment->employer_phone ?? '',
+                        'position' => $employment->position ?? '',
                     ]);
                 }
             }
@@ -516,21 +516,21 @@ class PatientRepository
                         'city' => $address->city,
                         'state' => $address->state,
                         'address' => $address->address,
-                        'country' => $address->country,
+                        'country' => $address->country ?? '',
                         'address_type_id' => $address->address_type_id,
                         'address_type' => $address->addressType->name ?? '',
-                        'country_subdivision_code' => $address->country_subdivision_code,
+                        'country_subdivision_code' => $address->country_subdivision_code ?? '',
                     ]);
                 }
             }
 
             if (isset($contact)) {
                 $patient_contact = [
-                    'fax' => $contact->fax,
+                    'fax' => $contact->fax ?? '',
                     'email' => $contact->email,
-                    'phone' => $contact->phone,
-                    'mobile' => $contact->mobile,
-                    'contact_name' => $contact->contact_name,
+                    'phone' => $contact->phone ?? '',
+                    'mobile' => $contact->mobile ?? '',
+                    'contact_name' => $contact->contact_name ?? '',
                 ];
             }
 
@@ -570,22 +570,22 @@ class PatientRepository
                                 'country' => $address->country,
                                 'address_type_id' => $address->address_type_id,
                                 'address_type' => $address->addressType->name ?? '',
-                                'country_subdivision_code' => $address->country_subdivision_code,
+                                'country_subdivision_code' => $address->country_subdivision_code ?? '',
                             ];
                         }
 
                         if (isset($contact)) {
                             $subscriber_contact = [
-                                'fax' => $contact->fax,
-                                'email' => $contact->email,
-                                'phone' => $contact->phone,
-                                'mobile' => $contact->mobile,
-                                'contact_name' => $contact->contact_name,
+                                'fax' => $contact->fax ?? '',
+                                'email' => $contact->email ?? '',
+                                'phone' => $contact->phone ?? '',
+                                'mobile' => $contact->mobile ?? '',
+                                'contact_name' => $contact->contact_name ?? '',
                             ];
                         }
                         array_push($patient_policy_subscriber, [
                             'id' => $subscriber->id,
-                            'ssn' => $subscriber->ssn,
+                            'ssn' => $subscriber->ssn ?? '',
                             'sex' => $subscriber->sex,
                             'first_name' => $subscriber->first_name,
                             'last_name' => $subscriber->last_name,
@@ -613,8 +613,8 @@ class PatientRepository
                         'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
                         'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
                         'status' => $patient_policy->status ?? false,
-                        'eff_date' => $patient_policy->eff_date,
-                        'end_date' => $patient_policy->end_date,
+                        'eff_date' => $patient_policy->eff_date ?? '',
+                        'end_date' => $patient_policy->end_date ?? '',
                         'assign_benefits' => $patient_policy->assign_benefits ?? false,
                         'release_info' => $patient_policy->release_info ?? false,
                         'own' => $patient_policy->own ?? false,
