@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Http\Casts\Claims\AditionalInformationWrapper;
+use App\Http\Casts\Claims\ClaimServicesWrapper;
+use App\Http\Casts\Claims\DemographicInformationWrapper;
+use App\Http\Casts\Claims\PoliciesInsurancesWrapper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -94,5 +98,50 @@ class Claim extends Model implements Auditable
     public function services(): HasOne
     {
         return $this->hasOne(ClaimServices::class);
+    }
+
+        protected function setDemographicInformation(Claim $claim, DemographicInformationWrapper $demographicInformation): void
+        {
+            $claim
+                ->demographicInformation()
+                ->updateOrCreate(
+                    ['claim_id' => $claim->id],
+                    $demographicInformation->getData()
+                );
+        }
+
+    protected function setServices(ClaimServicesWrapper $services): void
+    {
+        /** @var ClaimServices */
+        $claimService = $this
+            ->services()
+            ->updateOrCreate(
+                ['claim_id' => $this->id],
+                $services->getData()
+            );
+
+        Services::upsert($services->getService()->getData(), ['id']);
+
+        $claimService->diagnoses()->syncWithPivotValues(
+            $services->getDiagnoses()->getIds(),
+            $services->getDiagnoses()->getValues(),
+        );
+    }
+
+    protected function setInsurancePolicies(PoliciesInsurancesWrapper $policiesInsurances): void
+    {
+        $this
+            ->insurancePolicies()
+            ->sync($policiesInsurances->getData());
+    }
+
+    protected function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
+    {
+        $this
+            ->aditionalInformation()
+            ->updateOrCreate(
+                ['claim_id' => $this->id],
+                $aditionalInformation->getData()
+            );
     }
 }
