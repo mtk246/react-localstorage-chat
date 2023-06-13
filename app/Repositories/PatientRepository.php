@@ -488,10 +488,10 @@ class PatientRepository
                 $patient_emergency_contacts = [];
                 foreach ($emergency_contacts as $emergency_contact) {
                     array_push($patient_emergency_contacts, [
-                        'name' => $emergency_contact->name,
-                        'cellphone' => $emergency_contact->cellphone,
-                        'relationship_id' => $emergency_contact->relationship_id,
-                        'relationship' => $emergency_contact->relationship->description,
+                        'name' => $emergency_contact->name ?? '',
+                        'cellphone' => $emergency_contact->cellphone ?? '',
+                        'relationship_id' => $emergency_contact->relationship_id ?? '',
+                        'relationship' => $emergency_contact->relationship?->description ?? '',
                     ]);
                 }
             }
@@ -586,11 +586,14 @@ class PatientRepository
                         array_push($patient_policy_subscriber, [
                             'id' => $subscriber->id,
                             'ssn' => $subscriber->ssn,
+                            'sex' => $subscriber->sex,
                             'first_name' => $subscriber->first_name,
                             'last_name' => $subscriber->last_name,
                             'date_of_birth' => $subscriber->date_of_birth,
+                            'name_suffix_id' => $subscriber->name_suffix_id,
+                            'name_suffix' => $subscriber->nameSuffix?->description ?? '',
                             'relationship_id' => $subscriber->relationship_id,
-                            'relationship' => $subscriber->relationship->description ?? '',
+                            'relationship' => $subscriber->relationship?->description ?? '',
                             'address' => isset($subscriber_address) ? $subscriber_address : null,
                             'contact' => isset($subscriber_contact) ? $subscriber_contact : null,
                         ]);
@@ -1171,7 +1174,7 @@ class PatientRepository
                     'id' => $data['subscriber']['id'] ?? null,
                 ], [
                     'ssn' => $data['subscriber']['ssn'],
-                    'sex' => $data['subscriber']['sex'] ?? null,
+                    'sex' => upperCaseWords($data['subscriber']['sex'] ?? ''),
                     'first_name' => upperCaseWords($data['subscriber']['first_name']),
                     'last_name' => upperCaseWords($data['subscriber']['last_name']),
                     'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
@@ -1243,8 +1246,8 @@ class PatientRepository
             'policy_number' => $data['policy_number'],
             'insurance_plan_id' => $data['insurance_plan'],
             'group_number' => $data['group_number'] ?? '',
-            'eff_date' => $data['eff_date'],
-            'end_date' => $data['end_date'] ?? '',
+            'eff_date' => $data['eff_date'] ?? null,
+            'end_date' => $data['end_date'] ?? null,
             'insurance_policy_type_id' => $data['insurance_policy_type_id'] ?? null,
             'type_responsibility_id' => $data['type_responsibility_id'],
             'release_info' => $data['release_info'],
@@ -1260,7 +1263,7 @@ class PatientRepository
             ], [
                 'first_name' => upperCaseWords($data['subscriber']['first_name']),
                 'last_name' => upperCaseWords($data['subscriber']['last_name']),
-                'sex' => $data['subscriber']['sex'] ?? null,
+                'sex' => upperCaseWords($data['subscriber']['sex'] ?? ''),
                 'name_suffix_id' => $data['subscriber']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['subscriber']['date_of_birth'],
                 'relationship_id' => $data['subscriber']['relationship_id'],
