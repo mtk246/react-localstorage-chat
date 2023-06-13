@@ -1661,7 +1661,7 @@ class PatientRepository
                         ]);
                     } else {
                         $patient->companies()->updateExistingPivot($company->id, [
-                            'med_num' => $dataCompany['med_num'],
+                            'med_num' => $dataCompany['med_num'] ?? '',
                             'billing_company_id' => $billingCompany->id ?? $dataCompany['billing_company_id'],
                         ]);
                     }
