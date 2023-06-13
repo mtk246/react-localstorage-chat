@@ -251,13 +251,13 @@ class PatientRepository
                 /* update or create new emergency contact */
                 foreach ($data['emergency_contacts'] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
-                        'name' => $emergencyContact['name'],
+                        'name' => $emergencyContact['name'] ?? null,
                         'patient_id' => $patient->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        'name' => $emergencyContact['name'],
-                        'cellphone' => $emergencyContact['cellphone'],
-                        'relationship_id' => $emergencyContact['relationship_id'],
+                        'name' => $emergencyContact['name'] ?? null,
+                        'cellphone' => $emergencyContact['cellphone'] ?? null,
+                        'relationship_id' => $emergencyContact['relationship_id'] ?? null,
                         'patient_id' => $patient->id,
                     ]);
                 }
@@ -969,13 +969,13 @@ class PatientRepository
                 /* update or create new emergency contact */
                 foreach ($data['emergency_contacts'] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
-                        'name' => $emergencyContact['name'],
+                        'name' => $emergencyContact['name'] ?? null,
                         'patient_id' => $patient->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        'name' => $emergencyContact['name'],
-                        'cellphone' => $emergencyContact['cellphone'],
-                        'relationship_id' => $emergencyContact['relationship_id'],
+                        'name' => $emergencyContact['name'] ?? null,
+                        'cellphone' => $emergencyContact['cellphone'] ?? null,
+                        'relationship_id' => $emergencyContact['relationship_id'] ?? null,
                         'patient_id' => $patient->id,
                     ]);
                 }
