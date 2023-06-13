@@ -147,6 +147,7 @@ class PatientRepository
                     $address['addressable_type'] = User::class;
                     $address['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                     Address::firstOrCreate([
+                        'address_type_id' => $address['address_type_id'] ?? null,
                         'addressable_id' => $user->id,
                         'addressable_type' => User::class,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -251,13 +252,13 @@ class PatientRepository
                 /* update or create new emergency contact */
                 foreach ($data['emergency_contacts'] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
-                        'name' => $emergencyContact['name'],
+                        'name' => $emergencyContact['name'] ?? null,
                         'patient_id' => $patient->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        'name' => $emergencyContact['name'],
-                        'cellphone' => $emergencyContact['cellphone'],
-                        'relationship_id' => $emergencyContact['relationship_id'],
+                        'name' => $emergencyContact['name'] ?? null,
+                        'cellphone' => $emergencyContact['cellphone'] ?? null,
+                        'relationship_id' => $emergencyContact['relationship_id'] ?? null,
                         'patient_id' => $patient->id,
                     ]);
                 }
@@ -739,29 +740,32 @@ class PatientRepository
                 },
             ]);
         } else {
-            $data = Patient::with([
-                'user' => function ($query) {
-                    $query->with(['profile' => function ($q) {
-                        $q->with('socialMedias');
-                    }, 'roles', 'addresses', 'contacts',
-                    'billingCompanies',
-                    ]);
-                },
-                // "marital",
-                // "guarantor",
-                'employments',
-                'companies',
-                'emergencyContacts',
-                'publicNote',
-                'privateNotes',
-                'insurancePolicies',
-                'billingCompanies' => function ($query) use ($bC) {
+            $data = Patient::query()
+                ->whereHas('billingCompanies', function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
-                },
-                'insurancePlans' => function ($query) {
-                    $query->with('insuranceCompany');
-                },
-            ]);
+                })->with([
+                    'user' => function ($query) {
+                        $query->with(['profile' => function ($q) {
+                            $q->with('socialMedias');
+                        }, 'roles', 'addresses', 'contacts',
+                        'billingCompanies',
+                        ]);
+                    },
+                    // "marital",
+                    // "guarantor",
+                    'employments',
+                    'companies',
+                    'emergencyContacts',
+                    'publicNote',
+                    'privateNotes',
+                    'insurancePolicies',
+                    'billingCompanies' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'insurancePlans' => function ($query) {
+                        $query->with('insuranceCompany');
+                    },
+                ]);
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
@@ -914,6 +918,7 @@ class PatientRepository
             if (isset($data['addresses'])) {
                 foreach ($data['addresses'] as $address) {
                     Address::updateOrCreate([
+                        'address_type_id' => $address['address_type_id'] ?? null,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         'addressable_id' => $user->id,
                         'addressable_type' => User::class,
@@ -969,13 +974,13 @@ class PatientRepository
                 /* update or create new emergency contact */
                 foreach ($data['emergency_contacts'] as $emergencyContact) {
                     EmergencyContact::updateOrCreate([
-                        'name' => $emergencyContact['name'],
+                        'name' => $emergencyContact['name'] ?? null,
                         'patient_id' => $patient->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], [
-                        'name' => $emergencyContact['name'],
-                        'cellphone' => $emergencyContact['cellphone'],
-                        'relationship_id' => $emergencyContact['relationship_id'],
+                        'name' => $emergencyContact['name'] ?? null,
+                        'cellphone' => $emergencyContact['cellphone'] ?? null,
+                        'relationship_id' => $emergencyContact['relationship_id'] ?? null,
                         'patient_id' => $patient->id,
                     ]);
                 }
@@ -1145,8 +1150,8 @@ class PatientRepository
                 'own' => $data['own_insurance'] ?? false,
                 'policy_number' => $data['policy_number'],
                 'group_number' => $data['group_number'] ?? '',
-                'eff_date' => $data['eff_date'],
-                'end_date' => $data['end_date'] ?? '',
+                'eff_date' => $data['eff_date'] ?? null,
+                'end_date' => $data['end_date'] ?? null,
                 'insurance_policy_type_id' => $data['insurance_policy_type_id'] ?? null,
                 'type_responsibility_id' => $data['type_responsibility_id'],
                 'release_info' => $data['release_info'],
@@ -1383,7 +1388,7 @@ class PatientRepository
                 ->paginate(Pagination::itemsPerPage());
         } else {
             $data = $patient->insurancePolicies()
-                ->wherePivot('billing_company_id', $bC)
+                ->where('billing_company_id', $bC)
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         }
@@ -1661,7 +1666,7 @@ class PatientRepository
                         ]);
                     } else {
                         $patient->companies()->updateExistingPivot($company->id, [
-                            'med_num' => $dataCompany['med_num'],
+                            'med_num' => $dataCompany['med_num'] ?? '',
                             'billing_company_id' => $billingCompany->id ?? $dataCompany['billing_company_id'],
                         ]);
                     }

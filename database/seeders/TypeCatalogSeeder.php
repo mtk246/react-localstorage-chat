@@ -177,10 +177,6 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Patient relationship',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
-                        'description' => 'Self/Patient is Insured',
-                    ],
-                    [
                         'code' => '2',
                         'description' => 'Spouse',
                     ],
