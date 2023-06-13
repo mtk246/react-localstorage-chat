@@ -147,6 +147,7 @@ class PatientRepository
                     $address['addressable_type'] = User::class;
                     $address['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                     Address::firstOrCreate([
+                        'address_type_id' => $address['address_type_id'] ?? null,
                         'addressable_id' => $user->id,
                         'addressable_type' => User::class,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -914,6 +915,7 @@ class PatientRepository
             if (isset($data['addresses'])) {
                 foreach ($data['addresses'] as $address) {
                     Address::updateOrCreate([
+                        'address_type_id' => $address['address_type_id'] ?? null,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         'addressable_id' => $user->id,
                         'addressable_type' => User::class,
