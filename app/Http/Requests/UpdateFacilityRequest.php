@@ -61,7 +61,7 @@ class UpdateFacilityRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => ['nullable', 'email:rfc'],
         ];
     }
 }
