@@ -86,7 +86,7 @@ class Contact extends Model implements Auditable
 
     public function email(): Attribute
     {
-        return Attribute::make(set: fn (string $value) => empty($value) ? null : strtolower($value));
+        return Attribute::make(set: fn (?string $value) => empty($value) ? null : strtolower($value));
     }
 
     /**
