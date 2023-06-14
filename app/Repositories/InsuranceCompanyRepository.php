@@ -423,7 +423,7 @@ class InsuranceCompanyRepository
                     ->toArray();
             } else {
                 $billingCompaniesException = auth()->user()->billingCompanies
-                    ->first()
+                    ->take(1)
                     ->pluck('id')
                     ->toArray();
             }
