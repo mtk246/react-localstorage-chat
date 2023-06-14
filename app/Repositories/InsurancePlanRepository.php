@@ -527,7 +527,7 @@ class InsurancePlanRepository
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
+            $data = $data->search($request->query('query'), empty($insuranceCompanyId));
         }
 
         if ($request->sortBy) {
