@@ -102,17 +102,17 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimServices::class);
     }
 
-        protected function setDemographicInformation(Claim $claim, DemographicInformationWrapper $demographicInformation): void
-        {
-            $claim
-                ->demographicInformation()
-                ->updateOrCreate(
-                    ['claim_id' => $claim->id],
-                    $demographicInformation->getData()
-                );
-        }
+    public function setDemographicInformation(DemographicInformationWrapper $demographicInformation): void
+    {
+        $this
+            ->demographicInformation()
+            ->updateOrCreate(
+                ['claim_id' => $this->id],
+                $demographicInformation->getData()
+            );
+    }
 
-    protected function setServices(ClaimServicesWrapper $services): void
+    public function setServices(ClaimServicesWrapper $services): void
     {
         /** @var ClaimServices */
         $claimService = $this
@@ -130,14 +130,14 @@ class Claim extends Model implements Auditable
         );
     }
 
-    protected function setInsurancePolicies(PoliciesInsurancesWrapper $policiesInsurances): void
+    public function setInsurancePolicies(PoliciesInsurancesWrapper $policiesInsurances): void
     {
         $this
             ->insurancePolicies()
             ->sync($policiesInsurances->getData());
     }
 
-    protected function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
+    public function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
         $this
             ->aditionalInformation()
