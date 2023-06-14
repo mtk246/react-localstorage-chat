@@ -17,11 +17,11 @@ final class GetClaimPreviewAction
     {
         return DB::transaction(function () use ($data, $user): PreviewResource {
             $claim = Claim::query()
-                ->where('id', $data['id'])
+                ->where('id', $data['id'] ?? null)
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($user): void {
-                    $query
-                        ->where('billing_company_id', null)
-                        ->orWhere('billing_company_id', $user->billingCompanies->first()?->id);
+                    $query->whereHas('claimFormattable', function ($query) use ($user) {
+                        $query->where('billing_company_id', $user->billingCompanies->first()?->id);
+                    });
                 })
                 ->first();
 

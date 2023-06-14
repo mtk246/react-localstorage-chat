@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -304,14 +305,34 @@ class InsuranceCompany extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        if ('' != $search) {
-            return $query->whereHas('contacts', function ($q) use ($search) {
-                $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
-        }
+        return $query->when($search, function ($query, $search) {
+            return $query
+                ->where(function ($query) use ($search) {
+                    $this->searchByInsuranceCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByAbbreviation($query, $search);
+                });
+        });
+    }
 
-        return $query;
+    protected function searchByInsuranceCompany($query, $search)
+    {
+        $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(payer_id) LIKE (?)', [strtolower("%$search%")]);
+    }
+
+    protected function searchByAbbreviation($query, $search)
+    {
+        $query->whereHas('abbreviations', function ($q) use ($search) {
+            $q->when(Gate::denies('is-admin'), function ($query) {
+                $user = auth()->user();
+
+                return $query->where('billing_company_id', $user->billingCompanies->first()?->id);
+            })
+            ->whereRaw('LOWER(abbreviation) LIKE (?)', [strtolower("%$search%")]);
+        });
     }
 
     public function toSearchableArray(): array

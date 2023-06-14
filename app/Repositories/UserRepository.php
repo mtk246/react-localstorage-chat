@@ -590,9 +590,10 @@ class UserRepository
     {
         $ssn = $request->ssn;
         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
-        $profile = Profile::where('ssn', 'ilike', "%{$ssn}")
-                          ->orWhere('ssn', 'ilike', "%{$ssnFormated}")
-                          ->whereDateOfBirth($request->dateOfBirth)->first();
+        $profile = Profile::query()
+            ->where('ssn', 'LIKE', "%{$ssn}")
+            ->orWhere('ssn', 'LIKE', "%{$ssnFormated}")
+            ->whereDateOfBirth($request->dateOfBirth)->first();
 
         $user = User::where('profile_id', $profile->id)->first();
 
@@ -705,10 +706,10 @@ class UserRepository
                 'billingCompanies',
             ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
                 $query->whereDateOfBirth($date_of_birth)
-                      ->where('first_name', 'ilike', "%{$first_name}%")
-                      ->where('last_name', 'ilike', "%{$last_name}%")
-                      ->where('ssn', 'ilike', "%{$ssn}")
-                      ->orWhere('ssn', 'ilike', "%{$ssnFormated}");
+                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
+                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
+                    ->where('ssn', 'LIKE', "%{$ssn}")
+                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
             })->get();
         } else {
             $users = User::with([
@@ -725,10 +726,10 @@ class UserRepository
                 'billingCompanies',
             ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
                 $query->whereDateOfBirth($date_of_birth)
-                      ->where('first_name', 'ilike', "%{$first_name}%")
-                      ->where('last_name', 'ilike', "%{$last_name}%")
-                      ->where('ssn', 'ilike', "%{$ssn}")
-                      ->orWhere('ssn', 'ilike', "%{$ssnFormated}");
+                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
+                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
+                    ->where('ssn', 'LIKE', "%{$ssn}")
+                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
             })->get();
         }
 
