@@ -18,7 +18,7 @@ final class CreateAction
             function (Claim $claim) use ($claimData) {
                 $claim->setDemographicInformation($claimData->getDemographicInformation());
                 $claim->setServices($claimData->getClaimServices());
-                $claim->setPoliciesInsurances($claimData->getPoliciesInsurances());
+                $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
                 $claim->setAditionalInformation($claimData->getAditionalInformation());
             }
         )->load(['demographicInformation', 'services', 'policiesInsurances', 'aditionalInformation']));
