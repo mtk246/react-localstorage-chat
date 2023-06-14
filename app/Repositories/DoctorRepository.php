@@ -388,6 +388,10 @@ class DoctorRepository
                     $billingCompany->id ?? $billingCompany,
                     [
                         'status' => true,
+                        'is_provider' => $data['is_provider'] ?? false,
+                        'npi_company' => $data['npi_company'] ?? '',
+                        'company_id' => $data['company_id'] ?? null,
+                        'health_professional_type_id' => $data['health_professional_type_id']
                     ]
                 );
             }

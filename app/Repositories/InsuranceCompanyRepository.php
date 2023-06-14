@@ -558,7 +558,7 @@ class InsuranceCompanyRepository
 
             $insurance->update([
                 'naic' => $data['insurance']['naic'],
-                'file_method' => $data['insurance']['file_method_id'],
+                'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
             if (auth()->user()->hasRole('superuser')) {

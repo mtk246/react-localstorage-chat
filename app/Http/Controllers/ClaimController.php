@@ -73,7 +73,7 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimCreateRequest $request, int $id)
+    public function updateClaim(ClaimVerifyRequest $request, int $id)
     {
         $claim = $this->claimRepository->updateClaim($request->validated(), $id);
         if (is_null($claim)) {

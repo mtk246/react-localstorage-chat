@@ -286,17 +286,19 @@ class ClaimBatchRepository
                 'claimBatchStatus',
             ]);
         } else {
-            $data = ClaimBatch::with([
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                        'nicknames' => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        },
-                    ]);
-                },
-                'claims',
-                'claimBatchStatus',
-            ]);
+            $data = ClaimBatch::query()
+                ->where('billing_company_id', $bC)
+                ->with([
+                    'company' => function ($query) use ($bC) {
+                        $query->with([
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                    },
+                    'claims',
+                    'claimBatchStatus',
+                ]);
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {

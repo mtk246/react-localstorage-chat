@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
-use App\Http\Resources\Enums\TypeResource;
-use App\Models\CompanyHealthProfessional;
+use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Models\Company;
 use App\Models\HealthProfessional;
+use App\Models\HealthProfessionalType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,38 +28,30 @@ final class DoctorBodyResource extends JsonResource
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'code' => $this->resource->code,
-            'is_provider' => $this->resource->is_provider,
-            'npi_company' => $this->resource->npi_company,
-            'health_professional_type_id' => $this->resource->health_professional_type_id,
-            'company_id' => $this->resource->company_id,
             'nppes_verified_at' => $this->resource->nppes_verified_at,
             'ein' => $this->resource->ein,
             'upin' => $this->resource->upin,
             'status' => $this->resource->status,
             'last_modified' => $this->resource->last_modified,
-            'companies_providers' => $this->resource->companies_providers->map(
-                fn (CompanyHealthProfessional $companyProvider) => [
-                    'health_professional_id' => $companyProvider->health_professional_id,
-                    'company_id' => $companyProvider->company_id,
-                    'authorization' => TypeResource::collection($companyProvider->authorization),
-                    'billing_company_id' => $companyProvider->billing_company_id,
-                    'created_at' => $companyProvider->created_at,
-                    'updated_at' => $companyProvider->updated_at,
-                ],
-            ),
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
-            'companies' => $this->resource->companies,
-            'health_professional_type' => $this->resource->healthProfessionalType,
-            'company' => $this->resource->company,
             'public_note' => $this->resource->publicNote,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
-                    $model->socialMedias = $this->getSocialMedias($model->id);
-                    $model->addresses = $this->getAddresses($model->id);
-                    $model->contacts = $this->getContacts($model->id);
-                    $model->privateNotes = $this->getPrivateNotes($model->id);
+                    $type = $this->getHealthProfessionalType($model->id);
+                    $model->private_health_professional = [
+                        'socialMedias' => $this->getSocialMedias($model->id),
+                        'address' => $this->getAddress($model->id),
+                        'contact' => $this->getContact($model->id),
+                        'privateNote' => $this->getPrivateNote($model->id),
+                        'is_provider' => $model->pivot->is_provider,
+                        'npi_company' => $model->pivot->npi_company,
+                        'health_professional_type_id' => $type['id'] ?? null,
+                        'health_professional_type' => $type,
+                        'company_id' => $model->pivot->company_id,
+                        'company' => $this->getCompany($model->pivot->company_id, $model->id),
+                    ];
 
                     return $model;
                 }),
@@ -76,32 +69,64 @@ final class DoctorBodyResource extends JsonResource
             );
     }
 
-    private function getAddresses(int $billingCompanyId): Collection
+    private function getAddress(int $billingCompanyId)
     {
         return $this->resource
             ->user
             ->addresses
-            ->filter(
+            ->first(
                 fn ($address) => $address->billing_company_id === $billingCompanyId,
-            );
+            ) ?? null;
     }
 
-    private function getContacts(int $billingCompanyId): Collection
+    private function getContact(int $billingCompanyId)
     {
         return $this->resource
             ->user
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            );
+            )[0] ?? null;
     }
 
-    private function getPrivateNotes(int $billingCompanyId): Collection
+    private function getPrivateNote(int $billingCompanyId)
     {
         return $this->resource
             ->privateNotes
-            ->filter(
+            ->first(
                 fn ($privateNote) => $privateNote->billing_company_id === $billingCompanyId,
-            );
+            ) ?? null;
+    }
+
+    private function getHealthProfessionalType(int $billingCompanyId)
+    {
+        $type = HealthProfessionalType::query()
+            ->where('health_professional_id', $this->resource->id)
+            ->where('billing_company_id', $billingCompanyId)
+            ->first()?->type;
+
+        $enums = collect(HealthProfessionalTypeEnum::cases());
+        $item = $enums->first(fn ($item) => $item->value === (int) $type);
+
+        return ($item)
+            ? [
+                'id' => $item->value,
+                'name' => $item->getName(),
+            ]
+            : null;
+    }
+
+    private function getCompany(?int $companyId, int $billingCompanyId)
+    {
+        $company = Company::find($companyId);
+
+        return [
+            'id' => $company->id,
+            'name' => $company->name,
+            'nickname' => $company->nicknames->filter(
+                fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
+            )[0]->nickname ?? '',
+            'taxonomies' => $company->taxonomies ?? [],
+        ];
     }
 }

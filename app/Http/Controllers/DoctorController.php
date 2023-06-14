@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\HealthProfessional\GetDoctorAction;
-use App\Actions\HealthProfessional\GetBillingCompanyAction;
 use App\Http\Requests\CreateDoctorRequest;
 use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\HealthProfessional\UpdateCompaniesRequest;
@@ -105,11 +104,4 @@ class DoctorController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__('Error, update companies/providers by health professional'), 404);
     }
-    
-    public function getDoctorBillingCompany(HealthProfessional $doctor, Request $request, GetBillingCompanyAction $getBillingCompany): JsonResponse {
-        
-        return response()->json($getBillingCompany->all($request->user(), $doctor));
-    }
-
-    
 }
