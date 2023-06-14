@@ -9,12 +9,18 @@ use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
-final class CreateAction extends ClaimsActions
+final class CreateAction
 {
     public function invoke(CreateRequestWrapper $claimData): Collection
     {
-        return DB::transaction(tap(new Claim($claimData->getData()), function (Claim $claim) use ($claimData) {
-            $this->setDemographicInformation($claim, $claimData->getDemographicInformation());
-        }));
+        return DB::transaction(tap(
+            new Claim($claimData->getData()),
+            function (Claim $claim) use ($claimData) {
+                $claim->setDemographicInformation($claimData->getDemographicInformation());
+                $claim->setServices($claimData->getClaimServices());
+                $claim->setPoliciesInsurances($claimData->getPoliciesInsurances());
+                $claim->setAditionalInformation($claimData->getAditionalInformation());
+            }
+        )->load(['demographicInformation', 'services', 'policiesInsurances', 'aditionalInformation']));
     }
 }
