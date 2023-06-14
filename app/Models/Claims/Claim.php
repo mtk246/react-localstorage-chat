@@ -102,6 +102,16 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimServices::class);
     }
 
+    public function dateInformation(): HasOne
+    {
+        return $this->hasOne(ClaimDateInformation::class);
+    }
+
+    public function patientInformation(): HasOne
+    {
+        return $this->hasOne(PatientAdditionalInformation::class);
+    }
+
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformation): void
     {
         $this
@@ -136,11 +146,15 @@ class Claim extends Model implements Auditable
 
     public function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
-        $this
-            ->aditionalInformation()
+        $this->dateInformation()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
-                $aditionalInformation->getData()
+                $aditionalInformation->getDateInformation()
+            );
+        $this->patientInformation()
+            ->updateOrCreate(
+                ['claim_id' => $this->id],
+                $aditionalInformation->getPatientInformation()
             );
     }
 }
