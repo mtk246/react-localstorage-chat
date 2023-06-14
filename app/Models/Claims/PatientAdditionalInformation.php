@@ -38,9 +38,9 @@ final class PatientAdditionalInformation extends Model implements Auditable
      */
     protected $appends = ['condition_codes'];
 
-    public function claimAdditionalInformation()
+    public function claim()
     {
-        return $this->belongsTo(ClaimAdditionalInformation::class);
+        return $this->belongsTo(Claim::class);
     }
 
     /**
