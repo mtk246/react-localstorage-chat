@@ -124,10 +124,7 @@ class Claim extends Model implements Auditable
 
         Services::upsert($services->getService()->getData(), ['id']);
 
-        $claimService->diagnoses()->syncWithPivotValues(
-            $services->getDiagnoses()->getIds(),
-            $services->getDiagnoses()->getValues(),
-        );
+        $claimService->diagnoses()->sync($services->getDiagnoses()->getSyncData());
     }
 
     public function setInsurancePolicies(PoliciesInsurancesWrapper $policiesInsurances): void
