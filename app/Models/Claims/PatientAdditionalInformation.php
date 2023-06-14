@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
-final class AdditionalInformationPatient extends Model implements Auditable
+final class PatientAdditionalInformation extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
