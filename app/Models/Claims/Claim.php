@@ -8,6 +8,7 @@ use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Http\Casts\Claims\PoliciesInsurancesWrapper;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -73,9 +74,10 @@ class Claim extends Model implements Auditable
     use HasFactory;
     use AuditableTrait;
     use Searchable;
+    use HasUlids;
 
     protected $fillable = [
-        'qr_claim',
+        'format',
         'control_number',
         'submitter_name',
         'submitter_contact',
