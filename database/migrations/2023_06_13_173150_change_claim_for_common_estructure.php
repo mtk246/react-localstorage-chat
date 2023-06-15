@@ -55,8 +55,14 @@ return new class() extends Migration {
                 'claim_formattable_type',
                 'qr_claim',
             ]);
+            $table->foreignId('billing_company_id')
+                ->nullable()
+                ->constrained('billing_companies')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
             $table->ulid('code');
             $table->string('format');
+            $table->string('type')->default('institutional');
             $table->json('aditional_information');
         });
         Schema::create('claim_demographic', function (Blueprint $table) {
@@ -66,11 +72,6 @@ return new class() extends Migration {
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
             $table->string('type_of_medical_assistance');
-            $table->foreignId('billing_company_id')
-                ->nullable()
-                ->constrained('billing_companies')
-                ->onDelete('restrict')
-                ->onUpdate('cascade');
             $table->foreignId('company_id')
                 ->nullable()
                 ->constrained('companies')
@@ -125,7 +126,9 @@ return new class() extends Migration {
             $table->dropColumn([
                 'code',
                 'format',
+                'type',
                 'aditional_information',
+                'billing_company_id',
             ]);
 
             $table->string('qr_claim', 50)->nullable();
