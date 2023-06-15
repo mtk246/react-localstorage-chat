@@ -19,7 +19,10 @@ final class CreateAction
                 $claim->setDemographicInformation($claimData->getDemographicInformation());
                 $claim->setServices($claimData->getClaimServices());
                 $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
-                $claim->setAditionalInformation($claimData->getAditionalInformation());
+                $claim->setStates($claimData->getStatus(), $claimData->getSubStatus());
+                $claim->query()->when($claim->type, function (Claim $query) use ($claimData) {
+                    $query->setAditionalInformation($claimData->getAditionalInformation());
+                });
             }
         )->load(['demographicInformation', 'services', 'policiesInsurances', 'aditionalInformation']));
     }
