@@ -118,5 +118,36 @@ return new class() extends Migration {
 
     public function down(): void
     {
+        Schema::dropIfExists('claim_demographic');
+        Schema::dropIfExists('patient_information');
+
+        Schema::table('claims', function (Blueprint $table) {
+            $table->dropColumn([
+                'code',
+                'format',
+                'aditional_information',
+            ]);
+
+            $table->string('qr_claim', 50)->nullable();
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('facility_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('patient_id')->nullable()->constrained()->onDelete('restrict')->onUpdate('cascade');
+            $table->nullableMorphs('claim_formattable');
+            $table->boolean('validate')->default(true)->change();
+            $table->boolean('automatic_eligibility')->default(true);
+            $table->foreignId('billing_provider_id')->nullable()->constrained('health_professionals')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('service_provider_id')->nullable()->constrained('health_professionals')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('referred_id')->nullable()->constrained('health_professionals')->onDelete('restrict')->onUpdate('cascade');
+        });
+
+        Schema::table('claim_date_informations', function (Blueprint $table) {
+            $table->renameColumn('from_date', 'from_date_or_current');
+            $table->unsignedBigInteger('physician_or_supplier_information_id');
+            $table->foreign('physician_or_supplier_information_id', 'fk_cdi_psi_id')
+                ->references('id')
+                ->on('physician_or_supplier_informations')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+        });
     }
 };
