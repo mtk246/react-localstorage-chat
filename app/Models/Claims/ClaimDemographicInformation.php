@@ -124,6 +124,8 @@ final class ClaimDemographicInformation extends Model
      */
     public function healthProfessionals()
     {
-        return $this->belongsToMany(HealthProfessional::class, 'claim_health_professional', 'claim_id', 'health_professional_id')->withPivot(['field_id', 'qualifier_id'])->withTimestamps();
+        return $this->belongsToMany(HealthProfessional::class, 'claim_health_professional', 'claim_id', 'health_professional_id')
+            ->withPivot(['field_id', 'qualifier_id'])
+            ->withTimestamps();
     }
 }
