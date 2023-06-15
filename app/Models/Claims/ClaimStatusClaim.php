@@ -12,7 +12,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claims\ClaimStatusClaim
+ * App\Models\Claims\ClaimStatusClaim.
  *
  * @property int $id
  * @property int $claim_id
@@ -20,13 +20,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $claim_status_type
  * @property int|null $claim_status_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Claims\Claim $claim
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimCheckStatus> $claimCheckStatus
- * @property-read int|null $claim_check_status_count
- * @property-read Model|\Eloquent $claimStatus
- * @property-read mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claims\Claim $claim
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimCheckStatus> $claimCheckStatus
+ * @property int|null $claim_check_status_count
+ * @property Model|\Eloquent $claimStatus
+ * @property mixed $last_modified
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim query()
@@ -36,6 +37,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class ClaimStatusClaim extends Model implements Auditable

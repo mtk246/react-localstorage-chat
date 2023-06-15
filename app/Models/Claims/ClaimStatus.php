@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\morphMany;
 
 /**
- * App\Models\Claims\ClaimStatus
+ * App\Models\Claims\ClaimStatus.
  *
  * @property int $id
  * @property string $status
@@ -18,10 +18,11 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $background_color
  * @property string|null $font_color
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
- * @property-read int|null $claim_status_claims_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $claimSubStatuses
- * @property-read int|null $claim_sub_statuses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property int|null $claim_status_claims_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $claimSubStatuses
+ * @property int|null $claim_sub_statuses_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus query()
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class ClaimStatus extends Model
