@@ -305,7 +305,7 @@ class InsuranceCompany extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->when($search, function ($query, $search) {
+        return $query->when($search, function ($query) use ($search) {
             return $query
                 ->where(function ($query) use ($search) {
                     $this->searchByInsuranceCompany($query, $search);
