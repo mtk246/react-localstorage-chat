@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -77,6 +78,7 @@ class Claim extends Model implements Auditable
     use HasUlids;
 
     protected $fillable = [
+        'type',
         'format',
         'control_number',
         'submitter_name',
@@ -112,6 +114,19 @@ class Claim extends Model implements Auditable
         return $this->hasOne(PatientAdditionalInformation::class);
     }
 
+    public function status(): MorphToMany
+    {
+        return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claims');
+    }
+
+    /**
+     * Get all of the videos that are assigned this tag.
+     */
+    public function subStatus(): MorphToMany
+    {
+        return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claims');
+    }
+
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformation): void
     {
         $this
@@ -142,6 +157,21 @@ class Claim extends Model implements Auditable
         $this
             ->insurancePolicies()
             ->sync($policiesInsurances->getData());
+    }
+
+    public function setStates(?string $status, ?int $subStatus): void
+    {
+        if (null !== $status) {
+            $this->status()->sync(
+                ClaimStatus::query()->where('status', $status)->first()->id
+            );
+        }
+
+        if (null !== $subStatus) {
+            $this->subStatus()->sync(
+                ClaimSubStatus::query()->where('id', $subStatus)->first()->id
+            );
+        }
     }
 
     public function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
