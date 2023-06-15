@@ -453,9 +453,9 @@ class InsurancePlanRepository
                     'nickname' => $nickname->nickname ?? '',
                     'abbreviation' => $abbreviation->abbreviation ?? '',
                     'private_note' => $private_note->note ?? '',
-                    'address' => isset($insurance_address) ? $insurance_address : null,
-                    'contact' => isset($insurance_contact) ? $insurance_contact : null,
-                    'insurance_plan_time_failed' => isset($insurance_plan_time_failed) ? $insurance_plan_time_failed : null,
+                    'address' => isset($address) ? $insurance_address : null,
+                    'contact' => isset($contact) ? $insurance_contact : null,
+                    'insurance_plan_time_failed' => isset($time_failed) ? $insurance_plan_time_failed : null,
                 ],
             ]);
         }
@@ -643,24 +643,25 @@ class InsurancePlanRepository
         $insurance = InsurancePlan::query()->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])->first();
 
         if ($insurance) {
-            if (Gate::check('is-admin')) {
-                $billingCompaniesException = $insurance->billingCompanies()
-                    ->get()
-                    ->pluck('id')
-                    ->toArray();
-            } else {
-                $billingCompaniesException = auth()->user()->billingCompanies
-                    ->take(1)
-                    ->pluck('id')
-                    ->toArray();
-            }
+            $billingCompaniesException = $insurance->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
 
             $billingCompanies = $insurance->insuranceCompany
                 ->billingCompanies()
+                ->when(Gate::denies('is-admin'), function ($query) {
+                    $billingCompaniesUser = auth()->user()->billingCompanies
+                        ->take(1)
+                        ->pluck('id')
+                        ->toArray();
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
                 ->get()
                 ->pluck('id')
                 ->toArray();
+
             if (empty($billingCompanies)) {
                 return ['result' => false];
             }
