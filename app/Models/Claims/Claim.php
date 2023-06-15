@@ -129,12 +129,15 @@ class Claim extends Model implements Auditable
 
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformation): void
     {
-        $this
+        /** @var ClaimDemographicInformation */
+        $demographicInformation = $this
             ->demographicInformation()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
                 $demographicInformation->getData()
             );
+
+        $demographicInformation->healthProfessionals()->sync($demographicInformation->getHealthProfessionals());
     }
 
     public function setServices(ClaimServicesWrapper $services): void
