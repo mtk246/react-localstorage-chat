@@ -30,6 +30,8 @@ final class ClaimDemographicInformation extends Model
 {
     use HasFactory;
 
+    protected $table = 'claim_demographic';
+
     protected $fillable = [
         'claim_id',
         'type_of_medical_assistance',

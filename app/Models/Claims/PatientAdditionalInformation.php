@@ -15,6 +15,8 @@ final class PatientAdditionalInformation extends Model implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    protected $table = 'patient_information';
+
     protected $fillable = [
         'admission_date',
         'admission_time',
