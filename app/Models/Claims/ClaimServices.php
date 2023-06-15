@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Claims;
 
 use App\Models\Diagnosis;
+use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -51,7 +52,7 @@ final class ClaimServices extends Model
 
     public function services(): HasMany
     {
-        return $this->hasMany(Services::class)->withTimestamps();
+        return $this->hasMany(Services::class);
     }
 
     public function diagnoses(): BelongsToMany

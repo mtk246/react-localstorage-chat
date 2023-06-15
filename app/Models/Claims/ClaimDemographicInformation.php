@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\Company;
+use App\Models\Facility;
+use App\Models\HealthProfessional;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,7 +35,6 @@ final class ClaimDemographicInformation extends Model
         'type_of_medical_assistance',
         'validate',
         'automatic_eligibility',
-        'billing_company_id',
         'company_id',
         'facility_id',
         'patient_id',
@@ -55,16 +58,6 @@ final class ClaimDemographicInformation extends Model
     public function claim()
     {
         return $this->belongsTo(Claim::class);
-    }
-
-    /**
-     * Claim belongs to BillingCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function billingCompany()
-    {
-        return $this->belongsTo(BillingCompany::class);
     }
 
     /**
