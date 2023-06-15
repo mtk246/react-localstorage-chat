@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
-use App\Http\Casts\Claims\CreateRequestWrapper;
+use App\Http\Casts\Claims\StoreRequestWrapper;
 use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 final class CreateAction
 {
-    public function invoke(CreateRequestWrapper $claimData): Collection
+    public function invoke(StoreRequestWrapper $claimData): Collection
     {
         return DB::transaction(tap(
             new Claim($claimData->getData()),
