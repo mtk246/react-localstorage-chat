@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;

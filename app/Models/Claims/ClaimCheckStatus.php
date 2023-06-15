@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claims\ClaimCheckStatus
+ * App\Models\Claims\ClaimCheckStatus.
  *
  * @property int $id
  * @property string|null $response_details
@@ -23,8 +24,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $private_note_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus query()
@@ -38,6 +40,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereResolutionTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class ClaimCheckStatus extends Model implements Auditable

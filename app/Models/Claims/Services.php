@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\PlaceOfService;
+use App\Models\Procedure;
+use App\Models\TypeCatalog;
+use App\Models\TypeOfService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -66,7 +70,7 @@ final class Services extends Model
      */
     public function claimService()
     {
-        return $this->belongsTo(ClaimService::class);
+        return $this->belongsTo(ClaimServices::class);
     }
 
     /**

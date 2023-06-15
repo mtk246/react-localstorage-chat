@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\BillingCompany;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claims\ClaimBatch
+ * App\Models\Claims\ClaimBatch.
  *
  * @property int $id
  * @property string $code
@@ -23,21 +25,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property bool $claims_reconciled
  * @property int|null $claim_batch_status_id
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Claims\ClaimBatchStatus|null $claimBatchStatus
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
- * @property-read int|null $claims_count
- * @property-read mixed $last_modified
- * @property-read mixed $total_accepted
- * @property-read mixed $total_accepted_by_clearing_house
- * @property-read mixed $total_accepted_by_payer
- * @property-read mixed $total_claims
- * @property-read mixed $total_denied
- * @property-read mixed $total_denied_by_clearing_house
- * @property-read mixed $total_denied_by_payer
- * @property-read mixed $total_processed
- * @property-read mixed $claim_ids
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claims\ClaimBatchStatus|null $claimBatchStatus
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
+ * @property int|null $claims_count
+ * @property mixed $last_modified
+ * @property mixed $total_accepted
+ * @property mixed $total_accepted_by_clearing_house
+ * @property mixed $total_accepted_by_payer
+ * @property mixed $total_claims
+ * @property mixed $total_denied
+ * @property mixed $total_denied_by_clearing_house
+ * @property mixed $total_denied_by_payer
+ * @property mixed $total_processed
+ * @property mixed $claim_ids
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch query()
@@ -52,6 +55,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class ClaimBatch extends Model implements Auditable
