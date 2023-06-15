@@ -60,7 +60,8 @@ return new class() extends Migration {
                 ->constrained('billing_companies')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
-            $table->ulid('code');
+            $table->renameColumn('control_number', 'code');
+            $table->ulid('code')->change();
             $table->string('format');
             $table->string('type')->default('institutional');
             $table->json('aditional_information');
