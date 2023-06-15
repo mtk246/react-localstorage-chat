@@ -8,9 +8,12 @@ use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Http\Casts\Claims\PoliciesInsurancesWrapper;
+use App\Models\BillingCompany;
+use App\Models\InsurancePolicy;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -84,6 +87,7 @@ class Claim extends Model implements Auditable
         'submitter_name',
         'submitter_contact',
         'submitter_phone',
+        'billing_company_id',
     ];
 
     /**
@@ -119,9 +123,11 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claims');
     }
 
-    /**
-     * Get all of the videos that are assigned this tag.
-     */
+    public function billingCompany(): BelongsTo
+    {
+        return $this->belongsTo(BillingCompany::class);
+    }
+
     public function subStatus(): MorphToMany
     {
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claims');
