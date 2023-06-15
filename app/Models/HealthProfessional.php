@@ -119,7 +119,7 @@ class HealthProfessional extends Model implements Auditable
         return $this->belongsTo(Company::class);
     }
 
-    /**
+    /** private data
      * HealthProfessional belongs to HealthProfessionalType.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -156,7 +156,10 @@ class HealthProfessional extends Model implements Auditable
      */
     public function billingCompanies()
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(BillingCompanyHealthProfessional::class)
+            ->withPivot(['status', 'npi_company', 'is_provider', 'company_id', 'health_professional_type_id'])
+            ->withTimestamps();
     }
 
     /**

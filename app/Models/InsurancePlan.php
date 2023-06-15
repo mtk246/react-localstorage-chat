@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -399,14 +400,67 @@ class InsurancePlan extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch($query, $search, $notFromInsurance)
     {
-        if ('' != $search) {
-            return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower('%$search%')])
-                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower('%$search%')]);
-        }
+        return $query->when($search, function ($query) use ($search, $notFromInsurance) {
+            return $query
+                ->where(function ($query) use ($search, $notFromInsurance) {
+                    $this->searchByInsurancePlan($query, $search, $notFromInsurance);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByInsuranceCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByAbbreviation($query, $search);
+                });
+        });
+    }
 
-        return $query;
+    protected function searchByInsurancePlan($query, $search, $notFromInsurance)
+    {
+        $query->when($notFromInsurance, function ($query) use ($search) {
+            return $query->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("%$search%")])
+                ->orWhereHas('planType', function ($q) use ($search) {
+                    $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
+                });
+        }, function ($query) use ($search) {
+            return $query->where(function ($query) use ($search) {
+                $this->searchByBillingCompany($query, $search);
+            });
+        })
+            ->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereHas('insType', function ($q) use ($search) {
+                $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
+            });
+    }
+
+    protected function searchByInsuranceCompany($query, $search)
+    {
+        $query->whereHas('insuranceCompany', function ($q) use ($search) {
+            $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+        });
+    }
+
+    protected function searchByAbbreviation($query, $search)
+    {
+        $query->whereHas('abbreviations', function ($q) use ($search) {
+            $q->when(Gate::denies('is-admin'), function ($query) {
+                $user = auth()->user();
+
+                return $query->where('billing_company_id', $user->billingCompanies->first()?->id);
+            })
+            ->whereRaw('LOWER(abbreviation) LIKE (?)', [strtolower("%$search%")]);
+        });
+    }
+
+    protected function searchByBillingCompany($query, $search)
+    {
+        $query->whereHas('billingCompanies', function ($q) use ($search) {
+            $q->when(Gate::denies('is-admin'), function ($query) use ($search) {
+                return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            });
+        });
     }
 
     public function toSearchableArray(): array

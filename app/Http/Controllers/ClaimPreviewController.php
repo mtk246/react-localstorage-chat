@@ -20,7 +20,7 @@ final class ClaimPreviewController extends Controller
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'print' => $request->print ?? false,
-            'typeFormat' => $claim->format ?? null,
+            'typeFormat' => $claim->format ?? $request->format ?? null,
             'data' => $data->toArray($request),
         ]);
         $preview->setHeader();

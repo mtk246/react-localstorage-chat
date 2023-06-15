@@ -28,7 +28,7 @@ final class PreviewResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $typeFormat = $this->resource->claimFormattable?->typeForm?->form;
+        $typeFormat = $this->resource?->claimFormattable?->typeForm?->form ?? $request->format ?? '';
 
         return ('UB-04 / 837I' == $typeFormat)
             ? $this->getUB04PreviewResource($request)
@@ -41,7 +41,7 @@ final class PreviewResource extends JsonResource
     {
         $bC = (Gate::allows('is-admin'))
             ? ($request->billing_company_id ?? $this->resource->claimFormattable?->billing_company_id)
-            : $this->user->billingCompanies->first()?->id;
+            : auth()->user()->billingCompanies->first()?->id;
 
         $patient = Patient::with([
             'user' => function ($query) use ($bC): void {
@@ -509,7 +509,7 @@ final class PreviewResource extends JsonResource
     {
         $bC = (Gate::allows('is-admin'))
             ? ($request->billing_company_id ?? $this->resource->claimFormattable?->billing_company_id)
-            : $this->user->billingCompanies->first()?->id;
+            : auth()->user()->billingCompanies->first()?->id;
 
         $patient = Patient::with([
             'user' => function ($query) use ($bC): void {

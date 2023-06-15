@@ -10,6 +10,7 @@ use App\Http\Requests\InsurancePlan\UpdateRequest;
 use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class InsurancePlanController extends Controller
 {
@@ -136,7 +137,7 @@ class InsurancePlanController extends Controller
             if (isset($rs['result']) && $rs['result']) {
                 return response()->json($rs['data']);
             } else {
-                if (auth()->user()->hasRole('superuser')) {
+                if (Gate::check('is-admin')) {
                     return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
                 } else {
                     return response()->json(__('Forbidden, The insurance plan has already been associated with the billing company of your insurance company'), 403);
