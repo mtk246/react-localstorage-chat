@@ -120,13 +120,15 @@ final class DoctorBodyResource extends JsonResource
     {
         $company = Company::find($companyId);
 
-        return [
-            'id' => $company->id,
-            'name' => $company->name,
-            'nickname' => $company->nicknames->filter(
-                fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
-            )[0]->nickname ?? '',
-            'taxonomies' => $company->taxonomies ?? [],
-        ];
+        return ($company)
+            ? [
+                'id' => $company->id,
+                'name' => $company->name,
+                'nickname' => $company->nicknames->filter(
+                    fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
+                )[0]->nickname ?? '',
+                'taxonomies' => $company->taxonomies ?? [],
+            ]
+            : null;
     }
 }
