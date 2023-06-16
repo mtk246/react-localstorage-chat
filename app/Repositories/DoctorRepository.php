@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class DoctorRepository
@@ -206,7 +207,7 @@ class DoctorRepository
                 ],
             );
 
-            HealthProfessionalType::query()->updateOrCreate([
+            $type = HealthProfessionalType::query()->updateOrCreate([
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 'health_professional_id' => $healthP->id,
             ], [
@@ -256,7 +257,7 @@ class DoctorRepository
                     'is_provider' => $data['is_provider'] ?? false,
                     'npi_company' => $data['npi_company'] ?? '',
                     'company_id' => $company->id ?? $data['company_id'],
-                    'health_professional_type_id' => $data['health_professional_type_id']
+                    'health_professional_type_id' => $type?->id,
                 ]);
             } else {
                 $healthP->billingCompanies()->updateExistingPivot(
@@ -266,7 +267,7 @@ class DoctorRepository
                         'is_provider' => $data['is_provider'] ?? false,
                         'npi_company' => $data['npi_company'] ?? '',
                         'company_id' => $company->id ?? $data['company_id'],
-                        'health_professional_type_id' => $data['health_professional_type_id']
+                        'health_professional_type_id' => $type?->id,
                     ]
                 );
             }
@@ -790,6 +791,39 @@ class DoctorRepository
      */
     public function getOneByNpi(string $npi)
     {
+        $healthP = HealthProfessional::query()
+            ->whereNpi($npi)
+            //->with(['taxonomies', 'publicNote'])
+            ->first();
+
+        if ($healthP) {
+            $billingCompaniesException = $healthP->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            $billingCompanies = BillingCompany::query()
+                ->where('status', true)
+                ->when(Gate::denies('is-admin'), function ($query) {
+                    $billingCompaniesUser = auth()->user()->billingCompanies
+                        ->take(1)
+                        ->pluck('id')
+                        ->toArray();
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            if (empty($billingCompanies)) {
+                //return ['result' => false];
+                return !is_null($healthP) ? $healthP : null;
+            }
+        }
+        //return !is_null($healthP) ? ['data' => $healthP, 'result' => true] : null;
+        return null;
+
         $bC = auth()->user()->billing_company_id ?? null;
         $query = HealthProfessional::whereNpi($npi);
 
