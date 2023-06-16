@@ -379,7 +379,7 @@ class Patient extends Model implements Auditable
         return [
             'code' => $this->code,
             'driver_license' => $this->driver_license,
-            'marital_status' => $this->maritalStatus->name,
+            'marital_status' => $this->maritalStatus?->name,
             'user.code' => $this->user?->usercode,
             'user.mail' => $this->user?->email,
         ];
