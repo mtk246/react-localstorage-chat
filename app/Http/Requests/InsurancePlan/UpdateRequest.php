@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\InsurancePlan;
 
-use App\Models\InsurancePlan;
-use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
@@ -29,9 +28,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
+            'billing_company_id' => [Rule::requiredIf(Gate::check('is-admin')), 'integer', 'nullable'],
             'insurance_company_id' => ['required', 'integer'],
-            'name' => ['required', 'string', new IUnique(InsurancePlan::class, 'name', $this->id)],
+            'name' => ['required', 'string', 'max:255'],
             'payer_id' => ['required', 'string', 'max:20'],
             'nickname' => ['nullable', 'string'],
             'ins_type_id' => ['required', 'integer'],
