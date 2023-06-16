@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Enums\Company\ApplyToType;
-use App\Models\Company;
-use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
@@ -32,7 +31,7 @@ class CompanyCreateRequest extends FormRequest
     {
         return [
             'billing_company_id' => [
-                Rule::requiredIf(auth()->user()->hasRole('superuser')),
+                Rule::requiredIf(Gate::check('is-admin')),
                 'integer',
                 'nullable',
             ],
@@ -40,7 +39,7 @@ class CompanyCreateRequest extends FormRequest
             'ein' => ['nullable', 'string', 'regex:/^\d{2}-\d{7}$/'],
             'upin' => ['nullable', 'string', 'max:50'],
             'clia' => ['nullable', 'string', 'max:50'],
-            'name' => ['required', 'string', new IUnique(Company::class, 'name')],
+            'name' => ['required', 'string', 'max:255'],
             'nickname' => ['nullable', 'string'],
             'name_suffix_id' => ['nullable', 'integer'],
             'abbreviation' => ['nullable', 'string', 'max:20'],
