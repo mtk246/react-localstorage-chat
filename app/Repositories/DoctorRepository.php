@@ -40,9 +40,9 @@ class DoctorRepository
             /* Create Profile */
             if (isset($data['profile']['ssn'])) {
                 $profile = Profile::updateOrCreate([
-                    'first_name' => $data['profile']['first_name'],
-                    'last_name' => $data['profile']['last_name'],
-                    'date_of_birth' => $data['profile']['date_of_birth'],
+                    //'first_name' => $data['profile']['first_name'],
+                    //'last_name' => $data['profile']['last_name'],
+                    //'date_of_birth' => $data['profile']['date_of_birth'],
                     'ssn' => $data['profile']['ssn'],
                 ], collect($data['profile'])->toArray());
             } else {
