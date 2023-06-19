@@ -193,7 +193,7 @@ final class BillingCompanyRepository
             return null;
         }
 
-        $billingCompany->users()->update(['status' => $status]);
+        $billingCompany->users()->update(['billing_company_user.status' => $status]);
 
         return $billingCompany->update(['status' => $status]);
     }

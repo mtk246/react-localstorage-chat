@@ -400,12 +400,12 @@ class InsurancePlan extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch($query, $search, $notFromInsurance)
     {
-        return $query->when($search, function ($query, $search) {
+        return $query->when($search, function ($query) use ($search, $notFromInsurance) {
             return $query
-                ->where(function ($query) use ($search) {
-                    $this->searchByInsurancePlan($query, $search);
+                ->where(function ($query) use ($search, $notFromInsurance) {
+                    $this->searchByInsurancePlan($query, $search, $notFromInsurance);
                 })
                 ->orWhere(function ($query) use ($search) {
                     $this->searchByInsuranceCompany($query, $search);
@@ -416,14 +416,20 @@ class InsurancePlan extends Model implements Auditable
         });
     }
 
-    protected function searchByInsurancePlan($query, $search)
+    protected function searchByInsurancePlan($query, $search, $notFromInsurance)
     {
-        $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+        $query->when($notFromInsurance, function ($query) use ($search) {
+            return $query->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("%$search%")])
+                ->orWhereHas('planType', function ($q) use ($search) {
+                    $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
+                });
+        }, function ($query) use ($search) {
+            return $query->where(function ($query) use ($search) {
+                $this->searchByBillingCompany($query, $search);
+            });
+        })
+            ->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
             ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-            ->orWhereRaw('LOWER(payer_id) LIKE (?)', [strtolower("%$search%")])
-            ->orWhereHas('planType', function ($q) use ($search) {
-                $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
-            })
             ->orWhereHas('insType', function ($q) use ($search) {
                 $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
             });
@@ -445,6 +451,15 @@ class InsurancePlan extends Model implements Auditable
                 return $query->where('billing_company_id', $user->billingCompanies->first()?->id);
             })
             ->whereRaw('LOWER(abbreviation) LIKE (?)', [strtolower("%$search%")]);
+        });
+    }
+
+    protected function searchByBillingCompany($query, $search)
+    {
+        $query->whereHas('billingCompanies', function ($q) use ($search) {
+            $q->when(Gate::denies('is-admin'), function ($query) use ($search) {
+                return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            });
         });
     }
 

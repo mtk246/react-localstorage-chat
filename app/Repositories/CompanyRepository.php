@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class CompanyRepository
@@ -32,14 +33,26 @@ class CompanyRepository
     {
         try {
             DB::beginTransaction();
-            $company = Company::query()->create([
-                'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
-                'name' => $data['name'],
+            $company = Company::where([
                 'npi' => $data['npi'],
-                'ein' => $data['ein'] ?? null,
-                'upin' => $data['upin'] ?? null,
-                'clia' => $data['clia'] ?? null,
-            ]);
+            ])->first();
+            if (isset($company)) {
+                $company->update([
+                    'name' => $data['name'],
+                    'ein' => $data['ein'] ?? null,
+                    'upin' => $data['upin'] ?? null,
+                    'clia' => $data['clia'] ?? null,
+                ]);
+            } else {
+                $company = Company::query()->create([
+                    'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
+                    'name' => $data['name'],
+                    'npi' => $data['npi'],
+                    'ein' => $data['ein'] ?? null,
+                    'upin' => $data['upin'] ?? null,
+                    'clia' => $data['clia'] ?? null,
+                ]);
+            }
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
@@ -50,7 +63,7 @@ class CompanyRepository
                 $company->taxonomies()->sync($tax_array);
             }
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -828,12 +841,38 @@ class CompanyRepository
      */
     public function getOneByNpi(string $npi)
     {
-        $company = Company::whereNpi($npi)->with([
-            'taxonomies',
-            'publicNote',
-        ])->first();
+        $company = Company::query()
+            ->whereNpi($npi)
+            ->with(['taxonomies', 'publicNote'])
+            ->first();
 
-        return !is_null($company) ? $company : null;
+        if ($company) {
+            $billingCompaniesException = $company->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            $billingCompanies = BillingCompany::query()
+                ->where('status', true)
+                ->when(Gate::denies('is-admin'), function ($query) {
+                    $billingCompaniesUser = auth()->user()->billingCompanies
+                        ->take(1)
+                        ->pluck('id')
+                        ->toArray();
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            if (empty($billingCompanies)) {
+                //return ['result' => false];
+                return !is_null($company) ? $company : null;
+            }
+        }
+        //return !is_null($company) ? ['data' => $company, 'result' => true] : null;
+        return null;
     }
 
     /**
