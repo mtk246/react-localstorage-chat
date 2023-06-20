@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Claim;
 
+use App\Http\Casts\Claims\StoreRequestWrapper;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\ArrayCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -11,6 +13,10 @@ use Illuminate\Validation\Rule;
 
 final class StoreRequest extends FormRequest
 {
+    use HasCastedClass;
+
+    protected string $castedClass = StoreRequestWrapper::class;
+
     /** @return array<string, mixed> */
     public function rules()
     {
@@ -25,6 +31,7 @@ final class StoreRequest extends FormRequest
             'type' => ['required', 'integer'],
             'format' => ['required', 'integer'],
             'aditional_information' => ['nullable', 'array'],
+            'draft' => ['nullable', 'boolean'],
 
             'demographic_information' => ['required', 'array'],
             'demographic_information.type_of_medical_assistance' => ['required', 'string'],
@@ -54,22 +61,24 @@ final class StoreRequest extends FormRequest
             'demographic_information.health_professional_qualifier.*.health_professional_id' => ['nullable', 'integer'],
             'demographic_information.health_professional_qualifier.*.qualifier_id' => ['nullable', 'integer'],
 
-            'demographic_information.diagnoses' => ['array', 'nullable'],
-            'demographic_information.diagnoses.*.item' => ['string', 'nullable'],
-            'demographic_information.diagnoses.*.diagnosis_id' => ['integer', 'nullable'],
-            'demographic_information.diagnoses.*.admission' => ['boolean', 'nullable'],
-            'demographic_information.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
-
             'claim_services' => ['nullable', 'array'],
-            'claim_services.*.id' => ['nullable', 'integer'],
-            'claim_services.*.from_service' => ['sometimes', 'nullable', 'date'],
-            'claim_services.*.to_service' => ['sometimes', 'nullable', 'date'],
-            'claim_services.*.procedure_id' => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.revenue_code_id' => ['sometimes', 'nullable', 'integer'],
-            'claim_services.*.price' => ['sometimes', 'nullable', 'numeric'],
-            'claim_services.*.units_of_service' => ['sometimes', 'nullable', 'numeric'],
-            'claim_services.*.total_charge' => ['sometimes', 'nullable', 'numeric'],
-            'claim_services.*.copay' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.diagnosis_related_group_id' => ['nullable', 'integer'],
+            'claim_services.non_covered_charges' => ['nullable', 'numeric'],
+            'claim_services.services' => ['array', 'nullable'],
+            'claim_services.services.*.id' => ['nullable', 'integer'],
+            'claim_services.services.*.from_service' => ['sometimes', 'nullable', 'date'],
+            'claim_services.services.*.to_service' => ['sometimes', 'nullable', 'date'],
+            'claim_services.services.*.procedure_id' => ['sometimes', 'nullable', 'integer'],
+            'claim_services.services.*.revenue_code_id' => ['sometimes', 'nullable', 'integer'],
+            'claim_services.services.*.price' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.services.*.units_of_service' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.services.*.total_charge' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.services.*.copay' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.diagnoses' => ['array', 'nullable'],
+            'claim_services.diagnoses.*.item' => ['string', 'nullable'],
+            'claim_services.diagnoses.*.diagnosis_id' => ['integer', 'nullable'],
+            'claim_services.diagnoses.*.admission' => ['boolean', 'nullable'],
+            'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
             'additional_information.admission_date' => ['sometimes', 'date'],
@@ -81,8 +90,6 @@ final class StoreRequest extends FormRequest
             'additional_information.admission_source_id' => ['required', 'integer'],
             'additional_information.patient_status_id' => ['required', 'integer'],
             'additional_information.bill_classification_id' => ['nullable', 'integer'],
-            'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
-            'additional_information.non_covered_charges' => ['nullable', 'numeric'],
 
             'additional_information.claim_date_informations' => ['nullable', 'array'],
             'additional_information.claim_date_informations.*.id' => ['nullable', 'integer'],
