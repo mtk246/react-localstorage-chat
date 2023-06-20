@@ -81,9 +81,9 @@ class Claim extends Model implements Auditable
     use HasUlids;
 
     protected $fillable = [
+        'code',
         'type',
         'format',
-        'control_number',
         'submitter_name',
         'submitter_contact',
         'submitter_phone',
@@ -133,17 +133,17 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claims');
     }
 
-    public function setDemographicInformation(DemographicInformationWrapper $demographicInformation): void
+    public function setDemographicInformation(DemographicInformationWrapper $demographicInformationData): void
     {
         /** @var ClaimDemographicInformation */
         $demographicInformation = $this
             ->demographicInformation()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
-                $demographicInformation->getData()
+                $demographicInformationData->getData()
             );
 
-        $demographicInformation->healthProfessionals()->sync($demographicInformation->getHealthProfessionals());
+        $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
     }
 
     public function setServices(ClaimServicesWrapper $services): void

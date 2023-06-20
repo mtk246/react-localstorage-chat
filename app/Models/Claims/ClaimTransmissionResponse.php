@@ -6,11 +6,12 @@ namespace App\Models\Claims;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claims\ClaimTransmissionResponse
+ * App\Models\Claims\ClaimTransmissionResponse.
  *
  * @property int $id
  * @property array|null $response_details
@@ -19,10 +20,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $claim_transmission_status_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property-read int|null $audits_count
- * @property-read \App\Models\Claims\Claim|null $claim
- * @property-read \App\Models\Claims\ClaimTransmissionStatus|null $claimTransmissionStatus
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claims\Claim|null $claim
+ * @property \App\Models\Claims\ClaimTransmissionStatus|null $claimTransmissionStatus
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse query()
@@ -33,6 +35,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class ClaimTransmissionResponse extends Model implements Auditable
@@ -47,31 +50,17 @@ final class ClaimTransmissionResponse extends Model implements Auditable
         'response_details',
     ];
 
-    /**
-     * ClaimTransmissionResponse belongs to Claim.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function claim()
+    public function claim(): BelongsTo
     {
         return $this->belongsTo(Claim::class);
     }
 
-    /**
-     * ClaimTransmissionResponse belongs to ClaimTransmissionResponse.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function claimTransmissionStatus()
+    public function claimTransmissionStatus(): BelongsTo
     {
         return $this->belongsTo(ClaimTransmissionStatus::class);
     }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
+    /** @var array */
     protected $casts = [
         'response_details' => 'array',
     ];
