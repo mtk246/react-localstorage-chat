@@ -643,11 +643,10 @@ class ClaimRepository
                         ]);
                     }
                 } elseif (!empty($data['private_note'])) {
-                    PrivateNote::updateOrCreate([
+                    PrivateNote::create([
                         'publishable_type' => ClaimStatusClaim::class,
                         'publishable_id' => $status->id,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ], [
                         'note' => $data['private_note'],
                     ]);
                 }
@@ -1223,7 +1222,9 @@ class ClaimRepository
                     $query->with('typeResponsibility');
                 },
                 'user.profile',
-            ])->find($claim->patient_id);
+            ])->whereHas('insurancePolicies', function ($query) {
+                $query->where('status', true);
+            })->find($claim->patient_id);
             $insurancePolicies = [];
 
             foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
