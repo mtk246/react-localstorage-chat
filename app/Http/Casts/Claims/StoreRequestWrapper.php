@@ -6,6 +6,7 @@ namespace App\Http\Casts\Claims;
 
 use App\Http\Casts\CastsRequest;
 use App\Models\Claims\ClaimStatus;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 final class StoreRequestWrapper extends CastsRequest
@@ -60,9 +61,12 @@ final class StoreRequestWrapper extends CastsRequest
         return $this->cast('claim_services', ClaimServicesWrapper::class);
     }
 
-    public function getPoliciesInsurances(): PoliciesInsurancesWrapper
+    public function getPoliciesInsurances(): Collection
     {
-        return $this->cast('policies_insurances', PoliciesInsurancesWrapper::class);
+        return $this->getCollect('policies_insurances')
+            ->mapWithKeys(function (array $policy) {
+                return [$policy['insurance_policy_id'] => ['order' => $policy['order']]];
+            });
     }
 
     public function getAditionalInformation(): AditionalInformationWrapper
