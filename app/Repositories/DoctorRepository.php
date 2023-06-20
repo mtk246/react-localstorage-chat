@@ -945,7 +945,7 @@ class DoctorRepository
     {
         $billingCompanyId = $request->billing_company_id ?? null;
         $companyId = $request->company_id ?? null;
-        $authorization = $request->authorization ?? 'false';
+        $authorization = $request->authorization ?? 'true';
         $only = $request->only ?? null;
 
         if (auth()->user()->hasRole('superuser')) {
