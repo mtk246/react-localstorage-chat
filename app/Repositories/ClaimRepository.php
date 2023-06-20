@@ -2078,7 +2078,7 @@ class ClaimRepository
                     'controlNumber' => $claim->control_number,
                     'tradingPartnerServiceId' => '9496', /* Caso de prueba */
                     'usageIndicator' => 'T',  /* Caso de prueba */
-                    'tradingPartnerName' => 'Begento Technologies LLC',
+                    'tradingPartnerName' => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                     'submitter' => [/* Billing Company */
                         'organizationName' => $claim->claimFormattable->billingCompany->name ?? null,
                         'contactInformation' => [
