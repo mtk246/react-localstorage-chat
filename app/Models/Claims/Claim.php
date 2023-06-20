@@ -7,7 +7,6 @@ namespace App\Models\Claims;
 use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
-use App\Http\Casts\Claims\PoliciesInsurancesWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -17,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -158,14 +158,22 @@ class Claim extends Model implements Auditable
 
         Services::upsert($services->getService()->getData(), ['id']);
 
-        $claimService->diagnoses()->sync($services->getDiagnoses()->getSyncData());
+        $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
+        $claimService->services()->upsert($services
+            ->getService()
+            ->map(function (array $service) use ($claimService) {
+                $service['claim_id'] = $claimService->id;
+
+                return $service;
+            })
+            ->toArray(), ['id', 'claim_id']);
     }
 
-    public function setInsurancePolicies(PoliciesInsurancesWrapper $policiesInsurances): void
+    public function setInsurancePolicies(Collection $policiesInsurances): void
     {
         $this
             ->insurancePolicies()
-            ->sync($policiesInsurances->getData());
+            ->sync($policiesInsurances->toArray());
     }
 
     public function setStates(?string $status, ?int $subStatus): void
