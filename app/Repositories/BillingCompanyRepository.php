@@ -30,6 +30,7 @@ final class BillingCompanyRepository
             'abbreviation' => strtoupper($data['abbreviation'] ?? ''),
             'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), BillingCompany::class, 'code'),
             'logo' => $pathNameFile ?? '',
+            'status' => true
         ]);
 
         if (isset($data['address']['address'])) {
@@ -138,6 +139,8 @@ final class BillingCompanyRepository
                 'contacts',
             ]);
         }
+
+        $data = $data->where('status', true);
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));

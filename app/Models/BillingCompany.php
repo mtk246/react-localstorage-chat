@@ -232,13 +232,13 @@ class BillingCompany extends Model implements Auditable
     /**
      * Interact with the user's name.
      */
-    protected function name(): Attribute
+    /*protected function name(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => upperCaseWords($value),
             set: fn ($value) => upperCaseWords($value),
         );
-    }
+    }*/
 
     public function scopeSearch($query, $search)
     {
