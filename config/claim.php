@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Enums\Claim\RuleFormatType;
+use App\Enums\Claim\ClaimType;
+use App\Enums\Claim\FormatType;
 use App\Enums\Claim\RuleType;
 
 return [
@@ -7370,8 +7371,8 @@ return [
     */
 
     'formats' => [
-        RuleFormatType::INSTITUTIONAL->value => [
-            'file' => [
+        ClaimType::INSTITUTIONAL->value => [
+            FormatType::FILE->value => [
                 '1a' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
@@ -7393,6 +7394,7 @@ return [
                 ],
                 '2b' => [
                     'type' => RuleType::BOOLEAN,
+                    'format' => 'collect',
                     'value' => false,
                     'values' => [
                         'common' => [
@@ -7404,7 +7406,22 @@ return [
                     ],
                 ],
             ],
-            'digital' => [
+            FormatType::X12->value => [
+            ],
+        ],
+        ClaimType::PROFESSIONAL->value => [
+            FormatType::FILE->value => [
+                '1a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'format' => 'collect',
+                    'value' => [
+                        'company:id',
+                    ],
+                    'values' => [
+                        'common' => [
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
