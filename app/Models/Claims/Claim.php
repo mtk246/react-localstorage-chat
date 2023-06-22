@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FormatType;
 use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
@@ -58,7 +59,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $status_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
  * @property int|null $sub_status_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim query()
@@ -81,7 +81,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereValidate($value)
- *
+ * @property ClaimType $type
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
  * @mixin \Eloquent
  */
 class Claim extends Model implements Auditable
@@ -102,6 +106,7 @@ class Claim extends Model implements Auditable
     ];
 
     protected $casts = [
+        'type' => ClaimType::class,
         'format' => FormatType::class,
     ];
 
