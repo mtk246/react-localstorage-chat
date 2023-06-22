@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Models\v2;
+namespace App\Models\Claims;
 
+use App\Models\BillingCompany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * App\Models\Claims\ClaimSubStatus.
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $claimStatuses
+ * @property int|null $claim_statuses_count
+ * @property mixed $last_modified
+ * @property mixed $specific_billing_company
+ * @property mixed $status
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 final class ClaimSubStatus extends Model implements Auditable
 {
     use HasFactory;
@@ -126,7 +157,7 @@ final class ClaimSubStatus extends Model implements Auditable
             })->orWhereHas('claimStatuses', function ($q) use ($search) {
                 $q->whereRaw('LOWER(status) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;

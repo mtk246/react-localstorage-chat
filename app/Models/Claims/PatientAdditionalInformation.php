@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Models\v2;
+namespace App\Models\Claims;
 
+use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
-final class AdditionalInformationPatient extends Model implements Auditable
+final class PatientAdditionalInformation extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+
+    protected $table = 'patient_information';
 
     protected $fillable = [
         'admission_date',
@@ -38,9 +41,9 @@ final class AdditionalInformationPatient extends Model implements Auditable
      */
     protected $appends = ['condition_codes'];
 
-    public function claimAdditionalInformation()
+    public function claim()
     {
-        return $this->belongsTo(ClaimAdditionalInformation::class);
+        return $this->belongsTo(Claim::class);
     }
 
     /**

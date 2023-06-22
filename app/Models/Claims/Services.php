@@ -2,11 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Models\v2;
+namespace App\Models\Claims;
 
+use App\Models\PlaceOfService;
+use App\Models\Procedure;
+use App\Models\TypeCatalog;
+use App\Models\TypeOfService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Claims\Services.
+ *
+ * @property mixed $modifiers
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services query()
+ *
+ * @mixin \Eloquent
+ */
 final class Services extends Model
 {
     use HasFactory;
@@ -55,7 +70,7 @@ final class Services extends Model
      */
     public function claimService()
     {
-        return $this->belongsTo(ClaimService::class);
+        return $this->belongsTo(ClaimServices::class);
     }
 
     /**
