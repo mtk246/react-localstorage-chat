@@ -86,6 +86,7 @@ class InsurancePolicy extends Model implements Auditable
 
     protected $fillable = [
         'own',
+        'status',
         'eff_date',
         'end_date',
         'release_info',
