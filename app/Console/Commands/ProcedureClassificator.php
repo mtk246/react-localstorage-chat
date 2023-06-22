@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Enums\Interfaces\HasChildInterface;
 use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Procedure\CPT\GeneralType;
+use App\Enums\Procedure\ProcedureType;
 use Illuminate\Console\Command;
 
 final class ProcedureClassificator extends Command
@@ -30,8 +31,7 @@ final class ProcedureClassificator extends Command
     {
         $procedures = collect(json_decode(\File::get('database/data/Procedures.json')))
             ->map(function ($procedure) {
-                $procedure->type = 1;
-                $procedure->clasifications = $this->getClassifications((string) $procedure->code);
+                $procedure->clasifications = $this->getClassifications((string) $procedure->code, (int) $procedure->type);
                 $procedure->description = html_entity_decode($procedure->description, ENT_QUOTES, 'UTF-8');
 
                 return (array) $procedure;
@@ -42,9 +42,9 @@ final class ProcedureClassificator extends Command
         return Command::SUCCESS;
     }
 
-    private function getClassifications(string $code): array
+    private function getClassifications(string $code, int $type): array
     {
-        $general = $this->getGeneral($code);
+        $general = $this->getGeneral($code, $type);
         $specific = $this->getChildRange($code, $general);
         $subSpecific = $this->getChildRange($code, $specific);
 
@@ -55,15 +55,15 @@ final class ProcedureClassificator extends Command
         ];
     }
 
-    private function getGeneral(string $code): ?HasChildInterface
+    private function getGeneral(string $code, int $type): ?HasChildInterface
     {
         $value = null;
 
-        if ($code >= '0002M' && $code <= '0018M') {
+        if (ProcedureType::CPT->value == $type && $code >= '0002M' && $code <= '0018M') {
             $value = GeneralType::CATEGORY_I;
         }
 
-        return $value ?? $this->getEnumByRange($code, GeneralType::cases());
+        return $value ?? $this->getEnumByRange($code, ProcedureType::tryFrom($type)->getChild()::cases());
     }
 
     private function getChildRange(string $code, ?ProcedureClassificationInterface $general): ?ProcedureClassificationInterface

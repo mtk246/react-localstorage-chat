@@ -40,6 +40,7 @@ final class ClaimResource extends JsonResource
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'asc')->first();
 
+            $insurancePolicies[$key]['order'] = $insurancePolicy->pivot?->order ?? 0;
             $insurancePolicies[$key]['claim_eligibility'] = isset($claimEligibilityCurrent)
                 ? [
                     'control_number' => $claimEligibilityCurrent->control_number ?? null,
@@ -59,7 +60,7 @@ final class ClaimResource extends JsonResource
 
             return $a_index - $b_index;
         });
-        $this->claimFormattable->physicianOrSupplierInformation->claimDateInformations->transform(function ($dateInfo) {
+        $this->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations->transform(function ($dateInfo) {
             $enums = collect(FieldInformationInstitutional::cases());
             $item = $enums->first(fn ($item) => $item->value === (int) $dateInfo->field_id);
             if (is_null($item)) {
@@ -99,7 +100,23 @@ final class ClaimResource extends JsonResource
                     'from_service' => $service->from_service,
                     'to_service' => $service->to_service,
                     'procedure_id' => $service->procedure_id,
+                    'procedures' => isset($service->procedure)
+                        ? [[
+                            'id' => $service->procedure_id,
+                            'name' => $service->procedure->code,
+                            'description' => $service->procedure->description,
+                            'price' => $service->procedure->companies
+                                ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                        ]]
+                        : [],
                     'revenue_code_id' => $service->revenue_code_id,
+                    'revenue_codes' => isset($service->revenueCode)
+                        ? [[
+                            'id' => $service->revenue_code_id,
+                            'name' => $service->revenueCode->code,
+                            'description' => $service->revenueCode->description,
+                        ]]
+                        : [],
                     'price' => $service->price,
                     'units_of_service' => $service->days_or_units,
                     'total_charge' => $service->total_charge,
@@ -126,7 +143,7 @@ final class ClaimResource extends JsonResource
                         'field' => $dateInfo->field,
                         'qualifier_id' => $dateInfo->qualifier_id,
                         'qualifier' => $dateInfo->qualifier,
-                        'from_date' => $dateInfo->from_date,
+                        'from_date' => $dateInfo->from_date_or_current,
                         'to_date' => $dateInfo->to_date,
                         'through' => $dateInfo->through,
                         'amount' => $dateInfo->amount,
@@ -200,6 +217,7 @@ final class ClaimResource extends JsonResource
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'asc')->first();
 
+            $insurancePolicies[$key]['order'] = $insurancePolicy->pivot?->order ?? 0;
             $insurancePolicies[$key]['claim_eligibility'] = isset($claimEligibilityCurrent)
                 ? [
                     'control_number' => $claimEligibilityCurrent->control_number ?? null,
@@ -219,14 +237,14 @@ final class ClaimResource extends JsonResource
 
             return $a_index - $b_index;
         });
-        $this->claimFormattable->physicianOrSupplierInformation->claimDateInformations->transform(function ($dateInfo) {
+        $this->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations->transform(function ($dateInfo) {
             $enums = collect(FieldInformationProfessional::cases());
             $item = $enums->first(fn ($item) => $item->value === (int) $dateInfo->field_id);
             if (is_null($item)) {
                 $field = TypeCatalog::find($dateInfo->field_id);
                 $item = $enums->first(fn ($item) => $item->getName() === $field?->description);
-                $dateInfo->field_id = $item->value;
             }
+            $dateInfo->field_id = $item->value ?? '';
             $dateInfo->field = ($item) ? [
                 'id' => $item,
                 'code' => $item->value,
@@ -234,6 +252,19 @@ final class ClaimResource extends JsonResource
             ] : null;
 
             return $dateInfo;
+        });
+        $this->claimFormattable?->claimFormServices->transform(function ($service) {
+            $service->procedures = ($service->procedure_id)
+                ? [[
+                    'id' => $service->procedure_id,
+                    'name' => $service->procedure->code,
+                    'description' => $service->procedure->description,
+                    'price' => $service->procedure->companies
+                        ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                ]]
+                : [];
+
+            return $service;
         });
 
         return [

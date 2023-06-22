@@ -132,7 +132,7 @@ class Patient extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['status', 'last_modified'];
+    protected $appends = ['user', 'status', 'last_modified'];
 
     /**
      * Patient belongs to MaritalStatus.
@@ -168,6 +168,11 @@ class Patient extends Model implements Auditable
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getUserAttribute(): User
+    {
+        return $this->user()->sole();
     }
 
     /**
@@ -374,7 +379,7 @@ class Patient extends Model implements Auditable
         return [
             'code' => $this->code,
             'driver_license' => $this->driver_license,
-            'marital_status' => $this->maritalStatus->name,
+            'marital_status' => $this->maritalStatus?->name,
             'user.code' => $this->user?->usercode,
             'user.mail' => $this->user?->email,
         ];

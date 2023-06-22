@@ -28,6 +28,7 @@ use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 /** @todo separate in multiple controllers files this class is too big */
 final class CompanyController extends Controller
@@ -185,6 +186,22 @@ final class CompanyController extends Controller
         $rs = $this->companyRepository->getOneByNpi($npi);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
+        /**
+         * @todo Para asegurar el funcionamiento de esta lógica hay que aplicar los cambios en fronEnd
+         * if ($rs) {
+         *     if (isset($rs['result']) && $rs['result']) {
+         *         return response()->json($rs['data']);
+         *     } else {
+         *         if (Gate::check('is-admin')) {
+         *             return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
+         *         } else {
+         *             return response()->json(__('Forbidden, The company has already been associated with the billing company'), 403);
+         *         }
+         *     }
+         * } else {
+         *   return response()->json(__('Error, company not found'), 404);
+         * }
+         */
     }
 
     public function changeStatus(ChangeStatusCompanyRequest $request, int $id): JsonResponse

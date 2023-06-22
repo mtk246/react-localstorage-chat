@@ -28,8 +28,8 @@ class AddCompaniesRequest extends FormRequest
     {
         return [
             '*.billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
-            '*.company_id' => ['sometimes', 'integer'],
-            '*.med_num' => ['sometimes', 'string'],
+            '*.company_id' => ['required', 'integer'],
+            '*.med_num' => ['nullable', 'string'],
         ];
     }
 }

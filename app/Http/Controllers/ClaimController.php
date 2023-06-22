@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -53,7 +53,9 @@ class ClaimController extends Controller
      */
     public function updateAsDraft(ClaimDraftRequest $request, $id)
     {
-        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+        $data = $request->validated();
+        $data['draft'] = true;
+        $rs = $this->claimRepository->updateClaim($data, $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
     }
@@ -71,11 +73,27 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimCreateRequest $request, $id)
+    public function updateClaim(ClaimVerifyRequest $request, int $id)
     {
-        $rs = $this->claimRepository->updateClaim($request->validated(), $id);
+        $claim = $this->claimRepository->updateClaim($request->validated(), $id);
+        if (is_null($claim)) {
+            return response()->json(__('Error update claim'), 400);
+        }
+        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        if (($request->validate ?? false) == true) {
+            $rs = $this->claimValidation($claim->id);
+            $this->claimRepository->changeStatus([
+                'status_id' => $statusVerify->id,
+                'private_note' => 'API verification',
+            ], $claim->id);
+        } else {
+            $this->claimRepository->changeStatus([
+                'status_id' => $statusVerify->id,
+                'private_note' => 'Manual verification',
+            ], $claim->id);
+        }
 
-        return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
+        return $claim ? response()->json($claim) : response()->json(__('Error updating claim'), 400);
     }
 
     public function getAllClaims(Request $request)
@@ -114,11 +132,11 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error get all service type of service'), 400);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        $rs = $this->claimRepository->getListPlaceOfServices();
+        $rs = $this->claimRepository->getListPlaceOfServices($request);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error get all service place of service'), 400);
+        return response()->json($rs);
     }
 
     public function getListRevenueCodes(Request $request, int $company_id = null): JsonResponse
@@ -244,10 +262,12 @@ class ClaimController extends Controller
 
     public function storeCheckEligibility(ClaimEligibilityRequest $request)
     {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+        if (true == ($request->automatic_eligibility ?? false)) {
+            $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
 
-        if (!isset($token)) {
-            return response()->json(__('Error get security authorization access token'), 400);
+            if (!isset($token)) {
+                return response()->json(__('Error get security authorization access token'), 400);
+            }
         }
 
         $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());
@@ -330,22 +350,18 @@ class ClaimController extends Controller
     public function storeVerifyAndRegister(ClaimVerifyRequest $request)
     {
         $claim = $this->claimRepository->createClaim($request->validated());
+        if (is_null($claim)) {
+            return response()->json(__('Error save claim'), 400);
+        }
+
         $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
         if (($request->validate ?? false) == true) {
-            if (isset($request->insurance_policies)) {
-                $claim->insurancePolicies()->sync($request->insurance_policies);
-            }
-
             $rs = $this->claimValidation($claim->id);
             $this->claimRepository->changeStatus([
                 'status_id' => $statusVerify->id,
                 'private_note' => 'API verification',
             ], $claim->id);
         } else {
-            if (isset($request->insurance_policies)) {
-                $claim->insurancePolicies()->sync($request->insurance_policies);
-            }
-
             $this->claimRepository->changeStatus([
                 'status_id' => $statusVerify->id,
                 'private_note' => 'Manual verification',

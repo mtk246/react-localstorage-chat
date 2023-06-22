@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class InsuranceCompanyRepository
 {
@@ -42,7 +43,7 @@ class InsuranceCompanyRepository
                 ]);
             }
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -395,10 +396,10 @@ class InsuranceCompanyRepository
                     'nickname' => $nickname->nickname ?? '',
                     'abbreviation' => $abbreviation->abbreviation ?? '',
                     'private_note' => $private_note->note ?? '',
-                    'address' => isset($insurance_address) ? $insurance_address : null,
-                    'contact' => isset($insurance_contact) ? $insurance_contact : null,
+                    'address' => isset($address) ? $insurance_address : null,
+                    'contact' => isset($contact) ? $insurance_contact : null,
 
-                    'insurance_company_time_failed' => isset($insurance_company_time_failed) ? $insurance_company_time_failed : null,
+                    'insurance_company_time_failed' => isset($time_failed) ? $insurance_company_time_failed : null,
                     'billing_incomplete_reasons' => $billing_incomplete_reasons ?? [],
                     'appeal_reasons' => $appeal_reasons ?? [],
                 ],
@@ -415,20 +416,20 @@ class InsuranceCompanyRepository
             ->with('publicNote')
             ->first();
         if ($insurance) {
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompaniesException = $insurance->billingCompanies()
-                    ->get()
-                    ->pluck('id')
-                    ->toArray();
-            } else {
-                $billingCompaniesException = auth()->user()->billingCompanies
-                    ->first()
-                    ->pluck('id')
-                    ->toArray();
-            }
+            $billingCompaniesException = $insurance->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
 
             $billingCompanies = BillingCompany::query()
                 ->where('status', true)
+                ->when(Gate::denies('is-admin'), function ($query) {
+                    $billingCompaniesUser = auth()->user()->billingCompanies
+                        ->take(1)
+                        ->pluck('id')
+                        ->toArray();
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
                 ->get()
                 ->pluck('id')
@@ -439,13 +440,13 @@ class InsuranceCompanyRepository
             }
         }
 
-        return !is_null($insurance) ? $insurance : null;
+        return !is_null($insurance) ? ['data' => $insurance, 'result' => true] : null;
     }
 
     public function getList(array $data)
     {
         try {
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'] ?? null;
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
@@ -558,10 +559,10 @@ class InsuranceCompanyRepository
 
             $insurance->update([
                 'naic' => $data['insurance']['naic'],
-                'file_method' => $data['insurance']['file_method_id'],
+                'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();

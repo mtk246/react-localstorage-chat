@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class UserRepository
@@ -590,9 +591,10 @@ class UserRepository
     {
         $ssn = $request->ssn;
         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
-        $profile = Profile::where('ssn', 'ilike', "%{$ssn}")
-                          ->orWhere('ssn', 'ilike', "%{$ssnFormated}")
-                          ->whereDateOfBirth($request->dateOfBirth)->first();
+        $profile = Profile::query()
+            ->where('ssn', 'LIKE', "%{$ssn}")
+            ->orWhere('ssn', 'LIKE', "%{$ssnFormated}")
+            ->whereDateOfBirth($request->dateOfBirth)->first();
 
         $user = User::where('profile_id', $profile->id)->first();
 
@@ -648,38 +650,34 @@ class UserRepository
     /**
      * @return User|Builder|Model|object|null
      */
-    public function searchBySsn(string $ssn)
+    public function searchBySsn(string $ssn, ?int $billing_company_id = null)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $user = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses',
-                'contacts',
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn) {
-                $query->where('ssn', $ssn);
-            })->first();
-        } else {
-            $user = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses' => function ($query) use ($bC) {
+
+        $bC = Gate::check('is-admin') ? $billing_company_id : auth()->user()->billing_company_id;
+        $user = User::with([
+            'profile' => function ($query) {
+                $query->with('socialMedias');
+            },
+            'roles',
+            'billingCompanies',
+            'addresses' => function ($query) use ($bC) {
+                if (!empty($bC)) {
                     $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
+                }
+            },
+            'contacts' => function ($query) use ($bC) {
+                if (!empty($bC)) {
                     $query->where('billing_company_id', $bC);
-                },
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn) {
-                $query->where('ssn', $ssn);
-            })->first();
-        }
+                }
+            },
+        ])->whereHas('profile', function ($query) use ($ssn) {
+            $query->where('ssn', $ssn)
+                ->orWhere('ssn', str_replace('-', '', $ssn ?? ''));
+        })->whereHas('billingCompanies', function ($query) use ($bC) {
+            if (!empty($bC)) {
+                $query->where('billing_company_id', $bC);
+            }
+        })->first();
 
         return $user;
     }
@@ -705,10 +703,10 @@ class UserRepository
                 'billingCompanies',
             ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
                 $query->whereDateOfBirth($date_of_birth)
-                      ->where('first_name', 'ilike', "%{$first_name}%")
-                      ->where('last_name', 'ilike', "%{$last_name}%")
-                      ->where('ssn', 'ilike', "%{$ssn}")
-                      ->orWhere('ssn', 'ilike', "%{$ssnFormated}");
+                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
+                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
+                    ->where('ssn', 'LIKE', "%{$ssn}")
+                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
             })->get();
         } else {
             $users = User::with([
@@ -725,10 +723,10 @@ class UserRepository
                 'billingCompanies',
             ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
                 $query->whereDateOfBirth($date_of_birth)
-                      ->where('first_name', 'ilike', "%{$first_name}%")
-                      ->where('last_name', 'ilike', "%{$last_name}%")
-                      ->where('ssn', 'ilike', "%{$ssn}")
-                      ->orWhere('ssn', 'ilike', "%{$ssnFormated}");
+                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
+                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
+                    ->where('ssn', 'LIKE', "%{$ssn}")
+                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
             })->get();
         }
 

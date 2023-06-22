@@ -376,9 +376,9 @@ class UserController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, wrong otp code'), 404);
     }
 
-    public function searchBySsn(string $ssn): JsonResponse
+    public function searchBySsn(Request $request, string $ssn): JsonResponse
     {
-        $rs = $this->userRepository->searchBySsn($ssn);
+        $rs = $this->userRepository->searchBySsn($ssn, $request->billing_company_id ?? null);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }

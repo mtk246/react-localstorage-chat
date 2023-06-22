@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Models\TypeCatalog;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class GetBillClassificationAction
 {
-    public function all()
+    public function all(): Collection
     {
-        $response = TypeCatalog::query()->whereHas('type', function ($q) {
+        return TypeCatalog::query()->whereHas('type', function ($q) {
             $q->where('description', 'Bill classification');
-        })->select('id', 'code', 'description as name')->get()->toArray();
-
-        return $response;
+        })
+        ->get(['id', 'code', DB::Raw("CONCAT(code, ' - ', description) AS name")]);
     }
 }

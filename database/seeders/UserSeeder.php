@@ -322,6 +322,19 @@ class UserSeeder extends Seeder
                     'date_of_birth' => '1990-04-01',
                 ],
             ],
+            [
+                'email' => 'jsantana@ciph3r.co',
+                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                'role' => 'superuser',
+                'profile' => [
+                    'ssn' => randomNumber(9),
+                    'first_name' => 'Jhon',
+                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
+                    'last_name' => 'Santana',
+                    'sex' => 'M',
+                    'date_of_birth' => '1990-04-01',
+                ],
+            ],
         ];
 
         foreach ($users as $user) {

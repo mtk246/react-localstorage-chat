@@ -86,8 +86,9 @@ class ClaimRepository
 
                             if (isset($data['physician_or_supplier_information']['claim_date_informations'])) {
                                 foreach ($data['physician_or_supplier_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    $dateInf['physician_or_supplier_information_id'] = $physician->id;
                                     ClaimDateInformation::updateOrCreate([
-                                        'physician_or_supplier_information_id' => $physician->id,
+                                        'id' => $dateInf->id ?? null,
                                     ], $dateInf);
                                 }
                             }
@@ -102,6 +103,7 @@ class ClaimRepository
                             ]);
                             $claimForm->claimFormServices()->delete();
                             foreach ($data['claim_services'] as $service) {
+                                $service['days_or_units'] = $service['units_of_service'];
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::create($service);
                             }
@@ -128,7 +130,7 @@ class ClaimRepository
                             if (isset($data['additional_information']['claim_date_informations'])) {
                                 foreach ($data['additional_information']['claim_date_informations'] ?? [] as $dateInf) {
                                     ClaimDateInformation::updateOrCreate([
-                                        'physician_or_supplier_information_id' => $additional->id,
+                                        'id' => $dateInf['id'] ?? null,
                                     ], [
                                         'from_date_or_current' => $dateInf['from_date'],
                                         'to_date' => $dateInf['to_date'],
@@ -136,6 +138,7 @@ class ClaimRepository
                                         'qualifier_id' => $dateInf['qualifier_id'],
                                         'through' => $dateInf['through'],
                                         'amount' => $dateInf['amount'],
+                                        'physician_or_supplier_information_id' => $additional->id,
                                     ]);
                                 }
                             }
@@ -180,7 +183,8 @@ class ClaimRepository
                             'item' => $diagnosis['item'],
                             'admission' => $diagnosis['admission'] ?? null,
                             'poa' => $diagnosis['poa'] ?? null,
-                        ]);
+                        ]
+                    );
                 }
             }
 
@@ -220,8 +224,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return $e;
+            return null;
         }
     }
 
@@ -342,30 +345,36 @@ class ClaimRepository
                 });
             }
         } else {
-            $data = Claim::query()->with([
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                        'nicknames' => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        },
-                    ]);
-                },
-                'patient' => function ($query) use ($bC) {
-                    $query->with([
-                        'user' => function ($q) use ($bC) {
-                            $q->with([
-                                'profile',
-                                'addresses' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
-                    ]);
-                },
-            ]);
+            $data = Claim::query()
+                ->whereHas('claimFormattable', function ($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                })->with([
+                    'company' => function ($query) use ($bC) {
+                        $query->with([
+                            'nicknames' => function ($q) use ($bC) {
+                                $q->where('billing_company_id', $bC);
+                            },
+                        ]);
+                    },
+                    'patient' => function ($query) use ($bC) {
+                        $query->with([
+                            'user' => function ($q) use ($bC) {
+                                $q->with([
+                                    'profile',
+                                    'addresses' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                    'contacts' => function ($qq) use ($bC) {
+                                        $qq->where('billing_company_id', $bC);
+                                    },
+                                ]);
+                            },
+                        ]);
+                    },
+                    'claimFormattable' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                ]);
             if (count($subStatus) > 0) {
                 $data = $data->whereHas('claimStatusClaims', function ($query) use ($subStatus) {
                     $query->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
@@ -446,32 +455,123 @@ class ClaimRepository
                     if ('CMS-1500 / 837P' == $typeFormat->form) {
                         $model = ClaimFormP::class;
                         if (isset($data['claim_services'])) {
-                            $claimForm = ClaimFormP::create([
+                            $claimForm->update([
                                 'type_form_id' => $data['format'],
                                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
                             ]);
+                            foreach ($claimForm->claimFormServices ?? [] as $serviceDB) {
+                                $validated = false;
+                                foreach ($data['claim_services'] as $service) {
+                                    if ($service['id'] ?? null === $serviceDB->id) {
+                                        $validated = true;
+                                        break;
+                                    }
+                                }
+                                if (!$validated) {
+                                    $serviceDB->delete();
+                                }
+                            }
                             foreach ($data['claim_services'] as $service) {
                                 $service['claim_form_p_id'] = $claimForm->id;
-                                ClaimFormPService::create($service);
+                                ClaimFormPService::updateOrCreate([
+                                    'id' => $service['id'] ?? null
+                                ], $service);
+                            }
+                        }
+                        if (isset($data['patient_or_insured_information'])) {
+                            PatientOrInsuredInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id,
+                            ], $data['patient_or_insured_information']);
+                        }
+                        if (isset($data['physician_or_supplier_information'])) {
+                            $physician = PhysicianOrSupplierInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id,
+                            ], $data['physician_or_supplier_information']);
+
+                            if (isset($data['physician_or_supplier_information']['claim_date_informations'])) {
+                                foreach ($data['physician_or_supplier_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    $dateInf['physician_or_supplier_information_id'] = $physician->id;
+                                    ClaimDateInformation::updateOrCreate([
+                                        'id' => $dateInf->id ?? null,
+                                    ], $dateInf);
+                                }
                             }
                         }
                     } else {
-                        $model = ClaimFormI::class;
-                        $claimForm = ClaimFormI::create([
-                            'type_form_id' => $data['format'] ?? null,
-                            'type_of_bill' => $data['type_of_bill'],
-                            'federal_tax_number' => $data['federal_tax_number'],
-                            'start_date_service' => $data['start_date_service'] ?? null,
-                            'end_date_service' => $data['end_date_service'] ?? null,
-                            'admission_date' => $data['admission_date'] ?? null,
-                            'admission_hour' => $data['admission_hour'] ?? null,
-                            'type_of_admission' => $data['type_of_admission'],
-                            'source_admission' => $data['source_admission'],
-                            'discharge_hour' => $data['discharge_hour'] ?? null,
-                            'patient_discharge_stat' => $data['patient_discharge_stat'] ?? null,
-                            'admit_dx' => $data['admit_dx'] ?? null,
+                        $model = ClaimFormP::class;
+                        $claimForm->update([
+                            'type_form_id' => $data['format'],
+                            'type_of_medical_assistance' => $data['type_of_medical_assistance'] ?? null,
                             'billing_company_id' => $billingCompany->id ?? $billingCompany,
                         ]);
+                        if (isset($data['claim_services'])) {
+                            foreach ($claimForm->claimFormServices ?? [] as $serviceDB) {
+                                $validated = false;
+                                foreach ($data['claim_services'] as $service) {
+                                    if ($service['id'] ?? null === $serviceDB->id) {
+                                        $validated = true;
+                                        break;
+                                    }
+                                }
+                                if (!$validated) {
+                                    $serviceDB->delete();
+                                }
+                            }
+                            foreach ($data['claim_services'] as $service) {
+                                $service['days_or_units'] = $service['units_of_service'];
+                                $service['claim_form_p_id'] = $claimForm->id;
+                                ClaimFormPService::updateOrCreate([
+                                    'id' => $service['id'] ?? null
+                                ], $service);
+                            }
+                        }
+                        PatientOrInsuredInformation::updateOrCreate([
+                            'claim_form_p_id' => $claimForm->id,
+                        ], [
+                            'employment_related_condition' => $data['employment_related_condition'],
+                            'auto_accident_related_condition' => $data['auto_accident_related_condition'],
+                            'auto_accident_place_state' => $data['auto_accident_place_state'] ?? null,
+                            'other_accident_related_condition' => $data['other_accident_related_condition'],
+                            'patient_signature' => $data['patient_signature'],
+                            'insured_signature' => $data['insured_signature'],
+                        ]);
+                        if (isset($data['additional_information'])) {
+                            $data['additional_information']['prior_authorization_number'] = $data['prior_authorization_number'];
+                            $data['additional_information']['outside_lab'] = $data['outside_lab'];
+                            $data['additional_information']['charges'] = $data['charges'] ?? null;
+                            $data['additional_information']['accept_assignment'] = $data['accept_assignment'];
+                            $additional = PhysicianOrSupplierInformation::updateOrCreate([
+                                'claim_form_p_id' => $claimForm->id,
+                            ], $data['additional_information']);
+
+                            if (isset($data['additional_information']['claim_date_informations'])) {
+                                foreach ($claimForm->physicianOrSupplierInformation->claimDateInformations ?? [] as $dateInfDB) {
+                                    $validated = false;
+                                    foreach ($data['additional_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                        if ($dateInf['id'] ?? null === $dateInfDB->id) {
+                                            $validated = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!$validated) {
+                                        $dateInfDB->delete();
+                                    }
+                                }
+                                foreach ($data['additional_information']['claim_date_informations'] ?? [] as $dateInf) {
+                                    ClaimDateInformation::updateOrCreate([
+                                        'id' => $dateInf['id'] ?? null,
+                                    ], [
+                                        'from_date_or_current' => $dateInf['from_date'],
+                                        'to_date' => $dateInf['to_date'],
+                                        'field_id' => $dateInf['field_id'],
+                                        'qualifier_id' => $dateInf['qualifier_id'],
+                                        'through' => $dateInf['through'],
+                                        'amount' => $dateInf['amount'],
+                                        'physician_or_supplier_information_id' => $additional->id,
+                                    ]);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -488,10 +588,29 @@ class ClaimRepository
                 'claim_formattable_id' => $claimForm->id ?? null,
             ]);
 
+            if (isset($data['health_professional_qualifier'])) {
+                $claim->healthProfessionals()->detach();
+                foreach ($data['health_professional_qualifier'] as $hpq) {
+                    $claim->healthProfessionals()->attach(
+                        $hpq['health_professional_id'],
+                        [
+                            'field_id' => $hpq['field_id'] ?? null,
+                            'qualifier_id' => $hpq['qualifier_id'] ?? null,
+                        ]);
+                }
+            }
+
             if (isset($data['diagnoses'])) {
                 $claim->diagnoses()->detach();
                 foreach ($data['diagnoses'] as $diagnosis) {
-                    $claim->diagnoses()->attach($diagnosis['diagnosis_id'], ['item' => $diagnosis['item']]);
+                    $claim->diagnoses()->attach(
+                        $diagnosis['diagnosis_id'],
+                        [
+                            'item' => $diagnosis['item'],
+                            'admission' => $diagnosis['admission'] ?? null,
+                            'poa' => $diagnosis['poa'] ?? null,
+                        ]
+                    );
                 }
             }
 
@@ -504,27 +623,40 @@ class ClaimRepository
                 $claim->insurancePolicies()->sync($order_values);
             }
 
-            $claimStatus = ClaimStatus::whereStatus('Draft')->first();
-            $claimStatusClaim = ClaimStatusClaim::firstOrCreate([
-                'claim_id' => $claim->id,
-                'claim_status_type' => ClaimStatus::class,
-                'claim_status_id' => $claimStatus->id,
-            ]);
-            if (isset($data['private_note'])) {
-                PrivateNote::updateOrCreate([
-                    'publishable_type' => ClaimStatusClaim::class,
-                    'publishable_id' => $claimStatusClaim->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'note' => $data['private_note'],
-                ]);
-            }
-            if (isset($data['sub_status_id'])) {
-                $this->changeStatus([
-                    'status_id' => $claimStatus->id,
-                    'sub_status_id' => $data['sub_status_id'],
-                    'private_note' => $data['private_note'] ?? '',
-                ], $claim->id);
+            if (isset($data['draft'])) {
+                $status = $claim->claimStatusClaims()
+                    ->where('claim_status_type', ClaimStatus::class)
+                    ->orderBy('id', 'desc')->first() ?? null;
+                $claimStatus = ClaimStatus::whereStatus('Draft')->first();
+                if ($status->claimStatus->id != $claimStatus->id) {
+                    $claimStatusClaim = ClaimStatusClaim::create([
+                        'claim_id' => $claim->id,
+                        'claim_status_type' => ClaimStatus::class,
+                        'claim_status_id' => $claimStatus->id,
+                    ]);
+                    if (!empty($data['private_note'])) {
+                        PrivateNote::create([
+                            'publishable_type' => ClaimStatusClaim::class,
+                            'publishable_id' => $claimStatusClaim->id,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'note' => $data['private_note'],
+                        ]);
+                    }
+                } elseif (!empty($data['private_note'])) {
+                    PrivateNote::create([
+                        'publishable_type' => ClaimStatusClaim::class,
+                        'publishable_id' => $status->id,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        'note' => $data['private_note'],
+                    ]);
+                }
+                if (isset($data['sub_status_id'])) {
+                    $this->changeStatus([
+                        'status_id' => $claimStatus->id,
+                        'sub_status_id' => $data['sub_status_id'],
+                        'private_note' => $data['private_note'] ?? '',
+                    ], $claim->id);
+                }
             }
 
             if (isset($data['will_report_injuries'])) {
@@ -575,11 +707,9 @@ class ClaimRepository
                 }
             }
             DB::commit();
-
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
-
             return null;
         }
     }
@@ -627,9 +757,15 @@ class ClaimRepository
         return getList(TypeOfService::class, ['code', '-', 'name']);
     }
 
-    public function getListPlaceOfServices()
+    public function getListPlaceOfServices(Request $request)
     {
-        return getList(PlaceOfService::class, ['code', '-', 'name']);
+        return getList(
+            PlaceOfService::class,
+            ['code', '-', 'name'],
+            !empty($request->facility_id)
+                ? ['relationship' => 'facilities','where' => ['facility_id' => $request->facility_id]]
+                : []
+        );
     }
 
     public function getListRevCenters()
@@ -654,7 +790,7 @@ class ClaimRepository
     public function getListAdmissionTypes()
     {
         try {
-            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Admission type code']], null);
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Admission type code']], null);
         } catch (\Exception $e) {
             return [];
         }
@@ -663,7 +799,7 @@ class ClaimRepository
     public function getListAdmissionSources()
     {
         try {
-            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Admission source code']], null);
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Admission source code']], null);
         } catch (\Exception $e) {
             return [];
         }
@@ -1086,7 +1222,9 @@ class ClaimRepository
                     $query->with('typeResponsibility');
                 },
                 'user.profile',
-            ])->find($claim->patient_id);
+            ])->whereHas('insurancePolicies', function ($query) {
+                $query->where('status', true);
+            })->find($claim->patient_id);
             $insurancePolicies = [];
 
             foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
@@ -1628,6 +1766,18 @@ class ClaimRepository
                 'K' => 11,
                 'L' => 12,
             ];
+            $qualifierFields = [
+                '431' => 'symptomDate',
+                '304' => 'lastSeenDate',
+                '444' => 'firstContactDate',
+                '453' => 'acuteManifestationDate',
+                '439' => 'accidentDate',
+                '455' => 'lastXRayDate',
+                '090' => 'assumedAndRelinquishedCareBeginDate',
+                '091' => 'assumedAndRelinquishedCareEndDate',
+                '454' => 'initialTreatmentDate',
+                '471' => 'hearingAndVisionPrescriptionDate',
+            ];
             DB::beginTransaction();
             $data = [
                 'sandbox' => [
@@ -1812,15 +1962,15 @@ class ClaimRepository
 
             foreach ($patient->insurancePolicies()->whereIn('insurance_policies.id', $claimInsurancePolicies)->get() ?? [] as $insurancePolicy) {
                 $subscriber =
-                    (($insurancePolicy->own ?? true) == true)
+                    (($insurancePolicy->own ?? false) == true)
                         ? $patient->user
-                        : $insurancePolicy->subscriber;
+                        : $insurancePolicy?->subscriber;
                 $addressSubscriber = $subscriber->addresses->first();
                 $addressPatient = $patient->user->addresses->first();
                 $addressCompany = $claim->company->addresses->first();
                 $contactCompany = $claim->company->contacts->first();
 
-                $dependent = (($insurancePolicy->own ?? true) == true)
+                $dependent = (($insurancePolicy->own ?? false) == true)
                     ? null
                     : [
                         'memberId' => $patient->code ?? null,
@@ -1855,15 +2005,20 @@ class ClaimRepository
                     }
                 }
 
-                $serviceFacilityLocation = [
-                    'organizationName' => 'HAPPY DOCTORS GROUP',
-                    'address' => [
-                        'address1' => '000 address1',
-                        'city' => 'city2',
-                        'state' => 'tn',
-                        'postalCode' => '372030000',
-                    ],
-                ];
+                $facility = $claim->facility;
+                $addressFacility = $claim->facility?->addresses->first();
+
+                if (isset($facility) && isset($addressFacility)) {
+                    $serviceFacilityLocation = [
+                        'organizationName' => $facility->name,
+                        'address' => [
+                            'address1' => $addressFacility->address ?? null,
+                            'city' => $addressFacility->city ?? null,
+                            'state' => substr($addressFacility->state ?? '', 0, 2) ?? null,
+                            'postalCode' => str_replace('-', '', $addressFacility->zip),
+                        ],
+                    ];
+                }
 
                 $serviceLines = [];
 
@@ -1873,10 +2028,13 @@ class ClaimRepository
                         array_push($valuesPoint, $pointers[$point]);
                     }
                     array_push($serviceLines, [
-                        'serviceDate' => str_replace('-', '', $claim->date_of_service),
+                        'serviceDate' => str_replace('-', '', $service->from_service),
+                        'serviceDateEnd' => !empty($service->to_service)
+                            ? str_replace('-', '', $service->to_service)
+                            : null,
                         'professionalService' => [
                             'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
-                            'lineItemChargeAmount' => $service->price,
+                            'lineItemChargeAmount' => str_replace(',', '', $service->price),
                             'procedureCode' => $service->procedure->code,
                             'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                             'serviceUnitCount' => $service->days_or_units ?? '1',
@@ -1885,6 +2043,36 @@ class ClaimRepository
                             ],
                         ],
                     ]);
+                }
+                $provider = $claim->referred;
+                $providerProfile = $provider?->user?->profile;
+                if ($providerProfile) {
+                    $referred = [
+                        'providerType' => 'ReferringProvider',
+                        'npi' => str_replace('-', '', $provider->npi ?? ''),
+                        'firstName' => $providerProfile->first_name,
+                        'lastName' => $providerProfile->last_name,
+                        'employerId' => str_replace('-', '', $provider->ein ?? $provider->npi),
+                    ];
+                }
+
+                $claimDateInfo = [];
+                foreach ($claim->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations ?? [] as $dateInfo) {
+                    $qualifier = $dateInfo?->qualifier?->code ?? '';
+                    if (isset($qualifierFields[$qualifier])) {
+                        if (1 == $dateInfo->field_id) {
+                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
+                        } else if (2 == $dateInfo->field_id) {
+                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
+                        } else if (3 == $dateInfo->field_id) {
+                            $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
+                            $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
+                        } else if (4 == $dateInfo->field_id) {
+                            $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
+                            $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
+                        }
+                    }
+
                 }
 
                 $dataReal = [
@@ -1907,8 +2095,8 @@ class ClaimRepository
                         'paymentResponsibilityLevelCode' => $insurancePolicy->payment_responsibility_level_code ?? 'P',
                         'firstName' => $subscriber->first_name ?? $subscriber->profile->first_name,
                         'lastName' => $subscriber->last_name ?? $subscriber->profile->last_name,
-                        'gender' => strtoupper($subscriber->profile->sex ?? 'M'), /**Agregar*/
-                        'dateOfBirth' => str_replace('-', '', $subscriber->profile->date_of_birth ?? $subscriber->date_of_birth),
+                        'gender' => strtoupper($subscriber?->sex ?? $subscriber?->profile?->sex ?? 'M'),
+                        'dateOfBirth' => str_replace('-', '', $subscriber->profile?->date_of_birth ?? $subscriber->date_of_birth),
                         'policyNumber' => $insurancePolicy->policy_number ?? null,
                         'address' => [
                             'address1' => $addressSubscriber->address ?? null,
@@ -1921,7 +2109,7 @@ class ClaimRepository
                     'providers' => [/* Company */
                         [
                             'providerType' => 'BillingProvider',
-                            'npi' => $claim->company->npi ?? null,
+                            'npi' => str_replace('-', '', $claim->company->npi ?? ''),
                             'employerId' => str_replace('-', '', $claim->company->ein ?? $claim->company->npi),
                             'organizationName' => $claim->company->name ?? null,
                             'address' => [
@@ -1939,7 +2127,7 @@ class ClaimRepository
                     'claimInformation' => [
                         'claimFilingCode' => 'CI',
                         'patientControlNumber' => $claim->control_number, /**Preguntar xq no el el codePAtient Loop2300*/
-                        'claimChargeAmount' => $claim->billed_amount ?? '0.00',
+                        'claimChargeAmount' => str_replace(',', '', $claim->billed_amount ?? '0.00'),
                         'placeOfServiceCode' => $claimServiceLinePrincipal->placeOfService->code ?? '11',
                         'claimFrequencyCode' => '1', /* Porque siempre 1 ?? */
                         'signatureIndicator' => isset($claim->claimFormattable->patientOrInsuredInformation)
@@ -1955,10 +2143,16 @@ class ClaimRepository
                             'claimNumber' => '12345', /* ?? */
                         ],
                         'healthCareCodeInformation' => $claimDiagnoses ?? null,
-                        'serviceFacilityLocation' => null,
+                        'serviceFacilityLocation' => $serviceFacilityLocation ?? null,
                         'serviceLines' => $serviceLines,
                     ],
                 ];
+                if (isset($referred)) {
+                    array_push($dataReal['providers'], $referred);
+                }
+                $dataReal['claimInformation']['claimDateInformation'] = !empty($claimDateInfo)
+                    ? $claimDateInfo
+                    : null;
 
                 $response = Http::withToken($token)->acceptJson()->post(
                     $data[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],

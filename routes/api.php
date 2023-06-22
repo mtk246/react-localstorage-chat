@@ -300,6 +300,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{npi}/get-by-npi', [\App\Http\Controllers\DoctorController::class, 'getOneByNpi']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\DoctorController::class, 'changeStatus']);
         Route::put('/{id}/update-companies', [\App\Http\Controllers\DoctorController::class, 'updateCompanies']);
+        Route::get('{doctor}/billing-company', [\App\Http\Controllers\DoctorController::class, 'getDoctorBillingCompany']);
     });
 
     Route::prefix('patient')->middleware([
@@ -448,7 +449,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         ])->group(function () {
             Route::get('/get-all-server', [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get('/get-all-server-claims', [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
-            Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'showReport']);
+            Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatch']);
             Route::get('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'getOneClaimBatch']);
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
@@ -472,7 +473,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
-        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimController::class, 'ShowReport']);
+        Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
         Route::get('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'checkEligibility']);
