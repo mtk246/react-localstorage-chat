@@ -108,6 +108,7 @@ class BillingCompany extends Model implements Auditable
     use Searchable;
 
     protected $fillable = [
+        'tax_id',
         'name',
         'code',
         'status',
