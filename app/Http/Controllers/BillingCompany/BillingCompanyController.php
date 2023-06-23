@@ -98,4 +98,11 @@ final class BillingCompanyController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating image billing company'), 400);
     }
+
+    public function getByTaxId(string $tax_id): JsonResponse
+    {
+        $rs = $this->billingCompanyRepository->getByTaxId($tax_id);
+
+        return !is_null($rs) ? response()->json($rs) : response()->json([], 404);
+    }
 }

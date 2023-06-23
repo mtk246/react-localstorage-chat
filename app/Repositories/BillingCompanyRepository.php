@@ -26,6 +26,7 @@ final class BillingCompanyRepository
         }
 
         $company = BillingCompany::create([
+            'tax_id' => $data['tax_id'],
             'name' => $data['name'],
             'abbreviation' => strtoupper($data['abbreviation'] ?? ''),
             'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), BillingCompany::class, 'code'),
@@ -226,5 +227,13 @@ final class BillingCompanyRepository
         }
 
         return $pathNameFile ?? null;
+    }
+
+    public function getByTaxId(string $id)
+    {
+        return BillingCompany::with([
+            'addresses',
+            'contacts',
+        ])->where('tax_id', $id)->first();
     }
 }

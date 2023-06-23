@@ -28,6 +28,7 @@ class CreateCompanyBilling extends FormRequest
     public function rules()
     {
         return [
+            'tax_id' => ['required', 'string', 'unique:billing_companies'],
             'name' => ['required', 'string', 'max:50', new IUnique(BillingCompany::class, 'name')],
             'address' => ['nullable', 'array'],
             'contact' => ['required', 'array'],
