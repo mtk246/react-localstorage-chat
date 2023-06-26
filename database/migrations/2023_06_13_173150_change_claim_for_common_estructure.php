@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -40,6 +41,8 @@ return new class() extends Migration {
         Schema::dropIfExists('claim_status_medicals');
         Schema::enableForeignKeyConstraints();
 
+        Claim::query()->delete();
+
         Schema::table('claims', function (Blueprint $table) {
             $table->dropColumn([
                 'company_id',
@@ -61,11 +64,15 @@ return new class() extends Migration {
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
             $table->renameColumn('control_number', 'code');
-            $table->ulid('code')->change();
             $table->string('format');
             $table->string('type')->default('institutional');
             $table->json('aditional_information');
         });
+
+        Schema::table('claims', function (Blueprint $table) {
+            $table->ulid('code')->change();
+        });
+
         Schema::create('claim_demographic', function (Blueprint $table) {
             $table->id();
             $table->foreignId('claim_id')
