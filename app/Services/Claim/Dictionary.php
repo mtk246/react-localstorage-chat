@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\RuleType;
 use App\Models\Claims\Claim;
+use App\Models\Company;
 use App\Models\InsuranceCompany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -16,6 +17,7 @@ abstract class Dictionary implements DictionaryInterface
 
     public function __construct(
         protected readonly Claim $claim,
+        protected readonly Company $company,
         protected readonly InsuranceCompany $insuranceCompany,
     ) {
     }
@@ -52,6 +54,8 @@ abstract class Dictionary implements DictionaryInterface
     {
         list($model, $key) = explode(':', $value);
 
+        $model = Str::camel($model);
+
         if (!method_exists($this->claim, $model)) {
             throw new \InvalidArgumentException('Invalid model getter');
         }
@@ -60,7 +64,7 @@ abstract class Dictionary implements DictionaryInterface
 
         return method_exists($this, $accesor)
             ? $this->$accesor($key)
-            : $this->claim->$model->$key;
+            : $this->claim->{$model}()->{$key};
     }
 
     protected function getDateFormat(string $value): string
