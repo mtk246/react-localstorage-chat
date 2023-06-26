@@ -102,12 +102,4 @@ abstract class Dictionary implements DictionaryInterface
             ? (bool) $this->$accesor($key, $check)
             : (bool) $check;
     }
-
-    protected function getClaimAttribute(array $keys): string
-    {
-        $value = null;
-
-        foreach
-        return (string) $this->claim->getAttribute($key);
-    }
 }
