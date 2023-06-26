@@ -6,7 +6,7 @@ namespace App\Models\Claim;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
-use App\Models\Company;
+use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,6 +38,6 @@ final class Rules extends Model
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class, 'company_claim_rule');
+        return $this->belongsToMany(InsuranceCompany::class, 'claim_rules');
     }
 }
