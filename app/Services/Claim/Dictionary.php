@@ -79,7 +79,7 @@ abstract class Dictionary implements DictionaryInterface
                 ->format($format);
     }
 
-    protected function getBooleanFormat(string $value): string
+    protected function getBooleanFormat(string $value): bool
     {
         list($model, $key, $check) = explode(':', $value);
 
@@ -93,10 +93,8 @@ abstract class Dictionary implements DictionaryInterface
 
         $accesor = 'get'.Str::ucfirst($model).'Attribute';
 
-        if (method_exists($this, $accesor)) {
-            return $this->$accesor($key, $check);
-        }
-
-        return (bool) $check ? 'x' : '';
+        return method_exists($this, $accesor)
+            ? (bool) $this->$accesor($key, $check)
+            : (bool) $check;
     }
 }
