@@ -7375,33 +7375,195 @@ return [
             FormatType::FILE->value => [
                 '1a' => [
                     'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
                     'value' => [
-                        'model' => 'value',
-                        'company' => 'id',
+                        'company:name:',
                     ],
                     'values' => [
                         'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
                         ],
-                        'company' => [
+                    ],
+                ],
+                '1b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'company:address1',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
                         ],
-                        'billing_company' => [
+                    ],
+                ],
+                '1c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 24,
+                    'value' => [
+                        'company:address2',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
+                        ],
+                    ],
+                ],
+                '1d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'company:state',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
+                        ],
+                    ],
+                ],
+                '1e' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'company:zip',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
                         ],
                     ],
                 ],
                 '2a' => [
-                    'type' => RuleType::BOOLEAN,
-                    'value' => false,
-                ],
-                '2b' => [
-                    'type' => RuleType::BOOLEAN,
-                    'format' => 'collect',
-                    'value' => false,
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'company:name:',
+                    ],
                     'values' => [
                         'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
                         ],
-                        'company' => [
+                    ],
+                ],
+                '2b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'company:address1',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
                         ],
-                        'billing_company' => [
+                    ],
+                ],
+                '2c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 24,
+                    'value' => [
+                        'company:address2',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
+                        ],
+                    ],
+                ],
+                '2d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'company:state',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
+                        ],
+                    ],
+                ],
+                '2e' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'company:zip',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'company:address1',
+                            'company:address2',
+                            'company:state',
+                            'company:zip',
+                        ],
+                    ],
+                ],
+                '3a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'code:',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'code:',
+                        ],
+                    ],
+                ],
+                '3b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'patient_company:med_num',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'patient_company:med_num',
+                        ],
+                    ],
+                ],
+                '4' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'const:0',
+                        'facility:type',
+                        'demographicInformation:type_of_medical_assistance',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'patient_company:med_num',
                         ],
                     ],
                 ],

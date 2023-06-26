@@ -10,4 +10,5 @@ enum RuleType: string
     case BOOLEAN = 'boolean';
     case SINGLE = 'single';
     case MULTIPLE = 'multiple';
+    case NONE = 'none';
 }
