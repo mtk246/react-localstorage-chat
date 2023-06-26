@@ -35,6 +35,7 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
             RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value),
+            RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
     }
@@ -100,5 +101,13 @@ abstract class Dictionary implements DictionaryInterface
         return method_exists($this, $accesor)
             ? (bool) $this->$accesor($key, $check)
             : (bool) $check;
+    }
+
+    protected function getClaimAttribute(array $keys): string
+    {
+        $value = null;
+
+        foreach
+        return (string) $this->claim->getAttribute($key);
     }
 }
