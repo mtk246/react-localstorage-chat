@@ -35,21 +35,17 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::DATE->value => $this->getDateFormat($config->value),
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
-            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value),
+            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
     }
 
-    protected function getMultipleFormat(array $values): string
+    protected function getMultipleFormat(array $values, string $glue): string
     {
-        $result = '';
-
-        foreach ($values as $value) {
-            $result .= (string) $this->getSingleFormat($value);
-        }
-
-        return $result;
+        return Collect($values)
+            ->map(fn (string $value) => (string) $this->getSingleFormat($value))
+            ->implode($glue);
     }
 
     protected function getSingleFormat(string $value): string|Collection
