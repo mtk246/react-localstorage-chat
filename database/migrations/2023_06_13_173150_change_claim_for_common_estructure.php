@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -40,6 +41,8 @@ return new class() extends Migration {
         Schema::dropIfExists('claim_status_medicals');
         Schema::enableForeignKeyConstraints();
 
+        Claim::query()->delete();
+
         Schema::table('claims', function (Blueprint $table) {
             $table->dropColumn([
                 'company_id',
@@ -61,18 +64,20 @@ return new class() extends Migration {
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
             $table->renameColumn('control_number', 'code');
-            $table->ulid('code')->change();
-            $table->string('format');
             $table->string('type')->default('institutional');
             $table->json('aditional_information');
         });
+
+        Schema::table('claims', function (Blueprint $table) {
+            $table->ulid('code')->change();
+        });
+
         Schema::create('claim_demographic', function (Blueprint $table) {
             $table->id();
             $table->foreignId('claim_id')
                 ->constrained('claims')
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('type_of_medical_assistance');
             $table->foreignId('company_id')
                 ->nullable()
                 ->constrained('companies')
@@ -88,6 +93,7 @@ return new class() extends Migration {
                 ->constrained('patients')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
+            $table->string('type_of_medical_assistance')->nullable();
             $table->string('prior_authorization_number');
             $table->string('charges');
             $table->string('auto_accident_place_state');
@@ -115,6 +121,48 @@ return new class() extends Migration {
             $table->string('admission_source_id');
             $table->string('patient_status_id');
             $table->string('bill_classification_id');
+        });
+        Schema::create('claim_services', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('claim_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->string('diagnosis_related_group_id')->nullable();
+            $table->string('non_covered_charges')->nullable();
+        });
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('claim_service_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('procedure_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->json('modifier_ids')->nullable();
+            $table->json('diagnostic_pointers')->nullable();
+            $table->date('from_service');
+            $table->date('to_service');
+            $table->string('price');
+            $table->string('total_charge');
+            $table->string('copay')->nullable();
+            $table->string('revenue_code_id')->nullable();
+            $table->string('place_of_service_id')->nullable();
+            $table->string('type_of_service_id')->nullable();
+            $table->string('days_or_units')->nullable();
+            $table->string('emg')->nullable();
+            $table->string('epsdt_id')->nullable();
+            $table->string('family_planning_id')->nullable();
+        });
+        Schema::table('claim_diagnosis', function (Blueprint $table) {
+            $table->dropForeign(['claim_id']);
+            $table->renameColumn('claim_id', 'claim_service_id');
+        });
+        Schema::table('claim_diagnosis', function (Blueprint $table) {
+            $table->foreign('claim_service_id', 'dignosis_claim_service_id')
+                ->references('id')
+                ->on('claim_services')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 

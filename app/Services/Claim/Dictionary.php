@@ -8,6 +8,7 @@ use App\Enums\Claim\RuleType;
 use App\Models\Claims\Claim;
 use App\Models\Company;
 use App\Models\InsuranceCompany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -34,72 +35,71 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::DATE->value => $this->getDateFormat($config->value),
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
-            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value),
+            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
     }
 
-    protected function getMultipleFormat(array $values): string
+    protected function getMultipleFormat(array $values, string $glue): string
     {
-        $result = '';
-
-        foreach ($values as $value) {
-            $result .= (string) $this->getSingleFormat($value);
-        }
-
-        return $result;
+        return Collect($values)
+            ->map(fn (string $value) => (string) $this->getSingleFormat($value))
+            ->implode($glue);
     }
 
     protected function getSingleFormat(string $value): string|Collection
     {
-        list($model, $key) = explode(':', $value);
+        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
 
-        $model = Str::camel($model);
-
-        if (!method_exists($this->claim, $model)) {
-            throw new \InvalidArgumentException('Invalid model getter');
-        }
-
-        $accesor = 'get'.Str::ucfirst($model).'Attribute';
+        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
         return method_exists($this, $accesor)
-            ? $this->$accesor($key)
-            : $this->claim->{$model}()->{$key};
+            ? $this->$accesor($key, $default)
+            : $this->getClaimData($key, $default);
     }
 
     protected function getDateFormat(string $value): string
     {
-        list($model, $key, $format) = explode(':', $value);
+        list($key, $format, $default) = Str::of($value)->explode('|')->pad(3, null)->toArray();
 
-        if (!method_exists($this->claim, $model)) {
-            throw new \InvalidArgumentException('Invalid model getter');
-        }
-
-        $accesor = 'get'.Str::ucfirst($model).'Attribute';
+        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
         return method_exists($this, $accesor)
-            ? $this->$accesor($key, $format)
-            : $this->claim->$model->$key
-                ->format($format);
+            ? $this->$accesor($key, $format, $default)
+            : $this->getClaimData($key, $default)->format($format);
     }
 
     protected function getBooleanFormat(string $value): bool
     {
-        list($model, $key, $check) = explode(':', $value);
+        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
 
-        if (!method_exists($this->claim, $model)) {
-            throw new \InvalidArgumentException('Invalid model getter');
-        }
-
-        if ('null' == $check) {
-            $check = $this->claim->$model->$key;
-        }
-
-        $accesor = 'get'.Str::ucfirst($model).'Attribute';
+        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
         return method_exists($this, $accesor)
-            ? (bool) $this->$accesor($key, $check)
-            : (bool) $check;
+            ? (bool) $this->$accesor($key, $default)
+            : (bool) $this->getClaimData($key, $default);
+    }
+
+    protected function getClaimData(string $key, ?string $default = null): mixed
+    {
+        if ($default) {
+            return $default;
+        }
+
+        return Collect(explode('.', $key))
+            ->map(function (string $data) {
+                list($key, $properties) = Str::of($data)->explode(':')->pad(2, null)->toArray();
+
+                return (object) [
+                    'key' => Str::camel($key),
+                    'properties' => $properties
+                        ? explode(',', $properties)
+                        : [],
+                ];
+            })
+            ->reduce(function (Model $carry, object $item) {
+                return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
+            }, $this->claim);
     }
 }
