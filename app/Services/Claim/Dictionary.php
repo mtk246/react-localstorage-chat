@@ -63,7 +63,7 @@ abstract class Dictionary implements DictionaryInterface
     {
         list($key, $format, $default) = Str::of($value)->explode('|')->pad(3, null)->toArray();
 
-        $accesor = 'get'.Str::ucfirst($key).'Attribute';
+        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
         return method_exists($this, $accesor)
             ? $this->$accesor($key, $format, $default)
@@ -74,7 +74,7 @@ abstract class Dictionary implements DictionaryInterface
     {
         list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
 
-        $accesor = 'get'.Str::ucfirst($key).'Attribute';
+        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
         return method_exists($this, $accesor)
             ? (bool) $this->$accesor($key, $default)
