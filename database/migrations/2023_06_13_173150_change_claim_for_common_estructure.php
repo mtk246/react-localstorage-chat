@@ -64,7 +64,6 @@ return new class() extends Migration {
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
             $table->renameColumn('control_number', 'code');
-            $table->string('format');
             $table->string('type')->default('institutional');
             $table->json('aditional_information');
         });
@@ -79,7 +78,6 @@ return new class() extends Migration {
                 ->constrained('claims')
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('type_of_medical_assistance');
             $table->foreignId('company_id')
                 ->nullable()
                 ->constrained('companies')
@@ -95,6 +93,7 @@ return new class() extends Migration {
                 ->constrained('patients')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
+            $table->string('type_of_medical_assistance')->nullable();
             $table->string('prior_authorization_number');
             $table->string('charges');
             $table->string('auto_accident_place_state');
