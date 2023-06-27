@@ -122,6 +122,48 @@ return new class() extends Migration {
             $table->string('patient_status_id');
             $table->string('bill_classification_id');
         });
+        Schema::create('claim_services', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('claim_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->string('diagnosis_related_group_id')->nullable();
+            $table->string('non_covered_charges')->nullable();
+        });
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('claim_service_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('procedure_id')
+                ->restrictOnDelete()
+                ->cascadeOnUpdate();
+            $table->json('modifier_ids')->nullable();
+            $table->json('diagnostic_pointers')->nullable();
+            $table->date('from_service');
+            $table->date('to_service');
+            $table->string('price');
+            $table->string('total_charge');
+            $table->string('copay')->nullable();
+            $table->string('revenue_code_id')->nullable();
+            $table->string('place_of_service_id')->nullable();
+            $table->string('type_of_service_id')->nullable();
+            $table->string('days_or_units')->nullable();
+            $table->string('emg')->nullable();
+            $table->string('epsdt_id')->nullable();
+            $table->string('family_planning_id')->nullable();
+        });
+        Schema::table('claim_diagnosis', function (Blueprint $table) {
+            $table->dropForeign(['claim_id']);
+            $table->renameColumn('claim_id', 'claim_service_id');
+        });
+        Schema::table('claim_diagnosis', function (Blueprint $table) {
+            $table->foreign('claim_service_id', 'dignosis_claim_service_id')
+                ->references('id')
+                ->on('claim_services')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+        });
     }
 
     public function down(): void
