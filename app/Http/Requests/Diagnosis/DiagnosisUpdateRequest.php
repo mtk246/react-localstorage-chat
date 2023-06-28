@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Diagnosis;
 
+use App\Enums\Diagnoses\DiagnosesType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class DiagnosisUpdateRequest extends FormRequest
 {
@@ -31,6 +33,11 @@ class DiagnosisUpdateRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'injury_date_required' => ['nullable', 'boolean'],
             'note' => ['required', 'string'],
+
+            'type' => ['required', new Enum(DiagnosesType::class)],
+            'clasifications' => ['required', 'array'],
+            'clasifications.specific' => ['nullable', 'integer'],
+            'clasifications.sub_specific' => ['nullable', 'integer'],
         ];
     }
 }

@@ -10,6 +10,7 @@
 - [Get one diagnosis by code](#get-one-diagnosis-by-code)
 - [Update diagnosis](#update-diagnosis)
 - [Change status diagnosis](#change-status-diagnosis)
+- [Get classification type](#get-classification)
 
 
 
@@ -26,6 +27,7 @@
 | 5 |GET     | `Get one Diagnosis by code` | `/diagnosis/get-by-code/{code}` | yes            | Get one diagnosis by code|
 | 6 |PUT     | `Update Diagnosis`  | `/diagnosis/{id}` | yes            | Update diagnosis  |
 | 7 |PATCH   | `Change status Diagnosis`  | `/diagnosis/change-status/{id}` | yes            | Change status diagnosis  |
+| 8 |GET | `Get classification types`| `/diagnosis/type/{type}/classification`|yes|Get classification types based on select|
 
 
 <a name="create-diagnosis"></a>
@@ -39,7 +41,12 @@
     "start_date": "2022-07-05",
     "description": "Description diagnosis 1",
     "injury_date_required": true,
-    "note": "Note diagnosis 1"
+    "note": "Note diagnosis 1",
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "specific": 2, // not required
+        "sub_specific": 2 // not required
+    }
 }
 ```
 
@@ -277,7 +284,12 @@
     "end_date": "2022-08-05",
     "description": "Description diagnosis 1 edited",
     "injury_date_required": true,
-    "note": "Note diagnosis 1 edited"
+    "note": "Note diagnosis 1 edited",
+    "type": 1, // type of preocedure
+    "clasifications": {
+        "specific": 1, // not required
+        "sub_specific": 1 // not required
+    }
 }
 ```
 
@@ -347,3 +359,79 @@
 ## Response
 
 > {success} 204 Status changed
+
+
+<a name="get-classification"></a>
+## Get diagnosis classification types
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`specific optional <>`
+`sub_specific optional <specific>`
+
+
+## Response
+
+> {success} 200 
+
+```json
+{
+  "type": [
+    {
+      "id": 1,
+      "name": "Category I Codes"
+    },
+    {
+      "id": 2,
+      "name": "Category II Codes"
+    },
+    {
+      "id": 3,
+      "name": "Category III Codes"
+    },
+    ...
+  ],
+  "specific": [ // null when general not passed
+    {
+      "id": 1,
+      "name": "Anesthesia"
+    },
+    {
+      "id": 2,
+      "name": "Surgery"
+    },
+    {
+      "id": 3,
+      "name": "Radiology Procedures"
+    },
+    ...
+  ],
+  "sub_specific": [ // null when general or specific not passed
+    {
+      "id": 1,
+      "name": "Anesthesia for Procedures on the Head"
+    },
+    {
+      "id": 2,
+      "name": "Anesthesia for Procedures on the Neck"
+    },
+    {
+      "id": 3,
+      "name": "Anesthesia for Procedures on the Thorax (Chest Wall and Shoulder Girdle)"
+    },
+    ...
+  ]
+}
+```
+
+#
+
+>{warning} 404 Error, get procedures to company not found
