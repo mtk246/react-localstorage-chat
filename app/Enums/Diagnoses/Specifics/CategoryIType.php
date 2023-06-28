@@ -14,10 +14,10 @@ use App\Enums\Diagnoses\SubSpecifics\MedicineAndProcedureType;
 use App\Enums\Diagnoses\SubSpecifics\PathologyAndLaboratoryType;
 use App\Enums\Diagnoses\SubSpecifics\RadiologyType;
 use App\Enums\Diagnoses\SubSpecifics\SurgeryType;
+use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasRangeAttribute;
 use App\Enums\Traits\HasTypeAttributes;
-use App\Enums\Interfaces\ProcedureClassificationInterface;
 
 enum CategoryIType: int implements ProcedureClassificationInterface
 {

@@ -8,6 +8,7 @@ use App\Enums\Diagnoses\DiagnosesType;
 use App\Http\Resources\Enums\ChildTypeResource;
 use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\RequestWrapedResource;
+
 final class ClassificationResource extends RequestWrapedResource
 {
     /**

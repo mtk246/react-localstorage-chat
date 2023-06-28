@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Casts\Diagnosis;
 
-
 use App\Enums\Diagnoses\DiagnosesType;
 use App\Http\Resources\Enums\TypeResource;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -25,7 +24,7 @@ final class ClasificationsCast implements CastsAttributes
 
         $clasifications = json_decode($value);
 
-        $type_id = isset($model->type?->value)  ? $model->type->value : $model->type;
+        $type_id = isset($model->type?->value) ? $model->type->value : $model->type;
 
         $type = DiagnosesType::tryFrom((int) $type_id);
 

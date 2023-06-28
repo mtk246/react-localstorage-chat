@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Diagnosis\ClasificationsCast;
+use app\Enums\Diagnoses\DiagnosesType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
-use App\Casts\Diagnosis\ClasificationsCast;
-use app\Enums\Diagnoses\DiagnosesType;
-use App\Casts\Diagnosis\TypeCast;
 
 /**
  * App\Models\Diagnosis.
@@ -70,7 +69,7 @@ class Diagnosis extends Model implements Auditable
         'active',
         'injury_date_required',
         'type',
-        'clasifications'
+        'clasifications',
     ];
 
     /**

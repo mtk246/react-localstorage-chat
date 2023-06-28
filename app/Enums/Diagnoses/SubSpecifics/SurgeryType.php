@@ -7,10 +7,10 @@ namespace App\Enums\Diagnoses\SubSpecifics;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Attributes\RangeAttribute;
+use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasRangeAttribute;
 use App\Enums\Traits\HasTypeAttributes;
-use App\Enums\Interfaces\ProcedureClassificationInterface;
 
 enum SurgeryType: int implements ProcedureClassificationInterface
 {

@@ -9,10 +9,10 @@ use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Diagnoses\Specifics\CategoryIIType;
 use App\Enums\Diagnoses\Specifics\CategoryIType;
-use App\Enums\Traits\HasChildAttribute;
-use App\Enums\Traits\HasTypeAttributes;
-use App\Enums\Traits\HasRangeAttribute;
 use App\Enums\Interfaces\ProcedureClassificationInterface;
+use App\Enums\Traits\HasChildAttribute;
+use App\Enums\Traits\HasRangeAttribute;
+use App\Enums\Traits\HasTypeAttributes;
 
 enum DiagnosesType: int implements ProcedureClassificationInterface
 {
@@ -29,5 +29,4 @@ enum DiagnosesType: int implements ProcedureClassificationInterface
     #[ChildAttribute(CategoryIIType::class)]
     #[PublicAttribute(true)]
     case CATEGORY_II = 2;
-
 }
