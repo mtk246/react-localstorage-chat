@@ -40,7 +40,6 @@ final class Services extends Model
         'emg',
         'epsdt_id',
         'family_planning_id',
-        'claim_form_p_id',
         'revenue_code_id',
         'total_charge',
         'claim_service_id',
