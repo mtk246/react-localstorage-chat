@@ -110,6 +110,8 @@ final class GetCompany
                 'services' => ServiceResource::collection($companyProcedures)->resource,
                 'copays' => $copays,
                 'contract_fees' => $contracFees,
+                'addresses' => $company->addresses,
+                'contacts' => $company->contacts,
             ];
             $record['billing_companies'] = [];
 
