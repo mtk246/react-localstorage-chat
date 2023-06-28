@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\Diagnoses\DiagnosesResource;
 
 class DiagnosisRepository
 {
@@ -23,6 +24,8 @@ class DiagnosisRepository
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'description' => $data['description'],
+                'type' => $data['type'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             if (isset($data['note'])) {
@@ -35,7 +38,7 @@ class DiagnosisRepository
 
             DB::commit();
 
-            return $diagnosis;
+            return new DiagnosesResource($diagnosis);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -97,7 +100,7 @@ class DiagnosisRepository
                 'publicNote',
             ])->first();
 
-        return !is_null($diagnosis) ? $diagnosis : null;
+        return !is_null($diagnosis) ? new DiagnosesResource($diagnosis) : null;
     }
 
     /**
@@ -125,6 +128,8 @@ class DiagnosisRepository
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
+                'type' => $data['type'],
+                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
             ]);
 
             if (isset($data['note'])) {

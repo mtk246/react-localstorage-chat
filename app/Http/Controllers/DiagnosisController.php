@@ -8,6 +8,7 @@ use App\Http\Requests\Diagnosis\DiagnosisUpdateRequest;
 use App\Repositories\DiagnosisRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Resources\Diagnoses\ClassificationResource;
 
 class DiagnosisController extends Controller
 {
@@ -72,6 +73,13 @@ class DiagnosisController extends Controller
     {
         return response()->json(
             $this->diagnosisRepository->getListDiagnoses()
+        );
+    }
+
+    public function getClassifications(int $type): JsonResponse
+    {
+        return response()->json(
+            new ClassificationResource($type)
         );
     }
 }

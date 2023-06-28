@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Casts\Diagnosis\ClasificationsCast;
+use app\Enums\Diagnoses\DiagnosesType;
+use App\Casts\Diagnosis\TypeCast;
 
 /**
  * App\Models\Diagnosis.
@@ -66,6 +69,8 @@ class Diagnosis extends Model implements Auditable
         'description',
         'active',
         'injury_date_required',
+        'type',
+        'clasifications'
     ];
 
     /**
@@ -74,6 +79,17 @@ class Diagnosis extends Model implements Auditable
      * @var array
      */
     protected $appends = ['last_modified'];
+
+    protected $casts = [
+        'clasifications' => ClasificationsCast::class,
+    ];
+
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            set: fn (int $value) => DiagnosesType::tryFrom($value),
+        );
+    }
 
     /**
      * Diagnosis morphs many publicNotes.
