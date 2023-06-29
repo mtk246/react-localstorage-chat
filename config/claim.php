@@ -2926,118 +2926,114 @@ return [
         ],
     ],
     'preview_837i' => [
-        '1' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 4.5,
-                ],
-            ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 8.5,
-                ],
-            ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 13,
-                ],
-            ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 50,
-                    'y' => 13,
-                ],
-            ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 55,
-                    'y' => 13,
-                ],
+        '1a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 10,
+                'y' => 4.5,
             ],
         ],
-        '2' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 72,
-                    'y' => 4.5,
-                ],
+        '1b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 10,
+                'y' => 8.5,
             ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 72,
-                    'y' => 8.5,
-                ],
+        ],
+        '1c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 10,
+                'y' => 13,
             ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 60,
-                    'h' => 10,
-                    'x' => 72,
-                    'y' => 13,
-                ],
+        ],
+        '1d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 50,
+                'y' => 13,
             ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 112,
-                    'y' => 13,
-                ],
+        ],
+        '1e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 55,
+                'y' => 13,
             ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 117,
-                    'y' => 13,
-                ],
+        ],
+        '2a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 72,
+                'y' => 4.5,
+            ],
+        ],
+        '2b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 72,
+                'y' => 8.5,
+            ],
+        ],
+        '2c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 60,
+                'h' => 10,
+                'x' => 72,
+                'y' => 13,
+            ],
+        ],
+        '2d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 112,
+                'y' => 13,
+            ],
+        ],
+        '2e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 117,
+                'y' => 13,
             ],
         ],
         '3a' => [
@@ -3084,31 +3080,39 @@ return [
                 'y' => 17,
             ],
         ],
-        '6' => [
-            'from' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 157,
-                    'y' => 17,
-                ],
-            ],
-            'through' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 17,
-                ],
+        '6a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 157,
+                'y' => 17,
             ],
         ],
-        // '7' => '',
+        '6b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 175,
+                'y' => 17,
+            ],
+        ],
+        '7' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 195,
+                'y' => 17,
+            ],
+        ],
         '8a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
@@ -3131,61 +3135,59 @@ return [
                 'y' => 25.5,
             ],
         ],
-        '9' => [
-            'A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 110,
-                    'y' => 21.5,
-                ],
+        '9a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 110,
+                'y' => 21.5,
             ],
-            'B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 85,
-                    'y' => 25.5,
-                ],
+        ],
+        '9b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 85,
+                'y' => 25.5,
             ],
-            'C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 167,
-                    'y' => 25.5,
-                ],
+        ],
+        '9c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 167,
+                'y' => 25.5,
             ],
-            'D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 176,
-                    'y' => 25.5,
-                ],
+        ],
+        '9d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 176,
+                'y' => 25.5,
             ],
-            'E' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 204,
-                    'y' => 25.5,
-                ],
+        ],
+        '9e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 204,
+                'y' => 25.5,
             ],
         ],
         '10' => [
@@ -7565,7 +7567,151 @@ return [
                         'common' => [
                             '|0',
                             'facility.type',
-                            'demographicInformation.type_of_medical_assistance',
+                            'demographicInformation.get_type_of_medical_assistance',
+                            'patientInformation.billClassification.code',
+                        ],
+                    ],
+                ],
+                '5' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'company.npi',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company.npi',
+                        ],
+                    ],
+                ],
+                '6a' => [
+                    'type' => RuleType::DATE->value,
+                    'value' => [
+                        'company.tax_id',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company.tax_id',
+                        ],
+                    ],
+                ],
+                '6b' => [
+                    'type' => RuleType::DATE->value,
+                    'value' => [
+                        'company.tax_id',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company.tax_id',
+                        ],
+                    ],
+                ],
+                '7' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [
+                        ],
+                    ],
+                ],
+                '8a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'demographicInformation.patient.code',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.code',
+                        ],
+                    ],
+                ],
+                '8b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'demographicInformation.patient.last_name',
+                        '|,',
+                        'demographicInformation.patient.first_name',
+                        'demographicInformation.patient.middle_name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.last_name',
+                            'demographicInformation.patient.first_name',
+                            'demographicInformation.patient.middle_name',
+                        ],
+                    ],
+                ],
+                '9a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 28,
+                    'value' => [
+                        'demographicInformation.patient.address',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.address',
+                            'demographicInformation.patient.city',
+                            'demographicInformation.patient.state',
+                            'demographicInformation.patient.zip',
+                        ],
+                    ],
+                ],
+                '9b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 24,
+                    'value' => [
+                        'demographicInformation.patient.city',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.address',
+                            'demographicInformation.patient.city',
+                            'demographicInformation.patient.state',
+                            'demographicInformation.patient.zip',
+                        ],
+                    ],
+                ],
+                '9c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 3,
+                    'value' => [
+                        'demographicInformation.patient.state',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.address',
+                            'demographicInformation.patient.city',
+                            'demographicInformation.patient.state',
+                            'demographicInformation.patient.zip',
+                        ],
+                    ],
+                ],
+                '9d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 12,
+                    'value' => [
+                        'demographicInformation.patient.zip',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.address',
+                            'demographicInformation.patient.city',
+                            'demographicInformation.patient.state',
+                            'demographicInformation.patient.zip',
+                        ],
+                    ],
+                ],
+                '9e' => [
+                    'type' => RuleType::NONE->value,
+                    'length' => 27,
+                    'value' => [],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.address',
+                            'demographicInformation.patient.city',
+                            'demographicInformation.patient.state',
+                            'demographicInformation.patient.zip',
                         ],
                     ],
                 ],
