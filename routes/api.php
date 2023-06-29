@@ -383,6 +383,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\DiagnosisController::class, 'changeStatus']);
 
         Route::get('/get-list', [\App\Http\Controllers\DiagnosisController::class, 'getList']);
+
+        Route::get('/type/{type}/classification', [\App\Http\Controllers\DiagnosisController::class, 'getClassifications']);
     });
 
     Route::prefix('modifier')->middleware([

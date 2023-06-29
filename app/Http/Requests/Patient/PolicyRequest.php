@@ -38,7 +38,7 @@ class PolicyRequest extends FormRequest
             'policy_number' => ['required', 'string'],
             'insurance_plan' => ['required', 'numeric'],
             'group_number' => ['nullable', 'string'],
-            'eff_date' => ['nullable', 'date'],
+            'eff_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date'],
             'type_responsibility_id' => ['required', 'integer'],
             'insurance_policy_type_id' => ['nullable', 'integer'],
