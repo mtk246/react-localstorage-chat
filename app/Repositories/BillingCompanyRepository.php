@@ -44,6 +44,7 @@ final class BillingCompanyRepository
             $data['contact']['billing_company_id'] = $company->id;
             $data['contact']['contactable_id'] = $company->id;
             $data['contact']['contactable_type'] = BillingCompany::class;
+            $data['contact']['contact_name'] = $data['contact']['contact_name'] ?? null;
             Contact::create($data['contact']);
         }
 
@@ -76,6 +77,7 @@ final class BillingCompanyRepository
                 $data['contact']['billing_company_id'] = $id;
                 $data['contact']['contactable_id'] = $billingCompany->id;
                 $data['contact']['contactable_type'] = BillingCompany::class;
+                $data['contact_name'] = $data['contact']['contact_name'] ?? null;
                 $contact = Contact::updateOrCreate([
                     'billing_company_id' => $billingCompany->id,
                     'contactable_id' => $billingCompany->id,
@@ -231,9 +233,6 @@ final class BillingCompanyRepository
 
     public function getByTaxId(string $id)
     {
-        return BillingCompany::with([
-            'addresses',
-            'contacts',
-        ])->where('tax_id', $id)->first();
+        return BillingCompany::where('tax_id', $id)->first();
     }
 }
