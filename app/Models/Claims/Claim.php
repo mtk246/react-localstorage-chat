@@ -11,6 +11,7 @@ use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
+use App\Traits\Claim\FileTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -97,6 +98,7 @@ class Claim extends Model implements Auditable
     use AuditableTrait;
     use Searchable;
     use HasUlids;
+    use FileTrait;
 
     protected $fillable = [
         'code',
