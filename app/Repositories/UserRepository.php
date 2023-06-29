@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 
 class UserRepository
@@ -649,38 +650,34 @@ class UserRepository
     /**
      * @return User|Builder|Model|object|null
      */
-    public function searchBySsn(string $ssn)
+    public function searchBySsn(string $ssn, ?int $billing_company_id = null)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $user = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses',
-                'contacts',
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn) {
-                $query->where('ssn', $ssn);
-            })->first();
-        } else {
-            $user = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses' => function ($query) use ($bC) {
+
+        $bC = Gate::check('is-admin') ? $billing_company_id : auth()->user()->billing_company_id;
+        $user = User::with([
+            'profile' => function ($query) {
+                $query->with('socialMedias');
+            },
+            'roles',
+            'billingCompanies',
+            'addresses' => function ($query) use ($bC) {
+                if (!empty($bC)) {
                     $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
+                }
+            },
+            'contacts' => function ($query) use ($bC) {
+                if (!empty($bC)) {
                     $query->where('billing_company_id', $bC);
-                },
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn) {
-                $query->where('ssn', $ssn);
-            })->first();
-        }
+                }
+            },
+        ])->whereHas('profile', function ($query) use ($ssn) {
+            $query->where('ssn', $ssn)
+                ->orWhere('ssn', str_replace('-', '', $ssn ?? ''));
+        })->whereHas('billingCompanies', function ($query) use ($bC) {
+            if (!empty($bC)) {
+                $query->where('billing_company_id', $bC);
+            }
+        })->first();
 
         return $user;
     }

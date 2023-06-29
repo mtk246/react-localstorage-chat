@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Diagnosis\ClasificationsCast;
+use app\Enums\Diagnoses\DiagnosesType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -66,6 +68,8 @@ class Diagnosis extends Model implements Auditable
         'description',
         'active',
         'injury_date_required',
+        'type',
+        'clasifications',
     ];
 
     /**
@@ -74,6 +78,17 @@ class Diagnosis extends Model implements Auditable
      * @var array
      */
     protected $appends = ['last_modified'];
+
+    protected $casts = [
+        'clasifications' => ClasificationsCast::class,
+    ];
+
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            set: fn (int $value) => DiagnosesType::tryFrom($value),
+        );
+    }
 
     /**
      * Diagnosis morphs many publicNotes.
