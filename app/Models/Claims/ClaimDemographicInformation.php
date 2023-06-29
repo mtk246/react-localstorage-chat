@@ -112,6 +112,11 @@ final class ClaimDemographicInformation extends Model
         return $this->hasMany(ClaimTransmissionResponse::class);
     }
 
+    public function getTypeOfMedicalAssistance(): int
+    {
+        return 'inpatient' == $this->type_of_medical_assistance ? 1 : 3;
+    }
+
     /**
      * The healthProfessionals that belong to the Claim.
      *
