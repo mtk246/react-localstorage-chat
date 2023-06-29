@@ -6,5 +6,5 @@ namespace App\Services\Claim;
 
 interface DictionaryInterface
 {
-    public function translate(string $key): array|string;
+    public function translate(string $key): array|string|bool;
 }

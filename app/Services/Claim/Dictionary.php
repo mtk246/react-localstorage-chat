@@ -23,9 +23,9 @@ abstract class Dictionary implements DictionaryInterface
     ) {
     }
 
-    public function translate(string $key): array|string
+    public function translate(string $key): array|string|bool
     {
-        $config = config("claim.formats.{$this->claim->type->value}.{$this->format}.{$key}");
+        $config = (object) config("claim.formats.{$this->claim->type->value}.{$this->format}.{$key}");
 
         if (!$config) {
             throw new \InvalidArgumentException('Invalid format key');
@@ -52,10 +52,11 @@ abstract class Dictionary implements DictionaryInterface
     {
         list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
 
-        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
+        list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
+        $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
 
         return method_exists($this, $accesor)
-            ? $this->$accesor($key, $default)
+            ? $this->$accesor($property, $default)
             : $this->getClaimData($key, $default);
     }
 
@@ -74,10 +75,11 @@ abstract class Dictionary implements DictionaryInterface
     {
         list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
 
-        $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
+        list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
+        $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
 
         return method_exists($this, $accesor)
-            ? (bool) $this->$accesor($key, $default)
+            ? (bool) $this->$accesor($property, $default)
             : (bool) $this->getClaimData($key, $default);
     }
 
