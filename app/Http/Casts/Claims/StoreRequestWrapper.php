@@ -8,6 +8,7 @@ use App\Http\Casts\CastsRequest;
 use App\Models\Claims\ClaimStatus;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 final class StoreRequestWrapper extends CastsRequest
 {
@@ -21,14 +22,13 @@ final class StoreRequestWrapper extends CastsRequest
     public function getData(): array
     {
         return [
+            'code' => Str::ulid(),
             'type' => $this->get('type'),
-            'format' => $this->get('format'),
-            'control_number' => $this->get('control_number'),
             'submitter_name' => $this->get('submitter_name'),
             'submitter_contact' => $this->get('submitter_contact'),
             'submitter_phone' => $this->get('submitter_phone'),
             'billing_company_id' => $this->getBillingCompanyId(),
-            'aditional_information' => $this->getAditionalInformation()->getExtraData(),
+            'aditional_information' => $this->getAdditionalInformation()->getExtraInformation()->toJson(),
         ];
     }
 
@@ -69,8 +69,8 @@ final class StoreRequestWrapper extends CastsRequest
             });
     }
 
-    public function getAditionalInformation(): AditionalInformationWrapper
+    public function getAdditionalInformation(): AditionalInformationWrapper
     {
-        return $this->cast('aditional_information', AditionalInformationWrapper::class);
+        return $this->cast('additional_information', AditionalInformationWrapper::class);
     }
 }
