@@ -23,7 +23,7 @@ final class DemographicInformationWrapper extends CastsRequest
             'patient_signature' => $this->get('patient_signature'),
             'insured_signature' => $this->get('insured_signature'),
             'outside_lab' => $this->get('outside_lab'),
-            'charges' => $this->get('charges'),
+            'charges' => $this->get('charges') ?? 0,
             'employment_related_condition' => $this->get('employment_related_condition'),
             'auto_accident_related_condition' => $this->get('auto_accident_related_condition'),
             'auto_accident_place_state' => $this->get('auto_accident_place_state'),
