@@ -14,14 +14,14 @@ final class CreateAction
     public function invoke(StoreRequestWrapper $claimData): Collection
     {
         return DB::transaction(tap(
-            new Claim($claimData->getData()),
+            Claim::query()->create($claimData->getData()),
             function (Claim $claim) use ($claimData) {
                 $claim->setDemographicInformation($claimData->getDemographicInformation());
                 $claim->setServices($claimData->getClaimServices());
                 $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
                 $claim->setStates($claimData->getStatus(), $claimData->getSubStatus());
                 $claim->query()->when($claim->type, function (Claim $query) use ($claimData) {
-                    $query->setAditionalInformation($claimData->getAditionalInformation());
+                    $query->setAdditionalInformation($claimData->getAdditionalInformation());
                 });
             }
         )->load(['demographicInformation', 'services', 'policiesInsurances', 'aditionalInformation']));
