@@ -143,7 +143,7 @@ class Claim extends Model implements Auditable
 
     public function status(): MorphToMany
     {
-        return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claims');
+        return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claim');
     }
 
     public function billingCompany(): BelongsTo
@@ -153,7 +153,7 @@ class Claim extends Model implements Auditable
 
     public function subStatus(): MorphToMany
     {
-        return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claims');
+        return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claim');
     }
 
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformationData): void
@@ -179,7 +179,7 @@ class Claim extends Model implements Auditable
                 $services->getData()
             );
 
-        Services::upsert($services->getService()->getData(), ['id']);
+        Services::upsert($services->getService()->toArray(), ['id']);
 
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
         $claimService->services()->upsert($services
@@ -199,11 +199,11 @@ class Claim extends Model implements Auditable
             ->sync($policiesInsurances->toArray());
     }
 
-    public function setStates(?string $status, ?int $subStatus): void
+    public function setStates(?int $status, ?int $subStatus): void
     {
         if (null !== $status) {
             $this->status()->sync(
-                ClaimStatus::query()->where('status', $status)->first()->id
+                ClaimStatus::query()->where('id', $status)->first()->id
             );
         }
 
