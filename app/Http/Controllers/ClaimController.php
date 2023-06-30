@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\GetBillClassificationAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
@@ -16,6 +17,7 @@ use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
 use App\Models\ClaimStatus;
@@ -63,9 +65,9 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function createClaim(ClaimCreateRequest $request)
+    public function createClaim(StoreRequest $request, CreateAction $createClaim)
     {
-        $rs = $this->claimRepository->createClaim($request->validated());
+        $rs = $createClaim->invoke($request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error creating claim'), 400);
     }

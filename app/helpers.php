@@ -32,9 +32,9 @@ function middleRedactor($string, $char)
 
 if (!function_exists('generateNewCode')) {
     function generateNewCode(
-        ?string $prefix = null,
+        ?string $prefix,
         int $code_length,
-        ?string $suffix = null,
+        ?string $suffix,
         string $model,
         string $field = 'code',
     ): string {
