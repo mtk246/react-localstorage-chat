@@ -230,17 +230,6 @@ class BillingCompany extends Model implements Auditable
         return $this->morphMany(CustomKeyboardShortcuts::class, 'shortcutable');
     }
 
-    /**
-     * Interact with the user's name.
-     */
-    /*protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => upperCaseWords($value),
-            set: fn ($value) => upperCaseWords($value),
-        );
-    }*/
-
     public function scopeSearch($query, $search)
     {
         if ('' != $search) {
@@ -293,5 +282,10 @@ class BillingCompany extends Model implements Auditable
             'abbreviation' => $this->abbreviation,
             'contact.email' => $this->contact?->email ?? null,
         ];
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->firstWhere(request()->get('field'), $value);
     }
 }

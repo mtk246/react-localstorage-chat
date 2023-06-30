@@ -117,10 +117,13 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
             Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
             Route::get('/get-list', [BillingCompanyController::class, 'getList']);
-            Route::get('/get-by-tax-id/{tax_id}', [BillingCompanyController::class, 'getByTaxId']);
-            Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
-            Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
             Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
+            Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
+            Route::get('/billing-company/{company_binding}', [BillingCompanyController::class, 'getBillingCompany']);
+
+            /*
+            Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
+            */
         });
 
         Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);

@@ -230,9 +230,4 @@ final class BillingCompanyRepository
 
         return $pathNameFile ?? null;
     }
-
-    public function getByTaxId(string $id)
-    {
-        return BillingCompany::where('tax_id', $id)->first();
-    }
 }
