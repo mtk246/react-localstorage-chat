@@ -37,11 +37,11 @@ final class StoreRequestWrapper extends CastsRequest
         return (bool) $this->get('draft');
     }
 
-    public function getStatus(): string
+    public function getStatus(): int
     {
         return $this->getDraft()
-            ? ClaimStatus::whereStatus('Draft')->first()?->status
-            : $this->get('status');
+            ? ClaimStatus::whereStatus('Draft')->first()?->id
+            : $this->get('status') ?? 2;
     }
 
     public function getSubStatus(): ?string
