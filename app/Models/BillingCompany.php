@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\BillingCompany.
@@ -286,6 +287,12 @@ class BillingCompany extends Model implements Auditable
 
     public function resolveRouteBinding($value, $field = null)
     {
-        return $this->firstWhere(request()->get('field'), $value);
+        return $this->query()
+            ->when(is_numeric($value), function (Builder $query) use ($value): void {
+                $query->Where('id', $value)->orWhere('tax_id', $value);
+            }, function (Builder $query) use ($value): void {
+                $query->where('name', $value)->orWhere('code', $value);
+            })
+            ->firstOrFail();
     }
 }

@@ -102,6 +102,6 @@ final class BillingCompanyController extends Controller
 
     public function getBillingCompany(BillingCompany $company_binding): JsonResponse
     {
-        return !is_null($company_binding) ? response()->json($company_binding) : response()->json([], 404);
+        return response()->json($company_binding);
     }
 }
