@@ -29,8 +29,6 @@ final class StoreRequest extends FormRequest
                 'nullable',
             ],
             'type' => ['required', 'integer'],
-            'format' => ['required', 'integer'],
-            'aditional_information' => ['nullable', 'array'],
             'draft' => ['nullable', 'boolean'],
 
             'demographic_information' => ['required', 'array'],
@@ -81,15 +79,15 @@ final class StoreRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
-            'additional_information.admission_date' => ['sometimes', 'date'],
-            'additional_information.admission_time' => ['nullable', 'date_format:H:i:s'],
-            'additional_information.discharge_date' => ['sometimes', 'date'],
-            'additional_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
-            'additional_information.condition_code_ids' => ['nullable', 'array'],
-            'additional_information.admission_type_id' => ['required', 'integer'],
-            'additional_information.admission_source_id' => ['required', 'integer'],
-            'additional_information.patient_status_id' => ['required', 'integer'],
-            'additional_information.bill_classification_id' => ['nullable', 'integer'],
+            'additional_information.patient_information.admission_date' => ['sometimes', 'date'],
+            'additional_information.patient_information.admission_time' => ['nullable', 'date_format:H:i:s'],
+            'additional_information.patient_information.discharge_date' => ['sometimes', 'date'],
+            'additional_information.patient_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
+            'additional_information.patient_information.condition_code_ids' => ['nullable', 'array'],
+            'additional_information.patient_information.admission_type_id' => ['required', 'integer'],
+            'additional_information.patient_information.admission_source_id' => ['required', 'integer'],
+            'additional_information.patient_information.patient_status_id' => ['required', 'integer'],
+            'additional_information.patient_information.bill_classification_id' => ['nullable', 'integer'],
 
             'additional_information.claim_date_informations' => ['nullable', 'array'],
             'additional_information.claim_date_informations.*.id' => ['nullable', 'integer'],
@@ -99,6 +97,8 @@ final class StoreRequest extends FormRequest
             'additional_information.claim_date_informations.*.to_date' => ['nullable', 'date'],
             'additional_information.claim_date_informations.*.through' => ['nullable', 'string'],
             'additional_information.claim_date_informations.*.amount' => ['nullable', 'numeric'],
+
+            'additional_information.extra_information' => ['nullable', 'array'],
 
             'insurance_policies' => ['array', 'nullable'],
         ];
