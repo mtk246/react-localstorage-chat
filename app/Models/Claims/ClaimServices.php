@@ -57,6 +57,6 @@ final class ClaimServices extends Model
 
     public function diagnoses(): BelongsToMany
     {
-        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_id', 'diagnosis_id')->withPivot(['item', 'poa', 'admission'])->withTimestamps();
+        return $this->belongsToMany(Diagnosis::class, 'claim_diagnosis', 'claim_service_id', 'diagnosis_id')->withPivot(['item', 'poa', 'admission'])->withTimestamps();
     }
 }
