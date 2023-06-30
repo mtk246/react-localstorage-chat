@@ -12,7 +12,6 @@ use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
 use App\Traits\Claim\ClaimFile;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -97,17 +96,16 @@ class Claim extends Model implements Auditable
     use HasFactory;
     use AuditableTrait;
     use Searchable;
-    use HasUlids;
     use ClaimFile;
 
     protected $fillable = [
         'code',
         'type',
-        'format',
         'submitter_name',
         'submitter_contact',
         'submitter_phone',
         'billing_company_id',
+        'aditional_information',
     ];
 
     protected $casts = [
@@ -216,7 +214,7 @@ class Claim extends Model implements Auditable
         }
     }
 
-    public function setAditionalInformation(AditionalInformationWrapper $aditionalInformation): void
+    public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
         $this->dateInformation()
             ->updateOrCreate(
