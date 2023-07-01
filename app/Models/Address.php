@@ -90,6 +90,7 @@ class Address extends Model implements Auditable
         'billing_company_id',
         'addressable_type',
         'addressable_id',
+        'apt_suite',
     ];
 
     /**

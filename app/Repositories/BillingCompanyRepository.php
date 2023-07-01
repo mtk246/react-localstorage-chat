@@ -38,6 +38,7 @@ final class BillingCompanyRepository
             $data['address']['billing_company_id'] = $company->id;
             $data['address']['addressable_id'] = $company->id;
             $data['address']['addressable_type'] = BillingCompany::class;
+            $data['address']['apt_suite'] = $data['address']['apt_suite'] ?? null;
             Address::create($data['address']);
         }
         if (isset($data['contact']['email'])) {
@@ -67,6 +68,7 @@ final class BillingCompanyRepository
                 $data['address']['billing_company_id'] = $id;
                 $data['address']['addressable_id'] = $billingCompany->id;
                 $data['address']['addressable_type'] = BillingCompany::class;
+                $data['address']['apt_suite'] = $data['address']['apt_suite'] ?? null;
                 $address = Address::updateOrCreate([
                     'billing_company_id' => $billingCompany->id,
                     'addressable_id' => $billingCompany->id,
