@@ -381,14 +381,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/', [\App\Http\Controllers\DiagnosisController::class, 'createDiagnosis']);
         Route::get('/', [\App\Http\Controllers\DiagnosisController::class, 'getAllDiagnoses']);
         Route::get('get-by-code/{code}', [\App\Http\Controllers\DiagnosisController::class, 'getByCode']);
-        Route::get('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'getOneDiagnosis']);
-        Route::put('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosis']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\DiagnosisController::class, 'changeStatus']);
-
         Route::get('/get-list', [\App\Http\Controllers\DiagnosisController::class, 'getList']);
-
         Route::get('/type', [\App\Http\Controllers\DiagnosisController::class, 'getType']);
         Route::get('/type/{type}/classification', [\App\Http\Controllers\DiagnosisController::class, 'getClassifications']);
+        Route::get('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'getOneDiagnosis']);
+        Route::put('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosis']);
     });
 
     Route::prefix('modifier')->middleware([
