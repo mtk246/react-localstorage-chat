@@ -9,6 +9,7 @@ use App\Http\Requests\ImgBillingCompanyRequest;
 use App\Repositories\BillingCompanyRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\BillingCompany;
 
 final class BillingCompanyController extends Controller
 {
@@ -97,5 +98,10 @@ final class BillingCompanyController extends Controller
         $rs = $this->billingCompanyRepository->uploadImage($request);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating image billing company'), 400);
+    }
+
+    public function getBillingCompany(BillingCompany $company_binding): JsonResponse
+    {
+        return response()->json($company_binding);
     }
 }

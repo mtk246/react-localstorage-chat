@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Diagnoses\DiagnosesType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Diagnosis\DiagnosisCreateRequest;
 use App\Http\Requests\Diagnosis\DiagnosisUpdateRequest;
@@ -9,6 +10,7 @@ use App\Repositories\DiagnosisRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\Diagnoses\ClassificationResource;
+use App\Http\Resources\Enums\TypeResource;
 
 class DiagnosisController extends Controller
 {
@@ -73,6 +75,13 @@ class DiagnosisController extends Controller
     {
         return response()->json(
             $this->diagnosisRepository->getListDiagnoses()
+        );
+    }
+
+    public function getType(): JsonResponse
+    {
+        return response()->json(
+            TypeResource::collection(DiagnosesType::cases())
         );
     }
 

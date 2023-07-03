@@ -28,24 +28,24 @@ final class ClasificationsCast implements CastsAttributes
 
         $type = DiagnosesType::tryFrom((int) $type_id);
 
-        $specific = $this->checkProperty($clasifications, 'specific') && $type->getChild()
-            ? new TypeResource($type->getChild()::from((int) $clasifications->specific))
+        $general = $this->checkProperty($clasifications, 'general') && $type->getChild()
+            ? new TypeResource($type->getChild()::from((int) $clasifications->general))
             : null;
 
-        $subSpecific = $this->checkProperty($clasifications, 'specific')
-            && $this->checkProperty($clasifications, 'sub_specific')
-            && $specific
-            && $specific->getChild()
+        $specific = $this->checkProperty($clasifications, 'specific')
+            && $this->checkProperty($clasifications, 'specific')
+            && $general
+            && $general->getChild()
             ? new TypeResource(
                 $type
+                    ->getChild()::from((int) $clasifications->general)
                     ->getChild()::from((int) $clasifications->specific)
-                    ->getChild()::from((int) $clasifications->sub_specific)
             )
             : null;
 
         return [
-            'specific' => $specific,
-            'sub_specific' => $subSpecific,
+            'specific' => $general,
+            'sub_specific' => $specific,
         ];
     }
 
