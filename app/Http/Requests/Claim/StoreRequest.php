@@ -69,7 +69,7 @@ final class StoreRequest extends FormRequest
             'claim_services.services.*.procedure_id' => ['sometimes', 'nullable', 'integer'],
             'claim_services.services.*.revenue_code_id' => ['sometimes', 'nullable', 'integer'],
             'claim_services.services.*.price' => ['sometimes', 'nullable', 'numeric'],
-            'claim_services.services.*.units_of_service' => ['sometimes', 'nullable', 'numeric'],
+            'claim_services.services.*.days_or_units' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.services.*.total_charge' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.services.*.copay' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.diagnoses' => ['array', 'nullable'],
@@ -95,7 +95,7 @@ final class StoreRequest extends FormRequest
             'additional_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.from_date' => ['sometimes', 'date'],
             'additional_information.claim_date_informations.*.to_date' => ['nullable', 'date'],
-            'additional_information.claim_date_informations.*.through' => ['nullable', 'string'],
+            'additional_information.claim_date_informations.*.description' => ['nullable', 'string'],
             'additional_information.claim_date_informations.*.amount' => ['nullable', 'numeric'],
 
             'additional_information.extra_information' => ['nullable', 'array'],
