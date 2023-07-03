@@ -38,8 +38,8 @@ class DiagnosisCreateRequest extends FormRequest
 
             'type' => ['required', new Enum(DiagnosesType::class)],
             'clasifications' => ['required', 'array'],
+            'clasifications.general' => ['nullable', 'integer'],
             'clasifications.specific' => ['nullable', 'integer'],
-            'clasifications.sub_specific' => ['nullable', 'integer'],
         ];
     }
 }

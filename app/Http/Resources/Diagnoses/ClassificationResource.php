@@ -20,17 +20,17 @@ final class ClassificationResource extends RequestWrapedResource
     {
         $type = DiagnosesType::from($this->resource);
 
-        $specific = $request->specific && $type->getChild()
-            ? $type->getChild()::from((int) $request->specific)
+        $general = $request->general && $type->getChild()
+            ? $type->getChild()::from((int) $request->general)
             : null;
 
-        $subspecific = $request->specific && $request->subspecific && $specific && $specific->getChild()
-            ? $specific->getChild()::from((int) $request->subspecific)
+        $specific = $request->general && $request->specific && $general && $general->getChild()
+            ? $general->getChild()::from((int) $request->specific)
             : null;
 
         return [
-            'specific' => new ChildTypeResource($type, TypeResource::class),
-            'sub_specific' => new ChildTypeResource($specific, TypeResource::class),
+            'general' => new ChildTypeResource($type, TypeResource::class),
+            'specific' => new ChildTypeResource($general, TypeResource::class),
         ];
     }
 }

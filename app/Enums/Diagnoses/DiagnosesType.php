@@ -7,12 +7,12 @@ namespace App\Enums\Diagnoses;
 use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Diagnoses\Specifics\CategoryIIType;
-use App\Enums\Diagnoses\Specifics\CategoryIType;
 use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
 use App\Enums\Traits\HasRangeAttribute;
 use App\Enums\Traits\HasTypeAttributes;
+use App\Enums\Diagnoses\ICD09\GeneralType as ICD09GeneralType;
+use App\Enums\Diagnoses\ICD10\GeneralType as ICD10GeneralType;
 
 enum DiagnosesType: int implements ProcedureClassificationInterface
 {
@@ -20,13 +20,13 @@ enum DiagnosesType: int implements ProcedureClassificationInterface
     use HasChildAttribute;
     use HasRangeAttribute;
 
-    #[NameAttribute('Category I Codes')]
-    #[ChildAttribute(CategoryIType::class)]
+    /*#[NameAttribute('ICD-09')]
+    #[ChildAttribute(ICD09GeneralType::class)]
     #[PublicAttribute(true)]
-    case CATEGORY_I = 1;
+    case ICD09 = 1;*/
 
-    #[NameAttribute('Category II Codes')]
-    #[ChildAttribute(CategoryIIType::class)]
+    #[NameAttribute('ICD-10')]
+    #[ChildAttribute(ICD10GeneralType::class)]
     #[PublicAttribute(true)]
-    case CATEGORY_II = 2;
+    case ICD10 = 2;
 }
