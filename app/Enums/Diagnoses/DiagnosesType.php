@@ -7,7 +7,6 @@ namespace App\Enums\Diagnoses;
 use App\Enums\Attributes\ChildAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Diagnoses\ICD09\GeneralType as ICD09GeneralType;
 use App\Enums\Diagnoses\ICD10\GeneralType as ICD10GeneralType;
 use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
