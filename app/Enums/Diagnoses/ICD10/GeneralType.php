@@ -5,41 +5,43 @@ declare(strict_types=1);
 namespace App\Enums\Diagnoses\ICD10;
 
 use App\Enums\Attributes\ChildAttribute;
+use App\Enums\Attributes\ColorAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Attributes\RangeAttribute;
-use App\Enums\Interfaces\ProcedureClassificationInterface;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryIIType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryIIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryIType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryIVType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryVType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIIIType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryIXType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryVIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryVType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIVType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIIType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIIIType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryXIXType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXXType;
-use App\Enums\Diagnoses\ICD10\Specifics\CategoryXXIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXVType;
 use App\Enums\Diagnoses\ICD10\Specifics\CategoryXXIIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXXIType;
+use App\Enums\Diagnoses\ICD10\Specifics\CategoryXXType;
+use App\Enums\Interfaces\ColorTypeInterface;
+use App\Enums\Interfaces\ProcedureClassificationInterface;
 use App\Enums\Traits\HasChildAttribute;
+use App\Enums\Traits\HasColorAttributes;
 use App\Enums\Traits\HasRangeAttribute;
-use App\Enums\Traits\HasTypeAttributes;
 
-enum GeneralType: int implements ProcedureClassificationInterface {
-    
-    use HasTypeAttributes;
+enum GeneralType: int implements ProcedureClassificationInterface, ColorTypeInterface
+{
     use HasChildAttribute;
     use HasRangeAttribute;
+    use HasColorAttributes;
 
     #[ColorAttribute('#FFFFFF')]
     #[NameAttribute('Certain Infectious and Parasitic Diseases')]
@@ -51,7 +53,7 @@ enum GeneralType: int implements ProcedureClassificationInterface {
     #[ColorAttribute('#FF9B95')]
     #[NameAttribute('Neoplasms')]
     #[ChildAttribute(CategoryIIType::class)]
-    #[RangeAttribute('C00', 'D49' )]
+    #[RangeAttribute('C00', 'D49')]
     #[PublicAttribute(true)]
     case CATEGORY_II = 2;
 
@@ -134,7 +136,7 @@ enum GeneralType: int implements ProcedureClassificationInterface {
 
     #[ColorAttribute('#B7EDFF')]
     #[NameAttribute('Diseases of Genitourinary System')]
-    #[ChildAttribute(CategoryIVType::class)]
+    #[ChildAttribute(CategoryXIVType::class)]
     #[RangeAttribute('N00', 'N99')]
     #[PublicAttribute(true)]
     case CATEGORY_XIV = 14;

@@ -119,14 +119,14 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('/get-list', [BillingCompanyController::class, 'getList']);
             Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
             Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
-            Route::get('/billing-company/{company_binding}', [BillingCompanyController::class, 'getBillingCompany']);
+            Route::get('/{company_binding}', [BillingCompanyController::class, 'getBillingCompany']);
 
             /*
             Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
             */
         });
 
-        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update']);
         Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
             ->only(['index', 'store']);
     });

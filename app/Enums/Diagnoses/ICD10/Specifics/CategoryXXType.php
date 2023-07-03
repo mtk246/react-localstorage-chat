@@ -18,13 +18,13 @@ enum CategoryXXType: int implements ProcedureClassificationInterface
     use HasChildAttribute;
     use HasRangeAttribute;
 
-    #[NameAttribute("Provisional assignment of new diseases of uncertain etiology or emergency use")]
-    #[RangeAttribute("U00-U49")]
+    #[NameAttribute('Provisional assignment of new diseases of uncertain etiology or emergency use')]
+    #[RangeAttribute('U00-U49')]
     #[PublicAttribute(true)]
     case PROVISIONAL_ASSIGNMENT = 1;
 
-    #[NameAttribute("Provisional assignment of new diseases of uncertain etiology or emergency use")]
-    #[RangeAttribute("U50-U85")]
+    #[NameAttribute('Provisional assignment of new diseases of uncertain etiology or emergency use')]
+    #[RangeAttribute('U50-U85')]
     #[PublicAttribute(true)]
     case PROVISIONAL_ASSIGNMENT2 = 2;
 }
