@@ -41,6 +41,7 @@ return new class() extends Migration {
         Schema::dropIfExists('claim_status_medicals');
         Schema::enableForeignKeyConstraints();
 
+        DB::table('claim_status_claim')->delete();
         Claim::query()->delete();
 
         Schema::table('claims', function (Blueprint $table) {
