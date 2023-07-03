@@ -20,11 +20,6 @@ enum DiagnosesType: int implements ProcedureClassificationInterface
     use HasChildAttribute;
     use HasRangeAttribute;
 
-    /*#[NameAttribute('ICD-09')]
-    #[ChildAttribute(ICD09GeneralType::class)]
-    #[PublicAttribute(true)]
-    case ICD09 = 1;*/
-
     #[NameAttribute('ICD-10')]
     #[ChildAttribute(ICD10GeneralType::class)]
     #[PublicAttribute(true)]
