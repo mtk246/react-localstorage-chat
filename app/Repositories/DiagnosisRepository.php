@@ -23,6 +23,7 @@ class DiagnosisRepository
             $diagnosis = Diagnosis::create([
                 'code' => $data['code'],
                 'start_date' => $data['start_date'],
+                'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
                 'type' => $data['type'],
                 'clasifications' => collect($data['clasifications'])->filter()->toArray(),
@@ -104,7 +105,7 @@ class DiagnosisRepository
         $diagnosis = Diagnosis::whereId($id)->with([
                 'publicNote',
                 'gender',
-            ])->first();
+            ])->active()->first();
 
         return !is_null($diagnosis) ? new DiagnosesResource($diagnosis) : null;
     }
@@ -192,4 +193,11 @@ class DiagnosisRepository
             );
         }
     }
+
+    public function deleteDiagnosis(int $id)
+    {
+        $diagnosis = Diagnosis::find($id);
+        return $diagnosis->update(['status' => false]);
+    }
+
 }

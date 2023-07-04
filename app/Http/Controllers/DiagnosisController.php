@@ -11,6 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\Diagnoses\ClassificationResource;
 use App\Http\Resources\Enums\TypeResource;
+use App\Http\Requests\Diagnosis\UpdateNotesRequest;
+use App\Actions\Diagnosis\UpdateDiagnosis;
+use App\Models\Diagnosis;
 
 class DiagnosisController extends Controller
 {
@@ -90,5 +93,19 @@ class DiagnosisController extends Controller
         return response()->json(
             new ClassificationResource($type)
         );
+    }
+
+    public function deleteDiagnosis(int $id)
+    {
+        $rs = $this->diagnosisRepository->deleteDiagnosis($id);
+
+        return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 400);
+    }
+
+    public function updateDiagnosisNote(UpdateNotesRequest $request, UpdateDiagnosis $updateDiagnosis, Diagnosis $diagnosis): JsonResponse
+    {
+        $rs = $updateDiagnosis->notes($diagnosis, $request->validated());
+
+        return response()->json($rs);
     }
 }

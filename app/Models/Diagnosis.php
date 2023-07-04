@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\Diagnosis\ClasificationsCast;
 use app\Enums\Diagnoses\DiagnosesType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -74,6 +75,7 @@ class Diagnosis extends Model implements Auditable
         'age',
         'age_end',
         'gender_id',
+        'status',
     ];
 
     /**
@@ -176,5 +178,12 @@ class Diagnosis extends Model implements Auditable
             'description' => $this->description,
             'public_note' => $this->publicNote?->note,
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('active', function (Builder $builder) {
+            $builder->where('status', true);
+        });
     }
 }

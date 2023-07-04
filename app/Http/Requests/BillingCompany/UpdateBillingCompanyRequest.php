@@ -30,7 +30,7 @@ class UpdateBillingCompanyRequest extends FormRequest
         return [
             'name' => [
                 'required', 'string', 'max:50',
-                new IUnique(BillingCompany::class, 'name', $this->billing_company_id),
+                new IUnique(BillingCompany::class, 'name', $this->route('billing_company')),
             ],
             'address' => ['nullable', 'array'],
             'contact' => ['required', 'array'],
@@ -38,6 +38,7 @@ class UpdateBillingCompanyRequest extends FormRequest
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => ['required', 'email:rfc'],
+            'contact.contact_name' => ['nullable', 'string'],
             'abbreviation' => ['nullable', 'string'],
         ];
     }

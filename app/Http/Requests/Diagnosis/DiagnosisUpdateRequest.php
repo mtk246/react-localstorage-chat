@@ -34,14 +34,14 @@ class DiagnosisUpdateRequest extends FormRequest
             'injury_date_required' => ['nullable', 'boolean'],
             'note' => ['required', 'string'],
             'description_long' => ['nullable', 'string'],
-            'gender_id' => ['required', 'integer'],
+            'gender_id' => ['nullable', 'integer'],
             'age' => ['nullable', 'string'],
             'age_end' => ['nullable', 'string'],
 
             'type' => ['required', new Enum(DiagnosesType::class)],
             'clasifications' => ['required', 'array'],
+            'clasifications.general' => ['nullable', 'integer'],
             'clasifications.specific' => ['nullable', 'integer'],
-            'clasifications.sub_specific' => ['nullable', 'integer'],
         ];
     }
 }
