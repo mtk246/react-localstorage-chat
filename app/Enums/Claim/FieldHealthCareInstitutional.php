@@ -31,6 +31,18 @@ enum FieldHealthCareInstitutional: int implements PublicInterface
     #[PublicAttribute(true)]
     case FIELD_79 = 4;
 
+    #[NameAttribute('Billing Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_BP = 5;
+
+    #[NameAttribute('Referred Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_RP = 6;
+
+    #[NameAttribute('Service Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_SP = 7;
+
     public function getName(): string
     {
         return $this->getAttribute(NameAttribute::class);
