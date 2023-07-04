@@ -11,6 +11,7 @@ use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
+use App\Actions\Claim\UpdateClaimAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -18,8 +19,10 @@ use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\StoreRequest;
+use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
+use App\Models\Claims\Claim as ClaimsClaim;
 use App\Models\ClaimStatus;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
@@ -75,27 +78,9 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimVerifyRequest $request, int $id)
+    public function updateClaim(UpdateRequest $request, UpdateClaimAction $update, ClaimsClaim $claim)
     {
-        $claim = $this->claimRepository->updateClaim($request->validated(), $id);
-        if (is_null($claim)) {
-            return response()->json(__('Error update claim'), 400);
-        }
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
-        if (($request->validate ?? false) == true) {
-            $rs = $this->claimValidation($claim->id);
-            $this->claimRepository->changeStatus([
-                'status_id' => $statusVerify->id,
-                'private_note' => 'API verification',
-            ], $claim->id);
-        } else {
-            $this->claimRepository->changeStatus([
-                'status_id' => $statusVerify->id,
-                'private_note' => 'Manual verification',
-            ], $claim->id);
-        }
-
-        return $claim ? response()->json($claim) : response()->json(__('Error updating claim'), 400);
+        return response()->json($update->invoke($claim, $request->casted()));
     }
 
     public function getAllClaims(Request $request)
@@ -113,11 +98,9 @@ class ClaimController extends Controller
         return $this->claimRepository->getServerAll($request);
     }
 
-    public function getOneClaim(int $id): JsonResponse
+    public function getOneClaim(ClaimsClaim $claim): JsonResponse
     {
-        $rs = $this->claimRepository->getOneClaim($id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error, claim not found'), 404);
+        return response()->json($claim->load(['demographicInformation', 'services', 'insurancePolicies']));
     }
 
     public function getListClaimServices(Request $request)
