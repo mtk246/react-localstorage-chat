@@ -32,14 +32,19 @@ class DiagnosisCreateRequest extends FormRequest
         return [
             'code' => ['required', 'string', 'max:50', new IUnique(Diagnosis::class, 'code')],
             'start_date' => ['required', 'date'],
+            'end_date' => ['nullable', 'date'],
             'description' => ['required', 'string', 'max:255'],
             'injury_date_required' => ['nullable', 'boolean'],
             'note' => ['required', 'string'],
+            'description_long' => ['nullable', 'string'],
+            'gender_id' => ['required', 'integer'],
+            'age' => ['nullable', 'string'],
+            'age_end' => ['nullable', 'string'],
 
             'type' => ['required', new Enum(DiagnosesType::class)],
-            'clasifications' => ['required', 'array'],
+            'clasifications' => ['nullable', 'array'],
+            'clasifications.general' => ['nullable', 'integer'],
             'clasifications.specific' => ['nullable', 'integer'],
-            'clasifications.sub_specific' => ['nullable', 'integer'],
         ];
     }
 }

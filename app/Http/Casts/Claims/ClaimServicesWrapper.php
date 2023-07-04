@@ -27,7 +27,7 @@ final class ClaimServicesWrapper extends CastsRequest
                 'procedure_id' => $service['procedure_id'],
                 'revenue_code_id' => $service['revenue_code_id'],
                 'price' => $service['price'],
-                'units_of_service' => $service['units_of_service'],
+                'days_or_units' => $service['days_or_units'],
                 'total_charge' => $service['total_charge'],
                 'copay' => $service['copay'],
             ]);

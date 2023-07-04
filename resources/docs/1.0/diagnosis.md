@@ -360,6 +360,29 @@
 
 > {success} 204 Status changed
 
+<a name="get-type"></a>
+## Get diagnosis type
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 
+
+```json
+[
+    {
+        "id": 2,
+        "name": "ICD-10"
+    }
+]
+```
 
 <a name="get-classification"></a>
 ## Get diagnosis classification types
@@ -374,8 +397,7 @@
 
 ## Param in path
 
-`specific optional <>`
-`sub_specific optional <specific>`
+`general optional <general>`
 
 
 ## Response
@@ -384,51 +406,37 @@
 
 ```json
 {
-  "type": [
-    {
-      "id": 1,
-      "name": "Category I Codes"
-    },
-    {
-      "id": 2,
-      "name": "Category II Codes"
-    },
-    {
-      "id": 3,
-      "name": "Category III Codes"
-    },
-    ...
-  ],
-  "specific": [ // null when general not passed
-    {
-      "id": 1,
-      "name": "Anesthesia"
-    },
-    {
-      "id": 2,
-      "name": "Surgery"
-    },
-    {
-      "id": 3,
-      "name": "Radiology Procedures"
-    },
-    ...
-  ],
-  "sub_specific": [ // null when general or specific not passed
-    {
-      "id": 1,
-      "name": "Anesthesia for Procedures on the Head"
-    },
-    {
-      "id": 2,
-      "name": "Anesthesia for Procedures on the Neck"
-    },
-    {
-      "id": 3,
-      "name": "Anesthesia for Procedures on the Thorax (Chest Wall and Shoulder Girdle)"
-    },
-    ...
-  ]
+    "general": [
+        {
+            "id": 1,
+            "color": "#FFFFFF",
+            "name": "Certain Infectious and Parasitic Diseases"
+        },
+        {
+            "id": 2,
+            "color": "#FF9B95",
+            "name": "Neoplasms"
+        },
+        {
+            "id": 3,
+            "color": "#980E04",
+            "name": "Disease of the blood and blood-forming organs and certain disorders involving the immune mechanism"
+        },
+    ],
+    "specific": [
+        {
+            "id": 1,
+            "name": "Acute upper respiratory infections"
+        },
+        {
+            "id": 2,
+            "name": "Influenza and pneumonia"
+        },
+        {
+            "id": 3,
+            "name": "Other acute lower respiratory infections"
+        },
+    ]
 }
 ```
 

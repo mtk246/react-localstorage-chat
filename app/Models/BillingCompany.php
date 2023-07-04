@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -108,6 +109,7 @@ class BillingCompany extends Model implements Auditable
     use Searchable;
 
     protected $fillable = [
+        'tax_id',
         'name',
         'code',
         'status',
@@ -229,17 +231,6 @@ class BillingCompany extends Model implements Auditable
         return $this->morphMany(CustomKeyboardShortcuts::class, 'shortcutable');
     }
 
-    /**
-     * Interact with the user's name.
-     */
-    protected function name(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => upperCaseWords($value),
-            set: fn ($value) => upperCaseWords($value),
-        );
-    }
-
     public function scopeSearch($query, $search)
     {
         if ('' != $search) {
@@ -292,5 +283,16 @@ class BillingCompany extends Model implements Auditable
             'abbreviation' => $this->abbreviation,
             'contact.email' => $this->contact?->email ?? null,
         ];
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->query()
+            ->when(is_numeric($value), function (Builder $query) use ($value): void {
+                $query->Where('id', $value)->orWhere('tax_id', $value);
+            }, function (Builder $query) use ($value): void {
+                $query->where('name', $value)->orWhere('code', $value);
+            })
+            ->firstOrFail();
     }
 }

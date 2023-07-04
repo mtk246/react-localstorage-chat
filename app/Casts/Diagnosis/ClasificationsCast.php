@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Casts\Diagnosis;
 
 use App\Enums\Diagnoses\DiagnosesType;
+use App\Http\Resources\Enums\ColorTypeResource;
 use App\Http\Resources\Enums\TypeResource;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
@@ -28,24 +29,24 @@ final class ClasificationsCast implements CastsAttributes
 
         $type = DiagnosesType::tryFrom((int) $type_id);
 
-        $specific = $this->checkProperty($clasifications, 'specific') && $type->getChild()
-            ? new TypeResource($type->getChild()::from((int) $clasifications->specific))
+        $general = $this->checkProperty($clasifications, 'general') && $type->getChild()
+            ? new ColorTypeResource($type->getChild()::from((int) $clasifications->general))
             : null;
 
-        $subSpecific = $this->checkProperty($clasifications, 'specific')
-            && $this->checkProperty($clasifications, 'sub_specific')
-            && $specific
-            && $specific->getChild()
+        $specific = $this->checkProperty($clasifications, 'specific')
+            && $this->checkProperty($clasifications, 'specific')
+            && $general
+            && $general->getChild()
             ? new TypeResource(
                 $type
+                    ->getChild()::from((int) $clasifications->general)
                     ->getChild()::from((int) $clasifications->specific)
-                    ->getChild()::from((int) $clasifications->sub_specific)
             )
             : null;
 
         return [
+            'general' => $general,
             'specific' => $specific,
-            'sub_specific' => $subSpecific,
         ];
     }
 

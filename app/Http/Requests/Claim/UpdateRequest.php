@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-final class StoreRequest extends FormRequest
+final class UpdateRequest extends FormRequest
 {
     use HasCastedClass;
 
@@ -95,7 +95,7 @@ final class StoreRequest extends FormRequest
             'additional_information.claim_date_informations.*.qualifier_id' => ['nullable', 'integer'],
             'additional_information.claim_date_informations.*.from_date' => ['sometimes', 'date'],
             'additional_information.claim_date_informations.*.to_date' => ['nullable', 'date'],
-            'additional_information.claim_date_informations.*.description' => ['nullable', 'string'],
+            'additional_information.claim_date_informations.*.through' => ['nullable', 'string'],
             'additional_information.claim_date_informations.*.amount' => ['nullable', 'numeric'],
 
             'additional_information.extra_information' => ['nullable', 'array'],
