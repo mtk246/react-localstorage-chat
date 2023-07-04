@@ -483,14 +483,10 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
-        Route::get('/{id}', [\App\Http\Controllers\ClaimController::class, 'getOneClaim']);
+        Route::get('/{claim}', [\App\Http\Controllers\ClaimController::class, 'getOneClaim']);
         Route::get('/{status?}/{substatus?}', [\App\Http\Controllers\ClaimController::class, 'getAllClaims']);
-        Route::put('/{id}', [\App\Http\Controllers\ClaimController::class, 'updateClaim']);
+        Route::put('/{claim}', [\App\Http\Controllers\ClaimController::class, 'updateClaim']);
 
-        Route::post('/draft', [\App\Http\Controllers\ClaimController::class, 'saveAsDraft']);
-        Route::put('/draft/{id}', [\App\Http\Controllers\ClaimController::class, 'updateAsDraft']);
-
-        Route::post('/draft-check-eligibility', [\App\Http\Controllers\ClaimController::class, 'saveAsDraftAndEligibility']);
         Route::put('/verify-register/{id}', [\App\Http\Controllers\ClaimController::class, 'verifyAndRegister']);
         Route::post('/verify-register', [\App\Http\Controllers\ClaimController::class, 'storeVerifyAndRegister']);
 
