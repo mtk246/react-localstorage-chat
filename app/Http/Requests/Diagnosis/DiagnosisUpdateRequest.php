@@ -33,6 +33,10 @@ class DiagnosisUpdateRequest extends FormRequest
             'description' => ['required', 'string', 'max:255'],
             'injury_date_required' => ['nullable', 'boolean'],
             'note' => ['required', 'string'],
+            'description_long' => ['nullable', 'string'],
+            'gender_id' => ['required', 'integer'],
+            'age' => ['nullable', 'string'],
+            'age_end' => ['nullable', 'string'],
 
             'type' => ['required', new Enum(DiagnosesType::class)],
             'clasifications' => ['required', 'array'],

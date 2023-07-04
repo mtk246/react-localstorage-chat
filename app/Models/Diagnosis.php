@@ -70,6 +70,10 @@ class Diagnosis extends Model implements Auditable
         'injury_date_required',
         'type',
         'clasifications',
+        'description_long',
+        'age',
+        'age_end',
+        'gender_id',
     ];
 
     /**
@@ -93,7 +97,7 @@ class Diagnosis extends Model implements Auditable
     /**
      * Diagnosis morphs many publicNotes.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function publicNote()
     {
@@ -108,6 +112,16 @@ class Diagnosis extends Model implements Auditable
     public function procedures()
     {
         return $this->belongsToMany(Procedure::class, 'diagnosis_procedure', 'diagnosis_id', 'procedure_id')->withTimestamps();
+    }
+
+    /**
+     * The Diagnosis that belong to the Gender.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class, 'gender_id');
     }
 
     /**

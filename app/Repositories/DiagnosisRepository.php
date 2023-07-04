@@ -26,6 +26,11 @@ class DiagnosisRepository
                 'description' => $data['description'],
                 'type' => $data['type'],
                 'clasifications' => collect($data['clasifications'])->filter()->toArray(),
+                'description_long' => $data['description_long'] ?? null,
+                'age' => $data['age'] ?? null,
+                'age_end' => $data['age_end'] ?? null,
+                'gender_id' => $data['gender_id'] ?? null,
+                'injury_date_required' => $data['injury_date_required'] ?? null
             ]);
 
             if (isset($data['note'])) {
@@ -98,6 +103,7 @@ class DiagnosisRepository
     {
         $diagnosis = Diagnosis::whereId($id)->with([
                 'publicNote',
+                'gender',
             ])->first();
 
         return !is_null($diagnosis) ? new DiagnosesResource($diagnosis) : null;
@@ -130,6 +136,10 @@ class DiagnosisRepository
                 'description' => $data['description'],
                 'type' => $data['type'],
                 'clasifications' => collect($data['clasifications'])->filter()->toArray(),
+                'description_long' => $data['description_long'] ?? null,
+                'age' => $data['age'] ?? null,
+                'age_end' => $data['age_end'] ?? null,
+                'gender_id' => $data['gender_id'] ?? null
             ]);
 
             if (isset($data['note'])) {
@@ -146,6 +156,7 @@ class DiagnosisRepository
 
             return Diagnosis::whereId($id)->with([
                 'publicNote',
+                'gender'
             ])->first();
         } catch (\Exception $e) {
             DB::rollBack();
