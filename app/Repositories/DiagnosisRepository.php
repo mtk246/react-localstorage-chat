@@ -105,7 +105,7 @@ class DiagnosisRepository
         $diagnosis = Diagnosis::whereId($id)->with([
                 'publicNote',
                 'gender',
-            ])->active()->first();
+            ])->first();
 
         return !is_null($diagnosis) ? new DiagnosesResource($diagnosis) : null;
     }

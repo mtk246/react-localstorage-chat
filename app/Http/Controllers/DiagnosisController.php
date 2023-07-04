@@ -99,7 +99,7 @@ class DiagnosisController extends Controller
     {
         $rs = $this->diagnosisRepository->deleteDiagnosis($id);
 
-        return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 400);
+        return $rs ? response()->json([], 200) : response()->json(__('Error updating status'), 400);
     }
 
     public function updateDiagnosisNote(UpdateNotesRequest $request, UpdateDiagnosis $updateDiagnosis, Diagnosis $diagnosis): JsonResponse
