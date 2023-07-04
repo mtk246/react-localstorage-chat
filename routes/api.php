@@ -387,6 +387,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/type/{type}/classification', [\App\Http\Controllers\DiagnosisController::class, 'getClassifications']);
         Route::get('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'getOneDiagnosis']);
         Route::put('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosis']);
+        Route::delete('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'deleteDiagnosis']);
+        Route::put('/{diagnosis}/note', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosisNote']);
     });
 
     Route::prefix('modifier')->middleware([

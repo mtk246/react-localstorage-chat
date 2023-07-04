@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Diagnosis.
@@ -74,6 +75,7 @@ class Diagnosis extends Model implements Auditable
         'age',
         'age_end',
         'gender_id',
+        'status'
     ];
 
     /**
@@ -176,5 +178,12 @@ class Diagnosis extends Model implements Auditable
             'description' => $this->description,
             'public_note' => $this->publicNote?->note,
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('active', function (Builder $builder) {
+            $builder->where('status', true);
+        });
     }
 }

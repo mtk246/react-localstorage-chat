@@ -37,7 +37,7 @@ class DiagnosisCreateRequest extends FormRequest
             'injury_date_required' => ['nullable', 'boolean'],
             'note' => ['required', 'string'],
             'description_long' => ['nullable', 'string'],
-            'gender_id' => ['required', 'integer'],
+            'gender_id' => ['nullable', 'integer'],
             'age' => ['nullable', 'string'],
             'age_end' => ['nullable', 'string'],
 
