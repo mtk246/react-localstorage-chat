@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\BillingCompany;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Query\Builder;
 
 class UpdateBillingCompanyRequest extends FormRequest
 {
@@ -30,7 +30,7 @@ class UpdateBillingCompanyRequest extends FormRequest
         return [
             'name' => [
                 'required', 'string', 'max:50',
-                Rule::unique('billing_companies')->where(fn (Builder $query) => $query->where('id', '!=', $this->route('billing_company')))
+                Rule::unique('billing_companies')->where(fn (Builder $query) => $query->where('id', '!=', $this->route('billing_company'))),
             ],
             'address' => ['nullable', 'array'],
             'contact' => ['required', 'array'],
