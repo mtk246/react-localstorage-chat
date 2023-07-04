@@ -22,10 +22,10 @@ final class GetFieldAction
             ? []
             : (('information-institutional' === $type)
                 ? [
-                    1 => ['through'],
-                    2 => ['through'],
-                    3 => ['through'],
-                    4 => ['through'],
+                    1 => ['description'],
+                    2 => ['description'],
+                    3 => ['description'],
+                    4 => ['description'],
                     5 => ['to_date'],
                     6 => ['to_date'],
                 ]
