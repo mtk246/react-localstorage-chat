@@ -7,7 +7,6 @@ namespace App\Actions\Diagnosis;
 use App\Http\Resources\Diagnoses\NotesResource;
 use App\Models\Diagnosis;
 
-
 final class UpdateDiagnosis
 {
     public function notes(Diagnosis $diagnosis, $data): NotesResource

@@ -6,13 +6,13 @@ namespace App\Models;
 
 use App\Casts\Diagnosis\ClasificationsCast;
 use app\Enums\Diagnoses\DiagnosesType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Diagnosis.
@@ -75,7 +75,7 @@ class Diagnosis extends Model implements Auditable
         'age',
         'age_end',
         'gender_id',
-        'status'
+        'status',
     ];
 
     /**
