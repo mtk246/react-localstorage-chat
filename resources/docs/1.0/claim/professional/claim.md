@@ -99,10 +99,20 @@
         "other_accident_related_condition": true,
 
         "health_professional_qualifier": [ /** Only required by draft is false. Min(1) Max(3) */
-            {
-                "field_id": 11,
+            { /** Billing Provider */
+                "field_id": 5,
                 "health_professional_id": 1,
-                "qualifier_id": 1,
+                "qualifier_id": '',
+            },
+            { /** Referred Provider */
+                "field_id": 6,
+                "health_professional_id": 1,
+                "qualifier_id": 2,
+            },
+            { /** Service Provider */
+                "field_id": 7,
+                "health_professional_id": 1,
+                "qualifier_id": '',
             }
         ],
     },
@@ -115,8 +125,7 @@
                 "qualifier_id": 1,
                 "from_date": "2022-07-05",
                 "to_date": "2022-07-05",
-                "through": "Lorem ipsum",
-                "amount": 200,
+                "description": "Lorem ipsum",
             }
         ],
         "extra_information": "",
@@ -139,7 +148,7 @@
                 "place_of_service_id": 3,
                 "type_of_service_id": 2,
                 "diagnostic_pointers": ["A", "B"],
-                "units_of_service": 1.5,
+                "days_or_units": 1.5,
                 "price": 200,
                 "copay": 200,
                 "emg": true,
