@@ -134,7 +134,7 @@
                 "procedure_id": 11,
                 "revenue_code_id": 11,
                 "price": 200,
-                "units_of_service": 1.5,
+                "days_or_units": 1.5,
                 "total_charge": 200,
                 "copay": 200,
             }
@@ -162,7 +162,7 @@
                 "qualifier_id": 1,
                 "from_date": "2022-07-05",
                 "to_date": "2022-07-05",
-                "through": "Lorem ipsum",
+                "description": "Lorem ipsum",
                 "amount": 200,
             }
         ],
