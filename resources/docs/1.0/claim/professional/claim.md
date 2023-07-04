@@ -78,71 +78,81 @@
 ```json
 {
     "billing_company_id": 1, /** Only by superuser */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
+    "type": 1,
+    "draft": false,
+
+    "demographic_information": {
+        "validate": false,
+        "automatic_eligibility": false,
+        "company_id": 1,
+        "facility_id": 1,
+        "patient_id": 2,
+        "prior_authorization_number": "1234567890A",
+        "accept_assignment": false,
+        "patient_signature": false,
+        "insured_signature": false,
+        "outside_lab": true,
+        "charges": 200,
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
         "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
+
+        "health_professional_qualifier": [ /** Only required by draft is false. Min(1) Max(3) */
             {
-                "field_id": 1,
+                "field_id": 11,
+                "health_professional_id": 1,
                 "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
             }
         ],
     },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
+
+    "additional_information": {
+        "claim_date_informations": [
+            {
+                "id": "",
+                "field_id": 1,
+                "qualifier_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "through": "Lorem ipsum",
+                "amount": 200,
+            }
+        ],
+        "extra_information": "",
+    },
+
+    "claim_services": {
+        "diagnoses": [
+            {
+                "item": "A",
+                "diagnosis_id": 1,
+            }
+        ],
+        "services": [
+            {
+                "id": "",
+                "from_service": "2022-07-05",
+                "to_service": "2022-07-05",
+                "procedure_id": 11,
+                "modifier_ids": [1,2,3,4], /** Max 4 */
+                "place_of_service_id": 3,
+                "type_of_service_id": 2,
+                "diagnostic_pointers": ["A", "B"],
+                "units_of_service": 1.5,
+                "price": 200,
+                "copay": 200,
+                "emg": true,
+                "epsdt_id": 1,
+                "family_planning_id": 1
+            }
+        ],
+    },
+
     "insurance_policies": [
         {"insurance_policy_id": 8, "order": 1},
         {"insurance_policy_id": 10, "order": 2},
     ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ]
 }
 ```
 

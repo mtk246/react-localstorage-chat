@@ -117,12 +117,16 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
             Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
             Route::get('/get-list', [BillingCompanyController::class, 'getList']);
-            Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
-            Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
             Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
+            Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
+            Route::get('/{company_binding}', [BillingCompanyController::class, 'getBillingCompany']);
+
+            /*
+            Route::get('get-by-code/{code}', [BillingCompanyController::class, 'getByCode']);
+            */
         });
 
-        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update', 'show']);
+        Route::resource('billing-company', BillingCompanyController::class)->only(['index', 'update']);
         Route::resource('billing-company.shortcuts', KeyboardShortcutController::class)
             ->only(['index', 'store']);
     });
@@ -377,13 +381,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/', [\App\Http\Controllers\DiagnosisController::class, 'createDiagnosis']);
         Route::get('/', [\App\Http\Controllers\DiagnosisController::class, 'getAllDiagnoses']);
         Route::get('get-by-code/{code}', [\App\Http\Controllers\DiagnosisController::class, 'getByCode']);
+        Route::patch('/change-status/{id}', [\App\Http\Controllers\DiagnosisController::class, 'changeStatus']);
+        Route::get('/get-list', [\App\Http\Controllers\DiagnosisController::class, 'getList']);
+        Route::get('/type', [\App\Http\Controllers\DiagnosisController::class, 'getType']);
+        Route::get('/type/{type}/classification', [\App\Http\Controllers\DiagnosisController::class, 'getClassifications']);
         Route::get('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'getOneDiagnosis']);
         Route::put('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosis']);
-        Route::patch('/change-status/{id}', [\App\Http\Controllers\DiagnosisController::class, 'changeStatus']);
-
-        Route::get('/get-list', [\App\Http\Controllers\DiagnosisController::class, 'getList']);
-
-        Route::get('/type/{type}/classification', [\App\Http\Controllers\DiagnosisController::class, 'getClassifications']);
     });
 
     Route::prefix('modifier')->middleware([
