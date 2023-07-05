@@ -30,6 +30,13 @@ final class ClaimServicesWrapper extends CastsRequest
                 'days_or_units' => $service['days_or_units'],
                 'total_charge' => $service['total_charge'],
                 'copay' => $service['copay'],
+                'modifier_ids' => $service['modifier_ids'],
+                'place_of_service_id' => $service['place_of_service_id'],
+                'type_of_service_id' => $service['type_of_service_id'],
+                'diagnostic_pointers' => $service['diagnostic_pointers'],
+                'emg' => $service['emg'],
+                'epsdt_id' => $service['epsdt_id'],
+                'family_planning_id' => $service['family_planning_id'],
             ]);
     }
 
