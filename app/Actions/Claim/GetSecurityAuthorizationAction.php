@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 final class GetSecurityAuthorizationAction
 {
-    public function invoke(): string
+    public function invoke(): ?string
     {
         return DB::transaction(function () {
             $data = [
