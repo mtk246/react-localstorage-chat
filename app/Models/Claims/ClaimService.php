@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimServices extends Model
+final class ClaimService extends Model
 {
     use HasFactory;
 

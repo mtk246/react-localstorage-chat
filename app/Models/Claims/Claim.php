@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -126,14 +127,14 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimDemographicInformation::class);
     }
 
-    public function services(): HasOne
+    public function service(): HasOne
     {
-        return $this->hasOne(ClaimServices::class);
+        return $this->hasOne(ClaimService::class);
     }
 
-    public function dateInformation(): HasOne
+    public function dateInformations(): HasMany
     {
-        return $this->hasOne(ClaimDateInformation::class);
+        return $this->hasMany(ClaimDateInformation::class);
     }
 
     public function patientInformation(): HasOne
@@ -173,7 +174,7 @@ class Claim extends Model implements Auditable
     {
         /** @var ClaimServices */
         $claimService = $this
-            ->services()
+            ->service()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
                 $services->getData()
