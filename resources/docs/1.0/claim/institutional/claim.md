@@ -144,8 +144,6 @@
     },
 
     "additional_information": {
-        "diagnosis_related_group_id": 1,
-        "non_covered_charges": 20.15,
         "patient_information": {
             "admisison_date": "2022-07-05",
             "admisison_time": "07:05",
