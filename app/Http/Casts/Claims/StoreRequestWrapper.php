@@ -41,13 +41,13 @@ final class StoreRequestWrapper extends CastsRequest
     {
         return $this->getDraft()
             ? ClaimStatus::whereStatus('Draft')->first()?->id
-            : $this->get('status') ?? 2;
+            : ClaimStatus::whereStatus('Verified - Not submitted')->first()?->id;
     }
 
     public function getSubStatus(): ?string
     {
         return !$this->getDraft()
-            ? $this->get('sub_status')
+            ? $this->get('sub_status_id')
             : null;
     }
 
