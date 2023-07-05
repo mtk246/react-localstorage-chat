@@ -178,20 +178,24 @@ class DiagnosisRepository
         }
 
         if ($status) {
-            return $diagnosis->update(
+            $diagnosis->update(
                 [
                     'active' => $status,
                     'end_date' => null,
                 ]
             );
         } else {
-            return $diagnosis->update(
+            $diagnosis->update(
                 [
                     'active' => $status,
                     'end_date' => now(),
                 ]
             );
         }
+
+        return [
+            'active' => $diagnosis->active
+        ];
     }
 
     public function deleteDiagnosis(int $id)
