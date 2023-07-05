@@ -118,6 +118,8 @@
     },
 
     "claim_services": {
+        "diagnosis_related_group_id": 1,
+        "non_covered_charges": 200,
         "diagnoses": [
             {
                 "item": "A",
@@ -149,7 +151,7 @@
             "admisison_time": "07:05",
             "discharge_date":"2022-07-05",
             "discharge_time": "07:05",
-            "condition_codes": [1,2],
+            "condition_code_ids": [1,2], /** Max(11) */
             "admisison_type_id": 1,
             "admisison_source_id": 2,
             "patient_status_id": 2,
