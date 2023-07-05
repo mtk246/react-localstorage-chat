@@ -44,7 +44,7 @@ final class StoreRequestWrapper extends CastsRequest
             : ClaimStatus::whereStatus('Verified - Not submitted')->first()?->id;
     }
 
-    public function getSubStatus(): ?string
+    public function getSubStatus(): ?int
     {
         return !$this->getDraft()
             ? $this->get('sub_status_id')
