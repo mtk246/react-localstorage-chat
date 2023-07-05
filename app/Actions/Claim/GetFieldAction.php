@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
-use App\Enums\Claim\FieldHealthCareInstitutional;
+use App\Enums\Claim\FieldHealthCareProfessional;
 use App\Enums\Claim\FieldInformationInstitutional;
 use App\Enums\Claim\FieldInformationProfessional;
 
@@ -12,8 +12,8 @@ final class GetFieldAction
 {
     public function all($type)
     {
-        $enum = ('health-care-institutional' === $type)
-            ? FieldHealthCareInstitutional::cases()
+        $enum = ('healthcare-professional' === $type)
+            ? FieldHealthCareProfessional::cases()
             : (('information-institutional' === $type)
                 ? FieldInformationInstitutional::cases()
                 : FieldInformationProfessional::cases());

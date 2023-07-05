@@ -10,7 +10,7 @@ use App\Enums\Interfaces\PublicInterface;
 use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 
-enum FieldHealthCareInstitutional: int implements PublicInterface
+enum FieldHealthCareProfessional: int implements PublicInterface
 {
     use EnumToArray;
     use HasAttributes;
