@@ -71,7 +71,7 @@ class DiagnosisController extends Controller
     {
         $rs = $this->diagnosisRepository->changeStatus($request->input('status'), $id);
 
-        return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error updating status'), 400);
     }
 
     public function getList(): JsonResponse
