@@ -22,6 +22,7 @@ use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
+use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
 use App\Models\Claims\Claim as ClaimsClaim;
@@ -102,7 +103,7 @@ class ClaimController extends Controller
 
     public function getOneClaim(ClaimsClaim $claim): JsonResponse
     {
-        return response()->json($claim->load(['demographicInformation', 'services', 'insurancePolicies']));
+        return response()->json(new ClaimBodyResource($claim));
     }
 
     public function getListClaimServices(Request $request)
