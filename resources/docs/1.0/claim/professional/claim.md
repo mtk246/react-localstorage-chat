@@ -15,12 +15,8 @@
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
-- [Save as draft claim](#save-as-draft-claim)
-- [Update as draft claim](#update-as-draft-claim)
-- [Draft and Check eligibility](#draft-check-eligibility-claim)
 - [Check eligibility](#check-eligibility-claim)
 - [Validation claim](#validation-claim)
-- [verify and register claim](#verify-register)
 - [Show claim report preview or print ](#preview-claim)
 - [Change status Claim](#change-status-claim)
 - [Add note current status Claim](#add-note-current)
@@ -79,7 +75,9 @@
 {
     "billing_company_id": 1, /** Only by superuser */
     "type": 1,
-    "draft": false,
+    "draft": true,
+    "private_note": "Note claim", /** Only if draft is true */
+    "sub_status_id": 1, /** Only if draft is true */
 
     "demographic_information": {
         "validate": false,
@@ -1180,71 +1178,92 @@ subStatus optional <array>    //[1,2]
 ```json
 {
     "billing_company_id": 1, /** Only by superuser */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
+    "type": 1,
+    "draft": false,
+    "private_note": "Note claim", /** Only if draft is true */
+    "sub_status_id": 1, /** Only if draft is true */
+
+    "demographic_information": {
+        "validate": false,
+        "automatic_eligibility": false,
+        "company_id": 1,
+        "facility_id": 1,
+        "patient_id": 2,
+        "prior_authorization_number": "1234567890A",
+        "accept_assignment": false,
+        "patient_signature": false,
+        "insured_signature": false,
+        "outside_lab": true,
+        "charges": 200,
         "employment_related_condition": true,
         "auto_accident_related_condition": true,
         "auto_accident_place_state": "AS",
         "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
-            {
-                "field_id": 1,
-                "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
+
+        "health_professional_qualifier": [ /** Only required by draft is false. Min(1) Max(3) */
+            { /** Billing Provider */
+                "field_id": 5,
+                "health_professional_id": 1,
+                "qualifier_id": '',
+            },
+            { /** Referred Provider */
+                "field_id": 6,
+                "health_professional_id": 1,
+                "qualifier_id": 2,
+            },
+            { /** Service Provider */
+                "field_id": 7,
+                "health_professional_id": 1,
+                "qualifier_id": '',
             }
         ],
     },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
+
+    "additional_information": {
+        "claim_date_informations": [
+            {
+                "id": "",
+                "field_id": 1,
+                "qualifier_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "description": "Lorem ipsum",
+            }
+        ],
+        "extra_information": "",
+    },
+
+    "claim_services": {
+        "diagnoses": [
+            {
+                "item": "A",
+                "diagnosis_id": 1,
+            }
+        ],
+        "services": [
+            {
+                "id": "",
+                "from_service": "2022-07-05",
+                "to_service": "2022-07-05",
+                "procedure_id": 11,
+                "modifier_ids": [1,2,3,4], /** Max 4 */
+                "place_of_service_id": 3,
+                "type_of_service_id": 2,
+                "diagnostic_pointers": ["A", "B"],
+                "days_or_units": 1.5,
+                "price": 200,
+                "copay": 200,
+                "emg": true,
+                "epsdt_id": 1,
+                "family_planning_id": 1
+            }
+        ],
+    },
+
     "insurance_policies": [
         {"insurance_policy_id": 8, "order": 1},
         {"insurance_policy_id": 10, "order": 2},
     ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ]
 }
 ```
 
@@ -1289,325 +1308,6 @@ subStatus optional <array>    //[1,2]
     "updated_at": "2022-09-16T13:23:19.000000Z"
 }
 ```
-#
-
-<a name="save-as-draft-claim"></a>
-## Save as draft claim
-
-### Body request example
-
-```json
-{
-    "billing_company_id": 1, /** Only by superuser */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
-        "employment_related_condition": true,
-        "auto_accident_related_condition": true,
-        "auto_accident_place_state": "AS",
-        "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
-            {
-                "field_id": 1,
-                "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
-            }
-        ],
-    },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
-    "insurance_policies": [
-        {"insurance_policy_id": 8, "order": 1},
-        {"insurance_policy_id": 10, "order": 2},
-    ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ],
-    "private_note": "Note claim",
-    "sub_status_id": 1
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Response
-
-> {success} 201 claim created
-
-
-#
-
-```json
-{
-    "control_number": "000000001",
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "health_professional_id": 1,
-    "updated_at": "2022-09-16T13:23:19.000000Z",
-    "created_at": "2022-09-16T13:23:19.000000Z",
-    "id": 1
-}
-```
-#
-
-<a name="update-as-draft-claim"></a>
-## Update as draft claim
-
-### Body request example
-
-```json
-{
-    "billing_company_id": 1, /** Only by superuser */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
-        "employment_related_condition": true,
-        "auto_accident_related_condition": true,
-        "auto_accident_place_state": "AS",
-        "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
-            {
-                "field_id": 1,
-                "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
-            }
-        ],
-    },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
-    "insurance_policies": [
-        {"insurance_policy_id": 8, "order": 1},
-        {"insurance_policy_id": 10, "order": 2},
-    ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ],
-    "private_note": "Note claim",
-    "sub_status_id": 1
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 200 claim updated
-
-#
-
-```json
-{
-    "id": 1,
-    "qr_claim": null,
-    "control_number": "000000001",
-    "submitter_name": null,
-    "submitter_contact": null,
-    "submitter_phone": null,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "health_professional_id": 1,
-    "insurance_company_id": null,
-    "claim_formattable_type": null,
-    "claim_formattable_id": null,
-    "created_at": "2022-09-16T13:23:19.000000Z",
-    "updated_at": "2022-09-16T13:23:19.000000Z"
-}
-```
-#
-
-<a name="draft-check-eligibility-claim"></a>
-## Save as draft and check eligibility claim
-
-### Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-### Body request example
-
-```json
-{
-    "billing_company_id": 1, /** Only by superuser */
-    "claim_id": 1, /** Only if send eligibility previus */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
-        "employment_related_condition": true,
-        "auto_accident_related_condition": true,
-        "auto_accident_place_state": "AS",
-        "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
-            {
-                "field_id": 1,
-                "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
-            }
-        ],
-    },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ],
-    "private_note": "Note claim"
-}
-```
-## Response
-
-> {success} 200 claim found
-
-#
-
-
-```json
-
-```
-
 #
 
 <a name="check-eligibility-claim"></a>
@@ -1621,11 +1321,40 @@ subStatus optional <array>    //[1,2]
 }
 ```
 
-## Param in path
+### Body request example
 
 ```json
 {
-    "claimId": <integer>
+    "billing_company_id": 1, /** Only by superuser */
+    "type": 1,
+
+    "demographic_information": {
+        "automatic_eligibility": false,
+        "company_id": 1,
+        "facility_id": 1,
+        "patient_id": 2,
+    },
+
+    "claim_services": {
+        "services": [
+            {
+                "id": "",
+                "from_service": "2022-07-05",
+                "to_service": "2022-07-05",
+                "procedure_id": 11,
+                "modifier_ids": [1,2,3,4], /** Max 4 */
+                "place_of_service_id": 3,
+                "type_of_service_id": 2,
+                "diagnostic_pointers": ["A", "B"],
+                "days_or_units": 1.5,
+                "price": 200,
+                "copay": 200,
+                "emg": true,
+                "epsdt_id": 1,
+                "family_planning_id": 1
+            }
+        ],
+    },
 }
 ```
 
@@ -1693,125 +1422,6 @@ subStatus optional <array>    //[1,2]
         "payerName": "EXTRA HEALTHY INSURANCE",
         "payerID": "9496"
     }
-}
-```
-
-
-<a name="verify-register"></a>
-## Verify and register claim
-
-### Body request example
-
-```json
-{
-    "billing_company_id": 1, /** Only by superuser */
-    "format": 1,
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "billing_provider_id": 1,
-    "referred_id": 1,
-    "referred_provider_role_id": 1, /** required if referred_id exists and is different from null */
-    "service_provider_id": 1,
-    "patient_or_insured_information": {
-        "employment_related_condition": true,
-        "auto_accident_related_condition": true,
-        "auto_accident_place_state": "AS",
-        "other_accident_related_condition": true,
-        "patient_signature": false,
-        "insured_signature": false,
-    },
-    "physician_or_supplier_information": {
-        "prior_authorization_number": "1234567890A",
-        "outside_lab": true,
-        "charges": "123",
-        "patient_account_num": "12341234",
-        "accept_assignment": false,
-        "claim_date_informations": [
-            {
-                "field_id": 1,
-                "qualifier_id": 1,
-                "from_date_or_current": "2022-07-05",
-                "to_date": "2022-07-05",
-                "description": "Lorem ipsum"
-            }
-        ],
-    },
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1
-        },
-        {
-            "item": "B",
-            "diagnosis_id": 3
-        }
-    ],
-    "insurance_policies": [
-        {"insurance_policy_id": 8, "order": 1},
-        {"insurance_policy_id": 10, "order": 2},
-    ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "modifier_ids": [1,2,3,4], /** Max 4 */
-            "place_of_service_id": 3,
-            "type_of_service_id": 2,
-            "diagnostic_pointers": ["A", "B"],
-            "days_or_units": 1.5,
-            "price": 200,
-            "copay": 200,
-            "emg": true,
-            "epsdt_id": 1,
-            "family_planning_id": 1
-        }
-    ]
-}
-```
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-```json
-{
-    "id": <integer>
-}
-```
-
-## Response
-
-> {success} 200 claim verify and register
-
-#
-
-```json
-{
-    "id": 1,
-    "qr_claim": null,
-    "control_number": "000000001",
-    "submitter_name": null,
-    "submitter_contact": null,
-    "submitter_phone": null,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "health_professional_id": 1,
-    "insurance_company_id": null,
-    "claim_formattable_type": null,
-    "claim_formattable_id": null,
-    "created_at": "2022-09-16T13:23:19.000000Z",
-    "updated_at": "2022-09-16T13:23:19.000000Z"
 }
 ```
 #
