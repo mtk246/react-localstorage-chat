@@ -180,8 +180,6 @@ class Claim extends Model implements Auditable
                 $services->getData()
             );
 
-        Services::upsert($services->getService()->toArray(), ['id']);
-
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
         $claimService->services()->upsert($services
             ->getService()
@@ -190,7 +188,7 @@ class Claim extends Model implements Auditable
 
                 return $service;
             })
-            ->toArray(), ['id', 'claim_service_id']);
+            ->toArray(), ['id']);
     }
 
     public function setInsurancePolicies(Collection $policiesInsurances): void
@@ -217,7 +215,7 @@ class Claim extends Model implements Auditable
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
-        $this->dateInformation()
+        $this->dateInformations()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
                 $aditionalInformation->getDateInformation()

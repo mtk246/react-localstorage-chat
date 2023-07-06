@@ -21,6 +21,6 @@ final class CreateAction
                 $claim->setStates($claimData->getStatus(), $claimData->getSubStatus());
                 $claim->setAdditionalInformation($claimData->getAdditionalInformation());
             },
-        )->load(['demographicInformation', 'services', 'insurancePolicies']));
+        )->load(['demographicInformation', 'service', 'insurancePolicies']));
     }
 }
