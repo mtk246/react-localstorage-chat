@@ -14,8 +14,12 @@ final class GetSecurityAuthorizationAction
         return DB::transaction(function () {
             $response = Http::acceptJson()
                 ->post(
-                    config('claim.connections')[env('CHANGEHC_CONNECTION', 'sandbox')]['authorization']['url'],
-                    config('claim.connections')[env('CHANGEHC_CONNECTION', 'sandbox')]['authorization']['body']
+                    config('claim.connections.url_token'),
+                    [
+                        'client_id' => config('claim.connections.client_id'),
+                        'client_secret' => config('claim.connections.client_secret'),
+                        'grant_type' => 'client_credentials',
+                    ]
                 );
 
             return json_decode($response->body());
