@@ -52,6 +52,8 @@ class UserCreateRequest extends FormRequest
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],
+            'address.apt_suite' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
