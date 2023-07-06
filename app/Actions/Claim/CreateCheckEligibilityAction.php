@@ -18,51 +18,6 @@ final class CreateCheckEligibilityAction
     {
         try {
             DB::beginTransaction();
-            $dataENV = [
-                'sandbox' => [
-                    'url' => 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3',
-                    'body' => [
-                        'controlNumber' => '123456789',
-                        'tradingPartnerServiceId' => 'CMSMED',
-                        'provider' => [
-                            'organizationName' => 'provider_name',
-                            'npi' => '0123456789',
-                            'serviceProviderNumber' => '54321',
-                            'providerCode' => 'AD',
-                            'referenceIdentification' => '54321g',
-                        ],
-                        'subscriber' => [
-                            'memberId' => '0000000000',
-                            'firstName' => 'johnOne',
-                            'lastName' => 'doeOne',
-                            'gender' => 'M',
-                            'dateOfBirth' => '18800102',
-                            'ssn' => '555443333',
-                            'idCard' => 'card123',
-                        ],
-                        'dependents' => [
-                            [
-                                'firstName' => 'janeOne',
-                                'lastName' => 'doeone',
-                                'gender' => 'F',
-                                'dateOfBirth' => '18160421',
-                                'groupNumber' => '1111111111',
-                            ],
-                        ],
-                        'encounter' => [
-                            'beginningDateOfService' => '20100102',
-                            'endDateOfService' => '20100102',
-                            'serviceTypeCodes' => [
-                              '98',
-                            ],
-                        ],
-                    ],
-                ],
-                'production' => [
-                    'url' => 'https://apigw.changehealthcare.com/medicalnetwork/eligibility/v3',
-                    'body' => null,
-                ],
-            ];
 
             $patient = Patient::query()
                 ->with(
@@ -135,8 +90,8 @@ final class CreateCheckEligibilityAction
                     ];
 
                     $response = Http::withToken($token)->acceptJson()->post(
-                        $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]['url'],
-                        $dataENV[env('CHANGEHC_CONNECTION', 'sandbox')]['body'] ?? $dataReal
+                        config('claim.connections')[env('CHANGEHC_CONNECTION', 'sandbox')]['eligibility']['url'],
+                        config('claim.connections')[env('CHANGEHC_CONNECTION', 'sandbox')]['eligibility']['body'] ?? $dataReal
                     );
                     $responseData['response'] = json_decode($response->body());
                     $responseData['request'] = $dataReal;

@@ -8208,4 +8208,70 @@ return [
             ],
         ],
     ],
+
+    'connections' => [
+        'sandbox' => [
+            'eligibility' => [
+                'url' => 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3',
+                'body' => [
+                    'controlNumber' => '123456789',
+                    'tradingPartnerServiceId' => 'CMSMED',
+                    'provider' => [
+                        'organizationName' => 'provider_name',
+                        'npi' => '0123456789',
+                        'serviceProviderNumber' => '54321',
+                        'providerCode' => 'AD',
+                        'referenceIdentification' => '54321g',
+                    ],
+                    'subscriber' => [
+                        'memberId' => '0000000000',
+                        'firstName' => 'johnOne',
+                        'lastName' => 'doeOne',
+                        'gender' => 'M',
+                        'dateOfBirth' => '18800102',
+                        'ssn' => '555443333',
+                        'idCard' => 'card123',
+                    ],
+                    'dependents' => [
+                        [
+                            'firstName' => 'janeOne',
+                            'lastName' => 'doeone',
+                            'gender' => 'F',
+                            'dateOfBirth' => '18160421',
+                            'groupNumber' => '1111111111',
+                        ],
+                    ],
+                    'encounter' => [
+                        'beginningDateOfService' => '20100102',
+                        'endDateOfService' => '20100102',
+                        'serviceTypeCodes' => [
+                        '98',
+                        ],
+                    ],
+                ],
+            ],
+            'authorization' => [
+                'url' => 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token',
+                'body' => [
+                    'client_id' => '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF',
+                    'client_secret' => 'EBPadsDKoOuEoOWv',
+                    'grant_type' => 'client_credentials',
+                ],
+            ],
+        ],
+        'production' => [
+            'eligibility' => [
+                'url' => 'https://apigw.changehealthcare.com/medicalnetwork/eligibility/v3',
+                'body' => null,
+            ],
+            'authorization' => [
+                'url' => 'https://apigw.changehealthcare.com/apip/auth/v2/token',
+                'body' => [
+                    'client_id' => 'OB5PKVzA2Y0ecMMfML9ZeB56GC3MRKDN',
+                    'client_secret' => 'P1YmwbYAIOPMUfF9',
+                    'grant_type' => 'client_credentials',
+                ],
+            ],
+        ],
+    ],
 ];
