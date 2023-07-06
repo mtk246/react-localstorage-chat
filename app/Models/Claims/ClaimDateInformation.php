@@ -29,13 +29,14 @@ final class ClaimDateInformation extends Model implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    protected $table = 'claim_date_informations';
+
     protected $fillable = [
-        'from_date_or_current',
+        'from_date',
         'to_date',
         'description',
         'field_id',
         'qualifier_id',
-        'through',
         'amount',
         'claim_id',
     ];

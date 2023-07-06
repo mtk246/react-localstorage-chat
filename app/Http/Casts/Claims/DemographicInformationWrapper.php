@@ -12,7 +12,7 @@ final class DemographicInformationWrapper extends CastsRequest
     public function getData(): array
     {
         return [
-            'type_of_medical_assistance' => $this->get('type_of_medical_assistance'),
+            'type_of_medical_assistance' => $this->get('type_of_medical_assistance') ?? null,
             'validate' => $this->get('validate'),
             'automatic_eligibility' => $this->get('automatic_eligibility'),
             'company_id' => $this->get('company_id'),
