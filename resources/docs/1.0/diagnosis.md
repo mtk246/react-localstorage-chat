@@ -281,14 +281,17 @@
 ```json
 {
     "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
+    "end_date": "2022-08-05", // Optional
     "description": "Description diagnosis 1 edited",
-    "injury_date_required": true,
-    "note": "Note diagnosis 1 edited",
-    "type": 1, // type of preocedure
+    "injury_date_required": true, // Optional
+    "description_long": "Descripcion larga", // Optional
+    "gender_id":1, // Optional
+    "age": "20", // Optional
+    "age_end": "23", // Optional
+    "type": 2, // required
     "clasifications": {
-        "specific": 1, // not required
-        "sub_specific": 1 // not required
+        "general": 5, // Not required
+        "specific": 5 // Not required
     }
 }
 ```
@@ -358,7 +361,12 @@
 
 ## Response
 
-> {success} 204 Status changed
+> {success} 200 Status changed
+```json
+{
+    "active": true
+}
+```
 
 <a name="get-type"></a>
 ## Get diagnosis type
