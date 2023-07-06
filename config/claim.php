@@ -8210,48 +8210,11 @@ return [
     ],
 
     'connections' => [
-        'change_connection' => env('CHANGE_CONNECTION', 'sandbox'),
         'url_eligibility' => env('URL_ELIGIBILITY', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3'),
         'url_validation' => env('URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
         'url_submission' => env('URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
         'url_token' => env('URL_TOKEN', 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token'),
         'client_id' => env('CLIENT_ID', '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF'),
         'client_secret' => env('CLIENT_SECRET', 'EBPadsDKoOuEoOWv'),
-        'body' => [
-            'controlNumber' => '123456789',
-            'tradingPartnerServiceId' => 'CMSMED',
-            'provider' => [
-                'organizationName' => 'provider_name',
-                'npi' => '0123456789',
-                'serviceProviderNumber' => '54321',
-                'providerCode' => 'AD',
-                'referenceIdentification' => '54321g',
-            ],
-            'subscriber' => [
-                'memberId' => '0000000000',
-                'firstName' => 'johnOne',
-                'lastName' => 'doeOne',
-                'gender' => 'M',
-                'dateOfBirth' => '18800102',
-                'ssn' => '555443333',
-                'idCard' => 'card123',
-            ],
-            'dependents' => [
-                [
-                    'firstName' => 'janeOne',
-                    'lastName' => 'doeone',
-                    'gender' => 'F',
-                    'dateOfBirth' => '18160421',
-                    'groupNumber' => '1111111111',
-                ],
-            ],
-            'encounter' => [
-                'beginningDateOfService' => '20100102',
-                'endDateOfService' => '20100102',
-                'serviceTypeCodes' => [
-                '98',
-                ],
-            ],
-        ],
     ],
 ];

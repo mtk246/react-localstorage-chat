@@ -91,9 +91,7 @@ final class CreateCheckEligibilityAction
 
                     $response = Http::withToken($token)->acceptJson()->post(
                         config('claim.connections.url_eligibility'),
-                        ('sandbox' === config('claim.connections.change_connection'))
-                            ? config('claim.connections.body')
-                            : $dataReal
+                        $dataReal
                     );
                     $responseData['response'] = json_decode($response->body());
                     $responseData['request'] = $dataReal;
