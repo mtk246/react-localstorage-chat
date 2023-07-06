@@ -21,8 +21,9 @@ final class GetSecurityAuthorizationAction
                         'grant_type' => 'client_credentials',
                     ]
                 );
+            $responseData = json_decode($response->body(), true);
 
-            return json_decode($response->body());
+            return isset($responseData['access_token']) ? $responseData['access_token'] : null;
         });
     }
 }
