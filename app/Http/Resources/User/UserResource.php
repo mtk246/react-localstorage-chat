@@ -28,13 +28,13 @@ final class UserResource extends JsonResource
             'profile_id' => $this->resource->profile_id,
             'profile' => new ProfileResource($this->resource->profile),
             'language' => $this->resource->language,
+            'roles' => RoleResource::collection($this->resource->roles),
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $model->private_user = [
                         'socialMedias' => $this->getSocialMedias($model->id),
                         'address' => $this->getAddress($model->id),
                         'contact' => $this->getContact($model->id),
-                        'roles' => $this->getRoles($model->id),
                     ];
 
                     return $model;
@@ -81,17 +81,6 @@ final class UserResource extends JsonResource
 
     private function getContact(int $billingCompanyId)
     {
-        return $this->resource
-            ->contacts
-            ->filter(
-                fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
-    }
-
-    private function getRoles(int $billingCompanyId)
-    {
-        return '';
-
         return $this->resource
             ->contacts
             ->filter(
