@@ -18,6 +18,8 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table('claim_demographic', function (Blueprint $table) {
+            $table->string('prior_authorization_number')->change();
+            $table->string('auto_accident_place_state')->change();
         });
     }
 };
