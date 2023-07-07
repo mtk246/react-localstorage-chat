@@ -215,11 +215,13 @@ class Claim extends Model implements Auditable
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
-        $this->dateInformations()
+        foreach ($aditionalInformation->getDateInformation() as $data) {
+            $this->dateInformations()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
-                $aditionalInformation->getDateInformation()
+                $data
             );
+        }
         if (ClaimType::INSTITUTIONAL->value == $this->type) {
             $this->patientInformation()
                 ->updateOrCreate(
