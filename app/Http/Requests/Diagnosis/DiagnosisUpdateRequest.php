@@ -36,6 +36,7 @@ class DiagnosisUpdateRequest extends FormRequest
             'gender_id' => ['nullable', 'integer'],
             'age' => ['nullable', 'string'],
             'age_end' => ['nullable', 'string'],
+            'discriminatory_id' => ['nullable', 'numeric'],
 
             'type' => ['required', new Enum(DiagnosesType::class)],
             'clasifications' => ['nullable', 'array'],

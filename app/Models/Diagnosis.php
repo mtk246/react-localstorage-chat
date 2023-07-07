@@ -76,6 +76,7 @@ class Diagnosis extends Model implements Auditable
         'age_end',
         'gender_id',
         'status',
+        'discriminatory_id',
     ];
 
     /**
@@ -124,6 +125,16 @@ class Diagnosis extends Model implements Auditable
     public function gender()
     {
         return $this->belongsTo(Gender::class, 'gender_id');
+    }
+
+    /**
+     * The Diagnosis that belong to the Gender.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function discriminatory()
+    {
+        return $this->belongsTo(Discriminatory::class, 'discriminatory_id');
     }
 
     /**
