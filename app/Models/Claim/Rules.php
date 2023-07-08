@@ -10,7 +10,6 @@ use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Claim\Rules.
@@ -74,8 +73,8 @@ final class Rules extends Model
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function insuranceCompanies(): BelongsToMany
+    public function insuranceCompanies(): BelongsTo
     {
-        return $this->belongsToMany(InsuranceCompany::class, 'claim_rules');
+        return $this->belongsTo(InsuranceCompany::class);
     }
 }
