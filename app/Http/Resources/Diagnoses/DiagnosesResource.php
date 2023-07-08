@@ -18,7 +18,8 @@ final class DiagnosesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = parent::toArray($request);
+        $data = parent::toArray($this->resource);
+        $data['discriminatory'] = $this->resource->discriminatory;
 
         $id = isset($this->type->value) ? $this->type->value : $this->type;
         $enum = DiagnosesType::tryFrom((int) $id);

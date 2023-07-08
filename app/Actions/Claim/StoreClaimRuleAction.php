@@ -4,23 +4,17 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
-use App\Http\Casts\Claim\RulesWrapper;
+use App\Http\Casts\Claim\StoreRulesWrapper;
 use App\Http\Resources\Claim\RuleResource;
-use App\Models\Claim\Rules;
+use App\Models\Claims\Rules;
 use Illuminate\Support\Facades\DB;
 
 final class StoreClaimRuleAction
 {
-    public function invoke(RulesWrapper $rulesWrapper): RuleResource
+    public function invoke(StoreRulesWrapper $rulesWrapper): RuleResource
     {
         return DB::transaction(function () use ($rulesWrapper) {
-            $rules = tap(Rules::query()->create($rulesWrapper->getRuleData()), function (Rules $rules) use ($rulesWrapper) {
-                if ($rulesWrapper->getCompanies()->isNotEmpty()) {
-                    $rules->companies()->sync($rulesWrapper->getCompanies());
-                }
-            });
-
-            return new RuleResource($rules);
+            return new RuleResource(Rules::query()->create($rulesWrapper->getRuleData()));
         });
     }
 }

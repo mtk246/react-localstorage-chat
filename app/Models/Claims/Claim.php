@@ -55,7 +55,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
  * @property \App\Models\Claims\PatientAdditionalInformation|null $patientInformation
- * @property \App\Models\Claims\ClaimServices|null $services
+ * @property \App\Models\Claims\ClaimService|null $services
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
  * @property int|null $status_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
@@ -84,11 +84,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereValidate($value)
  *
+ * @property string|null $code
+ * @property int|null $billing_company_id
  * @property ClaimType $type
+ * @property mixed $aditional_information
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimDateInformation> $dateInformations
+ * @property int|null $date_informations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
+ * @property \App\Models\Claims\ClaimService|null $service
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereAditionalInformation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereType($value)ClaimServices
  *
  * @mixin \Eloquent
  */
@@ -257,7 +268,7 @@ class Claim extends Model implements Auditable
 
     public function setServices(ClaimServicesWrapper $services): void
     {
-        /** @var ClaimServices */
+        /** @var ClaimService */
         $claimService = $this
             ->service()
             ->updateOrCreate(

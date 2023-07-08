@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Casts\Claim;
 
-use App\Enums\Claim\RequiredFillRuleType;
 use App\Http\Casts\CastsRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
-final class RulesWrapper extends CastsRequest
+final class UpdateRulesWrapper extends CastsRequest
 {
-    public function getCompanies(): Collection
-    {
-        return $this->getCollect('companies');
-    }
-
     public function getRuleData(): array
     {
         return [
+            'id' => $this->get('id'),
             'name' => $this->get('name'),
             'format' => $this->get('format'),
             'description' => $this->get('description') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
+            'insurance_company_id' => $this->get('insurance_company_id'),
             'rules' => $this->getRules()->toArray(),
             'parameters' => $this->getParameters()->toArray(),
         ];
@@ -37,18 +33,11 @@ final class RulesWrapper extends CastsRequest
 
     private function getRules(): Collection
     {
-        return collect(config('claim.formats.institutional'))
-            ->map(fn ($format) => collect($format)
-                ->map(fn (array $rule) => collect($rule)
-                    ->only(['type', 'value'])
-                )
-            );
+        return $this->getCollect('rules');
     }
 
     private function getParameters(): Collection
     {
-        return $this->getRules()
-            ->filter(fn (string $value, string $key) => !is_null(RequiredFillRuleType::tryFrom($key)))
-            ->mapWithKeys(fn (array $rule) => [$rule['name'] => $rule['value']]);
+        return $this->getCollect('parameters');
     }
 }

@@ -56,6 +56,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
+ * @property Company $company
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
+ *
  * @mixin \Eloquent
  */
 final class ClaimBatch extends Model implements Auditable
