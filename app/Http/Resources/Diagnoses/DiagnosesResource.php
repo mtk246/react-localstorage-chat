@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Diagnoses;
 
-use App\Enums\Diagnoses\DiagnosesType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class DiagnosesResource extends JsonResource
@@ -23,8 +22,7 @@ final class DiagnosesResource extends JsonResource
             'id' => $this->type->value,
             'name' => $this->type->getName(),
         ];
-        
+
         return array_merge(parent::toArray($this->resource), $data);
-        
     }
 }
