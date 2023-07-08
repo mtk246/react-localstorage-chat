@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\RuleType;
 use App\Models\Claims\Claim;
+use App\Models\Claims\Rules;
 use App\Models\Company;
 use App\Models\InsuranceCompany;
 use Illuminate\Database\Eloquent\Model;
@@ -15,21 +16,23 @@ use Illuminate\Support\Str;
 abstract class Dictionary implements DictionaryInterface
 {
     protected string $format;
+    protected array $config;
 
     public function __construct(
         protected readonly Claim $claim,
         protected readonly Company $company,
         protected readonly InsuranceCompany $insuranceCompany,
     ) {
+        $this->setConfigFor();
     }
 
     public function translate(string $key): array|string|bool
     {
-        $config = (object) config("claim.formats.{$this->claim->type->value}.{$this->format}.{$key}");
-
-        if (!$config) {
+        if (array_key_exists($key, $this->config)) {
             throw new \InvalidArgumentException('Invalid format key');
         }
+
+        $config = (object) $this->config[$key];
 
         return match ($config->type) {
             RuleType::DATE->value => $this->getDateFormat($config->value),
@@ -39,6 +42,13 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
+    }
+
+    public function toArray(): array
+    {
+        return array_map(function ($key) {
+            return $this->translate($key);
+        }, array_keys($this->config));
     }
 
     protected function getMultipleFormat(array $values, string $glue): string
@@ -103,5 +113,26 @@ abstract class Dictionary implements DictionaryInterface
             ->reduce(function (Model $carry, object $item) {
                 return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
             }, $this->claim);
+    }
+
+    protected function setConfigFor(?InsuranceCompany $insuranceCompany = null): void
+    {
+        $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
+
+        $customRules = Rules::query()
+            ->where('insurance_company_id', $insuranceCompany?->id ?? $this->insuranceCompany->id)
+            ->where('billing_company_id', $this->claim->billing_company_id)
+            ->where('format', $this->claim->format)
+            ->first()
+            ?->rules;
+
+        if ($customRules) {
+            $rules = array_replace_recursive(
+                $rules,
+                $customRules[$this->format] ?? [],
+            );
+        }
+
+        $this->config = $rules;
     }
 }
