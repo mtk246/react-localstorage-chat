@@ -8,7 +8,6 @@ use App\Facades\Pagination;
 use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Models\Claims\Claim;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 final class GetClaimAction
