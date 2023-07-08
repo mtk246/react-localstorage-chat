@@ -12,16 +12,15 @@ use Illuminate\Http\Request;
 
 final class ClaimPreviewController extends Controller
 {
-    public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $resource)
+    public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview)
     {
         $id = $request->id ?? null;
         $claim = Claim::with(['claimFormattable', 'insurancePolicies'])->find($id);
-        $data = $resource->single($request->input(), $request->user());
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'print' => $request->print ?? false,
             'typeFormat' => $claim->format ?? $request->format ?? null,
-            'data' => $data->toArray($request),
+            'data' => $claimPreview->single($request->input(), $request->user()),
         ]);
         $preview->setHeader();
 
@@ -34,7 +33,7 @@ final class ClaimPreviewController extends Controller
         /**return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');*/
     }
 
-    public function showBatch(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $resource, int $id)
+    public function showBatch(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview, int $id)
     {
         $batch = ClaimBatch::with([
             'claims' => function ($query) {
@@ -44,12 +43,11 @@ final class ClaimPreviewController extends Controller
         $claims = $batch->claims;
         $total = count($claims);
         foreach ($claims as $key => $claim) {
-            $data = $resource->single(['id' => $claim->id], $request->user());
             $preview->setConfig([
                 'urlVerify' => 'www.nucc.org',
                 'print' => (bool) ($request->print ?? false),
                 'typeFormat' => $claim->format ?? null,
-                'data' => $data->toArray($data),
+                'data' => $claimPreview->single(['id' => $claim->id], $request->user()),
             ]);
             $preview->setHeader();
 

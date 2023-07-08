@@ -20,6 +20,53 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Services query()
  *
+ * @property int $id
+ * @property int $claim_service_id
+ * @property int $procedure_id
+ * @property array|null $modifier_ids
+ * @property array|null $diagnostic_pointers
+ * @property string $from_service
+ * @property string $to_service
+ * @property string $price
+ * @property string $total_charge
+ * @property string|null $copay
+ * @property string|null $revenue_code_id
+ * @property string|null $place_of_service_id
+ * @property string|null $type_of_service_id
+ * @property string|null $days_or_units
+ * @property string|null $emg
+ * @property string|null $epsdt_id
+ * @property string|null $family_planning_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Models\Claims\ClaimService|null $claimService
+ * @property TypeCatalog|null $epsdt
+ * @property TypeCatalog|null $familyPlanning
+ * @property PlaceOfService|null $placeOfService
+ * @property Procedure|null $procedure
+ * @property TypeCatalog|null $revenueCode
+ * @property TypeOfService|null $typeOfService
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereClaimServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereCopay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereDaysOrUnits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereDiagnosticPointers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereEmg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereEpsdtId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereFamilyPlanningId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereFromService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereModifierIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services wherePlaceOfServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereRevenueCodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereToService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereTotalCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereTypeOfServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Services whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class Services extends Model
@@ -69,7 +116,7 @@ final class Services extends Model
      */
     public function claimService()
     {
-        return $this->belongsTo(ClaimServices::class);
+        return $this->belongsTo(ClaimService::class);
     }
 
     /**

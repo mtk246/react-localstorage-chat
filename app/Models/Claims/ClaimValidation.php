@@ -35,6 +35,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property InsurancePolicy $insurancePolicy
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 final class ClaimValidation extends Model implements Auditable
