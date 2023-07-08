@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -260,11 +260,11 @@ class ClaimController extends Controller
     ) {
         $token = $getAccessToken->invoke();
 
-        if (empty($token)) {
+        if (empty($token) && true === $request->demographic_information['automatic_eligibility']) {
             return response()->json(__('Error get security authorization access token'), 400);
         }
 
-        $rs = $createEligibility->invoke($token, $request->validated());
+        $rs = $createEligibility->invoke($token ?? '', $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error claim eligibility'), 400);
     }
