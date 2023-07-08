@@ -11,6 +11,7 @@ use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
+use App\Models\User;
 use App\Traits\Claim\ClaimFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -125,6 +126,11 @@ class Claim extends Model implements Auditable
         'format' => FormatType::class,
     ];
 
+    protected $appends = [
+        'last_modified', 'private_note', 'billed_amount', 'amount_paid',
+        'past_due_date', 'date_of_service', 'status_date', 'user_created',
+    ];
+
     /**
      * The insurance policies that belong to the Claim.
      */
@@ -151,6 +157,11 @@ class Claim extends Model implements Auditable
     public function patientInformation(): HasOne
     {
         return $this->hasOne(PatientAdditionalInformation::class);
+    }
+
+    public function claimStatusClaims(): HasMany
+    {
+        return $this->hasMany(ClaimStatusClaim::class);
     }
 
     public function status(): MorphToMany
@@ -242,6 +253,101 @@ class Claim extends Model implements Auditable
         });
     }
 
+    public function getLastModifiedAttribute()
+    {
+        $record = [
+            'user' => '',
+            'roles' => [],
+        ];
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return [
+                'user' => 'Console',
+                'roles' => [],
+            ];
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
+            return [
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'roles' => $user->roles,
+            ];
+        }
+    }
+
+    /**
+     * Interact with the claim's privateNote.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    public function getPrivateNoteAttribute()
+    {
+        $status = $this->claimStatusClaims()
+                    ->orderBy('created_at', 'desc')
+                    ->orderBy('id', 'desc')->first();
+        if (isset($status)) {
+            $note = $status->privateNotes()->orderBy('created_at', 'desc')
+                           ->orderBy('id', 'asc')->first();
+        }
+
+        return (isset($note)) ? $note : null;
+    }
+
+    public function getBilledAmountAttribute()
+    {
+        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+            return $carry + ((float) $service['price'] ?? 0);
+        }, 0);
+
+        return number_format($billed, 2);
+    }
+
+    public function getAmountPaidAttribute()
+    {
+        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+            return $carry + ((float) $service['price'] ?? 0);
+        }, 0);
+
+        return number_format($billed, 2);
+    }
+
+    public function getPastDueDateAttribute()
+    {
+        /** @todo Esta fecha viene del insurance company Tyme Filing */
+        $services = $this->service?->services ?? collect([]);
+
+        return $services->max('to_service') ?? '';
+    }
+
+    public function getDateOfServiceAttribute()
+    {
+        $services = $this->service?->services ?? collect([]);
+
+        return $services->min('from_service') ?? '';
+    }
+
+    public function getStatusDateAttribute()
+    {
+        $status = $this->claimStatusClaims()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        return (isset($status)) ? $status->created_at?->format('Y-m-d') : '';
+    }
+
+    public function getUserCreatedAttribute()
+    {
+        $lastModified = $this->audits()->latest()->first();
+        if (!isset($lastModified->user_id)) {
+            return 'Console';
+        } else {
+            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+
+            return $user->profile->first_name.' '.$user->profile->last_name;
+        }
+    }
+
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformationData): void
     {
         /** @var ClaimDemographicInformation */
@@ -287,11 +393,11 @@ class Claim extends Model implements Auditable
             ->toArray(), ['id']);
     }
 
-    public function setInsurancePolicies(Collection $policiesInsurances): void
+    public function setInsurancePolicies(Collection $insurancePolicies): void
     {
         $this
             ->insurancePolicies()
-            ->sync($policiesInsurances->toArray());
+            ->sync($insurancePolicies->toArray());
     }
 
     public function setStates(?int $status, ?int $subStatus): void
