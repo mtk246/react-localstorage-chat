@@ -6,6 +6,6 @@ namespace App\Enums\Claim;
 
 enum ClaimType: int
 {
-    case INSTITUTIONAL = 1;
-    case PROFESSIONAL = 2;
+    case PROFESSIONAL = 1;
+    case INSTITUTIONAL = 2;
 }

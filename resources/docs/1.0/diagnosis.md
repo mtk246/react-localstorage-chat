@@ -39,13 +39,19 @@
 {
     "code": "D1",
     "start_date": "2022-07-05",
+    "end_date": "2022-08-05", // Not required
     "description": "Description diagnosis 1",
-    "injury_date_required": true,
+    "injury_date_required": false, // Not required
+    "gender_id": 1, /*Not required */
+    "age": "15", // Not required
+    "age_end": "20", // Not required
+    "discriminatory_id": 1, // Not required
+    "description_long": "Long Description Example", // Not required
     "note": "Note diagnosis 1",
-    "type": 1, // type of preocedure
+    "type": 2, // type of preocedure
     "clasifications": {
-        "specific": 2, // not required
-        "sub_specific": 2 // not required
+        "general": 1, // not required
+        "specific": 1 // not required
     }
 }
 ```
@@ -73,7 +79,12 @@
     "end_date": null,
     "updated_at": "2022-06-20T07:53:23.000000Z",
     "created_at": "2022-06-20T07:53:23.000000Z",
-    "id": 72751
+    "id": 72751,
+    "gender": null,
+    "discriminatory": {
+        "id": 1,
+        "description": "Greater or equal",
+    }
 }
 ```
 
@@ -288,6 +299,7 @@
     "gender_id":1, // Optional
     "age": "20", // Optional
     "age_end": "23", // Optional
+    "discriminatory_id": 1, // Optional
     "type": 2, // required
     "clasifications": {
         "general": 5, // Not required
@@ -327,7 +339,12 @@
     "end_date": "2022-08-05",
     "active": true,
     "created_at": "2022-06-20T07:53:23.000000Z",
-    "updated_at": "2022-06-20T08:04:59.000000Z"
+    "updated_at": "2022-06-20T08:04:59.000000Z",
+    "gender": null,
+    "discriminatory": {
+        "id": 1,
+        "description": "Greater or equal",
+    }
 }
 ```
 
