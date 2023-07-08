@@ -48,7 +48,7 @@ final class ClaimBodyResource extends JsonResource
             'past_due_date' => $this->past_due_date,
             'date_of_service' => $this->getDateOfServiceAttribute(),
             'status_date' => $this->getStatusDateAttribute(),
-            'insurance_company' => $this->getInsuranceCompany(),
+            'insurance_policy' => $this->getInsurancePolicy(),
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
@@ -224,7 +224,7 @@ final class ClaimBodyResource extends JsonResource
         }
     }
 
-    private function getInsuranceCompany(): ?array
+    private function getInsurancePolicy(): ?array
     {
         $policyPrimary = $this->resource
             ->insurancePolicies()
@@ -232,8 +232,8 @@ final class ClaimBodyResource extends JsonResource
             ->first();
 
         return [
-            'id' => $policyPrimary?->insurancePlan?->insuranceCompany?->id ?? '',
-            'name' => $policyPrimary?->insurancePlan?->insuranceCompany?->name ?? '',
+            'insurance_company_id' => $policyPrimary?->insurancePlan?->insuranceCompany?->id ?? '',
+            'insurance_company' => $policyPrimary?->insurancePlan?->insuranceCompany?->name ?? '',
             'insurance_plan_id' => $policyPrimary?->insurancePlan?->id ?? '',
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
