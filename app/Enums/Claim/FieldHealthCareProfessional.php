@@ -10,7 +10,7 @@ use App\Enums\Interfaces\PublicInterface;
 use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 
-enum FieldHealthCareInstitutional: int implements PublicInterface
+enum FieldHealthCareProfessional: int implements PublicInterface
 {
     use EnumToArray;
     use HasAttributes;
@@ -30,6 +30,18 @@ enum FieldHealthCareInstitutional: int implements PublicInterface
     #[NameAttribute('79. Other')]
     #[PublicAttribute(true)]
     case FIELD_79 = 4;
+
+    #[NameAttribute('Billing Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_BP = 5;
+
+    #[NameAttribute('Referred Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_RP = 6;
+
+    #[NameAttribute('Service Provider')]
+    #[PublicAttribute(false)]
+    case FIELD_SP = 7;
 
     public function getName(): string
     {

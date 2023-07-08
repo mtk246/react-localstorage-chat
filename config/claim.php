@@ -8208,4 +8208,13 @@ return [
             ],
         ],
     ],
+
+    'connections' => [
+        'url_eligibility' => env('URL_ELIGIBILITY', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3'),
+        'url_validation' => env('URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
+        'url_submission' => env('URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
+        'url_token' => env('URL_TOKEN', 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token'),
+        'client_id' => env('CLIENT_ID', '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF'),
+        'client_secret' => env('CLIENT_SECRET', 'EBPadsDKoOuEoOWv'),
+    ],
 ];

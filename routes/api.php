@@ -55,7 +55,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
-        Route::get('{id}/', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
+        Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
         Route::post('send-email-rescue-pass', [\App\Http\Controllers\UserController::class, 'sendEmailRescuePass']);
         Route::post('recovery-user', [\App\Http\Controllers\UserController::class, 'recoveryUser']);
         Route::post('unlock-user', [\App\Http\Controllers\UserController::class, 'unlockUser']);

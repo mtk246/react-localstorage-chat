@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -126,14 +127,14 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimDemographicInformation::class);
     }
 
-    public function services(): HasOne
+    public function service(): HasOne
     {
-        return $this->hasOne(ClaimServices::class);
+        return $this->hasOne(ClaimService::class);
     }
 
-    public function dateInformation(): HasOne
+    public function dateInformations(): HasMany
     {
-        return $this->hasOne(ClaimDateInformation::class);
+        return $this->hasMany(ClaimDateInformation::class);
     }
 
     public function patientInformation(): HasOne
@@ -166,30 +167,39 @@ class Claim extends Model implements Auditable
                 $demographicInformationData->getData()
             );
 
-        $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
+        $healthProfessionals = $demographicInformationData->getHealthProfessionals();
+        $data = [];
+        foreach ($healthProfessionals as $pivot) {
+            $data[$pivot['health_professional_id']] = [
+                'claim_id' => $demographicInformation['claim_id'],
+                'health_professional_id' => $pivot['health_professional_id'],
+                'field_id' => $pivot['field_id'],
+                'qualifier_id' => $pivot['qualifier_id'],
+            ];
+        }
+
+        $demographicInformation->healthProfessionals()->sync($data);
     }
 
     public function setServices(ClaimServicesWrapper $services): void
     {
         /** @var ClaimServices */
         $claimService = $this
-            ->services()
+            ->service()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
                 $services->getData()
             );
 
-        Services::upsert($services->getService()->toArray(), ['id']);
-
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
         $claimService->services()->upsert($services
             ->getService()
             ->map(function (array $service) use ($claimService) {
-                $service['claim_id'] = $claimService->id;
+                $service['claim_service_id'] = $claimService->id;
 
                 return $service;
             })
-            ->toArray(), ['id', 'claim_id']);
+            ->toArray(), ['id']);
     }
 
     public function setInsurancePolicies(Collection $policiesInsurances): void
@@ -216,15 +226,19 @@ class Claim extends Model implements Auditable
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
-        $this->dateInformation()
+        foreach ($aditionalInformation->getDateInformation() as $data) {
+            $this->dateInformations()
             ->updateOrCreate(
                 ['claim_id' => $this->id],
-                $aditionalInformation->getDateInformation()
+                $data
             );
-        $this->patientInformation()
-            ->updateOrCreate(
-                ['claim_id' => $this->id],
-                $aditionalInformation->getPatientInformation()
-            );
+        }
+        if (ClaimType::INSTITUTIONAL->value == $this->type) {
+            $this->patientInformation()
+                ->updateOrCreate(
+                    ['claim_id' => $this->id],
+                    $aditionalInformation->getPatientInformation()
+                );
+        }
     }
 }
