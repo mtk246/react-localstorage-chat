@@ -24,6 +24,59 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()
  *
+ * @property int $id
+ * @property int $claim_id
+ * @property int|null $company_id
+ * @property int|null $facility_id
+ * @property int|null $patient_id
+ * @property string|null $type_of_medical_assistance
+ * @property string $prior_authorization_number
+ * @property string $charges
+ * @property string $auto_accident_place_state
+ * @property bool $accept_assignment
+ * @property bool $patient_signature
+ * @property bool $insured_signature
+ * @property bool $outside_lab
+ * @property bool $employment_related_condition
+ * @property bool $auto_accident_related_condition
+ * @property bool $other_accident_related_condition
+ * @property bool $validate
+ * @property bool $automatic_eligibility
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property Company|null $company
+ * @property Facility|null $facility
+ * @property \Illuminate\Database\Eloquent\Collection<int, HealthProfessional> $healthProfessionals
+ * @property int|null $health_professionals_count
+ * @property Patient|null $patient
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAcceptAssignment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentPlaceState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentRelatedCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutomaticEligibility($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereCharges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereClaimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereEmploymentRelatedCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereFacilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereInsuredSignature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereOtherAccidentRelatedCondition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereOutsideLab($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePatientSignature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePriorAuthorizationNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereTypeOfMedicalAssistance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereValidate($value)
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property \Illuminate\Database\Eloquent\Collection<int, HealthProfessional> $healthProfessionals
+ *
  * @mixin \Eloquent
  */
 final class ClaimDemographicInformation extends Model
