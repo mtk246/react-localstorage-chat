@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Gate;
 
 final class RulesWrapper extends CastsRequest
 {
-    public function getCompanies(): Collection
-    {
-        return $this->getCollect('companies');
-    }
-
     public function getRuleData(): array
     {
         return [
@@ -23,6 +18,7 @@ final class RulesWrapper extends CastsRequest
             'format' => $this->get('format'),
             'description' => $this->get('description') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
+            'insurance_company_id' => $this->getInsuranceCompany(),
             'rules' => $this->getRules()->toArray(),
             'parameters' => $this->getParameters()->toArray(),
         ];
@@ -33,6 +29,11 @@ final class RulesWrapper extends CastsRequest
         return Gate::allows('is-admin') && $this->get('billing_company_id')
             ? (int) $this->get('billing_company_id')
             : $this->user->billingCompanies->first()?->id;
+    }
+
+    public function getInsuranceCompany(): Collection
+    {
+        return $this->getCollect('insurance_company_id');
     }
 
     private function getRules(): Collection
