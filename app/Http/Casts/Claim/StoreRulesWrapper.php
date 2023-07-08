@@ -9,7 +9,7 @@ use App\Http\Casts\CastsRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
-final class RulesWrapper extends CastsRequest
+final class StoreRulesWrapper extends CastsRequest
 {
     public function getRuleData(): array
     {
