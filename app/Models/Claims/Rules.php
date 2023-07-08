@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Claim;
+namespace App\Models\Claims;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Claim\Rules.
+ * App\Models\Claims\Rules.
  *
  * @property int $id
  * @property string $name
