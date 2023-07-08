@@ -55,7 +55,7 @@ final class ClaimBodyResource extends JsonResource
         ];
     }
 
-    private function getStatus(): ClaimStatus
+    private function getStatus(): ClaimStatus|array
     {
         $data = $this->resource->status()
             ->orderBy('claim_status_claim.id', 'desc')
