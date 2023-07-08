@@ -157,6 +157,80 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claim');
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query, $search) {
+            return $query
+                ->where('code', 'LIKE', strtoupper("%$search%"))
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByUserProfile($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByClaimFormServices($query, $search);
+                })
+                ->orWhereHas('insurancePolicies', function ($q) use ($search) {
+                    $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
+                        $qq->where('code', 'LIKE', strtoupper("%$search%"));
+                    });
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $query->with('service.services')
+                        ->when(is_numeric($search), function ($query, $search) {
+                            $this->searchByClaimFormServicesTotalPrice($query, $search);
+                        });
+                });
+        });
+    }
+
+    protected function searchByUserProfile($query, $search)
+    {
+        $query->with(['demographicInformation.patient.user.profile'])
+            ->whereHas('demographicInformation.patient.user.profile', function ($q) use ($search) {
+                $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
+            });
+    }
+
+    protected function searchByCompany($query, $search)
+    {
+        $query->with(['demographicInformation.company'])
+            ->orWhereHas('demographicInformation.company', function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")]);
+            });
+    }
+
+    protected function searchByClaimFormServices($query, $search)
+    {
+        $query->with('service.services')
+            ->whereHas('service.services', function ($subQuery) use ($search) {
+                $subQuery->when($search, function ($query, $search) {
+                    $query->where(function ($query) {
+                        $query->orderBy('from_service', 'asc')
+                            ->orderBy('to_service', 'desc')
+                            ->limit(1);
+                    })
+                    ->where('from_service', 'LIKE', "%$search%")
+                    ->orWhere('to_service', 'LIKE', "%$search%");
+                });
+            })
+            ->limit(1);
+    }
+
+    protected function searchByClaimFormServicesTotalPrice($query, $search)
+    {
+        $query->whereHas('service', function ($q) use ($search) {
+            $q->whereHas('services', function ($subQuery) use ($search) {
+                $subQuery->selectRaw('SUM(CAST(price AS DECIMAL(10,2))) as total_price')
+                    ->groupBy('services.id')
+                    ->havingRaw('SUM(CAST(price AS DECIMAL(10,2))) = ?', [(float) $search]);
+            });
+        });
+    }
+
     public function setDemographicInformation(DemographicInformationWrapper $demographicInformationData): void
     {
         /** @var ClaimDemographicInformation */
