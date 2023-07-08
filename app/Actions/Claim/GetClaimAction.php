@@ -39,10 +39,8 @@ final class GetClaimAction
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
-        // return ClaimBodyResource::collection($claimsQuery);
-
         $data = [
-            'data' => $claimsQuery->items(),
+            'data' => ClaimBodyResource::collection($claimsQuery->items()),
             'numberOfPages' => $claimsQuery->lastPage(),
             'count' => $claimsQuery->total(),
         ];
