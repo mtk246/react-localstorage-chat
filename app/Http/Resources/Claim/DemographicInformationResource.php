@@ -46,7 +46,7 @@ final class DemographicInformationResource extends JsonResource
 
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
-                'type_of_medical_assistance' => $this->resource->type->value_of_medical_assistance,
+                'type_of_medical_assistance' => $this->resource->type_of_medical_assistance,
             ],
             ClaimType::PROFESSIONAL->value => [],
             default => throw new \InvalidArgumentException('Invalid format type'),
