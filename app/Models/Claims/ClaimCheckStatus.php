@@ -41,6 +41,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property PrivateNote $privateNote
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
  * @mixin \Eloquent
  */
 final class ClaimCheckStatus extends Model implements Auditable

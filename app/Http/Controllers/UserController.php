@@ -273,9 +273,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getAllUsers(Request $request): JsonResponse
     {
         $rs = $this->userRepository->getAllUsers();
@@ -283,17 +280,14 @@ class UserController extends Controller
         return response()->json($rs);
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAllUsers(Request $request): JsonResponse
     {
-        return $this->userRepository->getServerAllUsers($request);
+        return response()->json($this->userRepository->getServerAllUsers($request));
     }
 
-    public function getOneUser(Request $request, int $id): JsonResponse
+    public function getOneUser(Request $request, User $user): JsonResponse
     {
-        $rs = $this->userRepository->getOneUser($id);
+        $rs = $this->userRepository->getOneUser($user);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }

@@ -41,13 +41,13 @@ final class StoreRequestWrapper extends CastsRequest
     {
         return $this->getDraft()
             ? ClaimStatus::whereStatus('Draft')->first()?->id
-            : $this->get('status') ?? 2;
+            : ClaimStatus::whereStatus('Verified - Not submitted')->first()?->id;
     }
 
-    public function getSubStatus(): ?string
+    public function getSubStatus(): ?int
     {
         return !$this->getDraft()
-            ? $this->get('sub_status')
+            ? $this->get('sub_status_id')
             : null;
     }
 
@@ -63,7 +63,7 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getPoliciesInsurances(): Collection
     {
-        return $this->getCollect('policies_insurances')
+        return $this->getCollect('insurance_policies')
             ->mapWithKeys(function (array $policy) {
                 return [$policy['insurance_policy_id'] => ['order' => $policy['order']]];
             });
