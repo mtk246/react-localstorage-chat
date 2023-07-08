@@ -25,7 +25,7 @@ final class ClaimBodyResource extends JsonResource
             'claim_service' => new ClaimServiceResource(
                 $this->resource->service,
                 $this->resource->type->value,
-                $this->resource->demographicInformation->company_id
+                $this->resource->demographicInformation->company_id ?? null,
             ),
             'additional_information' => new AdditionalInformationResource(
                 $this->resource,
