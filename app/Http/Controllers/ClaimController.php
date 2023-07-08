@@ -6,13 +6,14 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
-use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
+use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\UpdateClaimAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
@@ -22,7 +23,6 @@ use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
-use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Http\Resources\Claim\PreviewResource;
 use App\Models\Claim;
 use App\Models\Claims\Claim as ClaimsClaim;
@@ -96,14 +96,19 @@ class ClaimController extends Controller
         );
     }
 
-    public function getServerAll(Request $request)
-    {
-        return $this->claimRepository->getServerAll($request);
+    public function getServerAll(
+        Request $request,
+        ClaimsClaim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->all($claim, $request));
     }
 
-    public function getOneClaim(ClaimsClaim $claim): JsonResponse
-    {
-        return response()->json(new ClaimBodyResource($claim));
+    public function getOneClaim(
+        ClaimsClaim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->single($claim));
     }
 
     public function getListClaimServices(Request $request)
@@ -252,8 +257,7 @@ class ClaimController extends Controller
         ClaimEligibilityRequest $request,
         GetSecurityAuthorizationAction $getAccessToken,
         CreateCheckEligibilityAction $createEligibility
-    )
-    {
+    ) {
         $token = $getAccessToken->invoke();
 
         if (empty($token)) {

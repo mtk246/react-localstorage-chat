@@ -12,7 +12,7 @@ final class ServiceResource extends JsonResource
     public function __construct(
         $resource,
         protected int $type,
-        protected int $company_id
+        protected ?int $company_id
     ) {
         parent::__construct($resource);
     }
