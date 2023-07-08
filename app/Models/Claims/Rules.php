@@ -73,7 +73,7 @@ final class Rules extends Model
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function insuranceCompanies(): BelongsTo
+    public function insuranceCompany(): BelongsTo
     {
         return $this->belongsTo(InsuranceCompany::class);
     }
