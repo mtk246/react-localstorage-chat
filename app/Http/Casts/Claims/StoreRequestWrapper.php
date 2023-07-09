@@ -46,14 +46,19 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getSubStatus(): ?int
     {
-        return !$this->getDraft()
-            ? $this->get('sub_status_id')
+        return $this->getDraft()
+            ? $this->get('sub_status_id') ?? null
             : null;
     }
 
     public function getDemographicInformation(): DemographicInformationWrapper
     {
         return $this->cast('demographic_information', DemographicInformationWrapper::class);
+    }
+
+    public function getPrivateNote(): ?string
+    {
+        return $this->get('private_note') ?? null;
     }
 
     public function getClaimServices(): ClaimServicesWrapper

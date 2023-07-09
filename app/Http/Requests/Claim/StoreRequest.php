@@ -45,6 +45,16 @@ final class StoreRequest extends FormRequest
             ],
             'type' => ['required', 'integer'],
             'draft' => ['nullable', 'boolean'],
+            'private_note' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'string',
+                'nullable',
+            ],
+            'sub_status_id' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'integer',
+                'nullable',
+            ],
 
             'demographic_information' => ['required', 'array'],
             'demographic_information.type_of_medical_assistance' => [
@@ -164,6 +174,16 @@ final class StoreRequest extends FormRequest
                 'integer',
             ],
             'draft' => ['nullable', 'boolean'],
+            'private_note' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'string',
+                'nullable',
+            ],
+            'sub_status_id' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'integer',
+                'nullable',
+            ],
 
             'demographic_information' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),

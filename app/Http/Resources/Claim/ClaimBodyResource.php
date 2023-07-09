@@ -8,7 +8,6 @@ use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 final class ClaimBodyResource extends JsonResource
 {
@@ -16,7 +15,8 @@ final class ClaimBodyResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'billing_company_id' => $this->resource->id,
+            'id' => $this->resource->id,
+            'billing_company_id' => $this->resource->billing_company_id,
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'submitter_name' => $this->resource->submitter_name,
@@ -62,11 +62,19 @@ final class ClaimBodyResource extends JsonResource
             ->first()
             ?->setHidden(['pivot']);
         $data['sub_status'] = $this->getSubstatus();
+        $data['sub_statuses'] = ClaimSubStatus::query()
+            ->whereHas('claimStatuses', function ($query) use ($data) {
+                $query->where('claim_status_id', $data->id ?? null);
+            }
+            )
+            ->get()
+            ->setVisible(['id', 'name'])
+            ->toArray() ?? [];
 
         return $data;
     }
 
-    private function getSubstatus(): ?ClaimSubStatus
+    private function getSubstatus(): ClaimSubStatus|array|null
     {
         return $this->resource->subStatus()
             ->orderBy('claim_status_claim.id', 'desc')
@@ -91,7 +99,7 @@ final class ClaimBodyResource extends JsonResource
         return $records;
     }
 
-    private function setSubStatus(Collection $status, &$recordSubstatus): void
+    private function setSubStatus($status, &$recordSubstatus): void
     {
         $record = [];
         $notes = [];

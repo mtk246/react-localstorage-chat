@@ -11,6 +11,7 @@ use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
+use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Claim\ClaimFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -400,18 +401,31 @@ class Claim extends Model implements Auditable
             ->sync($insurancePolicies->toArray());
     }
 
-    public function setStates(?int $status, ?int $subStatus): void
+    public function setStates(?int $status, ?int $subStatus, ?string $note): void
     {
         if (null !== $status) {
-            $this->status()->sync(
-                ClaimStatus::query()->where('id', $status)->first()->id
-            );
+            $claimStatusClaim = ClaimStatusClaim::create([
+                'claim_id' => $this->id,
+                'claim_status_type' => ClaimStatus::class,
+                'claim_status_id' => $status,
+            ]);
         }
 
         if (null !== $subStatus) {
-            $this->subStatus()->sync(
-                ClaimSubStatus::query()->where('id', $subStatus)->first()->id
-            );
+            $claimStatusClaim = ClaimStatusClaim::create([
+                'claim_id' => $this->id,
+                'claim_status_type' => ClaimSubStatus::class,
+                'claim_status_id' => $subStatus,
+            ]);
+        }
+
+        if (null !== $note) {
+            PrivateNote::create([
+                'publishable_type' => ClaimStatusClaim::class,
+                'publishable_id' => $claimStatusClaim->id,
+                'billing_company_id' => $this->billing_company_id,
+                'note' => $note,
+            ]);
         }
     }
 
