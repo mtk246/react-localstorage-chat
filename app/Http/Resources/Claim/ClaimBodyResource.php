@@ -8,7 +8,6 @@ use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 final class ClaimBodyResource extends JsonResource
 {
@@ -63,6 +62,14 @@ final class ClaimBodyResource extends JsonResource
             ->first()
             ?->setHidden(['pivot']);
         $data['sub_status'] = $this->getSubstatus();
+        $data['sub_statuses'] = ClaimSubStatus::query()
+            ->whereHas('claimStatuses', function ($query) use ($data) {
+                $query->where('claim_status_id', $data->id ?? null);
+            }
+            )
+            ->get()
+            ->setVisible(['id', 'name'])
+            ->toArray() ?? [];
 
         return $data;
     }
