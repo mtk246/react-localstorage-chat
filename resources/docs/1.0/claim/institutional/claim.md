@@ -145,13 +145,13 @@
 
     "additional_information": {
         "patient_information": {
-            "admisison_date": "2022-07-05",
-            "admisison_time": "07:05",
+            "admission_date": "2022-07-05",
+            "admission_time": "07:05",
             "discharge_date":"2022-07-05",
             "discharge_time": "07:05",
             "condition_code_ids": [1,2], /** Max(11) */
-            "admisison_type_id": 1,
-            "admisison_source_id": 2,
+            "admission_type_id": 1,
+            "admission_source_id": 2,
             "patient_status_id": 2,
             "bill_classification_id": 2,
         },
@@ -272,13 +272,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
@@ -411,13 +411,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
@@ -508,13 +508,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
