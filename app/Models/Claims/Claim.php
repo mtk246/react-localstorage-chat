@@ -359,18 +359,7 @@ class Claim extends Model implements Auditable
                 $demographicInformationData->getData()
             );
 
-        $healthProfessionals = $demographicInformationData->getHealthProfessionals();
-        $data = [];
-        foreach ($healthProfessionals as $pivot) {
-            $data[$pivot['health_professional_id']] = [
-                'claim_id' => $demographicInformation['claim_id'],
-                'health_professional_id' => $pivot['health_professional_id'],
-                'field_id' => $pivot['field_id'],
-                'qualifier_id' => $pivot['qualifier_id'],
-            ];
-        }
-
-        $demographicInformation->healthProfessionals()->sync($data);
+        $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
     }
 
     public function setServices(ClaimServicesWrapper $services): void
