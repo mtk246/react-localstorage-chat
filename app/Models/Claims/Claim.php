@@ -427,7 +427,7 @@ class Claim extends Model implements Auditable
                 $data
             );
         }
-        if (ClaimType::INSTITUTIONAL->value == $this->type) {
+        if (ClaimType::INSTITUTIONAL == $this->type) {
             $this->patientInformation()
                 ->updateOrCreate(
                     ['claim_id' => $this->id],
