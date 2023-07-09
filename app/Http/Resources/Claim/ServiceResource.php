@@ -62,6 +62,7 @@ final class ServiceResource extends JsonResource
             ],
             ClaimType::PROFESSIONAL->value => [
                 'modifier_ids' => $this->resource->modifier_ids,
+                'modifiers' => $this->resource->modifiers,
                 'place_of_service_id' => $this->resource->place_of_service_id,
                 'type_of_service_id' => $this->resource->type_of_service_id,
                 'diagnostic_pointers' => $this->resource->diagnostic_pointers,
