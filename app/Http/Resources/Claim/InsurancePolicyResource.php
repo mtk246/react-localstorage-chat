@@ -44,6 +44,7 @@ final class InsurancePolicyResource extends JsonResource
             'payer_responsibility' => $this->resource->payerResponsibility?->code ?? '',
             'payment_responsibility_level_code' => $this->resource->payment_responsibility_level_code ?? null,
             'insurance_policy_type_id' => $this->resource->insurancePolicyType?->code ?? '',
+            'insurance_policy_id' => $this->resource->id ?? '',
             'order' => $this->resource->pivot->order,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
