@@ -16,7 +16,8 @@ final class ClaimBodyResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'billing_company_id' => $this->resource->id,
+            'id' => $this->resource->id,
+            'billing_company_id' => $this->resource->billing_company_id,
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'submitter_name' => $this->resource->submitter_name,
@@ -66,7 +67,7 @@ final class ClaimBodyResource extends JsonResource
         return $data;
     }
 
-    private function getSubstatus(): ?ClaimSubStatus
+    private function getSubstatus(): ClaimSubStatus|array|null
     {
         return $this->resource->subStatus()
             ->orderBy('claim_status_claim.id', 'desc')
@@ -91,7 +92,7 @@ final class ClaimBodyResource extends JsonResource
         return $records;
     }
 
-    private function setSubStatus(Collection $status, &$recordSubstatus): void
+    private function setSubStatus($status, &$recordSubstatus): void
     {
         $record = [];
         $notes = [];
