@@ -31,7 +31,7 @@ final class ClaimServiceResource extends JsonResource
 
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
-                'diagnosis_related_group_id' => $this->resource->diagnosis_related_group_id,
+                'diagnosis_related_group_id' => (int) $this->resource->diagnosis_related_group_id,
                 'non_covered_charges' => $this->resource->non_covered_charges,
             ],
             ClaimType::PROFESSIONAL->value => [],

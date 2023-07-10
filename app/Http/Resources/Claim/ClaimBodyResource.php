@@ -251,6 +251,7 @@ final class ClaimBodyResource extends JsonResource
             'insurance_plan_id' => $policyPrimary?->insurancePlan?->id ?? '',
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
+            'batch' => $policyPrimary?->batch ?? '',
         ];
     }
 }
