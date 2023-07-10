@@ -101,8 +101,6 @@ final class StoreRequest extends FormRequest
             'demographic_information.health_professional_qualifier.*.qualifier_id' => ['nullable', 'integer'],
 
             'claim_services' => ['nullable', 'array'],
-            'claim_services.diagnosis_related_group_id' => ['nullable', 'integer'],
-            'claim_services.non_covered_charges' => ['nullable', 'numeric'],
             'claim_services.services' => ['array', 'nullable'],
             'claim_services.services.*.id' => ['nullable', 'integer'],
             'claim_services.services.*.from_service' => ['sometimes', 'nullable', 'date'],
@@ -120,6 +118,8 @@ final class StoreRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
+            'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
+            'additional_information.non_covered_charges' => ['nullable', 'numeric'],
             'additional_information.patient_information.admission_date' => ['sometimes', 'date'],
             'additional_information.patient_information.admission_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.patient_information.discharge_date' => ['sometimes', 'date'],
