@@ -496,9 +496,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::put('/verify-register/{id}', [\App\Http\Controllers\ClaimController::class, 'verifyAndRegister']);
         Route::post('/verify-register', [\App\Http\Controllers\ClaimController::class, 'storeVerifyAndRegister']);
 
-        Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
+        Route::patch('/change-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
-        Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
+        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
         Route::resource('rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });

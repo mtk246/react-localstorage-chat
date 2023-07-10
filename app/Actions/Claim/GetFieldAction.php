@@ -39,14 +39,17 @@ final class GetFieldAction
             default => throw new \InvalidArgumentException('Invalid type field'),
         };
 
-        $response = collect($enum)->map(function ($item) use ($exceptions) {
-            return [
-                'id' => $item->value,
-                'name' => $item->getName(),
-                'except' => $exceptions[$item->value] ?? [],
-            ];
-        })->toArray();
-
-        return $response;
+        return collect($enum)
+            ->filter(function ($item) {
+                return $item->getPublic();
+            })
+            ->map(function ($item) use ($exceptions) {
+                return [
+                    'id' => $item->value,
+                    'name' => $item->getName(),
+                    'except' => $exceptions[$item->value] ?? [],
+                ];
+            })
+            ->toArray();
     }
 }

@@ -176,7 +176,10 @@ final class ClaimBodyResource extends JsonResource
 
     private function setSubNote($status, &$recordSubstatus): void
     {
-        foreach ($status->privateNotes as $note) {
+        $notes = $status->privateNotes()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')->get() ?? [];
+        foreach ($notes as $note) {
             array_push(
                 $recordSubstatus,
                 [
@@ -206,7 +209,10 @@ final class ClaimBodyResource extends JsonResource
             );
         }
         $recordSubstatus = [];
-        foreach ($status->privateNotes as $note) {
+        $notes = $status->privateNotes()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')->get() ?? [];
+        foreach ($notes as $note) {
             $check = ClaimCheckStatus::query()
                 ->where('private_note_id', $note->id)
                 ->first();
