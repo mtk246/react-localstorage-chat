@@ -670,7 +670,7 @@
 
 ## Example path 1
 
-> {primary} /get-list-claim-field-informations?type=health-care-institutional
+> {primary} /get-list-claim-field-informations?type=healthcare-professional
 
 ## Example path 2
 
