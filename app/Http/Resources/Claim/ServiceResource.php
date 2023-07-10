@@ -48,7 +48,7 @@ final class ServiceResource extends JsonResource
 
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
-                'revenue_code_id' => (int) $this->resource->revenue_code_id,
+                'revenue_code_id' => (int) $this->resource->revenue_code_id ?? '',
                 'revenue_codes' => isset($this->resource->revenueCode)
                     ? [
                         [
