@@ -453,4 +453,19 @@ class Claim extends Model implements Auditable
                 );
         }
     }
+
+    public function setPrivateNote(string $note): void
+    {
+        $statusCurrent = $this->claimStatusClaims()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->first() ?? null;
+
+        PrivateNote::create([
+            'publishable_type' => ClaimStatusClaim::class,
+            'publishable_id' => $statusCurrent->id,
+            'billing_company_id' => $this->billing_company_id,
+            'note' => $note,
+        ]);
+    }
 }
