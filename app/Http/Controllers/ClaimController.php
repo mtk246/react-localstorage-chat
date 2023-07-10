@@ -4,8 +4,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\ChangeStatusAction;
 use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
+use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
 use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
@@ -21,6 +23,7 @@ use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Requests\Claim\CreateNoteRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\PreviewResource;
@@ -451,9 +454,12 @@ class ClaimController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function changeStatus(ClaimChangeStatusRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->claimRepository->changeStatus($request->validated(), $id);
+    public function changeStatus(
+        ClaimChangeStatusRequest $request,
+        ChangeStatusAction $change,
+        ClaimsClaim $claim
+    ): JsonResponse {
+        $rs = $change->invoke($claim, $request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, change claim status'), 400);
     }
@@ -475,11 +481,14 @@ class ClaimController extends Controller
      *
      * @method addNoteCurrentStatus
      */
-    public function addNoteCurrentStatus(Request $request, int $id): JsonResponse
-    {
-        $rs = $this->claimRepository->addNoteCurrentStatus($request, $id);
+    public function addNoteCurrentStatus(
+        CreateNoteRequest $request,
+        CreateNoteAction $create,
+        ClaimsClaim $claim
+    ): JsonResponse {
+        $rs = $create->invoke($claim, $request->casted());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, change claim status'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error, create note in status claim'), 400);
     }
 
     /**
