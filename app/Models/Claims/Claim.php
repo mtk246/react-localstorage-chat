@@ -390,31 +390,49 @@ class Claim extends Model implements Auditable
             ->sync($insurancePolicies->toArray());
     }
 
-    public function setStates(?int $status, ?int $subStatus, ?string $note): void
+    public function setStates(int $status, ?int $subStatus, ?string $note): void
     {
-        if (null !== $status) {
-            $claimStatusClaim = ClaimStatusClaim::create([
+        $statusCurrent = $this->claimStatusClaims()
+            ->where('claim_status_type', ClaimStatus::class)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->first() ?? null;
+        $subStatusCurrent = $this->claimStatusClaims()
+            ->where('claim_status_type', ClaimSubStatus::class)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->first() ?? null;
+
+        if ($status !== $statusCurrent?->claim_status_id) {
+            $claimStatus = ClaimStatusClaim::create([
                 'claim_id' => $this->id,
                 'claim_status_type' => ClaimStatus::class,
                 'claim_status_id' => $status,
             ]);
         }
-
-        if (null !== $subStatus) {
-            $claimStatusClaim = ClaimStatusClaim::create([
-                'claim_id' => $this->id,
-                'claim_status_type' => ClaimSubStatus::class,
-                'claim_status_id' => $subStatus,
-            ]);
-        }
-
-        if (null !== $note) {
+        if ((null === $subStatus) && !empty($note)) {
             PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
-                'publishable_id' => $claimStatusClaim->id,
+                'publishable_id' => $claimStatus?->id ?? $statusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
                 'note' => $note,
             ]);
+        } else {
+            if ($subStatus !== $subStatusCurrent?->claim_status_id) {
+                $claimSubStatus = ClaimStatusClaim::create([
+                    'claim_id' => $this->id,
+                    'claim_status_type' => ClaimSubStatus::class,
+                    'claim_status_id' => $subStatus,
+                ]);
+            }
+            if (!empty($note)) {
+                PrivateNote::create([
+                    'publishable_type' => ClaimStatusClaim::class,
+                    'publishable_id' => $claimSubStatus?->id ?? $subStatusCurrent->id,
+                    'billing_company_id' => $this->billing_company_id,
+                    'note' => $note,
+                ]);
+            }
         }
     }
 
