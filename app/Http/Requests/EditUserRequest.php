@@ -37,7 +37,7 @@ class EditUserRequest extends FormRequest
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
-            'profile.ssn' => ['required', 'string'],
+            'profile.ssn' => ['nullable', 'string'],
             'profile.date_of_birth' => ['required', 'date'],
 
             'profile.social_medias' => ['sometimes', 'array'],
@@ -54,6 +54,8 @@ class EditUserRequest extends FormRequest
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],
+            'address.apt_suite' => ['required', 'string'],
+            'address.country' => ['required', 'string'],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],

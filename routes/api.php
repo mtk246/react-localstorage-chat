@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
+use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Reports\ReportReSource;
@@ -55,7 +56,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
-        Route::get('{id}/', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
+        Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
         Route::post('send-email-rescue-pass', [\App\Http\Controllers\UserController::class, 'sendEmailRescuePass']);
         Route::post('recovery-user', [\App\Http\Controllers\UserController::class, 'recoveryUser']);
         Route::post('unlock-user', [\App\Http\Controllers\UserController::class, 'unlockUser']);
@@ -499,6 +500,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
+        Route::resource('rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
     Route::prefix('claim-sub-status')->middleware([

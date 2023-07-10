@@ -1,16 +1,19 @@
 <?php
 
-//declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Actions\Claim\CreateAction;
+use App\Actions\Claim\CreateCheckEligibilityAction;
 use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
+use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\UpdateClaimAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
@@ -93,14 +96,19 @@ class ClaimController extends Controller
         );
     }
 
-    public function getServerAll(Request $request)
-    {
-        return $this->claimRepository->getServerAll($request);
+    public function getServerAll(
+        Request $request,
+        ClaimsClaim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->all($claim, $request));
     }
 
-    public function getOneClaim(ClaimsClaim $claim): JsonResponse
-    {
-        return response()->json($claim->load(['demographicInformation', 'services', 'insurancePolicies']));
+    public function getOneClaim(
+        ClaimsClaim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->single($claim));
     }
 
     public function getListClaimServices(Request $request)
@@ -245,17 +253,18 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error claim eligibility'), 400);
     }
 
-    public function storeCheckEligibility(ClaimEligibilityRequest $request)
-    {
-        if (true == ($request->automatic_eligibility ?? false)) {
-            $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+    public function storeCheckEligibility(
+        ClaimEligibilityRequest $request,
+        GetSecurityAuthorizationAction $getAccessToken,
+        CreateCheckEligibilityAction $createEligibility
+    ) {
+        $token = $getAccessToken->invoke();
 
-            if (!isset($token)) {
-                return response()->json(__('Error get security authorization access token'), 400);
-            }
+        if (empty($token) && true === $request->demographic_information['automatic_eligibility']) {
+            return response()->json(__('Error get security authorization access token'), 400);
         }
 
-        $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());
+        $rs = $createEligibility->invoke($token ?? '', $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error claim eligibility'), 400);
     }

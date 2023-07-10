@@ -10,6 +10,52 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * App\Models\Claims\PatientAdditionalInformation.
+ *
+ * @property int $id
+ * @property int $claim_id
+ * @property string $admission_date
+ * @property string $admission_time
+ * @property string $discharge_date
+ * @property string $discharge_time
+ * @property array $condition_code_ids
+ * @property string $admission_type_id
+ * @property string $admission_source_id
+ * @property string $patient_status_id
+ * @property string $bill_classification_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property TypeCatalog|null $admissionSource
+ * @property TypeCatalog|null $admissionType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property TypeCatalog|null $billClassification
+ * @property \App\Models\Claims\Claim $claim
+ * @property mixed $condition_codes
+ * @property TypeCatalog|null $patientStatus
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereAdmissionDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereAdmissionSourceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereAdmissionTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereAdmissionTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereBillClassificationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereClaimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereConditionCodeIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereDischargeDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereDischargeTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation wherePatientStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereUpdatedAt($value)
+ *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ *
+ * @mixin \Eloquent
+ */
 final class PatientAdditionalInformation extends Model implements Auditable
 {
     use HasFactory;
