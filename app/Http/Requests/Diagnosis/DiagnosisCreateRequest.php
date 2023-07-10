@@ -35,11 +35,15 @@ class DiagnosisCreateRequest extends FormRequest
             'end_date' => ['nullable', 'date'],
             'description' => ['required', 'string', 'max:255'],
             'injury_date_required' => ['nullable', 'boolean'],
-            'note' => ['required', 'string'],
+            'note' => ['nullable', 'string'],
             'description_long' => ['nullable', 'string'],
             'gender_id' => ['nullable', 'integer'],
-            'age' => ['nullable', 'string'],
+            'age' => [
+                'required_if:injury_date_required,true', 
+                'string'
+            ],
             'age_end' => ['nullable', 'string'],
+            'discriminatory_id' => ['nullable', 'numeric'],
 
             'type' => ['required', new Enum(DiagnosesType::class)],
             'clasifications' => ['nullable', 'array'],
