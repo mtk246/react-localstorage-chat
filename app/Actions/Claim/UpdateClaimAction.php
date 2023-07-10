@@ -14,7 +14,7 @@ final class UpdateClaimAction
     {
         return DB::transaction(function () use (&$claim, $claimData) {
             $claim->setDemographicInformation($claimData->getDemographicInformation());
-            $claim->setServices($claimData->getClaimServices());
+            $claim->setServices($claimData->getClaimServices(), $claimData->getAdditionalInformation());
             $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
             $claim->setStates($claimData->getStatus(), $claimData->getSubStatus(), $claimData->getPrivateNote());
             $claim->setAdditionalInformation($claimData->getAdditionalInformation());

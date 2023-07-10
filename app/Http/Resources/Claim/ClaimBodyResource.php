@@ -33,7 +33,8 @@ final class ClaimBodyResource extends JsonResource
             ),
             'additional_information' => new AdditionalInformationResource(
                 $this->resource,
-                $this->resource->type->value
+                $this->resource->type->value,
+                $this->resource->service
             ),
             'insurance_policies' => $this->resource->insurancePolicies->map(function ($model) {
                 return new InsurancePolicyResource($model);
@@ -251,6 +252,7 @@ final class ClaimBodyResource extends JsonResource
             'insurance_plan_id' => $policyPrimary?->insurancePlan?->id ?? '',
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
+            'batch' => $policyPrimary?->batch ?? '',
         ];
     }
 }
