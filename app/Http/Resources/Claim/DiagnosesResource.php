@@ -19,7 +19,9 @@ final class DiagnosesResource extends JsonResource
     {
         $commonFields = [
             'item' => $this->resource->pivot->item,
-            'diagnosis_id' => $this->resource->pivot->diagnosis_id,
+            'diagnosis_id' => $this->resource->id,
+            'code' => $this->resource->code,
+            'description' => $this->resource->description,
         ];
 
         $specificFields = match ($this->type) {

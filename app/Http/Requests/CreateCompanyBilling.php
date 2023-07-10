@@ -35,7 +35,11 @@ class CreateCompanyBilling extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => [
+                'required',
+                'email:rfc',
+                'unique:contacts,email',
+            ],
             'contact.contact_name' => ['nullable', 'string'],
             'logo' => ['nullable', 'file', 'mimes:jpg,png', 'max:1024'],
             'abbreviation' => ['nullable', 'string'],

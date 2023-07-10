@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Claim;
 
+use App\Http\Casts\Claims\ChangeStatusRequestWrapper;
+use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClaimChangeStatusRequest extends FormRequest
+final class ClaimChangeStatusRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+    use HasCastedClass;
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    protected string $castedClass = ChangeStatusRequestWrapper::class;
+
+    /** @return array<string, mixed> */
+    public function rules(): array
     {
         return [
             'status_id' => ['required', 'integer'],
