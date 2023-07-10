@@ -47,7 +47,7 @@ final class StoreRequestWrapper extends CastsRequest
     public function getSubStatus(): ?int
     {
         return $this->getDraft()
-            ? $this->get('sub_status_id') ?? null
+            ? $this->get('sub_status_id')
             : null;
     }
 
@@ -58,7 +58,9 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getPrivateNote(): ?string
     {
-        return $this->get('private_note') ?? null;
+        return $this->getDraft()
+            ? $this->get('private_note')
+            : ((false === ($this->get('demographic_information')['validate'] ?? false)) ? 'Manual verification' : 'API verification');
     }
 
     public function getClaimServices(): ClaimServicesWrapper
