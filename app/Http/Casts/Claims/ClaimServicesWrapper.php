@@ -9,14 +9,6 @@ use Illuminate\Support\Collection;
 
 final class ClaimServicesWrapper extends CastsRequest
 {
-    public function getData(): array
-    {
-        return [
-            'diagnosis_related_group_id' => $this->get('diagnosis_related_group_id'),
-            'non_covered_charges' => $this->get('non_covered_charges'),
-        ];
-    }
-
     public function getService(): Collection
     {
         return $this->getCollect('services')
