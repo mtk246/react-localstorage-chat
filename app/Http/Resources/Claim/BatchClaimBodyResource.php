@@ -22,6 +22,7 @@ final class BatchClaimBodyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
+            'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'submitter_name' => $this->resource->submitter_name,
@@ -280,6 +281,17 @@ final class BatchClaimBodyResource extends JsonResource
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')->first();
 
-        return json_decode($transmissionCurrent->response_details ?? null);
+        return json_decode($transmissionCurrent?->response_details ?? '');
+    }
+
+    private function getBillingProvider(): ?string
+    {
+        $billing = $this->resource->demographicInformation->healthProfessionals()
+            ->wherePivot('field_id', 5)
+            ->first();
+
+        return !empty($billing)
+            ? $billing->user->profile->first_name.' '.$billing->user->profile->last_name
+            : '';
     }
 }

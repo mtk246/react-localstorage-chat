@@ -17,7 +17,7 @@ final class ClaimBodyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
-            'billing_provider' => 'Name Billing provider',
+            'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'submitter_name' => $this->resource->submitter_name,
@@ -255,5 +255,16 @@ final class ClaimBodyResource extends JsonResource
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
         ];
+    }
+
+    private function getBillingProvider(): ?string
+    {
+        $billing = $this->resource->demographicInformation->healthProfessionals()
+            ->wherePivot('field_id', 5)
+            ->first();
+
+        return !empty($billing)
+            ? $billing->user->profile->first_name.' '.$billing->user->profile->last_name
+            : '';
     }
 }
