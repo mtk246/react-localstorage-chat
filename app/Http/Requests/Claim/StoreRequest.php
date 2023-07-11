@@ -120,22 +120,33 @@ final class StoreRequest extends FormRequest
             'additional_information' => ['nullable', 'array'],
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
-            'additional_information.patient_information.admission_date' => ['sometimes', 'date'],
+            'additional_information.patient_information.admission_date' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
             'additional_information.patient_information.admission_time' => ['nullable', 'date_format:H:i:s'],
-            'additional_information.patient_information.discharge_date' => ['sometimes', 'date'],
+            'additional_information.patient_information.discharge_date' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
             'additional_information.patient_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.patient_information.condition_code_ids' => ['nullable', 'array'],
             'additional_information.patient_information.admission_type_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.admission_source_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.patient_status_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.bill_classification_id' => ['nullable', 'integer'],
 
