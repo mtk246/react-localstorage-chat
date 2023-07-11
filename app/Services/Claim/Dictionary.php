@@ -28,7 +28,7 @@ abstract class Dictionary implements DictionaryInterface
 
     public function translate(string $key): array|string|bool
     {
-        if (array_key_exists($key, $this->config)) {
+        if (!array_key_exists($key, $this->config)) {
             throw new \InvalidArgumentException('Invalid format key');
         }
 
@@ -47,7 +47,7 @@ abstract class Dictionary implements DictionaryInterface
     public function toArray(): array
     {
         return array_map(function ($key) {
-            return $this->translate($key);
+            return $this->translate((string) $key);
         }, array_keys($this->config));
     }
 
@@ -110,8 +110,10 @@ abstract class Dictionary implements DictionaryInterface
                         : [],
                 ];
             })
-            ->reduce(function (Model $carry, object $item) {
-                return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
+            ->reduce(function (?Model $carry, object $item) {
+                return property_exists($carry, $item->key)
+                    ? $carry->{$item->key}
+                    : $carry->{$item->key}(...$item->properties);
             }, $this->claim);
     }
 
