@@ -232,7 +232,7 @@ class UserRepository
 
         $data = $data->paginate($request->itemsPerPage);
 
-        return UserResource::collection($data);
+        return UserResource::collection($data)->resource;
     }
 
     /**
