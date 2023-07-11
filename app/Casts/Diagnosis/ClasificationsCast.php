@@ -23,7 +23,7 @@ final class ClasificationsCast implements CastsAttributes
             return null;
         }
 
-        $clasifications = json_decode($value);
+        $clasifications = (object) json_decode($value);
 
         $type_id = isset($model->type?->value) ? $model->type->value : $model->type;
 
