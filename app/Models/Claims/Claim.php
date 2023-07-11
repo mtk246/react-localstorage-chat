@@ -165,6 +165,11 @@ class Claim extends Model implements Auditable
         return $this->hasMany(ClaimStatusClaim::class);
     }
 
+    public function claimTransmissionResponses()
+    {
+        return $this->hasMany(ClaimTransmissionResponse::class);
+    }
+
     public function status(): MorphToMany
     {
         return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claim');
@@ -359,18 +364,8 @@ class Claim extends Model implements Auditable
                 $demographicInformationData->getData()
             );
 
-        $healthProfessionals = $demographicInformationData->getHealthProfessionals();
-        $data = [];
-        foreach ($healthProfessionals as $pivot) {
-            $data[$pivot['health_professional_id']] = [
-                'claim_id' => $demographicInformation['claim_id'],
-                'health_professional_id' => $pivot['health_professional_id'],
-                'field_id' => $pivot['field'],
-                'qualifier_id' => $pivot['qualifier_id'],
-            ];
-        }
-
-        $demographicInformation->healthProfessionals()->sync($data);
+        $demographicInformation->healthProfessionals()->detach();
+        $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
     }
 
     public function setServices(

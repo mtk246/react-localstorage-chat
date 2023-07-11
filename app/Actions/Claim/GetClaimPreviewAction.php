@@ -25,9 +25,7 @@ final class GetClaimPreviewAction
             $claim = Claim::query()
                 ->where('id', $data['id'] ?? null)
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($user): void {
-                    $query->whereHas('claimFormattable', function ($query) use ($user) {
-                        $query->where('billing_company_id', $user->billingCompanies->first()?->id);
-                    });
+                    $query->where('billing_company_id', $user->billingCompanies->first()?->id);
                 })
                 ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
@@ -35,8 +33,12 @@ final class GetClaimPreviewAction
             return $this->claimService->create(
                 FormatType::FILE,
                 $claim,
-                $claim->demographicInformation->company,
-                $claim->insurancePolicies->first()->insurancePlan->insuranceCompany,
+                $claim->demographicInformation->company ?? null,
+                $claim->insurancePolicies()
+                    ->wherePivot('order', 1)
+                    ?->first()
+                    ?->insurancePlan
+                    ?->insuranceCompany ?? null,
             )->toArray();
         });
     }

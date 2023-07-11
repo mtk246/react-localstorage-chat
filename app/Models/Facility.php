@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -110,6 +112,7 @@ class Facility extends Model implements Auditable
         'npi',
         'facility_type_id',
         'nppes_verified_at',
+        'abbreviation',
     ];
 
     /**
@@ -205,6 +208,22 @@ class Facility extends Model implements Auditable
     public function abbreviations()
     {
         return $this->morphMany(EntityAbbreviation::class, 'abbreviable');
+    }
+
+    /**
+     * Company morphs one publicNote.
+     */
+    public function publicNote(): MorphOne
+    {
+        return $this->morphOne(PublicNote::class, 'publishable');
+    }
+
+    /**
+     * Company morphs many privateNotes.
+     */
+    public function privateNotes(): MorphMany
+    {
+        return $this->morphMany(PrivateNote::class, 'publishable');
     }
 
     /**
