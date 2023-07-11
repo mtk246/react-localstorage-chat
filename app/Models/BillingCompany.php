@@ -236,8 +236,11 @@ class BillingCompany extends Model implements Auditable
         if ('' != $search) {
             return $query->whereHas('contacts', function ($q) use ($search) {
                 $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                          ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
+            })
+            ->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(tax_id) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(abbreviation) LIKE (?)', [strtolower("%$search%")]);
         }
 
         return $query;
