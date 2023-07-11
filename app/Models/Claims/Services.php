@@ -176,7 +176,7 @@ final class Services extends Model
      */
     public function revenueCode()
     {
-        return $this->belongsTo(TypeCatalog::class, 'revenue_code_id');
+        return $this->belongsTo(Procedure::class, 'revenue_code_id');
     }
 
     public function getModifiersAttribute()
