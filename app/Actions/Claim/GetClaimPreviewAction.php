@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Enums\Claim\FormatType;
-use App\Models\Claim;
+use App\Models\Claims\Claim;
 use App\Models\User;
 use App\Services\ClaimService;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,13 +29,14 @@ final class GetClaimPreviewAction
                         $query->where('billing_company_id', $user->billingCompanies->first()?->id);
                     });
                 })
+                ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
 
             return $this->claimService->create(
                 FormatType::FILE,
                 $claim,
-                $claim->claimFormattable->billingCompany,
-                $claim->claimFormattable->insuranceCompany
+                $claim->demographicInformation->company,
+                $claim->insurancePolicies->first()->insurancePlan->insuranceCompany,
             )->toArray();
         });
     }
