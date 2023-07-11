@@ -92,7 +92,7 @@ final class ClaimBodyResource extends JsonResource
                         ->orderBy('id', 'desc')->get() ?? [];
         foreach ($history as $status) {
             match ($status->claim_status_type) {
-                ClaimSubStatus::class => $this->setSubstatus($status, $records),
+                ClaimSubStatus::class => $this->setSubstatus($status, $recordSubstatus),
                 ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
             };
         }
