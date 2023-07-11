@@ -359,6 +359,7 @@ class Claim extends Model implements Auditable
                 $demographicInformationData->getData()
             );
 
+        $demographicInformation->healthProfessionals()->detach();
         $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
     }
 
