@@ -20,8 +20,8 @@ abstract class Dictionary implements DictionaryInterface
 
     public function __construct(
         protected readonly Claim $claim,
-        protected readonly Company $company,
-        protected readonly InsuranceCompany $insuranceCompany,
+        protected readonly ?Company $company,
+        protected readonly ?InsuranceCompany $insuranceCompany,
     ) {
         $this->setConfigFor();
     }

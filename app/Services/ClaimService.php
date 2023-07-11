@@ -14,7 +14,7 @@ use App\Services\Claim\X12Dictionary;
 
 final class ClaimService
 {
-    public function create(FormatType $formatType, Claim $claim, Company $company, InsuranceCompany $insuranceCompany): DictionaryInterface
+    public function create(FormatType $formatType, Claim $claim, ?Company $company, ?InsuranceCompany $insuranceCompany): DictionaryInterface
     {
         return match ($formatType) {
             FormatType::FILE => new FileDictionary($claim, $company, $insuranceCompany),
