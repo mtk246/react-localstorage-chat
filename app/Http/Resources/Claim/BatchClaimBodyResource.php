@@ -9,15 +9,19 @@ use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-final class ClaimBodyResource extends JsonResource
+final class BatchClaimBodyResource extends JsonResource
 {
+    public function __construct($resource, protected int $claimBatchId)
+    {
+        parent::__construct($resource);
+    }
+
     /** @return array<string, mixed> */
     public function toArray($request): array
     {
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
-            'billing_provider' => 'Name Billing provider',
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'submitter_name' => $this->resource->submitter_name,
@@ -54,6 +58,8 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'transmission_status' => $this->getClaimTransmissionStatus(),
+            'transmission_response' => $this->getClaimTransmissionResponse(),
         ];
     }
 
@@ -255,5 +261,25 @@ final class ClaimBodyResource extends JsonResource
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
         ];
+    }
+
+    private function getClaimTransmissionStatus()
+    {
+        $transmissionCurrent = $this->claimTransmissionResponses()
+            ->where('claim_batch_id', $this->claimBatchId)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'asc')->first();
+
+        return $transmissionCurrent->claimTransmissionStatus ?? null;
+    }
+
+    private function getClaimTransmissionResponse()
+    {
+        $transmissionCurrent = $this->claimTransmissionResponses()
+            ->where('claim_batch_id', $this->claimBatchId)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'asc')->first();
+
+        return json_decode($transmissionCurrent->response_details ?? null);
     }
 }
