@@ -12,7 +12,7 @@ final class ServiceResource extends JsonResource
     public function __construct(
         $resource,
         protected int $type,
-        protected int $company_id
+        protected ?int $company_id
     ) {
         parent::__construct($resource);
     }
@@ -48,11 +48,11 @@ final class ServiceResource extends JsonResource
 
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
-                'revenue_code_id' => $this->resource->revenue_code_id,
+                'revenue_code_id' => (int) $this->resource->revenue_code_id ?? '',
                 'revenue_codes' => isset($this->resource->revenueCode)
                     ? [
                         [
-                            'id' => $this->resource->revenue_code_id,
+                            'id' => (int) $this->resource->revenue_code_id,
                             'name' => $this->resource->revenueCode->code,
                             'description' => $this->resource->revenueCode->description,
                         ],
@@ -62,12 +62,13 @@ final class ServiceResource extends JsonResource
             ],
             ClaimType::PROFESSIONAL->value => [
                 'modifier_ids' => $this->resource->modifier_ids,
-                'place_of_service_id' => $this->resource->place_of_service_id,
-                'type_of_service_id' => $this->resource->type_of_service_id,
+                'modifiers' => $this->resource->modifiers,
+                'place_of_service_id' => (int) $this->resource->place_of_service_id,
+                'type_of_service_id' => (int) $this->resource->type_of_service_id,
                 'diagnostic_pointers' => $this->resource->diagnostic_pointers,
-                'emg' => $this->resource->emg,
-                'epsdt_id' => $this->resource->epsdt_id,
-                'family_planning_id' => $this->resource->family_planning_id,
+                'emg' => (bool) $this->resource->emg,
+                'epsdt_id' => (int) $this->resource->epsdt_id,
+                'family_planning_id' => (int) $this->resource->family_planning_id,
             ],
             default => throw new \InvalidArgumentException('Invalid format type'),
         };

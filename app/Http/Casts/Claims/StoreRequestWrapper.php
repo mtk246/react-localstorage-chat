@@ -46,7 +46,7 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getSubStatus(): ?int
     {
-        return !$this->getDraft()
+        return $this->getDraft()
             ? $this->get('sub_status_id')
             : null;
     }
@@ -56,6 +56,13 @@ final class StoreRequestWrapper extends CastsRequest
         return $this->cast('demographic_information', DemographicInformationWrapper::class);
     }
 
+    public function getPrivateNote(): ?string
+    {
+        return $this->getDraft()
+            ? $this->get('private_note')
+            : ((false === ($this->get('demographic_information')['validate'] ?? false)) ? 'Manual verification' : 'API verification');
+    }
+
     public function getClaimServices(): ClaimServicesWrapper
     {
         return $this->cast('claim_services', ClaimServicesWrapper::class);
@@ -63,7 +70,7 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getPoliciesInsurances(): Collection
     {
-        return $this->getCollect('policies_insurances')
+        return $this->getCollect('insurance_policies')
             ->mapWithKeys(function (array $policy) {
                 return [$policy['insurance_policy_id'] => ['order' => $policy['order']]];
             });

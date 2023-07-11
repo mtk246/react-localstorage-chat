@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Claim;
 
-use App\Enums\Claim\RuleFormatType;
+use App\Enums\Claim\ClaimType;
+use App\Http\Casts\Claim\StoreRulesWrapper;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\Claim\RuleFormatRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
 final class StoreRulesRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return false;
-    }
+    use HasCastedClass;
+
+    protected string $castedClass = StoreRulesWrapper::class;
 
     /** @return array<string, mixed> */
     public function rules()
@@ -23,7 +24,7 @@ final class StoreRulesRequest extends FormRequest
             'name' => 'required|string',
             'format' => [
                 'required',
-                new Enum(RuleFormatType::class),
+                new Enum(ClaimType::class),
             ],
             'rules.file.*' => [
                 'required',
@@ -35,6 +36,7 @@ final class StoreRulesRequest extends FormRequest
                 'array',
                 new RuleFormatRule($this->format),
             ],
+            'parameters' => 'nullable|array',
         ];
     }
 }

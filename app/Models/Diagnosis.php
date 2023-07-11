@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\Diagnosis\ClasificationsCast;
-use app\Enums\Diagnoses\DiagnosesType;
+use App\Enums\Diagnoses\DiagnosesType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -76,6 +76,7 @@ class Diagnosis extends Model implements Auditable
         'age_end',
         'gender_id',
         'status',
+        'discriminatory_id',
     ];
 
     /**
@@ -86,15 +87,9 @@ class Diagnosis extends Model implements Auditable
     protected $appends = ['last_modified'];
 
     protected $casts = [
+        'type' => DiagnosesType::class,
         'clasifications' => ClasificationsCast::class,
     ];
-
-    protected function type(): Attribute
-    {
-        return Attribute::make(
-            set: fn (int $value) => DiagnosesType::tryFrom($value),
-        );
-    }
 
     /**
      * Diagnosis morphs many publicNotes.
@@ -124,6 +119,16 @@ class Diagnosis extends Model implements Auditable
     public function gender()
     {
         return $this->belongsTo(Gender::class, 'gender_id');
+    }
+
+    /**
+     * The Diagnosis that belong to the Gender.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function discriminatory()
+    {
+        return $this->belongsTo(Discriminatory::class, 'discriminatory_id');
     }
 
     /**

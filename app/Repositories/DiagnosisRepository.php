@@ -26,12 +26,13 @@ class DiagnosisRepository
                 'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => collect($data['clasifications'])->filter()->toArray(),
+                'clasifications' => collect($data['clasifications']?? [])->filter()->toArray(),
                 'description_long' => $data['description_long'] ?? null,
                 'age' => $data['age'] ?? null,
                 'age_end' => $data['age_end'] ?? null,
                 'gender_id' => $data['gender_id'] ?? null,
-                'injury_date_required' => $data['injury_date_required'] ?? null
+                'injury_date_required' => $data['injury_date_required'] ?? false,
+                //'discriminatory_id' => $data['discriminatory_id'] ?? null
             ]);
 
             if (isset($data['note'])) {
@@ -48,7 +49,7 @@ class DiagnosisRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
@@ -77,6 +78,7 @@ class DiagnosisRepository
     {
         $data = Diagnosis::with([
             'publicNote',
+            'discriminatory'
         ]);
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
@@ -140,7 +142,8 @@ class DiagnosisRepository
                 'description_long' => $data['description_long'] ?? null,
                 'age' => $data['age'] ?? null,
                 'age_end' => $data['age_end'] ?? null,
-                'gender_id' => $data['gender_id'] ?? null
+                'gender_id' => $data['gender_id'] ?? null,
+                'discriminatory_id' => $data['discriminatory_id'] ?? null,
             ]);
 
             if (isset($data['note'])) {
@@ -157,7 +160,8 @@ class DiagnosisRepository
 
             return Diagnosis::whereId($id)->with([
                 'publicNote',
-                'gender'
+                'gender',
+                'discriminatory'
             ])->first();
         } catch (\Exception $e) {
             DB::rollBack();

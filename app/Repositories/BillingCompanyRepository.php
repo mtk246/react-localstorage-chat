@@ -145,8 +145,6 @@ final class BillingCompanyRepository
             ]);
         }
 
-        $data = $data->where('status', true);
-
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
         }

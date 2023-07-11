@@ -4,46 +4,41 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Claim;
 
+use App\Actions\Claim\GetClaimRuleAction;
+use App\Actions\Claim\StoreClaimRuleAction;
+use App\Actions\Claim\UpdateClaimRuleAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Claim\StoreRulesRequest;
 use App\Http\Requests\Claim\UpdateRulesRequest;
-use App\Models\Claim\Rules;
+use App\Http\Resources\Claim\RuleResource;
+use App\Models\Claims\Rules;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
-final class RulesController extends Controller
+final class RulesResource extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request, GetClaimRuleAction $getRule): JsonResponse
     {
-        return response()->json();
+        return response()->json($getRule->getAll($request->user()->billing_company_id));
     }
 
-    public function create(): JsonResponse
+    public function store(StoreRulesRequest $request, StoreClaimRuleAction $storeRule): JsonResponse
     {
-        return response()->json();
-    }
-
-    public function store(StoreRulesRequest $request): JsonResponse
-    {
-        return response()->json();
+        return response()->json($storeRule->invoke($request->getRulesWrapper()));
     }
 
     public function show(Rules $rules): JsonResponse
     {
-        return response()->json();
+        return response()->json(new RuleResource($rules));
     }
 
-    public function edit(Rules $rules): JsonResponse
+    public function update(UpdateRulesRequest $request, Rules $rules, UpdateClaimRuleAction $updateRule): JsonResponse
     {
-        return response()->json();
-    }
-
-    public function update(UpdateRulesRequest $request, Rules $rules): JsonResponse
-    {
-        return response()->json();
+        return response()->json($updateRule->invoke($rules, $request->getRulesWrapper()));
     }
 
     public function destroy(Rules $rules): JsonResponse
     {
-        return response()->json();
+        return response()->json($rules->delete());
     }
 }
