@@ -190,7 +190,7 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
+                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'CARING FAMILY CORP',
                         'npi' => '1215297064',
                         'nppes_verified_at' => now(),
@@ -234,7 +234,7 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
+                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'ISA HOME CORP.',
                         'npi' => '1205277944',
                         'nppes_verified_at' => now(),
@@ -259,7 +259,7 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
+                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'MACARENA ASSISTED LIVING FACILITY, INC.',
                         'npi' => '1851778658',
                         'nppes_verified_at' => now(),
@@ -284,7 +284,7 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
+                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'MY NEW HOME ALF I, INC.',
                         'npi' => '1699160762',
                         'nppes_verified_at' => now(),

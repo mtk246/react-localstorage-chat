@@ -36,6 +36,7 @@ class ApiController extends Controller
         }
 
         $data = json_decode($response->getBody());
+        
         if (isset($data->Errors)) {
             return response()->json(__('Field contains special character(s) or wrong number of characters'), 404);
         } elseif (isset($data->results[0])) {
@@ -50,8 +51,19 @@ class ApiController extends Controller
             if (!isset($mailingAddress)) {
                 $mailingAddress = $r->addresses[0];
             }
+
+            $other_name = count($r->other_names) > 0 
+                            ? $r->other_names[0]->organization_name 
+                            : null;
+
+            if($other_name) {
+                $r->other_names[0]->organization_name = $r->basic->organization_name; 
+                $r->basic->organization_name = $other_name;  
+            }
+
             $r->contact = [
                 'phone' => $mailingAddress->telephone_number ?? '',
+                'fax' => $mailingAddress->fax_number ?? '',
                 'email' => '',
                 'address' => $mailingAddress->address_1 ?? '',
                 'country' => $mailingAddress->country_name ?? '',
@@ -60,11 +72,12 @@ class ApiController extends Controller
                 'state' => $mailingAddress->state ?? '',
                 'zip' => $mailingAddress->postal_code ?? '',
             ];
+            
 
             // unset($r->enumeration_type);
             unset($r->last_updated_epoch);
             unset($r->created_epoch);
-            unset($r->other_names);
+            //unset($r->other_names);
             unset($r->identifiers);
             unset($r->addresses);
 

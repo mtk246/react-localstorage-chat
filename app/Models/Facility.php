@@ -113,6 +113,7 @@ class Facility extends Model implements Auditable
         'facility_type_id',
         'nppes_verified_at',
         'abbreviation',
+        'other_name'
     ];
 
     /**
@@ -211,7 +212,7 @@ class Facility extends Model implements Auditable
     }
 
     /**
-     * Company morphs one publicNote.
+     * Facility morphs one publicNote.
      */
     public function publicNote(): MorphOne
     {
@@ -219,11 +220,27 @@ class Facility extends Model implements Auditable
     }
 
     /**
-     * Company morphs many privateNotes.
+     * Facility morphs many privateNotes.
      */
     public function privateNotes(): MorphMany
     {
         return $this->morphMany(PrivateNote::class, 'publishable');
+    }
+
+    /**
+     * Facility belongsToMany with FacilityType
+     */
+    public function facilityTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(FacilityType::class, 'type_of_facility')->using(TypeOfFacility::class);
+    }
+
+    /**
+     * Facility belongsToMany with BillClassification
+     */
+    public function billClassifications(): BelongsToMany
+    {
+        return $this->belongsToMany(BillClassification::class, 'facility_bill_clasifications')->using(FacilityBillClassification::class);
     }
 
     /**
