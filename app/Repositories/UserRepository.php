@@ -685,9 +685,9 @@ class UserRepository
     public function search(Request $request)
     {
         $date_of_birth = $request->get('date_of_birth', '');
-        $first_name = upperCaseWords($request->get('first_name', ''));
-        $last_name = upperCaseWords($request->get('last_name',''));
-        $ssn = $request->get('ssn','');
+        $first_name = $request->get('first_name', '');
+        $last_name = $request->get('last_name', '');
+        $ssn = $request->get('ssn', '');
         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
 
         $bC = auth()->user()->billing_company_id ?? null;
