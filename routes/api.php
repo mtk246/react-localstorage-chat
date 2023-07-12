@@ -53,7 +53,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
         Route::get('/get-list-name-suffix', [\App\Http\Controllers\UserController::class, 'getListNameSuffix'])->middleware(['auth:api']);
-        Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
+        Route::get('/search', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
         Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
