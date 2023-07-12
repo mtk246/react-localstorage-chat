@@ -36,7 +36,7 @@ class EditUserRequest extends FormRequest
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
 
-            'company-billing' => ['nullable', 'integer'],
+            'billing_company_id' => ['nullable', 'integer'],
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],
