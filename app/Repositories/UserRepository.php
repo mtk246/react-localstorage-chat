@@ -684,9 +684,9 @@ class UserRepository
 
     public function search(Request $request)
     {
-        $date_of_birth = $request->get('date_of_birth', '');
-        $first_name = $request->get('first_name', '');
-        $last_name = $request->get('last_name', '');
+        $date_of_birth = $request->get('date_of_birth');
+        $first_name = $request->get('first_name');
+        $last_name = $request->get('last_name');
         $ssn = $request->get('ssn', '');
         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
 
@@ -701,12 +701,20 @@ class UserRepository
                 'addresses',
                 'contacts',
                 'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->where('ssn', 'LIKE', "%{$ssn}")
-                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
+            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                $query->when($date_of_birth, function(Builder $query) use ($date_of_birth){
+                    $query->where('date_of_birth', $date_of_birth);
+                })
+                ->when($first_name, function(Builder $query) use ($first_name){
+                    $query->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")]);
+                })
+                ->when($last_name, function(Builder $query) use ($last_name){
+                    $query->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")]);
+                })
+                ->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
+                    $query->where('ssn', 'LIKE', "%{$ssn}");
+                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
+                });
             })->get();
         } else {
             $users = User::with([
@@ -721,12 +729,20 @@ class UserRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->where('ssn', 'LIKE', "%{$ssn}")
-                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
+            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
+                $query->when($date_of_birth, function(Builder $query) use ($date_of_birth){
+                    $query->where('date_of_birth', $date_of_birth);
+                })
+                ->when($first_name, function(Builder $query) use ($first_name){
+                    $query->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")]);
+                })
+                ->when($last_name, function(Builder $query) use ($last_name){
+                    $query->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")]);
+                })
+                ->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
+                    $query->where('ssn', 'LIKE', "%{$ssn}");
+                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
+                });
             })->get();
         }
 
