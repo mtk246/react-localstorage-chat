@@ -20,7 +20,6 @@ use App\Actions\Claim\UpdateClaimAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
-use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\CreateNoteRequest;
@@ -43,32 +42,6 @@ class ClaimController extends Controller
         private ClaimRepository $claimRepository,
         private ProcedureRepository $procedureRepository,
     ) {
-    }
-
-    /**
-     * @param claimCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function saveAsDraft(ClaimDraftRequest $request)
-    {
-        $rs = $this->claimRepository->createClaim($request->validated());
-
-        return $rs ? response()->json($rs) : response()->json(__('Error creating claim'), 400);
-    }
-
-    /**
-     * @param claimCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateAsDraft(ClaimDraftRequest $request, $id)
-    {
-        $data = $request->validated();
-        $data['draft'] = true;
-        $rs = $this->claimRepository->updateClaim($data, $id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
     }
 
     /**
@@ -290,25 +263,6 @@ class ClaimController extends Controller
         $rs = $this->claimRepository->claimValidation($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error claim validation'), 400);
-    }
-
-    /**
-     * @param claimCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function saveAsDraftAndEligibility(ClaimDraftRequest $request)
-    {
-        if (isset($request->claim_id)) {
-            $claim = Claim::find($request->claim_id);
-        } else {
-            $claim = $this->claimRepository->createClaim($request->validated());
-            if (!isset($claim)) {
-                return response()->json(__('Error save claim'), 400);
-            }
-        }
-
-        return $this->checkEligibility($claim->id);
     }
 
     /**
