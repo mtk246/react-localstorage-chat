@@ -52,9 +52,9 @@ final class FacilityCreateRequest extends FormRequest
 
             'address' => ['required', 'array'],
             'address.address' => [
-                'required', 
+                'required',
                 ' string',
-                'doesnt_start_with:POB,pob'
+                'doesnt_start_with:POB,pob',
             ],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
@@ -75,7 +75,7 @@ final class FacilityCreateRequest extends FormRequest
             'other_name' => ['nullable', 'string'],
 
             'types' => ['required', 'array'],
-            'bill_classifications' => ['required', 'array']
+            'bill_classifications' => ['required', 'array'],
         ];
     }
 }

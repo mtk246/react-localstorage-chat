@@ -18,7 +18,7 @@ final class RemoveCompanyRequest extends FormRequest
     {
         return [
             'company_id' => ['required', 'integer'],
-            'billing_company_id' => ['nullable', 'integer']
+            'billing_company_id' => ['nullable', 'integer'],
         ];
     }
 }

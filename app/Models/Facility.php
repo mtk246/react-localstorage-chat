@@ -113,7 +113,7 @@ class Facility extends Model implements Auditable
         'facility_type_id',
         'nppes_verified_at',
         'abbreviation',
-        'other_name'
+        'other_name',
     ];
 
     /**
@@ -228,7 +228,7 @@ class Facility extends Model implements Auditable
     }
 
     /**
-     * Facility belongsToMany with FacilityType
+     * Facility belongsToMany with FacilityType.
      */
     public function facilityTypes(): BelongsToMany
     {
@@ -236,7 +236,7 @@ class Facility extends Model implements Auditable
     }
 
     /**
-     * Facility belongsToMany with BillClassification
+     * Facility belongsToMany with BillClassification.
      */
     public function billClassifications(): BelongsToMany
     {

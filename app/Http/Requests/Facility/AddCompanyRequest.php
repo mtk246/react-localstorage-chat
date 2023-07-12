@@ -26,7 +26,7 @@ final class AddCompanyRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'companies.*.company_id' => [
-                'required', 
+                'required',
                 'integer',
                 'exists:\App\Models\Company,id',
             ],

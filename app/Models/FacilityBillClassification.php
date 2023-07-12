@@ -11,7 +11,7 @@ final class FacilityBillClassification extends Pivot
 {
     use HasFactory;
 
-    protected $table = "facility_bill_clasifications";
-    
-    protected $fillable = ["facility_id", "bill_classification_id"];
+    protected $table = 'facility_bill_clasifications';
+
+    protected $fillable = ['facility_id', 'bill_classification_id'];
 }
