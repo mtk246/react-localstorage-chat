@@ -16,9 +16,9 @@ final class CreateAction
             Claim::query()->create($claimData->getData()),
             function (Claim $claim) use ($claimData): void {
                 $claim->setDemographicInformation($claimData->getDemographicInformation());
-                $claim->setServices($claimData->getClaimServices());
+                $claim->setServices($claimData->getClaimServices(), $claimData->getAdditionalInformation());
                 $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
-                $claim->setStates($claimData->getStatus(), $claimData->getSubStatus());
+                $claim->setStates($claimData->getStatus(), $claimData->getSubStatus(), $claimData->getPrivateNote());
                 $claim->setAdditionalInformation($claimData->getAdditionalInformation());
             },
         )->load(['demographicInformation', 'service', 'insurancePolicies']));
