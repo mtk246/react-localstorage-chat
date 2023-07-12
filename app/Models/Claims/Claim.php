@@ -165,6 +165,11 @@ class Claim extends Model implements Auditable
         return $this->hasMany(ClaimStatusClaim::class);
     }
 
+    public function claimTransmissionResponses()
+    {
+        return $this->hasMany(ClaimTransmissionResponse::class);
+    }
+
     public function status(): MorphToMany
     {
         return $this->morphedByMany(ClaimStatus::class, 'claim_status', 'claim_status_claim');
@@ -359,6 +364,7 @@ class Claim extends Model implements Auditable
                 $demographicInformationData->getData()
             );
 
+        $demographicInformation->healthProfessionals()->detach();
         $demographicInformation->healthProfessionals()->sync($demographicInformationData->getHealthProfessionals());
     }
 
