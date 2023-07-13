@@ -19,6 +19,7 @@
 - [Remove to company](#remove-to-company)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list facilities](#get-list)
+- [Get list bill classifications](#get-bill-classifications)
 
 
 <a name="basic-data"></a>
@@ -40,9 +41,10 @@
 | 11 |GET | `Get list facility types`| `/facility/get-list-facility-types`        |yes            |Get list facility types|
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
-| 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
+| 14 |PATCH | `Remove to company`          | `/{facility}/remove-company`|yes|Remove facility to company|
 | 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 16 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
+| 17 |GET   | `Get list bill classifications`  | `/bill-classifications/{facility_type}`|yes|Get list bill classifications|
 
 
 
@@ -82,7 +84,7 @@
     "nickname":"alias facilityName",
     "abbreviation":"ABBFAC",
     "billing_company_id": 1, /** Only required by superuser */
-    "place_of_services": [1,2],
+    "place_of_services": [1,2,5,6],
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -90,29 +92,36 @@
             "primary": true
         },
         {
-            "tax_id": "TAX01213",
+            "tax_id": "TAX01214",
             "name": "NameTaxonomy",
             "primary": false
         },
         {
-            "tax_id": "TAX01213",
+            "tax_id": "TAX01215",
             "name": "NameTaxonomy",
             "primary": false
         }
     ],
-    "npi":"123fac321",
+    "npi":"123fa1c321",
     "address":{
-        "address":"address Facility",
+        "address":"pob address Facility",
         "city":"city Facility",
         "state":"state Facility",
-        "zip":234
+        "country": "country Facility",
+        "zip":"234",
+        "apt_suite": "Apt suite value"
     },
     "contact":{
         "phone":"34324234",
         "mobile":"34324234",
         "fax":"567674576457",
-        "email":"facility@facility.com"
-    }
+        "email":"facility4@facility.com"
+    },
+    "public_note": "Public Note",
+    "private_note": "Private Note",
+    "types": [1,2,3],
+    "bill_classifications": [1,21],
+    "other_name": "Other name test"
 }
 ```
 
@@ -133,15 +142,18 @@
 
 ```json
 {
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
-    "verified_on_nppes": true,
+    "code": "NAME-00001-2023",
+    "name": "Facilityname",
+    "npi": "123fa1c321",
     "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "id": 1,
-    "status": false
+    "nppes_verified_at": "2023-07-13T20:08:16.482022Z",
+    "abbreviation": "ABBFAC",
+    "other_name": "Other name test",
+    "updated_at": "2023-07-13T20:08:16.000000Z",
+    "created_at": "2023-07-13T20:08:16.000000Z",
+    "id": 20,
+    "status": false,
+    "verified_on_nppes": true
 }
 ```
 
@@ -1107,8 +1119,24 @@
 ## Param in path
 
 `facility_id required integer`
-`company_id  required integer`
 
+### Body request example
+#
+
+```json
+{
+    "companies": [
+        {
+            "billing_company_id": 2, /** Only required by superuser */
+            "company_id": 2
+        },
+        {
+            "billing_company_id": 1,
+            "company_id": 2
+        },
+    ]
+}
+```
 
 ## Response
 
@@ -1116,15 +1144,18 @@
 
 ```json
 {
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
+    "id": 20,
     "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "verified_on_nppes": true,
-    "id": 1,
-    "status": true
+    "name": "Facilityname",
+    "npi": "123fa1c321",
+    "created_at": "2023-07-13T20:08:16.000000Z",
+    "updated_at": "2023-07-13T20:08:16.000000Z",
+    "code": "NAME-00001-2023",
+    "nppes_verified_at": "2023-07-13",
+    "abbreviation": "ABBFAC",
+    "other_name": "Other name test",
+    "status": false,
+    "verified_on_nppes": true
 }
 ```
 
@@ -1148,8 +1179,15 @@
 ## Param in path
 
 `facility_id required integer`
-`company_id  required integer`
 
+### Body request example
+#
+
+```json
+{
+    "company_id": 2
+}
+```
 
 ## Response
 
@@ -1157,15 +1195,18 @@
 
 ```json
 {
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
+    "id": 20,
     "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "verified_on_nppes": true,
-    "id": 1,
-    "status": true
+    "name": "Facilityname",
+    "npi": "123fa1c321",
+    "created_at": "2023-07-13T20:08:16.000000Z",
+    "updated_at": "2023-07-13T20:08:16.000000Z",
+    "code": "NAME-00001-2023",
+    "nppes_verified_at": "2023-07-13",
+    "abbreviation": "ABBFAC",
+    "other_name": "Other name test",
+    "status": false,
+    "verified_on_nppes": true
 }
 ```
 
@@ -1277,3 +1318,59 @@
     }
 ]
 ```
+
+<a name="get-bill-classification"></a>
+## Get bill classifications from facility type
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`facility_type_id <facility_type>`
+
+
+## Response
+
+> {success} 200 
+
+```json
+[
+    {
+        "id": 1006,
+        "name": "Hospice (Non-Hospital Based)"
+    },
+    {
+        "id": 1007,
+        "name": "Hospice (Hospital Based)"
+    },
+    {
+        "id": 1008,
+        "name": "Ambulatory Surgery Center"
+    },
+    {
+        "id": 1009,
+        "name": "Free Standing Birthing Center"
+    },
+    {
+        "id": 1010,
+        "name": "CAH (Critical Access Hospital) / Rural Primary Care Hospital"
+    },
+    {
+        "id": 1011,
+        "name": "Residential Facility (not used for Medicare)"
+    },
+    {
+        "id": 1012,
+        "name": "Other"
+    }
+]
+```
+#
+
+>{warning} 404 Error, get classifications not found
