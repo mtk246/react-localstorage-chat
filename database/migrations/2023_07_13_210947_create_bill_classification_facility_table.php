@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create('facility_bill_clasifications', function (Blueprint $table) {
+        Schema::create('bill_classification_facility', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
 
@@ -23,6 +23,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('facility_bill_clasifications');
+        Schema::dropIfExists('bill_classification_facility');
     }
 };

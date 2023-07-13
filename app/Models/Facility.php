@@ -240,7 +240,7 @@ class Facility extends Model implements Auditable
      */
     public function billClassifications(): BelongsToMany
     {
-        return $this->belongsToMany(BillClassification::class, 'facility_bill_clasifications')->using(FacilityBillClassification::class);
+        return $this->belongsToMany(BillClassification::class);
     }
 
     /**

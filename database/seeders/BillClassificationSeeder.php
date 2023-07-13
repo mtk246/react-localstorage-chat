@@ -41,7 +41,7 @@ final class BillClassificationSeeder extends Seeder
         FacilityType::where('type', $type->id)->delete();
 
         // Estructura para la nueva logica de bill classifications
-        $bill_classification = [
+        $bill_classifications = collect([
             ['name' => 'Inpatient (Including Medicare Part A)'],
             ['name' => 'Inpatient (Medicare Part B Only)'],
             ['name' => 'Outpatient'],
@@ -66,26 +66,37 @@ final class BillClassificationSeeder extends Seeder
             ['name' => 'Residential Facility (not used for Medicare)'],
 
             ['name' => 'Other'],
-        ];
+        ]);
 
-        BillClassification::insert($bill_classification);
+        $bill_ids = $bill_classifications->map(fn ($item) => [
+            BillClassification::create(['name' => $item['name']])->id,
+        ]);
+
+        $ids = [];
+
+        foreach ($bill_ids as $value) {
+            array_push($ids, $value[0]);
+        }
 
         $facility_type = FacilityType::all();
 
         foreach ($facility_type as $type) {
             if ($type->id <= 6) {
-                $type->bill_classifications()->attach([1, 2, 3, 4, 5, 6, 7, 8, 21]);
+                $current_ids = array_slice($ids, 0, 8, true);
+                $type->bill_classifications()->attach($current_ids);
+                $type->bill_classifications()->attach(end($ids));
             }
 
             if (7 == $type->id) {
-                $type->bill_classifications()->attach([9, 10, 11, 12, 13, 14, 21]);
+                $current_ids = array_slice($ids, 8, 6, true);
+                $type->bill_classifications()->attach($current_ids);
+                $type->bill_classifications()->attach(end($ids));
             }
 
             if (8 == $type->id) {
-                $type->bill_classifications()->attach([15, 16, 17, 18, 19, 20, 21]);
+                $current_ids = array_slice($ids, 14, 7, true);
+                $type->bill_classifications()->attach($current_ids);
             }
         }
-
-        dd($facility_type[0]->bill_classifications);
     }
 }

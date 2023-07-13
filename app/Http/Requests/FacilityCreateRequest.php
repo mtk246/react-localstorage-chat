@@ -53,7 +53,7 @@ final class FacilityCreateRequest extends FormRequest
             'address' => ['required', 'array'],
             'address.address' => [
                 'required',
-                ' string',
+                'string',
                 'doesnt_start_with:POB,pob',
             ],
             'address.city' => ['required', 'string'],

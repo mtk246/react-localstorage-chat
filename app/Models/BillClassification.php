@@ -11,8 +11,6 @@ final class BillClassification extends Model
 {
     use HasFactory;
 
-    protected $table = 'bill_classifications';
-
     protected $fillable = ['name', 'facility_type_id'];
 
     /**
@@ -20,6 +18,6 @@ final class BillClassification extends Model
      */
     public function facilities()
     {
-        return $this->belongsToMany(Facility::class, 'facility_bill_clasifications')->using(FacilityBillClassification::class);
+        return $this->belongsToMany(Facility::class);
     }
 }

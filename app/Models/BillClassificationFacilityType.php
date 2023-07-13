@@ -7,11 +7,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-final class FacilityBillClassification extends Pivot
+final class BillClassificationFacilityType extends Pivot
 {
     use HasFactory;
 
-    protected $table = 'facility_bill_clasifications';
-
-    protected $fillable = ['facility_id', 'bill_classification_id'];
+    protected $fillable = ['bill_classification_id', 'facility_type_id'];
 }
