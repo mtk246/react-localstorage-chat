@@ -328,6 +328,7 @@ class CompanyRepository
                 'addresses',
                 'contacts',
                 'nicknames',
+                'abbreviations',
                 'billingCompanies',
             ]);
         } else {
@@ -341,6 +342,9 @@ class CompanyRepository
                 $query->where('billing_company_id', $bC);
             },
             'nicknames' => function ($query) use ($bC) {
+                $query->where('billing_company_id', $bC);
+            },
+            'abbreviations' => function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             },
             'billingCompanies' => function ($query) use ($bC) {
