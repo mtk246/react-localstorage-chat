@@ -55,6 +55,7 @@ class UpdateFacilityRequest extends FormRequest
             'address.state' => ['required', 'string'],
             'address.country' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.contact_name' => ['nullable', 'string'],
@@ -62,6 +63,9 @@ class UpdateFacilityRequest extends FormRequest
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => ['nullable', 'email:rfc'],
+
+            'public_note' => ['nullable', 'string'],
+            'private_note' => ['nullable', 'string'],
         ];
     }
 }

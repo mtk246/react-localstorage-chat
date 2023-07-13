@@ -11,6 +11,8 @@ use App\Models\EntityNickname;
 use App\Models\Facility;
 use App\Models\FacilityType;
 use App\Models\Taxonomy;
+use App\Models\PublicNote;
+use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +34,7 @@ class FacilityRepository
                 'npi' => $data['npi'],
                 'facility_type_id' => $data['facility_type_id'],
                 'nppes_verified_at' => now(),
+                'abbreviation' => $data['abbreviation']
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -132,6 +135,23 @@ class FacilityRepository
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'contactable_id' => $facility->id,
                     'contactable_type' => Facility::class,
+                ]);
+            }
+
+            if (isset($data['private_note'])) {
+                PrivateNote::create([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'note' => $data['private_note'],
+                ]);
+            }
+
+            if (isset($data['public_note'])) {
+                PublicNote::create([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                    'note' => $data['public_note'],
                 ]);
             }
 
@@ -365,9 +385,11 @@ class FacilityRepository
                 'nicknames',
                 'abbreviations',
                 'facilityType',
+                'publicNote'
             ])->first();
         } else {
             $facility = Facility::whereId($id)->with([
+                'publicNote',
                 'taxonomies',
                 'addresses' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
@@ -408,6 +430,7 @@ class FacilityRepository
                 'created_at' => $facility->created_at,
                 'updated_at' => $facility->updated_at,
                 'last_modified' => $facility->last_modified,
+                'public_note' => $facility->publicNote
             ];
             $record['billing_companies'] = [];
 
@@ -437,6 +460,9 @@ class FacilityRepository
 
                 $placeOfServices = $facility->placeOfServices()
                     ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+
+                $privateNote = $facility->privateNotes()
+                    ->where('billing_company_id', $billingCompany->id ?? $bC)->get();
 
                 if (isset($address)) {
                     $facility_address = [
@@ -472,6 +498,7 @@ class FacilityRepository
                         'address' => isset($facility_address) ? $facility_address : null,
                         'contact' => isset($facility_contact) ? $facility_contact : null,
                         'place_of_services' => $placeOfServices ?? [],
+                        'private_note' => $privateNote,
                     ],
                 ]);
             }
@@ -592,6 +619,25 @@ class FacilityRepository
                     'addressable_id' => $facility->id,
                     'addressable_type' => Facility::class,
                 ], $data['address']);
+            }
+
+            if (isset($data['private_note'])) {
+                PrivateNote::updateOrCreate([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'note' => $data['private_note'],
+                ]);
+            }
+    
+            if (isset($data['public_note'])) {
+                PublicNote::updateOrCreate([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                ], [
+                    'note' => $data['public_note'],
+                ]);
             }
 
             DB::commit();
