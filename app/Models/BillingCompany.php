@@ -278,6 +278,7 @@ class BillingCompany extends Model implements Auditable
     public function toSearchableArray()
     {
         return [
+            'tax_id' => $this->tax_id,
             'name' => $this->name,
             'code' => $this->code,
             'abbreviation' => $this->abbreviation,
