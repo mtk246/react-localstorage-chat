@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
-use App\Models\Claim;
+use App\Models\Claims\Claim;
 use App\Models\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
 use Illuminate\Http\Request;
@@ -15,11 +15,11 @@ final class ClaimPreviewController extends Controller
     public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview)
     {
         $id = $request->id ?? null;
-        $claim = Claim::with(['claimFormattable', 'insurancePolicies'])->find($id);
+        $claim = Claim::query()->with(['insurancePolicies'])->find($id);
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'print' => $request->print ?? false,
-            'typeFormat' => $claim->format ?? $request->format ?? null,
+            'typeFormat' => $claim->type->value ?? $request->format ?? null,
             'data' => $claimPreview->single($request->input(), $request->user()),
         ]);
         $preview->setHeader();
@@ -30,7 +30,7 @@ final class ClaimPreviewController extends Controller
         ]))[1];
 
         /* @todo Consulta para poder visualizar el pdf desde postman */
-        /**return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');*/
+        //return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');
     }
 
     public function showBatch(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview, int $id)

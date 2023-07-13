@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Enums\Claim\FormatType;
-use App\Models\Claim;
+use App\Models\Claims\Claim;
 use App\Models\User;
 use App\Services\ClaimService;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,17 +25,20 @@ final class GetClaimPreviewAction
             $claim = Claim::query()
                 ->where('id', $data['id'] ?? null)
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($user): void {
-                    $query->whereHas('claimFormattable', function ($query) use ($user) {
-                        $query->where('billing_company_id', $user->billingCompanies->first()?->id);
-                    });
+                    $query->where('billing_company_id', $user->billingCompanies->first()?->id);
                 })
+                ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
 
             return $this->claimService->create(
                 FormatType::FILE,
                 $claim,
-                $claim->claimFormattable->billingCompany,
-                $claim->claimFormattable->insuranceCompany
+                $claim->demographicInformation->company ?? null,
+                $claim->insurancePolicies()
+                    ->wherePivot('order', 1)
+                    ?->first()
+                    ?->insurancePlan
+                    ?->insuranceCompany ?? null,
             )->toArray();
         });
     }

@@ -26,10 +26,10 @@ class ValidateSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'date_of_birth' => ['required'],
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'ssn' => ['nullable'],
+            'date_of_birth' => ['nullable'],
+            'first_name' => ['nullable', 'string'],
+            'last_name' => ['nullable', 'string'],
+            'ssn' => ['nullable', 'string'],
         ];
     }
 }

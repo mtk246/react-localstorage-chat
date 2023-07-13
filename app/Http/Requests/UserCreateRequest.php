@@ -11,25 +11,12 @@ use Illuminate\Validation\Rule;
 class UserCreateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        $roles = $this->roles;
-        $invalidRoles = ['Super User', 'Development Support'];
-
         return [
             'profile' => ['required', 'array'],
             'profile.sex' => ['required', 'string', 'max:1'],
@@ -46,9 +33,7 @@ class UserCreateRequest extends FormRequest
             'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
-            'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
-                return !in_array_any($invalidRoles, $roles);
-            }), 'integer', 'nullable'],
+            'billing_company_id' => ['nullable', 'integer'],
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],
