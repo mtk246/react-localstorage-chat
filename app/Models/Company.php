@@ -138,8 +138,8 @@ final class Company extends Model implements Auditable
         'name',
         'npi',
         'ein',
-        'upin',
         'clia',
+        'other_name',
     ];
 
     /**
@@ -166,7 +166,10 @@ final class Company extends Model implements Auditable
      */
     public function billingCompanies(): BelongsToMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(BillingCompanyCompany::class)
+            ->withPivot(['status', 'miscellaneous', 'claim_format_ids'])
+            ->withTimestamps();
     }
 
     /**

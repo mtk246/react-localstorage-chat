@@ -310,6 +310,7 @@ class InsuranceCompanyRepository
             'created_at' => $insurance->created_at,
             'updated_at' => $insurance->updated_at,
             'last_modified' => $insurance->last_modified,
+            'abbreviations' => $insurance->abbreviations->setVisible(['id', 'abbreviation'])->toArray(),
             'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : null,
         ];
         $record['billing_companies'] = [];
@@ -428,6 +429,7 @@ class InsuranceCompanyRepository
                         ->take(1)
                         ->pluck('id')
                         ->toArray();
+
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
