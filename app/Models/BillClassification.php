@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 final class BillClassification extends Model
 {
@@ -19,5 +20,10 @@ final class BillClassification extends Model
     public function facilities()
     {
         return $this->belongsToMany(Facility::class);
+    }
+
+    public function facility_types(): BelongsToMany
+    {
+        return $this->belongsToMany(FacilityType::class);
     }
 }

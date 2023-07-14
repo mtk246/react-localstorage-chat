@@ -232,7 +232,7 @@ class Facility extends Model implements Auditable
      */
     public function facilityTypes(): BelongsToMany
     {
-        return $this->belongsToMany(FacilityType::class, 'type_of_facility')->using(TypeOfFacility::class);
+        return $this->belongsToMany(FacilityType::class);
     }
 
     /**
