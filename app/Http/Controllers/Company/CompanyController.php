@@ -15,12 +15,12 @@ use App\Http\Requests\Company\AddCompanyCopaysRequest;
 use App\Http\Requests\Company\AddContractFeesRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
 use App\Http\Requests\Company\AddServicesRequest;
+use App\Http\Requests\Company\CreateCompanyRequest;
 use App\Http\Requests\Company\StoreExectionICRequest;
 use App\Http\Requests\Company\StoreStatementRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
-use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
@@ -40,7 +40,7 @@ final class CompanyController extends Controller
     /**
      * @todo quick fix for the moment, the get should use aresource instead of a request
      */
-    public function createCompany(CompanyCreateRequest $request, GetCompany $getCompany): JsonResponse
+    public function createCompany(CreateCompanyRequest $request, GetCompany $getCompany): JsonResponse
     {
         $company = $this->companyRepository->createCompany($request->validated());
         $rs = $getCompany->getOne($company->id, $request->user());
@@ -185,23 +185,19 @@ final class CompanyController extends Controller
     {
         $rs = $this->companyRepository->getOneByNpi($npi);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
-        /**
-         * @todo Para asegurar el funcionamiento de esta lógica hay que aplicar los cambios en fronEnd
-         * if ($rs) {
-         *     if (isset($rs['result']) && $rs['result']) {
-         *         return response()->json($rs['data']);
-         *     } else {
-         *         if (Gate::check('is-admin')) {
-         *             return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
-         *         } else {
-         *             return response()->json(__('Forbidden, The company has already been associated with the billing company'), 403);
-         *         }
-         *     }
-         * } else {
-         *   return response()->json(__('Error, company not found'), 404);
-         * }
-         */
+        if ($rs) {
+            if (isset($rs['result']) && $rs['result']) {
+                return response()->json($rs['data']);
+            } else {
+                if (Gate::check('is-admin')) {
+                    return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
+                } else {
+                    return response()->json(__('Forbidden, The company has already been associated with the billing company'), 403);
+                }
+            }
+        } else {
+            return response()->json(__('Error, company not found'), 404);
+        }
     }
 
     public function changeStatus(ChangeStatusCompanyRequest $request, int $id): JsonResponse

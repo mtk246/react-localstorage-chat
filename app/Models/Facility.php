@@ -7,7 +7,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -120,14 +119,6 @@ class Facility extends Model implements Auditable
      * @var array
      */
     protected $appends = ['status', 'last_modified', 'verified_on_nppes'];
-
-    /**
-     * Facility belongs to FacilityType.
-     */
-    public function facilityType(): BelongsTo
-    {
-        return $this->belongsTo(FacilityType::class);
-    }
 
     /**
      * The billingCompanies that belong to the company.

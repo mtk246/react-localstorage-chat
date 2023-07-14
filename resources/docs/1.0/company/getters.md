@@ -1,3 +1,4 @@
+-- Active: 1685438728234@@127.0.0.1@5432@kavac_version_3
 # Company Getters Docs
 
 ---
@@ -14,6 +15,7 @@
 - [Get list statement apply to](#get-list-statement-apply-to)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list contract fee type](#get-list-contract-fee-types)
+- [Get list type formats](#get-list-type-formats)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -46,6 +48,7 @@
 | 14 | GET    | `Get list procedure`         | `/procedure/get-list/{company_id?}`    | yes            | Get list procedure         |
 | 15 | GET    | `Get list billing companies` | `/facility/get-list-billing-companies` | yes            | Get list billing companies |
 | 16 | GET    | `Get list facilities`        | `/facility/get-list`                   | yes            | Get list facilities        |
+| 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type 
 
 
 <a name="get-price-of-procedure"></a>
@@ -1344,6 +1347,39 @@
     {
         "id": 225,
         "name": "RVU"
+    }
+]
+```
+
+#
+
+<a name="get-list-type-formats"></a>
+## Get list type formats
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type formats of Claim found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "CMS-1500 / 837P"
+    },
+    {
+        "id": 2,
+        "name": "UB-04 / 837I"
     }
 ]
 ```

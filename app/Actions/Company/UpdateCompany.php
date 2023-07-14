@@ -28,6 +28,13 @@ final class UpdateCompany
         return DB::transaction(function () use ($company, $request): CompanyDataResource {
             $company->update($request->getCompanyValues());
             $company->billingCompanies()->syncWithoutDetaching($request->getBillingCompanyId());
+            $company->billingCompanies()->updateExistingPivot(
+                $request->getBillingCompanyId(),
+                [
+                    'miscellaneous' => $request->getMiscellaneous(),
+                    'claim_format_ids' => $request->getClaimFormats(),
+                ]
+            );
 
             if ($request->getNickname()) {
                 $company->nicknames()->updateOrCreate(

@@ -38,12 +38,13 @@
     "billing_company_id": 1, /** Only required by superuser */
     "npi":"222123", /** required */
     "ein":"1234321", /** required only number max 9 */
-    "upin":"222CF123", /** optional alfanumeric max 50 */
     "clia":"222CF123", /** optional alfanumeric max 50 */
     "name":"company first", /** required */
     "nickname":"alias company first", /** optional */
-    "name_suffix_id": 1, /** optional */
     "abbreviation": "ABB", /** optional */
+    "claim_format_ids": [1,2,3], /** required */
+    "other_name": "", /** optional */
+    "miscellaneous": "", /** optional */
     "taxonomies": [
         {
             "tax_id": "TAX01213", /** required if exist*/
@@ -65,30 +66,20 @@
     },
     "address": {
         "address":"address Company", /** required */
+        "apt_suite": "123234", /** optional */
         "city":"city Company", /** required */
         "state":"state Company", /** required */
         "zip": "123234", /** required */
-        "country": "Name country", /** optional */
-        "country_subdivision_code": "code" /** optional */
+        "country": "Name country", /** required */
     },
     "payment_address": { /** optional */
         "address":"address Company", /** required if exist */
+        "apt_suite": "123234", /** optional */
         "city":"city Company", /** required if exist */
         "state":"state Company", /** required if exist */
         "zip": "123234", /** required if exist */
-        "country": "Name country", /** optional */
-        "country_subdivision_code": "code" /** optional */
+        "country": "Name country", /** required */
     },
-    "statements": [
-        {
-            "rule_id": 1, /** optional */
-            "when_id": 1, /** optional */
-            "apply_to_ids": [1,2,3], /** optional */
-            "start_date": "2022-02-03", /** required if when content 'period' */
-            "end_date": "2022-02-03", /** required if when content 'period', example 'In a defined period' */
-        }
-    ],
-    "exception_insurance_companies": [1,2,3], /** optional */
     "public_note": "Public Note", /** optional */
     "private_note": "Private Note" /** optional */
 }
@@ -135,12 +126,14 @@
     "billing_company_id": 1, /** Only required by superuser */
     "npi":"222123", /** required */
     "ein":"1234321", /** required only number max 9 */
-    "upin":"222CF123", /** optional alfanumeric max 50 */
     "clia":"222CF123", /** optional alfanumeric max 50 */
     "name":"company first", /** required */
     "nickname":"alias company first", /** optional */
     "name_suffix_id": 1, /** optional */
     "abbreviation": "ABB", /** optional */
+    "claim_formats": [1,2,3], /** required */
+    "other_name": "", /** optional */
+    "miscellaneous": "", /** optional */
     "taxonomies": [
         {
             "tax_id": "TAX01213", /** required if exist*/
@@ -165,6 +158,7 @@
         "city":"city Company", /** required */
         "state":"state Company", /** required */
         "zip": "123234", /** required */
+        "apt_suite": "123234", /** optional */
         "country": "Name country", /** optional */
         "country_subdivision_code": "code" /** optional */
     },
@@ -173,8 +167,8 @@
         "city":"city Company", /** required if exist */
         "state":"state Company", /** required if exist */
         "zip": "123234", /** required if exist */
+        "apt_suite": "123234", /** optional */
         "country": "Name country", /** optional */
-        "country_subdivision_code": "code" /** optional */
     },
     "statements": [
         {
@@ -236,16 +230,16 @@
         "city":"city Company",
         "state":"state Company",
         "zip": "123234",
+        "apt_suite": "123234", /** optional */
         "country": "Name country",
-        "country_subdivision_code": "code"
     },
     "payment_address": {
         "address":"address Company",
         "city":"city Company",
         "state":"state Company",
         "zip": "123234",
+        "apt_suite": "123234", /** optional */
         "country": "Name country",
-        "country_subdivision_code": "code"
     }
 }
 ```
@@ -322,10 +316,23 @@
     "billing_company_id": 1,
     "npi":"222123",
     "ein":"1234321",
-    "upin":"222CF123",
     "clia":"222CF123",
     "name":"company first",
     "nickname":"alias company first",
+    "abbreviation":"alias company first",
+    "claim_format_ids": [1,2,3],
+    "claim_formats": [
+        {
+            "id": 1,
+            "name": "CMS-1500 / 837P"
+        },
+        {
+            "id": 2,
+            "name": "UB-04 / 837I"
+        }
+    ],
+    "other_name": "",
+    "miscellaneous": "",
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -519,6 +526,7 @@
     "store": [
       {
         "id": 8,
+        "billing_company_id":1,
         "rule_id": 1,
         "when_id": 1,
         "apply_to_ids": [1,2,3],
@@ -526,6 +534,7 @@
         "end_date": "2022-02-03"
       },
       {
+        "billing_company_id":1,
         "rule_id": 1,
         "when_id": 1,
         "apply_to_ids": [1,2,3],
@@ -568,6 +577,8 @@
 [
   {
     "id": 8,
+    "code": "",
+    "billing_company_id":1,
     "rule_id": 1,
     "when_id": 1,
     "start_date": "2022-02-03",

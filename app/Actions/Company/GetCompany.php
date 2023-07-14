@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Company;
 
 use App\Facades\Pagination;
+use App\Http\Resources\Company\CompanyResource;
 use App\Http\Resources\Company\ServiceResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
@@ -17,6 +18,7 @@ use App\Models\EntityNickname;
 use App\Models\PrivateNote;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -98,9 +100,8 @@ final class GetCompany
                 'name' => $company->name,
                 'npi' => $company->npi,
                 'ein' => $company->ein,
-                'upin' => $company->upin,
+                'other_name' => $company->other_name,
                 'clia' => $company->clia,
-                'status' => $company->status,
                 'created_at' => $company->created_at,
                 'updated_at' => $company->updated_at,
                 'last_modified' => $company->last_modified,
@@ -191,8 +192,8 @@ final class GetCompany
                         'state' => $address->state,
                         'address' => $address->address,
                         'country' => $address->country,
+                        'apt_suite' => $address->apt_suite,
                         'address_type_id' => $address->address_type_id,
-                        'country_subdivision_code' => $address->country_subdivision_code,
                     ];
                 }
 
@@ -203,8 +204,8 @@ final class GetCompany
                         'state' => $payment_address->state,
                         'address' => $payment_address->address,
                         'country' => $payment_address->country,
+                        'apt_suite' => $payment_address->apt_suite,
                         'address_type_id' => $payment_address->address_type_id,
-                        'country_subdivision_code' => $payment_address->country_subdivision_code,
                     ];
                 }
 
@@ -225,15 +226,20 @@ final class GetCompany
                     'abbreviation' => $billingCompany->abbreviation,
                     'private_company' => [
                         'status' => $billingCompany->pivot->status ?? false,
+                        'miscellaneous' => $billingCompany->pivot->miscellaneous ?? '',
+                        'claim_format_ids' => $billingCompany->pivot->claim_format_ids ?? [],
                         'edit_name' => isset($nickname->nickname),
                         'nickname' => $nickname->nickname ?? '',
                         'abbreviation' => $abbreviation->abbreviation ?? '',
                         'private_note' => $private_note->note ?? '',
+                        'taxonomy' => $company->taxonomies()
+                            ->where('primary', true)
+                            ->first()
+                            ->setHidden(['created_at', 'updated_at', 'pivot'])
+                            ->toArray(),
                         'address' => $company_address ?? null,
                         'payment_address' => $company_payment_address ?? null,
                         'contact' => $company_contact ?? null,
-                        'exception_insurance_companies' => $exceptionIC ?? [],
-                        'statements' => $statements ?? [],
                     ],
                 ]);
             }
@@ -294,5 +300,119 @@ final class GetCompany
                     'publicNote',
                 ]);
             })->first();
+    }
+
+    public function single(Company $company, User $user): CompanyResource
+    {
+        $company->query()
+            ->when(
+                Gate::check('is-admin'),
+                fn (Builder $query) => $this->loadAdminModel($query),
+                fn (Builder $query) => $this->loadModel($query, $user->billing_company_id)
+            );
+
+        return CompanyResource::make($company);
+    }
+
+    public function all(Company $company, Request $request)
+    {
+        $companiesQuery = $company->query()
+            ->when(
+                Gate::denies('is-admin'),
+                function ($query) use ($request) {
+                    $bC = $request->user()->billing_company_id;
+                    $query->whereHas('billingCompanies', function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    })
+                    ->with([
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'nicknames' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
+                function ($query) {
+                    $query->with([
+                        'addresses',
+                        'contacts',
+                        'nicknames',
+                        'billingCompanies',
+                    ]);
+                }
+            )
+            ->when(
+                !empty($request->query('query')) && '{}' !== $request->query('query'),
+                fn ($query) => $query->search($request->query('query')),
+            )
+            ->when(
+                !empty($request->query('query')) && '{}' !== $request->query('query'),
+                fn ($query) => $query->search($request->query('query')),
+            )
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
+
+        return [
+            'data' => CompanyResource::collection($companiesQuery->items()),
+            'numberOfPages' => $companiesQuery->lastPage(),
+            'count' => $companiesQuery->total(),
+        ];
+    }
+
+    private function loadAdminModel(Builder &$query): void
+    {
+        $query->with([
+            'taxonomies',
+            'addresses',
+            'contacts',
+            'nicknames',
+            'abbreviations',
+            'facilities',
+            'companyStatements',
+            'exceptionInsuranceCompanies',
+            'billingCompanies',
+            'publicNote',
+            'privateNotes',
+        ]);
+    }
+
+    private function loadModel(Builder &$query, int $bC): void
+    {
+        $query->with([
+            'addresses' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'contacts' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'nicknames' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'abbreviations' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'billingCompanies' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'exceptionInsuranceCompanies' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'companyStatements' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'privateNotes' => function ($query) use ($bC): void {
+                $query->where('billing_company_id', $bC);
+            },
+            'taxonomies',
+            'facilities',
+            'publicNote',
+        ]);
     }
 }
