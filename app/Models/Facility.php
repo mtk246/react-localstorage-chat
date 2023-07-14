@@ -110,7 +110,6 @@ class Facility extends Model implements Auditable
         'code',
         'name',
         'npi',
-        'facility_type_id',
         'nppes_verified_at',
         'other_name',
     ];
