@@ -34,7 +34,6 @@ class FacilityRepository
                 'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), Facility::class, 'code'),
                 'name' => $data['name'] ,
                 'npi' => $data['npi'],
-                'facility_type_id' => $data['facility_type_id'],
                 'nppes_verified_at' => now(),
                 'other_name' => $data['other_name']
             ]);
@@ -530,7 +529,6 @@ class FacilityRepository
             $facility->update([
                 'name' => $data['name'],
                 'npi' => $data['npi'],
-                'facility_type_id' => $data['facility_type_id'],
             ]);
 
             if (isset($data['taxonomies'])) {

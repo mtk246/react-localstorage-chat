@@ -23,7 +23,6 @@ class UpdateFacilityRequest extends FormRequest
         return [
             'name' => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
             'npi' => ['required', 'string'],
-            'facility_type_id' => ['required', 'integer'],
             'companies' => [
                 'required',
                 'array',

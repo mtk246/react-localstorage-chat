@@ -27,6 +27,8 @@ class FacilityTypeSeeder extends Seeder
             ['type' => 'Special Facility or Hospital ASC Surgery'],
         ];
 
+        FacilityType::truncate();
+
         foreach ($facilityTypes as $type) {
             FacilityType::updateOrCreate($type, $type);
         }

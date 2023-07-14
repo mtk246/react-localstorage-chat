@@ -79,7 +79,6 @@
 ```json
 {
     "name":"facilityName",
-    "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
     "abbreviation":"ABBFAC",
@@ -608,7 +607,6 @@
 ```json
 {
     "name":"facilityName",
-    "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
     "abbreviation":"ABBFAC",
