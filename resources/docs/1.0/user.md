@@ -88,7 +88,7 @@
     },
     "email":"user@gmail.com",
     "language":"es",
-    "company-billing": 1,
+    "billing_company_id": 1,
     "roles":[
         "BILLING_MANAGER"
     ],"address": {
@@ -216,7 +216,7 @@
     },
     "email":"user@gmail.com",
     "language":"es",
-    "company-billing": 1,
+    "billing_company_id": 1,
     "roles":[
         "BILLING_MANAGER"
     ],"address": {

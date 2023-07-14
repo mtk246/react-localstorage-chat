@@ -390,6 +390,8 @@ final class Company extends Model implements Auditable
 
     public function toSearchableArray()
     {
+        $contacts = $this->contacts->first();
+
         return [
             'code' => $this->code,
             'name' => $this->name,
@@ -397,6 +399,10 @@ final class Company extends Model implements Auditable
             'ein' => $this->ein,
             'upin' => $this->upin,
             'clia' => $this->clia,
+            'contacts.phone' => $contacts->phone,
+            'contacts.fax' => $contacts->fax,
+            'contacts.email' => $contacts->email,
+            'contacts.mobile' => $contacts->mobile,
         ];
     }
 }

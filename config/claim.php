@@ -157,63 +157,61 @@ return [
                 'y' => 48,
             ],
         ],
-        '3' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 100,
-                    'y' => 48.5,
-                ],
+        '3a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 100,
+                'y' => 48.5,
             ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 84,
-                    'y' => 48.5,
-                ],
+        ],
+        '3b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 84,
+                'y' => 48.5,
             ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 92,
-                    'y' => 48.5,
-                ],
+        ],
+        '3c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 92,
+                'y' => 48.5,
             ],
-            'sex' => [
-                'options' => [
-                    'M' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 111,
-                            'y' => 48.5,
-                        ],
+        ],
+        '3d' => [
+            'options' => [
+                'M' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 111,
+                        'y' => 48.5,
                     ],
-                    'F' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 123.5,
-                            'y' => 48.5,
-                        ],
+                ],
+                'F' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 123.5,
+                        'y' => 48.5,
                     ],
                 ],
             ],
@@ -8177,7 +8175,7 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 20,
                     'value' => [
-                        'provider:code',
+                        'providerProfile:code',
                     ],
                     'values' => [
                         'common' => [

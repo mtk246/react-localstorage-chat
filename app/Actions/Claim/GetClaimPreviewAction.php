@@ -27,6 +27,7 @@ final class GetClaimPreviewAction
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($user): void {
                     $query->where('billing_company_id', $user->billingCompanies->first()?->id);
                 })
+                ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
 
             return $this->claimService->create(
