@@ -40,7 +40,7 @@ class CompanyRepository
                 $company->update([
                     'name' => $data['name'],
                     'ein' => $data['ein'] ?? null,
-                    'upin' => $data['upin'] ?? null,
+                    'other_name' => $data['other_name'] ?? null,
                     'clia' => $data['clia'] ?? null,
                 ]);
             } else {
@@ -49,7 +49,7 @@ class CompanyRepository
                     'name' => $data['name'],
                     'npi' => $data['npi'],
                     'ein' => $data['ein'] ?? null,
-                    'upin' => $data['upin'] ?? null,
+                    'other_name' => $data['other_name'] ?? null,
                     'clia' => $data['clia'] ?? null,
                 ]);
             }
@@ -70,7 +70,13 @@ class CompanyRepository
             }
 
             /* Attach billing company */
-            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            $company->billingCompanies()->attach(
+                $billingCompany->id ?? $billingCompany,
+                [
+                    'miscellaneous' => $data['miscellaneous'] ?? null,
+                    'claim_format_ids' => $data['claim_format_ids'] ?? null
+                ]
+            );
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
@@ -111,29 +117,6 @@ class CompanyRepository
                 $data['contact']['contactable_id'] = $company->id;
                 $data['contact']['contactable_type'] = Company::class;
                 Contact::create($data['contact']);
-            }
-
-            if (isset($data['statements'])) {
-                foreach ($data['statements'] as $statement) {
-                    CompanyStatement::create([
-                        'start_date' => $statement['start_date'] ?? null,
-                        'end_date' => $statement['end_date'] ?? null,
-                        'rule_id' => $statement['rule_id'] ?? null,
-                        'when_id' => $statement['when_id'] ?? null,
-                        'apply_to_ids' => $statement['apply_to_ids'] ?? null,
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                }
-            }
-            if (isset($data['exception_insurance_companies'])) {
-                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
-                    ExceptionInsuranceCompany::create([
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'insurance_company_id' => $exceptionIC,
-                    ]);
-                }
             }
 
             if (isset($data['private_note'])) {
@@ -871,12 +854,10 @@ class CompanyRepository
                 ->toArray();
 
             if (empty($billingCompanies)) {
-                //return ['result' => false];
-                return !is_null($company) ? $company : null;
+                return ['result' => false];
             }
         }
-        //return !is_null($company) ? ['data' => $company, 'result' => true] : null;
-        return null;
+        return !is_null($company) ? ['data' => $company, 'result' => true] : null;
     }
 
     /**

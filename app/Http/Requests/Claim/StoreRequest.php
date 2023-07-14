@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Http\Casts\Claims\StoreRequestWrapper;
+use App\Http\Casts\Company\StoreRequestWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\ArrayCountRule;
 use Illuminate\Foundation\Http\FormRequest;
