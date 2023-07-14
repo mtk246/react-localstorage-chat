@@ -38,8 +38,6 @@ final class BillClassificationSeeder extends Seeder
                 });
             });
 
-        FacilityType::where('type', $type->id)->delete();
-
         // Estructura para la nueva logica de bill classifications
         $data = [
             'facility_types' => [
