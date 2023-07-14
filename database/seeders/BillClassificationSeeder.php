@@ -41,61 +41,68 @@ final class BillClassificationSeeder extends Seeder
         FacilityType::where('type', $type->id)->delete();
 
         // Estructura para la nueva logica de bill classifications
-        $bill_classifications = collect([
-            ['name' => 'Inpatient (Including Medicare Part A)'],
-            ['name' => 'Inpatient (Medicare Part B Only)'],
-            ['name' => 'Outpatient'],
-            ['name' => 'Other (for Hospital Referenced Diagnostic Services, or Home Health Not Under Plan of Treatment)'],
-            ['name' => 'Intermediate Care - Level I'],
-            ['name' => 'Intermediate Care - Level II'],
-            ['name' => 'Subacute Inpatient (Revenue Code 019X Required)'],
-            ['name' => 'Swing Beds '],
+        $data = [
+            'facility_types' => [
+                'Hospital',
+                'Skilled Nursing',
+                'Home Health',
+                'Christian Science (Hospital)',
+                'Christian Science (Extended Care)',
+                'Intermediate Care',
+                'Clinic ',
+                'Special Facility or Hospital ASC Surgery',
+            ],
+            'bill_classifications' => [
+                ['name' => 'Inpatient (Including Medicare Part A)'],
+                ['name' => 'Inpatient (Medicare Part B Only)'],
+                ['name' => 'Outpatient'],
+                ['name' => 'Other (for Hospital Referenced Diagnostic Services, or Home Health Not Under Plan of Treatment)'],
+                ['name' => 'Intermediate Care - Level I'],
+                ['name' => 'Intermediate Care - Level II'],
+                ['name' => 'Subacute Inpatient (Revenue Code 019X Required)'],
+                ['name' => 'Swing Beds '],
 
-            ['name' => 'Rural Health'],
-            ['name' => 'Hospital Based or Independent Renal Dialysis Center'],
-            ['name' => 'Free-standing'],
-            ['name' => 'Outpatient Rehabilitation Facility (ORF)'],
-            ['name' => 'Comprehensive Outpatient Rehabilitation Facilities (CORFS)'],
-            ['name' => 'Community Mental Health Center (CMHC)'],
+                ['name' => 'Rural Health'],
+                ['name' => 'Hospital Based or Independent Renal Dialysis Center'],
+                ['name' => 'Free-standing'],
+                ['name' => 'Outpatient Rehabilitation Facility (ORF)'],
+                ['name' => 'Comprehensive Outpatient Rehabilitation Facilities (CORFS)'],
+                ['name' => 'Community Mental Health Center (CMHC)'],
 
-            ['name' => 'Hospice (Non-Hospital Based)'],
-            ['name' => 'Hospice (Hospital Based)'],
-            ['name' => 'Ambulatory Surgery Center'],
-            ['name' => 'Free Standing Birthing Center'],
-            ['name' => 'CAH (Critical Access Hospital) / Rural Primary Care Hospital'],
-            ['name' => 'Residential Facility (not used for Medicare)'],
+                ['name' => 'Hospice (Non-Hospital Based)'],
+                ['name' => 'Hospice (Hospital Based)'],
+                ['name' => 'Ambulatory Surgery Center'],
+                ['name' => 'Free Standing Birthing Center'],
+                ['name' => 'CAH (Critical Access Hospital) / Rural Primary Care Hospital'],
+                ['name' => 'Residential Facility (not used for Medicare)'],
 
-            ['name' => 'Other'],
-        ]);
+                ['name' => 'Other'],
+            ],
+        ];
 
-        $bill_ids = $bill_classifications->map(fn ($item) => [
-            BillClassification::create(['name' => $item['name']])->id,
-        ]);
+        $facility_type_1 = FacilityType::whereIn('type', array_slice($data['facility_types'], 0, 6))->pluck('id')->toArray();
+        $facility_type_2 = FacilityType::where('type', $data['facility_types'][6])->first();
+        $facility_type_3 = FacilityType::where('type', $data['facility_types'][7])->first();
 
-        $ids = [];
-
-        foreach ($bill_ids as $value) {
-            array_push($ids, $value[0]);
-        }
-
-        $facility_type = FacilityType::all();
-
-        foreach ($facility_type as $type) {
-            if ($type->id <= 6) {
-                $current_ids = array_slice($ids, 0, 8, true);
-                $type->bill_classifications()->attach($current_ids);
-                $type->bill_classifications()->attach(end($ids));
+        foreach ($data['bill_classifications'] as $key => $value) {
+            if ($key <= 7) {
+                $bill_classification = BillClassification::create($value);
+                $bill_classification->facility_types()->attach($facility_type_1);
             }
 
-            if (7 == $type->id) {
-                $current_ids = array_slice($ids, 8, 6, true);
-                $type->bill_classifications()->attach($current_ids);
-                $type->bill_classifications()->attach(end($ids));
+            if ($key >= 8 && $key <= 13) {
+                $bill_classification = BillClassification::create($value);
+                $bill_classification->facility_types()->attach($facility_type_2);
             }
 
-            if (8 == $type->id) {
-                $current_ids = array_slice($ids, 14, 7, true);
-                $type->bill_classifications()->attach($current_ids);
+            if ($key >= 14 && $key <= 19) {
+                $bill_classification = BillClassification::create($value);
+                $bill_classification->facility_types()->attach($facility_type_3);
+            }
+
+            if (20 == $key) {
+                $bill_classification = BillClassification::create($value);
+                $bill_classification->facility_types()->attach(FacilityType::all());
             }
         }
     }
