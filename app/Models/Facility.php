@@ -122,14 +122,6 @@ class Facility extends Model implements Auditable
     protected $appends = ['status', 'last_modified', 'verified_on_nppes'];
 
     /**
-     * Facility belongs to FacilityType.
-     */
-    public function facilityType(): BelongsTo
-    {
-        return $this->belongsTo(FacilityType::class);
-    }
-
-    /**
      * The billingCompanies that belong to the company.
      */
     public function billingCompanies(): BelongsToMany
