@@ -431,8 +431,6 @@ class FacilityRepository
                 'code' => $facility->code,
                 'name' => $facility->name,
                 'npi' => $facility->npi,
-                'facility_type_id' => $facility->facility_type_id,
-                'facility_type' => $facility->facilityType->type,
                 'taxonomies' => $taxonomies ?? [],
                 'verified_on_nppes' => $facility->verified_on_nppes,
                 'nppes_verified_at' => $facility->nppes_verified_at,
