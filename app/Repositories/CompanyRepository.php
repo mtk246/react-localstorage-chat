@@ -74,7 +74,7 @@ class CompanyRepository
                 $billingCompany->id ?? $billingCompany,
                 [
                     'miscellaneous' => $data['miscellaneous'] ?? null,
-                    'claim_format_ids' => $data['claim_format_ids'] ?? null
+                    'claim_format_ids' => $data['claim_format_ids'] ?? null,
                 ]
             );
 
@@ -433,10 +433,9 @@ class CompanyRepository
             array_push($facilityFields, [
                 'billing_company_id' => $facility->pivot->billing_company_id,
                 'facility_id' => $facility->id,
-                'facility_type_id' => $facility->facility_type_id,
                 'billing_company' => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name ?? null,
                 'facility' => $facility->name,
-                'facility_type' => $facility->facilityType->type,
+                'facility_types' => $facility->facilityTypes ?? [],
             ]);
         }
 
@@ -846,6 +845,7 @@ class CompanyRepository
                         ->take(1)
                         ->pluck('id')
                         ->toArray();
+
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
@@ -857,6 +857,7 @@ class CompanyRepository
                 return ['result' => false];
             }
         }
+
         return !is_null($company) ? ['data' => $company, 'result' => true] : null;
     }
 
@@ -941,10 +942,9 @@ class CompanyRepository
             array_push($records, [
                 'billing_company_id' => $facility->pivot->billing_company_id,
                 'facility_id' => $facility->id,
-                'facility_type_id' => $facility->facility_type_id,
                 'billing_company' => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name ?? '',
                 'facility' => $facility->name,
-                'facility_type' => $facility->facilityType->type,
+                'facility_types' => $facility->facilityTypes ?? [],
             ]);
         }
 
