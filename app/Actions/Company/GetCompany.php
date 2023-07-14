@@ -100,9 +100,8 @@ final class GetCompany
                 'name' => $company->name,
                 'npi' => $company->npi,
                 'ein' => $company->ein,
-                'upin' => $company->upin,
+                'other_name' => $company->other_name,
                 'clia' => $company->clia,
-                'status' => $company->status,
                 'created_at' => $company->created_at,
                 'updated_at' => $company->updated_at,
                 'last_modified' => $company->last_modified,
@@ -193,8 +192,8 @@ final class GetCompany
                         'state' => $address->state,
                         'address' => $address->address,
                         'country' => $address->country,
+                        'apt_suite' => $address->apt_suite,
                         'address_type_id' => $address->address_type_id,
-                        'country_subdivision_code' => $address->country_subdivision_code,
                     ];
                 }
 
@@ -205,8 +204,8 @@ final class GetCompany
                         'state' => $payment_address->state,
                         'address' => $payment_address->address,
                         'country' => $payment_address->country,
+                        'apt_suite' => $payment_address->apt_suite,
                         'address_type_id' => $payment_address->address_type_id,
-                        'country_subdivision_code' => $payment_address->country_subdivision_code,
                     ];
                 }
 
@@ -227,6 +226,8 @@ final class GetCompany
                     'abbreviation' => $billingCompany->abbreviation,
                     'private_company' => [
                         'status' => $billingCompany->pivot->status ?? false,
+                        'miscellaneous' => $billingCompany->pivot->miscellaneous ?? '',
+                        'claim_format_ids' => $billingCompany->pivot->claim_format_ids ?? [],
                         'edit_name' => isset($nickname->nickname),
                         'nickname' => $nickname->nickname ?? '',
                         'abbreviation' => $abbreviation->abbreviation ?? '',
@@ -234,8 +235,6 @@ final class GetCompany
                         'address' => $company_address ?? null,
                         'payment_address' => $company_payment_address ?? null,
                         'contact' => $company_contact ?? null,
-                        'exception_insurance_companies' => $exceptionIC ?? [],
-                        'statements' => $statements ?? [],
                     ],
                 ]);
             }
