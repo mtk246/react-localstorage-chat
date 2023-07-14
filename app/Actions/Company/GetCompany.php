@@ -232,6 +232,11 @@ final class GetCompany
                         'nickname' => $nickname->nickname ?? '',
                         'abbreviation' => $abbreviation->abbreviation ?? '',
                         'private_note' => $private_note->note ?? '',
+                        'taxonomy' => $company->taxonomies()
+                            ->where('primary', true)
+                            ->first()
+                            ->setHidden(['created_at', 'updated_at', 'pivot'])
+                            ->toArray(),
                         'address' => $company_address ?? null,
                         'payment_address' => $company_payment_address ?? null,
                         'contact' => $company_contact ?? null,
