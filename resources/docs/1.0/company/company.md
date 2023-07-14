@@ -124,10 +124,23 @@
     {
         "billing_company_id": 1,
         "facility_id": 2,
-        "facility_type_id": 6,
+        "facility_type_ids": [1,2,3],
         "billing_company": "Medical Claims Consultants",
         "facility": "Isa Home Corp.",
-        "facility_type": "AL - Assisted Living Facility"
+        "facility_types": [
+          {
+            "id": 1,
+            "name": "AL - Assisted Living Facility"
+          },
+          {
+            "id": 2,
+            "name": "AL - Assisted Living Facility"
+          },
+          {
+            "id": 3,
+            "name": "AL - Assisted Living Facility"
+          }
+        ]
     }
 ]
 ```
@@ -158,11 +171,10 @@
 {
     "services": [
         {
-            "billing_company_id": 1,  /** Only required by superuser */
             "id":87,
-            "procedure_id": 1,
-            "description": "Description procedure",
-            "modifier_id": 2,
+            "billing_company_id": 1,  /** Only required by superuser */
+            "procedure_ids": [1,3],
+            "modifier_ids": [1,2],
             "price": 20.2,
             "mac": "02102",
             "locality_number":"01",
@@ -170,6 +182,7 @@
             "fsa": "STATEWIDE",
             "counties": "ALL COUNTIES",
             "insurance_label_fee_id": 1,
+            "rate": "", /**Consultar dominio */
             "price_percentage": "70",
             "clia": "00001A",
             "medications": [
@@ -194,8 +207,7 @@
         {
             "billing_company_id": 1,  /** Only required by superuser */
             "id": 88, /** zero for new entries */
-            "procedure_id": 2,
-            "description": "Description procedure",
+            "procedure_ids": [1,2],
             "price": 300
         }
     ]
@@ -212,9 +224,28 @@
   {
     "id": 87,
     "billing_company_id": 1,
-    "procedure_id": 1,
-    "description": "Office o/p new low 30-44 min",
-    "modifier_id": 2,
+    "procedure_ids": [1,2],
+    "procedures": [
+      {
+        "id": 1,
+        "name": "Procedure",
+      },
+      {
+        "id": 2,
+        "name": "Procedure2",
+      }
+    ],
+    "modifier_ids": [1,3],
+    "modifiers": [
+      {
+        "id": 1,
+        "name": "Modifier",
+      },
+      {
+        "id": 3,
+        "name": "Modifier3",
+      }
+    ],
     "mac": "02102",
     "locality_number": "01",
     "state": "ALASKA",
@@ -224,6 +255,7 @@
     "price": "20.2",
     "price_percentage": "70",
     "clia": "00001A",
+    "rate": "",
     "medication_application": false,
     "medications": [
       {
@@ -249,9 +281,15 @@
   {
     "id": 88,
     "billing_company_id": 1,
-    "procedure_id": 2,
-    "description": "Office o/p new mod 45-59 min",
-    "modifier_id": null,
+    "procedure_ids": [2],
+    "procedures": [
+      {
+        "id": 2,
+        "name": "Procedure2"
+      }
+    ],
+    "modifier_ids": [],
+    "modifiers": [],
     "mac": "10112",
     "locality_number": "00",
     "state": "ALABAMA",
@@ -261,6 +299,7 @@
     "price": "300",
     "price_percentage": null,
     "clia": null,
+    "rate": "",
     "medication_application": false,
     "medications": []
   }
@@ -295,8 +334,8 @@
         {
             "billing_company_id": 1, /** Only required by superuser */
             "procedure_ids": [1,2,3],
-            "insurance_plan_id": 1,
-            "insurance_company_id": 1,
+            "insurance_plan_ids": [1,2],
+            "insurance_company_ids": [1,2],
             "copay": 150.2,
             "private_note": "Note private by billing_company"
         }
@@ -356,13 +395,13 @@
     {
         "billing_company_id": 1, /** Only required by superuser */
         "contract_fee_id": 1, /** Only wen contract update */
-        "insurance_company_id": 1,
-        "insurance_plan_id": 1,
+        "insurance_company_ids": [1,2],
+        "insurance_plan_ids": [1,2],
         "type_id": 1,
         "start_date": "2022-03-16",
         "end_date": "2022-03-16",
-        "procedure_id": [1,2],
-        "modifier_id": 1,
+        "procedure_ids": [1,2],
+        "modifier_ids": [1,2],
         "price": 120.5,
         "mac": "02102",
         "locality_number":"01",
@@ -370,6 +409,7 @@
         "fsa": "STATEWIDE",
         "counties": "ALL COUNTIES",
         "insurance_label_fee_id": 1,
+        "rate": "02102",
         "price_percentage": 70,
         "private_note": "Note private by billing_company"
     }
