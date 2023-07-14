@@ -40,8 +40,8 @@
 | 10 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
 | 11 |GET | `Get list facility types`| `/facility/get-list-facility-types`        |yes            |Get list facility types|
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
-| 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
-| 14 |PATCH | `Remove to company`          | `/{facility}/remove-company`|yes|Remove facility to company|
+| 13 |PATCH | `Add to company`          | `/facility/{facility_id}/company/`|yes|Add facility to company|
+| 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-company`|yes|Remove facility to company|
 | 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 16 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
 | 17 |GET   | `Get list bill classifications`  | `/bill-classifications/{facility_type}`|yes|Get list bill classifications|
