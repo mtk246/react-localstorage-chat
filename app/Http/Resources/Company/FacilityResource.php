@@ -20,12 +20,11 @@ final class FacilityResource extends JsonResource
         return [
             'billing_company_id' => $this->resource->pivot->billing_company_id,
             'facility_id' => $this->resource->id,
-            'facility_type_id' => $this->resource->facility_type_id,
             'billing_company' => $this->resource->billingCompanies()->find(
                 $this->resource->pivot->billing_company_id,
             )->name ?? '',
             'facility' => $this->resource->name,
-            'facility_type' => $this->resource->facilityType->type,
+            'facility_types' => $this->resource->facilityTypes ?? [],
         ];
     }
 }

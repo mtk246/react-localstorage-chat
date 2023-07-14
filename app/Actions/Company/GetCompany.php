@@ -85,13 +85,11 @@ final class GetCompany
             $facilities->getCollection()->transform(fn ($facility) => [
                 'billing_company_id' => $facility->pivot->billing_company_id,
                 'facility_id' => $facility->id,
-                'facility_type_id' => $facility->facility_type_id,
-                'facility_type' => $facility->facilityType,
                 'billing_company' => $facility->billingCompanies()->find(
                     $facility->pivot->billing_company_id,
                 )->name ?? null,
                 'facility' => $facility->name,
-                'facility_type' => $facility->facilityType->type,
+                'facility_types' => $facility->facilityTypes ?? [],
             ]);
 
             $record = [
