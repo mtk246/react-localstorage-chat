@@ -36,7 +36,6 @@ class FacilityRepository
                 'npi' => $data['npi'],
                 'facility_type_id' => $data['facility_type_id'],
                 'nppes_verified_at' => now(),
-                'abbreviation' => $data['abbreviation'],
                 'other_name' => $data['other_name']
             ]);
 
