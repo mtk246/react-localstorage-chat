@@ -20,7 +20,7 @@ return new class() extends Migration {
         Schema::table('facilities', function (Blueprint $table) {
             $table->string('abbreviation')->nullable();
 
-            $table->unsignedBigInteger('facility_type_id');
+            $table->unsignedBigInteger('facility_type_id')->nullable();
             $table->foreign('facility_type_id')->references('id')->on('facility_types');
         });
     }
