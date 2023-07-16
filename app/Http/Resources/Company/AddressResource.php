@@ -23,7 +23,7 @@ final class AddressResource extends RequestWrapedResource
             'state' => $this->resource->state,
             'zip' => $this->resource->zip,
             'country' => $this->resource->country,
-            'apt_suite' => $this->resource->apt_suite,
+            'apt_suite' => $this->resource->apt_suite ?? '',
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];
