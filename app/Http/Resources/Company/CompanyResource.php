@@ -34,6 +34,8 @@ final class CompanyResource extends JsonResource
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
             'contract_fees' => $this->getContracFees(),
+            'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
+            'statements' => $this->getStatements(),
             'billing_companies' => $this->resource->billingCompanies
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
                 ->map(function ($bC) {
@@ -64,6 +66,34 @@ final class CompanyResource extends JsonResource
                     return $bC;
                 }),
         ];
+    }
+
+    private function getExceptionInsuranceCompanies()
+    {
+        $bC = request()->user()->billing_company_id;
+        $exceptions = $this->resource->exceptionInsuranceCompanies()
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('billing_company_id', $bC)
+            )
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
+
+        return ExceptionICResource::collection($exceptions)->resource;
+    }
+
+    private function getStatements()
+    {
+        $bC = request()->user()->billing_company_id;
+        $statements = $this->resource->companyStatements()
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('billing_company_id', $bC)
+            )
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
+
+        return StatementResource::collection($statements)->resource;
     }
 
     private function getFacilities()

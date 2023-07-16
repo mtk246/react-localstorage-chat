@@ -43,7 +43,7 @@ final class CompanyController extends Controller
     public function createCompany(CreateCompanyRequest $request, GetCompany $getCompany): JsonResponse
     {
         $company = $this->companyRepository->createCompany($request->validated());
-        $rs = $getCompany->getOne($company->id, $request->user());
+        $rs = $getCompany->single($company, $request->user());
 
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating company'), 400);
     }
@@ -104,14 +104,17 @@ final class CompanyController extends Controller
         );
     }
 
-    public function getServerAll(Request $request): JsonResponse
+    public function getServerAll(Request $request, GetCompany $getCompany, Company $company): JsonResponse
     {
-        return $this->companyRepository->getServerAllCompanies($request);
+        return response()->json(
+            $getCompany->all($company, $request),
+            200
+        );
     }
 
-    public function getOneCompany(Request $request, GetCompany $getOne, Company $company): JsonResponse
+    public function getOneCompany(Request $request, GetCompany $getCompany, Company $company): JsonResponse
     {
-        $rs = $getOne->single($company, $request->user());
+        $rs = $getCompany->single($company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
