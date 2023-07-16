@@ -22,12 +22,11 @@ final class CompanyResource extends JsonResource
             'name' => $this->resource->name,
             'npi' => $this->resource->npi,
             'ein' => $this->resource->ein,
-            'upin' => $this->resource->upin,
-            'clia' => $this->resource->clia,
-            'status' => (bool) $this->resource->status,
+            'clia' => $this->resource->clia ?? '',
+            'other_name' => $this->resource->other_name ?? '',
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
-            'public_note' => $this->resource->publicNote?->note ?? null,
+            'public_note' => $this->resource->publicNote?->note ?? '',
             'last_modified' => $this->resource->last_modified,
 
             'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies),
@@ -35,8 +34,35 @@ final class CompanyResource extends JsonResource
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
             'contract_fees' => $this->getContracFees(),
-            'addresses' => $this->resource->addresses,
-            'contacts' => $this->resource->contacts,
+            'billing_companies' => $this->resource->billingCompanies
+                ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
+                ->map(function ($bC) {
+                    $nickname = $this->resource->nicknames()
+                        ->where('billing_company_id', $bC->id)
+                        ->first()->nickname ?? '';
+
+                    $bC->private_company = [
+                        'status' => $bC->pivot->status ?? false,
+                        'miscellaneous' => $bC->pivot->miscellaneous ?? '',
+                        'claim_format_ids' => $bC->pivot->claim_format_ids ?? [],
+                        'edit_name' => !empty($nickname),
+                        'nickname' => $nickname,
+                        'abbreviation' => $this->resource->abbreviations()
+                            ->where('billing_company_id', $bC->id)
+                            ->first()->abbreviation ?? '',
+                        'private_note' => $this->getPrivateNote($bC->id)?->note ?? '',
+                        'taxonomy' => $this->resource->taxonomies()
+                            ->where('primary', true)
+                            ->first()
+                            ->setHidden(['created_at', 'updated_at', 'pivot'])
+                            ->toArray(),
+                        'address' => $this->getAddress($bC->id, 1),
+                        'payment_address' => $this->getAddress($bC->id, 3),
+                        'contact' => $this->getContact($bC->id),
+                    ];
+
+                    return $bC;
+                }),
         ];
     }
 
@@ -45,7 +71,7 @@ final class CompanyResource extends JsonResource
         $bC = request()->user()->billing_company_id;
         $facilities = $this->resource->facilities()
             ->when(
-                Gate::allows('is-admin'),
+                Gate::denies('is-admin'),
                 fn ($query) => $query->where('company_facility.billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
@@ -60,7 +86,7 @@ final class CompanyResource extends JsonResource
         $companyProcedures = CompanyProcedure::query()
             ->where('company_id', $this->id)
             ->when(
-                Gate::allows('is-admin'),
+                Gate::denies('is-admin'),
                 fn ($query) => $query->where('company_procedure.billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
@@ -76,7 +102,7 @@ final class CompanyResource extends JsonResource
         return $this->resource->copays()
             ->with('procedures')
             ->when(
-                Gate::allows('is-admin'),
+                Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
@@ -88,20 +114,45 @@ final class CompanyResource extends JsonResource
         $bC = request()->user()->billing_company_id;
 
         return $this->resource->contracFees()
-            ->with(
-                [
-                    'procedures',
-                    'modifiers',
-                    'patients',
-                    'macLocality',
-                    'insuranceCompany',
-                ]
-            )
+            ->with([
+                'procedures',
+                'modifiers',
+                'patients',
+                'macLocality',
+                'insuranceCompany',
+            ])
             ->when(
-                Gate::allows('is-admin'),
+                Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
+    }
+
+    private function getAddress(int $billingCompanyId, int $addressType)
+    {
+        $address = $this->resource->addresses()
+            ->where('billing_company_id', $billingCompanyId)
+            ->where('address_type_id', $addressType)
+            ->first();
+
+        return $address ? AddressResource::make($address) : null;
+    }
+
+    private function getContact(int $billingCompanyId)
+    {
+        $contact = $this->resource->contacts()
+            ->where('billing_company_id', $billingCompanyId)
+            ->first();
+
+        return $contact ? ContactResource::make($contact) : null;
+    }
+
+    private function getPrivateNote(int $billingCompanyId)
+    {
+        return $this->resource
+            ->privateNotes()
+            ->where('billing_company_id', $billingCompanyId)
+            ->first();
     }
 }
