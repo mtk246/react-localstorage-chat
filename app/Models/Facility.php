@@ -19,49 +19,29 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Facility.
  *
  * @property int $id
- * @property int $type
+ * @property int $facility_type_id
  * @property string $name
- * @property string $company_name
  * @property string $npi
- * @property string $taxonomy
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $company_id
- * @property \App\Models\Address|null $address
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property int|null $billing_companies_count
- * @property \App\Models\Company|null $company
- * @property \App\Models\Contact|null $contact
- * @property mixed $status
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCompanyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNpi($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereTaxonomy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
- *
- * @property int $facility_type_id
  * @property string $code
  * @property string|null $nppes_verified_at
+ * @property string|null $abbreviation
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
  * @property \App\Models\FacilityType $facilityType
  * @property mixed $last_modified
+ * @property mixed $status
  * @property mixed $verified_on_nppes
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  * @property int|null $health_professionals_count
@@ -69,32 +49,26 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $nicknames_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
  * @property int|null $place_of_services_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
+ * @property int|null $private_notes_count
+ * @property \App\Models\PublicNote|null $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
+ * @method static \Database\Factories\FacilityFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereAbbreviation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereFacilityTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNppesVerifiedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaceOfService> $placeOfServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

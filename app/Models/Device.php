@@ -14,13 +14,17 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Device.
  *
  * @property int $id
- * @property string $ip
- * @property string $os
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property bool $status
  * @property string|null $code_temp
+ * @property string|null $ip_address
+ * @property string|null $user_agent
+ * @property string|null $last_login
+ * @property string|null $type
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\User|null $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Device newModelQuery()
@@ -29,24 +33,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereCodeTemp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Device whereIp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Device whereOs($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Device whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Device whereUserId($value)
- *
- * @property string|null $ip_address
- * @property string|null $user_agent
- * @property string|null $last_login
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereIpAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereLastLogin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereUserAgent($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUserId($value)
  *
  * @mixin \Eloquent
  */

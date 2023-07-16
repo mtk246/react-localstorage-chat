@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  *
+ * @method static \Database\Factories\FacilityTypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType query()
@@ -24,9 +25,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  *
  * @mixin \Eloquent
  */

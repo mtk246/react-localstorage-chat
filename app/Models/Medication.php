@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\Medication.
  *
  * @property int $id
- * @property string $code
  * @property string $date
  * @property string $drug_code
  * @property string $batch
@@ -22,12 +21,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $company_procedure_id
  * @property \App\Models\CompanyProcedure|null $companyProcedure
+ * @property string $code
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication query()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereBatch($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCompanyProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereDate($value)

@@ -25,6 +25,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
+ * @property Model|\Eloquent $nicknamable
  *
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname newQuery()
@@ -36,10 +37,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNicknamableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityNickname whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Model|\Eloquent $nicknamable
  *
  * @mixin \Eloquent
  */

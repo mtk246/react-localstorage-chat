@@ -31,13 +31,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Discriminatory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Discriminatory whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureConsiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureConsiderations
- *
  * @mixin \Eloquent
  */
 class Discriminatory extends Model implements Auditable

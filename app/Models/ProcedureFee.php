@@ -40,9 +40,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureFee whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class ProcedureFee extends Model implements Auditable

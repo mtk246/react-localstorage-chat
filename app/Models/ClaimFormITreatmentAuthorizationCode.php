@@ -13,26 +13,13 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\ClaimFormITreatmentAuthorizationCode.
  *
- * @property int $id
- * @property int $treatment_authorization_code
- * @property int $claim_form_i_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\ClaimFormI $claimFormI
+ * @property \App\Models\ClaimFormI|null $claimFormI
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereClaimFormIId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereTreatmentAuthorizationCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormITreatmentAuthorizationCode whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */
