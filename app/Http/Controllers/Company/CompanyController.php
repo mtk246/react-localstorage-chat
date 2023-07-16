@@ -109,9 +109,9 @@ final class CompanyController extends Controller
         return $this->companyRepository->getServerAllCompanies($request);
     }
 
-    public function getOneCompany(Request $request, GetCompany $getOne, int $id): JsonResponse
+    public function getOneCompany(Request $request, GetCompany $getOne, Company $company): JsonResponse
     {
-        $rs = $getOne->getOne($id, $request->user());
+        $rs = $getOne->single($company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
