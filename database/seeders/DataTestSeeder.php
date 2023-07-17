@@ -21,7 +21,6 @@ use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\ExceptionInsuranceCompany;
 use App\Models\Facility;
-use App\Models\FacilityType;
 use App\Models\Guarantor;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;

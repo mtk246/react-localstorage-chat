@@ -76,8 +76,8 @@ class UpdateFacilityRequest extends FormRequest
             'types.*.bill_classifications.*' => [
                 'required',
                 'integer',
-                'exists:\App\Models\BillClassification,id'
-            ]
+                'exists:\App\Models\BillClassification,id',
+            ],
         ];
     }
 }
