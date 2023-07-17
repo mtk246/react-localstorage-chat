@@ -118,8 +118,12 @@
     },
     "public_note": "Public Note",
     "private_note": "Private Note",
-    "types": [1,2,3],
-    "bill_classifications": [1,21],
+    "types": [
+        {
+            "id": 1,
+            "bill_classifications": [3,4]
+        }
+    ],
     "other_name": "Other name test"
 }
 ```
@@ -486,7 +490,6 @@
 ```json
 {
     "id": 1,
-    "facility_type_id": 1,
     "name": "facilityName",
     "npi": "123fac321",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -494,12 +497,27 @@
     "verified_on_nppes": true,
     "code": "FA-00001-2022",
     "status": false,
-    "facility_type": {
-        "id": 1,
-        "type": "01 - Clinics",
-        "created_at": "2022-04-07T20:50:55.000000Z",
-        "updated_at": "2022-04-07T20:50:55.000000Z"
-    },
+    "facility_types": [
+        {
+            "id": 8,
+            "type": "Special Facility or Hospital ASC Surgery",
+            "created_at": "2023-07-14T21:26:35.000000Z",
+            "updated_at": "2023-07-14T21:26:35.000000Z",
+            "bill_classifications": [
+                {
+                    "id": 15,
+                    "name": "Hospice (Non-Hospital Based)",
+                    "created_at": "2023-07-14T21:31:02.000000Z",
+                    "updated_at": "2023-07-14T21:31:02.000000Z"
+                }
+            ],
+            "pivot": {
+                "facility_id": 31,
+                "facility_type_id": 8,
+                "bill_classifications": "[15]"
+            }
+        }
+    ],
     "taxonomies": [
         {
             "id": 1,
@@ -641,7 +659,16 @@
         "mobile":"34324234",
         "fax":"567674576457",
         "email":"facility@facility.com"
-    }
+    },
+    "public_note": "Public Note",
+    "private_note": "Private Note",
+    "types": [
+        {
+            "id": 8,
+            "bill_classifications": [15]
+        }
+    ],
+    "other_name": "Other name test"
 }
 ```
 
