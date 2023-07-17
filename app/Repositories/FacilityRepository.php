@@ -10,9 +10,9 @@ use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\Facility;
 use App\Models\FacilityType;
-use App\Models\Taxonomy;
-use App\Models\PublicNote;
 use App\Models\PrivateNote;
+use App\Models\PublicNote;
+use App\Models\Taxonomy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -32,10 +32,10 @@ class FacilityRepository
 
             $facility = Facility::query()->create([
                 'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), Facility::class, 'code'),
-                'name' => $data['name'] ,
+                'name' => $data['name'],
                 'npi' => $data['npi'],
                 'nppes_verified_at' => now(),
-                'other_name' => $data['other_name']
+                'other_name' => $data['other_name'],
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -131,7 +131,7 @@ class FacilityRepository
                     'contact_name' => $data['contact']['contact_name'] ?? null,
                     'phone' => $data['contact']['phone'] ?? null,
                     'fax' => $data['contact']['fax'] ?? null,
-                    'email' => $data['contact']['email'] ?? "",
+                    'email' => $data['contact']['email'] ?? '',
                     'mobile' => $data['contact']['mobile'] ?? null,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'contactable_id' => $facility->id,
@@ -180,12 +180,11 @@ class FacilityRepository
             DB::commit();
 
             return $facility;
-
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
-        
     }
 
     /**
@@ -216,7 +215,7 @@ class FacilityRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            $facilities = Facility::with('facilityType');
+            $facilities = Facility::with('facilityTypes');
 
             if (isset($billingCompany)) {
                 $facilities = $facilities->whereHas('billingCompanies', function ($query) use ($billingCompany) {
@@ -229,7 +228,7 @@ class FacilityRepository
                 });
             }
             if (!isset($billingCompany) && !isset($companyId)) {
-                $facilities = Facility::with('facilityType')->get();
+                $facilities = Facility::with('facilityTypes')->get();
             } else {
                 $facilities = $facilities->get();
             }
@@ -451,7 +450,7 @@ class FacilityRepository
                 'updated_at' => $facility->updated_at,
                 'last_modified' => $facility->last_modified,
                 'public_note' => $facility->publicNote,
-                'facility_types' => $facility->facilityTypes
+                'facility_types' => $facility->facilityTypes,
             ];
             $record['billing_companies'] = [];
 
@@ -650,7 +649,7 @@ class FacilityRepository
                     'note' => $data['private_note'],
                 ]);
             }
-    
+
             if (isset($data['public_note'])) {
                 PublicNote::updateOrCreate([
                     'publishable_type' => Facility::class,
@@ -799,18 +798,16 @@ class FacilityRepository
      */
     public function addToCompany($facility, $data)
     {
-        
-        foreach($data['companies'] as $company) {
-            
+        foreach ($data['companies'] as $company) {
             $check = is_null($facility->companies()
                 ->where([
                     'billing_company_id' => $company['billing_company_id'],
-                    'company_id' => $company['company_id']
+                    'company_id' => $company['company_id'],
                 ])->first()
             );
 
             if ($check) {
-                $facility->companies()->attach($company['company_id'], 
+                $facility->companies()->attach($company['company_id'],
                     ['billing_company_id' => $company['billing_company_id']]
                 );
             }
@@ -829,14 +826,15 @@ class FacilityRepository
         $check = is_null($facility->companies()
                 ->where([
                     'billing_company_id' => $data['billing_company_id'] ?? null,
-                    'company_id' => $data['company_id']
+                    'company_id' => $data['company_id'],
                 ])->first()
-            );
+        );
 
         if ($check) {
             return $facility;
         } else {
             $facility->companies()->wherePivot('billing_company_id', $data['billing_company_id'] ?? null)->detach($data['company_id']);
+
             return $facility;
         }
     }
