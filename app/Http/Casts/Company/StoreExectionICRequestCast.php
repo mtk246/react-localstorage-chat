@@ -8,7 +8,7 @@ use App\Http\Casts\CastsRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
-final class StoreExectionICRequestCast extends CastsRequest
+final class StoreExceptionICRequestCast extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
