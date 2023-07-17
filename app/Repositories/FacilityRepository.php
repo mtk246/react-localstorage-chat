@@ -443,6 +443,7 @@ class FacilityRepository
                 'last_modified' => $facility->last_modified,
                 'public_note' => $facility->publicNote,
                 'facility_types' => $facility->facilityTypes,
+                'other_name' => $facility->other_name
             ];
 
             foreach ($facility->facilityTypes as $key => $facilityType) {
