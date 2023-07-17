@@ -35,7 +35,7 @@ class FacilityRepository
                 'name' => $data['name'],
                 'npi' => $data['npi'],
                 'nppes_verified_at' => now(),
-                'other_name' => $data['other_name'],
+                'other_name' => $data['other_name'] ?? null,
             ]);
 
             if (isset($data['taxonomies'])) {
@@ -443,6 +443,7 @@ class FacilityRepository
                 'last_modified' => $facility->last_modified,
                 'public_note' => $facility->publicNote,
                 'facility_types' => $facility->facilityTypes,
+                'other_name' => $facility->other_name
             ];
 
             foreach ($facility->facilityTypes as $key => $facilityType) {
