@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\ApiController;
+use App\Models\BillClassificationFacilityFacilityType;
 
 class FacilityRepository
 {
@@ -157,11 +157,24 @@ class FacilityRepository
             }
 
             if (isset($data['types'])) {
-                $facility->facilityTypes()->attach($data['types']);
-            }
 
-            if(isset($data['bill_classifications'])) {
-                $facility->billClassifications()->attach($data['bill_classifications']);
+                $bcFacilityTypeFacility = array();
+
+                foreach ($data['types'] as $value) {
+
+                    $facility->facilityTypes()->attach($value['id']);
+
+                    foreach ($value['bill_classifications'] as $item) {
+                        array_push($bcFacilityTypeFacility, [
+                            'facility_id' => $facility->id,
+                            'facility_type_id' => $value['id'],
+                            'bill_classification_id' => $item
+                        ]);
+                    }                    
+                }
+
+                BillClassificationFacilityFacilityType::insert($bcFacilityTypeFacility);
+                
             }
 
             DB::commit();
@@ -248,7 +261,7 @@ class FacilityRepository
                 'nicknames',
                 'abbreviations',
                 'companies',
-                'facilityType',
+                'facilityType.bclassifications_ftypes_facility',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         } else {
             $facilities = Facility::whereHas('billingCompanies', function ($query) use ($bC) {
@@ -267,7 +280,7 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'companies',
-                'facilityType',
+                'facilityType.bclassifications_ftypes_facility',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         }
 
@@ -287,7 +300,7 @@ class FacilityRepository
                 'nicknames',
                 'abbreviations',
                 'companies',
-                'facilityType',
+                'facilityType.bclassifications_ftypes_facility',
             ])->whereHas('companies', function ($query) use ($company_id) {
                 $query->where('company_id', $company_id);
             })->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
@@ -306,7 +319,7 @@ class FacilityRepository
                         $query->where('billing_company_id', $bC);
                     },
                     'companies',
-                    'facilityType',
+                    'facilityType.bclassifications_ftypes_facility',
             ])->whereHas('companies', function ($query) use ($company_id) {
                 $query->where('company_id', $company_id);
             })->whereHas('billingCompanies', function ($query) use ($bC) {
@@ -327,7 +340,7 @@ class FacilityRepository
                 'nicknames',
                 'abbreviations',
                 'companies',
-                'facilityTypes',
+                'facilityTypes.bclassifications_ftypes_facility',
                 'billingCompanies',
             ]);
         } else {
@@ -347,7 +360,7 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'companies',
-                'facilityTypes',
+                'facilityTypes.bclassifications_ftypes_facility',
                 'billingCompanies' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
@@ -393,7 +406,7 @@ class FacilityRepository
                 'billingCompanies',
                 'nicknames',
                 'abbreviations',
-                'facilityTypes',
+                'facilityTypes.bclassifications_ftypes_facility',
                 'publicNote'
             ])->first();
         } else {
@@ -413,7 +426,7 @@ class FacilityRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'companies',
-                'facilityTypes',
+                'facilityTypes.bclassifications_ftypes_facility',
                 'placeOfServices' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
@@ -648,11 +661,28 @@ class FacilityRepository
             }
 
             if (isset($data['types'])) {
-                $facility->facilityTypes()->sync($data['types']);
-            }
 
-            if (isset($data['bill_classifications'])) {
-                $facility->billClassifications()->sync($data['bill_classifications']);
+                $bcFacilityTypeFacility = array();
+
+                BillClassificationFacilityFacilityType::where('facility_id', '=', $facility->id)->delete();
+                $facility->facilityTypes()->detach();
+
+                foreach ($data['types'] as $value) {
+
+                    $facility->facilityTypes()->attach($value['id']);
+
+                    foreach ($value['bill_classifications'] as $item) {
+
+                        array_push($bcFacilityTypeFacility, [
+                            'facility_id' => $facility->id,
+                            'facility_type_id' => $value['id'],
+                            'bill_classification_id' => $item
+                        ]);
+                    }                    
+                }
+
+                BillClassificationFacilityFacilityType::insert($bcFacilityTypeFacility);
+                
             }
 
             DB::commit();

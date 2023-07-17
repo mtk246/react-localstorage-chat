@@ -51,4 +51,10 @@ class FacilityType extends Model
     {
         return $this->belongsToMany(BillClassification::class);
     }
+
+    public function bclassifications_ftypes_facility(): BelongsToMany
+    {
+        return $this->belongsToMany(BillClassification::class, 'bill_classification_facility_facility_type')
+            ->using(BillClassificationFacilityFacilityType::class);
+    }
 }
