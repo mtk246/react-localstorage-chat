@@ -59,7 +59,6 @@ final class FacilityCreateRequest extends FormRequest
             'address.state' => ['required', 'string'],
             'address.country' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
             'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],

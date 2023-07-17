@@ -35,7 +35,7 @@ class FacilityRepository
                 'name' => $data['name'],
                 'npi' => $data['npi'],
                 'nppes_verified_at' => now(),
-                'other_name' => $data['other_name'],
+                'other_name' => $data['other_name'] ?? null,
             ]);
 
             if (isset($data['taxonomies'])) {
