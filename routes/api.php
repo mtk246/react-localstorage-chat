@@ -236,7 +236,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/{company}/services', [CompanyController::class, 'addServices']);
             Route::patch('/{company}/copays', [CompanyController::class, 'addCompanyCopays']);
             Route::patch('/{company}/contract-fees', [CompanyController::class, 'addCompanyContractFees']);
-            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
+            Route::get('/{company}', [CompanyController::class, 'getOneCompany']);
             Route::put('/{id}', [CompanyController::class, 'updateCompany']);
         });
     });
