@@ -8,6 +8,7 @@ use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
+use App\Actions\GetAPIAction;
 use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusCompanyRequest;
@@ -22,6 +23,7 @@ use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use App\Http\Resources\API\CompanyResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Models\Company;
@@ -184,7 +186,7 @@ final class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
 
-    public function getOneByNpi(string $npi): JsonResponse
+    public function getOneByNpi(string $npi, GetAPIAction $APIAction): JsonResponse
     {
         $rs = $this->companyRepository->getOneByNpi($npi);
 
@@ -199,7 +201,15 @@ final class CompanyController extends Controller
                 }
             }
         } else {
-            return response()->json(__('Error, company not found'), 404);
+            $rs = $APIAction->getByNPI($npi);
+
+            if ($rs) {
+                return ('NPI-2' === $rs->enumeration_type)
+                    ? response()->json(CompanyResource::make($rs))
+                    : response()->json(__('Error, The entered NPI does not belong to a company but to a health care professional, please verify it and enter a valid NPI.'), 404);
+            }
+
+            return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
         }
     }
 
