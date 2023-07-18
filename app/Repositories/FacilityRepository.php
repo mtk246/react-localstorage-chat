@@ -490,6 +490,7 @@ class FacilityRepository
                         'state' => $address->state,
                         'address' => $address->address,
                         'country' => $address->country,
+                        'apt_suite' => $address->apt_suite
                     ];
                 }
 
@@ -539,6 +540,12 @@ class FacilityRepository
                 'name' => $data['name'],
                 'npi' => $data['npi'],
             ]);
+
+            if (isset($data['other_name'])){
+                $facility->update([
+                    'other_name' => $data['other_name']
+                ]);
+            }
 
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
