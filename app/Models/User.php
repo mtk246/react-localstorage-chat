@@ -189,9 +189,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User belongs to Profile.
      */
-    public function getProfileAttribute(): Profile
+    public function getProfileAttribute(): ?Profile
     {
-        return $this->profile()->sole();
+        return $this->profile_id
+            ? $this->profile()->sole()
+            : null;
     }
 
     /**
@@ -225,7 +227,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Contact.
      */
-    public function contacts(): MorphMany
+    public function contacts(): ?MorphMany
     {
         return $this->profile?->contacts();
     }
@@ -233,9 +235,9 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Address.
      */
-    public function addresses(): MorphMany
+    public function addresses(): ?MorphMany
     {
-        return $this->profile->addresses();
+        return $this->profile?->addresses();
     }
 
     /**
