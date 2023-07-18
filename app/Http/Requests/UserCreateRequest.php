@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Http\Casts\User\StoreUserWrapper;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\OnlyRoleIf;
+use App\Rules\ValidRoleRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UserCreateRequest extends FormRequest
 {
+    use HasCastedClass;
+
+    protected string $castedClass = StoreUserWrapper::class;
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -33,7 +40,18 @@ class UserCreateRequest extends FormRequest
             'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
+            'roles.*' => ['required', 'integer', new ValidRoleRule()],
+
             'billing_company_id' => ['nullable', 'integer'],
+            'memberships' => [
+                Rule::requiredIf(in_array('Billing Worker', $this->roles)),
+                'nullable',
+                'array',
+            ],
+            'memberships.*' => [
+                'integer',
+                'exists:memberships_roles,id',
+            ],
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],

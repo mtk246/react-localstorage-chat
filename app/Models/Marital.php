@@ -21,13 +21,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $patient_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $billing_company_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
  * @property \App\Models\Patient $patient
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Marital newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Marital newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Marital query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Marital whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Marital whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Marital whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Marital wherePatientId($value)
@@ -35,9 +38,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Marital whereSpuseWork($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Marital whereSpuseWorkPhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Marital whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

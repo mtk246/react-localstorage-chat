@@ -15,7 +15,7 @@ class OnlyRoleIf implements Rule
      *
      * @return void
      */
-    public function __construct($exceptRole = ['Super User'])
+    public function __construct($exceptRole = [0])
     {
         $this->exceptRole = $exceptRole;
     }

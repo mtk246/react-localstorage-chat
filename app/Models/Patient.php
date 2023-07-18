@@ -17,69 +17,42 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Patient.
  *
  * @property int $id
- * @property string $marital_status
- * @property string $driver_licence
- * @property bool $dependent
- * @property string $guardian_name
- * @property string $guardian_phone
- * @property string $spuse_name
- * @property string $employer
- * @property string $employer_address
- * @property string $position
- * @property string $phone_employer
- * @property string $spuse_employer
- * @property string $spuse_work_phone
+ * @property string|null $driver_license
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\EmergencyContact[] $emergencyContacts
- * @property int|null $emergency_contacts_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlans
- * @property int|null $insurance_plans_count
- * @property \App\Models\User|null $user
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDependent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicence($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereEmployerAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereGuardianName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereGuardianPhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient wherePhoneEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient wherePosition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseWorkPhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUserId($value)
- *
- * @property string|null $driver_license
  * @property string|null $code
  * @property int|null $marital_status_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
+ * @property int|null $claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
+ * @property int|null $contract_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EmergencyContact> $emergencyContacts
+ * @property int|null $emergency_contacts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
  * @property int|null $employments_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
  * @property int|null $encounters_count
  * @property mixed $last_modified
  * @property mixed $status
- * @property \App\Models\Guarantor|null $guarantor
+ * @property \App\Models\User $user
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guarantor> $guarantors
+ * @property int|null $guarantors_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
  * @property int|null $injuries_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
- * @property \App\Models\Marital|null $marital
  * @property \App\Models\MaritalStatus|null $maritalStatus
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Marital> $maritals
+ * @property int|null $maritals_count
  * @property \App\Models\PatientConditionRelated|null $patientConditionRelated
  * @property \App\Models\PatientPrivate|null $patientPrivate
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
@@ -88,29 +61,17 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUserId($value)
  *
  * @mixin \Eloquent
  */

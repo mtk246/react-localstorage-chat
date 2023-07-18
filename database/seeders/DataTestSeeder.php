@@ -21,7 +21,6 @@ use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\ExceptionInsuranceCompany;
 use App\Models\Facility;
-use App\Models\FacilityType;
 use App\Models\Guarantor;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
@@ -190,7 +189,6 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'CARING FAMILY CORP',
                         'npi' => '1215297064',
                         'nppes_verified_at' => now(),
@@ -234,7 +232,6 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'ISA HOME CORP.',
                         'npi' => '1205277944',
                         'nppes_verified_at' => now(),
@@ -259,7 +256,6 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'MACARENA ASSISTED LIVING FACILITY, INC.',
                         'npi' => '1851778658',
                         'nppes_verified_at' => now(),
@@ -284,7 +280,6 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('Skilled Nursing')->first()->id,
                         'name' => 'MY NEW HOME ALF I, INC.',
                         'npi' => '1699160762',
                         'nppes_verified_at' => now(),
@@ -438,7 +433,6 @@ class DataTestSeeder extends Seeder
                 ], [
                     'code' => generateNewCode('FA', 5, date('Y'), Facility::class, 'code'),
                     'name' => $dataF['name'],
-                    'facility_type_id' => $dataF['facility_type_id'],
                     'nppes_verified_at' => $dataF['nppes_verified_at'],
                 ]);
 

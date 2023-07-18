@@ -26,7 +26,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $price_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $insurance_company_id
+ * @property string|null $private_note
  * @property \App\Models\Company|null $company
+ * @property \App\Models\InsuranceCompany|null $insuranceCompany
+ * @property \App\Models\MacLocality|null $macLocality
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
+ * @property int|null $modifiers_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patiens
+ * @property int|null $patiens_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @property int|null $procedures_count
  *
@@ -39,12 +47,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsuranceLabelFeeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereMacLocalityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereModifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePricePercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePrivateNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereUpdatedAt($value)
  *

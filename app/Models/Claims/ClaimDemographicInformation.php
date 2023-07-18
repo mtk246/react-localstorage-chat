@@ -14,25 +14,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Claims\ClaimDemographicInformation.
  *
- * @property \App\Models\Claims\Claim $claim
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
- * @property int|null $claim_status_claims_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property int|null $claim_transmission_responses_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()
- *
  * @property int $id
  * @property int $claim_id
  * @property int|null $company_id
  * @property int|null $facility_id
  * @property int|null $patient_id
  * @property string|null $type_of_medical_assistance
- * @property string $prior_authorization_number
+ * @property string|null $prior_authorization_number
  * @property string $charges
- * @property string $auto_accident_place_state
+ * @property string|null $auto_accident_place_state
  * @property bool $accept_assignment
  * @property bool $patient_signature
  * @property bool $insured_signature
@@ -44,14 +34,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $automatic_eligibility
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property int|null $claim_status_claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property int|null $claim_transmission_responses_count
  * @property Company|null $company
  * @property Facility|null $facility
  * @property \Illuminate\Database\Eloquent\Collection<int, HealthProfessional> $healthProfessionals
  * @property int|null $health_professionals_count
  * @property Patient|null $patient
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAcceptAssignment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentPlaceState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentRelatedCondition($value)
@@ -72,10 +68,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereTypeOfMedicalAssistance($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereValidate($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
- * @property \Illuminate\Database\Eloquent\Collection<int, HealthProfessional> $healthProfessionals
  *
  * @mixin \Eloquent
  */

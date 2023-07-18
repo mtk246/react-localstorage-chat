@@ -32,6 +32,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Claims\ClaimEligibilityStatus|null $claimEligibilityStatus
+ * @property Company $company
+ * @property InsuranceCompany $insuranceCompany
+ * @property Patient $patient
+ * @property Subscriber|null $subscriber
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility newQuery()
@@ -48,13 +52,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereSubscriberId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimEligibility whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Company $company
- * @property InsuranceCompany $insuranceCompany
- * @property Patient $patient
- * @property Subscriber|null $subscriber
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

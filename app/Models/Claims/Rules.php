@@ -25,8 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $insurance_company_id
  * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, InsuranceCompany> $insuranceCompanies
- * @property int|null $insurance_companies_count
+ * @property InsuranceCompany $insuranceCompany
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newQuery()
@@ -41,8 +40,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereParameters($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereRules($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, InsuranceCompany> $insuranceCompanies
  *
  * @mixin \Eloquent
  */

@@ -16,8 +16,11 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $health_professional_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property array|null $authorization
+ * @property AsEnumCollection|null $authorization
  * @property int|null $billing_company_id
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\Company $company
+ * @property \App\Models\HealthProfessional $healthProfessional
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyHealthProfessional newQuery()

@@ -28,21 +28,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $payer_responsibility_id
  * @property int|null $insurance_policy_type_id
  * @property int|null $type_responsibility_id
+ * @property int|null $billing_company_id
+ * @property int|null $patient_id
+ * @property bool $status
+ * @property bool $own
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
  * @property int|null $claim_eligibilities_count
+ * @property \App\Models\ClaimEligibility|null $claimLastEligibility
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
  * @property int|null $claim_validations_count
  * @property mixed $insurance_company_id
  * @property mixed $insurance_company_name
- * @property mixed $own
  * @property mixed $payer_id
  * @property mixed $subscriber
  * @property \App\Models\InsurancePlan $insurancePlan
  * @property \App\Models\TypeCatalog|null $insurancePolicyType
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property int|null $patients_count
+ * @property \App\Models\Patient|null $patient
  * @property \App\Models\PayerResponsibility|null $payerResponsibility
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
@@ -52,6 +56,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy query()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereAssignBenefits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereEffDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereEndDate($value)
@@ -59,23 +64,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereInsurancePolicyTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereOwn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePayerResponsibilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePaymentResponsibilityLevelCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePolicyNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereReleaseInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereTypeResponsibilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  *
  * @mixin \Eloquent
  */

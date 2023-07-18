@@ -59,7 +59,6 @@ final class FacilityCreateRequest extends FormRequest
             'address.state' => ['required', 'string'],
             'address.country' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
             'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
@@ -74,7 +73,13 @@ final class FacilityCreateRequest extends FormRequest
             'other_name' => ['nullable', 'string'],
 
             'types' => ['required', 'array'],
-            'bill_classifications' => ['required', 'array'],
+            'types.*.id' => ['required', 'integer', 'exists:\App\Models\FacilityType,id'],
+            'types.*.bill_classifications' => ['required', 'array'],
+            'types.*.bill_classifications.*' => [
+                'required',
+                'integer',
+                'exists:\App\Models\BillClassification,id',
+            ],
         ];
     }
 }

@@ -8,6 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * App\Models\CustomKeyboardShortcuts.
+ *
+ * @property int $id
+ * @property string $key
+ * @property int $keyboard_shortcut_id
+ * @property string $shortcutable_type
+ * @property int $shortcutable_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Model|\Eloquent $billingCompany
+ * @property \App\Models\KeyboardShortcut $keyboardShortcut
+ * @property Model|\Eloquent $user
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereKeyboardShortcutId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereShortcutableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereShortcutableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomKeyboardShortcuts whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 final class CustomKeyboardShortcuts extends Model
 {
     /** @var string[] */

@@ -24,51 +24,36 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string $npi
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $email
- * @property int $tax_id
- * @property \App\Models\Address|null $address
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property int|null $billing_companies_count
- * @property \App\Models\Contact|null $contact
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
- * @property int|null $facilities_count
- * @property mixed $status
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Company newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Company query()
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereTaxId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
- *
  * @property string|null $ein
  * @property string|null $upin
  * @property string|null $clia
- * @property int|null $name_suffix_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
  * @property int|null $claim_eligibilities_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyStatement> $companyStatements
  * @property int|null $company_statements_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contracFees
+ * @property int|null $contrac_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
+ * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExceptionInsuranceCompany> $exceptionInsuranceCompanies
  * @property int|null $exception_insurance_companies_count
- * @property mixed $edit_name
- * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property int|null $facilities_count
+ * @property bool $edit_name
+ * @property array<key, string> $last_modified
+ * @property bool|null $status
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  * @property int|null $health_professionals_count
- * @property \App\Models\TypeCatalog|null $nameSuffix
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
  * @property int|null $nicknames_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
@@ -83,42 +68,20 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
+ * @method static \Database\Factories\CompanyFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Company newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Company query()
  * @method static \Illuminate\Database\Eloquent\Builder|Company search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereClia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereEin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereNameSuffixId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpin($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyStatement> $companyStatements
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExceptionInsuranceCompany> $exceptionInsuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyStatement> $companyStatements
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
- * @property int|null $copays_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExceptionInsuranceCompany> $exceptionInsuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  *
  * @mixin \Eloquent
  */

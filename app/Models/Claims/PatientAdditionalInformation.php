@@ -52,8 +52,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation wherePatientStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PatientAdditionalInformation whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 final class PatientAdditionalInformation extends Model implements Auditable

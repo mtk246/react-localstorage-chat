@@ -20,29 +20,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property string $file_method
- * @property string $naic
+ * @property string|null $naic
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\Address|null $address
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property int|null $billing_companies_count
- * @property \App\Models\Contact|null $contact
- * @property string $status
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlan
- * @property int|null $insurance_plan_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany query()
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereFileMethod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereNaic($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereUpdatedAt($value)
- *
  * @property string|null $payer_id
  * @property int|null $file_method_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
@@ -53,6 +33,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $appeal_reasons_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
  * @property int|null $billing_incomplete_reasons_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
@@ -61,6 +43,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $contacts_count
  * @property \App\Models\TypeCatalog|null $fileMethod
  * @property mixed $last_modified
+ * @property string $status
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
  * @property int|null $insurance_company_time_faileds_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
@@ -73,34 +56,18 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $procedures_count
  * @property \App\Models\PublicNote $publicNote
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany query()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereFileMethodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereNaic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany wherePayerId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $appealReasons
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $billingIncompleteReasons
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompanyTimeFailed> $insuranceCompanyTimeFaileds
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
