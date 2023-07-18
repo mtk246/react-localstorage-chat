@@ -40,7 +40,7 @@ class UserCreateRequest extends FormRequest
             'email' => ['required', Rule::unique('users', 'email'), 'string', 'email:rfc'],
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
-            'roles.*' => ['required', 'string', new ValidRoleRule()],
+            'roles.*' => ['required', 'integer', new ValidRoleRule()],
 
             'billing_company_id' => ['nullable', 'integer'],
             'memberships' => [
