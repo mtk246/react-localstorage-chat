@@ -441,25 +441,25 @@ class UserRepository
         if (!$bC) {
             $user = $user->load([
                 'profile' => function ($query) {
-                    $query->with('socialMedias');
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
                 'roles',
-                'addresses',
-                'contacts',
                 'billingCompanies',
             ]);
         } else {
             $user = $user = $user->load([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
+                'profile' => function ($query) use ($bC) {
+                    $query->with([
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
                 },
                 'roles',
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
                 'billingCompanies',
             ]);
         }
@@ -655,21 +655,23 @@ class UserRepository
 
         $bC = Gate::check('is-admin') ? $billing_company_id : auth()->user()->billing_company_id;
         $user = User::with([
-            'profile' => function ($query) {
-                $query->with('socialMedias');
+            'profile' => function ($query) use ($bC) {
+                $query->with([
+                    'socialMedias',
+                    'addresses' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                    'contacts' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                ]);
             },
             'roles',
             'billingCompanies',
-            'addresses' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
-            'contacts' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
         ])->whereHas('profile', function ($query) use ($ssn) {
             $query->where('ssn', $ssn)
                 ->orWhere('ssn', str_replace('-', '', $ssn ?? ''));
