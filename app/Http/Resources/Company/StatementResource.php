@@ -28,7 +28,9 @@ final class StatementResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'rule_id' => $this->resource->rule_id,
+            'rule' => $this->resource->rule->description ?? '',
             'when_id' => $this->resource->when_id,
+            'when' => $this->resource->when->description ?? '',
             'start_date' => $this->resource->start_date,
             'end_date' => $this->resource->end_date,
             'apply_to_ids' => new EnumResource(

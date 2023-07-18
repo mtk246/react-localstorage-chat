@@ -101,8 +101,8 @@ final class Company extends Model implements Auditable
         'name',
         'npi',
         'ein',
-        'upin',
         'clia',
+        'other_name',
     ];
 
     /**
@@ -129,7 +129,10 @@ final class Company extends Model implements Auditable
      */
     public function billingCompanies(): BelongsToMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(BillingCompanyCompany::class)
+            ->withPivot(['status', 'miscellaneous', 'claim_format_ids'])
+            ->withTimestamps();
     }
 
     /**
@@ -350,6 +353,8 @@ final class Company extends Model implements Auditable
 
     public function toSearchableArray()
     {
+        $contacts = $this->contacts->first();
+
         return [
             'code' => $this->code,
             'name' => $this->name,
@@ -357,6 +362,10 @@ final class Company extends Model implements Auditable
             'ein' => $this->ein,
             'upin' => $this->upin,
             'clia' => $this->clia,
+            'contacts.phone' => $contacts->phone,
+            'contacts.fax' => $contacts->fax,
+            'contacts.email' => $contacts->email,
+            'contacts.mobile' => $contacts->mobile,
         ];
     }
 }

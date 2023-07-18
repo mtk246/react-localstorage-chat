@@ -23,7 +23,6 @@ class UpdateFacilityRequest extends FormRequest
         return [
             'name' => ['required', 'string', new IUnique(Facility::class, 'name', $this->id)],
             'npi' => ['required', 'string'],
-            'facility_type_id' => ['required', 'integer'],
             'companies' => [
                 'required',
                 'array',
@@ -50,7 +49,11 @@ class UpdateFacilityRequest extends FormRequest
             'taxonomies.*.primary' => ['required', 'boolean'],
 
             'address' => ['required', 'array'],
-            'address.address' => ['required', 'string'],
+            'address.address' => [
+                'required',
+                'string',
+                'doesnt_start_with:POB,pob',
+            ],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.country' => ['required', 'string'],
@@ -66,6 +69,16 @@ class UpdateFacilityRequest extends FormRequest
 
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],
+            'other_name' => ['nullable', 'string'],
+
+            'types' => ['required', 'array'],
+            'types.*.id' => ['required', 'integer', 'exists:\App\Models\FacilityType,id'],
+            'types.*.bill_classifications' => ['required', 'array'],
+            'types.*.bill_classifications.*' => [
+                'required',
+                'integer',
+                'exists:\App\Models\BillClassification,id',
+            ],
         ];
     }
 }

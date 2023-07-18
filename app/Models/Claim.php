@@ -665,14 +665,16 @@ class Claim extends Model implements Auditable
 
     public function toSearchableArray()
     {
+        $this->load(['company']);
+
         return [
             'control_number' => $this->control_number,
-            'company.code' => $this->company->code,
-            'company.name' => $this->company->name,
-            'company.npi' => $this->company->npi,
-            'company.ein' => $this->company->ein,
-            'company.upin' => $this->company->upin,
-            'company.clia' => $this->company->clia,
+            'company.code' => $this->company?->code,
+            'company.name' => $this->company?->name,
+            'company.npi' => $this->company?->npi,
+            'company.ein' => $this->company?->ein,
+            'company.upin' => $this->company?->upin,
+            'company.clia' => $this->company?->clia,
         ];
     }
 }

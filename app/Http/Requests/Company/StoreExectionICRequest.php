@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Http\Casts\Company\StoreExectionICRequestCast;
+use App\Http\Casts\Company\StoreExceptionICRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -14,7 +14,7 @@ final class StoreExectionICRequest extends FormRequest
 {
     use HasCastedClass;
 
-    protected string $castedClass = StoreExectionICRequestCast::class;
+    protected string $castedClass = StoreExceptionICRequestCast::class;
 
     /** @return array<string, mixed> */
     public function rules()
