@@ -34,6 +34,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
+ * @property Model|\Eloquent $profile
+ * @property Model|\Eloquent $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Address newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address newQuery()
@@ -98,6 +100,16 @@ class Address extends Model implements Auditable
     public function addressable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function user(): MorphTo
+    {
+        return $this->morphTo(User::class, 'addressable_type', 'addressable_id');
+    }
+
+    public function profile(): MorphTo
+    {
+        return $this->morphTo(Profile::class, 'addressable_type', 'addressable_id');
     }
 
     /**

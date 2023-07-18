@@ -30,6 +30,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
  * @property Model|\Eloquent $contactable
+ * @property Model|\Eloquent $profile
+ * @property Model|\Eloquent $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
@@ -83,5 +85,15 @@ class Contact extends Model implements Auditable
     public function contactable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function user(): MorphTo
+    {
+        return $this->morphTo(User::class, 'contactable_type', 'contactable_id');
+    }
+
+    public function profile(): MorphTo
+    {
+        return $this->morphTo(Profile::class, 'contactable_type', 'contactable_id');
     }
 }
