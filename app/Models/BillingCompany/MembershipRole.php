@@ -15,16 +15,29 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 /**
  * App\Models\BillingCompany\MembershipRole.
  *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $description
+ * @property int $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany\Membership> $memberships
  * @property int|null $memberships_count
- * @property mixed $slug
  *
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

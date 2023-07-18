@@ -38,15 +38,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $language
  * @property string|null $last_activity
  * @property int|null $billing_company_id
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
  * @property \App\Models\BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property int|null $contacts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomKeyboardShortcuts> $customKeyboardShortcuts
  * @property int|null $custom_keyboard_shortcuts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Device> $devices
