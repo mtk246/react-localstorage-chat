@@ -34,9 +34,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Injury whereTypeDiagId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Injury whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class Injury extends Model implements Auditable

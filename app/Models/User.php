@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\BillingCompany\Membership;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,71 +21,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * App\Models\User.
  *
  * @property int $id
- * @property string $username
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $sex
- * @property string $lastName
- * @property string $firstName
- * @property string $middleName
  * @property string|null $token
- * @property bool $available
  * @property bool $isLogged
- * @property string|null $img_profile
- * @property string|null $ssn
- * @property string|null $dateOfBirth
  * @property bool $isBlocked
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $address
- * @property int|null $address_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanyUser
- * @property int|null $billing_company_user_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Contact[] $contact
- * @property int|null $contact_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Device[] $devices
- * @property int|null $devices_count
- * @property \App\Models\Doctor|null $doctor
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Metadata[] $metadata
- * @property int|null $metadata_count
- * @property \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property int|null $notifications_count
- * @property \App\Models\Patient|null $patient
- * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
- * @property int|null $permissions_count
- * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
- * @property int|null $roles_count
- * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
- * @property int|null $tokens_count
- *
- * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDateOfBirth($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereImgProfile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBlocked($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLogged($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMiddleName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSex($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSsn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
- *
  * @property string|null $usercode
  * @property string|null $userkey
  * @property bool $status
@@ -91,49 +37,62 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $profile_id
  * @property string $language
  * @property string|null $last_activity
+ * @property int|null $billing_company_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
- * @property \Illuminate\Database\Eloquent\Collection<int, Audit> $audits
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
+ * @property \App\Models\BillingCompany|null $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomKeyboardShortcuts> $customKeyboardShortcuts
+ * @property int|null $custom_keyboard_shortcuts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Device> $devices
+ * @property int|null $devices_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
  * @property int|null $failed_login_attempts_count
- * @property mixed $billing_company
- * @property mixed $billing_company_id
  * @property mixed $last_modified
+ * @property \App\Models\Profile|null $profile
  * @property \App\Models\HealthProfessional|null $healthProfessional
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property int|null $ip_restrictions_count
- * @property \App\Models\Profile|null $profile
+ * @property \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property int|null $notifications_count
+ * @property \App\Models\Patient|null $patient
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
+ * @property int|null $permissions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Role> $roles
+ * @property int|null $roles_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property int|null $tokens_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  * @property int|null $user_permissions_count
  *
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBlocked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLogged($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastActivity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLogin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  *
  * @mixin \Eloquent
  */
@@ -164,6 +123,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         'isBlocked',
         'profile_id',
         'language',
+        'billing_company_id',
     ];
 
     /**
@@ -191,7 +151,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['profile', 'billing_company_id', 'billing_company', 'last_modified'];
+    protected $appends = ['profile', 'last_modified'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -221,7 +181,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User belongs to Profile.
      */
-    public function profile(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class);
     }
@@ -255,7 +215,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      */
     public function billingCompanies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(Membership::class)
+            ->withPivot('status', 'roles')
+            ->withTimestamps()
+            ->as('membership');
     }
 
     /**
@@ -263,7 +227,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      */
     public function contacts(): MorphMany
     {
-        return $this->morphMany(Contact::class, 'contactable');
+        return $this->profile?->contacts();
     }
 
     /**
@@ -271,7 +235,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      */
     public function addresses(): MorphMany
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->profile->addresses();
     }
 
     /**
@@ -298,36 +262,9 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->hasMany(Device::class);
     }
 
-    /*
-     * Get the company's status.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getBillingCompanyIdAttribute()
+    public function billingCompany(): BelongsTo
     {
-        $user = auth()->user();
-
-        if (is_null($user)) {
-            return null;
-        }
-
-        $billingCompany = $user->billingCompanies->first();
-
-        return $billingCompany->id ?? null;
-    }
-
-    /*
-     * Get the billing company's.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getBillingCompanyAttribute()
-    {
-        $billingCompany = $this->billingCompanies->first();
-
-        return $billingCompany ?? null;
+        return $this->belongsTo(BillingCompany::class);
     }
 
     /**
@@ -393,8 +330,8 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return [
             'usercode' => $this->usercode,
             'email' => $this->email,
-            'contacts' => $this->contacts->toArray(),
-            'addresses' => $this->addresses->toArray(),
+            'contacts' => $this->profile->contacts->toArray(),
+            'addresses' => $this->profile->addresses->toArray(),
             'profile.first_name' => $this->profile->first_name,
             'profile.last_name' => $this->profile->last_name,
             'profile.ssn' => $this->profile->ssn,

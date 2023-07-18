@@ -26,6 +26,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\TypeCatalog|null $from
+ * @property Model|\Eloquent $timeFailable
  *
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed newQuery()
@@ -38,10 +39,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereTimeFailableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereTimeFailableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityTimeFailed whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Model|\Eloquent $timeFailable
  *
  * @mixin \Eloquent
  */

@@ -23,6 +23,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Claim $claim
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimCheckStatus> $claimCheckStatus
+ * @property int|null $claim_check_status_count
  * @property Model|\Eloquent $claimStatus
  * @property mixed $last_modified
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
@@ -37,11 +39,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusClaim whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  *
  * @mixin \Eloquent
  */

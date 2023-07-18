@@ -10,6 +10,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * App\Models\ClaimCheckStatus.
+ *
+ * @property int $id
+ * @property string|null $response_details
+ * @property string|null $interface_type
+ * @property string|null $interface
+ * @property string|null $consultation_date
+ * @property string|null $resolution_time
+ * @property string|null $past_due_date
+ * @property int $private_note_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\PrivateNote $privateNote
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereConsultationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInterface($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInterfaceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus wherePastDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus wherePrivateNoteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereResolutionTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereResponseDetails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 final class ClaimCheckStatus extends Model implements Auditable
 {
     use AuditableTrait;

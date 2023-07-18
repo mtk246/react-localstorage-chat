@@ -14,14 +14,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\Claims\ClaimDateInformation.
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
- * @property \App\Models\Claims\ClaimAdditionalInformation|null $claimAdditionalInformation
- *
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation query()
- *
  * @property int $id
  * @property string|null $from_date
  * @property string|null $to_date
@@ -33,9 +25,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $amount
  * @property int $claim_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property TypeCatalog|null $qualifier
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation query()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereClaimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereCreatedAt($value)
@@ -46,8 +42,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereQualifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereToDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

@@ -34,9 +34,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult whereRank($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestrictionMult whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class IpRestrictionMult extends Model implements Auditable

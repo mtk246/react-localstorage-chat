@@ -41,13 +41,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimSubStatus whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatus> $claimStatuses
- *
  * @mixin \Eloquent
  */
 class ClaimSubStatus extends Model implements Auditable

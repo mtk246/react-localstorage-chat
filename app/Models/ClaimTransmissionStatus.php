@@ -29,9 +29,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $ClaimTransmissionResponses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimTransmissionResponse> $ClaimTransmissionResponses
- *
  * @mixin \Eloquent
  */
 class ClaimTransmissionStatus extends Model

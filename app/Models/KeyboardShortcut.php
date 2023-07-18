@@ -17,27 +17,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $id
  * @property string $description
  * @property string $shortcut_type
- * @property string|null $module
+ * @property array|null $module
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $default_key
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property mixed $key
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomKeyboardShortcuts> $keys
+ * @property int|null $keys_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut query()
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereDefaultKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereModule($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereShortcutType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|KeyboardShortcut whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property int|null $billing_companies_count
  *
  * @mixin \Eloquent
  */

@@ -21,21 +21,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\Address|null $address
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\BillingCompany[] $billingCompanies
- * @property int|null $billing_companies_count
- * @property \App\Models\Contact|null $contact
- * @property string $status
- *
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
- *
  * @property int|null $org_type_id
  * @property int|null $transmission_format_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
@@ -44,28 +29,28 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
+ * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
  * @property mixed $last_modified
+ * @property string $status
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
  * @property int|null $nicknames_count
  * @property \App\Models\TypeCatalog|null $orgType
  * @property \App\Models\TypeCatalog|null $transmissionFormat
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse query()
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereOrgTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereTransmissionFormatId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
+ * @method static \Illuminate\Database\Eloquent\Builder|ClearingHouse whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

@@ -23,6 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property mixed $last_modified
+ * @property Model|\Eloquent $publishable
  *
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote newQuery()
@@ -34,10 +35,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote wherePublishableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote wherePublishableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PrivateNote whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Model|\Eloquent $publishable
  *
  * @mixin \Eloquent
  */

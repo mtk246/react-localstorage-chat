@@ -23,37 +23,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
  * @property bool $status
- * @property \App\Models\Address|null $address
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\ClearingHouse[] $clearingHouses
- * @property int|null $clearing_houses_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Company[] $companies
- * @property int|null $companies_count
- * @property \App\Models\Contact|null $contact
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Facility[] $facilities
- * @property int|null $facilities_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsuranceCompany[] $insuranceCompany
- * @property int|null $insurance_company_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
- * @property int|null $users_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany query()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereUpdatedAt($value)
- *
  * @property string|null $logo
  * @property string|null $abbreviation
+ * @property string|null $tax_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClearingHouse> $clearingHouses
+ * @property int|null $clearing_houses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomKeyboardShortcuts> $customKeyboardShortcuts
+ * @property int|null $custom_keyboard_shortcuts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
+ * @property int|null $facilities_count
+ * @property mixed $address
+ * @property mixed $contact
  * @property mixed $last_modified
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  * @property int|null $health_professionals_count
@@ -63,42 +51,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $insurance_plans_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property int|null $ip_restrictions_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property int|null $keyboard_shortcuts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property int|null $users_count
  *
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereAbbreviation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingCompany whereLogo($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\KeyboardShortcut> $keyboardShortcuts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @method static \Database\Factories\BillingCompanyFactory factory($count = null, $state = [])
+ * @method static Builder|BillingCompany newModelQuery()
+ * @method static Builder|BillingCompany newQuery()
+ * @method static Builder|BillingCompany query()
+ * @method static Builder|BillingCompany search($search)
+ * @method static Builder|BillingCompany whereAbbreviation($value)
+ * @method static Builder|BillingCompany whereCode($value)
+ * @method static Builder|BillingCompany whereCreatedAt($value)
+ * @method static Builder|BillingCompany whereId($value)
+ * @method static Builder|BillingCompany whereLogo($value)
+ * @method static Builder|BillingCompany whereName($value)
+ * @method static Builder|BillingCompany whereStatus($value)
+ * @method static Builder|BillingCompany whereTaxId($value)
+ * @method static Builder|BillingCompany whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

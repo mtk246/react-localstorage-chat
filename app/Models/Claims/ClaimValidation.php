@@ -23,6 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
+ * @property InsurancePolicy $insurancePolicy
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation newQuery()
@@ -34,10 +35,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereInsurancePolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimValidation whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property InsurancePolicy $insurancePolicy
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

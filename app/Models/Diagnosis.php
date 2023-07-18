@@ -26,31 +26,44 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $start_date
  * @property string|null $end_date
  * @property bool $injury_date_required
+ * @property DiagnosesType|null $type
+ * @property mixed|null $clasifications
+ * @property string|null $description_long
+ * @property string|null $age
+ * @property string|null $age_end
+ * @property int|null $gender_id
+ * @property bool $status
+ * @property int|null $discriminatory_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\Discriminatory|null $discriminatory
+ * @property \App\Models\Gender|null $gender
  * @property mixed $last_modified
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @property int|null $procedures_count
- * @property \App\Models\PublicNote $publicNote
+ * @property \App\Models\PublicNote|null $publicNote
  *
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis query()
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereEndDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereInjuryDateRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereStartDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Diagnosis whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
+ * @method static Builder|Diagnosis newModelQuery()
+ * @method static Builder|Diagnosis newQuery()
+ * @method static Builder|Diagnosis query()
+ * @method static Builder|Diagnosis search($search)
+ * @method static Builder|Diagnosis whereActive($value)
+ * @method static Builder|Diagnosis whereAge($value)
+ * @method static Builder|Diagnosis whereAgeEnd($value)
+ * @method static Builder|Diagnosis whereClasifications($value)
+ * @method static Builder|Diagnosis whereCode($value)
+ * @method static Builder|Diagnosis whereCreatedAt($value)
+ * @method static Builder|Diagnosis whereDescription($value)
+ * @method static Builder|Diagnosis whereDescriptionLong($value)
+ * @method static Builder|Diagnosis whereDiscriminatoryId($value)
+ * @method static Builder|Diagnosis whereEndDate($value)
+ * @method static Builder|Diagnosis whereGenderId($value)
+ * @method static Builder|Diagnosis whereId($value)
+ * @method static Builder|Diagnosis whereInjuryDateRequired($value)
+ * @method static Builder|Diagnosis whereStartDate($value)
+ * @method static Builder|Diagnosis whereStatus($value)
+ * @method static Builder|Diagnosis whereType($value)
+ * @method static Builder|Diagnosis whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

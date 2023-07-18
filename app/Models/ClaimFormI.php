@@ -13,23 +13,10 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\ClaimFormI.
  *
- * @property int $id
- * @property string $type_of_bill
- * @property string $federal_tax_number
- * @property string|null $start_date_service
- * @property string|null $end_date_service
- * @property string|null $admission_date
- * @property int|null $admission_hour
- * @property string $type_of_admission
- * @property string $source_admission
- * @property int|null $discharge_hour
- * @property int|null $patient_discharge_stat
- * @property int|null $admit_dx
- * @property int $type_form_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormICodeAmount> $claimFormICodeAmounts
+ * @property int|null $claim_form_i_code_amounts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIConditionCode> $claimFormIConditionCodes
  * @property int|null $claim_form_i_condition_codes_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIOccurrence> $claimFormIOccurrences
@@ -38,46 +25,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $claim_form_i_revenues_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormITreatmentAuthorizationCode> $claimFormITreatmentAuthorizationCodes
  * @property int|null $claim_form_i_treatment_authorization_codes_count
- * @property ClaimFormI $typeForm
+ * @property ClaimFormI|null $typeForm
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereAdmissionDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereAdmissionHour($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereAdmitDx($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereDischargeHour($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereEndDateService($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereFederalTaxNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI wherePatientDischargeStat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereSourceAdmission($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereStartDateService($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereTypeFormId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereTypeOfAdmission($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereTypeOfBill($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormI whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormICodeAmount> $claimFormICodeAmounts
- * @property int|null $claim_form_i_code_amounts_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIConditionCode> $claimFormIConditionCodes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIOccurrence> $claimFormIOccurrences
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIRevenue> $claimFormIRevenues
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormITreatmentAuthorizationCode> $claimFormITreatmentAuthorizationCodes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormICodeAmount> $claimFormICodeAmounts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIConditionCode> $claimFormIConditionCodes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIOccurrence> $claimFormIOccurrences
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIRevenue> $claimFormIRevenues
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormITreatmentAuthorizationCode> $claimFormITreatmentAuthorizationCodes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormICodeAmount> $claimFormICodeAmounts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIConditionCode> $claimFormIConditionCodes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIOccurrence> $claimFormIOccurrences
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormIRevenue> $claimFormIRevenues
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormITreatmentAuthorizationCode> $claimFormITreatmentAuthorizationCodes
  *
  * @mixin \Eloquent
  */

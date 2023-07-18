@@ -14,8 +14,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\Copay.
  *
- * @todo compleate model structure
- *
  * @property int $id
  * @property int|null $billing_company_id
  * @property int|null $insurance_plan_id
@@ -23,6 +21,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $copay
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $insurance_company_id
+ * @property string|null $private_note
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Company|null $company
@@ -37,7 +37,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Copay whereCopay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Copay whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Copay whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Copay whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Copay whereInsurancePlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Copay wherePrivateNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Copay whereUpdatedAt($value)
  *
  * @mixin \Eloquent
