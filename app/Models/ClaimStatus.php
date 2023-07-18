@@ -33,11 +33,6 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimStatusClaim> $claimStatusClaims
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimSubStatus> $claimSubStatuses
- *
  * @mixin \Eloquent
  */
 class ClaimStatus extends Model

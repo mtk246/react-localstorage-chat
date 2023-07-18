@@ -15,40 +15,29 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Taxonomy.
  *
  * @property int $id
- * @property bool $isPrimary
  * @property string $name
- * @property int|null $user_id
- * @property int|null $company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy query()
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereIsPrimary($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUserId($value)
- *
  * @property string $tax_id
  * @property bool $primary
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy wherePrimary($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereTaxId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  * @property int|null $health_professionals_count
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy wherePrimary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereTaxId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Taxonomy whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

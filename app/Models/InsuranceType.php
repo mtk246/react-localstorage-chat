@@ -30,11 +30,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceType whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceLabelFee> $insuranceLabelFees
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceLabelFee> $insuranceLabelFees
- *
  * @mixin \Eloquent
  */
 class InsuranceType extends Model implements Auditable

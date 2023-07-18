@@ -12,6 +12,25 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\Service.
  *
+ * @property int $id
+ * @property int $claim_service_id
+ * @property int $procedure_id
+ * @property mixed|null $modifier_ids
+ * @property mixed|null $diagnostic_pointers
+ * @property string $from_service
+ * @property string $to_service
+ * @property string $price
+ * @property string $total_charge
+ * @property string|null $copay
+ * @property string|null $revenue_code_id
+ * @property string|null $place_of_service_id
+ * @property string|null $type_of_service_id
+ * @property string|null $days_or_units
+ * @property string|null $emg
+ * @property string|null $epsdt_id
+ * @property string|null $family_planning_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany $billingCompany
@@ -36,17 +55,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Service newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Service newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Service query()
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PublicNote> $publicNote
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereClaimServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereCopay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereDaysOrUnits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereDiagnosticPointers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereEmg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereEpsdtId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereFamilyPlanningId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereFromService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereModifierIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service wherePlaceOfServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereRevenueCodeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereToService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereTotalCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereTypeOfServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

@@ -14,20 +14,23 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Employment.
  *
  * @property int $id
- * @property string $employer_name
- * @property string $employer_address
- * @property string $employer_phone
- * @property string $position
+ * @property string|null $employer_name
+ * @property string|null $employer_address
+ * @property string|null $employer_phone
+ * @property string|null $position
  * @property int $patient_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $billing_company_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
  * @property \App\Models\Patient $patient
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Employment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Employment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Employment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employment whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employment whereEmployerAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employment whereEmployerName($value)
@@ -36,9 +39,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Employment wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employment wherePosition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employment whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

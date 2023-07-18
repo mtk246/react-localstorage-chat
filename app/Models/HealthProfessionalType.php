@@ -16,26 +16,25 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\HealthProfessionalType.
  *
  * @property int $id
- * @property string $type
+ * @property mixed $type
+ * @property int|null $health_professional_id
+ * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property int|null $health_professionals_count
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\HealthProfessional|null $healthProfessional
  *
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereHealthProfessionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessionalType whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessional> $healthProfessionals
  *
  * @mixin \Eloquent
  */

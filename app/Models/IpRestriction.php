@@ -19,12 +19,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property string|null $entity
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property int|null $ip_restriction_mults_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
  * @property mixed $last_modified
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $ipRestrictionMults
+ * @property int|null $ip_restriction_mults_count
  * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
@@ -40,19 +40,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereEntity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IpRestriction whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $IpRestrictionMults
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestrictionMult> $ipRestrictionMults
- * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  *
  * @mixin \Eloquent
  */

@@ -41,13 +41,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MacLocality whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- *
  * @mixin \Eloquent
  */
 class MacLocality extends Model implements Auditable

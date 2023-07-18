@@ -20,9 +20,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanServiceAliance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanServiceAliance query()
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class InsurancePlanServiceAliance extends Model implements Auditable

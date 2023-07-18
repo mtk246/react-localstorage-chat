@@ -27,6 +27,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  *
+ * @method static \Database\Factories\PlaceOfServiceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService query()
@@ -36,13 +37,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlaceOfService whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimServiceLine> $claimServiceLines
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimServiceLine> $claimServiceLines
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  *
  * @mixin \Eloquent
  */

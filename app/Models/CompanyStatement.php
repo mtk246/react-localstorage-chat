@@ -23,9 +23,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property array|null $apply_to_ids
+ * @property AsEnumCollection|null $apply_to_ids
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\Company $company
  * @property \App\Models\TypeCatalog|null $rule
  * @property \App\Models\TypeCatalog|null $when
@@ -43,10 +44,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereWhenId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \App\Models\BillingCompany $billingCompany
  *
  * @mixin \Eloquent
  */

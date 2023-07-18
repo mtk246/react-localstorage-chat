@@ -22,6 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Model|\Eloquent $abbreviable
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany $billingCompany
@@ -36,10 +37,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|EntityAbbreviation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityAbbreviation whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EntityAbbreviation whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Model|\Eloquent $abbreviable
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

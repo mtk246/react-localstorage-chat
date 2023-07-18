@@ -16,55 +16,37 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Contact.
  *
  * @property int $id
- * @property string $phone
- * @property string $fax
- * @property string $email
- * @property int|null $user_id
+ * @property string|null $phone
+ * @property string|null $fax
+ * @property string|null $email
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $clearing_house_id
- * @property int|null $facility_id
- * @property int|null $company_id
- * @property int|null $insurance_company_id
- * @property \App\Models\BillingCompany|null $billingCompany
- * @property \App\Models\ClearingHouse|null $clearingHouse
- * @property \App\Models\Company|null $company
- * @property \App\Models\Facility|null $facility
- * @property \App\Models\InsuranceCompany|null $insuranceCompany
- * @property \App\Models\User|null $user
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereBillingCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereClearingHouseId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFacilityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereInsuranceCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
- *
  * @property string|null $mobile
  * @property string $contactable_type
  * @property int $contactable_id
  * @property string|null $contact_name
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
  * @property Model|\Eloquent $contactable
+ * @property Model|\Eloquent $profile
+ * @property Model|\Eloquent $user
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereContactableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereFax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereMobile($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -103,5 +85,15 @@ class Contact extends Model implements Auditable
     public function contactable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function user(): MorphTo
+    {
+        return $this->morphTo(User::class, 'contactable_type', 'contactable_id');
+    }
+
+    public function profile(): MorphTo
+    {
+        return $this->morphTo(Profile::class, 'contactable_type', 'contactable_id');
     }
 }
