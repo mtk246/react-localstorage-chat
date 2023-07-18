@@ -40,8 +40,12 @@ final class StoreUserWrapper extends CastsRequest
     public function getRoles(): Collection
     {
         return $this->getCollect('roles')
-            ->filter(fn (string $name) => 'Patient' !== $name || 'Health Professional' !== $name)
-            ->map(fn (string $name) => Role::whereName($name)->first());
+            ->map(fn (string $id) => Role::query()
+                ->whereId($id)
+                ->whereNotIn('name', ['Patient', 'Health Professional'])
+                ->first()
+            )
+            ->filter(fn (?Role $role) => !is_null($role));
     }
 
     public function getEmail(): string

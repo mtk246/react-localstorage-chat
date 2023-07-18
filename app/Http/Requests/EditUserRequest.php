@@ -40,8 +40,8 @@ class EditUserRequest extends FormRequest
             'profile.social_medias.*.link' => ['sometimes', 'string'],
 
             'language' => ['nullable', 'string'],
-            'roles' => ['required', 'integer', new OnlyRoleIf()],
-            'roles.*' => ['required', 'string', new ValidRoleRule()],
+            'roles' => ['required', 'array', new OnlyRoleIf()],
+            'roles.*' => ['required', 'integer', new ValidRoleRule()],
 
             'billing_company_id' => ['nullable', 'integer'],
             'memberships' => [

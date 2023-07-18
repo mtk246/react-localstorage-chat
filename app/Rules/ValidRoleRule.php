@@ -19,7 +19,7 @@ final class ValidRoleRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (Gate::denies('is-admin') && 'Super User' === $value) {
+        if (Gate::denies('is-admin') && 0 === $value) {
             return false;
         }
 
