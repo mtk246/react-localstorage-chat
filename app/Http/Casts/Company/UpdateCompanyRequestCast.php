@@ -31,10 +31,10 @@ final class UpdateCompanyRequestCast extends CastsRequest
             : null;
     }
 
-    public function getUpin(): ?string
+    public function getOtherName(): ?string
     {
-        return array_key_exists('upin', $this->inputs)
-            ? $this->inputs['upin']
+        return array_key_exists('other_name', $this->inputs)
+            ? $this->inputs['other_name']
             : null;
     }
 
@@ -66,6 +66,18 @@ final class UpdateCompanyRequestCast extends CastsRequest
             : null;
     }
 
+    public function getMiscellaneous(): ?string
+    {
+        return array_key_exists('miscellaneous', $this->inputs)
+            ? $this->inputs['miscellaneous']
+            : null;
+    }
+
+    public function getClaimFormats(): array
+    {
+        return $this->getArray('claim_format_ids');
+    }
+
     public function getTaxonomies(): Collection
     {
         return collect($this->getArray('taxonomies'));
@@ -74,7 +86,7 @@ final class UpdateCompanyRequestCast extends CastsRequest
     public function getCompanyValues(): array
     {
         return ($this->getEin() ? ['ein' => $this->getEin()] : [])
-            + ($this->getUpin() ? ['upin' => $this->getUpin()] : [])
+            + ($this->getOtherName() ? ['other_name' => $this->getOtherName()] : [])
             + ($this->getClia() ? ['clia' => $this->getClia()] : []);
     }
 }

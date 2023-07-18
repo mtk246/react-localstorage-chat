@@ -70,7 +70,7 @@ final class KeyboardShortcut extends Model implements Auditable
             ->first()?->key;
     }
 
-    public function billingCompanyKey(int $billingCompanyId): ?string
+    public function billingCompanyKey(?int $billingCompanyId): ?string
     {
         return $this->keys()
                 ->where('shortcutable_type', BillingCompany::class)

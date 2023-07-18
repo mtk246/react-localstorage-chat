@@ -196,10 +196,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/add-to-billing-company/{id}', [\App\Http\Controllers\FacilityController::class, 'addToBillingCompany'])->middleware([
             'auth:api',
         ]);
-        Route::patch('/{facility_id}/add-to-company/{company_id}', [\App\Http\Controllers\FacilityController::class, 'addToCompany'])->middleware([
+        Route::patch('/{facility}/company', [\App\Http\Controllers\FacilityController::class, 'addToCompany'])->middleware([
             'auth:api',
         ]);
-        Route::patch('/{facility_id}/remove-to-company/{company_id}', [\App\Http\Controllers\FacilityController::class, 'removeToCompany'])->middleware([
+        Route::patch('/{facility}/remove-company', [\App\Http\Controllers\FacilityController::class, 'removeToCompany'])->middleware([
+            'auth:api',
+        ]);
+        Route::get('/bill-classifications/{facility_type}', [\App\Http\Controllers\FacilityController::class, 'getBillClassifiations'])->middleware([
             'auth:api',
         ]);
     });
@@ -233,7 +236,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/{company}/services', [CompanyController::class, 'addServices']);
             Route::patch('/{company}/copays', [CompanyController::class, 'addCompanyCopays']);
             Route::patch('/{company}/contract-fees', [CompanyController::class, 'addCompanyContractFees']);
-            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
+            Route::get('/{company}', [CompanyController::class, 'getOneCompany']);
             Route::put('/{id}', [CompanyController::class, 'updateCompany']);
         });
     });
