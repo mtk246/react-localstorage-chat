@@ -490,6 +490,7 @@ class FacilityRepository
                         'state' => $address->state,
                         'address' => $address->address,
                         'country' => $address->country,
+                        'apt_suite' => $address->apt_suite
                     ];
                 }
 
