@@ -253,13 +253,13 @@ class AuthController extends Controller
                 'profile' => function ($query) use ($bC)  {
                     $query->with([
                         'socialMedias',
-                    'addresses' => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'contacts' => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                ]);
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
                 },
             ]);
         }
