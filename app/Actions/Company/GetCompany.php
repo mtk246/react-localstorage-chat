@@ -42,16 +42,16 @@ final class GetCompany
                             $query->where('billing_company_id', $bC);
                         })
                         ->with([
-                            'addresses' => function (Builder $query) use ($bC) {
+                            'addresses' => function ($query) use ($bC) {
                                 $query->where('billing_company_id', $bC);
                             },
-                            'contacts' => function (Builder $query) use ($bC) {
+                            'contacts' => function ($query) use ($bC) {
                                 $query->where('billing_company_id', $bC);
                             },
-                            'nicknames' => function (Builder $query) use ($bC) {
+                            'nicknames' => function ($query) use ($bC) {
                                 $query->where('billing_company_id', $bC);
                             },
-                            'billingCompanies' => function (Builder $query) use ($bC) {
+                            'billingCompanies' => function ($query) use ($bC) {
                                 $query->where('billing_company_id', $bC);
                             },
                         ]);
