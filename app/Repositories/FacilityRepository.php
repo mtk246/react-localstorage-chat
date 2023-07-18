@@ -541,6 +541,12 @@ class FacilityRepository
                 'npi' => $data['npi'],
             ]);
 
+            if (isset($data['other_name'])){
+                $facility->update([
+                    'other_name' => $data['other_name']
+                ]);
+            }
+
             if (isset($data['taxonomies'])) {
                 $tax_array = [];
                 foreach ($data['taxonomies'] as $taxonomy) {

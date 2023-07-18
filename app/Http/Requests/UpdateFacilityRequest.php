@@ -69,6 +69,7 @@ class UpdateFacilityRequest extends FormRequest
 
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],
+            'other_name' => ['nullable', 'string'],
 
             'types' => ['required', 'array'],
             'types.*.id' => ['required', 'integer', 'exists:\App\Models\FacilityType,id'],
