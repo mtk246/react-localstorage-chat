@@ -6,14 +6,14 @@ namespace App\Actions\Company;
 
 use App\Http\Casts\Company\ExectionInsuranceCompanyCast;
 use App\Http\Casts\Company\StatementCast;
-use App\Http\Casts\Company\StoreExectionICRequestCast;
+use App\Http\Casts\Company\StoreExceptionICRequestCast;
 use App\Http\Casts\Company\StoreStatementRequestCast;
 use App\Http\Casts\Company\UpdateCompanyRequestCast;
 use App\Http\Casts\Company\UpdateContactDataRequestCast;
 use App\Http\Casts\Company\UpdateNotesRequestCast;
 use App\Http\Resources\Company\CompanyDataResource;
 use App\Http\Resources\Company\ContactDataResource;
-use App\Http\Resources\Company\ExectionICResource;
+use App\Http\Resources\Company\ExceptionICResource;
 use App\Http\Resources\Company\NotesResource;
 use App\Http\Resources\Company\StatementResource;
 use App\Models\Company;
@@ -113,7 +113,7 @@ final class UpdateCompany
 
     public function exectionInsuranceCompanies(
         Company $company,
-        StoreExectionICRequestCast $request
+        StoreExceptionICRequestCast $request
     ): AnonymousResourceCollection {
         return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
             $company->exceptionInsuranceCompanies()
@@ -132,7 +132,7 @@ final class UpdateCompany
                         ], ['insurance_company_id' => $store->getInsuranceCompanyId()]);
                 });
 
-            return ExectionICResource::collection(
+            return ExceptionICResource::collection(
                 $company->exceptionInsuranceCompanies()
                     ->where('billing_company_id', $request->getBillingCompanyId())
                     ->orderBy('id')

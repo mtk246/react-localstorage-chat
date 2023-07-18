@@ -24,7 +24,10 @@ final class FacilityResource extends JsonResource
                 $this->resource->pivot->billing_company_id,
             )->name ?? '',
             'facility' => $this->resource->name,
-            'facility_types' => $this->resource->facilityTypes ?? [],
+            'facility_types' => $this->resource->facilityTypes()
+                ->get(['facility_types.id', 'facility_types.type as name'])
+                ->setHidden(['pivot'])
+                ->toArray() ?? [],
         ];
     }
 }
