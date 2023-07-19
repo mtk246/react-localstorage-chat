@@ -687,58 +687,26 @@ class UserRepository
     public function search(Request $request)
     {
         $email = $request->get('email');
-        $ssn = $request->get('ssn', '');
-        $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
 
         $bC = auth()->user()->billing_company_id ?? null;
 
-        if (!$bC) {
-            $users = User::with([
-                'profile' => function ($query) {
-                    $query->with(['socialMedias', 'addresses', 'contacts']);
-                },
-                'roles',
-                'billingCompanies',
-            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated) {
-                $query->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
-                    $query->where('ssn', 'LIKE', "%{$ssn}");
-                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-                });
-            })->get();
+        if (User::query()->where('email', $email)->whereHas('roles', function(Builder $query) {
+                        $query->whereNot('level', 4);
+        })->exists()) {
+            return null;
+        }
 
+        if (!$bC) {
             $profile = Profile::query()
-                ->with(['socialMedias', 'addresses', 'contacts'])
-                ->whereHas(
-                    'contacts',
-                    function (Builder $query) use ($email) {
-                        $query->where('email', $email);
-                    }
-                )
+                ->with(['user', 'socialMedias', 'addresses', 'contacts'])
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
                 ->get();
         } else {
-            $users = User::with([
-                'profile' => function ($query) use ($bC) {
-                    $query->with([
-                        'socialMedias', 
-                        'addresses' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
-                        'contacts' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        }
-                    ]);
-                },
-                'roles',
-                'billingCompanies',
-            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated) {
-                $query->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
-                    $query->where('ssn', 'LIKE', "%{$ssn}");
-                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-                });
-            })->get();
-
             $profile = Profile::query()
                 ->with([
+                    'user',
                     'socialMedias',
                     'addresses' => function ($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
@@ -747,16 +715,13 @@ class UserRepository
                         $query->where('billing_company_id', $bC);
                     }
                 ])
-                ->whereHas(
-                    'contacts',
-                    function (Builder $query) use ($email) {
-                        $query->where('email', $email);
-                    }
-                )
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
                 ->get();
         }
 
-        return ['user' => $users, 'profile' => $profile];
+        return $profile;
     }
 
     public function updateLang(string $lang)

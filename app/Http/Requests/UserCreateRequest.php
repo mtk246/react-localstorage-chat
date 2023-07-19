@@ -54,18 +54,18 @@ class UserCreateRequest extends FormRequest
             ],
 
             'address' => ['required', 'array'],
-            'address.address' => ['required', 'string'],
-            'address.apt_suite' => ['required', 'string'],
-            'address.country' => ['required', 'string'],
-            'address.city' => ['required', 'string'],
-            'address.state' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
+            'address.address' => ['nullable', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
+            'address.country' => ['nullable', 'string'],
+            'address.city' => ['nullable', 'string'],
+            'address.state' => ['nullable', 'string'],
+            'address.zip' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.phone' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'string'],
+            'contact.email' => ['nullable', 'string'],
         ];
     }
 }
