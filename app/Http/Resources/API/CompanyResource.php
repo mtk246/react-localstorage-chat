@@ -2,36 +2,46 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Company;
+namespace App\Http\Resources\API;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-final class CompanyPublicResource extends JsonResource
+final class CompanyResource extends JsonResource
 {
     /** @return array<key, string> */
     public function toArray($request): array
     {
-        $address = array_first($this->resource['api']->addresses, function ($address) {
+        $address = array_first($this->resource->addresses, function ($address) {
             return 'MAILING' == $address->address_purpose;
         });
 
         return [
-            'id' => $this->resource['data']->id,
-            'code' => $this->resource['data']->code,
-            'name' => $this->resource['data']->name,
-            'npi' => $this->resource['data']->npi,
-            'ein' => $this->resource['data']->ein,
-            'clia' => $this->resource['data']->clia ?? '',
-            'other_name' => $this->resource['data']->other_name ?? '',
-            'created_at' => $this->resource['data']->created_at,
-            'updated_at' => $this->resource['data']->updated_at,
-            'public_note' => $this->resource['data']->publicNote?->note ?? '',
-            'last_modified' => $this->resource['data']->last_modified,
+            'id' => '',
+            'code' => '',
+            'name' => $this->getOrganizationName(),
+            'npi' => $this->resource->number ?? '',
+            'ein' => '',
+            'clia' => '',
+            'other_name' => $this->getOtherName(),
 
-            'taxonomies' => TaxonomiesResource::collection($this->resource['data']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];
+    }
+
+    private function getOrganizationName(): string
+    {
+        $other_name = $this->resource->other_names[0]?->organization_name ?? null;
+
+        return $other_name ?? $this->resource->basic->organization_name;
+    }
+
+    private function getOtherName(): string
+    {
+        $other_name = $this->resource->other_names[0]?->organization_name ?? null;
+
+        return !empty($other_name) ? $this->resource->basic->organization_name : '';
     }
 
     private function getContact($data): array

@@ -38,15 +38,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $language
  * @property string|null $last_activity
  * @property int|null $billing_company_id
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
  * @property \App\Models\BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property int|null $contacts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CustomKeyboardShortcuts> $customKeyboardShortcuts
  * @property int|null $custom_keyboard_shortcuts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Device> $devices
@@ -189,9 +185,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User belongs to Profile.
      */
-    public function getProfileAttribute(): Profile
+    public function getProfileAttribute(): ?Profile
     {
-        return $this->profile()->sole();
+        return $this->profile_id
+            ? $this->profile()->sole()
+            : null;
     }
 
     /**
@@ -217,7 +215,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(Membership::class)
-            ->withPivot('status', 'roles')
+            ->withPivot('status')
             ->withTimestamps()
             ->as('membership');
     }
@@ -225,7 +223,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Contact.
      */
-    public function contacts(): MorphMany
+    public function contacts(): ?MorphMany
     {
         return $this->profile?->contacts();
     }
@@ -233,9 +231,9 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User morphs many Address.
      */
-    public function addresses(): MorphMany
+    public function addresses(): ?MorphMany
     {
-        return $this->profile->addresses();
+        return $this->profile?->addresses();
     }
 
     /**

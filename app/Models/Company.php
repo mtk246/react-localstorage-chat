@@ -25,8 +25,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $ein
- * @property string|null $upin
  * @property string|null $clia
+ * @property string|null $other_name
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
@@ -80,8 +80,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereNpi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereOtherName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpin($value)
  *
  * @mixin \Eloquent
  */

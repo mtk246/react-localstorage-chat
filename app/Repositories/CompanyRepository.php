@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Http\Resources\Company\CompanyPublicResource;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
@@ -862,8 +861,8 @@ class CompanyRepository
         return !is_null($company)
             ?
                 [
-                    'data' => CompanyPublicResource::make($company),
-                    'result' => true
+                    'data' => $company,
+                    'result' => true,
                 ]
             : null;
     }
