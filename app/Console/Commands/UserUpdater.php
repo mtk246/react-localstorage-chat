@@ -32,7 +32,7 @@ final class UserUpdater extends Command
             })
             ->get()
             ->each(function ($user) {
-                $user->billing_company_id = $user->billingCompanies->first()->id;
+                $user->billing_company_id = $user->billingCompanies->first()?->id ?? 1;
                 $user->save();
             });
 
