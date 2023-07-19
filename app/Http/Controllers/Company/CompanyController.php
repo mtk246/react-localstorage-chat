@@ -24,6 +24,7 @@ use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\API\CompanyResource;
+use App\Http\Resources\Company\CompanyPublicResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Models\Company;
@@ -188,11 +189,12 @@ final class CompanyController extends Controller
 
     public function getOneByNpi(string $npi, GetAPIAction $APIAction): JsonResponse
     {
+        $apiResponse = $APIAction->getByNPI($npi);
         $rs = $this->companyRepository->getOneByNpi($npi);
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
-                return response()->json($rs['data']);
+                return response()->json(CompanyPublicResource::make(['data' => $rs['data'], 'api' => $apiResponse]), 200);
             } else {
                 if (Gate::check('is-admin')) {
                     return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
@@ -201,11 +203,9 @@ final class CompanyController extends Controller
                 }
             }
         } else {
-            $rs = $APIAction->getByNPI($npi);
-
-            if ($rs) {
-                return ('NPI-2' === $rs->enumeration_type)
-                    ? response()->json(CompanyResource::make($rs))
+            if ($apiResponse) {
+                return ('NPI-2' === $apiResponse->enumeration_type)
+                    ? response()->json(CompanyResource::make($apiResponse), 200)
                     : response()->json(__('Error, The entered NPI does not belong to a company but to a health care professional, please verify it and enter a valid NPI.'), 404);
             }
 
