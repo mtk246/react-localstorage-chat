@@ -44,7 +44,7 @@ class FacilityRepository
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
                     array_push($tax_array, $tax->id);
                 }
-                $facility->taxonomies()->sync($tax_array);
+                $facility->taxonomies()->syncWithPivotValues($tax_array, ['billing_company_id' => $data['billing_company_id']]);
             }
 
             if (auth()->user()->hasRole('superuser')) {
@@ -483,6 +483,11 @@ class FacilityRepository
                 $privateNote = $facility->privateNotes()
                     ->where('billing_company_id', $billingCompany->id ?? $bC)->get();
 
+                $private_taxonomy = $facility->taxonomies()
+                    ->where('billing_company_id', $billingCompany->id ?? $bC)
+                    ->where('primary', true)
+                    ->get();
+
                 if (isset($address)) {
                     $facility_address = [
                         'zip' => $address->zip,
@@ -509,6 +514,7 @@ class FacilityRepository
                     'name' => $billingCompany->name,
                     'code' => $billingCompany->code,
                     'abbreviation' => $billingCompany->abbreviation,
+                    'private_taxonomy' => $private_taxonomy,
                     'private_facility' => [
                         'status' => $billingCompany->pivot->status ?? false,
                         'edit_name' => isset($nickname->nickname) ? true : false,
@@ -555,7 +561,7 @@ class FacilityRepository
                     ], $taxonomy);
                     array_push($tax_array, $tax->id);
                 }
-                $facility->taxonomies()->sync($tax_array);
+                $facility->taxonomies()->syncWithPivotValues($tax_array, ['billing_company_id' => $data['billing_company_id']]);
             }
 
             if (auth()->user()->hasRole('superuser')) {
