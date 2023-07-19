@@ -38,9 +38,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ModifierConsideration whereModifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ModifierConsideration whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class ModifierConsideration extends Model implements Auditable

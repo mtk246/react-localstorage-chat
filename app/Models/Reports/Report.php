@@ -14,14 +14,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\Reports\Report.
  *
- * @property string $uuid
+ * @property string $id
  * @property string $name
  * @property string $use
  * @property string $description
  * @property ReportType $type
  * @property array $tags
  * @property array $configuration
- * @property \Illuminate\Support\Carbon $range
+ * @property string $range
  * @property bool $favorite
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -36,13 +36,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereFavorite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereRange($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereTags($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUse($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Report whereUuid($value)
  *
  * @mixin \Eloquent
  */

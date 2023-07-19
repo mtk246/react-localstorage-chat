@@ -30,34 +30,38 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Claims\Claim.
  *
  * @property int $id
- * @property string|null $qr_claim
- * @property string|null $control_number
+ * @property string|null $code
  * @property string|null $submitter_name
  * @property string|null $submitter_contact
  * @property string|null $submitter_phone
- * @property int|null $company_id
- * @property int|null $facility_id
- * @property int|null $patient_id
- * @property string|null $claim_formattable_type
- * @property int|null $claim_formattable_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property bool $validate
- * @property bool $automatic_eligibility
- * @property int|null $billing_provider_id
- * @property int|null $service_provider_id
- * @property int|null $referred_id
- * @property int|null $referred_provider_role_id
+ * @property int|null $billing_company_id
+ * @property ClaimType $type
+ * @property mixed $aditional_information
  * @property FormatType $format
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property BillingCompany $billingCompany
- * @property \App\Models\Claims\ClaimDateInformation|null $dateInformation
+ * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
+ * @property int|null $claim_status_claims_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
+ * @property int|null $claim_transmission_responses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimDateInformation> $dateInformations
+ * @property int|null $date_informations_count
  * @property \App\Models\Claims\ClaimDemographicInformation|null $demographicInformation
+ * @property mixed $amount_paid
+ * @property mixed $billed_amount
+ * @property mixed $date_of_service
+ * @property mixed $last_modified
+ * @property mixed $past_due_date
+ * @property \Illuminate\Database\Eloquent\Casts\Attribute $private_note
+ * @property mixed $status_date
+ * @property mixed $user_created
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
  * @property \App\Models\Claims\PatientAdditionalInformation|null $patientInformation
- * @property \App\Models\Claims\ClaimService|null $services
+ * @property \App\Models\Claims\ClaimService|null $service
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
  * @property int|null $status_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
@@ -66,42 +70,17 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim query()
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereAutomaticEligibility($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereBillingProviderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereClaimFormattableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereClaimFormattableType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereControlNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereFacilityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim wherePatientId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereQrClaim($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereReferredId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereReferredProviderRoleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereServiceProviderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterContact($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterPhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereValidate($value)
- *
- * @property string|null $code
- * @property int|null $billing_company_id
- * @property ClaimType $type
- * @property mixed $aditional_information
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimDateInformation> $dateInformations
- * @property int|null $date_informations_count
- * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
- * @property \App\Models\Claims\ClaimService|null $service
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
- *
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereAditionalInformation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Claim whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Claim whereType($value)ClaimServices
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterContact($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereSubmitterPhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Claim whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
