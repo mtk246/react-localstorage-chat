@@ -383,7 +383,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->search($request);
 
-        return ($rs) ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
+        return ($rs) ? response()->json($rs) : response()->json(__('Error, User already exists for this email'), 404);
     }
 
     public function updateLang(Request $request)
