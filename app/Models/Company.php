@@ -168,7 +168,7 @@ final class Company extends Model implements Auditable
      */
     public function patients(): BelongsToMany
     {
-        return $this->belongsToMany(Patient::class)->withPivot('billing_company_id', 'med_num')->withTimestamps();
+        return $this->belongsToMany(Patient::class)->withPivot('billing_company_id', 'med_num', 'id')->withTimestamps();
     }
 
     /**
