@@ -57,7 +57,7 @@ final class CompanyResource extends JsonResource
                         'taxonomy' => $this->resource->taxonomies()
                             ->where('primary', true)
                             ->first()
-                            ->setHidden(['created_at', 'updated_at', 'pivot'])
+                            ?->setHidden(['created_at', 'updated_at', 'pivot'])
                             ->toArray(),
                         'address' => $this->getAddress($bC->id, 1),
                         'payment_address' => $this->getAddress($bC->id, 3),
