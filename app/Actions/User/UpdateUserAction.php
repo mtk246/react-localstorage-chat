@@ -22,7 +22,7 @@ final class UpdateUserAction
 
             $user->update($userWrapper->getData()->toArray());
 
-            $user->billingCompany()->attach($userWrapper->getBillingCompanyId());
+            $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
 
             $user->billingCompanies()->syncWithPivotValues(
                 $userWrapper->getBillingCompanyId(),
@@ -32,7 +32,9 @@ final class UpdateUserAction
 
             $roles = $userWrapper->getRoles()
                 ->map(function (Role $role) use ($user) {
-                    $user->attachPermission($role->permissions);
+                    $role->permissions->each(function ($permission) use ($user) {
+                        $user->attachPermission($permission);
+                    });
 
                     return $role->id;
                 })
@@ -65,12 +67,13 @@ final class UpdateUserAction
             }
 
             /* update or create new social medias */
-            $userWrapper->getSocialMedias()->each(function ($socialM) use ($profile) {
+            $userWrapper->getSocialMedias()->each(function ($socialM) use ($profile, $userWrapper) {
                 $socialNetwork = SocialNetwork::whereName($socialM['name'])->first();
                 if (isset($socialNetwork)) {
                     SocialMedia::updateOrCreate([
                         'profile_id' => $profile->id,
                         'social_network_id' => $socialNetwork->id,
+                        'billing_company_id' => $userWrapper->getBillingCompanyId(),
                     ], [
                         'link' => $socialM['link'],
                     ]);
