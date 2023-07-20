@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $bill_classifications
+ * @property int|null $bill_classifications_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  *

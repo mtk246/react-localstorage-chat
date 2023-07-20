@@ -30,11 +30,9 @@ final class GetDoctorAction
             'user' => function (Builder $query) {
                 $query->with([
                     'profile' => function (Builder $query) {
-                        $query->with('socialMedias');
+                        $query->with(['socialMedias', 'addresses', 'contacts']);
                     },
                     'roles',
-                    'addresses',
-                    'contacts',
                     'billingCompanies',
                 ]);
             },
@@ -57,16 +55,18 @@ final class GetDoctorAction
         $query->with([
             'user' => function ($query) use ($bc) {
                 $query->with([
-                    'profile' => function ($query) {
-                        $query->with('socialMedias');
+                    'profile' => function ($query) use ($bc) {
+                        $query->with([
+                            'socialMedias',
+                            'addresses' => function ($query) use ($bc) {
+                                $query->where('billing_company_id', $bc);
+                            },
+                            'contacts' => function ($query) use ($bc) {
+                                $query->where('billing_company_id', $bc);
+                            },
+                        ]);
                     },
                     'roles',
-                    'addresses' => function ($query) use ($bc) {
-                        $query->where('billing_company_id', $bc);
-                    },
-                    'contacts' => function ($query) use ($bc) {
-                        $query->where('billing_company_id', $bc);
-                    },
                     'billingCompanies',
                 ]);
             },

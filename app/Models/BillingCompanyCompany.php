@@ -6,6 +6,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * App\Models\BillingCompanyCompany.
+ *
+ * @property int $id
+ * @property bool $status
+ * @property int $billing_company_id
+ * @property int $company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $miscellaneous
+ * @property array|null $claim_format_ids
+ * @property \App\Models\BillingCompany $billingCompany
+ * @property \App\Models\Company $company
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereClaimFormatIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereMiscellaneous($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 final class BillingCompanyCompany extends Pivot
 {
     /**

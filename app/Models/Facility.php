@@ -18,27 +18,29 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Facility.
  *
  * @property int $id
- * @property int $facility_type_id
  * @property string $name
  * @property string $npi
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $code
  * @property string|null $nppes_verified_at
- * @property string|null $abbreviation
+ * @property string|null $other_name
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $billClassifications
+ * @property int|null $bill_classifications_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
- * @property \App\Models\FacilityType $facilityType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FacilityType> $facilityTypes
+ * @property int|null $facility_types_count
  * @property mixed $last_modified
  * @property mixed $status
  * @property mixed $verified_on_nppes
@@ -59,14 +61,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility search($search)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereAbbreviation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Facility whereFacilityTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereNppesVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facility whereOtherName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereUpdatedAt($value)
  *
  * @mixin \Eloquent

@@ -9,6 +9,7 @@ use App\Models\FailedLoginAttempt;
 use App\Models\IpRestriction;
 use App\Models\IpRestrictionMult;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Detection\MobileDetect;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -234,31 +235,33 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $bC = auth()->user()->billing_company_id ?? null;
+        $user = Auth::user();
+
+        $bC = $user->billing_company_id;
         if (!$bC) {
-            $user = User::whereId(auth()->id())->with([
+            $user = Auth::user()->load([
                 'roles',
                 'permissions',
                 'profile' => function ($query) {
-                    $query->with('socialMedias');
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
-                'addresses',
-                'contacts',
-            ])->first();
+            ]);
         } else {
-            $user = User::whereId(auth()->id())->with([
+            $user = $user->load([
                 'roles',
                 'permissions',
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
+                'profile' => function ($query) use ($bC)  {
+                    $query->with([
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
                 },
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-            ])->first();
+            ]);
         }
         $perms = [];
         $perms_v2 = [];
