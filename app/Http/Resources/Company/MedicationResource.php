@@ -29,10 +29,10 @@ final class MedicationResource extends RequestWrapedResource
             'measurement_unit' => !empty($this->resource->measurement_unit_id)
                 ? $this->resource->measurement_unit_id->getCode().' - '.$this->resource->measurement_unit_id->getDescription()
                 : '',
-            'units' => $this->resource->units ?? '',
-            'units_limit' => $this->resource->units_limit ?? '',
-            'link_sequence_number' => $this->resource->link_sequence_number ?? '',
-            'pharmacy_prescription_number' => $this->resource->pharmacy_prescription_number ?? '',
+            'units' => (float) $this->resource->units ?? '',
+            'units_limit' => (float) $this->resource->units_limit ?? '',
+            'link_sequence_number' => (float) $this->resource->link_sequence_number ?? '',
+            'pharmacy_prescription_number' => (float) $this->resource->pharmacy_prescription_number ?? '',
             'repackaged_NDC' => $this->resource->repackaged_NDC ?? false,
             'code_NDC' => $this->resource->code_NDC ?? '',
             'claim_note_required' => !empty($this->resource->note) ? true : false,
