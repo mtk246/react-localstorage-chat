@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\User;
 
+use App\Models\SocialMedia;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**  @property User $resource */
@@ -32,6 +32,7 @@ final class UserResource extends JsonResource
             'language' => $this->resource->language,
             'last_modified' => $this->resource->last_modified,
             'roles' => RoleResource::collection($this->resource->roles),
+            'billing_company_id' => $this->resource->billing_company_id,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $model->private_user = [
@@ -63,14 +64,15 @@ final class UserResource extends JsonResource
         ];
     }
 
-    private function getSocialMedias(int $billingCompanyId): Collection
+    private function getSocialMedias(int $billingCompanyId): ?SocialMedia
     {
         return $this->resource
             ->profile
             ->socialMedias
             ->filter(
                 fn ($socialMedia) => $socialMedia->billing_company_id === $billingCompanyId,
-            );
+            )
+            ->first();
     }
 
     private function getAddress(int $billingCompanyId)
