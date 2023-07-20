@@ -6,6 +6,8 @@ namespace App\Http\Resources\Company;
 
 use App\Http\Resources\RequestWrapedResource;
 use App\Models\CompanyProcedure;
+use App\Models\Modifier;
+use App\Models\Procedure;
 
 /**
  * @property CompanyProcedure $resource
@@ -24,9 +26,26 @@ final class ServiceResource extends RequestWrapedResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
-            'procedure' => $this->resource->procedure,
-            'description' => $this->resource->procedure->description,
-            'modifier_id' => $this->resource->modifier_id,
+            'procedure_ids' => $this->resource->procedures
+                ->map(fn (Procedure $procedure) => $procedure->id)->toArray(),
+            'procedures' => $this->resource->procedures
+                ->map(function (Procedure $procedure) {
+                    return [
+                        'id' => $procedure->id,
+                        'name' => $procedure->code,
+                        'description' => $procedure->description,
+                    ];
+                })->toArray(),
+            'modifier_ids' => $this->resource->modifiers
+                ->map(fn (Modifier $modifier) => $modifier->id)->toArray(),
+            'modifiers' => $this->resource->modifiers
+                ->map(function (Modifier $modifier) {
+                    return [
+                        'id' => $modifier->id,
+                        'modifier' => $modifier->modifier,
+                        'color' => $modifier->classification->getColor(),
+                    ];
+                })->toArray(),
             'mac' => $this->resource->macLocality?->mac,
             'locality_number' => $this->resource->macLocality?->locality_number,
             'state' => $this->resource->macLocality?->state,
