@@ -8,6 +8,7 @@ use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
+use App\Actions\Company\UpdatePatient;
 use App\Actions\GetAPIAction;
 use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
@@ -22,6 +23,7 @@ use App\Http\Requests\Company\StoreStatementRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
+use App\Http\Requests\Company\UpdatePatientRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\API\CompanyResource;
 use App\Http\Resources\Company\CompanyPublicResource;
@@ -144,6 +146,16 @@ final class CompanyController extends Controller
         $rs = $updateCompany->contactData($company, $request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating company'), 400);
+    }
+
+    public function UpdatePatients(
+        UpdatePatientRequest $request,
+        UpdatePatient $updatePatient,
+        Company $company
+    ): JsonResponse {
+        $rs = $updatePatient->invoke($company, $request->castedCollect('store'));
+
+        return response()->json($rs);
     }
 
     public function StoreStatements(
