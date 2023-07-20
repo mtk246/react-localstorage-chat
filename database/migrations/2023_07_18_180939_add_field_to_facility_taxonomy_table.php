@@ -11,11 +11,12 @@ return new class() extends Migration {
     {
         Schema::table('facility_taxonomy', function (Blueprint $table) {
             $table->unsignedBigInteger('billing_company_id')->nullable();
-            $table->foreign('billing_company_id', 'bchp_bc_id')
+            $table->foreign('billing_company_id')
                 ->references('id')
                 ->on('billing_companies')
-                ->onDelete('restrict')
                 ->onUpdate('cascade');
+
+            $table->boolean('primary')->default(false);
         });
     }
 
