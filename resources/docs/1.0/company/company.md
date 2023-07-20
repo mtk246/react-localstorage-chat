@@ -20,7 +20,7 @@
 | 17 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 18 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 | 19 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
-| 20 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
+| 20 |PATCH | `Add services to company`       | `/company/{id}/services`|yes|Add services to company|
 | 21 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
 | 22 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
