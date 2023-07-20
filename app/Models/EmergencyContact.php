@@ -15,33 +15,30 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\EmergencyContact.
  *
  * @property int $id
- * @property string $name
- * @property string $cellphone
- * @property string $relationship
+ * @property string|null $name
+ * @property string|null $cellphone
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\Patient|null $patient
+ * @property int $patient_id
+ * @property int|null $relationship_id
+ * @property int|null $billing_company_id
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\Patient $patient
+ * @property \App\Models\TypeCatalog|null $relationship
  *
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereCellphone($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationship($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereUpdatedAt($value)
- *
- * @property int $patient_id
- * @property int|null $relationship_id
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereRelationshipId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @method static \Illuminate\Database\Eloquent\Builder|EmergencyContact whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

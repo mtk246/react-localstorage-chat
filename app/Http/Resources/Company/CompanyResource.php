@@ -35,6 +35,7 @@ final class CompanyResource extends JsonResource
             'copays' => $this->getCopays(),
             'contract_fees' => $this->getContracFees(),
             'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
+            'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
             'billing_companies' => $this->resource->billingCompanies
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
@@ -56,7 +57,7 @@ final class CompanyResource extends JsonResource
                         'taxonomy' => $this->resource->taxonomies()
                             ->where('primary', true)
                             ->first()
-                            ->setHidden(['created_at', 'updated_at', 'pivot'])
+                            ?->setHidden(['created_at', 'updated_at', 'pivot'])
                             ->toArray(),
                         'address' => $this->getAddress($bC->id, 1),
                         'payment_address' => $this->getAddress($bC->id, 3),
@@ -80,6 +81,20 @@ final class CompanyResource extends JsonResource
             ->paginate(Pagination::itemsPerPage());
 
         return ExceptionICResource::collection($exceptions)->resource;
+    }
+
+    private function getPatients()
+    {
+        $bC = request()->user()->billing_company_id;
+        $patients = $this->resource->patients()
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('company_patient.billing_company_id', $bC)
+            )
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
+
+        return CompanyPatientResource::collection($patients)->resource;
     }
 
     private function getStatements()

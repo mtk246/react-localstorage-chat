@@ -441,25 +441,25 @@ class UserRepository
         if (!$bC) {
             $user = $user->load([
                 'profile' => function ($query) {
-                    $query->with('socialMedias');
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
                 'roles',
-                'addresses',
-                'contacts',
                 'billingCompanies',
             ]);
         } else {
             $user = $user = $user->load([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
+                'profile' => function ($query) use ($bC) {
+                    $query->with([
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
                 },
                 'roles',
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
                 'billingCompanies',
             ]);
         }
@@ -655,21 +655,23 @@ class UserRepository
 
         $bC = Gate::check('is-admin') ? $billing_company_id : auth()->user()->billing_company_id;
         $user = User::with([
-            'profile' => function ($query) {
-                $query->with('socialMedias');
+            'profile' => function ($query) use ($bC) {
+                $query->with([
+                    'socialMedias',
+                    'addresses' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                    'contacts' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                ]);
             },
             'roles',
             'billingCompanies',
-            'addresses' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
-            'contacts' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
         ])->whereHas('profile', function ($query) use ($ssn) {
             $query->where('ssn', $ssn)
                 ->orWhere('ssn', str_replace('-', '', $ssn ?? ''));
@@ -684,69 +686,42 @@ class UserRepository
 
     public function search(Request $request)
     {
-        $date_of_birth = $request->get('date_of_birth');
-        $first_name = $request->get('first_name');
-        $last_name = $request->get('last_name');
-        $ssn = $request->get('ssn', '');
-        $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
+        $email = $request->get('email');
 
         $bC = auth()->user()->billing_company_id ?? null;
 
-        if (!$bC) {
-            $users = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses',
-                'contacts',
-                'billingCompanies',
-            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->when($date_of_birth, function(Builder $query) use ($date_of_birth){
-                    $query->where('date_of_birth', $date_of_birth);
-                })
-                ->when($first_name, function(Builder $query) use ($first_name){
-                    $query->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")]);
-                })
-                ->when($last_name, function(Builder $query) use ($last_name){
-                    $query->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")]);
-                })
-                ->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
-                    $query->where('ssn', 'LIKE', "%{$ssn}");
-                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-                });
-            })->get();
-        } else {
-            $users = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'billingCompanies',
-            ])->whereHas('profile', function (Builder $query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->when($date_of_birth, function(Builder $query) use ($date_of_birth){
-                    $query->where('date_of_birth', $date_of_birth);
-                })
-                ->when($first_name, function(Builder $query) use ($first_name){
-                    $query->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")]);
-                })
-                ->when($last_name, function(Builder $query) use ($last_name){
-                    $query->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")]);
-                })
-                ->when($ssn, function(Builder $query) use ($ssn, $ssnFormated){
-                    $query->where('ssn', 'LIKE', "%{$ssn}");
-                    $query->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-                });
-            })->get();
+        if (User::query()->where('email', $email)->whereHas('roles', function(Builder $query) {
+                        $query->whereNot('level', 4);
+        })->exists()) {
+            return null;
         }
 
-        return (0 == count($users)) ? null : $users;
+        if (!$bC) {
+            $profile = Profile::query()
+                ->with(['user', 'socialMedias', 'addresses', 'contacts'])
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
+                ->get();
+        } else {
+            $profile = Profile::query()
+                ->with([
+                    'user',
+                    'socialMedias',
+                    'addresses' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'contacts' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    }
+                ])
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
+                ->get();
+        }
+
+        return $profile;
     }
 
     public function updateLang(string $lang)

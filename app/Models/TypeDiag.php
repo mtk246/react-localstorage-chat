@@ -31,11 +31,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|TypeDiag whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TypeDiag whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- *
  * @mixin \Eloquent
  */
 class TypeDiag extends Model implements Auditable

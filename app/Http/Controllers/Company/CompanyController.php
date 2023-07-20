@@ -8,6 +8,8 @@ use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\UpdateCompany;
+use App\Actions\Company\UpdatePatient;
+use App\Actions\GetAPIAction;
 use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeStatusCompanyRequest;
@@ -21,7 +23,10 @@ use App\Http\Requests\Company\StoreStatementRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Requests\Company\UpdateContactDataRequest;
 use App\Http\Requests\Company\UpdateNotesRequest;
+use App\Http\Requests\Company\UpdatePatientRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use App\Http\Resources\API\CompanyResource;
+use App\Http\Resources\Company\CompanyPublicResource;
 use App\Http\Resources\Enums\CatalogResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Models\Company;
@@ -143,6 +148,16 @@ final class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error updating company'), 400);
     }
 
+    public function UpdatePatients(
+        UpdatePatientRequest $request,
+        UpdatePatient $updatePatient,
+        Company $company
+    ): JsonResponse {
+        $rs = $updatePatient->invoke($company, $request->castedCollect('store'));
+
+        return response()->json($rs);
+    }
+
     public function StoreStatements(
         StoreStatementRequest $request,
         UpdateCompany $updateCompany,
@@ -184,13 +199,14 @@ final class CompanyController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
 
-    public function getOneByNpi(string $npi): JsonResponse
+    public function getOneByNpi(string $npi, GetAPIAction $APIAction): JsonResponse
     {
+        $apiResponse = $APIAction->getByNPI($npi);
         $rs = $this->companyRepository->getOneByNpi($npi);
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
-                return response()->json($rs['data']);
+                return response()->json(CompanyPublicResource::make(['data' => $rs['data'], 'api' => $apiResponse]), 200);
             } else {
                 if (Gate::check('is-admin')) {
                     return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
@@ -199,7 +215,13 @@ final class CompanyController extends Controller
                 }
             }
         } else {
-            return response()->json(__('Error, company not found'), 404);
+            if ($apiResponse) {
+                return ('NPI-2' === $apiResponse->enumeration_type)
+                    ? response()->json(CompanyResource::make($apiResponse), 200)
+                    : response()->json(__('Error, The entered NPI does not belong to a company but to a health care professional, please verify it and enter a valid NPI.'), 404);
+            }
+
+            return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
         }
     }
 

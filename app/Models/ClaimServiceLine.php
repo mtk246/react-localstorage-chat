@@ -15,14 +15,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Claim $claim
- * @property \App\Models\PlaceOfService $placeOfService
+ * @property \App\Models\PlaceOfService|null $placeOfService
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimServiceLine query()
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

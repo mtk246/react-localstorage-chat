@@ -63,7 +63,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('change-password/{token}', [\App\Http\Controllers\UserController::class, 'changePassword']);
         Route::post('new-token', [\App\Http\Controllers\UserController::class, 'newToken']);
         Route::patch('{id?}/change-status', [\App\Http\Controllers\UserController::class, 'changeStatus'])->middleware('auth:api');
-        Route::put('{id}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
+        Route::put('{user}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
         Route::post('img-profile', [\App\Http\Controllers\UserController::class, 'updateImgProfile'])->middleware(['auth:api']);
 
         Route::get('social-networks/get-list', [\App\Http\Controllers\UserController::class, 'getListSocialNetworks'])->middleware(['auth:api']);
@@ -220,6 +220,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             'auth:api',
         ])->group(function (): void {
             Route::put('/{company}/data', [CompanyController::class, 'updateCompanyData']);
+            Route::put('/{company}/patients', [CompanyController::class, 'UpdatePatients']);
             Route::put('/{company}/contacts', [CompanyController::class, 'UpdateContactData']);
             Route::put('/{company}/statements', [CompanyController::class, 'StoreStatements']);
             Route::put('/{company}/exections', [CompanyController::class, 'StoreExectionInsuranceCompanies']);

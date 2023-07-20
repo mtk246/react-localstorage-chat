@@ -24,6 +24,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
+ * @property ClassificationType $classification
+ * @property ModifierType $type
+ * @property string $description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property mixed $last_modified
@@ -40,22 +43,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier query()
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereClassification($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereModifier($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereSpecialCodingInstructions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Modifier whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierConsideration> $modifierConsiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ModifierInvalidCombination> $modifierInvalidCombinations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  *
  * @mixin \Eloquent
  */

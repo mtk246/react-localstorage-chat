@@ -30,9 +30,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ModifierInvalidCombination whereModifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ModifierInvalidCombination whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class ModifierInvalidCombination extends Model implements Auditable

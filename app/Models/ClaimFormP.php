@@ -13,22 +13,12 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\ClaimFormP.
  *
- * @property int $id
- * @property bool $head_benefit_plan_other
- * @property string|null $date_of_current
- * @property string|null $total_charge
- * @property int|null $type_form_id
- * @property int|null $type_insurance_id
- * @property int|null $relationship_to_insured_id
- * @property int|null $billing_company_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\BillingCompany|null $billingCompany
+ * @property \App\Models\BillingCompany $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
  * @property int|null $claim_form_services_count
- * @property \App\Models\Facility $facility
+ * @property \App\Models\Facility|null $facility
  * @property \App\Models\InsurancePolicy $insurancePolicy
  * @property \App\Models\Patient $patient
  * @property \App\Models\PatientOrInsuredInformation|null $patientOrInsuredInformation
@@ -40,21 +30,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereBillingCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereDateOfCurrent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereHeadBenefitPlanOther($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereRelationshipToInsuredId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTotalCharge($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeFormId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereTypeInsuranceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormP whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
  *
  * @mixin \Eloquent
  */

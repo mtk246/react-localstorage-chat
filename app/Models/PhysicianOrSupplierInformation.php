@@ -14,38 +14,21 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\PhysicianOrSupplierInformation.
  *
- * @property int $id
- * @property string|null $prior_authorization_number
- * @property bool $outside_lab
- * @property string|null $charges
- * @property string|null $patient_account_num
- * @property bool $accept_assignment
- * @property int $claim_form_p_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Models\TypeCatalog|null $admissionSource
+ * @property \App\Models\TypeCatalog|null $admissionType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\TypeCatalog|null $billClassification
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimDateInformation> $claimDateInformations
  * @property int|null $claim_date_informations_count
- * @property \App\Models\ClaimFormP $claimFormP
+ * @property \App\Models\ClaimFormP|null $claimFormP
+ * @property \App\Models\TypeCatalog|null $diagnosisRelatedGroup
+ * @property mixed $condition_codes
+ * @property \App\Models\TypeCatalog|null $patientStatus
  *
  * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation query()
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereAcceptAssignment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereCharges($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereClaimFormPId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereOutsideLab($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation wherePatientAccountNum($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation wherePriorAuthorizationNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PhysicianOrSupplierInformation whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimDateInformation> $claimDateInformations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimDateInformation> $claimDateInformations
  *
  * @mixin \Eloquent
  */
