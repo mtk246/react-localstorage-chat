@@ -38,21 +38,37 @@ class FacilityRepository
                 'other_name' => $data['other_name'] ?? null,
             ]);
 
-            if (isset($data['taxonomies'])) {
-                foreach ($data['taxonomies'] as $taxonomy) {
-                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-
-                    $facility->taxonomies()->updateExistingPivot($tax->id, [
-                        'billing_company_id' => $data['billing_company_id'],
-                        'primary' => $taxonomy['primary']
-                    ]);
-                }
-            }
-
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
+            }
+
+            if (isset($data['taxonomies'])) {
+
+                $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
+                
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
+
+                    $check = $facility->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->find($tax->id);
+
+                    if($check) {
+                        $facility->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->updateExistingPivot($tax->id, [
+                            'primary' => $taxonomy['primary']
+                        ]);
+                    }
+                    else {
+                        $facility->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary']
+                        ]);
+                    }
+                }
             }
 
             if (isset($data['companies'])) {
@@ -555,21 +571,37 @@ class FacilityRepository
                 ]);
             }
 
-            if (isset($data['taxonomies'])) {
-                foreach ($data['taxonomies'] as $taxonomy) {
-                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-
-                    $facility->taxonomies()->updateExistingPivot($tax->id, [
-                        'billing_company_id' => $data['billing_company_id'],
-                        'primary' => $taxonomy['primary']
-                    ]);
-                }
-            }
-
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
+            }
+
+            if (isset($data['taxonomies'])) {
+
+                $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
+                
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
+
+                    $check = $facility->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->find($tax->id);
+
+                    if($check) {
+                        $facility->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->updateExistingPivot($tax->id, [
+                            'primary' => $taxonomy['primary']
+                        ]);
+                    }
+                    else {
+                        $facility->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary']
+                        ]);
+                    }
+                }
             }
 
             $companies = $facility->companies()
@@ -802,7 +834,6 @@ class FacilityRepository
     {
         if (auth()->user()->hasRole('superuser')) {
 
-
             $facility->companies()->detach();
 
             foreach ($data['companies'] as $company) {
@@ -815,7 +846,7 @@ class FacilityRepository
 
         } else {
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()->billing_company_id;
 
             $facility->companies()->wherePivot('billing_company_id', $billingCompany)->detach();
 
