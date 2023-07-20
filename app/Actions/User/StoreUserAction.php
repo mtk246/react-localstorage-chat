@@ -36,7 +36,9 @@ final class StoreUserAction
 
                 $roles = $userWrapper->getRoles()
                     ->map(function (Role $role) use ($user) {
-                        $user->attachPermission($role->permissions);
+                        $role->permissions->each(function ($permission) use ($user) {
+                            $user->attachPermission($permission);
+                        });
 
                         return $role->id;
                     })
@@ -96,12 +98,13 @@ final class StoreUserAction
             }
 
             /* update or create new social medias */
-            $userWrapper->getSocialMedias()->each(function ($socialM) use ($profile) {
+            $userWrapper->getSocialMedias()->each(function ($socialM) use ($profile, $userWrapper) {
                 $socialNetwork = SocialNetwork::whereName($socialM['name'])->first();
                 if (isset($socialNetwork)) {
                     SocialMedia::updateOrCreate([
                         'profile_id' => $profile->id,
                         'social_network_id' => $socialNetwork->id,
+                        'billing_company_id' => $userWrapper->getBillingCompanyId(),
                     ], [
                         'link' => $socialM['link'],
                     ]);
