@@ -37,7 +37,7 @@ final class CompanyPatientResource extends JsonResource
                 : null,
             'med_num' => $this->resource->pivot->med_num ?? '',
             'billing_company_id' => $this->resource->pivot->billing_company_id,
-            'billing_company_id' => (isset($this->resource->pivot->billing_company_id))
+            'billing_company' => (isset($this->resource->pivot->billing_company_id))
                 ? [
                     'id' => $this->resource->pivot->billing_company_id,
                     'name' => BillingCompany::find($this->resource->pivot->billing_company_id)->value('name'),
