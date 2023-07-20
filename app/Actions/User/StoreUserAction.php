@@ -61,16 +61,21 @@ final class StoreUserAction
 
     private function getProfile(StoreUserWrapper $userWrapper): ?Profile
     {
-        $profile = Profile::query()
-            ->whereHas(
-                'contacts',
-                function (Builder $query) use ($userWrapper) {
-                    $query->where('email', $userWrapper->getEmail());
-                }
-            )
-            ->first(['id']);
+        if (
+            Profile::query()
+                ->where('id', $userWrapper->getProfileId())
+                ->whereDoesntHave(
+                    'contacts',
+                    function (Builder $query) use ($userWrapper) {
+                        $query->where('email', $userWrapper->getEmail());
+                    }
+                )
+                ->exists()
+        ) {
+            throw new \Exception('Profile id does not match email');
+        }
 
-        return tap(Profile::query()->updateOrCreate(['id' => $profile?->id],
+        return tap(Profile::query()->updateOrCreate(['id' => $userWrapper->getProfileId()],
             $userWrapper->getProfileData(),
         ), function (Profile $profile) use ($userWrapper) {
             $socialMedias = $profile->socialMedias;
