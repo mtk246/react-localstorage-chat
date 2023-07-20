@@ -24,7 +24,7 @@ final class ProfileResource extends JsonResource
             'first_name' => $this->resource->first_name,
             'middle_name' => $this->resource->middle_name,
             'last_name' => $this->resource->last_name,
-            'sex' => strtoupper($this->resource->sex),
+            'sex' => $this->resource->sex,
             'date_of_birth' => $this->resource->date_of_birth,
             'avatar' => $this->resource->avatar,
             'name_suffix_id' => $this->resource->name_suffix_id ?? '',

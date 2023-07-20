@@ -22,7 +22,7 @@ final class UpdateUserAction
 
             $user->update($userWrapper->getData()->toArray());
 
-            $user->billingCompany()->attach($userWrapper->getBillingCompanyId());
+            $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
 
             $user->billingCompanies()->syncWithPivotValues(
                 $userWrapper->getBillingCompanyId(),
