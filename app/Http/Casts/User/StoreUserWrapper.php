@@ -67,6 +67,11 @@ final class StoreUserWrapper extends CastsRequest
             ->toArray();
     }
 
+    public function getProfileId(): ?int
+    {
+        return $this->getCollect('profile')->get('id');
+    }
+
     public function getSocialMedias(): Collection
     {
         return collect($this->getCollect('profile')

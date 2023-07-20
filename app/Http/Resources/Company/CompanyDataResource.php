@@ -22,16 +22,16 @@ final class CompanyDataResource extends RequestWrapedResource
             'id' => $this->resource->id,
             'npi' => $this->resource->npi,
             'ein' => $this->resource->ein,
-            'clia' => $this->resource->clia,
+            'clia' => $this->resource->clia ?? '',
             'name' => $this->resource->name,
             'abbreviation' => $this->resource
                 ->abbreviations()
                 ->where('billing_company_id', $request->getBillingCompanyId())
-                ->first()?->abbreviation,
+                ->first()?->abbreviation ?? '',
             'nickname' => $this->resource
                 ->nicknames()
                 ->where('billing_company_id', $request->getBillingCompanyId())
-                ->first()?->nickname,
+                ->first()?->nickname ?? '',
             'miscellaneous' => $this->resource
                 ->billingCompanies()
                 ->where('billing_company_id', $request->getBillingCompanyId())

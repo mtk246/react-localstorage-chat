@@ -220,6 +220,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             'auth:api',
         ])->group(function (): void {
             Route::put('/{company}/data', [CompanyController::class, 'updateCompanyData']);
+            Route::put('/{company}/patients', [CompanyController::class, 'UpdatePatients']);
             Route::put('/{company}/contacts', [CompanyController::class, 'UpdateContactData']);
             Route::put('/{company}/statements', [CompanyController::class, 'StoreStatements']);
             Route::put('/{company}/exections', [CompanyController::class, 'StoreExectionInsuranceCompanies']);

@@ -9,6 +9,7 @@
 - [Update company exections](#update-company-exections)
 - [Update company notes](#update-company-notes)
 - [Update company statements](#update-company-statements)
+- [Update company patients](#update-company-patients)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -23,6 +24,7 @@
 | 2 |PUT | `Update company exections`| `/company/{company}/exections`|yes|update company|
 | 2 |PUT | `Update company notes`    | `/company/{company}/notes`|yes|update company notes|
 | 2 |PUT | `Update company statements`| `/company/{company}/statements`|yes|update company|
+| 2 |PUT | `Update company patients`| `/company/{company}/patients`|yes|update company|
 
 
 <a name="create-company"></a>
@@ -604,6 +606,79 @@
     ],
     "created_at": "2023-03-23T08:05:24.000000Z",
     "updated_at": "2023-03-23T08:05:24.000000Z"
+  }
+]
+```
+
+
+<a name="update-company-patients"></a>
+## Update Company Patients
+
+
+### Body request example
+
+
+#
+
+```json
+ {
+    "store": [
+      {
+        "id": 8,
+        "billing_company_id":1,
+        "patient_id": 1,
+        "med_num": "ALSQ-123",
+      },
+      {
+        "id": "",
+        "billing_company_id":1,
+        "patient_id": 1,
+        "med_num": "ALSQ-123",
+      },
+    ],
+ }
+```
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 company updated
+
+
+#
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 company updated
+
+
+#
+
+```json
+[
+  {
+    "id": 19,
+    "patient_id": 1,
+    "med_num": "123456",
+    "billing_company_id": 1
+  },
+  {
+    "id": 18,
+    "patient_id": 2,
+    "med_num": "123456",
+    "billing_company_id": 1
   }
 ]
 ```

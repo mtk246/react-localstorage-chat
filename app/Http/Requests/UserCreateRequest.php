@@ -26,6 +26,7 @@ class UserCreateRequest extends FormRequest
     {
         return [
             'profile' => ['required', 'array'],
+            'profile.id' => ['nullable', 'integer'],
             'profile.sex' => ['required', 'string', 'max:1'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
