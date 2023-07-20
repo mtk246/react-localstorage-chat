@@ -37,7 +37,9 @@ final class CompanyResource extends JsonResource
             'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
             'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
-            'billing_companies' => $this->resource->billingCompanies
+            'billing_companies' => $this->resource->billingCompanies()
+                ->distinct('id')
+                ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
                 ->map(function ($bC) {
                     $nickname = $this->resource->nicknames()
