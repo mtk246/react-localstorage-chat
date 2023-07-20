@@ -42,9 +42,7 @@ class FacilityRepository
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $facility->taxonomies()->detach($tax->id);
-                    
-                    $facility->taxonomies()->attach($tax->id, [
+                    $facility->taxonomies()->updateExistingPivot($tax->id, [
                         'billing_company_id' => $data['billing_company_id'],
                         'primary' => $taxonomy['primary']
                     ]);
@@ -561,9 +559,7 @@ class FacilityRepository
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $facility->taxonomies()->detach($tax->id);
-                    
-                    $facility->taxonomies()->attach($tax->id, [
+                    $facility->taxonomies()->updateExistingPivot($tax->id, [
                         'billing_company_id' => $data['billing_company_id'],
                         'primary' => $taxonomy['primary']
                     ]);
