@@ -1,4 +1,3 @@
--- Active: 1685438728234@@127.0.0.1@5432@kavac_version_3
 # Company Getters Docs
 
 ---
