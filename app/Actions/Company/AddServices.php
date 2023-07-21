@@ -11,6 +11,7 @@ use App\Http\Resources\Company\ServiceResource;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\CompanyService;
+use App\Models\Medication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -42,9 +43,14 @@ final class AddServices
                 function (CompanyService $cService) use ($service): void {
                     $cService->procedures()->sync($service->getProcedureIds());
                     $cService->modifiers()->sync($service->getModifierIds());
-                    $this->setMedications(
-                        $cService,
-                        $service->getMedications());
+                    if ($service->getMedicationApplication()) {
+                        $this->setMedication(
+                            $cService,
+                            $service->getMedication()
+                        );
+                    } else {
+                        $cService->medication()->delete();
+                    }
                 }
             ));
 
@@ -91,31 +97,21 @@ final class AddServices
         return $billingCompany;
     }
 
-    private function setMedications(CompanyService $cService, Collection $medications): void
+    private function setMedication(CompanyService $cService, MedicationRequestCast $medication): void
     {
-        $cService->medications()
-            ->whereNotIn(
-                'id',
-                $medications->map(fn (MedicationRequestCast $medication) => $medication->getId())
-                    ->toArray(),
-            )
-            ->delete();
-
-        $medications->each(
-            fn (MedicationRequestCast $medication) => $cService->medications()->updateOrCreate(
-                ['id' => $medication->getId()],
-                [
-                    'drug_code' => $medication->getDrugCode(),
-                    'measurement_unit_id' => $medication->getMeasurementUnitId(),
-                    'units' => $medication->getUnits(),
-                    'units_limit' => $medication->getUnitsLimit(),
-                    'link_sequence_number' => $medication->getLinkSequenceNumber(),
-                    'pharmacy_prescription_number' => $medication->getPharmacyPrescriptionNumber(),
-                    'repackaged_NDC' => $medication->getRepackagedNDC(),
-                    'code_NDC' => $medication->getCodeNDC(),
-                    'note' => $medication->getNote(),
-                ],
-            )
+        Medication::query()->updateOrCreate(
+            ['company_service_id' => $cService->id],
+            [
+                'drug_code' => $medication->getDrugCode(),
+                'measurement_unit_id' => $medication->getMeasurementUnitId(),
+                'units' => $medication->getUnits(),
+                'units_limit' => $medication->getUnitsLimit(),
+                'link_sequence_number' => $medication->getLinkSequenceNumber(),
+                'pharmacy_prescription_number' => $medication->getPharmacyPrescriptionNumber(),
+                'repackaged_NDC' => $medication->getRepackagedNDC(),
+                'code_NDC' => $medication->getCodeNDC(),
+                'note' => $medication->getNote(),
+            ],
         );
     }
 }
