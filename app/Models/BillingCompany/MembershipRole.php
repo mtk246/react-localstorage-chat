@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\BillingCompany\MembershipRole.
@@ -19,12 +20,12 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  * @property string $name
  * @property string $slug
  * @property string|null $description
- * @property int $billing_company_id
+ * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property BillingCompany $billingCompany
+ * @property BillingCompany|null $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany\Membership> $memberships
  * @property int|null $memberships_count
  *
@@ -41,7 +42,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
  *
  * @mixin \Eloquent
  */
-final class MembershipRole extends Model
+final class MembershipRole extends Model implements Auditable
 {
     use HasFactory;
     use Slugable;
