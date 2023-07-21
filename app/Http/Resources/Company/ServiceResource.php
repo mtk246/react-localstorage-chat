@@ -55,8 +55,10 @@ final class ServiceResource extends RequestWrapedResource
             'price' => (float) $this->resource->price,
             'price_percentage' => (float) $this->resource->price_percentage,
             'clia' => $this->resource->clia,
-            'medication_application' => $this->resource->medications->count() > 0,
-            'medications' => MedicationResource::collection($this->resource->medications),
+            'medication_application' => !empty($this->resource->medication),
+            'medication' => !empty($this->resource->medication)
+                ? MedicationResource::make($this->resource->medication)
+                : null,
         ];
     }
 }
