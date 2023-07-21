@@ -164,7 +164,7 @@ final class CompanyResource extends JsonResource
             ->with([
                 'procedures',
                 'modifiers',
-                'patients',
+                'patiens',
                 'macLocality',
                 'insuranceCompany',
             ])
