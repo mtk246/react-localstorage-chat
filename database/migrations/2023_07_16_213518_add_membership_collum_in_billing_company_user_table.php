@@ -15,6 +15,7 @@ return new class() extends Migration {
             $table->string('slug');
             $table->string('description')->nullable();
             $table->foreignId('billing_company_id')
+                ->nullable()
                 ->constrained('billing_companies')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
