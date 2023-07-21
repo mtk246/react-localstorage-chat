@@ -16,7 +16,6 @@
 - [Get list facility types](#get-list-facility-types)
 - [Get list place of services](#get-list-place-of-services)
 - [Add to company](#add-to-company)
-- [Remove to company](#remove-to-company)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list facilities](#get-list)
 - [Get list bill classifications](#get-bill-classifications)
@@ -41,10 +40,9 @@
 | 11 |GET | `Get list facility types`| `/facility/get-list-facility-types`        |yes            |Get list facility types|
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
 | 13 |PATCH | `Add to company`          | `/facility/{facility_id}/company/`|yes|Add facility to company|
-| 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-company`|yes|Remove facility to company|
-| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
-| 16 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
-| 17 |GET   | `Get list bill classifications`  | `/bill-classifications/{facility_type}`|yes|Get list bill classifications|
+| 14 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 15 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
+| 16 |GET   | `Get list bill classifications`  | `/bill-classifications/{facility_type}`|yes|Get list bill classifications|
 
 
 
@@ -1189,55 +1187,6 @@
 >{warning} 404 error add facility to company
 
 #
-
-<a name="remove-to-company"></a>
-## Remove to company
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`facility_id required integer`
-
-### Body request example
-#
-
-```json
-{
-    "company_id": 2
-}
-```
-
-## Response
-
-> {success} 200 Good response
-
-```json
-{
-    "id": 20,
-    "facility_type_id": 1,
-    "name": "Facilityname",
-    "npi": "123fa1c321",
-    "created_at": "2023-07-13T20:08:16.000000Z",
-    "updated_at": "2023-07-13T20:08:16.000000Z",
-    "code": "NAME-00001-2023",
-    "nppes_verified_at": "2023-07-13",
-    "abbreviation": "ABBFAC",
-    "other_name": "Other name test",
-    "status": false,
-    "verified_on_nppes": true
-}
-```
-
-#
-
->{warning} 404 error remove facility to company
 
 <a name="get-list-billing-companies"></a>
 ## Get list billing companies

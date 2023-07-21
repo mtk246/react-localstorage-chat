@@ -314,7 +314,7 @@ class DataTestSeeder extends Seeder
                 'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
                 'npi' => $data['npi'],
                 'ein' => $data['ein'] ?? null,
-                'upin' => $data['upin'] ?? null,
+                // 'upin' => $data['upin'] ?? null,
                 'clia' => $data['clia'] ?? null,
             ]);
 

@@ -6,7 +6,7 @@ namespace App\Http\Resources\Company;
 
 use App\Facades\Pagination;
 use App\Models\Company;
-use App\Models\CompanyProcedure;
+use App\Models\CompanyService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -37,7 +37,9 @@ final class CompanyResource extends JsonResource
             'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
             'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
-            'billing_companies' => $this->resource->billingCompanies
+            'billing_companies' => $this->resource->billingCompanies()
+                ->distinct('id')
+                ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
                 ->map(function ($bC) {
                     $nickname = $this->resource->nicknames()
@@ -128,16 +130,16 @@ final class CompanyResource extends JsonResource
     private function getServices()
     {
         $bC = request()->user()->billing_company_id;
-        $companyProcedures = CompanyProcedure::query()
+        $companyServices = CompanyService::query()
             ->where('company_id', $this->id)
             ->when(
                 Gate::denies('is-admin'),
-                fn ($query) => $query->where('company_procedure.billing_company_id', $bC)
+                fn ($query) => $query->where('billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
-        return ServiceResource::collection($companyProcedures)->resource;
+        return ServiceResource::collection($companyServices)->resource;
     }
 
     private function getCopays()

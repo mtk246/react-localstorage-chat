@@ -251,8 +251,6 @@ final class CompanyController extends Controller
         AddServicesRequest $request,
         Company $company,
     ): JsonResponse {
-        $request->validated();
-
         $rs = $addServices->invoke($request->castedCollect('services'), $company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add services to company'), 404);
