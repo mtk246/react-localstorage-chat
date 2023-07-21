@@ -1,4 +1,3 @@
--- Active: 1685438728234@@127.0.0.1@5432@kavac_version_3
 # Company Getters Docs
 
 ---
@@ -16,6 +15,7 @@
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list contract fee type](#get-list-contract-fee-types)
 - [Get list type formats](#get-list-type-formats)
+- [Get list measurement units](#get-list-measurement-units)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -36,6 +36,7 @@
 | 11 |GET | `Get list statement apply to`          | `/company/get-list-statement-apply-to`|yes|Get all statement apply to|
 | 12 |GET | `Get list billing companies`| `/company/get-list-billing-companies?company_id={companyID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 13 |GET | `Get list contract fee type`| `/company/get-list-contract-fee-types`        |yes            |Get list contract fee types|
+| 14 |GET | `Get list measurement units`| `/company/get-list-measurement-units`        |yes            |Get list measurement units|
 
 
 <a name="data-another-module"></a>
@@ -1348,6 +1349,49 @@
         "id": 225,
         "name": "RVU"
     }
+]
+```
+
+<a name="get-list-measurement-units"></a>
+## Get list measurement units
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Measurement units found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "name": "F2 - International Unit"
+  },
+  {
+    "id": 2,
+    "name": "GR - Gram"
+  },
+  {
+    "id": 3,
+    "name": "ME - Milligram"
+  },
+  {
+    "id": 4,
+    "name": "ML - Milliliter"
+  },
+  {
+    "id": 5,
+    "name": "UN - Unit"
+  }
 ]
 ```
 
