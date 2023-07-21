@@ -58,7 +58,7 @@
     "insurance":{
         "payer_id": 12, /** required */
         "name":"Name insurance", /** required */
-        "abbreviations": ["Abbreviation 1", "Abbreviation 2"], /** required */
+        "abbreviation":"Abbreviation", /** required */
         "nickname":"alias insurance", /** optional */
         "naic":"someNaic",  /** optional */
         "file_method_id": 1, /** required */
@@ -617,26 +617,7 @@
                 "status": true,
                 "edit_name": false,
                 "nickname": "",
-                "abbreviations": [
-                    {
-                        "id": 13,
-                        "abbreviation": "Abbreviation 1",
-                        "abbreviable_type": "App\\Models\\InsuranceCompany",
-                        "abbreviable_id": 5,
-                        "billing_company_id": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    },
-                    {
-                        "id": 14,
-                        "abbreviation": "Abbreviation 2",
-                        "abbreviable_type": "App\\Models\\InsuranceCompany",
-                        "abbreviable_id": 5,
-                        "billing_company_id": 1,
-                        "created_at": null,
-                        "updated_at": null
-                    }
-                ],
+                "abbreviation": "",
                 "private_note": "",
                 "address": {
                     "zip": "3234",
@@ -678,7 +659,7 @@
     "insurance":{
         "payer_id": 12, /** required */
         "name":"Name insurance", /** required */
-        "abbreviations": ["Abbreviation 1", "Abbreviation 2"], /** required */
+        "abbreviation":"Abbreviation", /** required */
         "nickname":"alias insurance", /** optional */
         "naic":"someNaic",  /** optional */
         "file_method_id": 1, /** required */

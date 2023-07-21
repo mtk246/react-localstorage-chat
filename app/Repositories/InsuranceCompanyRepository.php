@@ -43,7 +43,7 @@ class InsuranceCompanyRepository
                 ]);
             }
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billing_company_id;
@@ -328,11 +328,11 @@ class InsuranceCompanyRepository
         $record['billing_companies'] = [];
 
         foreach ($insurance->billingCompanies as $billingCompany) {
-            $abbreviations = EntityAbbreviation::where([
+            $abbreviation = EntityAbbreviation::where([
                 'abbreviable_id' => $insurance->id,
                 'abbreviable_type' => InsuranceCompany::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            ])->get();
+            ])->first();
             $nickname = EntityNickname::where([
                 'nicknamable_id' => $insurance->id,
                 'nicknamable_type' => InsuranceCompany::class,
@@ -407,7 +407,7 @@ class InsuranceCompanyRepository
                     'status' => $billingCompany->pivot->status ?? false,
                     'edit_name' => isset($nickname->nickname) ? true : false,
                     'nickname' => $nickname->nickname ?? '',
-                    'abbreviations' => $abbreviations ?? [],
+                    'abbreviation' => $abbreviation->abbreviation ?? '',
                     'private_note' => $private_note->note ?? '',
                     'address' => isset($address) ? $insurance_address : null,
                     'contact' => isset($contact) ? $insurance_contact : null,
@@ -576,7 +576,7 @@ class InsuranceCompanyRepository
                 'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
-            if (auth()->user()->hasRole('superuser')) {
+            if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billing_company_id;
@@ -633,25 +633,14 @@ class InsuranceCompanyRepository
                 ]);
             }
 
-            if (isset($data['insurance']['abbreviations'])) {
-                $abbreviationData = array();
-
-                EntityAbbreviation::where([
+            if (isset($data['insurance']['abbreviation'])) {
+                EntityAbbreviation::updateOrCreate([
                     'abbreviable_id' => $insurance->id,
                     'abbreviable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany
-                ])->delete();
-
-                foreach($data['insurance']['abbreviations'] as $abbreviation) {
-                    array_push($abbreviationData, [
-                        'abbreviation' => $abbreviation,
-                        'abbreviable_id' => $insurance->id,
-                        'abbreviable_type' => InsuranceCompany::class,
-                        'billing_company_id' => $billingCompany,
-                    ]);
-                }
-
-                EntityAbbreviation::insert($abbreviationData);
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'abbreviation' => $data['insurance']['abbreviation'],
+                ]);
             }
 
             if (isset($data['address']['address'])) {

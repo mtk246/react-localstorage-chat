@@ -31,11 +31,10 @@ class UpdateInsuranceRequest extends FormRequest
             'insurance' => ['required', 'array'],
             'insurance.payer_id' => ['required', 'string', 'max:20'],
             'insurance.name' => ['required', 'string'],
+            'insurance.abbreviation' => ['required', 'string', 'max:20'],
             'insurance.naic' => ['nullable', 'string'],
             'insurance.file_method_id' => ['required', 'integer'],
             'insurance.nickname' => ['nullable', 'string', 'max:100'],
-            'insurance.abbreviations' => ['required', 'array'],
-            'insurance.abbreviations.*' => ['string', 'max:20'],
 
             'time_failed' => ['nullable', 'array'],
             'time_failed.days' => ['nullable', 'integer'],
