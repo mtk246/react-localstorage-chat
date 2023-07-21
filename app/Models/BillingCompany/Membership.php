@@ -40,6 +40,10 @@ final class Membership extends Pivot
         'billing_company_id',
     ];
 
+    protected $appends = [
+        'roles',
+    ];
+
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class);
@@ -52,6 +56,14 @@ final class Membership extends Pivot
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(MembershipRole::class, 'membership_role_user', 'membership_id', 'membership_role_id');
+        return $this->belongsToMany(
+            related: MembershipRole::class,
+            table: 'membership_role_user',
+        );
+    }
+
+    public function getRolesAttribute()
+    {
+        return $this->roles()->get();
     }
 }
