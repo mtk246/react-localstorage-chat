@@ -29,6 +29,9 @@ final class UpdateUserWrapper extends CastsRequest
     {
         return collect([
             'language' => $this->get('language') ?? 'en',
+            'billing_company_id' => $this->getCollect('roles')->search(1)
+                ? null
+                : $this->getBillingCompanyId(),
             'status' => true,
         ]);
     }
