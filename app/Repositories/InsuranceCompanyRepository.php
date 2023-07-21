@@ -43,27 +43,27 @@ class InsuranceCompanyRepository
                 ]);
             }
 
-            if (Gate::check('is-admin')) {
+            if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             /* Attach billing company */
-            $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            $insurance->billingCompanies()->attach($billingCompany);
 
             if (isset($data['billing_incomplete_reasons'])) {
                 foreach ($data['billing_incomplete_reasons'] as $bir) {
                     if (is_null($insurance->billingIncompleteReasons()
-                            ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($bir))) {
+                            ->wherePivot('billing_company_id', $billingCompany)->find($bir))) {
                         $insurance->billingIncompleteReasons()->attach($bir, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany,
                         ]);
                     } else {
                         $insurance->billingIncompleteReasons()
-                                 ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                                 ->wherePivot('billing_company_id', $billingCompany)
                                  ->updateExistingPivot($bir, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany,
                         ]);
                     }
                 }
@@ -72,15 +72,15 @@ class InsuranceCompanyRepository
             if (isset($data['appeal_reasons'])) {
                 foreach ($data['appeal_reasons'] as $ar) {
                     if (is_null($insurance->appealReasons()
-                            ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($ar))) {
+                            ->wherePivot('billing_company_id', $billingCompany)->find($ar))) {
                         $insurance->appealReasons()->attach($ar, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany,
                         ]);
                     } else {
                         $insurance->appealReasons()
-                                 ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                                 ->wherePivot('billing_company_id', $billingCompany)
                                  ->updateExistingPivot($ar, [
-                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'billing_company_id' => $billingCompany,
                         ]);
                     }
                 }
@@ -90,7 +90,7 @@ class InsuranceCompanyRepository
                 InsuranceCompanyTimeFailed::create([
                     'days' => $data['time_failed']['days'],
                     'from_id' => $data['time_failed']['from_id'],
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'insurance_company_id' => $insurance->id,
                 ]);
             }
@@ -100,27 +100,39 @@ class InsuranceCompanyRepository
                     'nickname' => $data['insurance']['nickname'],
                     'nicknamable_id' => $insurance->id,
                     'nicknamable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ]);
             }
 
-            if (isset($data['insurance']['abbreviation'])) {
-                EntityAbbreviation::create([
-                    'abbreviation' => $data['insurance']['abbreviation'],
+            if (isset($data['insurance']['abbreviations'])) {
+                $abbreviationData = array();
+
+                EntityAbbreviation::where([
                     'abbreviable_id' => $insurance->id,
                     'abbreviable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
+                    'billing_company_id' => $billingCompany
+                ])->delete();
+
+                foreach($data['insurance']['abbreviations'] as $abbreviation) {
+                    array_push($abbreviationData, [
+                        'abbreviation' => $abbreviation,
+                        'abbreviable_id' => $insurance->id,
+                        'abbreviable_type' => InsuranceCompany::class,
+                        'billing_company_id' => $billingCompany,
+                    ]);
+                }
+
+                EntityAbbreviation::insert($abbreviationData);
             }
 
             if (isset($data['address']['address'])) {
-                $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['address']['billing_company_id'] = $billingCompany;
                 $data['address']['addressable_id'] = $insurance->id;
                 $data['address']['addressable_type'] = InsuranceCompany::class;
                 Address::create($data['address']);
             }
             if (isset($data['contact']['email'])) {
-                $data['contact']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['contact']['billing_company_id'] = $billingCompany;
                 $data['contact']['contactable_id'] = $insurance->id;
                 $data['contact']['contactable_type'] = InsuranceCompany::class;
                 Contact::create($data['contact']);
@@ -130,7 +142,7 @@ class InsuranceCompanyRepository
                 PrivateNote::create([
                     'publishable_type' => InsuranceCompany::class,
                     'publishable_id' => $insurance->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'note' => $data['private_note'],
                 ]);
             }
@@ -316,11 +328,11 @@ class InsuranceCompanyRepository
         $record['billing_companies'] = [];
 
         foreach ($insurance->billingCompanies as $billingCompany) {
-            $abbreviation = EntityAbbreviation::where([
+            $abbreviations = EntityAbbreviation::where([
                 'abbreviable_id' => $insurance->id,
                 'abbreviable_type' => InsuranceCompany::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            ])->first();
+            ])->get();
             $nickname = EntityNickname::where([
                 'nicknamable_id' => $insurance->id,
                 'nicknamable_type' => InsuranceCompany::class,
@@ -395,7 +407,7 @@ class InsuranceCompanyRepository
                     'status' => $billingCompany->pivot->status ?? false,
                     'edit_name' => isset($nickname->nickname) ? true : false,
                     'nickname' => $nickname->nickname ?? '',
-                    'abbreviation' => $abbreviation->abbreviation ?? '',
+                    'abbreviations' => $abbreviations ?? [],
                     'private_note' => $private_note->note ?? '',
                     'address' => isset($address) ? $insurance_address : null,
                     'contact' => isset($contact) ? $insurance_contact : null,
@@ -564,46 +576,46 @@ class InsuranceCompanyRepository
                 'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
-            if (Gate::check('is-admin')) {
+            if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             /* Attach billing company */
-            if (is_null($insurance->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
-                $insurance->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            if (is_null($insurance->billingCompanies()->find($billingCompany))) {
+                $insurance->billingCompanies()->attach($billingCompany);
             } else {
-                $insurance->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
+                $insurance->billingCompanies()->updateExistingPivot($billingCompany, [
                     'status' => true,
                 ]);
             }
 
             if (isset($data['billing_incomplete_reasons'])) {
                 $insurance->billingIncompleteReasons()
-                          ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
+                          ->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['billing_incomplete_reasons'] as $bir) {
                     $insurance->billingIncompleteReasons()->attach($bir, [
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        'billing_company_id' => $billingCompany,
                     ]);
                 }
             }
 
             if (isset($data['appeal_reasons'])) {
                 $insurance->appealReasons()
-                          ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->detach();
+                          ->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['appeal_reasons'] as $ar) {
                     $insurance->appealReasons()->attach($ar, [
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                        'billing_company_id' => $billingCompany,
                     ]);
                 }
             }
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 InsuranceCompanyTimeFailed::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'insurance_company_id' => $insurance->id,
                 ], [
                     'days' => $data['time_failed']['days'],
@@ -615,25 +627,36 @@ class InsuranceCompanyRepository
                 EntityNickname::updateOrCreate([
                     'nicknamable_id' => $insurance->id,
                     'nicknamable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ], [
                     'nickname' => $data['insurance']['nickname'],
                 ]);
             }
 
-            if (isset($data['insurance']['abbreviation'])) {
-                EntityAbbreviation::updateOrCreate([
+            if (isset($data['insurance']['abbreviations'])) {
+                $abbreviationData = array();
+
+                EntityAbbreviation::where([
                     'abbreviable_id' => $insurance->id,
                     'abbreviable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'abbreviation' => $data['insurance']['abbreviation'],
-                ]);
+                    'billing_company_id' => $billingCompany
+                ])->delete();
+
+                foreach($data['insurance']['abbreviations'] as $abbreviation) {
+                    array_push($abbreviationData, [
+                        'abbreviation' => $abbreviation,
+                        'abbreviable_id' => $insurance->id,
+                        'abbreviable_type' => InsuranceCompany::class,
+                        'billing_company_id' => $billingCompany,
+                    ]);
+                }
+
+                EntityAbbreviation::insert($abbreviationData);
             }
 
             if (isset($data['address']['address'])) {
                 Address::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'addressable_id' => $insurance->id,
                     'addressable_type' => InsuranceCompany::class,
                 ],
@@ -641,7 +664,7 @@ class InsuranceCompanyRepository
             }
             if (isset($data['contact']['email'])) {
                 Contact::updateOrCreate([
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'contactable_id' => $insurance->id,
                     'contactable_type' => InsuranceCompany::class,
                 ], $data['contact']);
@@ -651,7 +674,7 @@ class InsuranceCompanyRepository
                 PrivateNote::updateOrCreate([
                     'publishable_type' => InsuranceCompany::class,
                     'publishable_id' => $insurance->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ], [
                     'note' => $data['private_note'],
                 ]);
