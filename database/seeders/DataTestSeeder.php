@@ -10,6 +10,7 @@ use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTyp
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\ClearingHouse;
 use App\Models\Company;
 use App\Models\CompanyHealthProfessionalType;
@@ -148,6 +149,14 @@ class DataTestSeeder extends Seeder
                     'billing_company_id' => $bc->id,
                 ]);
             }
+
+            collect(config('memberships.default_roles'))
+                ->map(function (array $role) use ($bc) {
+                    $role['billing_company_id'] = $bc->id;
+
+                    return $role;
+                })
+                ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
         }
 
         /****** SEDEER DE COMPANIES - FACILITIES *****/
@@ -314,7 +323,6 @@ class DataTestSeeder extends Seeder
                 'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
                 'npi' => $data['npi'],
                 'ein' => $data['ein'] ?? null,
-                'upin' => $data['upin'] ?? null,
                 'clia' => $data['clia'] ?? null,
             ]);
 
@@ -1967,32 +1975,40 @@ class DataTestSeeder extends Seeder
                     }
                 }
             }
+
             /** Create User */
-            $user = User::firstOrCreate([
+            $user = User::query()->firstOrCreate([
                 'email' => $dataHP['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
+                'billing_company_id' => null,
             ]);
 
             $billingCompany = BillingCompany::whereAbbreviation($dataHP['billing_company'])->first();
 
             /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::whereSlug('healthprofessional')->first()->id);
 
             if (isset($dataHP['contact'])) {
                 Contact::firstOrCreate([
-                    'contactable_id' => $user->id,
-                    'contactable_type' => User::class,
+                    'contactable_id' => $user->profile_id,
+                    'contactable_type' => Profile::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataHP['contact']);
             }
 
             if (isset($dataHP['address'])) {
                 Address::firstOrCreate([
-                    'addressable_id' => $user->id,
-                    'addressable_type' => User::class,
+                    'addressable_id' => $user->profile_id,
+                    'addressable_type' => Profile::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataHP['address']);
             }
@@ -3209,7 +3225,7 @@ class DataTestSeeder extends Seeder
             }
 
             /** Create User */
-            $user = User::firstOrCreate([
+            $user = User::query()->firstOrCreate([
                 'email' => $dataP['contact']['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
@@ -3221,7 +3237,13 @@ class DataTestSeeder extends Seeder
             $billingCompany = BillingCompany::whereAbbreviation($dataP['billing_company'])->first();
 
             /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::query()->whereSlug('patient')->where('billing_company_id', null)->first()->id);
 
             /* Create Contact */
             if (isset($dataP['contact'])) {
