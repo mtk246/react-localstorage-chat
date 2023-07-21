@@ -20,7 +20,7 @@
 | 17 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 18 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 | 19 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
-| 20 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
+| 20 |PATCH | `Add services to company`       | `/company/{id}/services`|yes|Add services to company|
 | 21 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
 | 22 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
@@ -182,25 +182,35 @@
             "fsa": "STATEWIDE",
             "counties": "ALL COUNTIES",
             "insurance_label_fee_id": 1,
-            "rate": "", /**Consultar dominio */
+            "rate": "",
             "price_percentage": "70",
             "clia": "00001A",
             "medications": [
                 {
                     "id": 2,
-                    "date": "2022-03-16",
-                    "drug_code": "001A23X",
-                    "batch": "0101AS",
-                    "quantity": 2,
-                    "frequency": 3
+                    "drug_code": "1472583691",
+                    "measurement_unit_id": 1,
+                    "units": 30.5,
+                    "units_limit": 30,
+                    "link_sequence_number": "124585154",
+                    "pharmacy_prescription_number": "123456",
+                    "repackaged_NDC": false,
+                    "Code_NDC": "1010524871",
+                    "claim_note_required": true,
+                    "note": "Note Medication",
                 },
                 {
                     "id": 0, /** zero for new entries */
-                    "date": "2022-03-16",
-                    "drug_code": "002A23X",
-                    "batch": "0201AS",
-                    "quantity": 2,
-                    "frequency": 3
+                    "drug_code": "001010101",
+                    "measurement_unit_id": 1,
+                    "units": 30,
+                    "units_limit": 30,
+                    "link_sequence_number": "7891561231",
+                    "pharmacy_prescription_number": "12345652145",
+                    "repackaged_NDC": false,
+                    "Code_NDC": "101000082",
+                    "claim_note_required": true,
+                    "note": "Note Medication",
                 }
             ]
         },

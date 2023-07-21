@@ -25,18 +25,14 @@ final class ServiceRequestCast extends CastsRequest
             : null;
     }
 
-    public function getProcedureId(): ?int
+    public function getProcedureIds(): ?array
     {
-        return array_key_exists('procedure_id', $this->inputs)
-            ? $this->inputs['procedure_id']
-            : null;
+        return $this->get('procedure_ids');
     }
 
-    public function getModifierId(): ?int
+    public function getModifierIds(): ?array
     {
-        return array_key_exists('modifier_id', $this->inputs)
-            ? $this->inputs['modifier_id']
-            : null;
+        return $this->get('modifier_ids');
     }
 
     public function getPrice(): ?float
@@ -83,9 +79,7 @@ final class ServiceRequestCast extends CastsRequest
 
     public function getInsuranceLabelFeeId(): ?int
     {
-        return array_key_exists('insurance_label_fee_id', $this->inputs)
-            ? (int) $this->inputs['insurance_label_fee_id']
-            : null;
+        return $this->get('insurance_label_fee_id');
     }
 
     public function getPricePercentage(): ?int
