@@ -1166,10 +1166,10 @@ class PermissionSeeder extends Seeder
             $clientRole, $developmentSupportRole) {
             $superUserRole->detachAllPermissions();
             $billingManagerRole->detachAllPermissions();
-            $billerRole->detachAllPermissions();
-            $paymentProcessorRole->detachAllPermissions();
-            $collectorRole->detachAllPermissions();
-            $accountManagerRole->detachAllPermissions();
+            $billerRole?->detachAllPermissions();
+            $paymentProcessorRole?->detachAllPermissions();
+            $collectorRole?->detachAllPermissions();
+            $accountManagerRole?->detachAllPermissions();
             $auditorRole->detachAllPermissions();
             $auditorBCRole->detachAllPermissions();
             $healthProfessionalRole->detachAllPermissions();
@@ -1204,7 +1204,7 @@ class PermissionSeeder extends Seeder
                     $billerRole->attachPermission($per);
                 }
                 if ($paymentProcessorRole && in_array($permission['slug'], $defaultPermissions['paymentprocessor'])) {
-                    $paymentProcessorRole->attachPermission($per);
+                    $paymentProcessorRole?->attachPermission($per);
                 }
                 if ($collectorRole && in_array($permission['slug'], $defaultPermissions['collector'])) {
                     $collectorRole->attachPermission($per);
