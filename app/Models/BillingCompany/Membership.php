@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 final class Membership extends Pivot
 {
-    use HasFactory;
+    // use HasFactory;
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -54,11 +54,13 @@ final class Membership extends Pivot
         return $this->belongsTo(User::class);
     }
 
-    public function roles(): BelongsToMany
+    public function roles(): ?BelongsToMany
     {
         return $this->belongsToMany(
             related: MembershipRole::class,
             table: 'membership_role_user',
+            foreignPivotKey: 'billing_company_user_id',
+            relatedPivotKey: 'membership_role_id',
         );
     }
 

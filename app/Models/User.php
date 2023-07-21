@@ -211,11 +211,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * The billingCompanies that belong to the User.
      */
-    public function billingCompanies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function billingCompanies()// : \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(Membership::class)
-            ->withPivot('status')
+            ->withPivot('status', 'id')
             ->withTimestamps()
             ->as('membership');
     }
