@@ -210,6 +210,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::prefix('company')->group(function () {
         Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
         Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
+        Route::get('/get-list-measurement-units', [CompanyController::class, 'getListMeasurementUnits']);
         Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
         Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
         Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
