@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Company\MeasurementUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,17 +43,17 @@ final class Medication extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
-        'date',
         'drug_code',
-        'batch',
-        'quantity',
-        'frequency',
+        'measurement_unit_id',
+        'units',
+        'units_limit',
+        'link_sequence_number',
+        'pharmacy_prescription_number',
+        'repackaged_NDC',
+        'code_NDC',
+        'claim_note_required',
+        'note',
     ];
 
     /**
@@ -70,9 +71,13 @@ final class Medication extends Model
         'company_procedure_id',
     ];
 
+    protected $casts = [
+        'measurement_unit_id' => MeasurementUnit::class,
+    ];
+
     public function getCodeAttribute(): string
     {
-        return $this->company_procedure_id.$this->drug_code.$this->batch.$this->id;
+        return $this->company_procedure_id.$this->drug_code.$this->id;
     }
 
     public function companyProcedure(): BelongsTo

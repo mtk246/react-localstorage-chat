@@ -136,26 +136,6 @@ final class Company extends Model implements Auditable
     }
 
     /**
-     * The procedures that belong to the Company.
-     */
-    public function procedures(): BelongsToMany
-    {
-        return $this->belongsToMany(Procedure::class)
-            ->using(CompanyProcedure::class)
-            ->withPivot(
-                'id',
-                'price',
-                'price_percentage',
-                'insurance_label_fee_id',
-                'billing_company_id',
-                'modifier_id',
-                'clia',
-                'mac_locality_id',
-            )
-            ->withTimestamps();
-    }
-
-    /**
      * The healthProfessionals that belong to the company.
      */
     public function healthProfessionals(): BelongsToMany
@@ -169,14 +149,6 @@ final class Company extends Model implements Auditable
     public function patients(): BelongsToMany
     {
         return $this->belongsToMany(Patient::class)->withPivot('billing_company_id', 'med_num', 'id')->withTimestamps();
-    }
-
-    /**
-     * The services that belong to the company.
-     */
-    public function services(): BelongsToMany
-    {
-        return $this->belongsToMany(Service::class)->withPivot('status', 'std_price')->withTimestamps();
     }
 
     /**
@@ -201,6 +173,14 @@ final class Company extends Model implements Auditable
     public function claimEligibilities(): HasMany
     {
         return $this->hasMany(ClaimEligibility::class);
+    }
+
+    /**
+     * Company has many CompanyServices.
+     */
+    public function companyServices(): HasMany
+    {
+        return $this->hasMany(CompanyService::class);
     }
 
     /**
