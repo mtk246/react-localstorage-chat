@@ -19,10 +19,10 @@ final class StoreUserWrapper extends CastsRequest
             : $this->user->billing_company_id;
     }
 
-    public function getBillingCompanyData(): array
+    public function getMembershipRoles(): array
     {
         return $this->getCollect('roles')->contains('Billing Worker')
-            ? ['memberships' => $this->get('memberships')]
+            ? $this->get('memberships')
             : [];
     }
 
