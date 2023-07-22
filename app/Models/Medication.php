@@ -54,6 +54,7 @@ final class Medication extends Model
         'code_NDC',
         'claim_note_required',
         'note',
+        'company_service_id',
     ];
 
     /**
@@ -80,8 +81,8 @@ final class Medication extends Model
         return $this->company_procedure_id.$this->drug_code.$this->id;
     }
 
-    public function companyProcedure(): BelongsTo
+    public function companyService(): BelongsTo
     {
-        return $this->belongsTo(CompanyProcedure::class);
+        return $this->belongsTo(CompanyService::class);
     }
 }

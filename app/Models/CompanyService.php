@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\CompanyService.
@@ -77,9 +77,9 @@ final class CompanyService extends Model
         // 'price' => MoneyStringCast::class,
     ];
 
-    public function medications(): ?HasMany
+    public function medication(): ?HasOne
     {
-        return $this->hasMany(Medication::class);
+        return $this->hasOne(Medication::class);
     }
 
     public function company(): BelongsTo
