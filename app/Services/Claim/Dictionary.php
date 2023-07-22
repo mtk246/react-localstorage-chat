@@ -46,9 +46,12 @@ abstract class Dictionary implements DictionaryInterface
 
     public function toArray(): array
     {
-        return array_map(function ($key) {
-            return $this->translate((string) $key);
-        }, array_keys($this->config));
+        return array_combine(
+            array_keys($this->config),
+            array_map(function ($key) {
+                return $this->translate((string) $key);
+            }, array_keys($this->config))
+        );
     }
 
     protected function getMultipleFormat(array $values, string $glue): string

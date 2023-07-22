@@ -158,6 +158,11 @@ final class FileDictionary extends Dictionary
         return $this->claim->lowerInsurancePlan()?->{$key} ?? '';
     }
 
+    protected function getHigherInsuranceCompanyAttribute(string $key): string
+    {
+        return $this->claim->higherInsurancePlan()?->insuranceCompany?->{$key} ?? '';
+    }
+
     protected function getHigherInsurancePlanAttribute(string $key): string
     {
         return $this->claim->higherInsurancePlan()?->{$key} ?? '';
