@@ -21,7 +21,7 @@ final class StoreUserWrapper extends CastsRequest
 
     public function getMembershipRoles(): array
     {
-        return $this->getCollect('roles')->contains('Billing Worker')
+        return $this->getCollect('roles')->contains(3)
             ? $this->get('memberships')
             : [];
     }
