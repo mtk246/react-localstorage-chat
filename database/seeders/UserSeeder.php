@@ -340,7 +340,7 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             $profile = Profile::updateOrCreate(['ssn' => $user['profile']['ssn']], $user['profile']);
 
-            $usr = User::updateOrCreate(
+            $usr = User::query()->updateOrCreate(
                 ['email' => $user['email']],
                 [
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
@@ -369,6 +369,7 @@ class UserSeeder extends Seeder
 
             if ('billingmanager' == $role->slug || 'biller' == $role->slug) {
                 $bCompany = BillingCompany::whereAbbreviation($user['billingCompany'])->first();
+                $usr->billingCompany()->disassociate($bCompany->id);
                 $usr->billingCompanies()->sync($bCompany->id);
             }
         }

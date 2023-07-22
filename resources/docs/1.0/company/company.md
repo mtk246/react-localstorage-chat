@@ -185,34 +185,20 @@
             "rate": "",
             "price_percentage": "70",
             "clia": "00001A",
-            "medications": [
-                {
-                    "id": 2,
-                    "drug_code": "1472583691",
-                    "measurement_unit_id": 1,
-                    "units": 30.5,
-                    "units_limit": 30,
-                    "link_sequence_number": "124585154",
-                    "pharmacy_prescription_number": "123456",
-                    "repackaged_NDC": false,
-                    "Code_NDC": "1010524871",
-                    "claim_note_required": true,
-                    "note": "Note Medication",
-                },
-                {
-                    "id": 0, /** zero for new entries */
-                    "drug_code": "001010101",
-                    "measurement_unit_id": 1,
-                    "units": 30,
-                    "units_limit": 30,
-                    "link_sequence_number": "7891561231",
-                    "pharmacy_prescription_number": "12345652145",
-                    "repackaged_NDC": false,
-                    "Code_NDC": "101000082",
-                    "claim_note_required": true,
-                    "note": "Note Medication",
-                }
-            ]
+            "medication_application": true,
+            "medication": {
+                "id": 2,
+                "drug_code": "1472583691",
+                "measurement_unit_id": 1,
+                "units": 30.5,
+                "units_limit": 30,
+                "link_sequence_number": "124585154",
+                "pharmacy_prescription_number": "123456",
+                "repackaged_NDC": false,
+                "Code_NDC": "1010524871",
+                "claim_note_required": true,
+                "note": "Note Medication",
+            },
         },
         {
             "billing_company_id": 1,  /** Only required by superuser */
@@ -266,27 +252,20 @@
     "price_percentage": "70",
     "clia": "00001A",
     "rate": "",
-    "medication_application": false,
-    "medications": [
-      {
-        "id": 2,
-        "code": "87001A23X0101AS54",
-        "drug_code": "001A23X",
-        "batch": "0101AS",
-        "quantity": 2,
-        "frequency": 3,
-        "date": "2022-03-16"
-      },
-      {
-        "id": 3,
-        "code": "87002A23X0201AS55",
-        "drug_code": "002A23X",
-        "batch": "0201AS",
-        "quantity": 2,
-        "frequency": 3,
-        "date": "2022-03-16"
-      }
-    ]
+    "medication_application": true,
+    "medication": {
+      "id": 2,
+      "drug_code": "1472583691",
+      "measurement_unit_id": 1,
+      "units": 30.5,
+      "units_limit": 30,
+      "link_sequence_number": "124585154",
+      "pharmacy_prescription_number": "123456",
+      "repackaged_NDC": false,
+      "Code_NDC": "1010524871",
+      "claim_note_required": true,
+      "note": "Note Medication",
+    },
   },
   {
     "id": 88,

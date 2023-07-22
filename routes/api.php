@@ -63,7 +63,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('change-password/{token}', [\App\Http\Controllers\UserController::class, 'changePassword']);
         Route::post('new-token', [\App\Http\Controllers\UserController::class, 'newToken']);
         Route::patch('{id?}/change-status', [\App\Http\Controllers\UserController::class, 'changeStatus'])->middleware('auth:api');
-        Route::put('{user}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
+        Route::put('/{user}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
         Route::post('img-profile', [\App\Http\Controllers\UserController::class, 'updateImgProfile'])->middleware(['auth:api']);
 
         Route::get('social-networks/get-list', [\App\Http\Controllers\UserController::class, 'getListSocialNetworks'])->middleware(['auth:api']);
@@ -210,6 +210,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::prefix('company')->group(function () {
         Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
         Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
+        Route::get('/get-list-measurement-units', [CompanyController::class, 'getListMeasurementUnits']);
         Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
         Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
         Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);

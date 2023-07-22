@@ -8,6 +8,7 @@ use App\Http\Resources\Enums\TypeResource;
 use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\Company;
 use App\Models\CompanyHealthProfessionalType;
 use App\Models\Contact;
@@ -69,6 +70,12 @@ class DoctorRepository
 
             /* Attach billing company */
             $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::whereSlug('healthprofessional')->first()->id);
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
@@ -398,6 +405,12 @@ class DoctorRepository
             }
 
             $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::whereSlug('healthprofessional')->first()->id);
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMedias = $profile->socialMedias;
@@ -723,11 +736,9 @@ class DoctorRepository
                 'user' => function ($query) {
                     $query->with([
                         'profile' => function ($query) {
-                            $query->with('socialMedias');
+                            $query->with('socialMedias', 'addresses', 'contacts');
                         },
                         'roles',
-                        'addresses',
-                        'contacts',
                         'billingCompanies',
                     ]);
                 },
@@ -749,16 +760,18 @@ class DoctorRepository
             $healthP = HealthProfessional::whereId($id)->with([
                 'user' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) {
-                            $query->with('socialMedias');
+                        'profile' => function ($query) use ($bC) {
+                            $query->with([
+                                'socialMedias', 
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                            ]);
                         },
                         'roles',
-                        'addresses' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
-                        'contacts' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
                         'billingCompanies',
                     ]);
                 },

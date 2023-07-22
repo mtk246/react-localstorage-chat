@@ -340,12 +340,11 @@ final class Company extends Model implements Auditable
             'name' => $this->name,
             'npi' => $this->npi,
             'ein' => $this->ein,
-            'upin' => $this->upin,
             'clia' => $this->clia,
-            'contacts.phone' => $contacts->phone ?? null,
-            'contacts.fax' => $contacts->fax ?? null,
-            'contacts.email' => $contacts->email ?? null,
-            'contacts.mobile' => $contacts->mobile ?? null,
+            'contacts.phone' => $contacts?->phone,
+            'contacts.fax' => $contacts?->fax,
+            'contacts.email' => $contacts?->email,
+            'contacts.mobile' => $contacts?->mobile,
         ];
     }
 }
