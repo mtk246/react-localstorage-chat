@@ -20,7 +20,7 @@ final class UpdateUserWrapper extends CastsRequest
 
     public function getMembershipRoles(): array
     {
-        return $this->getCollect('roles')->contains('Billing Worker')
+        return $this->getCollect('roles')->contains(1)
             ? $this->get('memberships')
             : [];
     }
