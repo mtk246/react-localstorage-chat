@@ -104,25 +104,13 @@ class InsuranceCompanyRepository
                 ]);
             }
 
-            if (isset($data['insurance']['abbreviations'])) {
-                $abbreviationData = array();
-
-                EntityAbbreviation::where([
+            if (isset($data['insurance']['abbreviation'])) {
+                EntityAbbreviation::create([
+                    'abbreviation' => $data['insurance']['abbreviation'],
                     'abbreviable_id' => $insurance->id,
                     'abbreviable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany
-                ])->delete();
-
-                foreach($data['insurance']['abbreviations'] as $abbreviation) {
-                    array_push($abbreviationData, [
-                        'abbreviation' => $abbreviation,
-                        'abbreviable_id' => $insurance->id,
-                        'abbreviable_type' => InsuranceCompany::class,
-                        'billing_company_id' => $billingCompany,
-                    ]);
-                }
-
-                EntityAbbreviation::insert($abbreviationData);
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ]);
             }
 
             if (isset($data['address']['address'])) {
