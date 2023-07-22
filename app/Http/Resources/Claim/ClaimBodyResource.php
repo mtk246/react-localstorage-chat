@@ -259,7 +259,7 @@ final class ClaimBodyResource extends JsonResource
 
     private function getBillingProvider(): ?string
     {
-        $billing = $this->resource->demographicInformation->healthProfessionals()
+        $billing = $this->resource->demographicInformation?->healthProfessionals()
             ->wherePivot('field_id', 5)
             ->first();
 
