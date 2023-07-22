@@ -30,7 +30,7 @@ final class UpdateUserAction
                 ->first()
                 ->membership
                 ->roles()
-                ->syncWithoutDetaching($userWrapper->getMembershipRoles());
+                ->sync($userWrapper->getMembershipRoles());
 
             $roles = $userWrapper->getRoles()
                 ->map(function (Role $role) use ($user) {
