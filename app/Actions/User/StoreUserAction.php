@@ -28,11 +28,13 @@ final class StoreUserAction
             return new UserResource(tap(User::query()->create($userData->toArray()), function (User $user) use ($profile, $userWrapper) {
                 $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
 
-                $user->billingCompanies()->syncWithPivotValues(
-                    $userWrapper->getBillingCompanyId(),
-                    $userWrapper->getBillingCompanyData(),
-                    false,
-                );
+                $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
+                $user->billingCompanies()
+                    ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
+                    ->first()
+                    ->membership
+                    ->roles()
+                    ->syncWithoutDetaching($userWrapper->getMembershipRoles());
 
                 $roles = $userWrapper->getRoles()
                     ->map(function (Role $role) use ($user) {
