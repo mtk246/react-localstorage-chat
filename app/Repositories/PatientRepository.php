@@ -667,8 +667,8 @@ class PatientRepository
             'user' => function ($query) use ($ssn) {
                 $query->with(['profile' => function ($q) use ($ssn) {
                     $q->where('ssn', $ssn)
-                      ->with('socialMedias');
-                }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                      ->with(['socialMedias', 'addresses', 'contacts']);
+                }, 'roles', 'billingCompanies']);
             },
             'maritalStatus',
             'marital',
@@ -701,8 +701,8 @@ class PatientRepository
         return Patient::with([
             'user' => function ($query) {
                 $query->with(['profile' => function ($q) {
-                    $q->with('socialMedias');
-                }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                    $q->with(['socialMedias', 'addresses', 'contacts']);
+                }, 'roles', 'billingCompanies']);
             },
             'maritalStatus',
             // "marital",
@@ -727,8 +727,8 @@ class PatientRepository
             $data = Patient::with([
                 'user' => function ($query) {
                     $query->with(['profile' => function ($q) {
-                        $q->with('socialMedias');
-                    }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                        $q->with(['socialMedias', 'addresses', 'contacts']);
+                    }, 'roles', 'billingCompanies']);
                 },
                 // "marital",
                 // "guarantor",
@@ -749,8 +749,8 @@ class PatientRepository
                 })->with([
                     'user' => function ($query) {
                         $query->with(['profile' => function ($q) {
-                            $q->with('socialMedias');
-                        }, 'roles', 'addresses', 'contacts',
+                            $q->with(['socialMedias', 'addresses', 'contacts']);
+                        }, 'roles',
                         'billingCompanies',
                         ]);
                     },
