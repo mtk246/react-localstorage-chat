@@ -8,52 +8,50 @@ use App\Enums\Claim\RuleType;
 
 return [
     'preview_837p' => [
-        'insurance_company' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 16,
-                ],
-            ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 20,
-                ],
-            ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 24,
-                ],
-            ],
-            'address3' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 28,
-                ],
+        '0a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 16,
             ],
         ],
+        /**'0b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 20,
+            ],
+        ],
+        'address2' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 24,
+            ],
+        ],
+        'address3' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 28,
+            ],
+        ],*/
         '1' => [
             'options' => [
                 'Medicare' => [
@@ -227,72 +225,70 @@ return [
                 'y' => 48,
             ],
         ],
-        '5' => [
-            'address' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 56.5,
-                ],
+        '5a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 56.5,
             ],
-            'city' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 64.5,
-                ],
+        ],
+        '5b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 64.5,
             ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 72.5,
-                    'y' => 64.5,
-                ],
+        ],
+        '5c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 72.5,
+                'y' => 64.5,
             ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 74,
-                ],
+        ],
+        '5d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 74,
             ],
-            'code_area' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 44.5,
-                    'y' => 74,
-                ],
+        ],
+        '5e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 44.5,
+                'y' => 74,
             ],
-            'phone' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 53,
-                    'y' => 74,
-                ],
+        ],
+        '5f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 53,
+                'y' => 74,
             ],
         ],
         '6' => [
@@ -343,72 +339,70 @@ return [
                 ],
             ],
         ],
-        '7' => [
-            'address' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 56.5,
-                ],
+        '7a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 56.5,
             ],
-            'city' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 64.5,
-                ],
+        ],
+        '7b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 64.5,
             ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 191.5,
-                    'y' => 64.5,
-                ],
+        ],
+        '7c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 191.5,
+                'y' => 64.5,
             ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 74,
-                ],
+        ],
+        '7d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 74,
             ],
-            'code_area' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 170,
-                    'y' => 74,
-                ],
+        ],
+        '7e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 170,
+                'y' => 74,
             ],
-            'phone' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 178.5,
-                    'y' => 74,
-                ],
+        ],
+        '7f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 178.5,
+                'y' => 74,
             ],
         ],
         // '8' => '',
@@ -473,18 +467,18 @@ return [
                 ],
             ],
         ],
-        '10b' => [
-            'place_state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 120,
-                    'y' => 99,
-                ],
+        '10ba' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 120,
+                'y' => 99,
             ],
+        ],
+        '10bb' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -548,63 +542,61 @@ return [
                 'y' => 82,
             ],
         ],
-        '11a' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 154,
-                    'y' => 91,
-                ],
+        '11aa' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 154,
+                'y' => 91,
             ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 139.5,
-                    'y' => 91,
-                ],
+        ],
+        '11ab' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 139.5,
+                'y' => 91,
             ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 146,
-                    'y' => 91,
-                ],
+        ],
+        '11ac' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 146,
+                'y' => 91,
             ],
-            'sex' => [
-                'options' => [
-                    'M' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 176,
-                            'y' => 90.5,
-                        ],
+        ],
+        '11ad' => [
+            'options' => [
+                'M' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 176,
+                        'y' => 90.5,
                     ],
-                    'F' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 193.8,
-                            'y' => 90.5,
-                        ],
+                ],
+                'F' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 193.8,
+                        'y' => 90.5,
                     ],
                 ],
             ],
@@ -646,28 +638,26 @@ return [
                 ],
             ],
         ],
-        '12' => [
-            'signed' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 27,
-                    'y' => 131.5,
-                ],
+        '12a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 27,
+                'y' => 131.5,
             ],
-            'date' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 100,
-                    'y' => 131.5,
-                ],
+        ],
+        '12b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 100,
+                'y' => 131.5,
             ],
         ],
         '13' => [
@@ -681,7 +671,7 @@ return [
                 'y' => 131.5,
             ],
         ],
-        '14' => [
+        /*'14' => [
             'year' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -840,32 +830,30 @@ return [
                     'y' => 141,
                 ],
             ],
-        ],
-        '17' => [
-            'code' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 9,
-                    'y' => 149,
-                ],
-            ],
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 15.5,
-                    'y' => 149,
-                ],
+        ],*/
+        '17aa' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 9,
+                'y' => 149,
             ],
         ],
-        '17a' => [
+        '17ab' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 15.5,
+                'y' => 149,
+            ],
+        ],
+        /*'17a' => [
             'code' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -2921,7 +2909,7 @@ return [
                 'x' => 134,
                 'y' => 262,
             ],
-        ],
+        ],*/
     ],
     'preview_837i' => [
         '1a' => [
@@ -7719,6 +7707,19 @@ return [
         ],
         ClaimType::PROFESSIONAL->value => [
             FormatType::FILE->value => [
+                '0a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'higherInsuranceCompany:name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'insuranceCompany.name',
+                            'insuranceCompany.address',
+                        ],
+                    ],
+                ],
                 '1' => [
                     'type' => RuleType::SINGLE->value,
                     'value' => 'insType:code',
