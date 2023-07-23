@@ -7,6 +7,7 @@ namespace App\Http\Requests\Company;
 use App\Http\Casts\Company\ServiceRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 final class AddServicesRequest extends FormRequest
 {
@@ -44,14 +45,32 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication_application' => ['nullable', 'boolean'],
             'services.*.medication' => ['nullable', 'array'],
             'services.*.medication.id' => ['nullable', 'integer'],
-            'services.*.medication.drug_code' => ['required', 'string', 'max:10'],
-            'services.*.medication.measurement_unit_id' => ['required', 'integer'],
-            'services.*.medication.units' => ['required', 'numeric'],
+            'services.*.medication.drug_code' => [
+                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                'nullable',
+                'string',
+                'max:10',
+            ],
+            'services.*.medication.measurement_unit_id' => [
+                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                'nullable',
+                'integer',
+            ],
+            'services.*.medication.units' => [
+                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                'nullable',
+                'numeric',
+            ],
             'services.*.medication.units_limit' => ['nullable', 'numeric'],
             'services.*.medication.link_sequence_number' => ['nullable', 'numeric'],
             'services.*.medication.pharmacy_prescription_number' => ['nullable', 'numeric'],
             'services.*.medication.repackaged_NDC' => ['nullable', 'boolean'],
-            'services.*.medication.code_NDC' => ['required', 'string', 'max:10'],
+            'services.*.medication.code_NDC' => [
+                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                'nullable',
+                'string',
+                'max:10',
+            ],
             'services.*.medication.claim_note_required' => ['nullable', 'boolean'],
             'services.*.medication.note' => ['nullable', 'string'],
         ];
