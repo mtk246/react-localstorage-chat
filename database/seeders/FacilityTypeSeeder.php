@@ -17,14 +17,14 @@ class FacilityTypeSeeder extends Seeder
     public function run()
     {
         $facilityTypes = [
-            ['type' => 'Hospital'],
-            ['type' => 'Skilled Nursing'],
-            ['type' => 'Home Health'],
-            ['type' => 'Christian Science (Hospital)'],
-            ['type' => 'Christian Science (Extended Care)'],
-            ['type' => 'Intermediate Care'],
-            ['type' => 'Clinic '],
-            ['type' => 'Special Facility or Hospital ASC Surgery'],
+            ['code' => '1', 'type' => 'Hospital'],
+            ['code' => '2', 'type' => 'Skilled Nursing'],
+            ['code' => '3', 'type' => 'Home Health'],
+            ['code' => '4', 'type' => 'Christian Science (Hospital)'],
+            ['code' => '5', 'type' => 'Christian Science (Extended Care)'],
+            ['code' => '6', 'type' => 'Intermediate Care'],
+            ['code' => '7', 'type' => 'Clinic '],
+            ['code' => '8', 'type' => 'Special Facility or Hospital ASC Surgery'],
         ];
 
         FacilityType::truncate();
