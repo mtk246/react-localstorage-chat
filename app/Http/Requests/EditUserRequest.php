@@ -45,13 +45,13 @@ class EditUserRequest extends FormRequest
 
             'billing_company_id' => ['nullable', 'integer'],
             'memberships' => [
-                Rule::requiredIf(in_array('Billing Worker', $this->roles)),
+                Rule::requiredIf(in_array(3, $this->roles)),
                 'nullable',
                 'array',
             ],
             'memberships.*' => [
                 'integer',
-                'exists:memberships_roles,id',
+                'exists:membership_roles,id',
             ],
 
             'address' => ['required', 'array'],

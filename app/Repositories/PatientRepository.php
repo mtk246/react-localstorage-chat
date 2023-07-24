@@ -334,16 +334,15 @@ class PatientRepository
                 ->get();
             $dataClaim = $patient->claims()
                 ->with([
-                    'company' => function ($query) use ($billingCompany) {
+                    'demographicInformation.company' => function ($query) use ($billingCompany) {
                         $query->with([
                             'nicknames' => function ($q) use ($billingCompany) {
                                 $q->where('billing_company_id', $billingCompany->id);
                             },
                         ]);
                     },
-                ])->whereHas('claimFormattable', function ($query) use ($billingCompany) {
-                    $query->where('billing_company_id', $billingCompany->id);
-                })->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ])->where('billing_company_id', $billingCompany->id)
+                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
             $dataPolicies = $patient->insurancePolicies()
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
@@ -667,8 +666,8 @@ class PatientRepository
             'user' => function ($query) use ($ssn) {
                 $query->with(['profile' => function ($q) use ($ssn) {
                     $q->where('ssn', $ssn)
-                      ->with('socialMedias');
-                }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                      ->with(['socialMedias', 'addresses', 'contacts']);
+                }, 'roles', 'billingCompanies']);
             },
             'maritalStatus',
             'marital',
@@ -701,8 +700,8 @@ class PatientRepository
         return Patient::with([
             'user' => function ($query) {
                 $query->with(['profile' => function ($q) {
-                    $q->with('socialMedias');
-                }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                    $q->with(['socialMedias', 'addresses', 'contacts']);
+                }, 'roles', 'billingCompanies']);
             },
             'maritalStatus',
             // "marital",
@@ -727,8 +726,8 @@ class PatientRepository
             $data = Patient::with([
                 'user' => function ($query) {
                     $query->with(['profile' => function ($q) {
-                        $q->with('socialMedias');
-                    }, 'roles', 'addresses', 'contacts', 'billingCompanies']);
+                        $q->with(['socialMedias', 'addresses', 'contacts']);
+                    }, 'roles', 'billingCompanies']);
                 },
                 // "marital",
                 // "guarantor",
@@ -749,8 +748,8 @@ class PatientRepository
                 })->with([
                     'user' => function ($query) {
                         $query->with(['profile' => function ($q) {
-                            $q->with('socialMedias');
-                        }, 'roles', 'addresses', 'contacts',
+                            $q->with(['socialMedias', 'addresses', 'contacts']);
+                        }, 'roles',
                         'billingCompanies',
                         ]);
                     },
@@ -1547,7 +1546,8 @@ class PatientRepository
                     ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
                     ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
                     ->when(!empty($ssn), function ($query) use ($ssn) {
-                        $ssnFormated = substr($ssn, 0, 1) . '-' . substr($ssn, 1, strlen($ssn));
+                        $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
+
                         return $query->where(function ($query) use ($ssn, $ssnFormated) {
                             $query
                                 ->whereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssn%")])
@@ -1576,6 +1576,7 @@ class PatientRepository
                         ->take(1)
                         ->pluck('id')
                         ->toArray();
+
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
