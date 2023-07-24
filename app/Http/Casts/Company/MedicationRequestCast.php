@@ -51,19 +51,21 @@ final class MedicationRequestCast extends CastsRequest
             : null;
     }
 
-    public function getRepackagedNDC(): ?bool
+    public function getRepackagedNDC(): bool
     {
         return array_key_exists('repackaged_NDC', $this->inputs)
             ? (bool) $this->inputs['repackaged_NDC']
-            : null;
+            : false;
     }
 
     public function getCodeNDC(): string
     {
-        return $this->get('code_NDC');
+        return $this->getRepackagedNDC()
+            ? ($this->get('code_NDC') ?? '')
+            : '';
     }
 
-    public function getClaimNoteRequired(): ?bool
+    public function getClaimNoteRequired(): bool
     {
         return array_key_exists('claim_note_required', $this->inputs)
             ? (bool) $this->inputs['claim_note_required']

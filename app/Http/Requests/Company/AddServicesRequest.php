@@ -66,7 +66,12 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication.pharmacy_prescription_number' => ['nullable', 'numeric'],
             'services.*.medication.repackaged_NDC' => ['nullable', 'boolean'],
             'services.*.medication.code_NDC' => [
-                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                Rule::excludeIf(
+                    fn () => (
+                        false === $this->input('medication_application', false) &&
+                        false === $this->input('repackaged_NDC', false)
+                    )
+                ),
                 'nullable',
                 'string',
                 'max:10',
