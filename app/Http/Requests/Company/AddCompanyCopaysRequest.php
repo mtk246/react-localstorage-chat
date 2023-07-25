@@ -20,7 +20,7 @@ final class AddCompanyCopaysRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'copays' => 'nullable|array',
+            'copays' => ['nullable', 'array'],
             'copays.*.id' => [
                 'nullable',
                 'integer',
