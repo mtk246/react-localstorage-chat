@@ -56,7 +56,6 @@ final class ClaimDateInformation extends Model implements Auditable
         'from_date',
         'to_date',
         'description',
-        'field_id',
         'qualifier_id',
         'amount',
         'claim_id',
