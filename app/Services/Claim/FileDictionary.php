@@ -23,7 +23,36 @@ final class FileDictionary extends Dictionary
             ?->companies
             ?->find($this->company->id ?? null)
             ?->pivot
-            ?->med_num ?? '';
+            ?->{$key} ?? '';
+    }
+
+    public function getCompanyAddressAttribute(string $key, string $entry): string
+    {
+        return (string) $this->claim
+            ->demographicInformation
+            ->company
+            ->addresses
+            ->get((int) $entry)
+            ?->{$key};
+    }
+
+    public function getMedicalAssistanceTypeAttribute(): string
+    {
+        $type = $this->claim
+            ->demographicInformation
+            ->type_of_medical_assistance;
+
+        return 'inpatient' === $type
+            ? '1'
+            : '0';
+    }
+
+    public function getPatientConditionCodesAttribute(string $key): string
+    {
+        return collect($this->claim->patientInformation->condition_codes)
+            ->map(fn ($code) => $code['code'])
+            ->pad(11, '')
+            ->get((int) $key);
     }
 
     protected function getInsTypeAttribute(string $key): string
@@ -88,6 +117,8 @@ final class FileDictionary extends Dictionary
     protected function getPatientAddressAttribute(string $key): string
     {
         return match ($key) {
+            'address' => substr($this->claim->patientAddress()?->{$key} ?? '', 0, 55),
+            'city' => substr($this->claim->patientAddress()?->{$key} ?? '', 0, 30),
             'state' => substr($this->claim->patientAddress()?->{$key} ?? '', 0, 2),
             'zip' => str_replace('-', '', substr($this->claim->patientAddress()?->{$key} ?? '', 0, 12)),
             default => $this->claim->patientAddress()?->{$key} ?? '',
@@ -160,7 +191,13 @@ final class FileDictionary extends Dictionary
 
     protected function getHigherInsuranceCompanyAttribute(string $key): string
     {
-        return $this->claim->higherInsurancePlan()?->insuranceCompany?->{$key} ?? '';
+        return match ($key) {
+            'address' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->address ?? '',
+            'city' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->city ?? '',
+            'state' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->state ?? '',
+            'zip' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->zip ?? '',
+            default => $this->claim->higherInsurancePlan()?->insuranceCompany?->{$key} ?? '',
+        };
     }
 
     protected function getHigherInsurancePlanAttribute(string $key): string

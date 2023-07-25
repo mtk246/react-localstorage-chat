@@ -37,6 +37,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
  * @property int|null $claim_eligibilities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyService> $companyServices
+ * @property int|null $company_services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyStatement> $companyStatements
  * @property int|null $company_statements_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
@@ -60,11 +62,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $patients_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property int|null $procedures_count
  * @property \App\Models\PublicNote|null $publicNote
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property int|null $services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
