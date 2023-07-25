@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -207,9 +208,11 @@ class Patient extends Model implements Auditable
     /**
      * Get all of the claims for the Patient.
      */
-    public function claims(): HasMany
+    public function claims()
     {
-        return $this->hasMany(Claim::class);
+        return Claim::whereHas('demographicInformation', function ($query) {
+            $query->where('patient_id', $this->id);
+        });
     }
 
     /**

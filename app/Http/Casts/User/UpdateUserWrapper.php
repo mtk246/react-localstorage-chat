@@ -18,10 +18,10 @@ final class UpdateUserWrapper extends CastsRequest
             : $this->user->billing_company_id;
     }
 
-    public function getBillingCompanyData(): array
+    public function getMembershipRoles(): array
     {
-        return $this->getCollect('roles')->contains('Billing Worker')
-            ? ['memberships' => $this->get('memberships')]
+        return $this->getCollect('roles')->contains(1)
+            ? $this->get('memberships')
             : [];
     }
 
@@ -29,6 +29,9 @@ final class UpdateUserWrapper extends CastsRequest
     {
         return collect([
             'language' => $this->get('language') ?? 'en',
+            'billing_company_id' => $this->getCollect('roles')->search(1)
+                ? null
+                : $this->getBillingCompanyId(),
             'status' => true,
         ]);
     }

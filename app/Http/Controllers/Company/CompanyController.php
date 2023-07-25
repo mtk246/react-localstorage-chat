@@ -7,6 +7,7 @@ use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
 use App\Actions\Company\GetCompany;
+use App\Actions\Company\GetMeasurementUnitAction;
 use App\Actions\Company\UpdateCompany;
 use App\Actions\Company\UpdatePatient;
 use App\Actions\GetAPIAction;
@@ -58,6 +59,13 @@ final class CompanyController extends Controller
         return response()->json(
             $this->companyRepository->getListCompanies($request, $id),
         );
+    }
+
+    public function getListMeasurementUnits(GetMeasurementUnitAction $measure): JsonResponse
+    {
+        $rs = $measure->all();
+
+        return response()->json($rs);
     }
 
     public function getListStatementRules(): JsonResponse
@@ -251,8 +259,6 @@ final class CompanyController extends Controller
         AddServicesRequest $request,
         Company $company,
     ): JsonResponse {
-        $request->validated();
-
         $rs = $addServices->invoke($request->castedCollect('services'), $company, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add services to company'), 404);
