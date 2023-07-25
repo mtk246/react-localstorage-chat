@@ -29,15 +29,14 @@ class UpdateRequest extends FormRequest
     {
         return [
             'billing_company_id' => [Rule::requiredIf(Gate::check('is-admin')), 'integer', 'nullable'],
-            'insurance_company_id' => ['required', 'integer'],
-            'name' => ['required', 'string', 'max:255'],
             'payer_id' => ['required', 'string', 'max:20'],
+            'name' => ['required', 'string', 'max:255'],
             'nickname' => ['nullable', 'string'],
+            'abbreviation' => ['nullable', 'string'],
+            'insurance_company_id' => ['required', 'integer'],
             'ins_type_id' => ['required', 'integer'],
             'plan_type_id' => ['nullable', 'integer'],
-            'abbreviation' => ['nullable', 'string'],
-            'eff_date' => ['required', 'date'],
-            'charge_using_id' => ['nullable', 'integer'],
+            'eff_date' => ['nullable', 'date'],
 
             'accept_assign' => ['required', 'boolean'],
             'pre_authorization' => ['required', 'boolean'],
@@ -65,6 +64,7 @@ class UpdateRequest extends FormRequest
             'address.state' => ['nullable', 'string'],
             'address.zip' => ['nullable', 'string'],
             'address.country' => ['nullable', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['nullable', 'array'],
             'contact.phone' => ['nullable', 'string'],

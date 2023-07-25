@@ -122,12 +122,12 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getListChargeUsings()
+    /*public function getListChargeUsings()
     {
         return response()->json(
             $this->insurancePlanRepository->getListChargeUsings()
         );
-    }
+    }*/
 
     public function getByPayer(string $payer): JsonResponse
     {

@@ -41,7 +41,7 @@ class InsurancePlanRepository
                 $insurancePlan->update([
                     'ins_type_id' => $data['ins_type_id'],
                     'plan_type_id' => $data['plan_type_id'] ?? null,
-                    'accept_assign' => $data['accept_assign'],
+                    'accept_assign' => $data['accept_assign'] ?? true,
                     'pre_authorization' => $data['pre_authorization'],
                     'file_zero_changes' => $data['file_zero_changes'],
                     'referral_required' => $data['referral_required'],
@@ -49,8 +49,7 @@ class InsurancePlanRepository
                     'require_abn' => $data['require_abn'],
                     'pqrs_eligible' => $data['pqrs_eligible'],
                     'allow_attached_files' => $data['allow_attached_files'],
-                    'eff_date' => $data['eff_date'],
-                    'charge_using_id' => $data['charge_using_id'] ?? null,
+                    'eff_date' => $data['eff_date']
                 ]);
             } else {
                 $insurancePlan = InsurancePlan::create([
@@ -68,7 +67,6 @@ class InsurancePlanRepository
                     'pqrs_eligible' => $data['pqrs_eligible'],
                     'allow_attached_files' => $data['allow_attached_files'],
                     'eff_date' => $data['eff_date'],
-                    'charge_using_id' => $data['charge_using_id'] ?? null,
                     'insurance_company_id' => $data['insurance_company_id'],
                 ]);
             }
@@ -76,11 +74,11 @@ class InsurancePlanRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             /* Attach billing company */
-            $insurancePlan->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            $insurancePlan->billingCompanies()->attach($billingCompany);
 
             InsurancePlanPrivate::create([
                 'naic' => $data['naic'] ?? null,
@@ -90,14 +88,14 @@ class InsurancePlanRepository
                 'format_ub_id' => $data['format_ub_id'] ?? null,
                 'file_method_id' => $data['file_method_id'] ?? null,
                 'insurance_plan_id' => $insurancePlan->id,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'billing_company_id' => $billingCompany,
             ]);
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 EntityTimeFailed::create([
                     'days' => $data['time_failed']['days'],
                     'from_id' => $data['time_failed']['from_id'],
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'time_failable_id' => $insurancePlan->id,
                     'time_failable_type' => InsurancePlan::class,
                 ]);
@@ -108,7 +106,7 @@ class InsurancePlanRepository
                     'nickname' => $data['nickname'],
                     'nicknamable_id' => $insurancePlan->id,
                     'nicknamable_type' => InsurancePlan::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ]);
             }
 
@@ -117,18 +115,18 @@ class InsurancePlanRepository
                     'abbreviation' => $data['abbreviation'],
                     'abbreviable_id' => $insurancePlan->id,
                     'abbreviable_type' => InsurancePlan::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ]);
             }
 
             if (isset($data['address']) && !array_empty($data['address'])) {
-                $data['address']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['address']['billing_company_id'] = $billingCompany;
                 $data['address']['addressable_id'] = $insurancePlan->id;
                 $data['address']['addressable_type'] = InsurancePlan::class;
                 Address::create($data['address']);
             }
             if (isset($data['contact']['email'])) {
-                $data['contact']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                $data['contact']['billing_company_id'] = $billingCompany;
                 $data['contact']['contactable_id'] = $insurancePlan->id;
                 $data['contact']['contactable_type'] = InsurancePlan::class;
                 Contact::create($data['contact']);
@@ -138,7 +136,7 @@ class InsurancePlanRepository
                 PrivateNote::create([
                     'publishable_type' => InsurancePlan::class,
                     'publishable_id' => $insurancePlan->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    'billing_company_id' => $billingCompany,
                     'note' => $data['private_note'],
                 ]);
             }
@@ -183,7 +181,6 @@ class InsurancePlanRepository
                 'pqrs_eligible' => $data['pqrs_eligible'],
                 'allow_attached_files' => $data['allow_attached_files'],
                 'eff_date' => $data['eff_date'],
-                'charge_using_id' => $data['charge_using_id'],
                 'insurance_company_id' => $data['insurance_company_id'],
             ]);
 
@@ -405,6 +402,7 @@ class InsurancePlanRepository
                     'address' => $address->address,
                     'country' => $address->country,
                     'address_type_id' => $address->address_type_id,
+                    'apt_suite' => $address->apt_suite
                 ];
             }
 
@@ -446,7 +444,6 @@ class InsurancePlanRepository
                     'file_method_id' => isset($private_insurance_plan) ? $private_insurance_plan->file_method_id : '',
                     'file_method' => isset($private_insurance_plan->fileMethod) ? ($private_insurance_plan->fileMethod->code.' - '.$private_insurance_plan->fileMethod->description) : '',
                     'eff_date' => $insurance->eff_date,
-                    'charge_using_id' => $insurance->charge_using_id ?? '',
                     'charge_using' => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code.' - '.$insurance->chargeUsing->description) : '',
                     'status' => $billingCompany->pivot->status ?? false,
                     'edit_name' => isset($nickname->nickname) ? true : false,
@@ -472,7 +469,7 @@ class InsurancePlanRepository
         if (!$bC) {
             $insurance = InsurancePlan::with([
                 'nicknames',
-                'publicNotes',
+                'publicNote',
                 'insuranceCompany',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         } else {
@@ -482,7 +479,7 @@ class InsurancePlanRepository
                 'nicknames' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                'publicNotes',
+                'publicNote',
                 'insuranceCompany',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         }
@@ -556,6 +553,7 @@ class InsurancePlanRepository
     public function changeStatus(bool $status, int $id)
     {
         $billingCompany = auth()->user()->billingCompanies->first();
+        dd($billingCompany);
         if (is_null($billingCompany)) {
             return null;
         }
@@ -624,7 +622,6 @@ class InsurancePlanRepository
                     'ins_type' => isset($insurance->insType) ? ($insurance->insType->code.' - '.$insurance->insType->description) : '',
                     'plan_type_id' => $insurance->plan_type_id ?? '',
                     'plan_type' => isset($insurance->planType) ? ($insurance->planType->code.' - '.$insurance->planType->description) : '',
-                    'charge_using_id' => $insurance->charge_using_id ?? '',
                     'charge_using' => isset($insurance->chargeUsing) ? ($insurance->chargeUsing->code.' - '.$insurance->chargeUsing->description) : '',
                     'insurance_company_id' => $insurance->insurance_company_id,
                     'insurance_company' => $insurance->insuranceCompany->name,
@@ -719,7 +716,7 @@ class InsurancePlanRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($insurancePlanId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = InsurancePlan::find($insurancePlanId)->billingCompanies;
@@ -766,7 +763,7 @@ class InsurancePlanRepository
         }
     }
 
-    public function getListChargeUsings()
+    /*public function getListChargeUsings()
     {
         try {
             return [];
@@ -775,7 +772,7 @@ class InsurancePlanRepository
         } catch (\Exception $e) {
             return [];
         }
-    }
+    }*/
 
     public function addCopays(array $data, int $id)
     {

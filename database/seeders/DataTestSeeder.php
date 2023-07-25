@@ -660,7 +660,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -706,7 +706,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -752,7 +752,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -798,7 +798,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -844,7 +844,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -890,7 +889,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -975,7 +974,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1021,7 +1020,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1067,7 +1066,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1113,7 +1112,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1159,7 +1158,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1205,7 +1204,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1290,7 +1289,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1336,7 +1335,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1382,7 +1381,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1428,7 +1427,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1474,7 +1473,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1520,7 +1519,7 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
+                        
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1699,7 +1698,7 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible' => $dataIP['pqrs_eligible'],
                         'allow_attached_files' => $dataIP['allow_attached_files'],
                         'eff_date' => $dataIP['eff_date'],
-                        'charge_using_id' => $dataIP['charge_using_id'],
+                        
                         'insurance_company_id' => $insurance->id,
                     ]);
 

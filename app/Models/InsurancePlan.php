@@ -33,7 +33,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $charge_using_id
  * @property int|null $ins_type_id
  * @property int|null $plan_type_id
  * @property string|null $payer_id
@@ -123,7 +122,6 @@ class InsurancePlan extends Model implements Auditable
         'eff_date',
         'ins_type_id',
         'plan_type_id',
-        'charge_using_id',
         'insurance_company_id',
     ];
 
@@ -160,16 +158,6 @@ class InsurancePlan extends Model implements Auditable
     public function planType()
     {
         return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
-    }
-
-    /**
-     * InsurancePlan belongs to ChargeUsing.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function chargeUsing()
-    {
-        return $this->belongsTo(TypeCatalog::class, 'charge_using_id');
     }
 
     /**
