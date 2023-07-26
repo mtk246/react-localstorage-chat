@@ -34,7 +34,7 @@ final class AddContractFeesRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
-            'contract_fees.*.contract_fee_id' => [
+            'contract_fees.*.id' => [
                 'nullable',
                 'integer',
                 'exists:\App\Models\ContractFee,id',
@@ -75,8 +75,9 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.insurance_label_fee_id' => ['nullable', 'integer'],
             'contract_fees.*.price_percentage' => ['nullable', 'numeric'],
             'contract_fees.*.private_note' => ['nullable', 'string'],
+
             'contract_fees.*.patients' => ['required_if:*.type_id,18', 'array'],
-            'contract_fees.*.patients.*.user_id' => ['required', 'integer'],
+            'contract_fees.*.patients.*.patient_id' => ['required', 'integer'],
             'contract_fees.*.patients.*.start_date' => [
                 'required',
                 'date',
@@ -87,7 +88,8 @@ final class AddContractFeesRequest extends FormRequest
                 'date',
                 'after:contract_fees.*.patients.*.start_date',
             ],
-            'contract_fees.*.contract_specifications' => ['nullable', 'boolean'],
+
+            'contract_fees.*.have_contract_specifications' => ['nullable', 'boolean'],
             'contract_fees.*.contract_specifications' => ['nullable', 'array'],
             'contract_fees.*.contract_specifications.*.billing_provider_id' => ['nullable', 'integer'],
             'contract_fees.*.contract_specifications.*.billing_provider_taxonomy_id' => ['nullable', 'integer'],

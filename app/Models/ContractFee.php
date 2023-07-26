@@ -101,7 +101,7 @@ final class ContractFee extends Model
         return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
     }
 
-    public function ContractFeeSpecifications(): HasMany
+    public function contractFeeSpecifications(): HasMany
     {
         return $this->hasMany(ContractFeeSpecification::class);
     }

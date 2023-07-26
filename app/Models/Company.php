@@ -297,7 +297,7 @@ final class Company extends Model implements Auditable
         return $this->belongsToMany(Copay::class)->withTimestamps();
     }
 
-    public function contracFees(): BelongsToMany
+    public function contractFees(): BelongsToMany
     {
         return $this->belongsToMany(ContractFee::class)->withTimestamps();
     }
