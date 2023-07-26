@@ -233,6 +233,7 @@ final class FileDictionary extends Dictionary
                     'procedure_description' => $claimService->procedure->description,
                     'procedure_code' => $claimService->procedure->code,
                     'procedure_start_date' => $claimService->procedure->start_date,
+                    'non_covered_charges' => $claimService->claimService->non_covered_charges ?? '',
                     default => $claimService->{$key},
                 };
             });
