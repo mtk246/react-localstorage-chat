@@ -55,6 +55,7 @@ final class ClaimDateInformation extends Model implements Auditable
     protected $fillable = [
         'from_date',
         'to_date',
+        'field_id',
         'description',
         'qualifier_id',
         'amount',

@@ -3739,296 +3739,268 @@ return [
                 'y' => 63.5,
             ],
         ],
-        '39' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 55.5,
-                ],
-            ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 55.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 59.5,
-                ],
-            ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 59.5,
-                ],
-            ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 63.5,
-                ],
-            ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 63.5,
-                ],
-            ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 67.5,
-                ],
-            ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 67.5,
-                ],
+        '39a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 55.5,
             ],
         ],
-        '40' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 55.5,
-                ],
-            ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 55.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 59.5,
-                ],
-            ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 59.5,
-                ],
-            ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 63.5,
-                ],
-            ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 63.5,
-                ],
-            ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 67.5,
-                ],
-            ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 67.5,
-                ],
+        '39b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 55.5,
             ],
         ],
-        '41' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 55.5,
-                ],
+        '39c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 59.5,
             ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 55.5,
-                ],
+        ],
+        '39d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 59.5,
             ],
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 55.5,
-                ],
+        ],
+        '39e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 63.5,
             ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 55.5,
-                ],
+        ],
+        '39f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 63.5,
             ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 59.5,
-                ],
+        ],
+        '39g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 67.5,
             ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 59.5,
-                ],
+        ],
+        '39h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 67.5,
             ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 63.5,
-                ],
+        ],
+        '40a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 55.5,
             ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 63.5,
-                ],
+        ],
+        '40b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 55.5,
             ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 67.5,
-                ],
+        ],
+        '40c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 59.5,
             ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 67.5,
-                ],
+        ],
+        '40d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 59.5,
+            ],
+        ],
+        '40e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 63.5,
+            ],
+        ],
+        '40f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 63.5,
+            ],
+        ],
+        '40g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 67.5,
+            ],
+        ],
+        '40h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 67.5,
+            ],
+        ],
+        '41a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 55.5,
+            ],
+        ],
+        '41b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 55.5,
+            ],
+        ],
+        '41c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 59.5,
+            ],
+        ],
+        '41d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 59.5,
+            ],
+        ],
+        '41e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 63.5,
+            ],
+        ],
+        '41f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 63.5,
+            ],
+        ],
+        '41g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 67.5,
+            ],
+        ],
+        '41h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 67.5,
             ],
         ],
         '42' => [
@@ -7287,28 +7259,26 @@ return [
                 'y' => 170,
             ],
         ],
-        'tb' => [
-            'page' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 30,
-                    'y' => 170,
-                ],
+        'tb1' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 30,
+                'y' => 170,
             ],
-            'total' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 44,
-                    'y' => 170,
-                ],
+        ],
+        'tb2' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 44,
+                'y' => 170,
             ],
         ],
         'tc' => [
@@ -7719,10 +7689,10 @@ return [
                 '13' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_time|h%m%s|h:m:s',
+                    'value' => 'patientInformation.admission_time|H%m%s|H:m:s',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_time|h:m:s',
+                            'patientInformation.admission_time|H%m%s|H:m:s',
                         ],
                     ],
                 ],
@@ -8165,6 +8135,336 @@ return [
                             'HigherInsuranceCompany:city',
                             'HigherInsuranceCompany:state',
                             'HigherInsuranceCompany:zip',
+                        ],
+                    ],
+                ],
+                '39a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '42' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:revenue_code',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '43' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:procedure_description',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '44' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:price',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '45' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:procedure_start_date',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '46' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:days_or_units',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '45' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:price',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '48' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '49' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'ta' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|001',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tb1' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|1',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tb2' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|1',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tc' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|0',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'td' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|0',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'te' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimServicesTotal',
+                    'values' => [
+                        'common' => [
+                            'claimServicesTotal',
                         ],
                     ],
                 ],
