@@ -7689,10 +7689,10 @@ return [
                 '13' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_time|h%m%s|h:m:s',
+                    'value' => 'patientInformation.admission_time|H%m%s|H:m:s',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_time|h:m:s',
+                            'patientInformation.admission_time|H%m%s|H:m:s',
                         ],
                     ],
                 ],
