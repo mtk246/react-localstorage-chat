@@ -292,14 +292,14 @@ final class Company extends Model implements Auditable
         return isset($names) && count($names) > 0;
     }
 
-    public function copays(): HasMany
+    public function copays(): BelongsToMany
     {
-        return $this->hasMany(Copay::class);
+        return $this->belongsToMany(Copay::class)->withTimestamps();
     }
 
-    public function contracFees(): HasMany
+    public function contracFees(): BelongsToMany
     {
-        return $this->hasMany(ContractFee::class);
+        return $this->belongsToMany(ContractFee::class)->withTimestamps();
     }
 
     /**

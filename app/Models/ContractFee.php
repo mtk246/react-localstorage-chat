@@ -8,15 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\ContractFee.
  *
  * @property int $id
- * @property int|null $company_id
- * @property int|null $modifier_id
  * @property int|null $mac_locality_id
- * @property int|null $insurance_plan_id
  * @property int|null $billing_company_id
  * @property int|null $insurance_label_fee_id
  * @property int|null $contract_fee_type_id
@@ -26,7 +24,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $price_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $insurance_company_id
  * @property string|null $private_note
  * @property \App\Models\Company|null $company
  * @property \App\Models\InsuranceCompany|null $insuranceCompany
@@ -66,11 +63,7 @@ final class ContractFee extends Model
 
     /** @var string[] */
     protected $fillable = [
-        'company_id',
-        'modifier_id',
         'mac_locality_id',
-        'insurance_company_id',
-        'insurance_plan_id',
         'billing_company_id',
         'insurance_label_fee_id',
         'contract_fee_type_id',
@@ -98,12 +91,22 @@ final class ContractFee extends Model
         return $this->belongsToMany(Modifier::class)->withTimestamps();
     }
 
-    public function company(): BelongsTo
+    public function companies(): BelongsToMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(Company::class)->withTimestamps();
     }
 
-    public function patiens(): BelongsToMany
+    public function insurancePlans(): BelongsToMany
+    {
+        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
+    }
+
+    public function ContractFeeSpecifications(): HasMany
+    {
+        return $this->hasMany(ContractFeeSpecification::class);
+    }
+
+    public function patients(): BelongsToMany
     {
         return $this->belongsToMany(Patient::class)
             ->using(ContractFeePatient::class)
@@ -114,10 +117,5 @@ final class ContractFee extends Model
     public function macLocality(): BelongsTo
     {
         return $this->belongsTo(MacLocality::class);
-    }
-
-    public function insuranceCompany(): BelongsTo
-    {
-        return $this->belongsTo(InsuranceCompany::class);
     }
 }

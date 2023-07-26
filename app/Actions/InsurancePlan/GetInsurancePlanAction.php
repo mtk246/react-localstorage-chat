@@ -21,7 +21,7 @@ final class GetInsurancePlanAction
                     fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
                         $query
                             ->where('billing_companies.id', $user->billing_company_id)
-                            ->where('status');
+                            ->where('billing_companies.status', true);
                     })
                 )
                 ->get()
@@ -35,7 +35,7 @@ final class GetInsurancePlanAction
                             fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
                                 $query
                                     ->where('billing_companies.id', $user->billing_company_id)
-                                    ->where('status', true);
+                                    ->where('billing_companies.status', true);
                             })
                         )
                         ->get(['id', 'name'])
@@ -49,7 +49,7 @@ final class GetInsurancePlanAction
                     fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
                         $query
                             ->where('billing_companies.id', $user->billing_company_id)
-                            ->where('status');
+                            ->where('billing_companies.status', true);
                     })
                 )
                 ->get(['id', 'name'])
