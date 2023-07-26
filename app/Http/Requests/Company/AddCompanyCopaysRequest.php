@@ -6,6 +6,8 @@ namespace App\Http\Requests\Company;
 
 use App\Http\Casts\Company\CopayRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,15 +37,13 @@ final class AddCompanyCopaysRequest extends FormRequest
                 'nullable',
                 new IntegerOrArrayKeyExists(Procedure::class),
             ],
-            'copays.*.insurance_plan_id' => [
+            'copays.*.insurance_company_ids' => [
                 'nullable',
-                'integer',
-                'exists:\App\Models\InsurancePlan,id',
+                new IntegerOrArrayKeyExists(InsuranceCompany::class),
             ],
-            'copays.*.insurance_company_id' => [
+            'copays.*.insurance_plan_ids' => [
                 'nullable',
-                'integer',
-                'exists:\App\Models\InsuranceCompany,id',
+                new IntegerOrArrayKeyExists(InsurancePlan::class),
             ],
             'copays.*.copay' => [
                 'nullable',
