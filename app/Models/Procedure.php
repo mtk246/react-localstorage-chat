@@ -131,9 +131,9 @@ class Procedure extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function companies()
+    public function companyServices()
     {
-        return $this->belongsToMany(Company::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id', 'billing_company_id', 'modifier_id', 'clia', 'mac_locality_id')->withTimestamps();
+        return $this->belongsToMany(CompanyService::class)->withTimestamps();
     }
 
     /**
