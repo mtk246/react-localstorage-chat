@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,8 +28,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
- * @property int|null $claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
@@ -207,9 +206,11 @@ class Patient extends Model implements Auditable
     /**
      * Get all of the claims for the Patient.
      */
-    public function claims(): HasMany
+    public function claims()
     {
-        return $this->hasMany(Claim::class);
+        return Claim::whereHas('demographicInformation', function ($query) {
+            $query->where('patient_id', $this->id);
+        });
     }
 
     /**

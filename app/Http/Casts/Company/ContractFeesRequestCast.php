@@ -20,23 +20,19 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getId(): int
     {
-        return array_key_exists('contract_fee_id', $this->inputs)
-            ? (int) $this->inputs['contract_fee_id']
+        return array_key_exists('id', $this->inputs)
+            ? (int) $this->inputs['id']
             : 0;
     }
 
-    public function getInsurancePlanId(): ?int
+    public function getInsurancePlanIds(): Collection
     {
-        return array_key_exists('insurance_plan_id', $this->inputs)
-            ? (int) $this->inputs['insurance_plan_id']
-            : null;
+        return collect($this->inputs['insurance_plan_ids'] ?? []);
     }
 
-    public function getInsuranceCompanyId(): ?int
+    public function getInsuranceCompanyIds(): Collection
     {
-        return array_key_exists('insurance_company_id', $this->inputs)
-            ? (int) $this->inputs['insurance_company_id']
-            : null;
+        return collect($this->inputs['insurance_company_ids'] ?? []);
     }
 
     public function getTypeId(): ?int
@@ -62,12 +58,12 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getProceduresIds(): Collection
     {
-        return collect($this->inputs['procedure_id'] ?? []);
+        return collect($this->inputs['procedure_ids'] ?? []);
     }
 
     public function getModifierIds(): Collection
     {
-        return collect($this->inputs['modifier_id'] ?? []);
+        return collect($this->inputs['modifier_ids'] ?? []);
     }
 
     public function getPrice(): ?int
@@ -160,15 +156,32 @@ final class ContractFeesRequestCast extends CastsRequest
         return $query->first() ?? null;
     }
 
+    public function getHaveContractSpecifications(): bool
+    {
+        return array_key_exists('have_contract_specifications', $this->inputs)
+            ? (bool) $this->inputs['have_contract_specifications']
+            : false;
+    }
+
     /**
      * @return \Illuminate\Support\Collection<TKey, TValue>
      *
      * @template TKey of array-key
      * @template TValue of \App\Http\Requests\Models\Medicament
      */
-    public function getPatiens(): Collection
+    public function getPatients(): Collection
     {
-        return collect($this->inputs['patiens'] ?? [])
+        return collect($this->inputs['patients'] ?? [])
             ->map(fn (array $inputs) => new ContractFeePatiensCast($inputs, $this->querys, $this->user));
+    }
+
+    public function getContractSpecifications(): Collection
+    {
+        return collect(
+            $this->getHaveContractSpecifications()
+                ? $this->inputs['contract_specifications'] ?? []
+                : []
+        )
+            ->map(fn (array $inputs) => new ContractFeeSpecificationWrapper($inputs, $this->querys, $this->user));
     }
 }

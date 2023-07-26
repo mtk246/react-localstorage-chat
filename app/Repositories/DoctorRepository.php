@@ -599,11 +599,9 @@ class DoctorRepository
                 'user' => function ($query) {
                     $query->with([
                         'profile' => function ($query) {
-                            $query->with('socialMedias');
+                            $query->with(['socialMedias', 'addresses', 'contacts']);
                         },
                         'roles',
-                        'addresses',
-                        'contacts',
                         'billingCompanies',
                     ]);
                 },
@@ -620,16 +618,18 @@ class DoctorRepository
             })->with([
                 'user' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) {
-                            $query->with('socialMedias');
+                        'profile' => function ($query) use ($bC) {
+                            $query->with([
+                                'socialMedias',
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                }
+                            ]);
                         },
                         'roles',
-                        'addresses' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
-                        'contacts' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
                         'billingCompanies',
                     ]);
                 },
@@ -654,11 +654,9 @@ class DoctorRepository
                 'user' => function ($query) {
                     $query->with([
                         'profile' => function ($query) {
-                            $query->with('socialMedias');
+                            $query->with(['socialMedias', 'addresses', 'contacts']);
                         },
                         'roles',
-                        'addresses',
-                        'contacts',
                         'billingCompanies',
                     ]);
                 },
@@ -675,16 +673,18 @@ class DoctorRepository
             })->with([
                 'user' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) {
-                            $query->with('socialMedias');
+                        'profile' => function ($query) use ($bC) {
+                            $query->with([
+                                'socialMedias',
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                }
+                            ]);
                         },
                         'roles',
-                        'addresses' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
-                        'contacts' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
                         'billingCompanies',
                     ]);
                 },
@@ -850,11 +850,9 @@ class DoctorRepository
                 'user' => function ($query) {
                     $query->with([
                         'profile' => function ($query) {
-                            $query->with('socialMedias');
+                            $query->with(['socialMedias', 'addresses', 'contacts']);
                         },
                         'roles',
-                        'addresses',
-                        'contacts',
                         'billingCompanies',
                     ]);
                 },
@@ -876,16 +874,18 @@ class DoctorRepository
             $healthP = HealthProfessional::whereNpi($npi)->with([
                 'user' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) {
-                            $query->with('socialMedias');
+                        'profile' => function ($query) use ($bC) {
+                            $query->with([
+                                'socialMedias',
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                }
+                            ]);
                         },
                         'roles',
-                        'addresses' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
-                        'contacts' => function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        },
                         'billingCompanies',
                     ]);
                 },
