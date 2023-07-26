@@ -38,6 +38,7 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::DATE->value => $this->getDateFormat($config->value),
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
+            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
@@ -59,6 +60,12 @@ abstract class Dictionary implements DictionaryInterface
         return Collect($values)
             ->map(fn (string $value) => (string) $this->getSingleFormat($value))
             ->implode($glue);
+    }
+
+    protected function getSingleArrayFormat(string $value): array
+    {
+        return $this->getSingleFormat($value)
+            ->toArray();
     }
 
     protected function getSingleFormat(string $value): string|Collection
