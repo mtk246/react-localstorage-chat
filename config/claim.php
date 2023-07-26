@@ -2952,8 +2952,8 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 50,
-                'y' => 13,
+                'x' => 10,
+                'y' => 17.5,
             ],
         ],
         '1e' => [
@@ -2963,8 +2963,8 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 55,
-                'y' => 13,
+                'x' => 40,
+                'y' => 17.5,
             ],
         ],
         '2a' => [
@@ -3029,7 +3029,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 140,
+                'x' => 138,
                 'y' => 4.5,
             ],
         ],
@@ -8395,9 +8395,9 @@ return [
                         ],
                     ],
                 ],
-                '45' => [
+                '47' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:price',
+                    'value' => 'claimServices:total_charge',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
@@ -8409,11 +8409,16 @@ return [
                     ],
                 ],
                 '48' => [
-                    'type' => RuleType::NONE->value,
-                    'value' => [
-                    ],
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:non_covered_charges',
                     'values' => [
-                        'common' => [],
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
                     ],
                 ],
                 '49' => [
