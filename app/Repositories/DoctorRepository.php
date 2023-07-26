@@ -992,7 +992,7 @@ class DoctorRepository
         $billingCompanyId = $request->billing_company_id ?? null;
         $companyId = $request->company_id ?? null;
         $authorization = $request->authorization ?? 'false';
-        $taxonomy = $request->with_taxonomy ?? 'false';
+        $taxonomy = $request->withTaxonomy ?? 'false';
         $only = $request->only ?? null;
 
         if (auth()->user()->hasRole('superuser')) {
@@ -1068,7 +1068,7 @@ class DoctorRepository
                     'id' => $healthProfessional->id,
                     'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
                 ];
-                if ($taxonomy ?? false) {
+                if ($taxonomy == 'true') {
                     $field['taxonomies'] = $healthProfessional->taxonomies->map(fn ($item) => [
                         'id' => $item->id,
                         'tax_id' => $item->tax_id,
