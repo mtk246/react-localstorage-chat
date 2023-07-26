@@ -16,6 +16,7 @@
 - [Get list contract fee type](#get-list-contract-fee-types)
 - [Get list type formats](#get-list-type-formats)
 - [Get list measurement units](#get-list-measurement-units)
+- [Get list insurance plans](#get-list-insurance-plans)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -50,6 +51,7 @@
 | 15 | GET    | `Get list billing companies` | `/facility/get-list-billing-companies` | yes            | Get list billing companies |
 | 16 | GET    | `Get list facilities`        | `/facility/get-list`                   | yes            | Get list facilities        |
 | 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type 
+| 4  |GET     | `Get list insurance plans`  | `/insurance-plan/get-list`     | yes            | Get list insurance plan
 
 
 <a name="get-price-of-procedure"></a>
@@ -1425,5 +1427,95 @@
         "id": 2,
         "name": "UB-04 / 837I"
     }
+]
+```
+
+#
+
+<a name="get-list-insurance-plan"></a>
+## Get list insurance plan
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Example path
+
+> {primary} /insurance-plan/get-list?
+        groupBy=true
+
+## Response
+
+> {success} 200 Insurance plans found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Providence Administrative Services",
+    "group_values": [
+      {
+        "id": 1,
+        "name": "Connect 1500 Gold"
+      },
+      {
+        "id": 2,
+        "name": "Connect 5000 Silver"
+      },
+      {
+        "id": 3,
+        "name": "Connect Direct 5000 Silver"
+      },
+      {
+        "id": 4,
+        "name": "Connect 9000 Bronze"
+      },
+      {
+        "id": 5,
+        "name": "Qualified 7050 Bronze - Choice Network"
+      },
+      {
+        "id": 6,
+        "name": "Qualified 7050 Bronze - Signature Network"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Kg Administrative Services",
+    "group_values": [
+      {
+        "id": 7,
+        "name": "Oregon Standard Gold - Choice Network"
+      },
+      {
+        "id": 8,
+        "name": "Oregon Standard Silver - Choice Network"
+      },
+      {
+        "id": 9,
+        "name": "Oregon Direct Silver - Choice Network"
+      },
+      {
+        "id": 10,
+        "name": "Oregon Standard Bronze - Choice Network"
+      },
+      {
+        "id": 11,
+        "name": "Columbia 1500 Gold"
+      },
+      {
+        "id": 12,
+        "name": "Columbia 8700 Bronze"
+      }
+    ]
+  }
 ]
 ```
