@@ -62,13 +62,9 @@ final class AddContractFees
             $company->contractFees()->attach($contractFee->id);
         }
 
-        $contractFeesRequest->getProceduresIds()->each(
-            fn (int $procedureId) => $contractFee->procedures()->attach($procedureId)
-        );
+        $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
 
-        $contractFeesRequest->getModifierIds()->each(
-            fn (int $modifierId) => $contractFee->modifiers()->attach($modifierId)
-        );
+        $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
 
         $contractFeesRequest->getPatients()->each(
             fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [

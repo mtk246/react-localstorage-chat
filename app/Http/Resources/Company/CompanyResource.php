@@ -146,21 +146,23 @@ final class CompanyResource extends JsonResource
     {
         $bC = request()->user()->billing_company_id;
 
-        return $this->resource->copays()
-            ->with('procedures')
+        $copays = $this->resource->copays()
+            ->with('procedures', 'insurancePlans')
             ->when(
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
+
+        return CopayResource::collection($copays)->resource;
     }
 
     private function getContracFees()
     {
         $bC = request()->user()->billing_company_id;
 
-        return $this->resource->contractFees()
+        $contractFees = $this->resource->contractFees()
             ->with([
                 'procedures',
                 'modifiers',
@@ -174,6 +176,8 @@ final class CompanyResource extends JsonResource
             )
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
+
+        return ContractFeeResource::collection($contractFees)->resource;
     }
 
     private function getAddress(int $billingCompanyId, int $addressType)
