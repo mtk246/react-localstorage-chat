@@ -657,12 +657,8 @@ class ProcedureRepository
                     })
                     ->with(['companyServices' => function ($query) use ($company_id) {
                         $query->where('company_id', $company_id);
-                    }])->get()
-                    ->sortByDesc(function ($procedure) use ($company_id) {
-                        $company = $procedure->companyServices->firstWhere('company_id', $company_id);
-
-                        return $company ? $company->price : 0;
-                    })
+                    }])
+                    ->get()
                     ->map(function ($procedure) use ($company_id) {
                         return [
                             'id' => $procedure->id,
@@ -671,7 +667,10 @@ class ProcedureRepository
                             'price' => (float) $procedure->companyServices
                                 ->firstWhere('company_id', $company_id)?->price ?? 0,
                         ];
-                    });
+                    })
+                    ->sortByDesc('price')
+                    ->values()
+                    ->toArray();
             }
         } catch (\Exception $e) {
             return [];
