@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
+use App\Models\Claims\Services;
+use Illuminate\Support\Collection;
 
 final class FileDictionary extends Dictionary
 {
@@ -220,6 +222,20 @@ final class FileDictionary extends Dictionary
         return $this->claim->demographicInformation?->{$key}
             ? 'Signature on File'
             : '';
+    }
+
+    protected function getClaimServicesAttribute(string $key): Collection
+    {
+        return $this->claim->service->services
+            ->map(function (Services $claimService) use ($key) {
+                return match ($key) {
+                    'revenue_code' => $claimService->revenueCode->code,
+                    'procedure_description' => $claimService->procedure->description,
+                    'procedure_code' => $claimService->procedure->code,
+                    'procedure_start_date' => $claimService->procedure->start_date,
+                    default => $claimService->{$key},
+                };
+            });
     }
 
     protected function getFirstClaimServiceAttribute(string $key): string
