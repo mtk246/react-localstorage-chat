@@ -160,13 +160,13 @@ final class CompanyResource extends JsonResource
     {
         $bC = request()->user()->billing_company_id;
 
-        return $this->resource->contracFees()
+        return $this->resource->contractFees()
             ->with([
                 'procedures',
                 'modifiers',
-                'patiens',
+                'patients',
                 'macLocality',
-                'insuranceCompany',
+                'insurancePlans',
             ])
             ->when(
                 Gate::denies('is-admin'),
