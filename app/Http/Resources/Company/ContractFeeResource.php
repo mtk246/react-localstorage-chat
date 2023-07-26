@@ -53,6 +53,7 @@ final class ContractFeeResource extends RequestWrapedResource
                     return [
                         'id' => $modifier->id,
                         'modifier' => $modifier->modifier,
+                        'description' => $modifier->description,
                         'color' => $modifier->classification->getColor(),
                     ];
                 })->toArray(),
