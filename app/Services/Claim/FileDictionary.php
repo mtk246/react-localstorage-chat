@@ -238,6 +238,12 @@ final class FileDictionary extends Dictionary
             });
     }
 
+    protected function getClaimServicesTotalAttribute(): string
+    {
+        return (string) $this->claim->service->services
+            ->sum('price');
+    }
+
     protected function getFirstClaimServiceAttribute(string $key): string
     {
         return $this->claim
