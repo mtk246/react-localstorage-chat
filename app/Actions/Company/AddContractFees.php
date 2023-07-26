@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\Company;
 
 use App\Http\Casts\Company\ContractFeePatiensCast;
+use App\Http\Casts\Company\ContractFeeSpecificationWrapper;
 use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Models\Company;
 use App\Models\ContractFee;
+use App\Models\ContractFeeSpecification;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -19,17 +21,14 @@ final class AddContractFees
     public function invoke(Collection $contractFees, Company $company, User $user): Collection
     {
         return DB::transaction(function () use ($contractFees, $company, $user): Collection {
-            $this->syncContractFee($company, $contractFees, $user->billingCompanies->first()?->id);
+            $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
-            $contractFees->each(fn (ContractFeesRequestCast $contractFee) => tap(
+            return $contractFees->map(fn (ContractFeesRequestCast $contractFee) => tap(
                 ContractFee::query()->updateOrCreate([
                     'id' => $contractFee->getId(),
                     'billing_company_id' => $contractFee->getBillingCompanyId(),
                 ], [
-                    'company_id' => $company->id,
                     'mac_locality_id' => $contractFee->getMacLocality()->id,
-                    'insurance_company_id' => $contractFee->getInsuranceCompanyId(),
-                    'insurance_plan_id' => $contractFee->getInsurancePlanId(),
                     'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
                     'contract_fee_type_id' => $contractFee->getTypeId(),
                     'start_date' => $contractFee->getStartDate(),
@@ -40,56 +39,74 @@ final class AddContractFees
                 ]),
                 fn (ContractFee $model) => $this->afterCreate(
                     $model,
+                    $company,
                     $contractFee,
                 )
-            ));
-
-            return $company->contracFees()->with([
+            ))
+            ->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
-                'patiens',
+                'patients',
                 'modifiers',
                 'macLocality',
-                'insuranceCompany',
-            ])->get();
+                'insurancePlans',
+            ]));
         });
     }
 
-    private function afterCreate(ContractFee $contractFee, ContractFeesRequestCast $contractFeesRequest): void
-    {
-        $contractFeesRequest->getProceduresIds()->each(
-            fn (int $procedureId) => $contractFee->procedures()->attach($procedureId)
-        );
+    private function afterCreate(
+        ContractFee &$contractFee,
+        Company &$company,
+        ContractFeesRequestCast $contractFeesRequest
+    ): void {
+        if (is_null($company->contractFees()->find($contractFee->id))) {
+            $company->contractFees()->attach($contractFee->id);
+        }
 
-        $contractFeesRequest->getModifierIds()->each(
-            fn (int $modifierId) => $contractFee->modifiers()->attach($modifierId)
-        );
+        $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
 
-        $contractFeesRequest->getPatiens()->each(
-            fn (ContractFeePatiensCast $patien) => $contractFee->patiens()->attach($patien->getId(), [
-                'start_date' => $patien->getStartDate(),
-                'end_date' => $patien->getEndDate(),
+        $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
+
+        $contractFeesRequest->getPatients()->each(
+            fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
+                'start_date' => $patient->getStartDate(),
+                'end_date' => $patient->getEndDate(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ])
+        );
+
+        $contractFeesRequest->getContractSpecifications()->each(
+            function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
+                ContractFeeSpecification::updateOrCreate([
+                    'id' => $contractSpecification->getId(),
+                ], [
+                    'code' => $contractFee->id.$contractFeeIndex,
+                    'contract_fee_id' => $contractFee->id,
+                    'billing_provider_id' => $contractSpecification->getBillingProviderId(),
+                    'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),
+                    'health_professional_id' => $contractSpecification->getHealthProfessionalId(),
+                    'health_professional_taxonomy_id' => $contractSpecification->getHealthProfessionalTaxonomyId(),
+                ]);
+            }
         );
     }
 
     private function syncContractFee(Company $company, collection $contractFees, ?int $billingCompanyId): void
     {
-        ContractFee::query()
-            ->where('company_id', $company->id)
+        $company->contractFees()
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompanyId): void {
                 $query->where('billing_company_id', $billingCompanyId);
             })
-            ->whereNotIn('id', $contractFees->map(
+            ->whereNotIn('contract_fees.id', $contractFees->map(
                 fn (ContractFeesRequestCast $services) => $services->getId()
             )->toArray())
             ->get()
-            ->each(function (ContractFee $contractFee) {
+            ->each(function (ContractFee $contractFee) use ($company) {
                 $contractFee->procedures()->detach();
-                $contractFee->patiens()->detach();
+                $contractFee->patients()->detach();
                 $contractFee->modifiers()->detach();
-                $contractFee->delete();
+                $contractFee->insurancePlans()->detach();
+                $company->contractFees()->detach($contractFee->id);
             });
     }
 }

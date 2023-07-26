@@ -9,7 +9,7 @@ use App\Models\Claims\Claim;
 use App\Models\Claims\Rules;
 use App\Models\Company;
 use App\Models\InsuranceCompany;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -38,6 +38,7 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::DATE->value => $this->getDateFormat($config->value),
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
+            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
@@ -61,6 +62,12 @@ abstract class Dictionary implements DictionaryInterface
             ->implode($glue);
     }
 
+    protected function getSingleArrayFormat(string $value): array
+    {
+        return $this->getSingleFormat($value)
+            ->toArray();
+    }
+
     protected function getSingleFormat(string $value): string|Collection
     {
         list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
@@ -75,13 +82,15 @@ abstract class Dictionary implements DictionaryInterface
 
     protected function getDateFormat(string $value): string
     {
-        list($key, $format, $default) = Str::of($value)->explode('|')->pad(3, null)->toArray();
+        list($key, $format, $rawFormat, $default) = Str::of($value)->explode('|')->pad(4, null)->toArray();
 
         $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
-        return method_exists($this, $accesor)
-            ? $this->$accesor($key, $format, $default)
-            : $this->getClaimData($key, $default)->format($format);
+        $rawDate = method_exists($this, $accesor)
+            ? $this->$accesor($key, $default)
+            : $this->getClaimData($key, $default);
+
+        return Carbon::createFromFormat($rawFormat ?? 'Y-m-d', $rawDate ?? '')->format(str_replace('%', ' ', $format));
     }
 
     protected function getBooleanFormat(string $value): bool
@@ -98,7 +107,7 @@ abstract class Dictionary implements DictionaryInterface
 
     protected function getClaimData(string $key, ?string $default = null): mixed
     {
-        if ($default) {
+        if (!is_null($default)) {
             return $default;
         }
 
@@ -107,16 +116,14 @@ abstract class Dictionary implements DictionaryInterface
                 list($key, $properties) = Str::of($data)->explode(':')->pad(2, null)->toArray();
 
                 return (object) [
-                    'key' => Str::camel($key),
+                    'key' => $key,
                     'properties' => $properties
                         ? explode(',', $properties)
                         : [],
                 ];
             })
-            ->reduce(function (?Model $carry, object $item) {
-                return property_exists($carry, $item->key)
-                    ? $carry->{$item->key}
-                    : $carry->{$item->key}(...$item->properties);
+            ->reduce(function (mixed $carry, object $item) {
+                return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
             }, $this->claim);
     }
 

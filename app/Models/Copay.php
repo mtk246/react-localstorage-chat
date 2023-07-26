@@ -6,7 +6,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -52,9 +51,6 @@ final class Copay extends Model implements Auditable
     /** @var string[] */
     protected $fillable = [
         'copay',
-        'company_id',
-        'insurance_company_id',
-        'insurance_plan_id',
         'billing_company_id',
         'private_note',
     ];
@@ -71,8 +67,13 @@ final class Copay extends Model implements Auditable
         return $this->belongsToMany(Procedure::class)->withTimestamps();
     }
 
-    public function company(): BelongsTo
+    public function companies(): BelongsToMany
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(Company::class)->withTimestamps();
+    }
+
+    public function insurancePlans(): BelongsToMany
+    {
+        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
     }
 }

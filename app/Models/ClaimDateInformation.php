@@ -55,7 +55,6 @@ class ClaimDateInformation extends Model implements Auditable
         'from_date_or_current',
         'to_date',
         'description',
-        'field_id',
         'qualifier_id',
         'physician_or_supplier_information_id',
         'through',

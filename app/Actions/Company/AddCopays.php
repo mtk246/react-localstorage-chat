@@ -18,42 +18,52 @@ final class AddCopays
     public function invoke(Collection $copays, Company $company, User $user): Collection
     {
         return DB::transaction(function () use ($copays, $company, $user): Collection {
-            $this->syncCopays($company, $copays, $user->billingCompanies->first()?->id);
+            $this->syncCopays($company, $copays, $user->billing_company_id);
 
             return $copays->map(fn (CopayRequestCast $copayData) => tap(
                 Copay::query()->updateOrCreate(['id' => $copayData->getId()], [
                     'billing_company_id' => $copayData->getBillingCompanyId(),
-                    'insurance_plan_id' => $copayData->getInsurancePlanId(),
-                    'insurance_company_id' => $copayData->getInsuranceCompanyId(),
-                    'company_id' => $company->id,
                     'copay' => $copayData->getCopay(),
                     'private_note' => $copayData->getPrivateNote(),
                 ]),
-                fn (Copay $copay) => $this->afterCreate($copay, $copayData->getProceduresIds())
+                fn (Copay $copay) => $this->afterCreate(
+                    $copay,
+                    $company,
+                    $copayData->getProceduresIds(),
+                    $copayData->getInsurancePlanIds(),
+                )
             ))
             ->map(fn (Copay $copay) => $copay->load('procedures'));
         });
     }
 
-    private function afterCreate(Copay &$copay, Collection $proceduresIds): void
-    {
+    private function afterCreate(
+        Copay &$copay,
+        Company &$company,
+        Collection $proceduresIds,
+        Collection $insurancePlanIds,
+    ): void {
+        if (is_null($company->copays()->find($copay->id))) {
+            $company->copays()->attach($copay->id);
+        }
         $copay->procedures()->sync($proceduresIds->toArray());
+        $copay->insurancePlans()->sync($insurancePlanIds->toArray());
     }
 
     private function syncCopays(Company $company, collection $services, ?int $billingCompanyId): void
     {
-        Copay::query()
-            ->where('company_id', $company->id)
+        $company->copays()
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompanyId): void {
                 $query->where('billing_company_id', $billingCompanyId);
             })
-            ->whereNotIn('id', $services->map(
+            ->whereNotIn('copays.id', $services->map(
                 fn (CopayRequestCast $services) => $services->getId()
             )->toArray())
             ->get()
-            ->each(function (Copay $copay) {
+            ->each(function (Copay $copay) use ($company) {
                 $copay->procedures()->detach();
-                $copay->delete();
+                $copay->insurancePlans()->detach();
+                $company->copays()->detach($copay->id);
             });
     }
 }

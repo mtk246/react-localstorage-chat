@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\InsurancePlan\GetInsurancePlanAction;
 use App\Http\Requests\ChangeStatusInsurancePlanRequest;
 use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
 use App\Http\Requests\InsurancePlan\AddCopaysRequest;
@@ -80,10 +81,10 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getList()
+    public function getList(Request $request, GetInsurancePlanAction $getInsurace)
     {
         return response()->json(
-            $this->insurancePlanRepository->getList()
+            $getInsurace->list($request->input(), $request->user())
         );
     }
 
