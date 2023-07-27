@@ -64,10 +64,10 @@ final class ContractFeesRequestCast extends CastsRequest
         return collect($this->inputs['modifier_ids'] ?? []);
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return array_key_exists('price', $this->inputs)
-            ? (int) $this->inputs['price']
+            ? (float) $this->inputs['price']
             : null;
     }
 
