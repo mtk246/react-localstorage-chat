@@ -223,7 +223,7 @@ class FacilityRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            $facilities = Facility::with('facilityTypes');
+            $facilities = Facility::query()->with('facilityTypes');
 
             if (isset($billingCompany)) {
                 $facilities = $facilities->whereHas('billingCompanies', function ($query) use ($billingCompany) {
@@ -236,7 +236,7 @@ class FacilityRepository
                 });
             }
             if (!isset($billingCompany) && !isset($companyId)) {
-                $facilities = Facility::with('facilityTypes')->get();
+                $facilities = Facility::query()->with('facilityTypes')->get();
             } else {
                 $facilities = $facilities->get();
             }
@@ -246,6 +246,7 @@ class FacilityRepository
                 array_push($records, [
                     'id' => $facility->id,
                     'name' => $facility->name,
+                    'code' => $facility->code,
                 ]);
             }
 
