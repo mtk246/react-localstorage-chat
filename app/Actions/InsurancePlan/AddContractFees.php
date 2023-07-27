@@ -7,9 +7,9 @@ namespace App\Actions\InsurancePlan;
 use App\Http\Casts\InsurancePlan\ContractFeePatiensCast;
 use App\Http\Casts\InsurancePlan\ContractFeeSpecificationWrapper;
 use App\Http\Casts\InsurancePlan\ContractFeesRequestCast;
-use App\Models\InsurancePlan;
 use App\Models\ContractFee;
 use App\Models\ContractFeeSpecification;
+use App\Models\InsurancePlan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -67,7 +67,6 @@ final class AddContractFees
         $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
 
         $contractFee->companies()->sync($contractFeesRequest->getCompanyIds());
-
 
         $contractFeesRequest->getPatients()->each(
             fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [

@@ -11,7 +11,6 @@ use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 
-
 class AddCopaysRequest extends FormRequest
 {
     use HasCastedClass;
@@ -26,7 +25,7 @@ class AddCopaysRequest extends FormRequest
             'copays.*.id' => [
                 'nullable',
                 'integer',
-                'exists:\App\Models\Copay,id'
+                'exists:\App\Models\Copay,id',
             ],
             'copays.*.billing_company_id' => [
                 'nullable',

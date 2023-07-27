@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Actions\InsurancePlan;
 
 use App\Http\Casts\InsurancePlan\CopayRequestCast;
-use App\Models\InsurancePlan;
 use App\Models\Copay;
+use App\Models\InsurancePlan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
