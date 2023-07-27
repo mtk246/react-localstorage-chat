@@ -37,9 +37,7 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getTypeId(): ?int
     {
-        return array_key_exists('type_id', $this->inputs)
-            ? (int) $this->inputs['type_id']
-            : null;
+        return $this->get('type_id');
     }
 
     public function getStartDate(): ?string
