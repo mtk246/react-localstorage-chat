@@ -291,7 +291,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/insurance-company/{id}/get-by-insurance-company', [\App\Http\Controllers\InsurancePlanController::class, 'getAllPlanByInsuranceCompany']);
         //Route::patch('/add-copays-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
         Route::patch('/{insurance}/copays', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
-        Route::patch('/add-contract-fees-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
+        //Route::patch('/add-contract-fees-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
+        Route::patch('/{insurance}/contract-fees', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
     });
 
     Route::prefix('health-professional')->middleware([

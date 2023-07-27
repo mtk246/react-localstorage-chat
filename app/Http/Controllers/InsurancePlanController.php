@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Actions\InsurancePlan\AddCopays;
 use App\Models\InsurancePlan;
 
+use App\Actions\InsurancePlan\AddContractFees;
+
 class InsurancePlanController extends Controller
 {
     private $insurancePlanRepository;
@@ -125,13 +127,6 @@ class InsurancePlanController extends Controller
         );
     }
 
-    /*public function getListChargeUsings()
-    {
-        return response()->json(
-            $this->insurancePlanRepository->getListChargeUsings()
-        );
-    }*/
-
     public function getByPayer(string $payer): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
@@ -151,21 +146,6 @@ class InsurancePlanController extends Controller
         }
     }
 
-    /*public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->insurancePlanRepository->addCopays($request->validated(), $id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error add copays to insurance'), 404);
-    }*/
-
-    public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->insurancePlanRepository->addContractFees($request->validated(), $id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to insurance'), 404);
-    }
-
-    
     public function addCopays(
         AddCopays $addCopays,
         AddCopaysRequest $request,
@@ -176,5 +156,17 @@ class InsurancePlanController extends Controller
         $rs = $addCopays->invoke($request->castedCollect('copays'), $insurance, $request->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
+    }
+
+    public function addContractFees(
+        AddContractFees $addContractFees,
+        AddContractFeesRequest $request,
+        InsurancePlan $insurance,
+    ): JsonResponse {
+        $request->validated();
+
+        $rs = $addContractFees->invoke($request->castedCollect('contract_fees'), $insurance, $request->user());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }
 }

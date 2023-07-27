@@ -30,7 +30,7 @@ class InsurancePlanRepository
      */
     public function createInsurancePlan(array $data)
     {
-        try {
+        //try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
                 'insurance_company_id' => $data['insurance_company_id'],
@@ -151,11 +151,11 @@ class InsurancePlanRepository
             DB::commit();
 
             return $insurancePlan;
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             DB::rollBack();
 
             return null;
-        }
+        }*/
     }
 
     /**
@@ -327,8 +327,8 @@ class InsurancePlanRepository
             ])->first();
         }
 
-        $copaysFields = $this->getCopays($id);
-        $contractFeesFields = $this->getContractFees($id);
+        //$copaysFields = $this->getCopays($id);
+        //$contractFeesFields = $this->getContractFees($id);
 
         $record = [
             'id' => $insurance->id,
@@ -353,8 +353,8 @@ class InsurancePlanRepository
             'updated_at' => $insurance->updated_at,
             'last_modified' => $insurance->last_modified,
             'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
-            'copays' => $copaysFields,
-            'contract_fees' => $contractFeesFields,
+            'copays' => $insurance->copays,
+            'contract_fees' => $insurance->contractFees,
         ];
         $record['billing_companies'] = [];
 
@@ -760,216 +760,6 @@ class InsurancePlanRepository
             return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Insurance plan type']]);
         } catch (\Exception $e) {
             return [];
-        }
-    }
-
-    /*public function getListChargeUsings()
-    {
-        try {
-            return [];
-
-            return getList(TypeCatalog::class, ['code'], ['relationship' => 'type', 'where' => ['description' => 'Charge using']]);
-        } catch (\Exception $e) {
-            return [];
-        }
-    }*/
-
-    public function addCopays(array $data, int $id)
-    {
-        try {
-            DB::beginTransaction();
-            $insurancePlan = InsurancePlan::find($id);
-            if (is_null($insurancePlan)) {
-                return null;
-            }
-
-            $billingCompany = auth()->user()->billingCompanies->first();
-            if (Gate::denies('is-admin')) {
-                if (is_null($billingCompany)) {
-                    return null;
-                }
-            }
-
-            if (isset($data['copays'])) {
-                if (Gate::check('is-admin')) {
-                    $copays = $insurancePlan->copays;
-                } else {
-                    $copays = $insurancePlan->copays()->where('billing_company_id', $billingCompany->id)->get();
-                }
-
-                /* Delete Copays */
-                foreach ($copays ?? [] as $copayDB) {
-                    $validated = false;
-                    foreach ($data['copays'] as $copay) {
-                        if (($copayDB['copay'] == $copay['copay']) && ($copayDB['company_id'] == $copay['company_id'])) {
-                            $validated = true;
-                            break;
-                        }
-                    }
-                    if (!$validated) {
-                        $copayDB->procedures()->detach();
-                        $copayDB->delete();
-                    }
-                }
-
-                /* update or create new copay */
-                foreach ($data['copays'] as $copay) {
-                    $copayDB = Copay::firstOrCreate([
-                        'copay' => $copay['copay'],
-                        'company_id' => $copay['company_id'] ?? null,
-                        'insurance_plan_id' => $insurancePlan->id,
-                        'billing_company_id' => $billingCompany->id ?? $copay['billing_company_id'],
-                    ]);
-                    if (isset($copay['private_note'])) {
-                        PrivateNote::updateOrCreate([
-                            'publishable_type' => Copay::class,
-                            'publishable_id' => $copayDB['id'],
-                            'billing_company_id' => $billingCompany->id ?? $copay['billing_company_id'],
-                        ], [
-                            'note' => $copay['private_note'],
-                        ]);
-                    }
-                    $copayDB->procedures()->sync($copay['procedure_ids']);
-                }
-            }
-
-            DB::commit();
-
-            return $this->getCopays($id);
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return null;
-        }
-    }
-
-    public function addContractFees(array $data, int $id)
-    {
-        try {
-            DB::beginTransaction();
-            $insurancePlan = InsurancePlan::find($id);
-            if (is_null($insurancePlan)) {
-                return null;
-            }
-
-            $billingCompany = auth()->user()->billingCompanies->first();
-            if (Gate::denies('is-admin')) {
-                if (is_null($billingCompany)) {
-                    return null;
-                }
-            }
-
-            if (isset($data['contract_fees'])) {
-                $type_id = TypeCatalog::query()
-                    ->where(['code' => 'CAP', 'description' => 'CAP'])
-                    ->whereHas('type', function ($query) {
-                        $query->where('description', 'Contract fee type');
-                    })->value('id');
-
-                $excludedIds = array_reduce($data['contract_fees'], function ($ids, $item) {
-                    if (isset($item['id'])) {
-                        $ids[] = $item['id'];
-                    }
-
-                    return $ids;
-                }, []);
-                if (Gate::check('is-admin')) {
-                    $contractFeesDelete = $insurancePlan
-                        ->contractFees()
-                        ->whereNotIn('id', $excludedIds);
-                } else {
-                    $contractFeesDelete = $insurancePlan
-                        ->contractFees()
-                        ->where('billing_company_id', $billingCompany->id)
-                        ->whereNotIn('id', $excludedIds);
-                }
-
-                /* Delete contract fees */
-                $contractFeesDelete->chunk(20, function ($contracts) {
-                    foreach ($contracts as $contract) {
-                        $contract->procedures()->detach();
-                        $contract->modifiers()->detach();
-                        $contract->patiens()->detach();
-                    }
-                    $contracts->each->delete();
-                });
-
-                /* update or create new contract fee */
-                foreach ($data['contract_fees'] as $contract) {
-                    $macLocality = MacLocality::where([
-                        'mac' => $contract['mac'] ?? null,
-                        'locality_number' => $contract['locality_number'] ?? null,
-                        'state' => $contract['state'] ?? null,
-                        'fsa' => $contract['fsa'] ?? null,
-                        'counties' => $contract['counties'] ?? null,
-                    ])->first();
-
-                    $contractFee = ContractFee::updateOrCreate([
-                        'id' => $contract['id'] ?? null,
-                    ], [
-                        'company_id' => $contract['company_id'],
-                        'insurance_plan_id' => $insurancePlan->id,
-                        'insurance_company_id' => $insurancePlan->insurance_company_id,
-                        'private_note' => $contract['private_note'],
-                        'billing_company_id' => $billingCompany->id ?? $contract['billing_company_id'],
-                        'mac_locality_id' => $macLocality->id ?? null,
-                        'insurance_label_fee_id' => $contract['insurance_label_fee_id'] ?? null,
-                        'contract_fee_type_id' => $contract['type_id'] ?? null,
-                        'start_date' => $contract['start_date'] ?? null,
-                        'end_date' => $contract['end_date'] ?? null,
-                        'price' => $contract['price'] ?? null,
-                        'price_percentage' => $contract['price_percentage'] ?? null,
-                    ]);
-                    $contractFee->procedures()->sync($contract['procedure_ids']);
-                    $contractFee->modifiers()->sync($contract['modifier_ids']);
-
-                    if (($type_id === $contract['type_id']) &&
-                        isset($contract['patients']) &&
-                        !empty(filter_array_empty($contract['patients']))) {
-                        $excludedPatients = array_reduce($contract['patients'], function ($ids, $item) {
-                            if (isset($item['patient_id'])) {
-                                $ids[] = $item['patient_id'];
-                            }
-
-                            return $ids;
-                        }, []);
-                        $patientsDelete = $contractFee
-                            ->patiens()
-                            ->whereNotIn('patients.id', $excludedPatients)
-                            ->select('patients.id')
-                            ->get()
-                            ->pluck('id');
-
-                        /* Delete contract fees patients */
-                        foreach ($patientsDelete ?? [] as $id) {
-                            $contractFee->patiens()->detach($id);
-                        }
-
-                        foreach ($contract['patients'] as $item) {
-                            /* Attach patient if exist */
-                            if (is_null($contractFee->patiens()->find($item['patient_id']))) {
-                                $contractFee->patiens()->attach($item['patient_id'], [
-                                    'start_date' => $item['start_date'],
-                                    'end_date' => $item['end_date'],
-                                ]);
-                            } else {
-                                $contractFee->patiens()->updateExistingPivot($item['patient_id'], [
-                                    'start_date' => $item['start_date'],
-                                    'end_date' => $item['end_date'],
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-
-            DB::commit();
-
-            return $this->getContractFees($id);
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return null;
         }
     }
 
