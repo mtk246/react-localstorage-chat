@@ -4,33 +4,48 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\InsurancePlan;
 
+use App\Http\Casts\InsurancePlan\CopayRequestCast;
+use App\Http\Requests\Traits\HasCastedClass;
+use App\Models\Company;
+use App\Models\Procedure;
+use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
+
 
 class AddCopaysRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+    use HasCastedClass;
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules()
+    protected string $castedClass = CopayRequestCast::class;
+
+    /** @return array<string, mixed> */
+    public function rules(): array
     {
         return [
-            'copays' => ['required', 'array'],
-            'copays.*.billing_company_id' => ['nullable', 'integer'],
-            'copays.*.procedure_ids' => ['required', 'array'],
-            'copays.*.company_id' => ['nullable', 'integer'],
-            'copays.*.copay' => ['nullable', 'numeric'],
+            'copays' => ['nullable', 'array'],
+            'copays.*.id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\Copay,id'
+            ],
+            'copays.*.billing_company_id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\BillingCompany,id',
+            ],
+            'copays.*.procedure_ids' => [
+                'nullable',
+                new IntegerOrArrayKeyExists(Procedure::class),
+            ],
+            'copays.*.company_ids' => [
+                'nullable',
+                new IntegerOrArrayKeyExists(Company::class),
+            ],
+            'copays.*.copay' => [
+                'nullable',
+                'numeric',
+                'between:0,999999.99',
+            ],
             'copays.*.private_note' => ['nullable', 'string'],
         ];
     }

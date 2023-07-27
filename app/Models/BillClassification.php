@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $code
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FacilityType> $facility_types
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillClassification whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification whereName($value)

@@ -44,7 +44,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
- * @property \App\Models\TypeCatalog|null $chargeUsing
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
@@ -82,7 +81,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAcceptAssign($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAccruePatientResp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAllowAttachedFiles($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereChargeUsingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereEffDate($value)
@@ -160,20 +158,14 @@ class InsurancePlan extends Model implements Auditable
         return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
     }
 
-    /**
-     * InsurancePlan has many Copays.
-     */
-    public function copays(): HasMany
+    public function copays(): BelongsToMany
     {
-        return $this->hasMany(Copay::class);
+        return $this->belongsToMany(Copay::class)->withTimestamps();
     }
 
-    /**
-     * InsurancePlan has many ContracFees.
-     */
-    public function contractFees(): HasMany
+    public function contractFees(): BelongsToMany
     {
-        return $this->hasMany(ContractFee::class);
+        return $this->belongsToMany(ContractFee::class)->withTimestamps();
     }
 
     /**

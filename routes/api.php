@@ -289,7 +289,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{companyName}/get-by-company', [\App\Http\Controllers\InsurancePlanController::class, 'getByCompany']);
         Route::get('/{name}/get-by-name', [\App\Http\Controllers\InsurancePlanController::class, 'getByName']);
         Route::get('/insurance-company/{id}/get-by-insurance-company', [\App\Http\Controllers\InsurancePlanController::class, 'getAllPlanByInsuranceCompany']);
-        Route::patch('/add-copays-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
+        //Route::patch('/add-copays-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
+        Route::patch('/{insurance}/copays', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
         Route::patch('/add-contract-fees-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
     });
 

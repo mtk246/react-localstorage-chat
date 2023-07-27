@@ -12,6 +12,8 @@ use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Actions\InsurancePlan\AddCopays;
+use App\Models\InsurancePlan;
 
 class InsurancePlanController extends Controller
 {
@@ -149,17 +151,30 @@ class InsurancePlanController extends Controller
         }
     }
 
-    public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
+    /*public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
     {
         $rs = $this->insurancePlanRepository->addCopays($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add copays to insurance'), 404);
-    }
+    }*/
 
     public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
     {
         $rs = $this->insurancePlanRepository->addContractFees($request->validated(), $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to insurance'), 404);
+    }
+
+    
+    public function addCopays(
+        AddCopays $addCopays,
+        AddCopaysRequest $request,
+        InsurancePlan $insurance,
+    ): JsonResponse {
+        $request->validated();
+
+        $rs = $addCopays->invoke($request->castedCollect('copays'), $insurance, $request->user());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }
 }
