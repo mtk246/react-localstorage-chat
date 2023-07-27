@@ -1001,7 +1001,7 @@ class DoctorRepository
             $billingCompany = auth()->user()->billingCompanies->first();
         }
 
-        $healthProfessionals = HealthProfessional::with('user.profile', 'companies');
+        $healthProfessionals = HealthProfessional::query()->with('user.profile', 'companies');
 
         if (isset($billingCompany)) {
             $healthProfessionals = $healthProfessionals->whereHas('billingCompanies', function ($query) use ($billingCompany) {
@@ -1017,7 +1017,7 @@ class DoctorRepository
             });
         }
         if (!isset($billingCompany) && !isset($companyId)) {
-            $healthProfessionals = HealthProfessional::with('user.profile', 'companies')->get();
+            $healthProfessionals = HealthProfessional::Query()->with('user.profile', 'companies')->get();
         } else {
             $healthProfessionals = $healthProfessionals->get();
         }
@@ -1048,12 +1048,14 @@ class DoctorRepository
                         array_push($records['billing_provider'], [
                             'id' => $healthProfessional->id,
                             'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'npi' => $healthProfessional->npi_company,
                         ]);
                     }
                     if (in_array($referred->id, $auth)) {
                         array_push($records['referred'], [
                             'id' => $healthProfessional->id,
                             'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'npi' => $healthProfessional->npi_company,
                         ]);
                     }
                     if (in_array($service_provider->id, $auth)) {
@@ -1073,6 +1075,7 @@ class DoctorRepository
                         'id' => $item->id,
                         'tax_id' => $item->tax_id,
                         'name' => $item->name,
+                        'npi' => $healthProfessional->npi_company,
                     ])->toArray();
                 }
                 array_push($record, $field);
