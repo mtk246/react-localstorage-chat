@@ -8,9 +8,9 @@ use App\Http\Casts\CastsRequest;
 
 final class ContractFeePatiensCast extends CastsRequest
 {
-    public function getId(): ?int
+    public function getId(): int
     {
-        return $this->get('id');
+        return $this->get('patient_id');
     }
 
     public function getStartDate(): ?string
