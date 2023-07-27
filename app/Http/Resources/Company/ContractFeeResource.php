@@ -27,6 +27,7 @@ final class ContractFeeResource extends RequestWrapedResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
+            'type_id' => $this->resource->contract_fee_type_id,
             'procedure_ids' => $this->resource->procedures
                 ->map(fn (Procedure $procedure) => $procedure->id)->toArray(),
             'procedures' => $this->resource->procedures
@@ -53,6 +54,7 @@ final class ContractFeeResource extends RequestWrapedResource
                     return [
                         'id' => $modifier->id,
                         'modifier' => $modifier->modifier,
+                        'description' => $modifier->description,
                         'color' => $modifier->classification->getColor(),
                     ];
                 })->toArray(),
