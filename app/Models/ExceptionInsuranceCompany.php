@@ -44,7 +44,11 @@ class ExceptionInsuranceCompany extends Model implements Auditable
     protected $fillable = [
         'company_id',
         'billing_company_id',
-        'insurance_company_id',
+        'insurance_plan_ids',
+    ];
+
+    protected $casts = [
+        'insurance_plan_ids' => 'array',
     ];
 
     /**
@@ -55,16 +59,6 @@ class ExceptionInsuranceCompany extends Model implements Auditable
     public function company()
     {
         return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * ExceptionInsuranceCompany belongs to InsuranceCompany.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function insuranceCompany()
-    {
-        return $this->belongsTo(InsuranceCompany::class);
     }
 
     /**
