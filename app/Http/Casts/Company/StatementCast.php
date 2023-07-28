@@ -15,6 +15,13 @@ final class StatementCast extends CastsRequest
             : null;
     }
 
+    public function getBillingCompanyId(): ?int
+    {
+        return $this->get('billing_company_id')
+            ? (int) $this->get('billing_company_id')
+            : null;
+    }
+
     public function getRuleId(): ?int
     {
         return $this->get('rule_id')

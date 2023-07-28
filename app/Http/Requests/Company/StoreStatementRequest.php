@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Enums\Company\ApplyToType;
 use App\Http\Casts\Company\StatementCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\DistinctArray;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 final class StoreStatementRequest extends FormRequest
 {
@@ -45,7 +43,6 @@ final class StoreStatementRequest extends FormRequest
             'store.*.apply_to_ids.*' => [
                 'nullable',
                 'integer',
-                new Enum(ApplyToType::class),
             ],
             'store.*.start_date' => ['nullable', 'date', 'before:store.*.end_date'],
             'store.*.end_date' => ['nullable', 'date'],
