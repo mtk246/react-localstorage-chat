@@ -496,8 +496,13 @@ class FacilityRepository
                     'contactable_type' => Facility::class,
                     'billing_company_id' => $billingCompanyId,
                 ])->first();
+
                 $companies = $facility->companies()
-                    ->wherePivot('billing_company_id', $billingCompanyId)->get();
+                    ->wherePivot('billing_company_id', $billingCompanyId)
+                    ->whereHas('abbreviations', function ($query) use ($billingCompanyId) {
+                        $query->where('billing_company_id', $billingCompanyId);
+                    })
+                    ->get();
 
                 $placeOfServices = $facility->placeOfServices()
                     ->wherePivot('billing_company_id', $billingCompanyId)->get();
@@ -529,12 +534,6 @@ class FacilityRepository
                         'mobile' => $contact->mobile,
                         'contact_name' => $contact->contact_name,
                     ];
-                }
-
-                if (isset($companies)) {
-                    $companies->each(function ($company) use ($billingCompanyId) {
-                        $company['abbreviation'] = $company->abbreviations()->firstWhere('billing_company_id', $billingCompanyId);
-                    });
                 }
 
                 array_push($record['billing_companies'], [

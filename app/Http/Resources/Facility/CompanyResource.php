@@ -22,7 +22,7 @@ final class CompanyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
-            'abbreviation' => $this->resource->abbreviation->abbreviation,
+            'abbreviation' => $this->resource->abbreviations->first()->abbreviation,
         ];
     }
 }
