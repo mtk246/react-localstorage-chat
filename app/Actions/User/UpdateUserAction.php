@@ -28,7 +28,7 @@ final class UpdateUserAction
             $user->billingCompanies()
                 ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
                 ->first()
-                ->membership
+                ?->membership
                 ->roles()
                 ->sync($userWrapper->getMembershipRoles());
 
