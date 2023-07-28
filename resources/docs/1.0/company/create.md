@@ -6,7 +6,7 @@
 - [Create company](#create-company)
 - [Update company contacts](#update-company-contacts)
 - [Update company data](#update-company-data)
-- [Update company exections](#update-company-exections)
+- [Update company exceptions](#update-company-exceptions)
 - [Update company notes](#update-company-notes)
 - [Update company statements](#update-company-statements)
 - [Update company patients](#update-company-patients)
@@ -21,7 +21,7 @@
 | 2 |PUT | `Update company`          | `/company/{id}`|yes|update company|
 | 2 |PUT | `Update company contacts` | `/company/{company}/contacts`|yes|update company contacts|
 | 2 |PUT | `Update company data`     | `/company/{company}/data`|yes|update company data|
-| 2 |PUT | `Update company exections`| `/company/{company}/exections`|yes|update company|
+| 2 |PUT | `Update company exceptions`| `/company/{company}/exceptions`|yes|update company|
 | 2 |PUT | `Update company notes`    | `/company/{company}/notes`|yes|update company notes|
 | 2 |PUT | `Update company statements`| `/company/{company}/statements`|yes|update company|
 | 2 |PUT | `Update company patients`| `/company/{company}/patients`|yes|update company|
@@ -401,8 +401,8 @@
 ```
 
 
-<a name="update-company-exections"></a>
-## Update Company Exections insurance companies
+<a name="update-company-exceptions"></a>
+## Update Company Exceptions insurance companies
 
 
 ### Body request example
@@ -412,14 +412,13 @@
 
 ```json
 {
-    "billing_company_id": 1, // admin only
     "store": [
       {
         "id": 6,
-        "insurance_company_id": 1
+        "billing_company_id": 1,
+        "insurance_plan_ids": [1,2]
       }
-    ],
-    "delete": [14,15,16]
+    ]
 }
 ```
 
