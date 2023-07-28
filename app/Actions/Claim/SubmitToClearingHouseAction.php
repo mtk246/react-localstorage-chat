@@ -342,17 +342,16 @@ final class SubmitToClearingHouseAction
                     if (isset($qualifierFields[$qualifier])) {
                         if (1 == $dateInfo->field_id) {
                             $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (2 == $dateInfo->field_id) {
+                        } elseif (2 == $dateInfo->field_id) {
                             $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (3 == $dateInfo->field_id) {
+                        } elseif (3 == $dateInfo->field_id) {
                             $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
                             $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
-                        } else if (4 == $dateInfo->field_id) {
+                        } elseif (4 == $dateInfo->field_id) {
                             $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
                             $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
                         }
                     }
-
                 }
 
                 $dataReal = [
