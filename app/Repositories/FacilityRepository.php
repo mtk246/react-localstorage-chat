@@ -473,37 +473,45 @@ class FacilityRepository
             $record['billing_companies'] = [];
 
             foreach ($facility->billingCompanies as $billingCompany) {
+
+                $billingCompanyId = $billingCompany->id ?? $bC;
+
                 $abbreviation = EntityAbbreviation::where([
                     'abbreviable_id' => $facility->id,
                     'abbreviable_type' => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? $bC,
+                    'billing_company_id' => $billingCompanyId,
                 ])->first();
                 $nickname = EntityNickname::where([
                     'nicknamable_id' => $facility->id,
                     'nicknamable_type' => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? $bC,
+                    'billing_company_id' => $billingCompanyId,
                 ])->first();
                 $address = Address::where([
                     'addressable_id' => $facility->id,
                     'addressable_type' => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? $bC,
+                    'billing_company_id' => $billingCompanyId,
                 ])->first();
                 $contact = Contact::query()->where([
                     'contactable_id' => $facility->id,
                     'contactable_type' => Facility::class,
-                    'billing_company_id' => $billingCompany->id ?? $bC,
+                    'billing_company_id' => $billingCompanyId,
                 ])->first();
+
                 $companies = $facility->companies()
-                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+                    ->wherePivot('billing_company_id', $billingCompanyId)
+                    ->whereHas('abbreviations', function ($query) use ($billingCompanyId) {
+                        $query->where('billing_company_id', $billingCompanyId);
+                    })
+                    ->get();
 
                 $placeOfServices = $facility->placeOfServices()
-                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)->get();
+                    ->wherePivot('billing_company_id', $billingCompanyId)->get();
 
                 $privateNote = $facility->privateNotes()
-                    ->where('billing_company_id', $billingCompany->id ?? $bC)->get();
+                    ->where('billing_company_id', $billingCompanyId)->get();
 
                 $private_taxonomy = $facility->taxonomies()
-                    ->wherePivot('billing_company_id', $billingCompany->id ?? $bC)
+                    ->wherePivot('billing_company_id', $billingCompanyId)
                     ->wherePivot('primary', true)
                     ->get();
 
@@ -767,7 +775,7 @@ class FacilityRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($facilityId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['code', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = Facility::find($facilityId)->billingCompanies;
@@ -775,9 +783,9 @@ class FacilityRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'facilities', 'whereHas' => ['relationship' => 'facilities', 'where' => ['facility_id' => $facilityId]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'exists' => 'facilities', 'whereHas' => ['relationship' => 'facilities', 'where' => ['facility_id' => $facilityId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'facilities', 'orWhereHas' => ['relationship' => 'facilities', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'facilities', 'orWhereHas' => ['relationship' => 'facilities', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }

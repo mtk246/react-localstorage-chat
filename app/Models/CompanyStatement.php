@@ -21,7 +21,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property AsEnumCollection|null $apply_to_ids
+ * @property array|null $apply_to_ids
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany $billingCompany

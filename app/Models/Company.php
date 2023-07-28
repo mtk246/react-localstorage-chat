@@ -43,8 +43,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $company_statements_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contracFees
- * @property int|null $contrac_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
+ * @property int|null $contract_fees_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
  * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExceptionInsuranceCompany> $exceptionInsuranceCompanies

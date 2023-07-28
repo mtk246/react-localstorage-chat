@@ -31,8 +31,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $short_description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyService> $companyServices
+ * @property int|null $company_services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
  * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
