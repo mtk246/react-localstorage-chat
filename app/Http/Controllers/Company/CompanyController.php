@@ -10,6 +10,7 @@ use App\Actions\Company\GetCompany;
 use App\Actions\Company\GetMeasurementUnitAction;
 use App\Actions\Company\UpdateCompany;
 use App\Actions\Company\UpdatePatient;
+use App\Actions\Company\UpdateStatementAction;
 use App\Actions\GetAPIAction;
 use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
@@ -168,10 +169,10 @@ final class CompanyController extends Controller
 
     public function StoreStatements(
         StoreStatementRequest $request,
-        UpdateCompany $updateCompany,
+        UpdateStatementAction $statementAction,
         Company $company
     ): JsonResponse {
-        $rs = $updateCompany->statement($company, $request->casted());
+        $rs = $statementAction->invoke($company, $request->castedCollect('store'), $request->user());
 
         return response()->json($rs);
     }
