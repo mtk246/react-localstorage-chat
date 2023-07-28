@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\Company\ApplyToType;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -108,6 +106,6 @@ class CompanyStatement extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'apply_to_ids' => AsEnumCollection::class.':'.ApplyToType::class,
+        'apply_to_ids' => 'array',
     ];
 }
