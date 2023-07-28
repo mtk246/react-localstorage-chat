@@ -39,10 +39,10 @@ final class CopayRequestCast extends CastsRequest
         return collect($this->inputs['insurance_company_ids'] ?? []);
     }
 
-    public function getCopay(): ?int
+    public function getCopay(): ?float
     {
         return array_key_exists('copay', $this->inputs)
-            ? (int) $this->inputs['copay']
+            ? (float) $this->inputs['copay']
             : null;
     }
 

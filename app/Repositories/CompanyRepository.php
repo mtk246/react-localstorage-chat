@@ -194,7 +194,9 @@ class CompanyRepository
                     Company::class,
                     ['name'],
                     ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
-                    $except_ids ?? null
+                    $except_ids ?? null,
+                    [],
+                    ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
                 );
             }
         } catch (\Exception $e) {
