@@ -775,7 +775,7 @@ class FacilityRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($facilityId)) {
-            return getList(BillingCompany::class, ['code', '-', 'name'], ['status' => true]);
+            return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = Facility::find($facilityId)->billingCompanies;
