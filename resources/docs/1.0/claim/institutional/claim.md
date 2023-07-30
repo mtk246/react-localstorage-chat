@@ -144,6 +144,8 @@
     },
 
     "additional_information": {
+        "from": "2022-07-05",
+        "to": "2022-07-05",
         "patient_information": {
             "admission_date": "2022-07-05",
             "admission_time": "07:05",
