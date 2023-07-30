@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $non_covered_charges
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $from
+ * @property string|null $to
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, Diagnosis> $diagnoses
  * @property int|null $diagnoses_count
@@ -33,8 +35,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereClaimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereDiagnosisRelatedGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereFrom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereNonCoveredCharges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -45,6 +49,8 @@ final class ClaimService extends Model
 
     protected $fillable = [
         'claim_id',
+        'from',
+        'to',
         'diagnosis_related_group_id',
         'non_covered_charges',
     ];

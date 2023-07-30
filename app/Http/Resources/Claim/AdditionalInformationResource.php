@@ -21,6 +21,8 @@ final class AdditionalInformationResource extends JsonResource
     public function toArray($request): array
     {
         $commonFields = [
+            'from' => $this->service->from,
+            'to' => $this->service->to,
             'claim_date_informations' => $this->resource->dateInformations->map(function ($model) {
                 return new ClaimDateInformationResource($model, $this->type);
             }),
