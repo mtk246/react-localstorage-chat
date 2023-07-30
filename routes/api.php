@@ -224,7 +224,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::put('/{company}/patients', [CompanyController::class, 'UpdatePatients']);
             Route::put('/{company}/contacts', [CompanyController::class, 'UpdateContactData']);
             Route::put('/{company}/statements', [CompanyController::class, 'StoreStatements']);
-            Route::put('/{company}/exections', [CompanyController::class, 'StoreExectionInsuranceCompanies']);
+            Route::put('/{company}/exceptions', [CompanyController::class, 'StoreExceptionInsurance']);
             Route::put('/{company}/notes', [CompanyController::class, 'updateCompanyNotes']);
             Route::get('/get-all-server', [CompanyController::class, 'getServerAll']);
             Route::post('/', [CompanyController::class, 'createCompany']);

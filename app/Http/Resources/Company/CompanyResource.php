@@ -82,7 +82,7 @@ final class CompanyResource extends JsonResource
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
-        return ExceptionICResource::collection($exceptions)->resource;
+        return ExceptionInsuranceResource::collection($exceptions)->resource;
     }
 
     private function getPatients()

@@ -58,7 +58,11 @@ final class ContractFeeResource extends RequestWrapedResource
                         'color' => $modifier->classification->getColor(),
                     ];
                 })->toArray(),
-            'patients' => $this->resource->patients ?? [],
+            'patients' => $this->resource->patients->map(fn ($model) => [
+                'patient_id' => $model->id,
+                'start_date' => $model->pivot?->start_date ?? '',
+                'end_date' => $model->pivot?->end_date ?? '',
+            ]) ?? [],
             'contract_specifications' => $this->resource->contractFeeSpecifications ?? [],
             'mac' => $this->resource->macLocality?->mac,
             'locality_number' => $this->resource->macLocality?->locality_number,
