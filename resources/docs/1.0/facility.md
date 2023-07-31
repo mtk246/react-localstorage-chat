@@ -902,47 +902,35 @@
 [
     {
         "id": 1,
-        "name": "01 - Clinics"
+        "name": "1 - Hospital"
     },
     {
         "id": 2,
-        "name": "02 - Hospitals"
+        "name": "2 - Skilled Nursing"
     },
     {
         "id": 3,
-        "name": "03 - Labs"
+        "name": "3 - Home Health"
     },
     {
         "id": 4,
-        "name": "75X - Comprehensive Outpa..."
+        "name": "4 - Christian Science (Hospital)"
     },
     {
         "id": 5,
-        "name": "86X - Specialty Facility Res..."
+        "name": "5 - Christian Science (Extended Care)"
     },
     {
         "id": 6,
-        "name": "AL - Assisted Living Facility"
+        "name": "6 - Intermediate Care"
     },
     {
         "id": 7,
-        "name": "ASC - Ambulatory Surgery Center"
+        "name": "7 - Clinic "
     },
     {
         "id": 8,
-        "name": "LAB - Free Standing Lab Facility"
-    },
-    {
-        "id": 9,
-        "name": "OT - Special Facility - Other"
-    },
-    {
-        "id": 10,
-        "name": "RRH - Rural Health Clinic"
-    },
-    {
-        "id": 11,
-        "name": "SN - Skilled Nursing Facility"
+        "name": "8 - Special Facility or Hospital ASC Surgery"
     }
 ]
 ```
@@ -1293,7 +1281,7 @@
 ]
 ```
 
-<a name="get-bill-classification"></a>
+<a name="get-bill-classifications"></a>
 ## Get bill classifications from facility type
 
 ## Param in header
@@ -1316,32 +1304,32 @@
 ```json
 [
     {
-        "id": 1006,
-        "name": "Hospice (Non-Hospital Based)"
+        "id": 9,
+        "name": "1 - Rural Health"
     },
     {
-        "id": 1007,
-        "name": "Hospice (Hospital Based)"
+        "id": 10,
+        "name": "2 - Hospital Based or Independent Renal Dialysis Center"
     },
     {
-        "id": 1008,
-        "name": "Ambulatory Surgery Center"
+        "id": 11,
+        "name": "3 - Free-standing"
     },
     {
-        "id": 1009,
-        "name": "Free Standing Birthing Center"
+        "id": 12,
+        "name": "4 - Outpatient Rehabilitation Facility (ORF)"
     },
     {
-        "id": 1010,
-        "name": "CAH (Critical Access Hospital) / Rural Primary Care Hospital"
+        "id": 13,
+        "name": "5 - Comprehensive Outpatient Rehabilitation Facilities (CORFS)"
     },
     {
-        "id": 1011,
-        "name": "Residential Facility (not used for Medicare)"
+        "id": 14,
+        "name": "6 - Community Mental Health Center (CMHC)"
     },
     {
-        "id": 1012,
-        "name": "Other"
+        "id": 21,
+        "name": "9 - Other"
     }
 ]
 ```
