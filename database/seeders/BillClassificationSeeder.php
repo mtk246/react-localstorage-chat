@@ -100,7 +100,7 @@ final class BillClassificationSeeder extends Seeder
 
             if (20 == $key) {
                 $bill_classification = BillClassification::create($value);
-                $bill_classification->facility_types()->attach(FacilityType::all());
+                $bill_classification->facility_types()->attach([$facility_type_2->id, $facility_type_3->id]);
             }
         }
     }
