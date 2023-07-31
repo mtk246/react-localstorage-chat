@@ -19,7 +19,8 @@ final class BillClassificationResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'name' => $this->resource->code.' - '.$this->resource->name,
+            'code' => $this->resource->code,
+            'name' => $this->resource->name,
         ];
     }
 }
