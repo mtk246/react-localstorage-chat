@@ -6,7 +6,6 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
-use App\Models\TypeCatalog;
 use Carbon\Carbon;
 use Cknow\Money\Money;
 use Illuminate\Support\Collection;
@@ -41,7 +40,7 @@ final class FileDictionary extends Dictionary
 
     public function getCompanyAddressAttribute(string $key, string $entry): string
     {
-        return (string) $this->claim
+        $value = (string) $this->claim
             ->demographicInformation
             ->company
             ->addresses
@@ -56,16 +55,29 @@ final class FileDictionary extends Dictionary
             )
             ->first()
             ?->{$key};
+
+        return match ($key) {
+            'address' => substr($value ?? '', 0, 55),
+            'city' => substr($value ?? '', 0, 30),
+            'state' => substr($value ?? '', 0, 2),
+            'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
+            default => $value ?? '',
+        };
     }
 
     public function getCompanyContactAttribute(string $key, string $entry): string
     {
-        return (string) $this->claim
+        $value = $this->claim
             ->demographicInformation
             ->company
             ->contacts
-            ->get((int) $entry)
-            ?->{$key};
+            ->get((int) $entry);
+
+        return match ($key) {
+            'code_araea' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
+            'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
+            default =>  (string) $value?->{$key} ?? '',
+        };
     }
 
     public function getMedicalAssistanceTypeAttribute(): string
@@ -329,15 +341,15 @@ final class FileDictionary extends Dictionary
             $resultServices['to_month_A'.($index + 1)] = $toService[1] ?? '';
             $resultServices['to_day_A'.($index + 1)] = $toService[2] ?? '';
             /* 24B */
-            $resultServices['pos_B'.($index + 1)] = isset($item->placeOfService) ? $item->placeOfService?->code : PlaceOfService::find($item['place_of_service_id'] ?? null)?->code ?? '';
+            $resultServices['pos_B'.($index + 1)] = $item?->placeOfService?->code ?? '';
             /* 24C */
             $resultServices['emg_C'.($index + 1)] = ($item['emg']) ? 'Y' : '';
             /* 24D */
-            $resultServices['procedure_D'.($index + 1)] = isset($item['procedure']) ? $item['procedure']?->code : Procedure::find($item['procedure_id'] ?? null)?->code ?? '';
-            $resultServices['modifier1_D'.($index + 1)] = isset($item['modifiers'][0]) ? $item['modifiers'][0]['name'] : Modifier::find($item['modifier_ids'][0] ?? null)?->modifier ?? '';
-            $resultServices['modifier2_D'.($index + 1)] = isset($item['modifiers'][1]) ? $item['modifiers'][1]['name'] : Modifier::find($item['modifier_ids'][1] ?? null)?->modifier ?? '';
-            $resultServices['modifier3_D'.($index + 1)] = isset($item['modifiers'][2]) ? $item['modifiers'][2]['name'] : Modifier::find($item['modifier_ids'][2] ?? null)?->modifier ?? '';
-            $resultServices['modifier4_D'.($index + 1)] = isset($item['modifiers'][3]) ? $item['modifiers'][3]['name'] : Modifier::find($item['modifier_ids'][3] ?? null)?->modifier ?? '';
+            $resultServices['procedure_D'.($index + 1)] = $item?->procedure?->code ?? '';
+            $resultServices['modifier1_D'.($index + 1)] = $item['modifiers'][0]['name'] ?? '';
+            $resultServices['modifier2_D'.($index + 1)] = $item['modifiers'][1]['name'] ?? '';
+            $resultServices['modifier3_D'.($index + 1)] = $item['modifiers'][2]['name'] ?? '';
+            $resultServices['modifier4_D'.($index + 1)] = $item['modifiers'][3]['name'] ?? '';
             /* 24E */
             $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
             ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
@@ -347,8 +359,8 @@ final class FileDictionary extends Dictionary
             /* 24G */
             $resultServices['days_G'.($index + 1)] = $item['days_or_units'] ?? '';
             /* 24H */
-            $resultServices['epsdt_H'.($index + 1)] = isset($item->epsdt) ? $item->epsdt?->code : TypeCatalog::find($item['epsdt_id'] ?? null)?->code ?? '';
-            $resultServices['family_planing_H'.($index + 1)] = isset($item->familyPlanning) ? $item->familyPlanning?->code : TypeCatalog::find($item['family_planning_id'] ?? null)?->code ?? '';
+            $resultServices['epsdt_H'.($index + 1)] = $item?->epsdt?->code ?? '';
+            $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
             /** 24I */
             // $tax_id = $this->claim?->provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
             $tax_id_BP = $billingProvider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
