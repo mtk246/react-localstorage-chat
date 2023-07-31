@@ -105,8 +105,8 @@ final class ClaimResource extends JsonResource
                             'id' => $service->procedure_id,
                             'name' => $service->procedure->code,
                             'description' => $service->procedure->description,
-                            'price' => $service->procedure->companies
-                                ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                            'price' => $service->procedure->companyServices
+                                ->firstWhere('company_id', $this->company_id)?->price ?? 0,
                         ]]
                         : [],
                     'revenue_code_id' => $service->revenue_code_id,
@@ -259,8 +259,8 @@ final class ClaimResource extends JsonResource
                     'id' => $service->procedure_id,
                     'name' => $service->procedure->code,
                     'description' => $service->procedure->description,
-                    'price' => $service->procedure->companies
-                        ->firstWhere('company_id', $this->company_id)?->pivot->price ?? 0,
+                    'price' => $service->procedure->companyServices
+                        ->firstWhere('company_id', $this->company_id)?->price ?? 0,
                 ]]
                 : [];
 

@@ -118,6 +118,8 @@ final class StoreRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
+            'additional_information.from' => ['required', 'date'],
+            'additional_information.to' => ['required', 'date'],
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
             'additional_information.patient_information.admission_date' => [

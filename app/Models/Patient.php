@@ -28,8 +28,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
- * @property int|null $claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees

@@ -31,12 +31,11 @@ final class ServiceResource extends JsonResource
                         'id' => $this->resource->procedure_id,
                         'name' => $this->resource->procedure->code,
                         'description' => $this->resource->procedure->description,
-                        'price' => $this->resource->procedure->companies
+                        'price' => $this->resource->procedure->companyServices
                             ->firstWhere(
                                 'company_id',
                                 $this->company_id
                             )
-                            ?->pivot
                             ?->price ?? 0,
                     ],
                 ]
