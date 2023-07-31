@@ -2956,17 +2956,6 @@ return [
                 'y' => 17.5,
             ],
         ],
-        '1e' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 40,
-                'y' => 17.5,
-            ],
-        ],
         '2a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
@@ -3007,19 +2996,8 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 112,
-                'y' => 13,
-            ],
-        ],
-        '2e' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 117,
-                'y' => 13,
+                'x' => 72,
+                'y' => 17.5,
             ],
         ],
         '3a' => [
@@ -7303,6 +7281,17 @@ return [
                 'y' => 170,
             ],
         ],
+        'te' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'R',
+                'w' => 30,
+                'h' => 10,
+                'x' => 148,
+                'y' => 170,
+            ],
+        ],
     ],
 
     /*
@@ -7354,20 +7343,7 @@ return [
                     'length' => 24,
                     'value' => [
                         'companyAddress:city|0',
-                    ],
-                    'values' => [
-                        'common' => [
-                            'demographicInformation.company.name',
-                            'companyAddress:address|0',
-                            'companyAddress:city|0',
-                            'companyAddress:state|0',
-                            'companyAddress:zip|0',
-                        ],
-                    ],
-                ],
-                '1d' => [
-                    'type' => RuleType::MULTIPLE->value,
-                    'value' => [
+                        '|, ',
                         'companyAddress:state|0',
                     ],
                     'values' => [
@@ -7380,7 +7356,7 @@ return [
                         ],
                     ],
                 ],
-                '1e' => [
+                '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
                         'companyAddress:zip|0',
@@ -7404,10 +7380,10 @@ return [
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
-                            'companyAddress:address|1',
-                            'companyAddress:city|1',
-                            'companyAddress:state|1',
-                            'companyAddress:zip|1',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7415,15 +7391,15 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'companyAddress:address|1',
+                        'companyAddress:address|3',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
-                            'companyAddress:address|1',
-                            'companyAddress:city|1',
-                            'companyAddress:state|1',
-                            'companyAddress:zip|1',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7431,45 +7407,32 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 24,
                     'value' => [
-                        'companyAddress:city|1',
+                        'companyAddress:city|3',
+                        '|, ',
+                        'companyAddress:state|3',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
-                            'companyAddress:address|1',
-                            'companyAddress:city|1',
-                            'companyAddress:state|1',
-                            'companyAddress:zip|1',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'companyAddress:state|1',
+                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
-                            'companyAddress:address|1',
-                            'companyAddress:city|1',
-                            'companyAddress:state|1',
-                            'companyAddress:zip|1',
-                        ],
-                    ],
-                ],
-                '2e' => [
-                    'type' => RuleType::MULTIPLE->value,
-                    'value' => [
-                        'companyAddress:zip|1',
-                    ],
-                    'values' => [
-                        'common' => [
-                            'demographicInformation.company.name',
-                            'companyAddress:address|1',
-                            'companyAddress:city|1',
-                            'companyAddress:state|1',
-                            'companyAddress:zip|1',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7477,11 +7440,11 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'code',
+                        'demographicInformation.patient.code',
                     ],
                     'values' => [
                         'common' => [
-                            'code',
+                            'demographicInformation.patient.code',
                         ],
                     ],
                 ],
@@ -7526,23 +7489,23 @@ return [
                 ],
                 '6a' => [
                     'type' => RuleType::DATE->value,
-                    'value' => 'patientInformation.admission_date|m%d%y',
+                    'value' => 'service.from|mdy',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_date|m/d/y',
-                            'patientInformation.admission_date|m-d-y',
-                            'patientInformation.admission_date|m%d%y',
+                            'service.from|m/d/y',
+                            'service.from|m-d-y',
+                            'service.from|mdy',
                         ],
                     ],
                 ],
                 '6b' => [
                     'type' => RuleType::DATE->value,
-                    'value' => 'patientInformation.discharge_date|m%d%y',
+                    'value' => 'service.to|mdy',
                     'values' => [
                         'common' => [
-                            'patientInformation.discharge_date|m/d/y',
-                            'patientInformation.discharge_date|m-d-y',
-                            'patientInformation.discharge_date|m%d%y',
+                            'service.to|m/d/y',
+                            'service.to|m-d-y',
+                            'service.to|mdy',
                         ],
                     ],
                 ],
@@ -7569,7 +7532,6 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
                         'patientProfile:last_name',
-                        '|, ',
                         'patientProfile:first_name',
                         'patientProfile:middle_name',
                     ],
@@ -7657,12 +7619,12 @@ return [
                 '10' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|m%d%y',
+                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdy',
                     'values' => [
                         'common' => [
                             'demographicInformation.patient.user.profile.date_of_birth|m/d/y',
                             'demographicInformation.patient.user.profile.date_of_birth|m-d-y',
-                            'demographicInformation.patient.user.profile.date_of_birth|m%d%y',
+                            'demographicInformation.patient.user.profile.date_of_birth|mdy',
                         ],
                     ],
                 ],
@@ -7679,20 +7641,20 @@ return [
                 '12' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_date|m%d%y',
+                    'value' => 'patientInformation.admission_date|mdy',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_date|m%d%y',
+                            'patientInformation.admission_date|mdy',
                         ],
                     ],
                 ],
                 '13' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_time|H%m%s|H:m:s',
+                    'value' => 'patientInformation.admission_time|Hms|H:m:s',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_time|H%m%s|H:m:s',
+                            'patientInformation.admission_time|Hms|H:m:s',
                         ],
                     ],
                 ],
@@ -8345,7 +8307,7 @@ return [
                 ],
                 '43' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:procedure_description',
+                    'value' => 'claimServices:short_description',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
@@ -8358,7 +8320,7 @@ return [
                 ],
                 '44' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:price',
+                    'value' => 'claimServices:related_group',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
@@ -8451,15 +8413,15 @@ return [
                     ],
                 ],
                 'tc' => [
-                    'type' => RuleType::SINGLE->value,
-                    'value' => '|0',
+                    'type' => RuleType::DATE->value,
+                    'value' => 'created_at|mdy',
                     'values' => [
                         'common' => [],
                     ],
                 ],
                 'td' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => '|0',
+                    'value' => '|02222222',
                     'values' => [
                         'common' => [],
                     ],
