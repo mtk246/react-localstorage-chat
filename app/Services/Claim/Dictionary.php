@@ -90,6 +90,10 @@ abstract class Dictionary implements DictionaryInterface
             ? $this->$accesor($key, $default)
             : $this->getClaimData($key, $default);
 
+        if ($rawDate instanceof Carbon) {
+            return $rawDate->format(str_replace('%', ' ', $format));
+        }
+
         return Carbon::createFromFormat($rawFormat ?? 'Y-m-d', $rawDate ?? '')->format(str_replace('%', ' ', $format));
     }
 

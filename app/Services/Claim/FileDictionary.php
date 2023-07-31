@@ -8,6 +8,7 @@ use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
+use Cknow\Money\Money;
 use Illuminate\Support\Collection;
 
 final class FileDictionary extends Dictionary
@@ -44,7 +45,16 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->addresses
-            ->get((int) $entry)
+            ->where('address_type_id', $this->claim
+                ->demographicInformation
+                ->company
+                ->addresses
+                ->where('address_type_id', (int) $entry)
+                ->count() > 1
+                    ? (int) $entry
+                    : 1
+            )
+            ->first()
             ?->{$key};
     }
 
@@ -259,6 +269,8 @@ final class FileDictionary extends Dictionary
                     'procedure_code' => $claimService->procedure->code,
                     'procedure_start_date' => $claimService->procedure->start_date,
                     'non_covered_charges' => $claimService->claimService->non_covered_charges ?? '',
+                    'related_group' => $claimService->claimService->diagnosisRelatedGroup?->code ?? '',
+                    'total_charge' => Money::parse($claimService->total_charge)->formatByDecimal(),
                     default => $claimService->{$key},
                 };
             });
@@ -266,8 +278,7 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimServicesTotalAttribute(): string
     {
-        return (string) $this->claim->service->services
-            ->sum('price');
+        return Money::parse($this->claim->service->services->sum('price'))->formatByDecimal();
     }
 
     protected function getClaimServicesTotalKeyAttribute(string $key): Collection
