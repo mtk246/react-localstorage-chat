@@ -6,6 +6,8 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\TypeCatalog;
+use Carbon\Carbon;
 use Cknow\Money\Money;
 use Illuminate\Support\Collection;
 
@@ -15,7 +17,15 @@ final class FileDictionary extends Dictionary
 
     protected function getCompanyAttribute(string $key): string
     {
-        return (string) $this->company->getAttribute($key);
+        return match ($key) {
+            'federal_tax' => $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? '',
+            'federal_tax_value' => !empty($this->company->ein)
+                ? 'EIN'
+                : (!empty($this->company->ssn)
+                    ? 'SSN'
+                    : ''),
+            default => (string) $this->company->getAttribute($key),
+        };
     }
 
     protected function getPatientCompanyAttribute(string $key): string
@@ -45,6 +55,16 @@ final class FileDictionary extends Dictionary
                     : 1
             )
             ->first()
+            ?->{$key};
+    }
+
+    public function getCompanyContactAttribute(string $key, string $entry): string
+    {
+        return (string) $this->claim
+            ->demographicInformation
+            ->company
+            ->contacts
+            ->get((int) $entry)
             ?->{$key};
     }
 
@@ -206,7 +226,7 @@ final class FileDictionary extends Dictionary
         return match ($key) {
             'address' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->address ?? '',
             'city' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->city ?? '',
-            'state' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->state ?? '',
+            'state' => substr($this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->state ?? '', 0, 2),
             'zip' => $this->claim->higherInsurancePlan()?->insuranceCompany?->addresses?->first()->zip ?? '',
             default => $this->claim->higherInsurancePlan()?->insuranceCompany?->{$key} ?? '',
         };
@@ -222,9 +242,14 @@ final class FileDictionary extends Dictionary
         return !empty($this->claim->higherInsurancePlan());
     }
 
-    protected function getClaimDemographicInformationAttribute(string $key): string
+    protected function getClaimDemographicInformationAttribute(string $key): string|bool
     {
-        return $this->claim->demographicInformation?->{$key} ?? '';
+        return match ($key) {
+            'charges' => ($this->claim->demographicInformation?->outside_lab ?? false)
+                ? str_replace([',', '.'], '', (string) ($this->claim->demographicInformation?->{$key} ?? ''))
+                : '',
+            default => $this->claim->demographicInformation?->{$key} ?? '',
+        };
     }
 
     protected function getPatientSignatureAttribute(string $key): string
@@ -256,17 +281,87 @@ final class FileDictionary extends Dictionary
         return Money::parse($this->claim->service->services->sum('price'))->formatByDecimal();
     }
 
-    protected function getFirstClaimServiceAttribute(string $key): string
+    protected function getClaimServicesTotalKeyAttribute(string $key): Collection
     {
-        return $this->claim
-            ->claimService
-            ?->services()
-            ?->first()
-            ?->{$key}
-            ?->format('m/d/Y') ?? '';
+        $total = explode('.', (string) $this->claim->service->services->sum($key));
+        $total[1] = (('' != $total[0])
+                    ? (str_pad($total[1] ?? '', 2, '0', STR_PAD_RIGHT) ?? '00')
+                    : '');
+
+        return Collect($total);
     }
 
-    protected function getReferredProviderRole(string $key): string
+    protected function getFirstClaimServiceAttribute(string $key): string
+    {
+        return Carbon::createFromFormat(
+            'Y-m-d',
+            $this->claim
+                ->service
+                ?->services()
+                ?->first()
+                ?->{$key} ?? ''
+        )->format('m/d/Y');
+    }
+
+    protected function getClaimProfessionalServicesAttribute(string $key): Collection
+    {
+        $resultServices = [];
+        $totalCharge = 0;
+        $totalCopay = 0;
+
+        foreach ($this->claim->service->services ?? [] as $index => $item) {
+            $arrayPrice = explode('.', (string) ($item['price'] ?? ''));
+            $totalCharge += $item['price'] ?? 0;
+            $totalCopay += $item['copay'] ?? 0;
+            $fromService = explode('-', $item['from_service'] ?? '');
+            $toService = explode('-', $item['to_service'] ?? '');
+            $billingProvider = $this->claim
+                ?->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first() ?? null;
+
+            /* 24A */
+            $resultServices['from_year_A'.($index + 1)] = substr($fromService[0] ?? '', 2, 2);
+            $resultServices['from_month_A'.($index + 1)] = $fromService[1] ?? '';
+            $resultServices['from_day_A'.($index + 1)] = $fromService[2] ?? '';
+            $resultServices['to_year_A'.($index + 1)] = substr($toService[0] ?? '', 2, 2);
+            $resultServices['to_month_A'.($index + 1)] = $toService[1] ?? '';
+            $resultServices['to_day_A'.($index + 1)] = $toService[2] ?? '';
+            /* 24B */
+            $resultServices['pos_B'.($index + 1)] = isset($item->placeOfService) ? $item->placeOfService?->code : PlaceOfService::find($item['place_of_service_id'] ?? null)?->code ?? '';
+            /* 24C */
+            $resultServices['emg_C'.($index + 1)] = ($item['emg']) ? 'Y' : '';
+            /* 24D */
+            $resultServices['procedure_D'.($index + 1)] = isset($item['procedure']) ? $item['procedure']?->code : Procedure::find($item['procedure_id'] ?? null)?->code ?? '';
+            $resultServices['modifier1_D'.($index + 1)] = isset($item['modifiers'][0]) ? $item['modifiers'][0]['name'] : Modifier::find($item['modifier_ids'][0] ?? null)?->modifier ?? '';
+            $resultServices['modifier2_D'.($index + 1)] = isset($item['modifiers'][1]) ? $item['modifiers'][1]['name'] : Modifier::find($item['modifier_ids'][1] ?? null)?->modifier ?? '';
+            $resultServices['modifier3_D'.($index + 1)] = isset($item['modifiers'][2]) ? $item['modifiers'][2]['name'] : Modifier::find($item['modifier_ids'][2] ?? null)?->modifier ?? '';
+            $resultServices['modifier4_D'.($index + 1)] = isset($item['modifiers'][3]) ? $item['modifiers'][3]['name'] : Modifier::find($item['modifier_ids'][3] ?? null)?->modifier ?? '';
+            /* 24E */
+            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
+            ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
+            /* 24F */
+            $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
+            $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '';
+            /* 24G */
+            $resultServices['days_G'.($index + 1)] = $item['days_or_units'] ?? '';
+            /* 24H */
+            $resultServices['epsdt_H'.($index + 1)] = isset($item->epsdt) ? $item->epsdt?->code : TypeCatalog::find($item['epsdt_id'] ?? null)?->code ?? '';
+            $resultServices['family_planing_H'.($index + 1)] = isset($item->familyPlanning) ? $item->familyPlanning?->code : TypeCatalog::find($item['family_planning_id'] ?? null)?->code ?? '';
+            /** 24I */
+            // $tax_id = $this->claim?->provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $tax_id_BP = $billingProvider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id_BP) ? 'ZZ' : '';
+            /* 24J */
+            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $billingProvider?->npi ?? '');
+            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $tax_id_BP);
+        }
+
+        return Collect($resultServices);
+    }
+
+    protected function getReferredProviderRoleAttribute(string $key): string
     {
         return $this->claim
             ?->provider()
@@ -278,14 +373,100 @@ final class FileDictionary extends Dictionary
     protected function getProviderProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => ', '.$this->claim->provider()?->user?->profile?->{$key} ?? '',
-            'name_suffix' => !empty($this->claim->provider()?->user?->profile?->{$key}?->code)
-                ? ' '.$this->claim->provider()?->user?->profile?->{$key}?->code
-                : '',
-            'middle_name' => !empty($this->claim->provider()?->user?->profile?->{$key})
-                ? ', '.substr($this->claim->provider()?->user?->profile?->{$key}, 0, 1)
-                : '',
-            default => $this->claim->patientProfile()?->{$key} ?? '',
+            'first_name' => $this->claim->provider()?->user?->profile?->{$key} ?? '',
+            'last_name' => $this->claim->provider()?->user?->profile?->{$key} ?? '',
+            'name_suffix' => $this->claim->provider()?->user?->profile?->{$key}?->code ?? '',
+            'middle_name' => substr($this->claim->provider()?->user?->profile?->{$key} ?? '', 0, 1),
+            'qualifier' => 'G2',
+            'qualifierValue' => str_replace('-', '', $this->claim->provider()?->upin ?? ''),
+            'npi' => str_replace('-', '', $this->claim->provider()?->npi ?? ''),
+            default => $this->claim->provider()?->{$key} ?? '',
         };
     }
+
+    protected function getBillingProviderProfileAttribute(string $key): string
+    {
+        return match ($key) {
+            'first_name' => $this->claim->billingProvider()?->user?->profile?->{$key} ?? '',
+            'last_name' => $this->claim->billingProvider()?->user?->profile?->{$key} ?? '',
+            'name_suffix' => $this->claim->billingProvider()?->user?->profile?->{$key}?->code ?? '',
+            'middle_name' => substr($this->claim->billingProvider()?->user?->profile?->{$key} ?? '', 0, 1),
+            default => $this->claim->billingProvider()?->{$key} ?? '',
+        };
+    }
+
+    protected function getClaimDateCurrentInformationAttribute(string $key): string
+    {
+        return $this->getClaimDateInformationAttribute($key, 1);
+    }
+
+    protected function getClaimDateOtherInformationAttribute(string $key): string
+    {
+        return $this->getClaimDateInformationAttribute($key, 2);
+    }
+
+    protected function getClaimDateWorkInformationAttribute(string $key): string
+    {
+        return $this->getClaimDateInformationAttribute($key, 3);
+    }
+
+    protected function getClaimDateHospitalInformationAttribute(string $key): string
+    {
+        return $this->getClaimDateInformationAttribute($key, 4);
+    }
+
+    protected function getClaimDateAdditionalInformationAttribute(string $key): string
+    {
+        return $this->getClaimDateInformationAttribute($key, 2);
+    }
+
+    protected function getClaimDiagnosesCodeAttribute(string $key): string
+    {
+        return $this->claim?->service?->diagnoses()?->wherePivot('item', $key)->first()?->code ?? '';
+    }
+
+    protected function getClaimDateInformationAttribute(string $key, int $field): string
+    {
+        $model = $this->claim
+            ?->dateInformations
+            ?->first(fn ($dateInformation) => $dateInformation->field_id == $field);
+
+        return match ($key) {
+            'year_of_from_date' => substr(
+                explode('-', $model?->from_date ?? '')[0] ?? '',
+                2,
+                2,
+            ),
+            'month_of_from_date' => explode('-', $model?->from_date ?? '')[1] ?? '',
+            'day_of_from_date' => explode('-', $model?->from_date ?? '')[2] ?? '',
+            'year_of_to_date' => substr(
+                explode('-', $model?->to_date ?? '')[0] ?? '',
+                2,
+                2,
+            ),
+            'month_of_to_date' => explode('-', $model?->to_date ?? '')[1] ?? '',
+            'day_of_to_date' => explode('-', $model?->to_date ?? '')[2] ?? '',
+            'qualifier' => $model?->qualifier?->code ?? '',
+            'description' => $model?->description ?? '',
+            default => '',
+        };
+    }
+
+        protected function getFacilityAttribute(string $key): string
+        {
+            return (string) $this->claim
+            ->demographicInformation
+            ->facility
+            ?->{$key} ?? '';
+        }
+
+        public function getFacilityAddressAttribute(string $key, string $entry): string
+        {
+            return (string) $this->claim
+                ->demographicInformation
+                ->company
+                ->addresses
+                ->get((int) $entry)
+                ?->{$key};
+        }
 }
