@@ -7489,23 +7489,23 @@ return [
                 ],
                 '6a' => [
                     'type' => RuleType::DATE->value,
-                    'value' => 'service.from|mdy',
+                    'value' => 'service.from|mdY',
                     'values' => [
                         'common' => [
                             'service.from|m/d/y',
                             'service.from|m-d-y',
-                            'service.from|mdy',
+                            'service.from|mdY',
                         ],
                     ],
                 ],
                 '6b' => [
                     'type' => RuleType::DATE->value,
-                    'value' => 'service.to|mdy',
+                    'value' => 'service.to|mdY',
                     'values' => [
                         'common' => [
                             'service.to|m/d/y',
                             'service.to|m-d-y',
-                            'service.to|mdy',
+                            'service.to|mdY',
                         ],
                     ],
                 ],
@@ -7619,12 +7619,12 @@ return [
                 '10' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdy',
+                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdY',
                     'values' => [
                         'common' => [
                             'demographicInformation.patient.user.profile.date_of_birth|m/d/y',
                             'demographicInformation.patient.user.profile.date_of_birth|m-d-y',
-                            'demographicInformation.patient.user.profile.date_of_birth|mdy',
+                            'demographicInformation.patient.user.profile.date_of_birth|mdY',
                         ],
                     ],
                 ],
@@ -7641,10 +7641,10 @@ return [
                 '12' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_date|mdy',
+                    'value' => 'patientInformation.admission_date|mdY',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_date|mdy',
+                            'patientInformation.admission_date|mdY',
                         ],
                     ],
                 ],
@@ -8414,7 +8414,7 @@ return [
                 ],
                 'tc' => [
                     'type' => RuleType::DATE->value,
-                    'value' => 'created_at|mdy',
+                    'value' => 'created_at|mdY',
                     'values' => [
                         'common' => [],
                     ],
