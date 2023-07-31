@@ -26,15 +26,19 @@ use App\Http\Requests\Claim\CreateNoteRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\PreviewResource;
-use App\Models\Claim;
-use App\Models\Claims\Claim as ClaimsClaim;
+use App\Models\BillClassification;
+use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
+use App\Models\Facility;
+use App\Models\FacilityType;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
 use App\Services\Claim\ClaimPreviewService;
+use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClaimController extends Controller
 {
@@ -57,7 +61,7 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(UpdateRequest $request, UpdateClaimAction $update, ClaimsClaim $claim)
+    public function updateClaim(UpdateRequest $request, UpdateClaimAction $update, Claim $claim)
     {
         return response()->json($update->invoke($claim, $request->casted()));
     }
@@ -74,14 +78,14 @@ class ClaimController extends Controller
 
     public function getServerAll(
         Request $request,
-        ClaimsClaim $claim,
+        Claim $claim,
         GetClaimAction $getClaim
     ): JsonResponse {
         return response()->json($getClaim->all($claim, $request));
     }
 
     public function getOneClaim(
-        ClaimsClaim $claim,
+        Claim $claim,
         GetClaimAction $getClaim
     ): JsonResponse {
         return response()->json($getClaim->single($claim));
@@ -129,6 +133,29 @@ class ClaimController extends Controller
     {
         return response()->json(
             $this->claimRepository->getListAdmissionSources()
+        );
+    }
+
+    public function getBillClassifications(Request $request, string $facilityId): JsonResponse
+    {
+        Facility::query()
+        ->where('id', $facilityId)
+        ->whereHas('billingCompanies', function ($query) use($request) {
+            $query->where('billing_company_id', Gate::check('is-admin')
+                ? $request->billing_company_id
+                : Auth::user()->billing_company_id
+            );
+        })
+        ->first()
+        ->facilityTypes
+        ->reduce(function (FacilityType $facilityType) {
+            $facilityType->bill_classifications->each(function (BillClassification $billClassification) {
+                $billClassification->name;
+            });
+        }, []);
+
+        return response()->json(
+            $this->claimRepository->getBillClassifications()
         );
     }
 
@@ -411,7 +438,7 @@ class ClaimController extends Controller
     public function changeStatus(
         ClaimChangeStatusRequest $request,
         ChangeStatusAction $change,
-        ClaimsClaim $claim
+        Claim $claim
     ): JsonResponse {
         $rs = $change->invoke($claim, $request->casted());
 
@@ -438,7 +465,7 @@ class ClaimController extends Controller
     public function addNoteCurrentStatus(
         CreateNoteRequest $request,
         CreateNoteAction $create,
-        ClaimsClaim $claim
+        Claim $claim
     ): JsonResponse {
         $rs = $create->invoke($claim, $request->casted());
 

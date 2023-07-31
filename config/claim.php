@@ -7344,7 +7344,9 @@ return [
                     'value' => [
                         'companyAddress:city|0',
                         '|, ',
-                        'companyAddress:state|0',
+                        'companyAddress:state_code|0',
+                        '| ',
+                        'companyAddress:zip|0',
                     ],
                     'values' => [
                         'common' => [
@@ -7353,13 +7355,13 @@ return [
                             'companyAddress:city|0',
                             'companyAddress:state|0',
                             'companyAddress:zip|0',
+                            'companyAddress:state_code|0',
                         ],
                     ],
                 ],
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'companyAddress:zip|0',
                     ],
                     'values' => [
                         'common' => [
@@ -7409,7 +7411,9 @@ return [
                     'value' => [
                         'companyAddress:city|3',
                         '|, ',
-                        'companyAddress:state|3',
+                        'companyAddress:state_code|3',
+                        '| ',
+                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
@@ -7424,7 +7428,6 @@ return [
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
