@@ -76,7 +76,7 @@ final class FileDictionary extends Dictionary
         return match ($key) {
             'code_araea' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
             'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
-            default =>  (string) $value?->{$key} ?? '',
+            default => (string) $value?->{$key} ?? '',
         };
     }
 
