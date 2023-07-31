@@ -13,28 +13,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\Medication.
  *
  * @property int $id
- * @property string $date
  * @property string $drug_code
- * @property string $batch
- * @property int $quantity
- * @property int $frequency
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $company_procedure_id
- * @property \App\Models\CompanyProcedure|null $companyProcedure
+ * @property MeasurementUnit|null $measurement_unit_id
+ * @property string|null $units
+ * @property string|null $units_limit
+ * @property string|null $link_sequence_number
+ * @property string|null $pharmacy_prescription_number
+ * @property bool $repackaged_NDC
+ * @property string|null $code_NDC
+ * @property string|null $note
+ * @property int|null $company_service_id
+ * @property \App\Models\CompanyService|null $companyService
  * @property string $code
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication query()
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereBatch($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCompanyProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCodeNDC($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCompanyServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereDrugCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereFrequency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Medication whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereLinkSequenceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereMeasurementUnitId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication wherePharmacyPrescriptionNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereRepackagedNDC($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereUnits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereUnitsLimit($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereUpdatedAt($value)
  *
  * @mixin \Eloquent

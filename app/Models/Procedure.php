@@ -31,8 +31,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $short_description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyService> $companyServices
+ * @property int|null $company_services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
  * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
@@ -131,9 +131,9 @@ class Procedure extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function companies()
+    public function companyServices()
     {
-        return $this->belongsToMany(Company::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id', 'billing_company_id', 'modifier_id', 'clia', 'mac_locality_id')->withTimestamps();
+        return $this->belongsToMany(CompanyService::class)->withTimestamps();
     }
 
     /**

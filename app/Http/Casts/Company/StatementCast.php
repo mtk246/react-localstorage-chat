@@ -10,8 +10,15 @@ final class StatementCast extends CastsRequest
 {
     public function getId(): ?int
     {
-        return $this->get('id')
-            ? (int) $this->get('id')
+        return array_key_exists('id', $this->inputs)
+            ? (int) $this->inputs['id']
+            : 0;
+    }
+
+    public function getBillingCompanyId(): ?int
+    {
+        return $this->get('billing_company_id')
+            ? (int) $this->get('billing_company_id')
             : null;
     }
 

@@ -44,6 +44,14 @@ return new class() extends Migration {
                     'note',
                 ]
             );
+            $table->dropForeign(['company_service_id']);
+            $table->dropColumn(['company_service_id']);
+
+            $table->foreignId('company_procedure_id')
+                ->nullable()
+                ->constrained('company_procedure')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->date('date')->nullable()->after('name');
             $table->string('batch')->nullable()->after('date');
             $table->string('quantity')->nullable()->after('batch');

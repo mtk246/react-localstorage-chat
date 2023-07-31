@@ -37,12 +37,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
  * @property int|null $claim_eligibilities_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyService> $companyServices
+ * @property int|null $company_services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyStatement> $companyStatements
  * @property int|null $company_statements_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contracFees
- * @property int|null $contrac_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
+ * @property int|null $contract_fees_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
  * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ExceptionInsuranceCompany> $exceptionInsuranceCompanies
@@ -60,11 +62,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $patients_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property int|null $procedures_count
  * @property \App\Models\PublicNote|null $publicNote
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property int|null $services_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
@@ -292,14 +290,14 @@ final class Company extends Model implements Auditable
         return isset($names) && count($names) > 0;
     }
 
-    public function copays(): HasMany
+    public function copays(): BelongsToMany
     {
-        return $this->hasMany(Copay::class);
+        return $this->belongsToMany(Copay::class)->withTimestamps();
     }
 
-    public function contracFees(): HasMany
+    public function contractFees(): BelongsToMany
     {
-        return $this->hasMany(ContractFee::class);
+        return $this->belongsToMany(ContractFee::class)->withTimestamps();
     }
 
     /**

@@ -8,8 +8,8 @@
 - [Add to billing company](#add-to-billing-company)
 - [Add facilities to company](#add-facilities)
 - [Add service to company](#add-services)
-- [Add service to company](#add-copay)
-- [Add service to contract fee](#add-contracts-fee)
+- [Add copays to company](#add-copay)
+- [Add contract fee to company](#add-contracts-fee)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -21,7 +21,7 @@
 | 18 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 | 19 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
 | 20 |PATCH | `Add services to company`       | `/company/{id}/services`|yes|Add services to company|
-| 21 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
+| 21 |PATCH | `Add copays to company`       | `/company/{id}/copays`|yes|Add copays to company|
 | 22 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
 <a name="change-status-company"></a>
@@ -321,6 +321,7 @@
 {
     "copays": [
         {
+            "id": 1, /**Only edit */
             "billing_company_id": 1, /** Only required by superuser */
             "procedure_ids": [1,2,3],
             "insurance_plan_ids": [1,2],
@@ -341,9 +342,11 @@
 [
   {
     "billing_company_id": 1,
-    "insurance_plan_id": 1,
-    "company_id": 1,
+    "insurance_plan_ids": [1,2],
+    "insurance_company_ids": [1,2],
     "copay": "150.00",
+    "private_note": "Note private by billing_company",
+    "procedure_ids": [1,2,3],
     "procedures": [
       {
         "id": 1,
@@ -400,7 +403,23 @@
         "insurance_label_fee_id": 1,
         "rate": "02102",
         "price_percentage": 70,
-        "private_note": "Note private by billing_company"
+        "private_note": "Note private by billing_company",
+        "patients": [
+            {
+                "patient_id": 1,
+                "start_date": "2022-03-16",
+                "end_date": "2022-03-16",
+            }
+        ],
+        "have_contract_specifications": true,
+        "contract_specifications": [
+            {
+                "billing_provider_id": 1,
+                "billing_provider_taxonomy_id": 1,
+                "health_professional_id": 1,
+                "health_professional_taxonomy_id": 1,
+            }
+        ],
     }
 ]
 ```

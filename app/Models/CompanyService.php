@@ -24,12 +24,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $clia
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\BillingCompany|null $billingCompany
- * @property \App\Models\Company|null $company
- * @property \App\Models\MacLocality|null $mac_locality
+ * @property \App\Models\BillingCompany $billingCompany
+ * @property \App\Models\Company $company
  * @property \App\Models\MacLocality|null $macLocality
- * @property Collection<int, \App\Models\Medication> $medications
- * @property int|null $medications_count
+ * @property \App\Models\Medication|null $medication
  * @property Collection<int, \App\Models\Modifier> $modifiers
  * @property int|null $modifiers_count
  * @property Collection<int, \App\Models\Procedure> $procedures
