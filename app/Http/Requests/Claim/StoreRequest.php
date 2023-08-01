@@ -61,7 +61,7 @@ final class StoreRequest extends FormRequest
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'string',
             ],
-            'demographic_information.bill_clasification' => ['required', 'integer'],
+            'demographic_information.bill_classification' => ['required', 'integer'],
             'demographic_information.validate' => ['nullable', 'boolean'],
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
