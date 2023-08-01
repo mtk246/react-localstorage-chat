@@ -7438,12 +7438,12 @@ return [
                     'value' => [
                         '|0',
                         'demographicInformation.bill_classification',
-                        'patientInformation.bill_classification_id',
+                        'patientInformation.billClassification.code',
                     ],
                     'values' => [
                         'common' => [
                             '|0',
-                            'patientInformation.bill_classification_id',
+                            'patientInformation.billClassification.code',
                             'demographicInformation.bill_classification',
                         ],
                     ],
