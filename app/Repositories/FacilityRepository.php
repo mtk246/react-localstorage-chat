@@ -206,8 +206,7 @@ class FacilityRepository
         /** Inicia la opción vacia por defecto */
         $options = [];
         foreach ($records as $rec) {
-            $text = $rec->code . ' - ' . $rec->type;
-            array_push($options, ['id' => $rec->id, 'name' => $text]);
+            array_push($options, ['id' => $rec->id, 'name' => $rec->type, 'code' => $rec->code]);
         }
 
         return $options;
