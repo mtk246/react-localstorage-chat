@@ -17,7 +17,7 @@ final class FileDictionary extends Dictionary
     protected function getCompanyAttribute(string $key): string
     {
         return match ($key) {
-            'federal_tax' => $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? '',
+            'federal_tax' => str_replace('-', '', $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? ''),
             'federal_tax_value' => !empty($this->company->ein)
                 ? 'EIN'
                 : (!empty($this->company->ssn)
@@ -74,7 +74,7 @@ final class FileDictionary extends Dictionary
             ->get((int) $entry);
 
         return match ($key) {
-            'code_araea' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
+            'code_area' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
             'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
             default => (string) $value?->{$key} ?? '',
         };
@@ -389,7 +389,7 @@ final class FileDictionary extends Dictionary
             'last_name' => $this->claim->provider()?->user?->profile?->{$key} ?? '',
             'name_suffix' => $this->claim->provider()?->user?->profile?->{$key}?->code ?? '',
             'middle_name' => substr($this->claim->provider()?->user?->profile?->{$key} ?? '', 0, 1),
-            'qualifier' => 'G2',
+            'qualifier' => !empty($this->claim->provider()?->upin) ? 'G2' : '',
             'qualifierValue' => str_replace('-', '', $this->claim->provider()?->upin ?? ''),
             'npi' => str_replace('-', '', $this->claim->provider()?->npi ?? ''),
             default => $this->claim->provider()?->{$key} ?? '',
@@ -458,6 +458,18 @@ final class FileDictionary extends Dictionary
             ),
             'month_of_to_date' => explode('-', $model?->to_date ?? '')[1] ?? '',
             'day_of_to_date' => explode('-', $model?->to_date ?? '')[2] ?? '',
+            'from_date' => !empty($model?->from_date)
+                ? Carbon::createFromFormat(
+                    'Y-m-d',
+                    $model->from_date
+                )->format('m/d/Y')
+                : '',
+            'to_date' => !empty($model?->to_date)
+                ? Carbon::createFromFormat(
+                    'Y-m-d',
+                    $model->to_date
+                )->format('m/d/Y')
+                : '',
             'qualifier' => $model?->qualifier?->code ?? '',
             'description' => $model?->description ?? '',
             default => '',
@@ -474,11 +486,19 @@ final class FileDictionary extends Dictionary
 
         public function getFacilityAddressAttribute(string $key, string $entry): string
         {
-            return (string) $this->claim
+            $value = (string) $this->claim
                 ->demographicInformation
                 ->company
                 ->addresses
                 ->get((int) $entry)
                 ?->{$key};
+
+            return match ($key) {
+                'address' => substr($value ?? '', 0, 55),
+                'city' => substr($value ?? '', 0, 30),
+                'state' => substr($value ?? '', 0, 2),
+                'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
+                default => $value ?? '',
+            };
         }
 }
