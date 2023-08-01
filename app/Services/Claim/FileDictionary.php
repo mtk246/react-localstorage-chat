@@ -17,7 +17,7 @@ final class FileDictionary extends Dictionary
     protected function getCompanyAttribute(string $key): string
     {
         return match ($key) {
-            'federal_tax' => str_replace('-', '', ($this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? '')),
+            'federal_tax' => str_replace('-', '', $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? ''),
             'federal_tax_value' => !empty($this->company->ein)
                 ? 'EIN'
                 : (!empty($this->company->ssn)
