@@ -91,6 +91,6 @@ final class UserResource extends JsonResource
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            )->first() ?? null;
     }
 }

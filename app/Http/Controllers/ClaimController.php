@@ -26,14 +26,19 @@ use App\Http\Requests\Claim\CreateNoteRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\PreviewResource;
+use App\Models\BillClassification;
 use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
+use App\Models\Facility;
+use App\Models\FacilityType;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
 use App\Services\Claim\ClaimPreviewService;
+use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClaimController extends Controller
 {
@@ -128,6 +133,32 @@ class ClaimController extends Controller
     {
         return response()->json(
             $this->claimRepository->getListAdmissionSources()
+        );
+    }
+
+    public function getBillClassifications(Request $request, string $facilityId): JsonResponse
+    {
+        return response()->json(
+            Facility::query()
+                ->where('id', $facilityId)
+                ->whereHas('billingCompanies', function ($query) use($request) {
+                    $query->where('billing_company_id', Gate::check('is-admin')
+                        ? $request->billing_company_id ?? 0
+                        : Auth::user()->billing_company_id
+                    );
+                })
+                ->first()
+                ?->facilityTypes
+                ->reduce(function (array $response, FacilityType $facilityType) {
+                    $facilityType->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
+                        $response[] = [
+                            'id' => $facilityType->code.$billClassification->code,
+                            'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
+                        ];
+                    });
+
+                    return $response;
+                }, []),
         );
     }
 

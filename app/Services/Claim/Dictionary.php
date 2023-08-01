@@ -127,7 +127,15 @@ abstract class Dictionary implements DictionaryInterface
                 ];
             })
             ->reduce(function (mixed $carry, object $item) {
-                return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
+                if (isset($carry->{$item->key})) {
+                    return $carry->{$item->key};
+                }
+
+                if (method_exists($carry, $item->key)) {
+                    return $carry->{$item->key}(...$item->properties);
+                }
+
+                return '';
             }, $this->claim);
     }
 

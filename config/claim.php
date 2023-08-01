@@ -3020,7 +3020,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 157,
+                'x' => 155.5,
                 'y' => 17,
             ],
         ],
@@ -3031,7 +3031,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 175,
+                'x' => 173,
                 'y' => 17,
             ],
         ],
@@ -3148,11 +3148,11 @@ return [
         '12' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
-                'fontSize' => '10px',
+                'fontSize' => '9px',
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 37,
+                'x' => 35.5,
                 'y' => 34,
             ],
         ],
@@ -7313,7 +7313,9 @@ return [
                     'value' => [
                         'companyAddress:city|0',
                         '|, ',
-                        'companyAddress:state|0',
+                        'companyAddress:state_code|0',
+                        '| ',
+                        'companyAddress:zip|0',
                     ],
                     'values' => [
                         'common' => [
@@ -7322,13 +7324,13 @@ return [
                             'companyAddress:city|0',
                             'companyAddress:state|0',
                             'companyAddress:zip|0',
+                            'companyAddress:state_code|0',
                         ],
                     ],
                 ],
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'companyAddress:zip|0',
                     ],
                     'values' => [
                         'common' => [
@@ -7378,7 +7380,9 @@ return [
                     'value' => [
                         'companyAddress:city|3',
                         '|, ',
-                        'companyAddress:state|3',
+                        'companyAddress:state_code|3',
+                        '| ',
+                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
@@ -7393,7 +7397,6 @@ return [
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
@@ -7434,13 +7437,14 @@ return [
                     'length' => 30,
                     'value' => [
                         '|0',
+                        'demographicInformation.bill_classification',
                         'medicalAssistanceType',
                     ],
                     'values' => [
                         'common' => [
                             '|0',
                             'medicalAssistanceType',
-                            'patientInformation.billClassification.code',
+                            'demographicInformation.bill_classification',
                         ],
                     ],
                 ],
@@ -7620,10 +7624,10 @@ return [
                 '13' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'patientInformation.admission_time|Hms|H:m:s',
+                    'value' => 'patientInformation.admission_time|H|H:m:s',
                     'values' => [
                         'common' => [
-                            'patientInformation.admission_time|Hms|H:m:s',
+                            'patientInformation.admission_time|H|H:m:s',
                         ],
                     ],
                 ],
