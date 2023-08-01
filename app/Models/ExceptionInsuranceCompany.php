@@ -14,15 +14,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property int $company_id
- * @property int $insurance_company_id
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array|null $insurance_plan_ids
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\Company $company
- * @property \App\Models\InsuranceCompany $insuranceCompany
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany newQuery()
@@ -31,7 +30,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereInsurancePlanIds($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ExceptionInsuranceCompany whereUpdatedAt($value)
  *
  * @mixin \Eloquent

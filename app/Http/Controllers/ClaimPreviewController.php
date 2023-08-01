@@ -24,6 +24,8 @@ final class ClaimPreviewController extends Controller
         ]);
         $preview->setHeader();
 
+        // dd($claimPreview->single($request->input(), $request->user()));
+
         /* @todo Consulta para poder devolver el pdf en como una cadena que sera renderizada por el frontEnd */
         return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
             'pdf' => $preview,
@@ -37,7 +39,7 @@ final class ClaimPreviewController extends Controller
     {
         $batch = ClaimBatch::with([
             'claims' => function ($query) {
-                $query->with('claimFormattable', 'insurancePolicies');
+                $query->with('insurancePolicies');
             },
         ])->find($id);
         $claims = $batch->claims;

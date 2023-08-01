@@ -69,6 +69,7 @@ final class BillingCompanyRepository
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
+                'tax_id' => $data['tax_id'],
                 'name' => $data['name'],
                 'abbreviation' => $data['abbreviation'] ?? '',
             ]);

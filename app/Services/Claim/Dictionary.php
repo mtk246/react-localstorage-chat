@@ -90,6 +90,10 @@ abstract class Dictionary implements DictionaryInterface
             ? $this->$accesor($key, $default)
             : $this->getClaimData($key, $default);
 
+        if ($rawDate instanceof Carbon) {
+            return $rawDate->format(str_replace('%', ' ', $format));
+        }
+
         return Carbon::createFromFormat($rawFormat ?? 'Y-m-d', $rawDate ?? '')->format(str_replace('%', ' ', $format));
     }
 
@@ -123,7 +127,15 @@ abstract class Dictionary implements DictionaryInterface
                 ];
             })
             ->reduce(function (mixed $carry, object $item) {
-                return $carry->{$item->key} ?? $carry->{$item->key}(...$item->properties);
+                if (isset($carry->{$item->key})) {
+                    return $carry->{$item->key};
+                }
+
+                if (method_exists($carry, $item->key)) {
+                    return $carry->{$item->key}(...$item->properties);
+                }
+
+                return '';
             }, $this->claim);
     }
 

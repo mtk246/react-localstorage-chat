@@ -61,6 +61,7 @@ final class UpdateRequest extends FormRequest
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'string',
             ],
+            'demographic_information.bill_classification' => ['required', 'integer'],
             'demographic_information.validate' => ['nullable', 'boolean'],
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
@@ -118,6 +119,8 @@ final class UpdateRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
+            'additional_information.from' => ['required', 'date'],
+            'additional_information.to' => ['required', 'date'],
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
             'additional_information.patient_information.admission_date' => [

@@ -216,6 +216,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
         Route::get('/get-list-contract-fee-types', [CompanyController::class, 'getListContractFeeTypes']);
         Route::get('/get-list-billing-companies', [CompanyController::class, 'getListBillingCompanies']);
+        Route::get('/get-list-billing-providers', [CompanyController::class, 'getListBillingProviders']);
 
         Route::middleware([
             'auth:api',
@@ -467,7 +468,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
             Route::delete('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'deleteBatch']);
-            Route::patch('/submit-to-clearing-house/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
+            Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
         });
 
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
@@ -486,6 +487,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
+        Route::get('/bill-classifications/{facility_id}', [\App\Http\Controllers\ClaimController::class, 'getBillClassifications']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);

@@ -29,6 +29,12 @@ class UpdateBillingCompanyRequest extends FormRequest
     public function rules()
     {
         return [
+            'tax_id' => [
+                'required',
+                'string',
+                'max:50',
+                new IUnique(BillingCompany::class, 'tax_id', $this->route('billing_company')),
+            ],
             'name' => [
                 'required', 'string', 'max:50',
                 new IUnique(BillingCompany::class, 'name', $this->route('billing_company')),
