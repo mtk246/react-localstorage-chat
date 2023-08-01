@@ -7437,14 +7437,14 @@ return [
                     'length' => 30,
                     'value' => [
                         '|0',
-                        'demographicInformation.bill_clasification',
+                        'demographicInformation.bill_classification',
                         'medicalAssistanceType',
                     ],
                     'values' => [
                         'common' => [
                             '|0',
                             'medicalAssistanceType',
-                            'demographicInformation.bill_clasification',
+                            'demographicInformation.bill_classification',
                         ],
                     ],
                 ],
