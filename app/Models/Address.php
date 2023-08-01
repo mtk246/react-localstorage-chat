@@ -140,6 +140,6 @@ class Address extends Model implements Auditable
 
     protected function getStateCodeAttribute(): string
     {
-        return explode(' - ', $this->state)[0] ?? '';
+        return explode(' - ', $this->state ?? '')[0] ?? '';
     }
 }
