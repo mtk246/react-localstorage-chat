@@ -167,7 +167,16 @@ trait ClaimFile
         return $this->claim
             ?->demographicInformation
             ?->healthProfessionals()
-            ?->wherePivot('qualifier_id', 'DN')
+            ?->wherePivot('field_id', 6)
+            ?->first() ?? null;
+    }
+
+    public function billingProvider(): ?HealthProfessional
+    {
+        return $this->claim
+            ?->demographicInformation
+            ?->healthProfessionals()
+            ?->wherePivot('field_id', 5)
             ?->first() ?? null;
     }
 }

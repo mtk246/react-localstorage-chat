@@ -467,7 +467,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
             Route::delete('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'deleteBatch']);
-            Route::patch('/submit-to-clearing-house/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
+            Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
         });
 
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);

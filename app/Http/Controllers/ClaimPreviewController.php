@@ -39,7 +39,7 @@ final class ClaimPreviewController extends Controller
     {
         $batch = ClaimBatch::with([
             'claims' => function ($query) {
-                $query->with('claimFormattable', 'insurancePolicies');
+                $query->with('insurancePolicies');
             },
         ])->find($id);
         $claims = $batch->claims;

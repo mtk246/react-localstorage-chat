@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\GetSecurityAuthorizationAction;
+use App\Actions\Claim\SubmitToClearingHouseAction;
 use App\Http\Requests\Claim\ClaimBatchRequest;
-use App\Models\ClaimBatch;
+use App\Models\Claims\ClaimBatch;
 use App\Repositories\ClaimBatchRepository;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ReportRepository;
@@ -78,61 +80,20 @@ class ClaimBatchController extends Controller
      *
      * @return JsonResponse
      */
-    public function submitToClearingHouse($id)
+    public function submitToClearingHouse(
+        ClaimBatch $batch,
+        GetSecurityAuthorizationAction $getAccessToken,
+        SubmitToClearingHouseAction $submitAction,
+    )
     {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+        $token = $getAccessToken->invoke();
 
-        if (!isset($token)) {
+        if (empty($token)) {
             return response()->json(__('Error get security authorization access token'), 400);
         }
 
-        $rs = $this->claimBatchRepository->submitToClearingHouse($token->access_token ?? '', $id);
+        $rs = $submitAction->invoke($token ?? '', $batch);
 
         return $rs ? response()->json($rs) : response()->json(__('Error submitting claim batch'), 400);
-    }
-
-    public function showReport(Request $request, int $id)
-    {
-        $pdf = new ReportRepository();
-        $batch = ClaimBatch::with([
-            'claims' => function ($query) {
-                $query->with('claimFormattable', 'insurancePolicies', 'claimFormattable');
-            },
-        ])->find($id);
-
-        $claims = $batch->claims;
-        $total = count($claims);
-        $pdf->setHeader('');
-        foreach ($claims as $key => $claim) {
-            $insurancePolicies = [];
-
-            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($insurancePolicies, $insurancePolicy->id);
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'print' => $request->print ?? false,
-                'typeFormat' => $claim->format ?? null,
-                'patient_id' => $claim->patient_id ?? null,
-                'claim_form_services' => $claim->claimFormattable->claimFormServices ?? [],
-                'patient_or_insured_information' => $claim->claimFormattable->patientOrInsuredInformation ?? null,
-                'physician_or_supplier_information' => $claim->claimFormattable->physicianOrSupplierInformation ?? null,
-                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                'billing_provider_id' => $claim->billing_provider_id ?? null,
-                'service_provider_id' => $claim->service_provider_id ?? null,
-                'referred_id' => $claim->referred_id ?? null,
-                'company_id' => $claim->company_id ?? null,
-                'facility_id' => $claim->facility_id ?? null,
-                'insurance_policies' => $insurancePolicies ?? [],
-                'diagnoses' => $claim->diagnoses ?? [],
-            ]);
-            if (($total - 1) == $key) {
-                return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
-                    'pdf' => $pdf,
-                ], 'E', true))[1];
-            } else {
-                $pdf->setBody('pdf.837P', true, ['pdf' => $pdf], 'E', false);
-            }
-        }
     }
 }

@@ -138,24 +138,25 @@ class ClaimController extends Controller
 
     public function getBillClassifications(Request $request, string $facilityId): JsonResponse
     {
-        Facility::query()
-        ->where('id', $facilityId)
-        ->whereHas('billingCompanies', function ($query) use($request) {
-            $query->where('billing_company_id', Gate::check('is-admin')
-                ? $request->billing_company_id
-                : Auth::user()->billing_company_id
-            );
-        })
-        ->first()
-        ->facilityTypes
-        ->reduce(function (FacilityType $facilityType) {
-            $facilityType->bill_classifications->each(function (BillClassification $billClassification) {
-                $billClassification->name;
-            });
-        }, []);
-
         return response()->json(
-            $this->claimRepository->getBillClassifications()
+            Facility::query()
+                ->where('id', $facilityId)
+                ->whereHas('billingCompanies', function ($query) use($request) {
+                    $query->where('billing_company_id', Gate::check('is-admin')
+                        ? $request->billing_company_id
+                        : Auth::user()->billing_company_id
+                    );
+                })
+                ->first()
+                ->facilityTypes
+                ->reduce(function (array $response, FacilityType $facilityType) {
+                    $facilityType->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
+                        $response[] = [
+                            'id' => $facilityType->code.$billClassification->code,
+                            'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
+                        ];
+                    });
+                }, []),
         );
     }
 
@@ -347,85 +348,6 @@ class ClaimController extends Controller
         }
 
         return $claim ? response()->json($claim) : response()->json(__('Error save claim'), 400);
-    }
-
-    public function showPreview(Request $request, ClaimPreviewService $preview)
-    {
-        $id = $request->id ?? null;
-        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
-        $data = new PreviewResource($claim);
-        $preview->setConfig([
-            'urlVerify' => 'www.google.com.ve',
-            'print' => $request->print ?? false,
-            'typeFormat' => $claim->format ?? null,
-            'data' => $data->toArray($request),
-        ]);
-        $preview->setHeader('');
-
-        return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
-            'pdf' => $preview,
-        ]))[1];
-    }
-
-    public function showReport(Request $request)
-    {
-        $pdf = new ReportRepository();
-        $id = $request->id ?? null;
-
-        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
-
-        if (isset($claim)) {
-            $insurancePolicies = [];
-
-            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($insurancePolicies, $insurancePolicy->id);
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'print' => $request->print ?? false,
-                'typeFormat' => $claim->format ?? null,
-                'patient_id' => $claim->patient_id ?? null,
-                'claim_form_services' => $claim->claimFormattable->claimFormServices ?? [],
-                'patient_or_insured_information' => $claim->claimFormattable->patientOrInsuredInformation ?? null,
-                'physician_or_supplier_information' => $claim->claimFormattable->physicianOrSupplierInformation ?? null,
-                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                'billing_provider_id' => $claim->billing_provider_id ?? null,
-                'service_provider_id' => $claim->service_provider_id ?? null,
-                'referred_id' => $claim->referred_id ?? null,
-                'company_id' => $claim->company_id ?? null,
-                'facility_id' => $claim->facility_id ?? null,
-                'insurance_policies' => $insurancePolicies ?? [],
-                'diagnoses' => $claim->diagnoses ?? [],
-            ]);
-        } else {
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $request->billing_company_id;
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'print' => $request->print ?? false,
-                'typeFormat' => ('' != $request->format) ? $request->format : null,
-                'patient_id' => ('' != $request->patient_id) ? $request->patient_id : null,
-                'claim_form_services' => $request->claim_services ?? [],
-                'patient_or_insured_information' => $request->patient_or_insured_information ?? null,
-                'physician_or_supplier_information' => $request->physician_or_supplier_information ?? null,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                'billing_provider_id' => $request->billing_provider_id ?? null,
-                'service_provider_id' => $request->service_provider_id ?? null,
-                'referred_id' => $request->referred_id ?? null,
-                'company_id' => $request->company_id ?? null,
-                'facility_id' => $request->facility_id ?? null,
-                'insurance_policies' => $request->insurance_policies ?? [],
-                'diagnoses' => $request->diagnoses ?? [],
-            ]);
-        }
-        $pdf->setHeader('');
-
-        return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
-            'pdf' => $pdf,
-        ]))[1];
     }
 
     /**
