@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
+use App\Models\Claims\ClaimDemographicInformation;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @property ClaimDemographicInformation $resource */
 final class DemographicInformationResource extends JsonResource
 {
     public function __construct($resource, protected int $type)
@@ -21,6 +23,7 @@ final class DemographicInformationResource extends JsonResource
             'validate' => $this->resource->validate,
             'automatic_eligibility' => $this->resource->automatic_eligibility,
             'company_id' => $this->resource->company_id,
+            'bill_classification' => $this->resource->bill_clasification,
             'company' => $this->resource->company->name ?? '',
             'facility_id' => $this->resource->facility_id,
             'facility' => $this->resource->facility->name ?? '',
