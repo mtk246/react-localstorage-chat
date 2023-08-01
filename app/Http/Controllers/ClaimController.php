@@ -150,12 +150,20 @@ class ClaimController extends Controller
                 ->first()
                 ?->facilityTypes
                 ->reduce(function (array $response, FacilityType $facilityType) {
-                    $facilityType->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
-                        $response[] = [
-                            'id' => $facilityType->code.$billClassification->code,
-                            'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
-                        ];
-                    });
+                    BillClassification::query()
+                        ->whereIn('id', json_decode($facilityType->pivot->bill_classifications))
+                        ->get()
+                        ->each(function (BillClassification $billClassification) use (&$response, $facilityType){
+                            $response[] = [
+                                'id' => $facilityType->code.$billClassification->code,
+                                'name' => $facilityType->code
+                                    .$billClassification->code
+                                    .' - '
+                                    .$facilityType->type
+                                    .' / '
+                                    .$billClassification->name,  
+                            ];
+                        });
 
                     return $response;
                 }, []),
