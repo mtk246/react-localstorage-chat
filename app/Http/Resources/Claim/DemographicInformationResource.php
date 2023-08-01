@@ -23,7 +23,7 @@ final class DemographicInformationResource extends JsonResource
             'validate' => $this->resource->validate,
             'automatic_eligibility' => $this->resource->automatic_eligibility,
             'company_id' => $this->resource->company_id,
-            'bill_classification' => $this->resource->bill_clasification,
+            'bill_classification' => $this->resource->bill_classification,
             'company' => $this->resource->company->name ?? '',
             'facility_id' => $this->resource->facility_id,
             'facility' => $this->resource->facility->name ?? '',
