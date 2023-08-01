@@ -14,11 +14,13 @@ use App\Models\FacilityType;
 use App\Models\PrivateNote;
 use App\Models\PublicNote;
 use App\Models\Taxonomy;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class FacilityRepository
 {
@@ -214,20 +216,17 @@ class FacilityRepository
     public function getList(Request $request)
     {
         try {
-            $billingCompanyId = $request->billing_company_id ?? null;
             $companyId = $request->company_id ?? null;
 
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $billingCompanyId;
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
+            $billingCompany = Gate::check('is-admin')
+                ? $request->billing_company_id ?? null
+                : Auth::user()->billing_company_id;
 
             $facilities = Facility::query()->with('facilityTypes');
 
             if (isset($billingCompany)) {
                 $facilities = $facilities->whereHas('billingCompanies', function ($query) use ($billingCompany) {
-                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+                    $query->where('billing_company_id', $billingCompany);
                 });
             }
             if (isset($companyId)) {
@@ -247,6 +246,11 @@ class FacilityRepository
                     'id' => $facility->id,
                     'name' => $facility->name,
                     'code' => $facility->code,
+                    'abreviation' => $facility
+                        ->abbreviations
+                        ->where('billing_company_id', $billingCompany)
+                        ->first()
+                        ?->abbreviation,
                 ]);
             }
 
