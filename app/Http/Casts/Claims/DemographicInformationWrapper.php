@@ -13,7 +13,7 @@ final class DemographicInformationWrapper extends CastsRequest
     {
         return [
             'type_of_medical_assistance' => $this->get('type_of_medical_assistance'),
-            'bill_clasification' => $this->get('bill_clasification'),
+            'bill_clasification' => $this->get('bill_classification'),
             'validate' => $this->get('validate'),
             'automatic_eligibility' => $this->get('automatic_eligibility'),
             'company_id' => $this->get('company_id'),
