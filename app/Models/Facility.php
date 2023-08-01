@@ -196,7 +196,7 @@ class Facility extends Model implements Auditable
      */
     public function facilityTypes(): BelongsToMany
     {
-        return $this->belongsToMany(FacilityType::class)->withPivot('billClassifications');
+        return $this->belongsToMany(FacilityType::class)->withPivot('bill_classifications');
     }
 
     /**
