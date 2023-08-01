@@ -80,7 +80,7 @@ final class AddContractFees
         $contractFeesRequest->getContractSpecifications()->each(
             function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
                 $billingProvider = explode(':', $contractSpecification->getBillingProviderId());
-                $healthProfessional = explode(':', $contractSpecification->getBillingProviderId());
+                $healthProfessional = explode(':', $contractSpecification->getHealthProfessionalId());
 
                 ContractFeeSpecification::updateOrCreate([
                     'id' => $contractSpecification->getId(),
