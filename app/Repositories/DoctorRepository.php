@@ -1069,6 +1069,7 @@ class DoctorRepository
                 $field = [
                     'id' => $healthProfessional->id,
                     'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                    'npi' => $healthProfessional->npi_company,
                 ];
                 if ($taxonomy == 'true') {
                     $field['taxonomies'] = $healthProfessional->taxonomies->map(fn ($item) => [
