@@ -156,6 +156,8 @@ class ClaimController extends Controller
                             'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
                         ];
                     });
+
+                    return $response;
                 }, []),
         );
     }
