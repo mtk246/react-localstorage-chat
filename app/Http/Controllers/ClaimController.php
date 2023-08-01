@@ -156,7 +156,12 @@ class ClaimController extends Controller
                         ->each(function (BillClassification $billClassification) use (&$response, $facilityType){
                             $response[] = [
                                 'id' => $facilityType->code.$billClassification->code,
-                                'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
+                                'name' => $facilityType->code
+                                    .$billClassification->code
+                                    .' - '
+                                    .$facilityType->type
+                                    .' / '
+                                    .$billClassification->name,  
                             ];
                         });
 
