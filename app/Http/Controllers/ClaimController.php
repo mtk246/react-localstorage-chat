@@ -150,7 +150,7 @@ class ClaimController extends Controller
                 ->first()
                 ?->facilityTypes
                 ->reduce(function (array $response, FacilityType $facilityType) {
-                    $facilityType->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
+                    $facilityType->pivot->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
                         $response[] = [
                             'id' => $facilityType->code.$billClassification->code,
                             'name' => $facilityType->code.$billClassification->code.' - '.$billClassification->name,  
