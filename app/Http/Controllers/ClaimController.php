@@ -143,12 +143,12 @@ class ClaimController extends Controller
                 ->where('id', $facilityId)
                 ->whereHas('billingCompanies', function ($query) use($request) {
                     $query->where('billing_company_id', Gate::check('is-admin')
-                        ? $request->billing_company_id
+                        ? $request->billing_company_id ?? 0
                         : Auth::user()->billing_company_id
                     );
                 })
                 ->first()
-                ->facilityTypes
+                ?->facilityTypes
                 ->reduce(function (array $response, FacilityType $facilityType) {
                     $facilityType->bill_classifications->each(function (BillClassification $billClassification) use (&$response, $facilityType){
                         $response[] = [
