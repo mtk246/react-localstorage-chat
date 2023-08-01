@@ -55,8 +55,10 @@ final class ContractFeeSpecification extends Model implements Auditable
         'code',
         'contract_fee_id',
         'billing_provider_id',
+        'billing_provider_tax_id',
         'billing_provider_taxonomy_id',
         'health_professional_id',
+        'health_professional_tax_id',
         'health_professional_taxonomy_id',
     ];
 

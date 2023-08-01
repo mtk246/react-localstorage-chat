@@ -415,8 +415,10 @@
         "contract_specifications": [
             {
                 "billing_provider_id": 1,
+                "billing_provider_tax_id": "111q322",
                 "billing_provider_taxonomy_id": 1,
                 "health_professional_id": 1,
+                "health_professional_tax_id": "111q322",
                 "health_professional_taxonomy_id": 1,
             }
         ],

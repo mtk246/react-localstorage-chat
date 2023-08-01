@@ -6,6 +6,7 @@ use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
+use App\Actions\Company\GetBilllingProviderAction;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\GetMeasurementUnitAction;
 use App\Actions\Company\UpdateCompany;
@@ -66,6 +67,15 @@ final class CompanyController extends Controller
     public function getListMeasurementUnits(GetMeasurementUnitAction $measure): JsonResponse
     {
         $rs = $measure->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListBillingProviders(
+        Request $request,
+        GetBilllingProviderAction $billingProvider
+    ): JsonResponse {
+        $rs = $billingProvider->all($request->input(), $request->user());
 
         return response()->json($rs);
     }
