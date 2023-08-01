@@ -7438,12 +7438,12 @@ return [
                     'value' => [
                         '|0',
                         'demographicInformation.bill_classification',
-                        'medicalAssistanceType',
+                        'patientInformation.bill_classification_id',
                     ],
                     'values' => [
                         'common' => [
                             '|0',
-                            'medicalAssistanceType',
+                            'patientInformation.bill_classification_id',
                             'demographicInformation.bill_classification',
                         ],
                     ],
