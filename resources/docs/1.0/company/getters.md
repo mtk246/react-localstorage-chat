@@ -16,6 +16,7 @@
 - [Get list contract fee type](#get-list-contract-fee-types)
 - [Get list type formats](#get-list-type-formats)
 - [Get list measurement units](#get-list-measurement-units)
+- [Get list billing providers](#get-list-billing-providers)
 - [Get list insurance plans](#get-list-insurance-plans)
 
 <a name="basic-data"></a>
@@ -38,6 +39,7 @@
 | 12 |GET | `Get list billing companies`| `/company/get-list-billing-companies?company_id={companyID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 13 |GET | `Get list contract fee type`| `/company/get-list-contract-fee-types`        |yes            |Get list contract fee types|
 | 14 |GET | `Get list measurement units`| `/company/get-list-measurement-units`        |yes            |Get list measurement units|
+| 15 |GET | `Get list billing-providers`| `/company/get-list-billing-providers`        |yes            |Get list billing providers|
 
 
 <a name="data-another-module"></a>
@@ -1393,6 +1395,60 @@
   {
     "id": 5,
     "name": "UN - Unit"
+  }
+]
+```
+
+<a name="get-list-billing-providers"></a>
+## Get list billing providers
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Example path
+
+> {primary} /company/get-list-billing-providers? billing_company_id=1 & company_id=3
+
+## Example path 2
+
+> {primary} /company/get-list-billing-providers? billing_company_id=1 & company_id=2 & all_health_professional=true
+
+## Response
+
+> {success} 200 Billing providers found
+
+#
+
+```json
+[
+  {
+    "id": "company:3",
+    "name": "Company First312112",
+    "npi": "22212312",
+    "tax_id_options": [
+      {
+        "id": "123432100",
+        "name": "123432100"
+      }
+    ],
+    "taxonomy_options": [
+      {
+        "id": 8,
+        "name": "TAX01213 - Nametaxonomy Company",
+        "primary": true
+      },
+      {
+        "id": 9,
+        "name": "TAX01222 - Nametaxonomy 2 Company",
+        "primary": false
+      }
+    ]
   }
 ]
 ```

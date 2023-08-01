@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $code
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $bill_classifications
  * @property int|null $bill_classifications_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereType($value)
@@ -35,7 +37,7 @@ class FacilityType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type'];
+    protected $fillable = ['code', 'type'];
 
     /**
      * Company has many facilities.

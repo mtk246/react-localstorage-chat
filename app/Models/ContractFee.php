@@ -18,20 +18,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $billing_company_id
  * @property int|null $insurance_label_fee_id
  * @property int|null $contract_fee_type_id
- * @property string $start_date
- * @property string $end_date
+ * @property string|null $start_date
+ * @property string|null $end_date
  * @property string|null $price
  * @property string|null $price_percentage
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $private_note
- * @property \App\Models\Company|null $company
- * @property \App\Models\InsuranceCompany|null $insuranceCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
+ * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFeeSpecification> $contractFeeSpecifications
+ * @property int|null $contract_fee_specifications_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
  * @property \App\Models\MacLocality|null $macLocality
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
  * @property int|null $modifiers_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patiens
- * @property int|null $patiens_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property int|null $patients_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @property int|null $procedures_count
  *
@@ -39,16 +43,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee query()
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereBillingCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereContractFeeTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsuranceLabelFeeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereMacLocalityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ContractFee whereModifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePricePercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ContractFee wherePrivateNote($value)

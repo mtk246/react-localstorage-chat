@@ -6,10 +6,13 @@ use App\Actions\Company\AddContractFees;
 use App\Actions\Company\AddCopays;
 use App\Actions\Company\AddFacilities;
 use App\Actions\Company\AddServices;
+use App\Actions\Company\GetBilllingProviderAction;
 use App\Actions\Company\GetCompany;
 use App\Actions\Company\GetMeasurementUnitAction;
 use App\Actions\Company\UpdateCompany;
+use App\Actions\Company\UpdateExceptionInsuranceAction;
 use App\Actions\Company\UpdatePatient;
+use App\Actions\Company\UpdateStatementAction;
 use App\Actions\GetAPIAction;
 use App\Enums\Company\ApplyToType;
 use App\Http\Controllers\Controller;
@@ -19,7 +22,7 @@ use App\Http\Requests\Company\AddContractFeesRequest;
 use App\Http\Requests\Company\AddFacilitiesRequest;
 use App\Http\Requests\Company\AddServicesRequest;
 use App\Http\Requests\Company\CreateCompanyRequest;
-use App\Http\Requests\Company\StoreExectionICRequest;
+use App\Http\Requests\Company\StoreExceptionInsuranceRequest;
 use App\Http\Requests\Company\StoreStatementRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Requests\Company\UpdateContactDataRequest;
@@ -64,6 +67,15 @@ final class CompanyController extends Controller
     public function getListMeasurementUnits(GetMeasurementUnitAction $measure): JsonResponse
     {
         $rs = $measure->all();
+
+        return response()->json($rs);
+    }
+
+    public function getListBillingProviders(
+        Request $request,
+        GetBilllingProviderAction $billingProvider
+    ): JsonResponse {
+        $rs = $billingProvider->all($request->input(), $request->user());
 
         return response()->json($rs);
     }
@@ -168,20 +180,20 @@ final class CompanyController extends Controller
 
     public function StoreStatements(
         StoreStatementRequest $request,
-        UpdateCompany $updateCompany,
+        UpdateStatementAction $statementAction,
         Company $company
     ): JsonResponse {
-        $rs = $updateCompany->statement($company, $request->casted());
+        $rs = $statementAction->invoke($company, $request->castedCollect('store'), $request->user());
 
         return response()->json($rs);
     }
 
-    public function StoreExectionInsuranceCompanies(
-        StoreExectionICRequest $request,
-        UpdateCompany $updateCompany,
+    public function StoreExceptionInsurance(
+        StoreExceptionInsuranceRequest $request,
+        UpdateExceptionInsuranceAction $exceptionAction,
         Company $company
     ): JsonResponse {
-        $rs = $updateCompany->exectionInsuranceCompanies($company, $request->casted());
+        $rs = $exceptionAction->invoke($company, $request->castedCollect('store'), $request->user());
 
         return response()->json($rs);
     }

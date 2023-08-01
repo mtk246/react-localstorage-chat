@@ -45,6 +45,7 @@ final class CopayResource extends RequestWrapedResource
                         'name' => $insurance->name,
                     ];
                 })->toArray(),
+            'copay' => (float) $this->resource->copay,
             'private_note' => $this->resource->private_note,
         ];
     }

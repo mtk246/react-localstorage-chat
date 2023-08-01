@@ -36,7 +36,7 @@ final class BillClassification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'facility_type_id'];
+    protected $fillable = ['code', 'name', 'facility_type_id'];
 
     /**
      * Facility belongsToMany with BillClassification.

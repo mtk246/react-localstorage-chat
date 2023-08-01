@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $automatic_eligibility
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $bill_classification
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
@@ -52,6 +53,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentPlaceState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutoAccidentRelatedCondition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereAutomaticEligibility($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereBillClassification($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereCharges($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereClaimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereCompanyId($value)
@@ -80,6 +82,7 @@ final class ClaimDemographicInformation extends Model
     protected $fillable = [
         'claim_id',
         'type_of_medical_assistance',
+        'bill_classification',
         'validate',
         'automatic_eligibility',
         'company_id',

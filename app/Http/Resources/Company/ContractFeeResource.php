@@ -6,6 +6,7 @@ namespace App\Http\Resources\Company;
 
 use App\Http\Resources\RequestWrapedResource;
 use App\Models\ContractFee;
+use App\Models\HealthProfessional;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Procedure;
@@ -58,8 +59,25 @@ final class ContractFeeResource extends RequestWrapedResource
                         'color' => $modifier->classification->getColor(),
                     ];
                 })->toArray(),
-            'patients' => $this->resource->patients ?? [],
-            'contract_specifications' => $this->resource->contractFeeSpecifications ?? [],
+            'patients' => $this->resource->patients->map(fn ($model) => [
+                'patient_id' => $model->id,
+                'start_date' => $model->pivot?->start_date ?? '',
+                'end_date' => $model->pivot?->end_date ?? '',
+            ]) ?? [],
+            'contract_specifications' => $this->resource->contractFeeSpecifications->map(fn ($model) => [
+                'id' => $model->id,
+                'contract_fee_id' => $model->contract_fee_id,
+                'billing_provider_id' => !empty($model->billing_provider_id)
+                    ? ((HealthProfessional::class == $model->billing_provider_type)
+                        ? 'healthProfessional:'.$model->billing_provider_id
+                        : 'company:'.$model->billing_provider_id)
+                    : '',
+                'billing_provider_tax_id' => $model->billing_provider_tax_id,
+                'billing_provider_taxonomy_id' => $model->billing_provider_taxonomy_id,
+                'health_professional_id' => 'healthProfessional:'.$model->health_professional_id,
+                'health_professional_tax_id' => $model->health_professional_tax_id,
+                'health_professional_taxonomy_id' => $model->health_professional_taxonomy_id,
+            ]),
             'mac' => $this->resource->macLocality?->mac,
             'locality_number' => $this->resource->macLocality?->locality_number,
             'state' => $this->resource->macLocality?->state,

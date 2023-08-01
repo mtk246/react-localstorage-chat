@@ -76,6 +76,10 @@ class Address extends Model implements Auditable
         'apt_suite',
     ];
 
+    protected $appends = [
+        'state_code',
+    ];
+
     /**
      * Address belongs to AddressType.
      *
@@ -132,5 +136,10 @@ class Address extends Model implements Auditable
             get: fn ($value) => upperCaseWords($value),
             set: fn ($value) => upperCaseWords($value),
         );
+    }
+
+    protected function getStateCodeAttribute(): string
+    {
+        return explode(' - ', $this->state ?? '')[0] ?? '';
     }
 }

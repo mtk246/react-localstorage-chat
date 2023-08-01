@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\User;
 
-use App\Models\SocialMedia;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 /**  @property User $resource */
 final class UserResource extends JsonResource
@@ -64,15 +64,14 @@ final class UserResource extends JsonResource
         ];
     }
 
-    private function getSocialMedias(int $billingCompanyId): ?SocialMedia
+    private function getSocialMedias(int $billingCompanyId): ?Collection
     {
         return $this->resource
             ->profile
             ->socialMedias
             ->filter(
                 fn ($socialMedia) => $socialMedia->billing_company_id === $billingCompanyId,
-            )
-            ->first();
+            );
     }
 
     private function getAddress(int $billingCompanyId)
@@ -92,6 +91,6 @@ final class UserResource extends JsonResource
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            )->first() ?? null;
     }
 }
