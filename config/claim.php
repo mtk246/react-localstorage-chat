@@ -457,17 +457,6 @@ return [
             ],
         ],
         '10ba' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 5.8,
-                'x' => 120,
-                'y' => 99,
-            ],
-        ],
-        '10bb' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -491,6 +480,17 @@ return [
                         'y' => 99,
                     ],
                 ],
+            ],
+        ],
+        '10bb' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 120,
+                'y' => 99,
             ],
         ],
         '10c' => [
@@ -9308,17 +9308,9 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 2,
                     'value' => [
-                        'claimDateAdditionalInformation:month_of_from_date',
-                        '|/',
-                        'claimDateAdditionalInformation:day_of_from_date',
-                        '|/',
-                        'claimDateAdditionalInformation:year_of_from_date',
+                        'claimDateAdditionalInformation:from_date',
                         '| ',
-                        'claimDateAdditionalInformation:month_of_to_date',
-                        '|/',
-                        'claimDateAdditionalInformation:day_of_to_date',
-                        '|/',
-                        'claimDateAdditionalInformation:year_of_to_date',
+                        'claimDateAdditionalInformation:to_date',
                         '| ',
                         'claimDateAdditionalInformation:description',
                     ],
@@ -9611,7 +9603,7 @@ return [
                         ],
                     ],
                 ],
-                '33A3' => [
+                '33A4' => [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 20,
                     'value' => [
