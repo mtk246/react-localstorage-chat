@@ -64,6 +64,7 @@ final class ContractFeeResource extends RequestWrapedResource
                 'start_date' => $model->pivot?->start_date ?? '',
                 'end_date' => $model->pivot?->end_date ?? '',
             ]) ?? [],
+            'have_contract_specifications' => !empty($this->resource->contractFeeSpecifications),
             'contract_specifications' => $this->resource->contractFeeSpecifications->map(fn ($model) => [
                 'id' => $model->id,
                 'contract_fee_id' => $model->contract_fee_id,
