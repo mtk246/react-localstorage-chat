@@ -30,7 +30,7 @@ class InsurancePlanRepository
      */
     public function createInsurancePlan(array $data)
     {
-        //try {
+        try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
                 'insurance_company_id' => $data['insurance_company_id'],
@@ -151,11 +151,11 @@ class InsurancePlanRepository
             DB::commit();
 
             return $insurancePlan;
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return null;
-        }*/
+        }
     }
 
     /**
@@ -724,9 +724,9 @@ class InsurancePlanRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insurancePlans', 'whereHas' => ['relationship' => 'insurancePlans', 'where' => ['insurance_plan_id' => $insurancePlanId]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'exists' => 'insurancePlans', 'whereHas' => ['relationship' => 'insurancePlans', 'where' => ['insurance_plan_id' => $insurancePlanId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insurancePlans', 'orWhereHas' => ['relationship' => 'insurancePlans', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'insurancePlans', 'orWhereHas' => ['relationship' => 'insurancePlans', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }
