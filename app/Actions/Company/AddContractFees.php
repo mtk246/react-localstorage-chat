@@ -10,6 +10,7 @@ use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Models\Company;
 use App\Models\ContractFee;
 use App\Models\ContractFeeSpecification;
+use App\Models\HealthProfessional;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -87,7 +88,7 @@ final class AddContractFees
                 ], [
                     'code' => $contractFee->id.$contractFeeIndex,
                     'contract_fee_id' => $contractFee->id,
-                    'billing_provider_type' => $billingProvider[0],
+                    'billing_provider_type' => ('healthProfessional' === $billingProvider[0]) ? HealthProfessional::class : Company::class,
                     'billing_provider_id' => $billingProvider[1],
                     'billing_provider_tax_id' => $contractSpecification->getBillingProviderTaxId(),
                     'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),

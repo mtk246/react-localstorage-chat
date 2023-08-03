@@ -78,14 +78,6 @@ final class ContractFeeSpecification extends Model implements Auditable
     }
 
     /**
-     * Get the billingProvider that owns the ContractFeeSpecification.
-     */
-    public function billingProvider(): BelongsTo
-    {
-        return $this->belongsTo(HealthProfessional::class);
-    }
-
-    /**
      * Get the billingProviderTaxonomy that owns the ContractFeeSpecification.
      */
     public function billingProviderTaxonomy(): BelongsTo

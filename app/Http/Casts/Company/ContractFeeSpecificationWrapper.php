@@ -28,9 +28,9 @@ final class ContractFeeSpecificationWrapper extends CastsRequest
         return $this->get('billing_provider_taxonomy_id');
     }
 
-    public function getHealthProfessionalId(): ?string
+    public function getHealthProfessionalId(): string
     {
-        return $this->get('health_professional_id');
+        return $this->get('health_professional_id') ?? '';
     }
 
     public function getHealthProfessionalTaxId(): ?string
