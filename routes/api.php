@@ -279,19 +279,19 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-formats', [\App\Http\Controllers\InsurancePlanController::class, 'getListFormats']);
         Route::get('/get-list-ins-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListInsTypes']);
         Route::get('/get-list-plan-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListPlanTypes']);
-        Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
+        // Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\InsurancePlanController::class, 'getListBillingCompanies']);
         Route::get('/get-by-payer-id/{payer}', [\App\Http\Controllers\InsurancePlanController::class, 'getByPayer']);
         Route::post('/', [\App\Http\Controllers\InsurancePlanController::class, 'createInsurancePlan']);
         Route::put('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'updateInsurancePlan']);
         Route::get('/', [\App\Http\Controllers\InsurancePlanController::class, 'getAllInsurancePlans']);
-        Route::get('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'getOneInsurancePlan']);
+        Route::get('/{insurance}', [\App\Http\Controllers\InsurancePlanController::class, 'getOneInsurancePlan']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\InsurancePlanController::class, 'changeStatus']);
         Route::get('/{companyName}/get-by-company', [\App\Http\Controllers\InsurancePlanController::class, 'getByCompany']);
         Route::get('/{name}/get-by-name', [\App\Http\Controllers\InsurancePlanController::class, 'getByName']);
         Route::get('/insurance-company/{id}/get-by-insurance-company', [\App\Http\Controllers\InsurancePlanController::class, 'getAllPlanByInsuranceCompany']);
-        Route::patch('/add-copays-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
-        Route::patch('/add-contract-fees-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
+        Route::patch('/{insurance}/copays', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
+        Route::patch('/{insurance}/contract-fees', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
     });
 
     Route::prefix('health-professional')->middleware([
