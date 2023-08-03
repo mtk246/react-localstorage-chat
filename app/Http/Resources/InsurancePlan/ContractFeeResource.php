@@ -39,7 +39,7 @@ final class ContractFeeResource extends RequestWrapedResource
                         'description' => $procedure->description,
                     ];
                 })->toArray(),
-            'companies_ids' => $this->resource->insurancePlans
+            'companies_ids' => $this->resource->companies
                 ->map(fn (Company $company) => $company->id)->toArray(),
             'companies' => $this->resource->companies
                 ->map(function (Company $company) {

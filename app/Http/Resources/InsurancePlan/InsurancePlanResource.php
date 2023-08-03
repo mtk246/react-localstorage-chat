@@ -6,6 +6,7 @@ namespace App\Http\Resources\InsurancePlan;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Facades\Pagination;
+use Illuminate\Support\Facades\Gate;
 
 final class InsurancePlanResource extends JsonResource
 {
@@ -41,8 +42,8 @@ final class InsurancePlanResource extends JsonResource
             'updated_at' => $this->resource->updated_at,
             'last_modified' => $this->resource->last_modified,
             'public_note' => isset($this->resource->publicNote) ? $this->resource->publicNote->note : '',
-            'copays' => $this->resource->copays,
-            'contract_fees' => $this->resource->contractFees,
+            'copays' => $this->getCopays(),
+            'contract_fees' => $this->getContracFees(),
             'billing_companies' => $this->resource->billingCompanies()
                 ->distinct('id')
                 ->get()
