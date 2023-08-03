@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\InsurancePlan;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Facades\Pagination;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
 final class InsurancePlanResource extends JsonResource
@@ -13,12 +13,12 @@ final class InsurancePlanResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
-     
         return [
             'id' => $this->resource->id,
             'code' => $this->resource->code,
@@ -49,7 +49,6 @@ final class InsurancePlanResource extends JsonResource
                 ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_insurance_plan'])
                 ->map(function ($bC) {
-
                     $private_insurance_plan = $this->getInsurancePlanPrivate($bC->id);
                     $nickname = $this->getNickname($bC->id);
 
@@ -73,8 +72,7 @@ final class InsurancePlanResource extends JsonResource
                         'private_note' => $this->getPrivateNote($bC->id),
                         'address' => $this->getAddress($bC->id, 1),
                         'contact' => $this->getContact($bC->id),
-                        'insurance_plan_time_failed' => $this->getTimeFailed($bC->id)
-                        
+                        'insurance_plan_time_failed' => $this->getTimeFailed($bC->id),
                     ];
 
                     return $bC;
@@ -83,19 +81,19 @@ final class InsurancePlanResource extends JsonResource
     }
 
     private function getInsurancePlanPrivate(int $billingCompanyId)
-    {        
+    {
         return $this->resource->insurancePlanPrivate()->where([
-            'billing_company_id' => $billingCompanyId
+            'billing_company_id' => $billingCompanyId,
         ])->first();
     }
 
     private function getNickname(int $billingCompanyId)
     {
         return $this->resource->nicknames()->where([
-            'billing_company_id' => $billingCompanyId
+            'billing_company_id' => $billingCompanyId,
         ])->first();
     }
-    
+
     private function getAbbreviation(int $billingCompanyId)
     {
         $abbreviation = $this->resource->abbreviations()
@@ -142,7 +140,7 @@ final class InsurancePlanResource extends JsonResource
                     'days' => $time_failed->days,
                     'from' => $time_failed->from,
                     'from_id' => $time_failed->from_id,
-                ] 
+                ]
                 : null;
     }
 

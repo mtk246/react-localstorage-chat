@@ -7,12 +7,12 @@ namespace App\Actions\InsurancePlan;
 use App\Http\Resources\InsurancePlan\InsurancePlanResource;
 use App\Models\InsurancePlan;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Builder;
 
-final class GetInsurancePlan {
-    
+final class GetInsurancePlan
+{
     public function single(InsurancePlan $insurance, User $user): InsurancePlanResource
     {
         return DB::transaction(function () use ($insurance, $user) {
@@ -31,8 +31,7 @@ final class GetInsurancePlan {
         $query->with([
             'billingCompanies' => function (Builder $query) use ($bC): void {
                 $query->where('billing_company_id', $bC);
-            }
+            },
         ]);
     }
-
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Resources\InsurancePlan;
 
 use App\Http\Resources\RequestWrapedResource;
+use App\Models\Company;
 use App\Models\ContractFee;
 use App\Models\HealthProfessional;
-use App\Models\Company;
 use App\Models\Modifier;
 use App\Models\Procedure;
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\InsurancePlan;
 
 use App\Http\Resources\RequestWrapedResource;
-use App\Models\Copay;
 use App\Models\Company;
+use App\Models\Copay;
 use App\Models\Procedure;
 
 /**
