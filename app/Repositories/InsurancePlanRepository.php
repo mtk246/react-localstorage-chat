@@ -327,9 +327,6 @@ class InsurancePlanRepository
             ])->first();
         }
 
-        //$copaysFields = $this->getCopays($id);
-        //$contractFeesFields = $this->getContractFees($id);
-
         $record = [
             'id' => $insurance->id,
             'code' => $insurance->code,
@@ -553,7 +550,6 @@ class InsurancePlanRepository
     public function changeStatus(bool $status, int $id)
     {
         $billingCompany = auth()->user()->billingCompanies->first();
-        dd($billingCompany);
         if (is_null($billingCompany)) {
             return null;
         }

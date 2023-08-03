@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\InsurancePlan\GetInsurancePlan;
 use App\Actions\InsurancePlan\GetInsurancePlanAction;
 use App\Http\Requests\ChangeStatusInsurancePlanRequest;
 use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
@@ -40,11 +41,16 @@ class InsurancePlanController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error update insurance plan'), 400);
     }
 
-    public function getOneInsurancePlan(int $id): JsonResponse
+    public function getOneInsurancePlan(Request $request, GetInsurancePlan $getInsurance, InsurancePlan $insurance): JsonResponse
     {
-        $rs = $this->insurancePlanRepository->getOneInsurancePlan($id);
+        //$rs = $this->insurancePlanRepository->getOneInsurancePlan($id);
+        $rs = $getInsurance->single($insurance, $request->user());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
+        
+        /*$rs = $this->insurancePlanRepository->getOneInsurancePlan($id);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);*/
     }
 
     public function getByName(string $name): JsonResponse
