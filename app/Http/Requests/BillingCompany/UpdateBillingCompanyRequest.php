@@ -7,6 +7,7 @@ namespace App\Http\Requests\BillingCompany;
 use App\Models\BillingCompany;
 use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBillingCompanyRequest extends FormRequest
 {
@@ -28,6 +29,12 @@ class UpdateBillingCompanyRequest extends FormRequest
     public function rules()
     {
         return [
+            'tax_id' => [
+                'required',
+                'string',
+                'max:50',
+                new IUnique(BillingCompany::class, 'tax_id', $this->route('billing_company')),
+            ],
             'name' => [
                 'required', 'string', 'max:50',
                 new IUnique(BillingCompany::class, 'name', $this->route('billing_company')),
@@ -37,7 +44,11 @@ class UpdateBillingCompanyRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => [
+                'required',
+                'email:rfc',
+                Rule::unique('contacts', 'email')->ignore($this->route('billing_company'), 'billing_company_id'),
+            ],
             'contact.contact_name' => ['nullable', 'string'],
             'abbreviation' => ['nullable', 'string'],
         ];

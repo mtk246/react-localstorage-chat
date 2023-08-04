@@ -197,7 +197,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"ccffcfgdfcvv\",\r\n    \"email\":\"ccffffdfdfcvvc@gmail.com\",\r\n    \"sex\":\"m\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"middleName\":\"testing\",\r\n    \"roles\":[\"ACCOUNT_MANAGER\"],\r\n    \"ssn\":\"345345\",\r\n    \"dateOfBirth\":\"1990-11-11\",\r\n    \"company-billing\":35\r\n}",
+							"raw": "{\r\n    \"username\":\"ccffcfgdfcvv\",\r\n    \"email\":\"ccffffdfdfcvvc@gmail.com\",\r\n    \"sex\":\"m\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"test\",\r\n    \"middleName\":\"testing\",\r\n    \"roles\":[\"ACCOUNT_MANAGER\"],\r\n    \"ssn\":\"345345\",\r\n    \"dateOfBirth\":\"1990-11-11\",\r\n    \"billing_company_id\":35\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

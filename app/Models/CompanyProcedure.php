@@ -11,13 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\CondoMembership.
- *
- * @property mixed $roles
- *
- * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CondoMembership query()
+ * App\Models\CompanyProcedure.
  *
  * @property int $id
  * @property int $company_id
@@ -31,9 +25,16 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int|null $modifier_id
  * @property int|null $mac_locality_id
  * @property string|null $clia
+ * @property \App\Models\Company|null $billingCompany
+ * @property \App\Models\MacLocality|null $mac_locality
  * @property Collection<int, \App\Models\Medication> $medications
+ * @property \App\Models\MacLocality|null $macLocality
  * @property int|null $medications_count
+ * @property \App\Models\Procedure|null $procedure
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure query()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereClia($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereCompanyId($value)
@@ -46,12 +47,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure wherePricePercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereProcedureId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyProcedure whereUpdatedAt($value)
- *
- * @property \App\Models\Company|null $billingCompany
- * @property \App\Models\MacLocality $mac_locality
- * @property Collection<int, \App\Models\Medication> $medications
- * @property \App\Models\MacLocality|null $macLocality
- * @property \App\Models\Procedure|null $procedure
  *
  * @mixin \Eloquent
  */

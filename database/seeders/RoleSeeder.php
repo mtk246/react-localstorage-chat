@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\BillingCompany\MembershipRole;
 use App\Roles\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -31,27 +32,9 @@ class RoleSeeder extends Seeder
                     'level' => 2,
                 ],
                 [
-                    'name' => 'Biller',
-                    'slug' => 'biller',
-                    'description' => 'Allows access to system functions for biller management',
-                    'level' => 3,
-                ],
-                [
-                    'name' => 'Payment Processor',
-                    'slug' => 'paymentprocessor',
-                    'description' => 'Allows access to system functions for payment processor management',
-                    'level' => 3,
-                ],
-                [
-                    'name' => 'Collector',
-                    'slug' => 'collector',
-                    'description' => 'Allows access to system functions for collector management',
-                    'level' => 3,
-                ],
-                [
-                    'name' => 'Account Manager',
-                    'slug' => 'accountmanager',
-                    'description' => 'Allows access to system functions for account manager management',
+                    'name' => 'Billing Worker',
+                    'slug' => 'billingworker',
+                    'description' => 'worker of a billing company',
                     'level' => 3,
                 ],
                 [
@@ -102,6 +85,13 @@ class RoleSeeder extends Seeder
                     ]
                 );
             }
+
+            collect(json_decode(\File::get('database/data/MembershipRoles.json')))
+                ->map(function ($role, $key) {
+                    return (array) $role;
+                })
+                ->chunk(1000)
+                ->each(fn ($chunk) => MembershipRole::upsert($chunk->toArray(), ['id']));
         });
     }
 }

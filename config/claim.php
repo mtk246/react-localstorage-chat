@@ -8,50 +8,37 @@ use App\Enums\Claim\RuleType;
 
 return [
     'preview_837p' => [
-        'insurance_company' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 16,
-                ],
+        '0a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 16,
             ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 20,
-                ],
+        ],
+        '0b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 20,
             ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 24,
-                ],
-            ],
-            'address3' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 107,
-                    'y' => 28,
-                ],
+        ],
+        '0c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 107,
+                'y' => 28,
             ],
         ],
         '1' => [
@@ -157,63 +144,61 @@ return [
                 'y' => 48,
             ],
         ],
-        '3' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 100,
-                    'y' => 48.5,
-                ],
+        '3a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 100,
+                'y' => 48.5,
             ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 84,
-                    'y' => 48.5,
-                ],
+        ],
+        '3b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 84,
+                'y' => 48.5,
             ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 92,
-                    'y' => 48.5,
-                ],
+        ],
+        '3c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 92,
+                'y' => 48.5,
             ],
-            'sex' => [
-                'options' => [
-                    'M' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 111,
-                            'y' => 48.5,
-                        ],
+        ],
+        '3d' => [
+            'options' => [
+                'M' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 111,
+                        'y' => 48.5,
                     ],
-                    'F' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 123.5,
-                            'y' => 48.5,
-                        ],
+                ],
+                'F' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 123.5,
+                        'y' => 48.5,
                     ],
                 ],
             ],
@@ -229,72 +214,70 @@ return [
                 'y' => 48,
             ],
         ],
-        '5' => [
-            'address' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 56.5,
-                ],
+        '5a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 56.5,
             ],
-            'city' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 64.5,
-                ],
+        ],
+        '5b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 64.5,
             ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 72.5,
-                    'y' => 64.5,
-                ],
+        ],
+        '5c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 72.5,
+                'y' => 64.5,
             ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 10,
-                    'y' => 74,
-                ],
+        ],
+        '5d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 10,
+                'y' => 74,
             ],
-            'code_area' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 44.5,
-                    'y' => 74,
-                ],
+        ],
+        '5e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 44.5,
+                'y' => 74,
             ],
-            'phone' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 53,
-                    'y' => 74,
-                ],
+        ],
+        '5f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 53,
+                'y' => 74,
             ],
         ],
         '6' => [
@@ -345,72 +328,70 @@ return [
                 ],
             ],
         ],
-        '7' => [
-            'address' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 56.5,
-                ],
+        '7a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 56.5,
             ],
-            'city' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 64.5,
-                ],
+        ],
+        '7b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 64.5,
             ],
-            'state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 191.5,
-                    'y' => 64.5,
-                ],
+        ],
+        '7c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 191.5,
+                'y' => 64.5,
             ],
-            'zip' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 135,
-                    'y' => 74,
-                ],
+        ],
+        '7d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 135,
+                'y' => 74,
             ],
-            'code_area' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 170,
-                    'y' => 74,
-                ],
+        ],
+        '7e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 170,
+                'y' => 74,
             ],
-            'phone' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 178.5,
-                    'y' => 74,
-                ],
+        ],
+        '7f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 178.5,
+                'y' => 74,
             ],
         ],
         // '8' => '',
@@ -475,18 +456,7 @@ return [
                 ],
             ],
         ],
-        '10b' => [
-            'place_state' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 120,
-                    'y' => 99,
-                ],
-            ],
+        '10ba' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -510,6 +480,17 @@ return [
                         'y' => 99,
                     ],
                 ],
+            ],
+        ],
+        '10bb' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 120,
+                'y' => 99,
             ],
         ],
         '10c' => [
@@ -550,63 +531,61 @@ return [
                 'y' => 82,
             ],
         ],
-        '11a' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 154,
-                    'y' => 91,
-                ],
+        '11aa' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 154,
+                'y' => 91,
             ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 139.5,
-                    'y' => 91,
-                ],
+        ],
+        '11ab' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 139.5,
+                'y' => 91,
             ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 146,
-                    'y' => 91,
-                ],
+        ],
+        '11ac' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 146,
+                'y' => 91,
             ],
-            'sex' => [
-                'options' => [
-                    'M' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 176,
-                            'y' => 90.5,
-                        ],
+        ],
+        '11ad' => [
+            'options' => [
+                'M' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 176,
+                        'y' => 90.5,
                     ],
-                    'F' => [
-                        'properties' => [
-                            'fontFamily' => 'helvetica',
-                            'fontSize' => '10px',
-                            'align' => 'L',
-                            'w' => 70,
-                            'h' => 10,
-                            'x' => 193.8,
-                            'y' => 90.5,
-                        ],
+                ],
+                'F' => [
+                    'properties' => [
+                        'fontFamily' => 'helvetica',
+                        'fontSize' => '10px',
+                        'align' => 'L',
+                        'w' => 70,
+                        'h' => 10,
+                        'x' => 193.8,
+                        'y' => 90.5,
                     ],
                 ],
             ],
@@ -648,28 +627,26 @@ return [
                 ],
             ],
         ],
-        '12' => [
-            'signed' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 27,
-                    'y' => 131.5,
-                ],
+        '12a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 27,
+                'y' => 131.5,
             ],
-            'date' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 100,
-                    'y' => 131.5,
-                ],
+        ],
+        '12b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 100,
+                'y' => 131.5,
             ],
         ],
         '13' => [
@@ -683,212 +660,202 @@ return [
                 'y' => 131.5,
             ],
         ],
-        '14' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 27,
-                    'y' => 141,
-                ],
-            ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 11,
-                    'y' => 141,
-                ],
-            ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 19.5,
-                    'y' => 141,
-                ],
-            ],
-            'qualifier' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 46,
-                    'y' => 141,
-                ],
+        '14a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 11,
+                'y' => 141,
             ],
         ],
-        '15' => [
-            'year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 114,
-                    'y' => 141,
-                ],
-            ],
-            'month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 100,
-                    'y' => 141,
-                ],
-            ],
-            'day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 106,
-                    'y' => 141,
-                ],
-            ],
-            'qualifier' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 83,
-                    'y' => 141,
-                ],
+        '14b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 19.5,
+                'y' => 141,
             ],
         ],
-        '16' => [
-            'from_year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 156,
-                    'y' => 141,
-                ],
-            ],
-            'from_month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 142,
-                    'y' => 141,
-                ],
-            ],
-            'from_day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 148,
-                    'y' => 141,
-                ],
-            ],
-            'to_year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 191,
-                    'y' => 141,
-                ],
-            ],
-            'to_month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177,
-                    'y' => 141,
-                ],
-            ],
-            'to_day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 183,
-                    'y' => 141,
-                ],
+        '14c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 27,
+                'y' => 141,
             ],
         ],
-        '17' => [
-            'code' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 9,
-                    'y' => 149,
-                ],
-            ],
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 15.5,
-                    'y' => 149,
-                ],
+        '14d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 46,
+                'y' => 141,
             ],
         ],
-        '17a' => [
-            'code' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 81,
-                    'y' => 145,
-                ],
+        '15a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 83,
+                'y' => 141,
             ],
-            'value' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 86.5,
-                    'y' => 145,
-                ],
+        ],
+        '15b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 100,
+                'y' => 141,
+            ],
+        ],
+        '15c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 106,
+                'y' => 141,
+            ],
+        ],
+        '15d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 114,
+                'y' => 141,
+            ],
+        ],
+        '16a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 142,
+                'y' => 141,
+            ],
+        ],
+        '16b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 148,
+                'y' => 141,
+            ],
+        ],
+        '16c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177,
+                'y' => 141,
+            ],
+        ],
+        '16d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 183,
+                'y' => 141,
+            ],
+        ],
+        '16e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 156,
+                'y' => 141,
+            ],
+        ],
+        '16f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 191,
+                'y' => 141,
+            ],
+        ],
+        '170' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 9,
+                'y' => 149,
+            ],
+        ],
+        '171' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 15.5,
+                'y' => 149,
+            ],
+        ],
+        '17a0' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 81,
+                'y' => 145,
+            ],
+        ],
+        '17a1' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 86.5,
+                'y' => 145,
             ],
         ],
         '17b' => [
@@ -902,72 +869,70 @@ return [
                 'y' => 149,
             ],
         ],
-        '18' => [
-            'from_year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 156,
-                    'y' => 149,
-                ],
+        '18a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 142,
+                'y' => 149,
             ],
-            'from_month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 142,
-                    'y' => 149,
-                ],
+        ],
+        '18b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 148,
+                'y' => 149,
             ],
-            'from_day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 148,
-                    'y' => 149,
-                ],
+        ],
+        '18c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 156,
+                'y' => 149,
             ],
-            'to_year' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 191,
-                    'y' => 149,
-                ],
+        ],
+        '18d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177,
+                'y' => 149,
             ],
-            'to_month' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177,
-                    'y' => 149,
-                ],
+        ],
+        '18e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 183,
+                'y' => 149,
             ],
-            'to_day' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 183,
-                    'y' => 149,
-                ],
+        ],
+        '18f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 191,
+                'y' => 149,
             ],
         ],
         '19' => [
@@ -981,18 +946,7 @@ return [
                 'y' => 157,
             ],
         ],
-        '20' => [
-            'charges' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'R',
-                    'w' => 25,
-                    'h' => 10,
-                    'x' => 160,
-                    'y' => 157.2,
-                ],
-            ],
+        '20a' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -1018,173 +972,180 @@ return [
                 ],
             ],
         ],
-        '21' => [
-            'indicator' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 8,
-                    'h' => 10,
-                    'x' => 111.5,
-                    'y' => 162,
-                ],
-            ],
-            'A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 12.5,
-                    'y' => 166,
-                ],
-            ],
-            'B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 45,
-                    'y' => 166,
-                ],
-            ],
-            'C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 77.9,
-                    'y' => 166,
-                ],
-            ],
-            'D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 110.4,
-                    'y' => 166.3,
-                ],
-            ],
-            'E' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 12.5,
-                    'y' => 170,
-                ],
-            ],
-            'F' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 45,
-                    'y' => 170.1,
-                ],
-            ],
-            'G' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 77.9,
-                    'y' => 170,
-                ],
-            ],
-            'H' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 110.4,
-                    'y' => 170.5,
-                ],
-            ],
-            'I' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 12.5,
-                    'y' => 174,
-                ],
-            ],
-            'J' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 45,
-                    'y' => 174.2,
-                ],
-            ],
-            'K' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 77.9,
-                    'y' => 174.2,
-                ],
-            ],
-            'L' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 110.4,
-                    'y' => 174.2,
-                ],
+        '20b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'R',
+                'w' => 25,
+                'h' => 10,
+                'x' => 160,
+                'y' => 157.2,
             ],
         ],
-        '22' => [
-            'resubmision_code' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 132,
-                    'y' => 166.3,
-                ],
+        '21' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 8,
+                'h' => 10,
+                'x' => 111.5,
+                'y' => 162,
             ],
-            'original_code' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 20,
-                    'h' => 10,
-                    'x' => 160,
-                    'y' => 166.3,
-                ],
+        ],
+        '21A' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 12.5,
+                'y' => 166,
+            ],
+        ],
+        '21B' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 45,
+                'y' => 166,
+            ],
+        ],
+        '21C' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 77.9,
+                'y' => 166,
+            ],
+        ],
+        '21D' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 110.4,
+                'y' => 166.3,
+            ],
+        ],
+        '21E' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 12.5,
+                'y' => 170,
+            ],
+        ],
+        '21F' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 45,
+                'y' => 170.1,
+            ],
+        ],
+        '21G' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 77.9,
+                'y' => 170,
+            ],
+        ],
+        '21H' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 110.4,
+                'y' => 170.5,
+            ],
+        ],
+        '21I' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 12.5,
+                'y' => 174,
+            ],
+        ],
+        '21J' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 45,
+                'y' => 174.2,
+            ],
+        ],
+        '21K' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 77.9,
+                'y' => 174.2,
+            ],
+        ],
+        '21L' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 110.4,
+                'y' => 174.2,
+            ],
+        ],
+        '22A' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 132,
+                'y' => 166.3,
+            ],
+        ],
+        '22B' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 20,
+                'h' => 10,
+                'x' => 160,
+                'y' => 166.3,
             ],
         ],
         '23' => [
@@ -2653,18 +2614,18 @@ return [
                 ],
             ],
         ],
-        '25' => [
-            'num' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 35,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 240.8,
-                ],
+        '25A' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 35,
+                'h' => 10,
+                'x' => 10,
+                'y' => 240.8,
             ],
+        ],
+        '25B' => [
             'options' => [
                 'SSN' => [
                     'properties' => [
@@ -2728,7 +2689,7 @@ return [
             ],
         ],
         '28' => [
-            'total_charge' => [
+            0 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
                     'fontSize' => '9px',
@@ -2739,7 +2700,7 @@ return [
                     'y' => 240.8,
                 ],
             ],
-            'total_charge_decimal' => [
+            1 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
                     'fontSize' => '9px',
@@ -2752,7 +2713,7 @@ return [
             ],
         ],
         '29' => [
-            'total_copay' => [
+            0 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
                     'fontSize' => '9px',
@@ -2763,7 +2724,7 @@ return [
                     'y' => 240.8,
                 ],
             ],
-            'total_copay_decimal' => [
+            1 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
                     'fontSize' => '9px',
@@ -2775,77 +2736,73 @@ return [
                 ],
             ],
         ],
-        '31' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 15,
-                    'y' => 255.5,
-                ],
-            ],
-            'signed' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 15,
-                    'y' => 260,
-                ],
-            ],
-            'date' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 45,
-                    'y' => 260,
-                ],
+        '31A' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 15,
+                'y' => 255.5,
             ],
         ],
-        '32' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 65,
-                    'y' => 248,
-                ],
-            ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 65,
-                    'y' => 252,
-                ],
-            ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 65,
-                    'y' => 256,
-                ],
+        '31B' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 15,
+                'y' => 260,
             ],
         ],
-        '32a' => [
+        '31C' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 45,
+                'y' => 260,
+            ],
+        ],
+        '32A0' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 65,
+                'y' => 248,
+            ],
+        ],
+        '32A1' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 65,
+                'y' => 252,
+            ],
+        ],
+        '32A2' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 65,
+                'y' => 256,
+            ],
+        ],
+        '32A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2856,64 +2813,62 @@ return [
                 'y' => 262,
             ],
         ],
-        '33' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 134,
-                    'y' => 248,
-                ],
-            ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 134,
-                    'y' => 252,
-                ],
-            ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 134,
-                    'y' => 256,
-                ],
-            ],
-            'code_area' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 172,
-                    'y' => 246,
-                ],
-            ],
-            'phone' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '9px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 5.8,
-                    'x' => 182,
-                    'y' => 246,
-                ],
+        '33A0' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 134,
+                'y' => 248,
             ],
         ],
-        '33a' => [
+        '33A1' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 134,
+                'y' => 252,
+            ],
+        ],
+        '33A2' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 134,
+                'y' => 256,
+            ],
+        ],
+        '33A3' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 172,
+                'y' => 246,
+            ],
+        ],
+        '33A4' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 5.8,
+                'x' => 182,
+                'y' => 246,
+            ],
+        ],
+        '33A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2966,19 +2921,8 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 50,
-                'y' => 13,
-            ],
-        ],
-        '1e' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 55,
-                'y' => 13,
+                'x' => 10,
+                'y' => 17.5,
             ],
         ],
         '2a' => [
@@ -3021,19 +2965,8 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 112,
-                'y' => 13,
-            ],
-        ],
-        '2e' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 117,
-                'y' => 13,
+                'x' => 72,
+                'y' => 17.5,
             ],
         ],
         '3a' => [
@@ -3043,7 +2976,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 140,
+                'x' => 138,
                 'y' => 4.5,
             ],
         ],
@@ -3087,7 +3020,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 157,
+                'x' => 155.5,
                 'y' => 17,
             ],
         ],
@@ -3098,7 +3031,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 175,
+                'x' => 173,
                 'y' => 17,
             ],
         ],
@@ -3215,11 +3148,11 @@ return [
         '12' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
-                'fontSize' => '10px',
+                'fontSize' => '9px',
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 37,
+                'x' => 35.5,
                 'y' => 34,
             ],
         ],
@@ -3411,652 +3344,610 @@ return [
             ],
         ],
         // '30' => 'Future Use',
-        '31' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 7,
-                    'y' => 42.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 7,
-                    'y' => 46.5,
-                ],
-            ],
-            'DATE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 17,
-                    'y' => 42.5,
-                ],
-            ],
-            'DATE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 17,
-                    'y' => 46.5,
-                ],
+        '31a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 7,
+                'y' => 42.5,
             ],
         ],
-        '32' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 32,
-                    'y' => 42.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 32,
-                    'y' => 46.5,
-                ],
-            ],
-            'DATE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 42,
-                    'y' => 42.5,
-                ],
-            ],
-            'DATE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 42,
-                    'y' => 46.5,
-                ],
+        '31b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 7,
+                'y' => 46.5,
             ],
         ],
-        '33' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 56.5,
-                    'y' => 42.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 56.5,
-                    'y' => 46.5,
-                ],
-            ],
-            'DATE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 66.5,
-                    'y' => 42.5,
-                ],
-            ],
-            'DATE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 66.5,
-                    'y' => 46.5,
-                ],
+        '31c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 17,
+                'y' => 42.5,
             ],
         ],
-        '34' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 81,
-                    'y' => 42.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 81,
-                    'y' => 46.5,
-                ],
-            ],
-            'DATE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 92,
-                    'y' => 42.5,
-                ],
-            ],
-            'DATE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 92,
-                    'y' => 46.5,
-                ],
+        '31d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 17,
+                'y' => 46.5,
             ],
         ],
-        '35' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 105.5,
-                    'y' => 42.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 105.5,
-                    'y' => 46.5,
-                ],
-            ],
-            'FROM_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 116,
-                    'y' => 42.5,
-                ],
-            ],
-            'FROM_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 116,
-                    'y' => 46.5,
-                ],
-            ],
-            'THROUGH_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 42.5,
-                ],
-            ],
-            'THROUGH_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 46.5,
-                ],
+        '32a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 32,
+                'y' => 42.5,
             ],
         ],
-        '36' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 148,
-                    'y' => 42.5,
-                ],
+        '32b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 32,
+                'y' => 46.5,
             ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 148,
-                    'y' => 46.5,
-                ],
+        ],
+        '32c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 42,
+                'y' => 42.5,
             ],
-            'FROM_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 160,
-                    'y' => 42.5,
-                ],
+        ],
+        '32d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 42,
+                'y' => 46.5,
             ],
-            'FROM_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 160,
-                    'y' => 46.5,
-                ],
+        ],
+        '33a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 56.5,
+                'y' => 42.5,
             ],
-            'THROUGH_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 42.5,
-                ],
+        ],
+        '33b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 56.5,
+                'y' => 46.5,
             ],
-            'THROUGH_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 46.5,
-                ],
+        ],
+        '33c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 66.5,
+                'y' => 42.5,
+            ],
+        ],
+        '33d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 66.5,
+                'y' => 46.5,
+            ],
+        ],
+        '34a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 81,
+                'y' => 42.5,
+            ],
+        ],
+        '34b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 81,
+                'y' => 46.5,
+            ],
+        ],
+        '34c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 92,
+                'y' => 42.5,
+            ],
+        ],
+        '34d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 92,
+                'y' => 46.5,
+            ],
+        ],
+        '35a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 105.5,
+                'y' => 42.5,
+            ],
+        ],
+        '35b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 105.5,
+                'y' => 46.5,
+            ],
+        ],
+        '35c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 116,
+                'y' => 42.5,
+            ],
+        ],
+        '35d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 116,
+                'y' => 46.5,
+            ],
+        ],
+        '35e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 42.5,
+            ],
+        ],
+        '35f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 46.5,
+            ],
+        ],
+        '36a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 148,
+                'y' => 42.5,
+            ],
+        ],
+        '36b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 148,
+                'y' => 46.5,
+            ],
+        ],
+        '36c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 160,
+                'y' => 42.5,
+            ],
+        ],
+        '36d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 160,
+                'y' => 46.5,
+            ],
+        ],
+        '36e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 175,
+                'y' => 42.5,
+            ],
+        ],
+        '36f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 175,
+                'y' => 46.5,
             ],
         ],
         // '37' => '',
-        '38' => [
-            'name' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 55.5,
-                ],
-            ],
-            'address1' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 59.5,
-                ],
-            ],
-            'address2' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 10,
-                    'y' => 63.5,
-                ],
+        '38a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 10,
+                'y' => 55.5,
             ],
         ],
-        '39' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 55.5,
-                ],
-            ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 55.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 59.5,
-                ],
-            ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 59.5,
-                ],
-            ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 63.5,
-                ],
-            ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 63.5,
-                ],
-            ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 113,
-                    'y' => 67.5,
-                ],
-            ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 133,
-                    'y' => 67.5,
-                ],
+        '38b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 10,
+                'y' => 59.5,
             ],
         ],
-        '40' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 55.5,
-                ],
-            ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 55.5,
-                ],
-            ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 59.5,
-                ],
-            ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 59.5,
-                ],
-            ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 63.5,
-                ],
-            ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 63.5,
-                ],
-            ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 145.5,
-                    'y' => 67.5,
-                ],
-            ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 165,
-                    'y' => 67.5,
-                ],
+        '38c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 10,
+                'y' => 63.5,
             ],
         ],
-        '41' => [
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 55.5,
-                ],
+        '39a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 55.5,
             ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 55.5,
-                ],
+        ],
+        '39b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 55.5,
             ],
-            'CODE_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 55.5,
-                ],
+        ],
+        '39c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 59.5,
             ],
-            'AMOUNT_A' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 55.5,
-                ],
+        ],
+        '39d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 59.5,
             ],
-            'CODE_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 59.5,
-                ],
+        ],
+        '39e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 63.5,
             ],
-            'AMOUNT_B' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 59.5,
-                ],
+        ],
+        '39f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 63.5,
             ],
-            'CODE_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 63.5,
-                ],
+        ],
+        '39g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 113,
+                'y' => 67.5,
             ],
-            'AMOUNT_C' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 63.5,
-                ],
+        ],
+        '39h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 133,
+                'y' => 67.5,
             ],
-            'CODE_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 177.5,
-                    'y' => 67.5,
-                ],
+        ],
+        '40a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 55.5,
             ],
-            'AMOUNT_D' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 197,
-                    'y' => 67.5,
-                ],
+        ],
+        '40b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 55.5,
+            ],
+        ],
+        '40c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 59.5,
+            ],
+        ],
+        '40d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 59.5,
+            ],
+        ],
+        '40e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 63.5,
+            ],
+        ],
+        '40f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 63.5,
+            ],
+        ],
+        '40g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 145.5,
+                'y' => 67.5,
+            ],
+        ],
+        '40h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 165,
+                'y' => 67.5,
+            ],
+        ],
+        '41a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 55.5,
+            ],
+        ],
+        '41b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 55.5,
+            ],
+        ],
+        '41c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 59.5,
+            ],
+        ],
+        '41d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 59.5,
+            ],
+        ],
+        '41e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 63.5,
+            ],
+        ],
+        '41f' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 63.5,
+            ],
+        ],
+        '41g' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177.5,
+                'y' => 67.5,
+            ],
+        ],
+        '41h' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 197,
+                'y' => 67.5,
             ],
         ],
         '42' => [
@@ -7315,28 +7206,26 @@ return [
                 'y' => 170,
             ],
         ],
-        'tb' => [
-            'page' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 30,
-                    'y' => 170,
-                ],
+        'tb1' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 30,
+                'y' => 170,
             ],
-            'total' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 44,
-                    'y' => 170,
-                ],
+        ],
+        'tb2' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 44,
+                'y' => 170,
             ],
         ],
         'tc' => [
@@ -7361,6 +7250,17 @@ return [
                 'y' => 170,
             ],
         ],
+        'te' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'R',
+                'w' => 30,
+                'h' => 10,
+                'x' => 148,
+                'y' => 170,
+            ],
+        ],
     ],
 
     /*
@@ -7379,15 +7279,15 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'company.name',
+                        'demographicInformation.company.name',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|0',
+                            'companyAddress:city|0',
+                            'companyAddress:state|0',
+                            'companyAddress:zip|0',
                         ],
                     ],
                 ],
@@ -7395,15 +7295,15 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'company.address1',
+                        'companyAddress:address|0',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|0',
+                            'companyAddress:city|0',
+                            'companyAddress:state|0',
+                            'companyAddress:zip|0',
                         ],
                     ],
                 ],
@@ -7411,45 +7311,34 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 24,
                     'value' => [
-                        'company.address2',
+                        'companyAddress:city|0',
+                        '|, ',
+                        'companyAddress:state_code|0',
+                        '| ',
+                        'companyAddress:zip|0',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|0',
+                            'companyAddress:city|0',
+                            'companyAddress:state|0',
+                            'companyAddress:zip|0',
+                            'companyAddress:state_code|0',
                         ],
                     ],
                 ],
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'company.state',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
-                        ],
-                    ],
-                ],
-                '1e' => [
-                    'type' => RuleType::MULTIPLE->value,
-                    'value' => [
-                        'company.zip',
-                    ],
-                    'values' => [
-                        'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|0',
+                            'companyAddress:city|0',
+                            'companyAddress:state|0',
+                            'companyAddress:zip|0',
                         ],
                     ],
                 ],
@@ -7457,15 +7346,15 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'company.name',
+                        'demographicInformation.company.name',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7473,15 +7362,15 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'company.address1',
+                        'companyAddress:address|3',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7489,45 +7378,33 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 24,
                     'value' => [
-                        'company.address2',
+                        'companyAddress:city|3',
+                        '|, ',
+                        'companyAddress:state_code|3',
+                        '| ',
+                        'companyAddress:zip|3',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'company.state',
                     ],
                     'values' => [
                         'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
-                        ],
-                    ],
-                ],
-                '2e' => [
-                    'type' => RuleType::MULTIPLE->value,
-                    'value' => [
-                        'company.zip',
-                    ],
-                    'values' => [
-                        'common' => [
-                            'company.name',
-                            'company.address1',
-                            'company.address2',
-                            'company.state',
-                            'company.zip',
+                            'demographicInformation.company.name',
+                            'companyAddress:address|3',
+                            'companyAddress:city|3',
+                            'companyAddress:state|3',
+                            'companyAddress:zip|3',
                         ],
                     ],
                 ],
@@ -7535,11 +7412,11 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'code',
+                        'demographicInformation.patient.code',
                     ],
                     'values' => [
                         'common' => [
-                            'code',
+                            'demographicInformation.patient.code',
                         ],
                     ],
                 ],
@@ -7547,11 +7424,11 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'patient_company:med_num',
+                        'patientCompany:med_num',
                     ],
                     'values' => [
                         'common' => [
-                            'patient_company:med_num',
+                            'patientCompany:med_num',
                         ],
                     ],
                 ],
@@ -7560,15 +7437,14 @@ return [
                     'length' => 30,
                     'value' => [
                         '|0',
-                        'facility.type',
-                        'demographicInformation.type_of_medical_assistance',
+                        'demographicInformation.bill_classification',
+                        'patientInformation.billClassification.code',
                     ],
                     'values' => [
                         'common' => [
                             '|0',
-                            'facility.type',
-                            'demographicInformation.get_type_of_medical_assistance',
                             'patientInformation.billClassification.code',
+                            'demographicInformation.bill_classification',
                         ],
                     ],
                 ],
@@ -7576,33 +7452,33 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 30,
                     'value' => [
-                        'company.npi',
+                        'demographicInformation.company.npi',
                     ],
                     'values' => [
                         'common' => [
-                            'company.npi',
+                            'demographicInformation.company.npi',
                         ],
                     ],
                 ],
                 '6a' => [
                     'type' => RuleType::DATE->value,
-                    'value' => [
-                        'company.tax_id',
-                    ],
+                    'value' => 'service.from|mdY',
                     'values' => [
                         'common' => [
-                            'company.tax_id',
+                            'service.from|m/d/y',
+                            'service.from|m-d-y',
+                            'service.from|mdY',
                         ],
                     ],
                 ],
                 '6b' => [
                     'type' => RuleType::DATE->value,
-                    'value' => [
-                        'company.tax_id',
-                    ],
+                    'value' => 'service.to|mdY',
                     'values' => [
                         'common' => [
-                            'company.tax_id',
+                            'service.to|m/d/y',
+                            'service.to|m-d-y',
+                            'service.to|mdY',
                         ],
                     ],
                 ],
@@ -7611,8 +7487,7 @@ return [
                     'value' => [
                     ],
                     'values' => [
-                        'common' => [
-                        ],
+                        'common' => [],
                     ],
                 ],
                 '8a' => [
@@ -7629,16 +7504,15 @@ return [
                 '8b' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
-                        'demographicInformation.patient.last_name',
-                        '|,',
-                        'demographicInformation.patient.first_name',
-                        'demographicInformation.patient.middle_name',
+                        'patientProfile:last_name',
+                        'patientProfile:first_name',
+                        'patientProfile:middle_name',
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.last_name',
-                            'demographicInformation.patient.first_name',
-                            'demographicInformation.patient.middle_name',
+                            'patientProfile:last_name',
+                            'patientProfile:first_name',
+                            'patientProfile:middle_name',
                         ],
                     ],
                 ],
@@ -7646,14 +7520,14 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 28,
                     'value' => [
-                        'demographicInformation.patient.address',
+                        'patientAddress:address',
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.address',
-                            'demographicInformation.patient.city',
-                            'demographicInformation.patient.state',
-                            'demographicInformation.patient.zip',
+                            'patientAddress:address',
+                            'patientAddress:city',
+                            'patientAddress:state',
+                            'patientAddress:zip',
                         ],
                     ],
                 ],
@@ -7661,14 +7535,14 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 24,
                     'value' => [
-                        'demographicInformation.patient.city',
+                        'patientAddress:city',
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.address',
-                            'demographicInformation.patient.city',
-                            'demographicInformation.patient.state',
-                            'demographicInformation.patient.zip',
+                            'patientAddress:address',
+                            'patientAddress:city',
+                            'patientAddress:state',
+                            'patientAddress:zip',
                         ],
                     ],
                 ],
@@ -7676,14 +7550,14 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 3,
                     'value' => [
-                        'demographicInformation.patient.state',
+                        'patientAddress:state',
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.address',
-                            'demographicInformation.patient.city',
-                            'demographicInformation.patient.state',
-                            'demographicInformation.patient.zip',
+                            'patientAddress:address',
+                            'patientAddress:city',
+                            'patientAddress:state',
+                            'patientAddress:zip',
                         ],
                     ],
                 ],
@@ -7691,14 +7565,14 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 12,
                     'value' => [
-                        'demographicInformation.patient.zip',
+                        'patientAddress:zip',
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.address',
-                            'demographicInformation.patient.city',
-                            'demographicInformation.patient.state',
-                            'demographicInformation.patient.zip',
+                            'patientAddress:address',
+                            'patientAddress:city',
+                            'patientAddress:state',
+                            'patientAddress:zip',
                         ],
                     ],
                 ],
@@ -7708,10 +7582,829 @@ return [
                     'value' => [],
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.address',
-                            'demographicInformation.patient.city',
-                            'demographicInformation.patient.state',
-                            'demographicInformation.patient.zip',
+                            'patientAddress:address',
+                            'patientAddress:city',
+                            'patientAddress:state',
+                            'patientAddress:zip',
+                        ],
+                    ],
+                ],
+                '10' => [
+                    'type' => RuleType::DATE->value,
+                    'length' => 30,
+                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.patient.user.profile.date_of_birth|m/d/y',
+                            'demographicInformation.patient.user.profile.date_of_birth|m-d-y',
+                            'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                        ],
+                    ],
+                ],
+                '11' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 27,
+                    'value' => 'patientProfile:sex',
+                    'values' => [
+                        'common' => [
+                            'patientProfile:sex',
+                        ],
+                    ],
+                ],
+                '12' => [
+                    'type' => RuleType::DATE->value,
+                    'length' => 30,
+                    'value' => 'patientInformation.admission_date|mdY',
+                    'values' => [
+                        'common' => [
+                            'patientInformation.admission_date|mdY',
+                        ],
+                    ],
+                ],
+                '13' => [
+                    'type' => RuleType::DATE->value,
+                    'length' => 30,
+                    'value' => 'patientInformation.admission_time|H|H:m:s',
+                    'values' => [
+                        'common' => [
+                            'patientInformation.admission_time|H|H:m:s',
+                        ],
+                    ],
+                ],
+                '14' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientInformation.admissionType.code',
+                    'values' => [
+                        'common' => [
+                            'patientInformation.admissionType.code',
+                        ],
+                    ],
+                ],
+                '15' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientInformation.admissionSource.code',
+                    'values' => [
+                        'common' => [
+                            'patientInformation.admissionSource.code',
+                        ],
+                    ],
+                ],
+                '16' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'medicalAssistanceType',
+                    'values' => [
+                        'common' => [
+                            'medicalAssistanceType',
+                        ],
+                    ],
+                ],
+                '17' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientInformation.patientStatus.code',
+                    'values' => [
+                        'common' => [
+                            'patientInformation.patientStatus.code',
+                        ],
+                    ],
+                ],
+                '18' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:0',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:0',
+                        ],
+                    ],
+                ],
+                '19' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:1',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:1',
+                        ],
+                    ],
+                ],
+                '20' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:2',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:2',
+                        ],
+                    ],
+                ],
+                '21' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:3',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:3',
+                        ],
+                    ],
+                ],
+                '22' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:4',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:4',
+                        ],
+                    ],
+                ],
+                '23' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:5',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:5',
+                        ],
+                    ],
+                ],
+                '24' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:6',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:6',
+                        ],
+                    ],
+                ],
+                '25' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:7',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:7',
+                        ],
+                    ],
+                ],
+                '26' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:8',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:8',
+                        ],
+                    ],
+                ],
+                '27' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:9',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:9',
+                        ],
+                    ],
+                ],
+                '28' => [
+                    'type' => RuleType::SINGLE->value,
+                    'length' => 30,
+                    'value' => 'patientConditionCodes:10',
+                    'values' => [
+                        'common' => [
+                            'patientConditionCodes:10',
+                        ],
+                    ],
+                ],
+                '29' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '30' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '31a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '31b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '31c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '31d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '32a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '32b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '32c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '32d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '33a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '33b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '33c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '33d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '34a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '34b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '34c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '34d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '35f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '36f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '37' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '38a' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'HigherInsuranceCompany:name',
+                    'values' => [
+                        'common' => [
+                            'HigherInsuranceCompany:name',
+                            'HigherInsuranceCompany:address',
+                            'HigherInsuranceCompany:city',
+                            'HigherInsuranceCompany:state',
+                            'HigherInsuranceCompany:zip',
+                        ],
+                    ],
+                ],
+                '38b' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'HigherInsuranceCompany:address',
+                    'values' => [
+                        'common' => [
+                            'HigherInsuranceCompany:name',
+                            'HigherInsuranceCompany:address',
+                            'HigherInsuranceCompany:city',
+                            'HigherInsuranceCompany:state',
+                            'HigherInsuranceCompany:zip',
+                        ],
+                    ],
+                ],
+                '38c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'value' => [
+                        'HigherInsuranceCompany:city',
+                        '| ',
+                        'HigherInsuranceCompany:state',
+                        'HigherInsuranceCompany:zip',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'HigherInsuranceCompany:name',
+                            'HigherInsuranceCompany:address',
+                            'HigherInsuranceCompany:city',
+                            'HigherInsuranceCompany:state',
+                            'HigherInsuranceCompany:zip',
+                        ],
+                    ],
+                ],
+                '39a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '39h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '40h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41a' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41b' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41c' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41d' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41e' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41f' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41g' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '41h' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '42' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:revenue_code',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '43' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:short_description',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '44' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:related_group',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '45' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:procedure_start_date',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '46' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:days_or_units',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '47' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:total_charge',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '48' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServices:non_covered_charges',
+                    'values' => [
+                        'common' => [
+                            'claimServices:revenue_code',
+                            'claimServices:procedure_description',
+                            'claimServices:procedure_start_date',
+                            'claimServices:price',
+                            'claimServices:days_or_units',
+                        ],
+                    ],
+                ],
+                '49' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'ta' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|001',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tb1' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|1',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tb2' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|1',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'tc' => [
+                    'type' => RuleType::DATE->value,
+                    'value' => 'created_at|mdY',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'td' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|02222222',
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                'te' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimServicesTotal',
+                    'values' => [
+                        'common' => [
+                            'claimServicesTotal',
                         ],
                     ],
                 ],
@@ -7721,6 +8414,42 @@ return [
         ],
         ClaimType::PROFESSIONAL->value => [
             FormatType::FILE->value => [
+                '0a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'higherInsuranceCompany:name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'insuranceCompany.name',
+                            'insuranceCompany.address',
+                        ],
+                    ],
+                ],
+                '0b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'value' => [
+                        'higherInsuranceCompany:address',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'higherInsuranceCompany:name',
+                            'higherInsuranceCompany:address',
+                        ],
+                    ],
+                ],
+                '0c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 30,
+                    'glue' => ' ',
+                    'value' => [
+                        'higherInsuranceCompany:city',
+                        'higherInsuranceCompany:state',
+                        'higherInsuranceCompany:zip',
+                    ],
+                ],
                 '1' => [
                     'type' => RuleType::SINGLE->value,
                     'value' => 'insType:code',
@@ -8173,27 +8902,252 @@ return [
                     'type' => RuleType::SINGLE->value,
                     'value' => 'patientSignature:insured_signature',
                 ],
-                '17aa' => [
+                '14a' => [
                     'type' => RuleType::MULTIPLE->value,
-                    'length' => 20,
+                    'length' => 2,
                     'value' => [
-                        'provider:code',
+                        'value' => 'claimDateCurrentInformation:month_of_from_date',
                     ],
                     'values' => [
                         'common' => [
-                            'provider:code',
+                            'claimDateCurrentInformation:month_of_from_date',
+                            'claimDateCurrentInformation:day_of_from_date',
+                            'claimDateCurrentInformation:year_of_from_date',
+                            'claimDateCurrentInformation:qualifier',
+                        ],
+                    ],
+                ],
+                '14b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateCurrentInformation:day_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateCurrentInformation:month_of_from_date',
+                            'claimDateCurrentInformation:day_of_from_date',
+                            'claimDateCurrentInformation:year_of_from_date',
+                            'claimDateCurrentInformation:qualifier',
+                        ],
+                    ],
+                ],
+                '14c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateCurrentInformation:year_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateCurrentInformation:month_of_from_date',
+                            'claimDateCurrentInformation:day_of_from_date',
+                            'claimDateCurrentInformation:year_of_from_date',
+                            'claimDateCurrentInformation:qualifier',
+                        ],
+                    ],
+                ],
+                '14d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateCurrentInformation:qualifier',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateCurrentInformation:month_of_from_date',
+                            'claimDateCurrentInformation:day_of_from_date',
+                            'claimDateCurrentInformation:year_of_from_date',
+                            'claimDateCurrentInformation:qualifier',
+                        ],
+                    ],
+                ],
+                '15a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateOtherInformation:qualifier',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateOtherInformation:qualifier',
+                            'claimDateOtherInformation:month_of_from_date',
+                            'claimDateOtherInformation:day_of_from_date',
+                            'claimDateOtherInformation:year_of_from_date',
+                        ],
+                    ],
+                ],
+                '15b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateOtherInformation:month_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateOtherInformation:qualifier',
+                            'claimDateOtherInformation:month_of_from_date',
+                            'claimDateOtherInformation:day_of_from_date',
+                            'claimDateOtherInformation:year_of_from_date',
+                        ],
+                    ],
+                ],
+                '15c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateOtherInformation:day_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateOtherInformation:qualifier',
+                            'claimDateOtherInformation:month_of_from_date',
+                            'claimDateOtherInformation:day_of_from_date',
+                            'claimDateOtherInformation:year_of_from_date',
+                        ],
+                    ],
+                ],
+                '15d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateOtherInformation:year_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateOtherInformation:qualifier',
+                            'claimDateOtherInformation:month_of_from_date',
+                            'claimDateOtherInformation:day_of_from_date',
+                            'claimDateOtherInformation:year_of_from_date',
+                        ],
+                    ],
+                ],
+                '16a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:month_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '16b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:day_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '16c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:year_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '16d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:month_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '16e' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:day_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '16f' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateWorkInformation:year_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateWorkInformation:month_of_from_date',
+                            'claimDateWorkInformation:day_of_from_date',
+                            'claimDateWorkInformation:year_of_from_date',
+                            'claimDateWorkInformation:month_of_to_date',
+                            'claimDateWorkInformation:day_of_to_date',
+                            'claimDateWorkInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '170' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'referredProviderRole:code',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'referredProviderRole:code',
                             'providerProfile:first_name',
                             'providerProfile:middle_name',
+                            'providerProfile:last_name',
                             'providerProfile:name_suffix',
                         ],
                     ],
                 ],
-                '17ab' => [
+                '171' => [
                     'type' => RuleType::MULTIPLE->value,
                     'length' => 20,
+                    'glue' => ' ',
                     'value' => [
                         'providerProfile:first_name',
                         'providerProfile:middle_name',
+                        'providerProfile:last_name',
                         'providerProfile:name_suffix',
                     ],
                     'values' => [
@@ -8201,7 +9155,489 @@ return [
                             'referredProviderRole:code',
                             'providerProfile:first_name',
                             'providerProfile:middle_name',
+                            'providerProfile:last_name',
                             'providerProfile:name_suffix',
+                        ],
+                    ],
+                ],
+                '17a0' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'providerProfile:qualifier',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'providerProfile:qualifier',
+                            'providerProfile:qualifierValue',
+                            'providerProfile:npi',
+                        ],
+                    ],
+                ],
+                '17a1' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 17,
+                    'value' => [
+                        'providerProfile:qualifierValue',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'providerProfile:qualifier',
+                            'providerProfile:qualifierValue',
+                            'providerProfile:npi',
+                        ],
+                    ],
+                ],
+                '17b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 10,
+                    'value' => [
+                        'providerProfile:npi',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'providerProfile:qualifier',
+                            'providerProfile:qualifierValue',
+                            'providerProfile:npi',
+                        ],
+                    ],
+                ],
+                '18a' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:month_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '18b' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:day_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '18c' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:year_of_from_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '18d' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:month_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '18e' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:day_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '18f' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'value' => 'claimDateHospitalInformation:year_of_to_date',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateHospitalInformation:month_of_from_date',
+                            'claimDateHospitalInformation:day_of_from_date',
+                            'claimDateHospitalInformation:year_of_from_date',
+                            'claimDateHospitalInformation:month_of_to_date',
+                            'claimDateHospitalInformation:day_of_to_date',
+                            'claimDateHospitalInformation:year_of_to_date',
+                        ],
+                    ],
+                ],
+                '19' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 2,
+                    'value' => [
+                        'claimDateAdditionalInformation:from_date',
+                        '| ',
+                        'claimDateAdditionalInformation:to_date',
+                        '| ',
+                        'claimDateAdditionalInformation:description',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'claimDateAdditionalInformation:month_of_from_date',
+                            'claimDateAdditionalInformation:day_of_from_date',
+                            'claimDateAdditionalInformation:year_of_from_date',
+                            'claimDateAdditionalInformation:month_of_to_date',
+                            'claimDateAdditionalInformation:day_of_to_date',
+                            'claimDateAdditionalInformation:year_of_to_date',
+                            'claimDateAdditionalInformation:description',
+                        ],
+                    ],
+                ],
+                '20a' => [
+                    'type' => RuleType::BOOLEAN->value,
+                    'value' => 'claimDemographicInformation:outside_lab',
+                ],
+                '20b' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDemographicInformation:charges',
+                ],
+                '21' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'demograficInformation:|0',
+                ],
+                '21A' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:A',
+                ],
+                '21B' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:B',
+                ],
+                '21C' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:C',
+                ],
+                '21D' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:D',
+                ],
+                '21E' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:E',
+                ],
+                '21F' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:F',
+                ],
+                '21G' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:G',
+                ],
+                '21H' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:H',
+                ],
+                '21I' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:I',
+                ],
+                '21J' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:J',
+                ],
+                '21K' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:K',
+                ],
+                '21L' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosesCode:L',
+                ],
+                '22A' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'demograficInformation:|',
+                ],
+                '22B' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'demograficInformation:|',
+                ],
+                '23' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'demographicInformation:prior_authorization_number| ',
+                ],
+                '24' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimProfessionalServices:24',
+                ],
+                '25A' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:federal_tax',
+                ],
+                '25B' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:federal_tax_value',
+                ],
+                '26' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'patientCompany:med_num',
+                ],
+                '27' => [
+                    'type' => RuleType::BOOLEAN->value,
+                    'value' => 'claimDemographicInformation:accept_assignment',
+                ],
+                '28' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServicesTotalKey:price',
+                ],
+                '29' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claimServicesTotalKey:copay',
+                ],
+                '31A' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'glue' => ' ',
+                    'value' => [
+                        'billingProviderProfile:first_name',
+                        'billingProviderProfile:middle_name',
+                        'billingProviderProfile:last_name',
+                        'billingProviderProfile:name_suffix',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'billingProviderProfile:first_name',
+                            'billingProviderProfile:middle_name',
+                            'billingProviderProfile:last_name',
+                            'billingProviderProfile:name_suffix',
+                        ],
+                    ],
+                ],
+                '31B' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => '|Signature on File',
+                ],
+                '31C' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'firstClaimService:from_service',
+                ],
+                '32A0' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'facility:name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'facility:name',
+                            'facilityAddress:address',
+                            'facilityAddress:city',
+                            'facilityAddress:state',
+                            'facilityAddress:zip',
+                            'facility:npi',
+                        ],
+                    ],
+                ],
+                '32A1' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'facilityAddress:address|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'facility:name',
+                            'facilityAddress:address',
+                            'facilityAddress:city',
+                            'facilityAddress:state',
+                            'facilityAddress:zip',
+                            'facility:npi',
+                        ],
+                    ],
+                ],
+                '32A2' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'glue' => ' ',
+                    'value' => [
+                        'facilityAddress:city|0',
+                        'facilityAddress:state|0',
+                        'facilityAddress:zip|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'facility:name',
+                            'facilityAddress:address',
+                            'facilityAddress:city',
+                            'facilityAddress:state',
+                            'facilityAddress:zip',
+                            'facility:npi',
+                        ],
+                    ],
+                ],
+                '32A' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'facility:npi',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'facility:name',
+                            'facilityAddress:address',
+                            'facilityAddress:city',
+                            'facilityAddress:state',
+                            'facilityAddress:zip',
+                            'facility:npi',
+                        ],
+                    ],
+                ],
+                '33A0' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'company:name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
+                        ],
+                    ],
+                ],
+                '33A1' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'companyAddress:address|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
+                        ],
+                    ],
+                ],
+                '33A2' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'glue' => ' ',
+                    'value' => [
+                        'companyAddress:city|0',
+                        'companyAddress:state|0',
+                        'companyAddress:zip|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
+                        ],
+                    ],
+                ],
+                '33A3' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'companyContact:code_area|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
+                        ],
+                    ],
+                ],
+                '33A4' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'companyContact:phone|0',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
+                        ],
+                    ],
+                ],
+                '33A' => [
+                    'type' => RuleType::MULTIPLE->value,
+                    'length' => 20,
+                    'value' => [
+                        'company:npi',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'company:name',
+                            'companyAddress:address',
+                            'companyAddress:city',
+                            'companyAddress:state',
+                            'companyAddress:zip',
+                            'companyContact:code_area',
+                            'companyContact:phone',
+                            'company:npi',
                         ],
                     ],
                 ],

@@ -22,9 +22,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $code
  * @property bool $is_provider
  * @property string|null $npi_company
- * @property int|null $health_professional_type_id
  * @property int|null $company_id
  * @property string|null $nppes_verified_at
+ * @property string|null $ein
+ * @property string|null $upin
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -32,17 +33,18 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \App\Models\Company|null $company
- * @property \Illuminate\Support\collection $companies_providers
+ * @property Collection $companies_providers
  * @property mixed $last_modified
  * @property mixed $status
+ * @property \App\Models\User $user
  * @property mixed $verified_on_nppes
- * @property \App\Models\HealthProfessionalType|null $healthProfessionalType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessionalType> $healthProfessionalType
+ * @property int|null $health_professional_type_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
  * @property \App\Models\PublicNote|null $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
- * @property \App\Models\User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
@@ -51,25 +53,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereHealthProfessionalTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereEin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereIsProvider($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUserId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  *
  * @mixin \Eloquent
  */

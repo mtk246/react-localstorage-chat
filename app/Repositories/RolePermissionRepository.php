@@ -2,9 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\User;
 use App\Roles\Models\Permission;
 use App\Roles\Models\Role;
+use Auth;
+use Gate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +27,15 @@ class RolePermissionRepository
             return Role::where('level', '>=', auth()->user()->level())
                        ->whereNotIn('level', [5, 6])->get();
         }
+    }
+
+    public function getAllMemberships(Request $request)
+    {
+        return MembershipRole::query()
+            ->where('billing_company_id', Gate::check('is-admin')
+                ? $request->get('billing_company', null)
+                : Auth::user()->billing_company_id)
+            ->get();
     }
 
     /**

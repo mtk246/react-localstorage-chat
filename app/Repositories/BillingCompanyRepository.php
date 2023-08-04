@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Requests\ImgBillingCompanyRequest;
 use App\Models\Address;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,6 +35,14 @@ final class BillingCompanyRepository
             'status' => true
         ]);
 
+        collect(config('memberships.default_roles'))
+            ->map(function (array $role) use ($company) {
+                $role['billing_company_id'] = $company->id;
+
+                return $role;
+            })
+            ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
+
         if (isset($data['address']['address'])) {
             $data['address']['billing_company_id'] = $company->id;
             $data['address']['addressable_id'] = $company->id;
@@ -60,6 +69,7 @@ final class BillingCompanyRepository
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
+                'tax_id' => $data['tax_id'],
                 'name' => $data['name'],
                 'abbreviation' => $data['abbreviation'] ?? '',
             ]);

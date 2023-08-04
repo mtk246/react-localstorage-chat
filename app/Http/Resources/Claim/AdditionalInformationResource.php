@@ -9,8 +9,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 final class AdditionalInformationResource extends JsonResource
 {
-    public function __construct($resource, protected int $type)
-    {
+    public function __construct(
+        $resource,
+        protected int $type,
+        protected $service,
+    ) {
         parent::__construct($resource);
     }
 
@@ -18,6 +21,8 @@ final class AdditionalInformationResource extends JsonResource
     public function toArray($request): array
     {
         $commonFields = [
+            'from' => $this->service->from,
+            'to' => $this->service->to,
             'claim_date_informations' => $this->resource->dateInformations->map(function ($model) {
                 return new ClaimDateInformationResource($model, $this->type);
             }),
@@ -26,6 +31,8 @@ final class AdditionalInformationResource extends JsonResource
 
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
+                'diagnosis_related_group_id' => (int) $this->service->diagnosis_related_group_id,
+                'non_covered_charges' => $this->service->non_covered_charges,
                 'patient_information' => new PatientInformationResource($this->resource->patientInformation),
             ],
             ClaimType::PROFESSIONAL->value => [],

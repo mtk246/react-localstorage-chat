@@ -108,6 +108,7 @@
         "zip":"3234", /** optional */
         "country": "Name country", /** optional */
         "country_subdivision_code": "Code", /** optional */
+        "apt_suite": "Apt Suite" /**optional */
     },
     "contact": { /** optional */
         "contact_name": "Some name", /** optional */
@@ -204,6 +205,7 @@
         "zip":"3234", /** optional */
         "country": "Name country", /** optional */
         "country_subdivision_code": "Code", /** optional */
+        "apt_suite": "Apt suite update"
     },
     "contact": { /** optional */
         "contact_name": "Some name", /** optional */
@@ -671,7 +673,8 @@ insurance_company_id <integer>
                     "address": "Name Address",
                     "country": "Name country",
                     "address_type_id": null,
-                    "country_subdivision_code": "Code"
+                    "country_subdivision_code": "Code",
+                    "apt_suite": "Apt_suite"
                 },
                 "contact": {
                     "fax": "fsdfs",

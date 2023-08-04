@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -17,100 +19,62 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Patient.
  *
  * @property int $id
- * @property string $marital_status
- * @property string $driver_licence
- * @property bool $dependent
- * @property string $guardian_name
- * @property string $guardian_phone
- * @property string $spuse_name
- * @property string $employer
- * @property string $employer_address
- * @property string $position
- * @property string $phone_employer
- * @property string $spuse_employer
- * @property string $spuse_work_phone
- * @property int $user_id
+ * @property string|null $driver_license
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\EmergencyContact[] $emergencyContacts
- * @property int|null $emergency_contacts_count
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\InsurancePlan[] $insurancePlans
- * @property int|null $insurance_plans_count
- * @property \App\Models\User|null $user
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDependent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicence($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereEmployerAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereGuardianName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereGuardianPhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient wherePhoneEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient wherePosition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseEmployer($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereSpuseWorkPhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUserId($value)
- *
- * @property string|null $driver_license
  * @property string|null $code
  * @property int|null $marital_status_id
+ * @property bool $deceased
+ * @property int|null $profile_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
+ * @property int|null $contract_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EmergencyContact> $emergencyContacts
+ * @property int|null $emergency_contacts_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
  * @property int|null $employments_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
  * @property int|null $encounters_count
  * @property mixed $last_modified
  * @property mixed $status
- * @property \App\Models\Guarantor|null $guarantor
+ * @property \App\Models\User|null $user
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guarantor> $guarantors
+ * @property int|null $guarantors_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
  * @property int|null $injuries_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
- * @property \App\Models\Marital|null $marital
  * @property \App\Models\MaritalStatus|null $maritalStatus
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Marital> $maritals
+ * @property int|null $maritals_count
  * @property \App\Models\PatientConditionRelated|null $patientConditionRelated
  * @property \App\Models\PatientPrivate|null $patientPrivate
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
+ * @property \App\Models\Profile|null $profile
  * @property \App\Models\PublicNote $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDeceased($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employment> $employments
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Encounter> $encounters
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -124,7 +88,8 @@ class Patient extends Model implements Auditable
         'code',
         'driver_license',
         'marital_status_id',
-        'user_id',
+        'deceased',
+        'profile_id',
     ];
 
     /**
@@ -162,17 +127,22 @@ class Patient extends Model implements Auditable
         return $this->belongsToMany(Injury::class, 'injury_patient', 'patient_id', 'injury_id')->withTimestamps();
     }
 
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
     /**
      * Patient belongs to user.
      */
-    public function user(): BelongsTo
+    public function user(): HasOneThrough
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
-    public function getUserAttribute(): User
+    public function getUserAttribute(): ?User
     {
-        return $this->user()->sole();
+        return $this->user()->first();
     }
 
     /**
@@ -246,9 +216,11 @@ class Patient extends Model implements Auditable
     /**
      * Get all of the claims for the Patient.
      */
-    public function claims(): HasMany
+    public function claims()
     {
-        return $this->hasMany(Claim::class);
+        return Claim::whereHas('demographicInformation', function ($query) {
+            $query->where('patient_id', $this->id);
+        });
     }
 
     /**
@@ -317,7 +289,7 @@ class Patient extends Model implements Auditable
      */
     public function getStatusAttribute()
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return false;
         }

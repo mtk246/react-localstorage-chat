@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -21,62 +20,21 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $id
  * @property string $code
  * @property string $name
- * @property bool $status
- * @property string $note
- * @property string $ins_type
- * @property string $plan_type
  * @property bool $accept_assign
  * @property bool $pre_authorization
- * @property bool $file_zero
+ * @property bool $file_zero_changes
  * @property bool $referral_required
  * @property bool $accrue_patient_resp
  * @property bool $require_abn
  * @property bool $pqrs_eligible
  * @property bool $allow_attached_files
  * @property string $eff_date
- * @property string $charge_using
- * @property string $format
- * @property string $method
- * @property string $naic
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\InsuranceCompany|null $insuranceCompany
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Patient[] $patients
- * @property int|null $patients_count
- *
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan query()
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAcceptAssign($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAccruePatientResp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAllowAttachedFiles($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCapGroup($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereChargeUsing($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereEffDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereFileZero($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereFormat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereInsType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereInsuranceCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereMethod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereNaic($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereNote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePlanType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePqrsEligible($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePreAuthorization($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereReferralRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereRequireAbn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereUpdatedAt($value)
- *
- * @property bool $file_zero_changes
- * @property int|null $charge_using_id
  * @property int|null $ins_type_id
  * @property int|null $plan_type_id
+ * @property string|null $payer_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
@@ -85,11 +43,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
  * @property int|null $billing_companies_count
- * @property \App\Models\TypeCatalog|null $chargeUsing
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
+ * @property int|null $contract_fees_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
+ * @property int|null $copays_count
  * @property mixed $last_modified
  * @property \App\Models\TypeCatalog|null $insType
+ * @property \App\Models\InsuranceCompany $insuranceCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanPrivate> $insurancePlanPrivate
  * @property int|null $insurance_plan_private_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
@@ -98,6 +60,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $insurance_policies_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
  * @property int|null $nicknames_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
+ * @property int|null $patients_count
  * @property \App\Models\TypeCatalog|null $planType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
@@ -109,43 +73,28 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityTimeFailed> $timeFaileds
  * @property int|null $time_faileds_count
  *
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereChargeUsingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan search($search, $notFromInsurance)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAcceptAssign($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAccruePatientResp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereAllowAttachedFiles($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereEffDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereFileZeroChanges($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereInsTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePayerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePlanTypeId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanPrivate> $insurancePlanPrivate
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityTimeFailed> $timeFaileds
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ContractFee> $contractFees
- * @property int|null $contract_fees_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
- * @property int|null $copays_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanPrivate> $insurancePlanPrivate
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlanService> $insurancePlanServices
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityNickname> $nicknames
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityTimeFailed> $timeFaileds
- *
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan search($search)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePqrsEligible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan wherePreAuthorization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereReferralRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereRequireAbn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -170,7 +119,6 @@ class InsurancePlan extends Model implements Auditable
         'eff_date',
         'ins_type_id',
         'plan_type_id',
-        'charge_using_id',
         'insurance_company_id',
     ];
 
@@ -209,30 +157,14 @@ class InsurancePlan extends Model implements Auditable
         return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
     }
 
-    /**
-     * InsurancePlan belongs to ChargeUsing.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function chargeUsing()
+    public function copays(): BelongsToMany
     {
-        return $this->belongsTo(TypeCatalog::class, 'charge_using_id');
+        return $this->belongsToMany(Copay::class)->withTimestamps();
     }
 
-    /**
-     * InsurancePlan has many Copays.
-     */
-    public function copays(): HasMany
+    public function contractFees(): BelongsToMany
     {
-        return $this->hasMany(Copay::class);
-    }
-
-    /**
-     * InsurancePlan has many ContracFees.
-     */
-    public function contractFees(): HasMany
-    {
-        return $this->hasMany(ContractFee::class);
+        return $this->belongsToMany(ContractFee::class)->withTimestamps();
     }
 
     /**

@@ -14,18 +14,23 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string|null $naic
- * @property bool $file_capitated
- * @property int|null $format_id
  * @property int|null $file_method_id
  * @property int|null $insurance_plan_id
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $format_professional_id
+ * @property int|null $format_cms_id
+ * @property int|null $format_institutional_id
+ * @property int|null $format_ub_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
  * @property \App\Models\TypeCatalog|null $fileMethod
- * @property \App\Models\TypeCatalog|null $format
+ * @property \App\Models\TypeCatalog|null $formatCMS
+ * @property \App\Models\TypeCatalog|null $formatInstitutional
+ * @property \App\Models\TypeCatalog|null $formatProfessional
+ * @property \App\Models\TypeCatalog|null $formatUB
  * @property \App\Models\InsurancePlan|null $insurancePlan
  *
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate newModelQuery()
@@ -33,29 +38,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate query()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFileCapitated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFileMethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereInsurancePlanId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $format_professional_id
- * @property int|null $format_cms_id
- * @property int|null $format_institutional_id
- * @property int|null $format_ub_id
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \App\Models\TypeCatalog|null $formatCMS
- * @property \App\Models\TypeCatalog|null $formatInstitutional
- * @property \App\Models\TypeCatalog|null $formatProfessional
- * @property \App\Models\TypeCatalog|null $formatUB
- *
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatCmsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatInstitutionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatProfessionalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatUbId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereInsurancePlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

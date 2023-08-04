@@ -45,12 +45,23 @@ final class StoreRequest extends FormRequest
             ],
             'type' => ['required', 'integer'],
             'draft' => ['nullable', 'boolean'],
+            'private_note' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'string',
+                'nullable',
+            ],
+            'sub_status_id' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'integer',
+                'nullable',
+            ],
 
             'demographic_information' => ['required', 'array'],
             'demographic_information.type_of_medical_assistance' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'string',
             ],
+            'demographic_information.bill_classification' => ['required', 'integer'],
             'demographic_information.validate' => ['nullable', 'boolean'],
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
@@ -91,8 +102,6 @@ final class StoreRequest extends FormRequest
             'demographic_information.health_professional_qualifier.*.qualifier_id' => ['nullable', 'integer'],
 
             'claim_services' => ['nullable', 'array'],
-            'claim_services.diagnosis_related_group_id' => ['nullable', 'integer'],
-            'claim_services.non_covered_charges' => ['nullable', 'numeric'],
             'claim_services.services' => ['array', 'nullable'],
             'claim_services.services.*.id' => ['nullable', 'integer'],
             'claim_services.services.*.from_service' => ['sometimes', 'nullable', 'date'],
@@ -110,22 +119,37 @@ final class StoreRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
-            'additional_information.patient_information.admission_date' => ['sometimes', 'date'],
+            'additional_information.from' => ['required', 'date'],
+            'additional_information.to' => ['required', 'date'],
+            'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
+            'additional_information.non_covered_charges' => ['nullable', 'numeric'],
+            'additional_information.patient_information.admission_date' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
             'additional_information.patient_information.admission_time' => ['nullable', 'date_format:H:i:s'],
-            'additional_information.patient_information.discharge_date' => ['sometimes', 'date'],
+            'additional_information.patient_information.discharge_date' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
             'additional_information.patient_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.patient_information.condition_code_ids' => ['nullable', 'array'],
             'additional_information.patient_information.admission_type_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.admission_source_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.patient_status_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.bill_classification_id' => ['nullable', 'integer'],
 
@@ -164,6 +188,16 @@ final class StoreRequest extends FormRequest
                 'integer',
             ],
             'draft' => ['nullable', 'boolean'],
+            'private_note' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'string',
+                'nullable',
+            ],
+            'sub_status_id' => [
+                Rule::excludeIf(fn () => false === $this->input('draft', false)),
+                'integer',
+                'nullable',
+            ],
 
             'demographic_information' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),

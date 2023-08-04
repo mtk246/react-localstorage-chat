@@ -13,16 +13,6 @@ use Illuminate\Validation\Rule;
 class UpdateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -40,6 +30,7 @@ class UpdateRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'driver_license' => ['nullable', 'string'],
+            'deceased' => ['nullable', 'boolean'],
 
             'profile' => ['required', 'array'],
             'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user?->profile_id ?? null), 'nullable', 'string'],

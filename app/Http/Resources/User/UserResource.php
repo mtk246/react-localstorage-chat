@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\User;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 /**  @property User $resource */
 final class UserResource extends JsonResource
@@ -25,10 +25,14 @@ final class UserResource extends JsonResource
             'status' => $this->resource->status,
             'last_login' => $this->resource->last_login,
             'last_activity' => $this->resource->last_activity,
+            'updated_at' => $this->resource->created_at,
+            'created_at' => $this->resource->updated_at,
             'profile_id' => $this->resource->profile_id,
             'profile' => new ProfileResource($this->resource->profile),
             'language' => $this->resource->language,
+            'last_modified' => $this->resource->last_modified,
             'roles' => RoleResource::collection($this->resource->roles),
+            'billing_company_id' => $this->resource->billing_company_id,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $model->private_user = [
@@ -60,7 +64,7 @@ final class UserResource extends JsonResource
         ];
     }
 
-    private function getSocialMedias(int $billingCompanyId): Collection
+    private function getSocialMedias(int $billingCompanyId): ?Collection
     {
         return $this->resource
             ->profile
@@ -73,6 +77,7 @@ final class UserResource extends JsonResource
     private function getAddress(int $billingCompanyId)
     {
         return $this->resource
+            ->profile
             ->addresses
             ->first(
                 fn ($address) => $address->billing_company_id === $billingCompanyId,
@@ -82,9 +87,10 @@ final class UserResource extends JsonResource
     private function getContact(int $billingCompanyId)
     {
         return $this->resource
+            ->profile
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            )->first() ?? null;
     }
 }

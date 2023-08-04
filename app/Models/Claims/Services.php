@@ -14,12 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Claims\Services.
  *
- * @property mixed $modifiers
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Services query()
- *
  * @property int $id
  * @property int $claim_service_id
  * @property int $procedure_id
@@ -42,11 +36,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property \App\Models\Claims\ClaimService|null $claimService
  * @property TypeCatalog|null $epsdt
  * @property TypeCatalog|null $familyPlanning
+ * @property mixed $modifiers
  * @property PlaceOfService|null $placeOfService
  * @property Procedure|null $procedure
- * @property TypeCatalog|null $revenueCode
+ * @property Procedure|null $revenueCode
  * @property TypeOfService|null $typeOfService
  *
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Services query()
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereClaimServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereCopay($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereCreatedAt($value)
@@ -176,7 +174,7 @@ final class Services extends Model
      */
     public function revenueCode()
     {
-        return $this->belongsTo(TypeCatalog::class, 'revenue_code_id');
+        return $this->belongsTo(Procedure::class, 'revenue_code_id');
     }
 
     public function getModifiersAttribute()

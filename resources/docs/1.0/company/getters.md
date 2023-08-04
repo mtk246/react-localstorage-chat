@@ -14,6 +14,10 @@
 - [Get list statement apply to](#get-list-statement-apply-to)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list contract fee type](#get-list-contract-fee-types)
+- [Get list type formats](#get-list-type-formats)
+- [Get list measurement units](#get-list-measurement-units)
+- [Get list billing providers](#get-list-billing-providers)
+- [Get list insurance plans](#get-list-insurance-plans)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -34,6 +38,8 @@
 | 11 |GET | `Get list statement apply to`          | `/company/get-list-statement-apply-to`|yes|Get all statement apply to|
 | 12 |GET | `Get list billing companies`| `/company/get-list-billing-companies?company_id={companyID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 13 |GET | `Get list contract fee type`| `/company/get-list-contract-fee-types`        |yes            |Get list contract fee types|
+| 14 |GET | `Get list measurement units`| `/company/get-list-measurement-units`        |yes            |Get list measurement units|
+| 15 |GET | `Get list billing-providers`| `/company/get-list-billing-providers`        |yes            |Get list billing providers|
 
 
 <a name="data-another-module"></a>
@@ -46,6 +52,8 @@
 | 14 | GET    | `Get list procedure`         | `/procedure/get-list/{company_id?}`    | yes            | Get list procedure         |
 | 15 | GET    | `Get list billing companies` | `/facility/get-list-billing-companies` | yes            | Get list billing companies |
 | 16 | GET    | `Get list facilities`        | `/facility/get-list`                   | yes            | Get list facilities        |
+| 4  |GET     | `Get list types formats`  | `/claim/get-list-type-formats`     | yes            | Get list type 
+| 4  |GET     | `Get list insurance plans`  | `/insurance-plan/get-list`     | yes            | Get list insurance plan
 
 
 <a name="get-price-of-procedure"></a>
@@ -1345,5 +1353,225 @@
         "id": 225,
         "name": "RVU"
     }
+]
+```
+
+<a name="get-list-measurement-units"></a>
+## Get list measurement units
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Measurement units found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "name": "F2 - International Unit"
+  },
+  {
+    "id": 2,
+    "name": "GR - Gram"
+  },
+  {
+    "id": 3,
+    "name": "ME - Milligram"
+  },
+  {
+    "id": 4,
+    "name": "ML - Milliliter"
+  },
+  {
+    "id": 5,
+    "name": "UN - Unit"
+  }
+]
+```
+
+<a name="get-list-billing-providers"></a>
+## Get list billing providers
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Example path
+
+> {primary} /company/get-list-billing-providers? billing_company_id=1 & company_id=3
+
+## Example path 2
+
+> {primary} /company/get-list-billing-providers? billing_company_id=1 & company_id=2 & all_health_professional=true
+
+## Response
+
+> {success} 200 Billing providers found
+
+#
+
+```json
+[
+  {
+    "id": "company:3",
+    "name": "Company First312112",
+    "npi": "22212312",
+    "tax_id_options": [
+      {
+        "id": "123432100",
+        "name": "123432100"
+      }
+    ],
+    "taxonomy_options": [
+      {
+        "id": 8,
+        "name": "TAX01213 - Nametaxonomy Company",
+        "primary": true
+      },
+      {
+        "id": 9,
+        "name": "TAX01222 - Nametaxonomy 2 Company",
+        "primary": false
+      }
+    ]
+  }
+]
+```
+
+#
+
+<a name="get-list-type-formats"></a>
+## Get list type formats
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Type formats of Claim found
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "CMS-1500 / 837P"
+    },
+    {
+        "id": 2,
+        "name": "UB-04 / 837I"
+    }
+]
+```
+
+#
+
+<a name="get-list-insurance-plan"></a>
+## Get list insurance plan
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Example path
+
+> {primary} /insurance-plan/get-list?
+        groupBy=true
+
+## Response
+
+> {success} 200 Insurance plans found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Providence Administrative Services",
+    "group_values": [
+      {
+        "id": 1,
+        "name": "Connect 1500 Gold"
+      },
+      {
+        "id": 2,
+        "name": "Connect 5000 Silver"
+      },
+      {
+        "id": 3,
+        "name": "Connect Direct 5000 Silver"
+      },
+      {
+        "id": 4,
+        "name": "Connect 9000 Bronze"
+      },
+      {
+        "id": 5,
+        "name": "Qualified 7050 Bronze - Choice Network"
+      },
+      {
+        "id": 6,
+        "name": "Qualified 7050 Bronze - Signature Network"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Kg Administrative Services",
+    "group_values": [
+      {
+        "id": 7,
+        "name": "Oregon Standard Gold - Choice Network"
+      },
+      {
+        "id": 8,
+        "name": "Oregon Standard Silver - Choice Network"
+      },
+      {
+        "id": 9,
+        "name": "Oregon Direct Silver - Choice Network"
+      },
+      {
+        "id": 10,
+        "name": "Oregon Standard Bronze - Choice Network"
+      },
+      {
+        "id": 11,
+        "name": "Columbia 1500 Gold"
+      },
+      {
+        "id": 12,
+        "name": "Columbia 8700 Bronze"
+      }
+    ]
+  }
 ]
 ```

@@ -26,10 +26,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
+ * @property mixed|null $type
+ * @property mixed|null $clasifications
+ * @property string|null $short_description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property int|null $companies_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyService> $companyServices
+ * @property int|null $company_services_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
+ * @property int|null $copays_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
  * @property int|null $diagnoses_count
  * @property mixed $last_modified
@@ -52,34 +57,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure query()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereClasifications($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereShortDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Copay> $copays
- * @property int|null $copays_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsuranceCompany> $insuranceCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePlan> $insurancePlans
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\MacLocality> $macLocalities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $modifiers
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureConsideration> $procedureCosiderations
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProcedureFee> $procedureFees
  *
  * @mixin \Eloquent
  */
@@ -144,9 +131,9 @@ class Procedure extends Model implements Auditable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function companies()
+    public function companyServices()
     {
-        return $this->belongsToMany(Company::class)->withPivot('price', 'price_percentage', 'insurance_label_fee_id', 'billing_company_id', 'modifier_id', 'clia', 'mac_locality_id')->withTimestamps();
+        return $this->belongsToMany(CompanyService::class)->withTimestamps();
     }
 
     /**

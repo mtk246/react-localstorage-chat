@@ -17,9 +17,12 @@ class RolePermissionController extends Controller
         $this->RolePermissionRepository = new RolePermissionRepository();
     }
 
-    public function getRoles(): JsonResponse
+    public function getRoles(Request $request): JsonResponse
     {
-        return response()->json($this->RolePermissionRepository->getAllRoles());
+        return response()->json([
+            'roles' => $this->RolePermissionRepository->getAllRoles(),
+            'memberships' => $this->RolePermissionRepository->getAllMemberships($request),
+        ]);
     }
 
     public function getRolesWithPermissions(): JsonResponse

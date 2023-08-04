@@ -17,6 +17,7 @@ final class ListModifierResource extends JsonResource
             'id' => $this->resource->id,
             'color' => $this->resource->classification->getColor(),
             'name' => $this->resource->modifier,
+            'description' => $this->resource->description,
         ];
     }
 }

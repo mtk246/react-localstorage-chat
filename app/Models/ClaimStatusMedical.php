@@ -12,13 +12,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\ClaimStatusMedical.
  *
- * @property int $id
- * @property string $control_number
- * @property int $company_id
- * @property int $subscriber_id
- * @property int $insurance_company_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Company $company
@@ -28,16 +21,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereControlNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereInsuranceCompanyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereSubscriberId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatusMedical whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

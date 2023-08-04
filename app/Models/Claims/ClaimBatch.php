@@ -27,9 +27,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $claim_batch_status_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property BillingCompany|null $billingCompany
  * @property \App\Models\Claims\ClaimBatchStatus|null $claimBatchStatus
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
  * @property int|null $claims_count
+ * @property Company $company
  * @property mixed $last_modified
  * @property mixed $total_accepted
  * @property mixed $total_accepted_by_clearing_house
@@ -55,13 +57,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
- * @property Company $company
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Claim> $claims
  *
  * @mixin \Eloquent
  */

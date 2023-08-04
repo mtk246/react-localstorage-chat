@@ -36,9 +36,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed whereInsuranceCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompanyTimeFailed whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class InsuranceCompanyTimeFailed extends Model implements Auditable

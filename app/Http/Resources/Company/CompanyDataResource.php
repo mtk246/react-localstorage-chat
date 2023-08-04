@@ -19,19 +19,28 @@ final class CompanyDataResource extends RequestWrapedResource
     public function toArray($request): array
     {
         return [
+            'id' => $this->resource->id,
             'npi' => $this->resource->npi,
             'ein' => $this->resource->ein,
-            'upin' => $this->resource->upin,
-            'clia' => $this->resource->clia,
+            'clia' => $this->resource->clia ?? '',
             'name' => $this->resource->name,
             'abbreviation' => $this->resource
                 ->abbreviations()
                 ->where('billing_company_id', $request->getBillingCompanyId())
-                ->first()?->abbreviation,
+                ->first()?->abbreviation ?? '',
             'nickname' => $this->resource
                 ->nicknames()
                 ->where('billing_company_id', $request->getBillingCompanyId())
-                ->first()?->nickname,
+                ->first()?->nickname ?? '',
+            'miscellaneous' => $this->resource
+                ->billingCompanies()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->first()?->pivot?->miscellaneous ?? '',
+            'claim_format_ids' => $this->resource
+                ->billingCompanies()
+                ->where('billing_company_id', $request->getBillingCompanyId())
+                ->first()?->pivot?->claim_format_ids ?? [],
+            'other_name' => $this->resource->other_name ?? '',
             'taxonomies' => TaxonomiesResource::collection(
                 $this->resource->taxonomies()->orderBy('id')->get()
             ),

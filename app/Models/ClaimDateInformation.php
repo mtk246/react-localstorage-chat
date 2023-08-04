@@ -14,36 +14,33 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\ClaimDateInformation.
  *
  * @property int $id
- * @property string|null $from_date_or_current
+ * @property string|null $from_date
  * @property string|null $to_date
  * @property string|null $description
  * @property int|null $field_id
  * @property int|null $qualifier_id
- * @property int $physician_or_supplier_information_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $amount
+ * @property int $claim_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\TypeCatalog|null $field
- * @property \App\Models\PhysicianOrSupplierInformation $physicianOrSupplierInformation
+ * @property \App\Models\PhysicianOrSupplierInformation|null $physicianOrSupplierInformation
  * @property \App\Models\TypeCatalog|null $qualifier
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereClaimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereFieldId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereFromDateOrCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereFromDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation wherePhysicianOrSupplierInformationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereQualifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereToDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDateInformation whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */
@@ -58,7 +55,6 @@ class ClaimDateInformation extends Model implements Auditable
         'from_date_or_current',
         'to_date',
         'description',
-        'field_id',
         'qualifier_id',
         'physician_or_supplier_information_id',
         'through',

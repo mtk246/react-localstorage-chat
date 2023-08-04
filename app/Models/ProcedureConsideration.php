@@ -21,9 +21,17 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $discriminatory_id
+ * @property int $age_type
+ * @property bool $claim_note
+ * @property bool $supervisor
+ * @property bool $authorization
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Discriminatory $discriminatory
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $frecuentDiagnoses
+ * @property int|null $frecuent_diagnoses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Modifier> $frecuentModifiers
+ * @property int|null $frecuent_modifiers_count
  * @property \App\Models\Gender $gender
  * @property \App\Models\Procedure $procedure
  *
@@ -32,15 +40,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration query()
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereAgeEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereAgeInit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereAgeType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereAuthorization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereClaimNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereDiscriminatoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereGenderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereSupervisor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProcedureConsideration whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

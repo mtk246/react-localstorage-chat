@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Http\Casts\User\UpdateUserWrapper;
+use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\OnlyRoleIf;
+use App\Rules\ValidRoleRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class EditUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+    use HasCastedClass;
+
+    protected string $castedClass = UpdateUserWrapper::class;
 
     /**
      * Get the validation rules that apply to the request.
@@ -27,8 +24,6 @@ class EditUserRequest extends FormRequest
      */
     public function rules()
     {
-        $roles = $this->roles;
-        $invalidRoles = ['Super User', 'Development Support'];
         $id = $this->route('id');
 
         return [
@@ -44,27 +39,34 @@ class EditUserRequest extends FormRequest
             'profile.social_medias.*.name' => ['sometimes', 'string'],
             'profile.social_medias.*.link' => ['sometimes', 'string'],
 
-            'email' => ['required', Rule::unique('users', 'email')->ignore($id), 'string', 'email:rfc'],
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
+            'roles.*' => ['required', 'integer', new ValidRoleRule()],
 
-            'company-billing' => [Rule::requiredIf(function () use ($roles, $invalidRoles) {
-                return !in_array_any($invalidRoles, $roles ?? $invalidRoles);
-            }), 'integer', 'nullable'],
+            'billing_company_id' => ['nullable', 'integer'],
+            'memberships' => [
+                Rule::requiredIf(in_array(3, $this->roles)),
+                'nullable',
+                'array',
+            ],
+            'memberships.*' => [
+                'integer',
+                'exists:membership_roles,id',
+            ],
 
             'address' => ['required', 'array'],
-            'address.address' => ['required', 'string'],
-            'address.apt_suite' => ['required', 'string'],
-            'address.country' => ['required', 'string'],
-            'address.city' => ['required', 'string'],
-            'address.state' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
+            'address.address' => ['nullable', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
+            'address.country' => ['nullable', 'string'],
+            'address.city' => ['nullable', 'string'],
+            'address.state' => ['nullable', 'string'],
+            'address.zip' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.phone' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'string'],
+            'contact.email' => ['nullable', 'string'],
         ];
     }
 }

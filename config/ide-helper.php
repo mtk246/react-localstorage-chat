@@ -299,7 +299,7 @@ return [
     | The specified commands should run after migrations are finished running.
     |
     */
-    'post_migrate' => [
-        'ide-helper:models --nowrite',
-    ],
+    'post_migrate' => env('POST_MIGRATE', true)
+        ? ['ide-helper:models -WR']
+        : [],
 ];

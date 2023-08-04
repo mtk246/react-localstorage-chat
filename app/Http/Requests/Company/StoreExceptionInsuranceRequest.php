@@ -4,34 +4,34 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Company;
 
-use App\Http\Casts\Company\StoreExectionICRequestCast;
+use App\Http\Casts\Company\ExceptionInsuranceWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Models\InsurancePlan;
+use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-final class StoreExectionICRequest extends FormRequest
+final class StoreExceptionInsuranceRequest extends FormRequest
 {
     use HasCastedClass;
 
-    protected string $castedClass = StoreExectionICRequestCast::class;
+    protected string $castedClass = ExceptionInsuranceWrapper::class;
 
     /** @return array<string, mixed> */
     public function rules()
     {
         return [
-            'billing_company_id' => [
+            'store' => ['nullable', 'array'],
+            'store.*.id' => ['nullable', 'integer'],
+            'store.*.billing_company_id' => [
                 Rule::requiredIf(Gate::check('is-admin')),
                 'integer',
                 'nullable',
             ],
-            'store' => 'nullable|array',
-            'store.*.id' => 'nullable|integer',
-            'store.*.insurance_company_id' => [
+            'store.*.insurance_plan_ids' => [
                 'required',
-                'integer',
-                'distinct',
-                'exists:\App\Models\InsuranceCompany,id',
+                new IntegerOrArrayKeyExists(InsurancePlan::class),
             ],
         ];
     }

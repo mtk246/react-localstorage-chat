@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\InsurancePlan\GetInsurancePlan;
+use App\Actions\InsurancePlan\GetInsurancePlanAction;
 use App\Http\Requests\ChangeStatusInsurancePlanRequest;
 use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
 use App\Http\Requests\InsurancePlan\AddCopaysRequest;
@@ -11,6 +13,10 @@ use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Actions\InsurancePlan\AddCopays;
+use App\Models\InsurancePlan;
+
+use App\Actions\InsurancePlan\AddContractFees;
 
 class InsurancePlanController extends Controller
 {
@@ -35,11 +41,11 @@ class InsurancePlanController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error update insurance plan'), 400);
     }
 
-    public function getOneInsurancePlan(int $id): JsonResponse
+    public function getOneInsurancePlan(Request $request, GetInsurancePlan $getInsurance, InsurancePlan $insurance): JsonResponse
     {
-        $rs = $this->insurancePlanRepository->getOneInsurancePlan($id);
+        $rs = $getInsurance->single($insurance, $request->user());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+        return $rs ? response()->json($rs) : response()->json(__('Error, company not found'), 404);
     }
 
     public function getByName(string $name): JsonResponse
@@ -80,10 +86,10 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getList()
+    public function getList(Request $request, GetInsurancePlanAction $getInsurace)
     {
         return response()->json(
-            $this->insurancePlanRepository->getList()
+            $getInsurace->list($request->input(), $request->user())
         );
     }
 
@@ -122,13 +128,6 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getListChargeUsings()
-    {
-        return response()->json(
-            $this->insurancePlanRepository->getListChargeUsings()
-        );
-    }
-
     public function getByPayer(string $payer): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
@@ -148,17 +147,27 @@ class InsurancePlanController extends Controller
         }
     }
 
-    public function addCopays(AddCopaysRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->insurancePlanRepository->addCopays($request->validated(), $id);
+    public function addCopays(
+        AddCopays $addCopays,
+        AddCopaysRequest $request,
+        InsurancePlan $insurance,
+    ): JsonResponse {
+        $request->validated();
 
-        return $rs ? response()->json($rs) : response()->json(__('Error add copays to insurance'), 404);
+        $rs = $addCopays->invoke($request->castedCollect('copays'), $insurance, $request->user());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error add copays to company'), 404);
     }
 
-    public function addContractFees(AddContractFeesRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->insurancePlanRepository->addContractFees($request->validated(), $id);
+    public function addContractFees(
+        AddContractFees $addContractFees,
+        AddContractFeesRequest $request,
+        InsurancePlan $insurance,
+    ): JsonResponse {
+        $request->validated();
 
-        return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to insurance'), 404);
+        $rs = $addContractFees->invoke($request->castedCollect('contract_fees'), $insurance, $request->user());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }
 }

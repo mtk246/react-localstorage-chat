@@ -17,18 +17,17 @@ class FacilityTypeSeeder extends Seeder
     public function run()
     {
         $facilityTypes = [
-            ['type' => '01 - Clinics'],
-            ['type' => '02 - Hospitals'],
-            ['type' => '03 - Labs'],
-            ['type' => '75X - Comprehensive Outpa...'],
-            ['type' => '86X - Specialty Facility Res...'],
-            ['type' => 'AL - Assisted Living Facility'],
-            ['type' => 'ASC - Ambulatory Surgery Center'],
-            ['type' => 'LAB - Free Standing Lab Facility'],
-            ['type' => 'OT - Special Facility - Other'],
-            ['type' => 'RRH - Rural Health Clinic'],
-            ['type' => 'SN - Skilled Nursing Facility'],
+            ['code' => '1', 'type' => 'Hospital'],
+            ['code' => '2', 'type' => 'Skilled Nursing'],
+            ['code' => '3', 'type' => 'Home Health'],
+            ['code' => '4', 'type' => 'Christian Science (Hospital)'],
+            ['code' => '5', 'type' => 'Christian Science (Extended Care)'],
+            ['code' => '6', 'type' => 'Intermediate Care'],
+            ['code' => '7', 'type' => 'Clinic '],
+            ['code' => '8', 'type' => 'Special Facility or Hospital ASC Surgery'],
         ];
+
+        FacilityType::truncate();
 
         foreach ($facilityTypes as $type) {
             FacilityType::updateOrCreate($type, $type);

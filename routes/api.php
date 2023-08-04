@@ -53,7 +53,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
         Route::get('/get-list-name-suffix', [\App\Http\Controllers\UserController::class, 'getListNameSuffix'])->middleware(['auth:api']);
-        Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\UserController::class, 'search']);
+        Route::get('/search', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
         Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
@@ -63,7 +63,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('change-password/{token}', [\App\Http\Controllers\UserController::class, 'changePassword']);
         Route::post('new-token', [\App\Http\Controllers\UserController::class, 'newToken']);
         Route::patch('{id?}/change-status', [\App\Http\Controllers\UserController::class, 'changeStatus'])->middleware('auth:api');
-        Route::put('{id}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
+        Route::put('/{user}', [\App\Http\Controllers\UserController::class, 'editUser'])->middleware('auth:api');
         Route::post('img-profile', [\App\Http\Controllers\UserController::class, 'updateImgProfile'])->middleware(['auth:api']);
 
         Route::get('social-networks/get-list', [\App\Http\Controllers\UserController::class, 'getListSocialNetworks'])->middleware(['auth:api']);
@@ -196,10 +196,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/add-to-billing-company/{id}', [\App\Http\Controllers\FacilityController::class, 'addToBillingCompany'])->middleware([
             'auth:api',
         ]);
-        Route::patch('/{facility_id}/add-to-company/{company_id}', [\App\Http\Controllers\FacilityController::class, 'addToCompany'])->middleware([
+        Route::patch('/{facility}/company', [\App\Http\Controllers\FacilityController::class, 'addToCompany'])->middleware([
             'auth:api',
         ]);
-        Route::patch('/{facility_id}/remove-to-company/{company_id}', [\App\Http\Controllers\FacilityController::class, 'removeToCompany'])->middleware([
+        Route::patch('/{facility}/remove-company', [\App\Http\Controllers\FacilityController::class, 'removeToCompany'])->middleware([
+            'auth:api',
+        ]);
+        Route::get('/bill-classifications/{facility_type}', [\App\Http\Controllers\FacilityController::class, 'getBillClassifiations'])->middleware([
             'auth:api',
         ]);
     });
@@ -207,19 +210,22 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::prefix('company')->group(function () {
         Route::get('/get-list-by-billing-company/{id?}', [CompanyController::class, 'getList']);
         Route::get('/get-list-name-suffix', [CompanyController::class, 'getListNameSuffix']);
+        Route::get('/get-list-measurement-units', [CompanyController::class, 'getListMeasurementUnits']);
         Route::get('/get-list-statement-rules', [CompanyController::class, 'getListStatementRules']);
         Route::get('/get-list-statement-when', [CompanyController::class, 'getListStatementWhen']);
         Route::get('/get-list-statement-apply-to', [CompanyController::class, 'getListStatementApplyTo']);
         Route::get('/get-list-contract-fee-types', [CompanyController::class, 'getListContractFeeTypes']);
         Route::get('/get-list-billing-companies', [CompanyController::class, 'getListBillingCompanies']);
+        Route::get('/get-list-billing-providers', [CompanyController::class, 'getListBillingProviders']);
 
         Route::middleware([
             'auth:api',
         ])->group(function (): void {
             Route::put('/{company}/data', [CompanyController::class, 'updateCompanyData']);
+            Route::put('/{company}/patients', [CompanyController::class, 'UpdatePatients']);
             Route::put('/{company}/contacts', [CompanyController::class, 'UpdateContactData']);
             Route::put('/{company}/statements', [CompanyController::class, 'StoreStatements']);
-            Route::put('/{company}/exections', [CompanyController::class, 'StoreExectionInsuranceCompanies']);
+            Route::put('/{company}/exceptions', [CompanyController::class, 'StoreExceptionInsurance']);
             Route::put('/{company}/notes', [CompanyController::class, 'updateCompanyNotes']);
             Route::get('/get-all-server', [CompanyController::class, 'getServerAll']);
             Route::post('/', [CompanyController::class, 'createCompany']);
@@ -233,7 +239,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/{company}/services', [CompanyController::class, 'addServices']);
             Route::patch('/{company}/copays', [CompanyController::class, 'addCompanyCopays']);
             Route::patch('/{company}/contract-fees', [CompanyController::class, 'addCompanyContractFees']);
-            Route::get('/{id}', [CompanyController::class, 'getOneCompany']);
+            Route::get('/{company}', [CompanyController::class, 'getOneCompany']);
             Route::put('/{id}', [CompanyController::class, 'updateCompany']);
         });
     });
@@ -273,19 +279,19 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-formats', [\App\Http\Controllers\InsurancePlanController::class, 'getListFormats']);
         Route::get('/get-list-ins-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListInsTypes']);
         Route::get('/get-list-plan-types', [\App\Http\Controllers\InsurancePlanController::class, 'getListPlanTypes']);
-        Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
+        // Route::get('/get-list-charge-usings', [\App\Http\Controllers\InsurancePlanController::class, 'getListChargeUsings']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\InsurancePlanController::class, 'getListBillingCompanies']);
         Route::get('/get-by-payer-id/{payer}', [\App\Http\Controllers\InsurancePlanController::class, 'getByPayer']);
         Route::post('/', [\App\Http\Controllers\InsurancePlanController::class, 'createInsurancePlan']);
         Route::put('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'updateInsurancePlan']);
         Route::get('/', [\App\Http\Controllers\InsurancePlanController::class, 'getAllInsurancePlans']);
-        Route::get('/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'getOneInsurancePlan']);
+        Route::get('/{insurance}', [\App\Http\Controllers\InsurancePlanController::class, 'getOneInsurancePlan']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\InsurancePlanController::class, 'changeStatus']);
         Route::get('/{companyName}/get-by-company', [\App\Http\Controllers\InsurancePlanController::class, 'getByCompany']);
         Route::get('/{name}/get-by-name', [\App\Http\Controllers\InsurancePlanController::class, 'getByName']);
         Route::get('/insurance-company/{id}/get-by-insurance-company', [\App\Http\Controllers\InsurancePlanController::class, 'getAllPlanByInsuranceCompany']);
-        Route::patch('/add-copays-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
-        Route::patch('/add-contract-fees-to-insurance-plan/{id}', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
+        Route::patch('/{insurance}/copays', [\App\Http\Controllers\InsurancePlanController::class, 'addCopays']);
+        Route::patch('/{insurance}/contract-fees', [\App\Http\Controllers\InsurancePlanController::class, 'addContractFees']);
     });
 
     Route::prefix('health-professional')->middleware([
@@ -462,7 +468,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
             Route::delete('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'deleteBatch']);
-            Route::patch('/submit-to-clearing-house/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
+            Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
         });
 
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
@@ -481,6 +487,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
         Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
+        Route::get('/bill-classifications/{facility_id}', [\App\Http\Controllers\ClaimController::class, 'getBillClassifications']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
 
         Route::get('/get-access-token', [\App\Http\Controllers\ClaimController::class, 'getSecurityAuthorizationAccessToken']);
@@ -496,9 +503,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::put('/verify-register/{id}', [\App\Http\Controllers\ClaimController::class, 'verifyAndRegister']);
         Route::post('/verify-register', [\App\Http\Controllers\ClaimController::class, 'storeVerifyAndRegister']);
 
-        Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
+        Route::patch('/change-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
-        Route::patch('/add-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
+        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
         Route::resource('rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
