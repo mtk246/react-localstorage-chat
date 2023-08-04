@@ -60,6 +60,7 @@ final class ContractFeeSpecification extends Model implements Auditable
     protected $fillable = [
         'code',
         'contract_fee_id',
+        'billing_provider_type',
         'billing_provider_id',
         'billing_provider_tax_id',
         'billing_provider_taxonomy_id',
@@ -74,14 +75,6 @@ final class ContractFeeSpecification extends Model implements Auditable
     public function contractFee(): BelongsTo
     {
         return $this->belongsTo(ContractFee::class);
-    }
-
-    /**
-     * Get the billingProvider that owns the ContractFeeSpecification.
-     */
-    public function billingProvider(): BelongsTo
-    {
-        return $this->belongsTo(HealthProfessional::class);
     }
 
     /**
