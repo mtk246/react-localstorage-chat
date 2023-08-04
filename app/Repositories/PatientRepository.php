@@ -729,12 +729,13 @@ class PatientRepository
         if (!$bC) {
             $data = Patient::with([
                 'user' => function ($query) {
-                    $query->with(['profile' => function ($q) {
-                        $q->with(['socialMedias', 'addresses', 'contacts']);
-                    }, 'roles', 'billingCompanies']);
+                    $query->with(['roles', 'billingCompanies']);
                 },
                 // "marital",
                 // "guarantor",
+                'profile' => function ($q) {
+                    $q->with(['socialMedias', 'addresses', 'contacts']);
+                },
                 'employments',
                 'companies',
                 'emergencyContacts',
@@ -751,14 +752,13 @@ class PatientRepository
                     $query->where('billing_company_id', $bC);
                 })->with([
                     'user' => function ($query) {
-                        $query->with(['profile' => function ($q) {
-                            $q->with(['socialMedias', 'addresses', 'contacts']);
-                        }, 'roles',
-                        'billingCompanies',
-                        ]);
+                        $query->with(['roles', 'billingCompanies']);
                     },
                     // "marital",
                     // "guarantor",
+                    'profile' => function ($q) {
+                        $q->with(['socialMedias', 'addresses', 'contacts']);
+                    },
                     'employments',
                     'companies',
                     'emergencyContacts',
