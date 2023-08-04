@@ -73,6 +73,7 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "driver_license": "Driver License", /** Optional */
+    "deceased": false,
     "profile": {
         "ssn":"237891812", /** Optional */
         "first_name":"Fisrt Name", /** Required */
@@ -854,6 +855,7 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "driver_license": "Driver License", /** Optional */
+    "deceased": true,
     "profile": {
         "ssn":"237891812", /** Optional */
         "first_name":"Fisrt Name", /** Required */

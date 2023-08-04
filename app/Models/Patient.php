@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -19,11 +20,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string|null $driver_license
- * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
  * @property int|null $marital_status_id
+ * @property bool $deceased
+ * @property int|null $profile_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -40,7 +42,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $encounters_count
  * @property mixed $last_modified
  * @property mixed $status
- * @property \App\Models\User $user
+ * @property \App\Models\User|null $user
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Guarantor> $guarantors
  * @property int|null $guarantors_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Injury> $injuries
@@ -56,6 +58,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\PatientPrivate|null $patientPrivate
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
+ * @property \App\Models\Profile|null $profile
  * @property \App\Models\PublicNote $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
@@ -66,11 +69,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Patient search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDeceased($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUserId($value)
  *
  * @mixin \Eloquent
  */
@@ -84,7 +88,8 @@ class Patient extends Model implements Auditable
         'code',
         'driver_license',
         'marital_status_id',
-        'user_id',
+        'deceased',
+        'profile_id',
     ];
 
     /**
@@ -122,17 +127,22 @@ class Patient extends Model implements Auditable
         return $this->belongsToMany(Injury::class, 'injury_patient', 'patient_id', 'injury_id')->withTimestamps();
     }
 
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
     /**
      * Patient belongs to user.
      */
-    public function user(): BelongsTo
+    public function user(): HasOneThrough
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
-    public function getUserAttribute(): User
+    public function getUserAttribute(): ?User
     {
-        return $this->user()->sole();
+        return $this->user()->first();
     }
 
     /**
@@ -279,7 +289,7 @@ class Patient extends Model implements Auditable
      */
     public function getStatusAttribute()
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return false;
         }

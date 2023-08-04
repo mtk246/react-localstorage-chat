@@ -48,9 +48,12 @@ class PatientRepository
                 : auth()->user()->billingCompanies->first();
 
             if (isset($data['patient_id'])) {
-                $patient = Patient::find($data['patient_id']);
-                $user = $patient->user;
-                $profile = $user->profile;
+                $patient = Patient::query()->find($data['patient_id']);
+                $user = isset($data['id'])
+                    ? User::find($data['id'])
+                    : $patient->profile?->user;
+
+                $profile = $patient->profile;
             } elseif (isset($data['id'])) {
                 $user = User::find($data['id']);
                 $profile = $user->profile;
@@ -130,12 +133,12 @@ class PatientRepository
 
             /* Create Contact */
             if (isset($data['contact'])) {
-                $data['contact']['contactable_id'] = $user->id;
-                $data['contact']['contactable_type'] = User::class;
+                $data['contact']['contactable_id'] = $profile->id;
+                $data['contact']['contactable_type'] = Profile::class;
                 $data['contact']['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                 Contact::firstOrCreate([
-                    'contactable_id' => $user->id,
-                    'contactable_type' => User::class,
+                    'contactable_id' => $profile->id,
+                    'contactable_type' => Profile::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $data['contact']);
             }
@@ -143,13 +146,13 @@ class PatientRepository
             /* Create Address */
             if (isset($data['addresses'])) {
                 foreach ($data['addresses'] as $address) {
-                    $address['addressable_id'] = $user->id;
-                    $address['addressable_type'] = User::class;
+                    $address['addressable_id'] = $profile->id;
+                    $address['addressable_type'] = Profile::class;
                     $address['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                     Address::firstOrCreate([
                         'address_type_id' => $address['address_type_id'] ?? null,
-                        'addressable_id' => $user->id,
-                        'addressable_type' => User::class,
+                        'addressable_id' => $profile->id,
+                        'addressable_type' => Profile::class,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     ], $address);
                 }
@@ -161,7 +164,8 @@ class PatientRepository
                     'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                     'driver_license' => $data['driver_license'] ?? '',
                     'marital_status_id' => $data['marital_status_id'] ?? null,
-                    'user_id' => $user->id,
+                    'deceased' => $data['deceased'] ?? false,
+                    'profile_id' => $profile->id,
                 ]);
             }
 
@@ -805,8 +809,9 @@ class PatientRepository
         try {
             DB::beginTransaction();
 
-            $patient = Patient::find($id);
+            $patient = Patient::query()->find($id);
             $user = $patient->user;
+            $profile = $user->profile;
 
             $billingCompany = Gate::allows('is-admin')
                 ? $data['billing_company_id']
@@ -816,7 +821,8 @@ class PatientRepository
             $patient->update([
                 'driver_license' => $data['driver_license'],
                 'marital_status_id' => $data['marital_status_id'] ?? null,
-                'user_id' => $user->id,
+                'deceased' => $data['deceased'] ?? false,
+                'profile_id' => $profile->id,
             ]);
 
             if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
@@ -912,8 +918,8 @@ class PatientRepository
             if (isset($data['contact'])) {
                 Contact::updateOrCreate([
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    'contactable_id' => $user->id,
-                    'contactable_type' => User::class,
+                    'contactable_id' => $profile->id,
+                    'contactable_type' => Profile::class,
                 ], $data['contact']);
             }
 
@@ -922,8 +928,8 @@ class PatientRepository
                     Address::updateOrCreate([
                         'address_type_id' => $address['address_type_id'] ?? null,
                         'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'addressable_id' => $user->id,
-                        'addressable_type' => User::class,
+                        'addressable_id' => $profile->id,
+                        'addressable_type' => Profile::class,
                     ], $address);
                 }
             }
