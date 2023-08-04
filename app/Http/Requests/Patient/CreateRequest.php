@@ -13,16 +13,6 @@ use Illuminate\Validation\Rule;
 class CreateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -41,6 +31,7 @@ class CreateRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'driver_license' => ['nullable', 'string'],
+            'deceased' => ['nullable', 'boolean'],
 
             'profile' => ['required', 'array'],
             'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($user->profile_id ?? null), 'nullable', 'string'],
@@ -84,7 +75,7 @@ class CreateRequest extends FormRequest
             'addresses.*.country' => ['required', 'string'],
             'addresses.*.city' => ['required', 'string'],
             'addresses.*.state' => ['required', 'string'],
-            'addresses.*.zip' => ['required', 'string'],
+            'addresses.*.zip' => ['required', 'string', 'regex:^.{5}$|^.{9}$'],
 
             'guarantor' => ['nullable', 'array'],
             'guarantor.name' => ['nullable', 'string'],
