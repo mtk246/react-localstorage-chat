@@ -17,21 +17,17 @@ final class GetInsurancePlan
     {
         return DB::transaction(function () use ($insurance, $user) {
             $insurance->query()
-                ->unless(
-                    Gate::check('is-admin'),
-                    fn (Builder $query) => $this->loadModel($query, $user->billing_company_id)
+                ->when(
+                    Gate::denied('is-admin'),
+                    function (Builder $query) use ($user) {
+                        $bC = $user->billing_company_id;
+                        $query->whereHas('billingCompanies', function (Builder $query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        });
+                    }
                 );
 
             return InsurancePlanResource::make($insurance);
         });
-    }
-
-    private function loadModel(Builder &$query, int $bC): void
-    {
-        $query->with([
-            'billingCompanies' => function (Builder $query) use ($bC): void {
-                $query->where('billing_company_id', $bC);
-            },
-        ]);
     }
 }
