@@ -20,7 +20,7 @@ final class InsurancePlanResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->id,
+            'id' => $this->resource,
             'code' => $this->resource->code,
             'name' => $this->resource->name,
             'payer_id' => $this->resource->payer_id,
@@ -37,7 +37,7 @@ final class InsurancePlanResource extends JsonResource
             'plan_type_id' => $this->resource->plan_type_id ?? '',
             'plan_type' => isset($this->resource->planType) ? ($this->resource->planType->code.' - '.$this->resource->planType->description) : '',
             'insurance_company_id' => $this->resource->insurance_company_id,
-            'insurance_company' => $this->resource->insuranceCompany->name,
+            'insurance_company' => !is_null($this->resource->insuranceCompany) ? $this->resource->insuranceCompany->name : null,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'last_modified' => $this->resource->last_modified,

@@ -17,7 +17,7 @@ final class GetInsurancePlan
     {
         return DB::transaction(function () use ($insurance, $user) {
             $insurance->query()
-                ->when(
+                ->unless(
                     Gate::check('is-admin'),
                     fn (Builder $query) => $this->loadModel($query, $user->billing_company_id)
                 );
