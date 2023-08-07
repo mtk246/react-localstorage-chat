@@ -367,6 +367,7 @@ class InsuranceCompanyRepository
                     'country' => $address->country,
                     'address_type_id' => $address->address_type_id,
                     'country_subdivision_code' => $address->country_subdivision_code,
+                    'apt_suite' => $address->apt_suite
                 ];
             }
 
