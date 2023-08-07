@@ -7,20 +7,16 @@ use App\Actions\Claim\SubmitToClearingHouseAction;
 use App\Http\Requests\Claim\ClaimBatchRequest;
 use App\Models\Claims\ClaimBatch;
 use App\Repositories\ClaimBatchRepository;
-use App\Repositories\ClaimRepository;
-use App\Repositories\ReportRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClaimBatchController extends Controller
 {
     private $claimBatchRepository;
-    private $claimRepository;
 
     public function __construct()
     {
         $this->claimBatchRepository = new ClaimBatchRepository();
-        $this->claimRepository = new ClaimRepository();
     }
 
     /**
@@ -84,13 +80,12 @@ class ClaimBatchController extends Controller
         ClaimBatch $batch,
         GetSecurityAuthorizationAction $getAccessToken,
         SubmitToClearingHouseAction $submitAction,
-    )
-    {
-        $token = $getAccessToken->invoke();
+    ) {
+        /**$token = $getAccessToken->invoke();
 
         if (empty($token)) {
             return response()->json(__('Error get security authorization access token'), 400);
-        }
+        }*/
 
         $rs = $submitAction->invoke($token ?? '', $batch);
 
