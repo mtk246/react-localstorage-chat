@@ -69,6 +69,7 @@ class PatientRepository
                     'sex' => $data['profile']['sex'],
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
+                    'deceased_date' => $data['profile']['deceased_date'] ?? null,
                 ]);
             } else {
                 $profile->update([
@@ -78,6 +79,7 @@ class PatientRepository
                     'sex' => $data['profile']['sex'],
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
+                    'deceased_date' => $data['profile']['deceased_date'] ?? null,
                 ]);
             }
 
@@ -116,7 +118,7 @@ class PatientRepository
             }
 
             /* Create User */
-            if (!isset($user)) {
+            if (((boolean) $data['create_user']) && !isset($user)) {
                 $user = User::create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
@@ -127,7 +129,7 @@ class PatientRepository
             }
 
             /* Attach billing company */
-            if (is_null($user->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
+            if (isset($user) && is_null($user->billingCompanies()?->find($billingCompany->id ?? $billingCompany))) {
                 $user->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
             }
 
@@ -164,7 +166,6 @@ class PatientRepository
                     'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                     'driver_license' => $data['driver_license'] ?? '',
                     'marital_status_id' => $data['marital_status_id'] ?? null,
-                    'deceased' => $data['deceased'] ?? false,
                     'profile_id' => $profile->id,
                 ]);
             }
@@ -279,7 +280,7 @@ class PatientRepository
                     ]);
                 }
             }
-            if ($user && $patient) {
+            if (isset($user) && $patient) {
                 $rolePatient = Role::where('slug', 'patient')->first();
                 $user->attachRole($rolePatient);
 
@@ -296,10 +297,6 @@ class PatientRepository
                         )
                     );
                 }
-            } else {
-                DB::rollBack();
-
-                return null;
             }
 
             DB::commit();
@@ -308,7 +305,7 @@ class PatientRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
@@ -317,7 +314,7 @@ class PatientRepository
      */
     public function getOnePatient(int $id)
     {
-        $patient = Patient::find($id);
+        $patient = Patient::query()->find($id);
 
         if (Gate::allows('is-admin')) {
             $dataCompany = $patient->companies;
@@ -405,18 +402,21 @@ class PatientRepository
 
         $record = [
             'id' => $patient->id,
-            'user_id' => $patient->user_id,
             'code' => $patient->code,
+            'has_user' => isset($patient->user),
+            'user' => $patient->user,
             'profile' => [
-                'avatar' => $patient->user->profile->avatar ?? null,
-                'ssn' => $patient->user->profile->ssn ?? '',
-                'name_suffix_id' => $patient->user->profile->name_suffix_id ?? '',
-                'name_suffix' => $patient->user->profile->nameSuffix->description ?? '',
-                'first_name' => $patient->user->profile->first_name ?? '',
-                'middle_name' => $patient->user->profile->middle_name ?? '',
-                'last_name' => $patient->user->profile->last_name ?? '',
-                'date_of_birth' => $patient->user->profile->date_of_birth ?? '',
-                'sex' => $patient->user->profile->sex ?? '',
+                'avatar' => $patient->profile->avatar ?? null,
+                'ssn' => $patient->profile->ssn ?? '',
+                'name_suffix_id' => $patient->profile->name_suffix_id ?? '',
+                'name_suffix' => $patient->profile->nameSuffix->description ?? '',
+                'first_name' => $patient->profile->first_name ?? '',
+                'middle_name' => $patient->profile->middle_name ?? '',
+                'last_name' => $patient->profile->last_name ?? '',
+                'date_of_birth' => $patient->profile->date_of_birth ?? '',
+                'sex' => $patient->profile->sex ?? '',
+                'deceased' => $patient->profile->deceased ?? false,
+                'deceased_date' => $patient->profile->deceased_date,
             ],
             'driver_license' => $patient->driver_license ?? '',
             'language' => $patient->user->language ?? '',
@@ -432,14 +432,14 @@ class PatientRepository
 
         $record['billing_companies'] = [];
         foreach ($patient->billingCompanies as $billingCompany) {
-            $addresses = Address::where([
-                'addressable_id' => $patient->user->id,
-                'addressable_type' => User::class,
+            $addresses = Address::query()->where([
+                'addressable_id' => $patient->profile->id,
+                'addressable_type' => Profile::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->get();
             $contact = Contact::where([
-                'contactable_id' => $patient->user->id,
-                'contactable_type' => User::class,
+                'contactable_id' => $patient->profile->id,
+                'contactable_type' => Profile::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ])->first();
             $private_note = PrivateNote::where([
@@ -460,7 +460,7 @@ class PatientRepository
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
             $employments = $patient->employments()
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
-            $social_medias = $patient->user->profile->socialMedias()
+            $social_medias = $patient->profile->socialMedias()
             ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
 
             if (isset($social_medias)) {
@@ -519,6 +519,7 @@ class PatientRepository
                         'city' => $address->city,
                         'state' => $address->state,
                         'address' => $address->address,
+                        'apt_suite' => $address->apt_suite ?? '',
                         'country' => $address->country ?? '',
                         'address_type_id' => $address->address_type_id,
                         'address_type' => $address->addressType->name ?? '',
@@ -811,7 +812,7 @@ class PatientRepository
 
             $patient = Patient::query()->find($id);
             $user = $patient->user;
-            $profile = $user->profile;
+            $profile = $patient->profile;
 
             $billingCompany = Gate::allows('is-admin')
                 ? $data['billing_company_id']
@@ -821,7 +822,6 @@ class PatientRepository
             $patient->update([
                 'driver_license' => $data['driver_license'],
                 'marital_status_id' => $data['marital_status_id'] ?? null,
-                'deceased' => $data['deceased'] ?? false,
                 'profile_id' => $profile->id,
             ]);
 
@@ -838,7 +838,6 @@ class PatientRepository
                     ]
                 );
             }
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['public_note'])) {
                 /* PublicNote */
@@ -861,14 +860,28 @@ class PatientRepository
                 ]);
             }
 
+            /* Create User */
+            if (((boolean) $data['create_user']) && !isset($user)) {
+                $user = User::query()->create([
+                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+                    'email' => $data['contact']['email'],
+                    'language' => $data['language'] ?? 'en',
+                    'userkey' => encrypt(uniqid('', true)),
+                    'profile_id' => $profile->id,
+                ]);
+            }
+
             /* Update User */
-            $user->update([
-                'email' => $data['contact']['email'],
-                'language' => $data['language'],
-            ]);
+            if($user){
+                $user->update([
+                    'email' => $data['contact']['email'],
+                    'language' => $data['language'],
+                ]);
+
+                $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            }
 
             /** Create Profile */
-            $profile = $user->profile;
             $profile->update([
                 'ssn' => $data['profile']['ssn'],
                 'first_name' => $data['profile']['first_name'],
@@ -877,6 +890,7 @@ class PatientRepository
                 'sex' => $data['profile']['sex'],
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['profile']['date_of_birth'],
+                'deceased_date' => $data['profile']['deceased_date'] ?? null,
             ]);
 
             if (isset($data['profile']['social_medias']) && !empty(filter_array_empty($data['profile']['social_medias']))) {
@@ -1464,9 +1478,9 @@ class PatientRepository
             array_push($records, [
                 'id' => $patient->id,
                 'name' => $patient->code.' - '.
-                          $patient->user->profile->first_name.' '.
-                          substr($patient->user->profile->middle_name, 0, 1).' '.
-                          $patient->user->profile->last_name,
+                          $patient->profile->first_name.' '.
+                          substr($patient->profile->middle_name, 0, 1).' '.
+                          $patient->profile->last_name,
             ]);
         }
 

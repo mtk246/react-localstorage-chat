@@ -367,6 +367,7 @@ class InsuranceCompanyRepository
                     'country' => $address->country,
                     'address_type_id' => $address->address_type_id,
                     'country_subdivision_code' => $address->country_subdivision_code,
+                    'apt_suite' => $address->apt_suite
                 ];
             }
 
@@ -470,7 +471,7 @@ class InsuranceCompanyRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($insuranceCompanyId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = InsuranceCompany::find($insuranceCompanyId)->billingCompanies;
@@ -478,9 +479,9 @@ class InsuranceCompanyRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'exists' => 'insuranceCompanies', 'whereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['insurance_company_id' => $insuranceCompanyId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'insuranceCompanies', 'orWhereHas' => ['relationship' => 'insuranceCompanies', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }
@@ -558,9 +559,11 @@ class InsuranceCompanyRepository
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::find($id);
-
+                    
             $insurance->update([
+                'name' => $data['insurance']['name'],
                 'naic' => $data['insurance']['naic'],
+                'payer_id' => $data['insurance']['payer_id'],
                 'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
