@@ -23,244 +23,44 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Ins type',
                 'type_catalogs' => [
                     [
-                        'code' => '01',
-                        'description' => 'Short Term Insurance',
+                        'code' => 'AETNA',
+                        'description' => 'Aetna',
                     ],
                     [
-                        'code' => 'M',
-                        'description' => 'Medicare Advantage Point of Service (POS) Plan that excludes Part D coverage',
-                    ],
-                    [
-                        'code' => '11',
-                        'description' => 'Other Non-Federal Programs',
-                    ],
-                    [
-                        'code' => '12',
-                        'description' => 'Medicare is secondary, Working Aged Beneficiary or Spouse with employer group health plan is primary',
-                    ],
-                    [
-                        'code' => '13',
-                        'description' => 'Medicare is secondary, End-Stage Renal Disease Beneficiary in the mandated coordination period with an employer\'s group]health plan is primary',
-                    ],
-                    [
-                        'code' => '14',
-                        'description' => 'Medicare is secondary, no-fault insurance, including auto, is primary',
-                    ],
-                    [
-                        'code' => '15',
-                        'description' => 'Medicare is secondary, Worker\'s Compensation is primary',
-                    ],
-                    [
-                        'code' => '16',
-                        'description' => 'Medicare is secondary, Public Health Service (PHS) or Other Federal Agency is primary',
-                    ],
-                    [
-                        'code' => '17',
-                        'description' => 'Dental Insurance',
-                    ],
-                    [
-                        'code' => '18',
-                        'description' => 'Vision Insurance',
-                    ],
-                    [
-                        'code' => '19',
-                        'description' => 'Prescription Drug Insurance',
-                    ],
-                    [
-                        'code' => '41',
-                        'description' => 'Medicare is secondary, Black Lung is primary',
-                    ],
-                    [
-                        'code' => '42',
-                        'description' => 'Medicare is secondary, Veteran\'s Administration is primary',
-                    ],
-                    [
-                        'code' => '43',
-                        'description' => 'Medicare is secondary, Disabled Beneficiary Under Age 65 with a large group health plan (LGHP) is primary',
-                    ],
-                    [
-                        'code' => '47',
-                        'description' => 'Medicare is secondary, other liability insurance is primary',
-                    ],
-                    [
-                        'code' => 'AM',
-                        'description' => 'Automobile Medical',
-                    ],
-                    [
-                        'code' => 'AP',
+                        'code' => 'AUTO',
                         'description' => 'Automobile Insurance',
                     ],
                     [
-                        'code' => 'BL',
-                        'description' => 'Blue Cross/Blue Shield',
+                        'code' => 'BCBS',
+                        'description' => 'Blue Cross an Blue Shield',
                     ],
                     [
-                        'code' => 'CH',
-                        'description' => 'Champus',
+                        'code' => 'CA',
+                        'description' => 'Capitation',
                     ],
                     [
-                        'code' => 'CI',
+                        'code' => 'CIGNA',
+                        'description' => 'Cigna',
+                    ],
+                    [
+                        'code' => 'COMMERCIAL',
                         'description' => 'Commercial Insurance',
                     ],
                     [
-                        'code' => 'CO',
-                        'description' => 'Beneficiary is under Consolidated Omnibus Budget Reconciliation Act (COBRA) coverage',
-                    ],
-                    [
-                        'code' => 'DS',
-                        'description' => 'Disability Insurance',
-                    ],
-                    [
-                        'code' => 'FI',
-                        'description' => 'Federal Employees Federal',
-                    ],
-                    [
-                        'code' => 'EP',
-                        'description' => 'Exclusive Provider Organization (EPO) Plan',
-                    ],
-                    [
-                        'code' => 'HB',
-                        'description' => 'Health Insurance Exchange (HIX) Bronze',
-                    ],
-                    [
-                        'code' => 'HD',
-                        'description' => 'High Deductible Health Plan (HDHP)',
-                    ],
-                    [
-                        'code' => 'HG',
-                        'description' => 'Health Insurance Exchange (HIX) Gold',
-                    ],
-                    [
-                        'code' => 'HM',
-                        'description' => 'Health Maintenance Organization (HMO) Plan',
-                    ],
-                    [
-                        'code' => 'HP',
-                        'description' => 'Health Insurance Exchange (HIX) Platinum',
-                    ],
-                    [
-                        'code' => 'HS',
-                        'description' => 'Health Insurance Exchange (HIX) Silver',
-                    ],
-                    [
-                        'code' => 'IN',
-                        'description' => 'Indemnity Plan',
-                    ],
-                    [
-                        'code' => 'LC',
-                        'description' => 'Long Term Care Insurance',
-                    ],
-                    [
-                        'code' => 'LI',
-                        'description' => 'Life Insurance',
-                    ],
-                    [
-                        'code' => 'LM',
-                        'description' => 'Liability Medical',
-                    ],
-                    [
-                        'code' => 'LT',
-                        'description' => 'Impacted by litigation',
-                    ],
-                    [
-                        'code' => 'MA',
-                        'description' => 'Medicare Part A',
-                    ],
-                    [
-                        'code' => 'MB',
-                        'description' => 'Medicare Part B',
-                    ],
-                    [
-                        'code' => 'MD',
-                        'description' => 'Medicare Part D',
-                    ],
-                    [
-                        'code' => 'MC',
+                        'code' => 'MEDICAID',
                         'description' => 'Medicaid',
                     ],
                     [
-                        'code' => 'ME',
-                        'description' => 'Medicare Advantage Preferred Provider Organization (PPO) Plan that excludes Part D Coverage',
+                        'code' => 'MEDICARE',
+                        'description' => 'Medicare',
                     ],
                     [
-                        'code' => 'MJ',
-                        'description' => 'Medicare Advantage Health Maintenance Organization (HMO) Plan that includes Part D Coverage',
+                        'code' => 'UHC',
+                        'description' => 'United Health Care',
                     ],
                     [
-                        'code' => 'MK',
-                        'description' => 'Medicare Advantage Health Maintenance Organization (HMO) Risk Plan that includes Part D Coverage',
-                    ],
-                    [
-                        'code' => 'ML',
-                        'description' => 'Medicare Advantage Indemnity Plan that includes Part D Coverage',
-                    ],
-                    [
-                        'code' => 'MM',
-                        'description' => 'Medicare Advantage Preferred Provider Organization (PPO) Plan that includes Part D Coverage',
-                    ],
-                    [
-                        'code' => 'MN',
-                        'description' => 'Medicare Advantage Indemnity Plan that excludes Part D coverage',
-                    ],
-                    [
-                        'code' => 'MO',
-                        'description' => 'Medicare Advantage Point of Service (POS) Plan that includes Part D Coverage',
-                    ],
-                    [
-                        'code' => 'MR',
-                        'description' => 'Medicare Advantage Health Maintenance Organization (HMO) Risk Plan that excludes Part D coverage',
-                    ],
-                    [
-                        'code' => 'MT',
-                        'description' => 'Medicare Advantage Health Maintenance Organization (HMO) Plan that excludes Part D coverage',
-                    ],
-                    [
-                        'code' => 'OA',
-                        'description' => 'Open Access Point of Service Plan (POS) Plan',
-                    ],
-                    [
-                        'code' => 'OF',
-                        'description' => 'Other Federal Program',
-                    ],
-                    [
-                        'code' => 'TV',
-                        'description' => 'Title V',
-                    ],
-                    [
-                        'code' => 'PE',
-                        'description' => 'Property Insurance - Personal',
-                    ],
-                    [
-                        'code' => 'PR',
-                        'description' => 'Preferred Provider Organization (PPO) Plan',
-                    ],
-                    [
-                        'code' => 'PS',
-                        'description' => 'Point of Service (POS) Plan',
-                    ],
-                    [
-                        'code' => 'RP',
-                        'description' => 'Property Insurance - Real',
-                    ],
-                    [
-                        'code' => 'SP',
-                        'description' => 'Supplemental Insurance',
-                    ],
-                    [
-                        'code' => 'VA',
-                        'description' => 'Veterans Affairs Plan',
-                    ],
-                    [
-                        'code' => 'WC',
-                        'description' => 'Workers Compensation Insurance',
-                    ],
-                    [
-                        'code' => 'WU',
-                        'description' => 'Wrap-Up Insurance',
-                    ],
-                    [
-                        'code' => 'ZZ',
-                        'description' => 'Mutually Defined',
+                        'code' => 'WORKCOMP',
+                        'description' => 'Workers Compensation',
                     ],
                 ],
             ],
@@ -280,28 +80,12 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Exclusive Provider Organization',
                     ],
                     [
-                        'code' => 'POS',
-                        'description' => 'Point of service',
-                    ],
-                    [
                         'code' => 'HDHP',
                         'description' => 'High Deductible Health Plan',
                     ],
                     [
                         'code' => 'HSA',
                         'description' => 'Health Savings Accounts',
-                    ],
-                    [
-                        'code' => 'HRA',
-                        'description' => 'Health Reimbursement Arrangement',
-                    ],
-                    [
-                        'code' => 'MEDICAID',
-                        'description' => 'Medical Managed Care Plans',
-                    ],
-                    [
-                        'code' => 'MEDICARE',
-                        'description' => 'Medicare Advantage Plans',
                     ],
                 ],
             ],
@@ -318,32 +102,16 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Contract fee type',
                 'type_catalogs' => [
                     [
-                        'code' => '01',
-                        'description' => 'Diagnosis Related Group (DRG)',
+                        'code' => 'AUT',
+                        'description' => 'AUT',
                     ],
                     [
-                        'code' => '02',
-                        'description' => 'Per Diem',
+                        'code' => 'CAP',
+                        'description' => 'CAP',
                     ],
                     [
-                        'code' => '03',
-                        'description' => 'Variable Per Diem',
-                    ],
-                    [
-                        'code' => '04',
-                        'description' => 'Flat',
-                    ],
-                    [
-                        'code' => '05',
-                        'description' => 'Capitated',
-                    ],
-                    [
-                        'code' => '06',
-                        'description' => 'Percent',
-                    ],
-                    [
-                        'code' => '09',
-                        'description' => 'Other',
+                        'code' => 'RVU',
+                        'description' => 'RVU',
                     ],
                 ],
             ],
