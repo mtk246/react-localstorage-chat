@@ -38,7 +38,7 @@ final class FileDictionary extends Dictionary
             ?->{$key} ?? '';
     }
 
-    public function getCompanyAddressAttribute(string $key, string $entry): string
+    protected function getCompanyAddressAttribute(string $key, string $entry): string
     {
         $value = (string) $this->claim
             ->demographicInformation
@@ -65,7 +65,7 @@ final class FileDictionary extends Dictionary
         };
     }
 
-    public function getCompanyContactAttribute(string $key, string $entry): string
+    protected function getCompanyContactAttribute(string $key, string $entry): string
     {
         $value = $this->claim
             ->demographicInformation
@@ -80,7 +80,7 @@ final class FileDictionary extends Dictionary
         };
     }
 
-    public function getMedicalAssistanceTypeAttribute(): string
+    protected function getMedicalAssistanceTypeAttribute(): string
     {
         $type = $this->claim
             ->demographicInformation
@@ -91,7 +91,7 @@ final class FileDictionary extends Dictionary
             : '0';
     }
 
-    public function getPatientConditionCodesAttribute(string $key): string
+    protected function getPatientConditionCodesAttribute(string $key): string
     {
         return collect($this->claim->patientInformation->condition_codes)
             ->map(fn ($code) => $code['code'])
@@ -476,29 +476,29 @@ final class FileDictionary extends Dictionary
         };
     }
 
-        protected function getFacilityAttribute(string $key): string
-        {
-            return (string) $this->claim
+    protected function getFacilityAttribute(string $key): string
+    {
+        return (string) $this->claim
+        ->demographicInformation
+        ->facility
+        ?->{$key} ?? '';
+    }
+
+    protected function getFacilityAddressAttribute(string $key, string $entry): string
+    {
+        $value = (string) $this->claim
             ->demographicInformation
             ->facility
-            ?->{$key} ?? '';
-        }
+            ->addresses
+            ->get((int) $entry)
+            ?->{$key};
 
-        public function getFacilityAddressAttribute(string $key, string $entry): string
-        {
-            $value = (string) $this->claim
-                ->demographicInformation
-                ->company
-                ->addresses
-                ->get((int) $entry)
-                ?->{$key};
-
-            return match ($key) {
-                'address' => substr($value ?? '', 0, 55),
-                'city' => substr($value ?? '', 0, 30),
-                'state' => substr($value ?? '', 0, 2),
-                'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
-                default => $value ?? '',
-            };
-        }
+        return match ($key) {
+            'address' => substr($value ?? '', 0, 55),
+            'city' => substr($value ?? '', 0, 30),
+            'state' => substr($value ?? '', 0, 2),
+            'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
+            default => $value ?? '',
+        };
+    }
 }
