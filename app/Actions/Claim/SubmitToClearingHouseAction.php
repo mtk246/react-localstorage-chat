@@ -12,6 +12,7 @@ use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimTransmissionStatus;
 use App\Models\ClaimTransmissionResponse;
 use App\Services\ClaimService;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -22,16 +23,17 @@ final class SubmitToClearingHouseAction
     ) {
     }
 
-    public function invoke(?string $token, ClaimBatch $batch)
+    public function invoke(?string $token, ClaimBatch $batch): Collection
     {
         return DB::transaction(function () use (&$batch, $token) {
             $claimBatchStatus = ClaimBatchStatus::whereStatus('Submitted')->first();
-            $batch->update([
+            $batch->claims
+                ->map(fn (Claim $claim) => $this->claimSubmit($token, $claim->id, $batch->id));
+
+            return $batch->update([
                 'claim_batch_status_id' => $claimBatchStatus->id,
                 'shipping_date' => now(),
             ]);
-            $batch->claims
-                ->map(fn (Claim $claim) => $this->claimSubmit($token, $claim->id, $batch->id));
         });
     }
 
