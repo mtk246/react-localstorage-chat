@@ -314,7 +314,7 @@ class PatientRepository
      */
     public function getOnePatient(int $id)
     {
-        $patient = Patient::find($id);
+        $patient = Patient::query()->find($id);
 
         if (Gate::allows('is-admin')) {
             $dataCompany = $patient->companies;
@@ -402,9 +402,9 @@ class PatientRepository
 
         $record = [
             'id' => $patient->id,
-            'user_id' => $patient->user_id,
             'code' => $patient->code,
-            'has_user' => isset($patient->user_id),
+            'has_user' => isset($patient->user),
+            'user' => $patient->user,
             'profile' => [
                 'avatar' => $patient->profile->avatar ?? null,
                 'ssn' => $patient->profile->ssn ?? '',
@@ -837,7 +837,6 @@ class PatientRepository
                     ]
                 );
             }
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['public_note'])) {
                 /* PublicNote */
@@ -872,10 +871,14 @@ class PatientRepository
             }
 
             /* Update User */
-            $user->update([
-                'email' => $data['contact']['email'],
-                'language' => $data['language'],
-            ]);
+            if($user){
+                $user->update([
+                    'email' => $data['contact']['email'],
+                    'language' => $data['language'],
+                ]);
+
+                $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            }
 
             /** Create Profile */
             $profile->update([
