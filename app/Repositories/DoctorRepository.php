@@ -197,6 +197,7 @@ class DoctorRepository
                 ]);
             }
 
+            // Address and Contact for Health Professional
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $healthP->id;
                 $data['contact']['contactable_type'] = HealthProfessional::class;
@@ -207,6 +208,21 @@ class DoctorRepository
             if (isset($data['address'])) {
                 $data['address']['addressable_id'] = $healthP->id;
                 $data['address']['addressable_type'] = HealthProfessional::class;
+                $data['address']['billing_company_id'] = $billingCompany;
+                Address::create($data['address']);
+            }
+
+            // Address and Contact for Company
+            if (isset($data['contact'])) {
+                $data['contact']['contactable_id'] = $healthP->id;
+                $data['contact']['contactable_type'] = Company::class;
+                $data['contact']['billing_company_id'] = $billingCompany;
+                Contact::create($data['contact']);
+            }
+
+            if (isset($data['address'])) {
+                $data['address']['addressable_id'] = $healthP->id;
+                $data['address']['addressable_type'] = Company::class;
                 $data['address']['billing_company_id'] = $billingCompany;
                 Address::create($data['address']);
             }
