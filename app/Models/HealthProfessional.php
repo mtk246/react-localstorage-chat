@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -16,7 +17,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string $npi
- * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
@@ -26,6 +26,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $nppes_verified_at
  * @property string|null $ein
  * @property string|null $upin
+ * @property int|null $profile_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -36,7 +37,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Collection $companies_providers
  * @property mixed $last_modified
  * @property mixed $status
- * @property \App\Models\User $user
+ * @property \App\Models\User|null $user
  * @property mixed $verified_on_nppes
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessionalType> $healthProfessionalType
  * @property int|null $health_professional_type_count
@@ -59,9 +60,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUserId($value)
  *
  * @mixin \Eloquent
  */
@@ -78,7 +79,7 @@ class HealthProfessional extends Model implements Auditable
         'upin',
         'npi_company',
         'is_provider',
-        'user_id',
+        'profile_id',
         'company_id',
         'health_professional_type_id',
         'nppes_verified_at',
@@ -92,13 +93,11 @@ class HealthProfessional extends Model implements Auditable
     protected $appends = ['user', 'status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
 
     /**
-     * HealthProfessional belongs to User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Patient belongs to user.
      */
-    public function user()
+    public function user(): HasOneThrough
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
     public function getUserAttribute(): User
