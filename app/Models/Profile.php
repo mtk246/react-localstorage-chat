@@ -27,12 +27,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $name_suffix_id
+ * @property string|null $deceased_date
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property bool $deceased
  * @property \App\Models\TypeCatalog|null $name_suffix
  * @property \App\Models\TypeCatalog|null $nameSuffix
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
@@ -47,6 +49,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereCreditScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDateOfBirth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDeceasedDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLastName($value)
@@ -73,15 +76,22 @@ final class Profile extends Model implements Auditable
         'avatar',
         'credit_score',
         'name_suffix_id',
+        'deceased_date',
     ];
 
     protected $appends = [
         'name_suffix',
+        'deceased',
     ];
 
     public function getNameSuffixAttribute(): ?TypeCatalog
     {
         return $this->nameSuffix()->first();
+    }
+
+    public function getDeceasedAttribute(): bool
+    {
+        return isset($this->deceased_date);
     }
 
     /**
