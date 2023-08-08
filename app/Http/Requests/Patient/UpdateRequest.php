@@ -19,8 +19,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id');
-        $patient = Patient::find($id);
+        $patient = Patient::query()->find($this->route('id'));
 
         return [
             'billing_company_id' => [
@@ -66,7 +65,7 @@ class UpdateRequest extends FormRequest
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => [
                 'required',
-                Rule::unique('users', 'email')->ignore($patient->profile->user?->id ?? null),
+                Rule::unique('users', 'email')->ignore($patient->user?->id ?? null),
                 'string',
                 'email:rfc',
             ],
