@@ -9645,7 +9645,7 @@ return [
             FormatType::JSON->value => [
                 'controlNumber' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'claim:control_number',
+                    'value' => 'claim:controlNumber',
                 ],
                 'tradingPartnerServiceId' => [
                     'type' => RuleType::SINGLE->value,
