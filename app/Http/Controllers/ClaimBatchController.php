@@ -81,11 +81,11 @@ class ClaimBatchController extends Controller
         GetSecurityAuthorizationAction $getAccessToken,
         SubmitToClearingHouseAction $submitAction,
     ) {
-        /**$token = $getAccessToken->invoke();
+        $token = $getAccessToken->invoke();
 
         if (empty($token)) {
             return response()->json(__('Error get security authorization access token'), 400);
-        }*/
+        }
 
         $rs = $submitAction->invoke($token ?? '', $batch);
 

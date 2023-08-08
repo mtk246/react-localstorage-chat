@@ -12,6 +12,17 @@ final class JSONDictionary extends Dictionary
 {
     protected string $format = FormatType::JSON->value;
 
+    protected function getSingleArrayFormat(string $value): array
+    {
+        return array_filter($this->getSingleFormat($value)->toArray(), function ($value) {
+            if (is_array($value)) {
+                return !empty($value);
+            }
+
+            return true;
+        });
+    }
+
     protected function getClaimAttribute(string $key): string|Collection|null
     {
         return match ($key) {
@@ -1082,7 +1093,7 @@ final class JSONDictionary extends Dictionary
         ];
     }
 
-    protected function getReferring(): array
+    protected function getReferring(): ?array
     {
         $referringProvider = $this->claim->provider();
         $referringProviderAddress = $referringProvider?->addresses()?->first();

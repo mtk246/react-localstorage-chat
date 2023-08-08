@@ -12,7 +12,6 @@ use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimTransmissionStatus;
 use App\Models\ClaimTransmissionResponse;
 use App\Services\ClaimService;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -36,7 +35,7 @@ final class SubmitToClearingHouseAction
         });
     }
 
-    public function claimSubmit(?string $token, int $claimId, int $batchId): Collection
+    public function claimSubmit(?string $token, int $claimId, int $batchId)
     {
         return DB::transaction(function () use ($token, $claimId, $batchId) {
             $claim = Claim::query()
@@ -44,17 +43,21 @@ final class SubmitToClearingHouseAction
                 ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
 
-            $body = $this->claimService->create(
-                FormatType::JSON,
-                $claim,
-                $claim->demographicInformation->company ?? null,
-                $claim->insurancePolicies()
-                    ->wherePivot('order', 1)
-                    ?->first()
-                    ?->insurancePlan
-                    ?->insuranceCompany ?? null,
-            )->toArray();
-            dd($body);
+            $body = array_filter(
+                $this->claimService->create(
+                    FormatType::JSON,
+                    $claim,
+                    $claim->demographicInformation->company ?? null,
+                    $claim->insurancePolicies()
+                        ->wherePivot('order', 1)
+                        ?->first()
+                        ?->insurancePlan
+                        ?->insuranceCompany ?? null,
+                )->toArray(),
+                function ($innerValue) {
+                    return !empty($innerValue);
+                }
+            );
 
             $response = Http::withToken($token)->acceptJson()->post(
                 config('claim.connections.url_submission'),
