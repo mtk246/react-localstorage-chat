@@ -432,7 +432,7 @@ class PatientRepository
 
         $record['billing_companies'] = [];
         foreach ($patient->billingCompanies as $billingCompany) {
-            $addresses = Address::where([
+            $addresses = Address::query()->where([
                 'addressable_id' => $patient->profile->id,
                 'addressable_type' => Profile::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -519,6 +519,7 @@ class PatientRepository
                         'city' => $address->city,
                         'state' => $address->state,
                         'address' => $address->address,
+                        'apt_suite' => $address->apt_suite ?? '',
                         'country' => $address->country ?? '',
                         'address_type_id' => $address->address_type_id,
                         'address_type' => $address->addressType->name ?? '',
