@@ -2060,26 +2060,31 @@ class ClaimRepository
                 foreach ($claim->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations ?? [] as $dateInfo) {
                     $qualifier = $dateInfo?->qualifier?->code ?? '';
                     if (isset($qualifierFields[$qualifier])) {
-                        if (1 == $dateInfo->field_id) {
+                        if ((1 == $dateInfo->field_id) || (2 == $dateInfo->field_id)) {
                             $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (2 == $dateInfo->field_id) {
-                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (3 == $dateInfo->field_id) {
+                        }
+                    } else if (3 == $dateInfo->field_id) {
+                        if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
+                        }
+                        if (!empty($dateInfo->to_date)) {
                             $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
-                        } else if (4 == $dateInfo->field_id) {
+                        }
+                    } else if (4 == $dateInfo->field_id) {
+                        if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
+                        }
+                        if (!empty($dateInfo->to_date)) {
                             $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
                         }
                     }
-
                 }
 
                 $dataReal = [
                     'controlNumber' => $claim->control_number,
                     'tradingPartnerServiceId' => '9496', /* Caso de prueba */
                     'usageIndicator' => 'T',  /* Caso de prueba */
-                    'tradingPartnerName' => 'Begento Technologies LLC',
+                    'tradingPartnerName' => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
                     'submitter' => [/* Billing Company */
                         'organizationName' => $claim->claimFormattable->billingCompany->name ?? null,
                         'contactInformation' => [
