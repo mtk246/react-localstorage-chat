@@ -559,9 +559,11 @@ class InsuranceCompanyRepository
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::find($id);
-
+                    
             $insurance->update([
+                'name' => $data['insurance']['name'],
                 'naic' => $data['insurance']['naic'],
+                'payer_id' => $data['insurance']['payer_id'],
                 'file_method_id' => $data['insurance']['file_method_id'],
             ]);
 
