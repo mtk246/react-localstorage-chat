@@ -33,7 +33,7 @@ class UpdateRequest extends FormRequest
             'create_user' => ['required', 'boolean'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user?->profile_id ?? null), 'nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
@@ -64,7 +64,12 @@ class UpdateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', Rule::unique('users', 'email')->ignore($patient->user_id), 'string', 'email:rfc'],
+            'contact.email' => [
+                'required',
+                Rule::unique('users', 'email')->ignore($patient->profile->user?->id ?? null),
+                'string',
+                'email:rfc',
+            ],
 
             'addresses' => ['required', 'array'],
             'addresses.*.address_type_id' => ['required', 'integer'],
