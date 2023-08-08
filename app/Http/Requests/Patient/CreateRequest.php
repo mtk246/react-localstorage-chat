@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Patient;
 
 use App\Models\MaritalStatus;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -20,6 +21,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         $user = User::find($this->input('id') ?? null);
+        $patient = Patient::query()->find($this->input('patient_id') ?? $user->id ?? null);
 
         return [
             'patient_id' => ['nullable', 'integer'],
@@ -34,7 +36,7 @@ class CreateRequest extends FormRequest
             'create_user' => ['required', 'boolean'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($user->profile_id ?? null), 'nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
@@ -68,7 +70,12 @@ class CreateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', Rule::unique('users', 'email')->ignore($user->id ?? null), 'string', 'email:rfc'],
+            'contact.email' => [
+                'required',
+                Rule::unique('users', 'email')->ignore($patient->user?->id ?? null),
+                'string',
+                'email:rfc',
+            ],
 
             'addresses' => ['required', 'array'],
             'addresses.*.address_type_id' => ['required', 'integer'],
