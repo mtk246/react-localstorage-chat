@@ -30,7 +30,7 @@ class UpdateRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'driver_license' => ['nullable', 'string'],
-            'deceased' => ['nullable', 'boolean'],
+            'create_user' => ['required', 'boolean'],
 
             'profile' => ['required', 'array'],
             'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user?->profile_id ?? null), 'nullable', 'string'],
@@ -40,6 +40,7 @@ class UpdateRequest extends FormRequest
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.date_of_birth' => ['required', 'date'],
             'profile.sex' => ['required', 'string', 'max:1'],
+            'profile.deceased_date' => ['nullable', 'date'],
 
             'marital_status_id' => ['nullable', 'integer'],
             'marital' => [
@@ -71,7 +72,8 @@ class UpdateRequest extends FormRequest
             'addresses.*.country' => ['required', 'string'],
             'addresses.*.city' => ['required', 'string'],
             'addresses.*.state' => ['required', 'string'],
-            'addresses.*.zip' => ['required', 'string'],
+            'addresses.*.zip' => ['required', 'string', 'regex:/^.{5}$|^.{9}$/'],
+            'addresses.*.apt_suite' => ['nullable', 'string'],
 
             'guarantor' => ['nullable', 'array'],
             'guarantor.name' => ['nullable', 'string'],

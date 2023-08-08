@@ -27,7 +27,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $health_professional_tax_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\HealthProfessional|null $billingProvider
  * @property \App\Models\Taxonomy|null $billingProviderTaxonomy
  * @property \App\Models\ContractFee $contractFee
  * @property \App\Models\HealthProfessional|null $healthProfessional
