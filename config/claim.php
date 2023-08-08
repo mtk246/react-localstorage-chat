@@ -9679,7 +9679,7 @@ return [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:claimInformation',
                 ],
-                'payToAddress' => [
+                /*'payToAddress' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:payToAddress',
                 ],
@@ -9690,7 +9690,7 @@ return [
                 'payerAddress' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:payerAddress',
-                ],
+                ],*/
                 'billing' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:billing',
@@ -9699,7 +9699,7 @@ return [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:referring',
                 ],
-                'rendering' => [
+                /*'rendering' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:rendering',
                 ],
@@ -9710,7 +9710,7 @@ return [
                 'supervising' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:supervising',
-                ],
+                ],*/
             ],
         ],
     ],

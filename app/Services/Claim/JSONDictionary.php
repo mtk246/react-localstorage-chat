@@ -19,13 +19,13 @@ final class JSONDictionary extends Dictionary
             'tradingPartnerServiceId' => '9496', /* Caso de prueba */
             'tradingPartnerName' => 'Begento Technologies LLC',
             'usageIndicator' => 'T',  /* Caso de prueba */
-            default => $this->{'get'.Str::ucfirst(Str::camel($key))}(),
+            default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
 
-    protected function getSubmitter(): Collection
+    protected function getSubmitter(): array
     {
-        return collect([
+        return [
             'organizationName' => $this->claim->billingCompany->name,
             // 'lastName' => 'doeOne',
             // 'firstName' => 'janeone',
@@ -37,17 +37,17 @@ final class JSONDictionary extends Dictionary
                 'email' => $this->claim->billingCompany->contact?->email ?? '',
                 // 'phoneExtension' => '1234'
             ],
-        ]);
+        ];
     }
 
-    protected function getReceiver(): Collection
+    protected function getReceiver(): array
     {
-        return collect([
+        return [
             'organizationName' => $this->claim->higherInsurancePlan()?->insuranceCompany?->name ?? null,
-        ]);
+        ];
     }
 
-    protected function getSubscriber(): Collection
+    protected function getSubscriber(): array
     {
         $subscriber = $this->claim->subscriber();
         $subscriberAddress = $subscriber?->addresses()
@@ -55,10 +55,10 @@ final class JSONDictionary extends Dictionary
         $subscriberContact = $subscriber?->contacts()
             ->first() ?? null;
 
-        return collect([
+        return [
             'memberId' => $subscriber->member_id ?? $subscriber->id,
             'ssn' => $subscriber->ssn,
-            'paymentResponsibilityLevelCode' => $this->claim->higherInsurancePolicy()->payment_responsibility_level_code,
+            'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()->payment_responsibility_level_code,
             // 'organizationName' => 'string',
             // 'insuranceTypeCode' => '12',
             // 'subscriberGroupName' => 'Subscriber Group Name',
@@ -68,14 +68,14 @@ final class JSONDictionary extends Dictionary
             'suffix' => $subscriber->nameSuffix?->code ?? null,
             'gender' => strtoupper($subscriber->sex ?? 'U'),
             'dateOfBirth' => str_replace('-', '', $subscriber->date_of_birth),
-            'policyNumber' => $this->claim->higherInsurancePolicy()->policy_number ?? null,
+            'policyNumber' => $this->claim->higherOrderPolicy()->policy_number ?? null,
             // 'groupNumber' => 'string',
 
             'contactInformation' => [
                 'name' => $subscriberContact->contact_name ?? $subscriber->first_name,
-                'phoneNumber' => $subscriberContact->phone,
-                'faxNumber' => $subscriberContact->fax,
-                'email' => $subscriberContact->email,
+                'phoneNumber' => $subscriberContact?->phone,
+                'faxNumber' => $subscriberContact?->fax,
+                'email' => $subscriberContact?->email,
                 // 'phoneExtension' => '1234'
             ],
             'address' => [
@@ -87,22 +87,22 @@ final class JSONDictionary extends Dictionary
                 'countryCode' => $subscriberAddress?->country,
                 'countrySubDivisionCode' => $subscriberAddress?->country_subdivision_code,
             ],
-        ]);
+        ];
     }
 
-    protected function getDependent(): ?Collection
+    protected function getDependent(): ?array
     {
         $patient = $this->claim
             ?->demographicInformation
             ?->patient;
-        $patientAddress = $patient?->addresses()
+        $patientAddress = $patient?->profile?->addresses()
             ?->first() ?? null;
-        $patientContact = $patient?->contacts()
+        $patientContact = $patient?->profile->contacts()
             ->first() ?? null;
 
-        return (($this->claim->higherInsurancePolicy()?->own ?? false) == true)
+        return (true == ($this->claim->higherOrderPolicy()?->own ?? false))
         ? null
-        : collect([
+        : [
             'firstName' => $patient->profile->first_name,
             'lastName' => $patient->profile->last_name,
             'middleName' => $patient->profile->middle_name ?? null,
@@ -128,10 +128,10 @@ final class JSONDictionary extends Dictionary
                 'countryCode' => $patientAddress?->country,
                 'countrySubDivisionCode' => $patientAddress?->country_subdivision_code,
             ],
-        ]);
+        ];
     }
 
-    protected function getClaimInformation(): Collection
+    protected function getClaimInformation(): array
     {
         $claimServiceLinePrincipal = $this->claim->service->services->first();
         $relatedCausesCode = array_filter([
@@ -212,7 +212,7 @@ final class JSONDictionary extends Dictionary
             ]);
         }
 
-        return collect([
+        return [
             'claimFilingCode' => 'CI',
             // 'propertyCasualtyClaimNumber' => 'string',
             // 'deathDate' => 'string',
@@ -982,12 +982,12 @@ final class JSONDictionary extends Dictionary
                     ]
                 ]
             ]*/
-        ]);
+        ];
     }
 
-    protected function getPayToAddress(): ?Collection
+    protected function getPayToAddress(): ?array
     {
-        return collect([
+        return [
             'address1' => '123 address1',
             'address2' => 'apt 000',
             'city' => 'city1',
@@ -995,12 +995,12 @@ final class JSONDictionary extends Dictionary
             'postalCode' => '981010000',
             'countryCode' => 'string',
             'countrySubDivisionCode' => 'string',
-        ]);
+        ];
     }
 
-    protected function getPayToPlan(): ?Collection
+    protected function getPayToPlan(): ?array
     {
-        return collect([
+        return [
             'organizationName' => 'Example Org',
             'primaryIdentifierTypeCode' => 'PI',
             'primaryIdentifier' => 'string',
@@ -1016,12 +1016,12 @@ final class JSONDictionary extends Dictionary
             'secondaryIdentifierTypeCode' => '2U',
             'secondaryIdentifier' => '11',
             'taxIdentificationNumber' => 'string',
-        ]);
+        ];
     }
 
-    protected function getPayerAddress(): ?Collection
+    protected function getPayerAddress(): ?array
     {
-        return collect([
+        return [
             'address1' => '123 address1',
             'address2' => 'apt 000',
             'city' => 'city1',
@@ -1029,10 +1029,10 @@ final class JSONDictionary extends Dictionary
             'postalCode' => '981010000',
             'countryCode' => 'string',
             'countrySubDivisionCode' => 'string',
-        ]);
+        ];
     }
 
-    protected function getBilling(): Collection
+    protected function getBilling(): array
     {
         $billingProvider = $this->claim
             ?->demographicInformation
@@ -1044,7 +1044,7 @@ final class JSONDictionary extends Dictionary
             ->contacts()
             ?->first() ?? null;
 
-        return collect([
+        return [
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
             'ssn' => $billingProvider?->ssn,
@@ -1079,16 +1079,18 @@ final class JSONDictionary extends Dictionary
                 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
-        ]);
+        ];
     }
 
-    protected function getReferring(): Collection
+    protected function getReferring(): array
     {
         $referringProvider = $this->claim->provider();
         $referringProviderAddress = $referringProvider?->addresses()?->first();
         $referringProviderContact = $referringProvider?->contacts()?->first();
 
-        return collect([
+        return !isset($referringProvider)
+        ? null
+        : [
             'providerType' => 'ReferringProvider',
             'npi' => str_replace('-', '', $referringProvider->npi ?? ''),
             'ssn' => str_replace('-', '', $referringProvider->ssn ?? ''),
@@ -1123,12 +1125,12 @@ final class JSONDictionary extends Dictionary
                 'email' => $referringProviderContact->email,
                 'phoneExtension' => '',
             ],
-        ]);
+        ];
     }
 
-    protected function getRendering(): ?Collection
+    protected function getRendering(): ?array
     {
-        return collect([
+        return [
             'providerType' => 'BillingProvider',
             'npi' => '1760854442',
             'ssn' => '000000000',
@@ -1163,12 +1165,12 @@ final class JSONDictionary extends Dictionary
                 'email' => 'email@email.com',
                 'phoneExtension' => '1234',
             ],
-        ]);
+        ];
     }
 
-    protected function getOrdering(): ?Collection
+    protected function getOrdering(): ?array
     {
-        return collect([
+        return [
             'providerType' => 'BillingProvider',
             'npi' => '1760854442',
             'ssn' => '000000000',
@@ -1203,12 +1205,12 @@ final class JSONDictionary extends Dictionary
                 'email' => 'email@email.com',
                 'phoneExtension' => '1234',
             ],
-        ]);
+        ];
     }
 
-    protected function getSupervising(): ?Collection
+    protected function getSupervising(): ?array
     {
-        return collect([
+        return [
             'providerType' => 'BillingProvider',
             'npi' => '1760854442',
             'ssn' => '000000000',
@@ -1243,7 +1245,7 @@ final class JSONDictionary extends Dictionary
                 'email' => 'email@email.com',
                 'phoneExtension' => '1234',
             ],
-        ]);
+        ];
     }
 
     protected function getFacilityAttribute(string $key): string
