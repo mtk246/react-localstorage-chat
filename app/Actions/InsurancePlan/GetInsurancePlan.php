@@ -18,12 +18,14 @@ final class GetInsurancePlan
         return DB::transaction(function () use ($insurance, $user) {
             $insurance->query()
                 ->when(
-                    Gate::denied('is-admin'),
+                    Gate::when('is-admin'),
+                    fn (Builder $query) => $query->with(['billingCompanies']),
                     function (Builder $query) use ($user) {
-                        $bC = $user->billing_company_id;
-                        $query->whereHas('billingCompanies', function (Builder $query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        });
+                        $query->with([
+                            'billingCompanies' => function (Builder $query) use ($user): void {
+                                $query->where('billing_company_id', $user->billing_company_id);
+                            },
+                        ]);
                     }
                 );
 
