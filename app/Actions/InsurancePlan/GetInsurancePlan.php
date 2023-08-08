@@ -18,20 +18,18 @@ final class GetInsurancePlan
         return DB::transaction(function () use ($insurance, $user) {
             $insurance->query()
                 ->when(
-                    Gate::check('is-admin'),
-                    fn (Builder $query) => $this->loadModel($query, $user->billing_company_id)
+                    Gate::when('is-admin'),
+                    fn (Builder $query) => $query->with(['billingCompanies']),
+                    function (Builder $query) use ($user) {
+                        $query->with([
+                            'billingCompanies' => function (Builder $query) use ($user): void {
+                                $query->where('billing_company_id', $user->billing_company_id);
+                            },
+                        ]);
+                    }
                 );
 
             return InsurancePlanResource::make($insurance);
         });
-    }
-
-    private function loadModel(Builder &$query, int $bC): void
-    {
-        $query->with([
-            'billingCompanies' => function (Builder $query) use ($bC): void {
-                $query->where('billing_company_id', $bC);
-            },
-        ]);
     }
 }
