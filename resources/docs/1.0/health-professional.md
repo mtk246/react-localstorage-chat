@@ -55,15 +55,14 @@
 ```json
 {
     "billing_company_id": 1, /** Only required by superuser */
-    "email":"user1@gmail.com",
-    "npi":"123456719",
-    "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
-    "name_company": "", /** Optional, only required if the npi_company exist */
+    "npi":"987654456",/**Solo es requerido si el ssn del profile esta vacio o no se envia */
+    "ein_company": "987654456",/**Requerido cuando is provider es true */
     "nickname":"alias company",
-    "is_provider": true,
-    "company_id": 1,  /** Optional, only required if the is provider field is false */
+    "is_provider": true, /** Requerido */
+    "create_user": false,/** Requerido, para definir si se creara un usuario o no */
+    "miscellaneous": "Miscellaneous value",
     "health_professional_type_id": 1,
-    "authorization": [1,2,3],  /** Optional, only required if the is provider field is true and type health professional is doctor */
+    "authorization": [1,2,3],
     "private_note": "Note Private",
     "public_note": "Note Public",
     "taxonomies": [
@@ -78,20 +77,8 @@
             "primary": false
         }
     ],
-    "taxonomies_company": [ /** Optional, only required if the npi_company exist */
-        {
-            "tax_id": "TAX01213",
-            "name": "NameTaxonomy Company",
-            "primary": true
-        },
-        {
-            "tax_id": "TAX01222",
-            "name": "NameTaxonomy 2 Company",
-            "primary": false
-        }
-    ],
     "profile": {
-        "ssn":"237891812",
+        "ssn":"987654456", /**Solo es requerido si el ein esta vacio o no se envia */
         "first_name":"Fisrt Name",
         "last_name":"Last Name",
         "middle_name":"Middle Name",
@@ -99,11 +86,11 @@
         "date_of_birth":"1990-11-11",
         "social_medias": [
             {
-                "name": "nameSocialMedia1",
+                "name": "Facebook",
                 "link": "URLSocialMedia1"
             },
             {
-                "name": "nameSocialMedia2",
+                "name": "Twitter",
                 "link": "URLSocialMedia2"
             }
         ]
@@ -112,7 +99,9 @@
         "address": "Direction address",
         "city": "city address",
         "state": "state address",
-        "zip": "123456789"
+        "zip": "123456789",
+        "country":"venezuela",
+        "apt_suite": "Apt suite value"
     },
     "contact": {
         "phone": "4245675712",
