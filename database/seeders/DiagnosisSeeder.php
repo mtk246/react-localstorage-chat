@@ -18,7 +18,6 @@ class DiagnosisSeeder extends Seeder
     {
         collect(json_decode(\File::get('database/data/Diagnoses.json')))
             ->map(function ($diagnosis) {
-                $diagnosis->start_date = '2023-01-1';
                 $diagnosis->end_date = null;
                 $diagnosis->active = true;
 
