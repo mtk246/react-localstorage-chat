@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Enums\HealthProfessional\HealthProfessionalType;
-use App\Models\HealthProfessional;
-use App\Rules\company\NameCheckerRule;
+use App\Rules\CountInArray;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -20,60 +18,36 @@ class CreateDoctorRequest extends FormRequest
      */
     public function rules()
     {
-        $doctorTypeId = HealthProfessionalType::MEDICAL_DOCTOR->value;
-        $doctor = HealthProfessional::query()->where('npi', $this->npi)->with(['company'])->first();
-        $company = $doctor?->company;
-        $user = $doctor?->user;
-
         return [
             'npi' => ['required', 'string'],
-            'ein' => ['nullable', 'string', 'regex:/^\d{2}-\d{7}$/'],
-            'upin' => ['nullable', 'string', 'max:50'],
-            'email' => [
-                'required',
-                Rule::unique('users', 'email')
-                    ->ignore($user?->id),
+            'ein' => [
+                Rule::requiredIf(!isset($this->profile['ssn'])),
                 'string',
-                'email:rfc',
+                'regex:/^\d{2}-\d{7}$/',
             ],
-            'is_provider' => ['nullable', 'boolean'],
+            'miscellaneous' => ['nullable', 'string', 'max:255'],
+
+            'is_provider' => ['required', 'boolean'],
 
             'billing_company_id' => [Rule::requiredIf(Auth::user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
-            'company_id' => ['required_unless:is_provider,true', 'integer', 'nullable'],
-            'authorization' => [
-                Rule::requiredIf(
-                    !$this->is_provider
-                    && $doctorTypeId == $this->health_professional_type_id
-                ),
+            'company_id' => ['required_if:is_provider,false', 'integer', 'nullable'],
+            'authorization' => ['required', 'array'],
+            'authorization.*' => ['required', 'integer'],
+
+            'taxonomies' => [
+                'required',
                 'array',
-                'nullable',
+                new CountInArray('primary', true, 1),
             ],
+            'taxonomies.*.tax_id' => ['required', 'string'],
+            'taxonomies.*.name' => ['required', 'string'],
+            'taxonomies.*.primary' => ['required', 'boolean'],
 
-            'taxonomies_company' => ['required_unless:npi_company,null', 'array', 'nullable'],
-            'taxonomies_company.*.tax_id' => ['required_unless:npi_company,null', 'string', 'nullable'],
-            'taxonomies_company.*.name' => ['required_unless:npi_company,null', 'string', 'nullable'],
-            'taxonomies_company.*.primary' => ['required_unless:npi_company,null', 'boolean', 'nullable'],
-
-            'npi_company' => ['nullable', 'string'],
-            'name_company' => [
-                new NameCheckerRule(
-                    $this->npi_company,
-                    $this->npi,
-                    $this->profile['first_name'],
-                    $this->profile['last_name'],
-                    $company,
-                ),
-            ],
             'nickname' => ['nullable', 'string'],
 
             'private_note' => ['nullable', 'string'],
             'public_note' => ['nullable', 'string'],
-
-            'taxonomies' => ['required', 'array'],
-            'taxonomies.*.tax_id' => ['required', 'string'],
-            'taxonomies.*.name' => ['required', 'string'],
-            'taxonomies.*.primary' => ['required', 'boolean'],
 
             'profile' => ['required', 'array'],
             'profile.sex' => ['required', 'string', 'max:1'],
@@ -81,7 +55,10 @@ class CreateDoctorRequest extends FormRequest
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
-            'profile.ssn' => ['nullable', 'string'],
+            'profile.ssn' => [
+                Rule::requiredIf(!isset($this->profile['ein'])),
+                'string',
+            ],
             'profile.date_of_birth' => ['required', 'date'],
 
             'profile.social_medias' => ['nullable', 'array'],
@@ -94,12 +71,18 @@ class CreateDoctorRequest extends FormRequest
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
             'address.country' => ['required', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => [
+                Rule::requiredIf($this->create_user),
+                'email:rfc',
+            ],
+
+            'create_user' => ['required', 'boolean'],
         ];
     }
 }
