@@ -119,7 +119,7 @@ class InsuranceCompanyRepository
                 $data['address']['addressable_type'] = InsuranceCompany::class;
                 Address::create($data['address']);
             }
-            if (isset($data['contact']['email'])) {
+            if (isset($data['contact']['phone'])) {
                 $data['contact']['billing_company_id'] = $billingCompany;
                 $data['contact']['contactable_id'] = $insurance->id;
                 $data['contact']['contactable_type'] = InsuranceCompany::class;
@@ -642,7 +642,7 @@ class InsuranceCompanyRepository
                 ],
                     $data['address']);
             }
-            if (isset($data['contact']['email'])) {
+            if (isset($data['contact']['phone'])) {
                 Contact::updateOrCreate([
                     'billing_company_id' => $billingCompany,
                     'contactable_id' => $insurance->id,
