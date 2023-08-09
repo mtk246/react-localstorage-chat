@@ -10,14 +10,14 @@ use App\Enums\Procedure\CPT\GeneralType;
 use App\Enums\Procedure\ProcedureType;
 use Illuminate\Console\Command;
 
-final class ProcedureClassificator extends Command
+final class ClassificatorProcedure extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'procedure:classificate';
+    protected $signature = 'classificator:procedure';
 
     /**
      * The console command description.
