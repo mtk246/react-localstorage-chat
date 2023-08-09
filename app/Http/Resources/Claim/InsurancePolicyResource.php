@@ -21,7 +21,7 @@ final class InsurancePolicyResource extends JsonResource
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
             'patient_id' => $this->resource->patient_id,
-            'patient' => $this->resource->patient->user->profile->first_name.' '.$this->resource->patient->user->profile->last_name,
+            'patient' => $this->resource->patient->profile?->first_name.' '.$this->resource->patient->profile?->last_name,
             'status' => $this->resource->status,
             'own' => $this->resource->own,
             'policy_number' => $this->resource->policy_number,
