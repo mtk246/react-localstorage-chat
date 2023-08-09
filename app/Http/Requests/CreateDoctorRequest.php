@@ -22,8 +22,8 @@ class CreateDoctorRequest extends FormRequest
             'npi' => ['required', 'string'],
             'ein' => [
                 Rule::requiredIf(!isset($this->profile['ssn'])),
-                'string', 
-                'regex:/^\d{2}-\d{7}$/'
+                'string',
+                'regex:/^\d{2}-\d{7}$/',
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
@@ -32,7 +32,8 @@ class CreateDoctorRequest extends FormRequest
             'billing_company_id' => [Rule::requiredIf(Auth::user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required_if:is_provider,false', 'integer', 'nullable'],
-            'authorization' => ['required', 'array', 'nullable'],
+            'authorization' => ['required', 'array'],
+            'authorization.*' => ['required', 'integer'],
 
             'taxonomies' => [
                 'required',
@@ -56,7 +57,7 @@ class CreateDoctorRequest extends FormRequest
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
             'profile.ssn' => [
                 Rule::requiredIf(!isset($this->profile['ein'])),
-                'string'
+                'string',
             ],
             'profile.date_of_birth' => ['required', 'date'],
 
