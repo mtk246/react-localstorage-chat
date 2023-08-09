@@ -11,8 +11,7 @@ return new class() extends Migration {
     {
         Schema::table('health_professional_taxonomy', function (Blueprint $table) {
             $table->unsignedBigInteger('billing_company_id')->nullable();
-            $table->foreign('billing_company_id')
-                    ->references('id')->on('billing_companies')->onDelete('set null');
+            $table->foreign('billing_company_id')->references('id')->on('billing_companies')->onDelete('set null');
 
             $table->boolean('primary')->nullable()->default(false);
         });

@@ -32,7 +32,8 @@ class CreateDoctorRequest extends FormRequest
             'billing_company_id' => [Rule::requiredIf(Auth::user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required_if:is_provider,false', 'integer', 'nullable'],
-            'authorization' => ['required', 'array', 'nullable'],
+            'authorization' => ['required', 'array'],
+            'authorization.*' => ['required', 'integer'],
 
             'taxonomies' => [
                 'required',

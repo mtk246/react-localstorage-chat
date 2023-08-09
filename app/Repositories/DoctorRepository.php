@@ -38,20 +38,19 @@ class DoctorRepository
     public function createDoctor(array $data)
     {
         try {
-
             \DB::beginTransaction();
 
             /* Create Profile */
             if (isset($data['profile']['ssn'])) {
                 $profile = Profile::query()->updateOrCreate([
                     'ssn' => $data['profile']['ssn'] ?? null,
-                ], collect($data['profile'])->toArray());
+                ], $data['profile']);
             } else {
                 $profile = Profile::query()->updateOrCreate([
                     'first_name' => $data['profile']['first_name'],
                     'last_name' => $data['profile']['last_name'],
                     'date_of_birth' => $data['profile']['date_of_birth'],
-                ], collect($data['profile'])->toArray());
+                ], $data['profile']);
             }
             
             /** Create User si boolean create user its true */
@@ -70,7 +69,7 @@ class DoctorRepository
             } else {
                 $billingCompany = auth()->user()->billing_company_id;
             }
-
+            
             /* Attach billing company */
             if(isset($user)) {
                 $user->billingCompanies()->syncWithoutDetaching($billingCompany);
@@ -100,7 +99,7 @@ class DoctorRepository
                         $socialMedia->delete();
                     }
                 }
-            
+                
                 /* update or create new social medias */
                 foreach ($data['profile']['social_medias'] as $socialMedia) {
                     $socialNetwork = SocialNetwork::whereName($socialMedia['name'])->first();
@@ -163,23 +162,8 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
             
-            $auth = [];
-            
-            if (
-                HealthProfessionalTypeEnum::MEDICAL_DOCTOR->value === $data['health_professional_type_id']
-                && isset($data['is_provider'])
-                    ? !$data['is_provider']
-                    : false
-            ) {
-                foreach ($data['authorization'] as $authorization) {
-                    if (is_numeric($authorization)) {
-                        array_push($auth, $authorization);
-                    }
-                }
-            }
-            
             $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
-                'authorization' => $auth,
+                'authorization' => $data['authorization'],
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ]);
             
