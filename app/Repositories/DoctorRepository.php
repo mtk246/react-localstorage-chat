@@ -52,7 +52,7 @@ class DoctorRepository
                     'date_of_birth' => $data['profile']['date_of_birth'],
                 ], $data['profile']);
             }
-            
+
             /** Create User si boolean create user its true */
             if ($data['create_user']) {
                 $user = User::query()->updateOrCreate([
@@ -63,7 +63,7 @@ class DoctorRepository
                     'profile_id' => $profile->id,
                 ]);
             }
-            
+
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
@@ -99,7 +99,7 @@ class DoctorRepository
                         $socialMedia->delete();
                     }
                 }
-                
+
                 /* update or create new social medias */
                 foreach ($data['profile']['social_medias'] as $socialMedia) {
                     $socialNetwork = SocialNetwork::whereName($socialMedia['name'])->first();
@@ -154,19 +154,19 @@ class DoctorRepository
                     'profile_id' => $profile->id,
                 ],
             );
-            
+
             $type = HealthProfessionalType::query()->updateOrCreate([
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 'health_professional_id' => $healthP->id,
             ], [
                 'type' => (string) $data['health_professional_type_id'],
             ]);
-            
+
             $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
                 'authorization' => $data['authorization'],
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
             ]);
-            
+
             if (isset($data['private_note'])) {
                 PrivateNote::create([
                     'publishable_type' => HealthProfessional::class,
@@ -175,7 +175,7 @@ class DoctorRepository
                     'note' => $data['private_note'],
                 ]);
             }
-            
+
             if (isset($data['public_note'])) {
                 PublicNote::create([
                     'publishable_type' => HealthProfessional::class,
@@ -183,7 +183,7 @@ class DoctorRepository
                     'note' => $data['public_note'],
                 ]);
             }
-            
+
             // Address and Contact for Health Professional
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $profile->id;
@@ -191,14 +191,14 @@ class DoctorRepository
                 $data['contact']['billing_company_id'] = $billingCompany;
                 Contact::create($data['contact']);
             }
-            
+
             if (isset($data['address'])) {
                 $data['address']['addressable_id'] = $profile->id;
                 $data['address']['addressable_type'] = Profile::class;
                 $data['address']['billing_company_id'] = $billingCompany;
                 Address::create($data['address']);
             }
-            
+
             // Address and Contact for Company
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $healthP->id;
@@ -206,14 +206,14 @@ class DoctorRepository
                 $data['contact']['billing_company_id'] = $billingCompany;
                 Contact::create($data['contact']);
             }
-            
+
             if (isset($data['address'])) {
                 $data['address']['addressable_id'] = $healthP->id;
                 $data['address']['addressable_type'] = Company::class;
                 $data['address']['billing_company_id'] = $billingCompany;
                 Address::create($data['address']);
             }
-            
+
             if (is_null($healthP->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
                 $healthP->billingCompanies()->attach($billingCompany->id ?? $billingCompany, [
                     'is_provider' => $data['is_provider'] ?? false,
@@ -234,7 +234,7 @@ class DoctorRepository
                     ]
                 );
             }
-            
+
             if (isset($data['taxonomies'])) {
             
                 $company->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
@@ -242,14 +242,14 @@ class DoctorRepository
                 
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-            
+
                     //@todo: refactorizar esta logica para el asociar taxonomies a companies y healthP
-            
+
                     //logic for attach taxonomies to companies
                     $check = $company->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->find($tax->id);
-            
+
                     if($check) {
                         $company->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
@@ -263,12 +263,12 @@ class DoctorRepository
                             'primary' => $taxonomy['primary']
                         ]);
                     }
-            
+
                     //logic for attach taxonomies to health professional
                     $check = $healthP->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->find($tax->id);
-            
+
                     if($check) {
                         $healthP->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
@@ -284,15 +284,15 @@ class DoctorRepository
                     }
                 }
             }
-            
+
             if (!is_null($healthP) && isset($user)) {
                 $role = Role::whereSlug('healthprofessional')->first();
                 $user->attachRole($role);
-            
+
                 $token = encrypt($user->id.'@#@#$'.$user->email);
                 $user->token = $token;
                 $user->save();
-            
+
                 Mail::to($user->email)->send(
                     new GenerateNewPassword(
                         $profile->first_name.' '.$profile->last_name,
@@ -304,7 +304,7 @@ class DoctorRepository
             }
 
             \DB::commit();
-            
+
             return new DoctorBodyResource($healthP);
 
         } catch (\Exception $e) {
