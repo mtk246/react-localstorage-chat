@@ -69,7 +69,7 @@ class DoctorRepository
             } else {
                 $billingCompany = auth()->user()->billing_company_id;
             }
-            
+
             /* Attach billing company */
             if(isset($user)) {
                 $user->billingCompanies()->syncWithoutDetaching($billingCompany);
