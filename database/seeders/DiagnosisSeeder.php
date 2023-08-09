@@ -20,6 +20,7 @@ class DiagnosisSeeder extends Seeder
             ->map(function ($diagnosis) {
                 $diagnosis->end_date = null;
                 $diagnosis->active = true;
+                $diagnosis->clasifications = json_encode($diagnosis->clasifications);
 
                 return (array) $diagnosis;
             })
