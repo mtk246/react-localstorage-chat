@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
@@ -43,6 +44,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $health_professional_type_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
+ * @property \App\Models\Profile|null $profile
  * @property \App\Models\PublicNote|null $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
@@ -98,6 +100,11 @@ class HealthProfessional extends Model implements Auditable
     public function user(): HasOneThrough
     {
         return $this->hasOneThrough(User::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
+    }
+
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
     }
 
     public function getUserAttribute(): User

@@ -127,7 +127,9 @@ final class DoctorBodyResource extends JsonResource
                 'nickname' => $company->nicknames->filter(
                     fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
                 )[0]->nickname ?? '',
-                'taxonomies' => $company->taxonomies ?? [],
+                'taxonomies' => $company->taxonomies()->wherePivot(
+                    'billing_company_id', '=', $billingCompanyId
+                )->get() ?? [],
             ]
             : null;
     }
