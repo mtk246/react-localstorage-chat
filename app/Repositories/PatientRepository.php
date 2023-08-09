@@ -314,7 +314,7 @@ class PatientRepository
      */
     public function getOnePatient(int $id)
     {
-        $patient = Patient::find($id);
+        $patient = Patient::query()->find($id);
 
         if (Gate::allows('is-admin')) {
             $dataCompany = $patient->companies;
@@ -402,9 +402,9 @@ class PatientRepository
 
         $record = [
             'id' => $patient->id,
-            'user_id' => $patient->user_id,
             'code' => $patient->code,
-            'has_user' => isset($patient->user_id),
+            'has_user' => isset($patient->user),
+            'user' => $patient->user,
             'profile' => [
                 'avatar' => $patient->profile->avatar ?? null,
                 'ssn' => $patient->profile->ssn ?? '',
@@ -432,7 +432,7 @@ class PatientRepository
 
         $record['billing_companies'] = [];
         foreach ($patient->billingCompanies as $billingCompany) {
-            $addresses = Address::where([
+            $addresses = Address::query()->where([
                 'addressable_id' => $patient->profile->id,
                 'addressable_type' => Profile::class,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
@@ -519,6 +519,7 @@ class PatientRepository
                         'city' => $address->city,
                         'state' => $address->state,
                         'address' => $address->address,
+                        'apt_suite' => $address->apt_suite ?? '',
                         'country' => $address->country ?? '',
                         'address_type_id' => $address->address_type_id,
                         'address_type' => $address->addressType->name ?? '',
@@ -837,7 +838,6 @@ class PatientRepository
                     ]
                 );
             }
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
 
             if (isset($data['public_note'])) {
                 /* PublicNote */
@@ -872,10 +872,14 @@ class PatientRepository
             }
 
             /* Update User */
-            $user->update([
-                'email' => $data['contact']['email'],
-                'language' => $data['language'],
-            ]);
+            if($user){
+                $user->update([
+                    'email' => $data['contact']['email'],
+                    'language' => $data['language'],
+                ]);
+
+                $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            }
 
             /** Create Profile */
             $profile->update([

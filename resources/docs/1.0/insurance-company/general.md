@@ -56,16 +56,16 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
-        "payer_id": 12, /** required */
+        "payer_id": "12", /** required */
         "name":"Name insurance", /** required */
         "abbreviation":"Abbreviation", /** required */
-        "nickname":"alias insurance", /** optional */
         "naic":"someNaic",  /** optional */
         "file_method_id": 1, /** required */
+        "nickname":"alias insurance" /** optional */
     },
     "time_failed": {
         "days": 30, /** optional */
-        "from_id": 2, /** optional */
+        "from_id": 2 /** optional */
     },
     "billing_incomplete_reasons": [1,2,3], /** optional */
     "appeal_reasons": [1,2,3], /** optional */
@@ -76,6 +76,7 @@
         "zip":"3234", /** required */
         "country": "Name country", /** consultar monser */
         "country_subdivision_code": "Code", /** consultar monser */
+        "apt_suite": "Apt Suite Value"
     },
     "contact": {
         "contact_name": "Some name", /** consultar monser */
@@ -657,16 +658,16 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "insurance":{
-        "payer_id": 12, /** required */
+        "payer_id": "12", /** required */
         "name":"Name insurance", /** required */
         "abbreviation":"Abbreviation", /** required */
-        "nickname":"alias insurance", /** optional */
         "naic":"someNaic",  /** optional */
         "file_method_id": 1, /** required */
+        "nickname":"alias insurance" /** optional */
     },
     "time_failed": {
         "days": 30, /** optional */
-        "from_id": 2, /** optional */
+        "from_id": 2 /** optional */
     },
     "billing_incomplete_reasons": [1,2,3], /** optional */
     "appeal_reasons": [1,2,3], /** optional */
@@ -677,11 +678,12 @@
         "zip":"3234", /** required */
         "country": "Name country", /** consultar monser */
         "country_subdivision_code": "Code", /** consultar monser */
+        "apt_suite": "Apt Suite Value Edited"
     },
     "contact": {
         "contact_name": "Some name", /** consultar monser */
-        "phone":"55433", /** required */
-        "mobile":"55433", /** optional */
+        "phone":"5543355555", /** required */
+        "mobile":"554336666", /** optional */
         "fax":"fsdfs", /** optional */
         "email":"dsfsd@gdrfg.com" /** required */
     },
