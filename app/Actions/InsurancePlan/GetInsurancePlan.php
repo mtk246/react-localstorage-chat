@@ -18,7 +18,7 @@ final class GetInsurancePlan
         return DB::transaction(function () use ($insurance, $user) {
             $insurance->query()
                 ->when(
-                    Gate::when('is-admin'),
+                    Gate::check('is-admin'),
                     fn (Builder $query) => $query->with(['billingCompanies']),
                     function (Builder $query) use ($user) {
                         $query->with([
