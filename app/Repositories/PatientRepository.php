@@ -881,7 +881,6 @@ class PatientRepository
             /* Update User */
             if($user){
                 $user->update([
-                    'email' => $data['contact']['email'],
                     'language' => $data['language'],
                 ]);
 
