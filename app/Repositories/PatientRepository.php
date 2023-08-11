@@ -118,7 +118,7 @@ class PatientRepository
             }
 
             /* Create User */
-            if (((boolean) $data['create_user']) && !isset($user)) {
+            if (((bool) $data['create_user']) && !isset($user)) {
                 $user = User::create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
@@ -320,8 +320,12 @@ class PatientRepository
             $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
-                    'company' => function ($query) {
-                        $query->with('nicknames');
+                    'demographicInformation' => function ($query) {
+                        $query->with([
+                            'company' => function ($query) {
+                                $query->with('nicknames');
+                            },
+                        ]);
                     },
                 ])->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
@@ -861,7 +865,7 @@ class PatientRepository
             }
 
             /* Create User */
-            if (((boolean) $data['create_user']) && !isset($user)) {
+            if (((bool) $data['create_user']) && !isset($user)) {
                 $user = User::query()->create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
@@ -872,7 +876,7 @@ class PatientRepository
             }
 
             /* Update User */
-            if($user){
+            if ($user) {
                 $user->update([
                     'email' => $data['contact']['email'],
                     'language' => $data['language'],
@@ -881,7 +885,7 @@ class PatientRepository
                 $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
             }
 
-            /** Create Profile */
+            /* Create Profile */
             $profile->update([
                 'ssn' => $data['profile']['ssn'],
                 'first_name' => $data['profile']['first_name'],
