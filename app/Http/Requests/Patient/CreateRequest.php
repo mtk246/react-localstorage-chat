@@ -72,7 +72,6 @@ class CreateRequest extends FormRequest
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => [
                 Rule::requiredIf(fn () => (bool) $this->input('create_user')),
-                Rule::excludeIf(fn () => !((bool) $this->input('create_user'))),
                 Rule::unique('users', 'email')->ignore($patient->user?->id ?? null),
                 'string',
                 'email:rfc',
