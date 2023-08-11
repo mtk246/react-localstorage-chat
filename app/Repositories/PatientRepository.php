@@ -70,6 +70,7 @@ class PatientRepository
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
                     'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                    'language' => $data['language'] ?? 'en',
                 ]);
             } else {
                 $profile->update([
@@ -80,6 +81,7 @@ class PatientRepository
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
                     'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                    'language' => $data['language'] ?? 'en',
                 ]);
             }
 
@@ -122,7 +124,6 @@ class PatientRepository
                 $user = User::create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
-                    'language' => $data['language'] ?? 'en',
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                 ]);
@@ -876,7 +877,6 @@ class PatientRepository
                 $user = User::query()->create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
-                    'language' => $data['language'] ?? 'en',
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                 ]);
@@ -884,10 +884,6 @@ class PatientRepository
 
             /* Update User */
             if ($user) {
-                $user->update([
-                    'language' => $data['language'],
-                ]);
-
                 $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
             }
 
@@ -901,6 +897,7 @@ class PatientRepository
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['profile']['date_of_birth'],
                 'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                'language' => $data['language'] ?? 'en',
             ]);
 
             if (isset($data['profile']['social_medias']) && !empty(filter_array_empty($data['profile']['social_medias']))) {
