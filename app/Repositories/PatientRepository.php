@@ -145,29 +145,35 @@ class PatientRepository
                 ], $data['contact']);
             }
 
-            /* Create Address */
-            if (isset($data['addresses'])) {
-                foreach ($data['addresses'] as $address) {
-                    $address['addressable_id'] = $profile->id;
-                    $address['addressable_type'] = Profile::class;
-                    $address['billing_company_id'] = $billingCompany->id ?? $billingCompany;
-                    Address::firstOrCreate([
-                        'address_type_id' => $address['address_type_id'] ?? null,
-                        'addressable_id' => $profile->id,
-                        'addressable_type' => Profile::class,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ], $address);
-                }
-            }
-
             /* Create Patient */
             if (!isset($patient)) {
-                $patient = Patient::create([
+                $patient = Patient::query()->create([
                     'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                     'driver_license' => $data['driver_license'] ?? '',
                     'marital_status_id' => $data['marital_status_id'] ?? null,
                     'profile_id' => $profile->id,
                 ]);
+            }
+
+            /* Create Address */
+            if (isset($data['addresses'])) {
+                foreach ($data['addresses'] as $addressData) {
+                    $addressData['addressable_id'] = $profile->id;
+                    $addressData['addressable_type'] = Profile::class;
+                    $addressData['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                    $address = Address::query()->firstOrCreate([
+                        'address_type_id' => $addressData['address_type_id'] ?? null,
+                        'addressable_id' => $profile->id,
+                        'addressable_type' => Profile::class,
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ], $addressData);
+
+                    if ($addressData['main_address'] ?? false) {
+                        $patient->update([
+                            'main_address_id' => $address->id,
+                        ]);
+                    }
+                }
             }
 
             if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
@@ -521,6 +527,7 @@ class PatientRepository
                         'address' => $address->address,
                         'apt_suite' => $address->apt_suite ?? '',
                         'country' => $address->country ?? '',
+                        'main_address' => $address->id == $patient->main_address_id,
                         'address_type_id' => $address->address_type_id,
                         'address_type' => $address->addressType->name ?? '',
                         'country_subdivision_code' => $address->country_subdivision_code ?? '',
@@ -874,7 +881,6 @@ class PatientRepository
             /* Update User */
             if($user){
                 $user->update([
-                    'email' => $data['contact']['email'],
                     'language' => $data['language'],
                 ]);
 
@@ -945,6 +951,12 @@ class PatientRepository
                         'addressable_id' => $profile->id,
                         'addressable_type' => Profile::class,
                     ], $address);
+
+                    if ($addressData['main_address'] ?? false) {
+                        $patient->update([
+                            'main_address_id' => $address->id,
+                        ]);
+                    }
                 }
             }
 
