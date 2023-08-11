@@ -945,20 +945,29 @@ class PatientRepository
             }
 
             if (isset($data['addresses'])) {
-                foreach ($data['addresses'] as $address) {
-                    Address::updateOrCreate([
-                        'address_type_id' => $address['address_type_id'] ?? null,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'addressable_id' => $profile->id,
-                        'addressable_type' => Profile::class,
-                    ], $address);
+                $addresses = collect($data['addresses'])
+                    ->map(function ($address) use ($billingCompany, $profile, $patient) {
+                        $addressId = Address::query()->updateOrCreate([
+                            'address_type_id' => $address['address_type_id'] ?? null,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'addressable_id' => $profile->id,
+                            'addressable_type' => Profile::class,
+                        ], $address)->id;
+                    
+                        if ($address['main_address'] ?? false) {
+                            $patient->update([
+                                'main_address_id' => $addressId,
+                            ]);
+                        }
+                        return $addressId;
+                    });
 
-                    if ($addressData['main_address'] ?? false) {
-                        $patient->update([
-                            'main_address_id' => $address->id,
-                        ]);
-                    }
-                }
+                Address::query()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                    ->where('addressable_id', $profile->id)
+                    ->where('addressable_type', Profile::class)
+                    ->whereNotIn('id', $addresses->toArray())
+                    ->delete();
             }
 
             /* Create Marital */
@@ -1071,7 +1080,7 @@ class PatientRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
