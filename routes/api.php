@@ -298,13 +298,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::post('/create', [\App\Http\Controllers\DoctorController::class, 'create']);
+        Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
         Route::get('/get-list-health-professional-types', [\App\Http\Controllers\DoctorController::class, 'getListTypes']);
         Route::get('/get-list-authorizations', [\App\Http\Controllers\DoctorController::class, 'getListAuthorizations']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\DoctorController::class, 'getListBillingCompanies']);
         Route::get('/get-list', [\App\Http\Controllers\DoctorController::class, 'getList']);
         Route::get('/get-all-server', [\App\Http\Controllers\DoctorController::class, 'getServerAll']);
-        Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'updateDoctor']);
         Route::get('/{doctor}', [\App\Http\Controllers\DoctorController::class, 'getOneDoctor']);
         Route::get('/', [\App\Http\Controllers\DoctorController::class, 'getAllDoctors']);
@@ -396,6 +397,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::put('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosis']);
         Route::delete('/{id}', [\App\Http\Controllers\DiagnosisController::class, 'deleteDiagnosis']);
         Route::put('/{diagnosis}/note', [\App\Http\Controllers\DiagnosisController::class, 'updateDiagnosisNote']);
+        Route::get('/classification/{code}', [\App\Http\Controllers\DiagnosisController::class, 'getClassificationsByCode']);
     });
 
     Route::prefix('modifier')->middleware([

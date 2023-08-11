@@ -2072,7 +2072,7 @@ class DataTestSeeder extends Seeder
                 'is_provider' => $dataHP['is_provider'] ?? false,
                 'npi_company' => $dataHP['npi_company'] ?? '',
                 'company_id' => $company->id ?? $dataHP['company_id'],
-                'user_id' => $user->id,
+                'profile_id' => $user->profile_id,
             ]);
 
             HealthProfessionalType::query()->create([
@@ -3253,7 +3253,7 @@ class DataTestSeeder extends Seeder
             ], [
                 'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                 'marital_status_id' => $dataP['marital_status_id'] ?? null,
-                'user_id' => $user->id,
+                'profile_id' => $user->profile_id,
             ]);
 
             if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
