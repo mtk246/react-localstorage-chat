@@ -70,6 +70,7 @@ class PatientRepository
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
                     'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                    'language' => $data['language'] ?? 'en',
                 ]);
             } else {
                 $profile->update([
@@ -80,6 +81,7 @@ class PatientRepository
                     'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                     'date_of_birth' => $data['profile']['date_of_birth'],
                     'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                    'language' => $data['language'] ?? 'en',
                 ]);
             }
 
@@ -122,7 +124,6 @@ class PatientRepository
                 $user = User::create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
-                    'language' => $data['language'] ?? 'en',
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                 ]);
@@ -876,7 +877,6 @@ class PatientRepository
                 $user = User::query()->create([
                     'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                     'email' => $data['contact']['email'],
-                    'language' => $data['language'] ?? 'en',
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                 ]);
@@ -884,10 +884,6 @@ class PatientRepository
 
             /* Update User */
             if ($user) {
-                $user->update([
-                    'language' => $data['language'],
-                ]);
-
                 $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
             }
 
@@ -901,6 +897,7 @@ class PatientRepository
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 'date_of_birth' => $data['profile']['date_of_birth'],
                 'deceased_date' => $data['profile']['deceased_date'] ?? null,
+                'language' => $data['language'] ?? 'en',
             ]);
 
             if (isset($data['profile']['social_medias']) && !empty(filter_array_empty($data['profile']['social_medias']))) {
@@ -948,20 +945,29 @@ class PatientRepository
             }
 
             if (isset($data['addresses'])) {
-                foreach ($data['addresses'] as $address) {
-                    Address::updateOrCreate([
-                        'address_type_id' => $address['address_type_id'] ?? null,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'addressable_id' => $profile->id,
-                        'addressable_type' => Profile::class,
-                    ], $address);
+                $addresses = collect($data['addresses'])
+                    ->map(function ($address) use ($billingCompany, $profile, $patient) {
+                        $addressId = Address::query()->updateOrCreate([
+                            'address_type_id' => $address['address_type_id'] ?? null,
+                            'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                            'addressable_id' => $profile->id,
+                            'addressable_type' => Profile::class,
+                        ], $address)->id;
+                    
+                        if ($address['main_address'] ?? false) {
+                            $patient->update([
+                                'main_address_id' => $addressId,
+                            ]);
+                        }
+                        return $addressId;
+                    });
 
-                    if ($addressData['main_address'] ?? false) {
-                        $patient->update([
-                            'main_address_id' => $address->id,
-                        ]);
-                    }
-                }
+                Address::query()
+                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                    ->where('addressable_id', $profile->id)
+                    ->where('addressable_type', Profile::class)
+                    ->whereNotIn('id', $addresses->toArray())
+                    ->delete();
             }
 
             /* Create Marital */
@@ -1074,7 +1080,7 @@ class PatientRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
