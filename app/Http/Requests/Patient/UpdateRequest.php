@@ -79,6 +79,7 @@ class UpdateRequest extends FormRequest
             'addresses.*.state' => ['required', 'string'],
             'addresses.*.zip' => ['required', 'string', 'regex:/^.{5}$|^.{9}$/'],
             'addresses.*.apt_suite' => ['nullable', 'string'],
+            'addresses.*.main_address' => ['nullable', 'boolean'],
 
             'guarantor' => ['nullable', 'array'],
             'guarantor.name' => ['nullable', 'string'],
