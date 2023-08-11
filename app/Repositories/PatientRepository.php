@@ -952,6 +952,12 @@ class PatientRepository
                         'addressable_id' => $profile->id,
                         'addressable_type' => Profile::class,
                     ], $address);
+
+                    if ($addressData['main_address'] ?? false) {
+                        $patient->update([
+                            'main_address_id' => $address->id,
+                        ]);
+                    }
                 }
             }
 
