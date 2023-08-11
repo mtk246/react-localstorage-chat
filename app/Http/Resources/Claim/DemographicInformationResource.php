@@ -29,8 +29,8 @@ final class DemographicInformationResource extends JsonResource
             'facility' => $this->resource->facility->name ?? '',
             'patient_id' => $this->resource->patient_id,
             'avatar' => $this->resource->patient?->profile?->avatar,
-            'patient' => isset($this->resource->patient->user)
-                ? ($this->resource->patient->user->profile->first_name.' '.$this->resource->patient->user->profile->last_name)
+            'patient' => isset($this->resource->patient->profile)
+                ? ($this->resource->patient->profile->first_name.' '.$this->resource->patient->profile->last_name)
                 : '',
             'prior_authorization_number' => $this->resource->prior_authorization_number,
             'accept_assignment' => $this->resource->accept_assignment,
