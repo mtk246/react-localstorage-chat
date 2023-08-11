@@ -331,7 +331,7 @@ final class JSONDictionary extends Dictionary
             'epsdtReferral' => [
                 'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
                 'conditionCodes' => [
-                    $claimServiceLinePrincipal?->epsdt?->code ?? 'AV',
+                    $claimServiceLinePrincipal?->epsdt?->code ?? 'NU',
                 ],
             ],
             'healthCareCodeInformation' => $this->claim->service->diagnoses
@@ -1267,13 +1267,13 @@ final class JSONDictionary extends Dictionary
         ?->{$key} ?? '';
     }
 
-    public function getFacilityAddressAttribute(string $key, string $entry): string
+    public function getFacilityAddressAttribute(string $key, string $entry): ?string
     {
         $value = (string) $this->claim
             ->demographicInformation
             ->facility
             ->addresses
-            ->get((int) $entry)
+            ->first()
             ?->{$key};
 
         return match ($key) {
@@ -1281,7 +1281,7 @@ final class JSONDictionary extends Dictionary
             'city' => substr($value ?? '', 0, 30),
             'state' => substr($value ?? '', 0, 2),
             'zip' => substr(str_replace('-', '', $value ?? ''), 0, 12),
-            default => $value ?? '',
+            default => !empty($value) ? $value : null,
         };
     }
 

@@ -164,8 +164,7 @@ trait ClaimFile
 
     public function provider(): ?HealthProfessional
     {
-        return $this->claim
-            ?->demographicInformation
+        return $this->demographicInformation
             ?->healthProfessionals()
             ?->wherePivot('field_id', 6)
             ?->first() ?? null;
@@ -173,8 +172,7 @@ trait ClaimFile
 
     public function billingProvider(): ?HealthProfessional
     {
-        return $this->claim
-            ?->demographicInformation
+        return $this->demographicInformation
             ?->healthProfessionals()
             ?->wherePivot('field_id', 5)
             ?->first() ?? null;
