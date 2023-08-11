@@ -28,6 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $name_suffix_id
  * @property string|null $deceased_date
+ * @property string|null $language
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -52,6 +53,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDeceasedDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereMiddleName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereNameSuffixId($value)
@@ -77,6 +79,7 @@ final class Profile extends Model implements Auditable
         'credit_score',
         'name_suffix_id',
         'deceased_date',
+        'language',
     ];
 
     protected $appends = [
