@@ -25,6 +25,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $code
  * @property int|null $marital_status_id
  * @property int|null $profile_id
+ * @property int|null $main_address_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -70,6 +71,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMainAddressId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
@@ -87,6 +89,7 @@ class Patient extends Model implements Auditable
         'driver_license',
         'marital_status_id',
         'profile_id',
+        'main_address_id',
     ];
 
     /**
