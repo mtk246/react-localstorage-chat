@@ -6,9 +6,9 @@ namespace App\Http\Requests;
 
 use App\Enums\HealthProfessional\HealthProfessionalType;
 use App\Models\HealthProfessional;
+use App\Rules\CountInArray;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Rules\CountInArray;
 
 class UpdateDoctorRequest extends FormRequest
 {
@@ -92,7 +92,7 @@ class UpdateDoctorRequest extends FormRequest
                 'email:rfc',
             ],
 
-            'create_user' => ['required', 'boolean'], 
+            'create_user' => ['required', 'boolean'],
         ];
     }
 }
