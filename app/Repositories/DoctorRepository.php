@@ -53,7 +53,7 @@ class DoctorRepository
                 ], $data['profile']);
             }
 
-            /** Create User si boolean create user its true */
+            /* Create User si boolean create user its true */
             if ($data['create_user']) {
                 $user = User::query()->updateOrCreate([
                     'email' => $data['contact']['email'],
@@ -71,7 +71,7 @@ class DoctorRepository
             }
 
             /* Attach billing company */
-            if(isset($user)) {
+            if (isset($user)) {
                 $user->billingCompanies()->syncWithoutDetaching($billingCompany);
                 $user->billingCompanies()
                     ->wherePivot('billing_company_id', $billingCompany)
@@ -110,9 +110,7 @@ class DoctorRepository
 
             if (!$data['is_provider']) {
                 $company = Company::query()->find($data['company_id']);
-            }
-            else {
-
+            } else {
                 $company = Company::query()->create([
                     'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
                     'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
@@ -120,8 +118,8 @@ class DoctorRepository
                     'ein' => $data['ein'] ?? null,
                     'upin' => $data['upin'] ?? null,
                 ]);
-            
-                //Create Nikname for new company
+
+                // Create Nikname for new company
                 if (isset($data['nickname'])) {
                     EntityNickname::updateOrCreate([
                         'nicknamable_id' => $company->id,
@@ -229,50 +227,47 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
-            
                 $company->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
                 $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    //@todo: refactorizar esta logica para el asociar taxonomies a companies y healthP
+                    // @todo: refactorizar esta logica para el asociar taxonomies a companies y healthP
 
-                    //logic for attach taxonomies to companies
+                    // logic for attach taxonomies to companies
                     $check = $company->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->find($tax->id);
 
-                    if($check) {
+                    if ($check) {
                         $company->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->updateExistingPivot($tax->id, [
-                            'primary' => $taxonomy['primary']
+                            'primary' => $taxonomy['primary'],
                         ]);
-                    }
-                    else {
+                    } else {
                         $company->taxonomies()->attach($tax->id, [
                             'billing_company_id' => $billingCompany,
-                            'primary' => $taxonomy['primary']
+                            'primary' => $taxonomy['primary'],
                         ]);
                     }
 
-                    //logic for attach taxonomies to health professional
+                    // logic for attach taxonomies to health professional
                     $check = $healthP->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->find($tax->id);
 
-                    if($check) {
+                    if ($check) {
                         $healthP->taxonomies()
                         ->wherePivot('billing_company_id', $billingCompany)
                         ->updateExistingPivot($tax->id, [
-                            'primary' => $taxonomy['primary']
+                            'primary' => $taxonomy['primary'],
                         ]);
-                    }
-                    else {
+                    } else {
                         $healthP->taxonomies()->attach($tax->id, [
                             'billing_company_id' => $billingCompany,
-                            'primary' => $taxonomy['primary']
+                            'primary' => $taxonomy['primary'],
                         ]);
                     }
                 }
@@ -299,7 +294,6 @@ class DoctorRepository
             \DB::commit();
 
             return new DoctorBodyResource($healthP);
-
         } catch (\Exception $e) {
             \DB::rollBack();
 
@@ -1024,7 +1018,8 @@ class DoctorRepository
                 TypeCatalog::class,
                 ['description'],
                 ['relationship' => 'type', 'where' => ['description' => 'Referred or ordered provider roles']],
-                null
+                null,
+                ['code']
             ),
         ];
         foreach ($healthProfessionals as $healthProfessional) {
@@ -1037,20 +1032,21 @@ class DoctorRepository
                         array_push($records['billing_provider'], [
                             'id' => $healthProfessional->id,
                             'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
-                            'npi' => $healthProfessional->npi_company,
+                            'npi' => $healthProfessional->npi,
                         ]);
                     }
                     if (in_array($referred->id, $auth)) {
                         array_push($records['referred'], [
                             'id' => $healthProfessional->id,
                             'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
-                            'npi' => $healthProfessional->npi_company,
+                            'npi' => $healthProfessional->npi,
                         ]);
                     }
                     if (in_array($service_provider->id, $auth)) {
                         array_push($records['service_provider'], [
                             'id' => $healthProfessional->id,
                             'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'npi' => $healthProfessional->npi,
                         ]);
                     }
                 }
@@ -1058,14 +1054,14 @@ class DoctorRepository
                 $field = [
                     'id' => $healthProfessional->id,
                     'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
-                    'npi' => $healthProfessional->npi_company,
+                    'npi' => $healthProfessional->npi,
                 ];
-                if ($taxonomy == 'true') {
+                if ('true' == $taxonomy) {
                     $field['taxonomies'] = $healthProfessional->taxonomies->map(fn ($item) => [
                         'id' => $item->id,
                         'tax_id' => $item->tax_id,
                         'name' => $item->name,
-                        'npi' => $healthProfessional->npi_company,
+                        'npi' => $healthProfessional->npi,
                     ])->toArray();
                 }
                 array_push($record, $field);

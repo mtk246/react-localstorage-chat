@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property bool $is_provider
  * @property int|null $company_id
  * @property int|null $health_professional_type_id
+ * @property string|null $miscellaneous
  * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\HealthProfessional $healthProfessional
  *
@@ -33,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereHealthProfessionalTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereIsProvider($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereMiscellaneous($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional whereUpdatedAt($value)

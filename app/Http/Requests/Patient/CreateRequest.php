@@ -72,7 +72,7 @@ class CreateRequest extends FormRequest
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => [
                 Rule::requiredIf(fn () => (bool) $this->input('create_user')),
-                Rule::excludeIf(fn () => !((bool) $this->input('create_user'))),
+                'nullable',
                 Rule::unique('users', 'email')->ignore($patient->user?->id ?? null),
                 'string',
                 'email:rfc',
@@ -86,6 +86,7 @@ class CreateRequest extends FormRequest
             'addresses.*.state' => ['required', 'string'],
             'addresses.*.zip' => ['required', 'string', 'regex:/^.{5}$|^.{9}$/'],
             'addresses.*.apt_suite' => ['nullable', 'string'],
+            'addresses.*.main_address' => ['nullable', 'boolean'],
 
             'guarantor' => ['nullable', 'array'],
             'guarantor.name' => ['nullable', 'string'],

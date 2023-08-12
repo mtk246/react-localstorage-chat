@@ -118,7 +118,8 @@
             "city": "city address", /** Required */
             "state": "state address", /** Required */
             "zip": "123456789", /** Required */
-            "apt_suite": ""
+            "apt_suite": "",
+            "main_address": false /** Optional */
         }
     ],
     "guarantor": {
