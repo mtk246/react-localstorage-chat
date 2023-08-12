@@ -3170,6 +3170,7 @@ class DataTestSeeder extends Seeder
                     'last_name' => $dataP['profile']['last_name'],
                     'sex' => $dataP['profile']['sex'],
                     'date_of_birth' => $dataP['profile']['date_of_birth'],
+                    'language' => $dataP['language'] ?? 'en',
                 ]);
             }
 
@@ -3211,7 +3212,6 @@ class DataTestSeeder extends Seeder
                 'email' => $dataP['contact']['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                'language' => $dataP['language'] ?? 'en',
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
             ]);
