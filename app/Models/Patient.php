@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\MultipleRecordsFoundException;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -142,7 +143,13 @@ class Patient extends Model implements Auditable
 
     public function getUserAttribute(): ?User
     {
-        return $this->user()->first();
+        $results = $this->user()->get();
+
+        if (($count = $results->count()) > 1) {
+            throw new MultipleRecordsFoundException($count);
+        }
+
+        return $results->first();
     }
 
     /**
