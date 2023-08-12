@@ -108,9 +108,10 @@ class HealthProfessional extends Model implements Auditable
         return $this->belongsTo(Profile::class);
     }
 
-    public function getUserAttribute(): User
+    public function getUserAttribute(): ?User
     {
         $results = $this->user()->get();
+
         if (($count = $results->count()) > 1) {
             throw new MultipleRecordsFoundException($count);
         }
