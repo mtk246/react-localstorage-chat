@@ -61,6 +61,7 @@ final class DoctorBodyResource extends JsonResource
     private function getSocialMedias(int $billingCompanyId): Collection
     {
         return $this->resource
+            ->user
             ->profile
             ->socialMedias
             ->filter(
@@ -71,6 +72,7 @@ final class DoctorBodyResource extends JsonResource
     private function getAddress(int $billingCompanyId)
     {
         return $this->resource
+            ->user
             ->profile
             ->addresses
             ->first(
@@ -81,6 +83,7 @@ final class DoctorBodyResource extends JsonResource
     private function getContact(int $billingCompanyId)
     {
         return $this->resource
+            ->user
             ->profile
             ->contacts
             ->filter(
