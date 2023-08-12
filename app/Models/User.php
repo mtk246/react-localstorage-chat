@@ -35,7 +35,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property bool $status
  * @property string|null $last_login
  * @property int|null $profile_id
- * @property string $language
  * @property string|null $last_activity
  * @property int|null $billing_company_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -78,7 +77,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBlocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLogged($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastActivity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLogin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
@@ -118,7 +116,6 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         'isLogged',
         'isBlocked',
         'profile_id',
-        'language',
         'billing_company_id',
     ];
 
@@ -147,7 +144,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['profile', 'last_modified'];
+    protected $appends = ['profile', 'language', 'last_modified'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -190,6 +187,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->profile_id
             ? $this->profile()->sole()
             : null;
+    }
+
+    public function getLanguageAttribute(): string
+    {
+        return $this->profile?->language ?? 'en';
     }
 
     /**

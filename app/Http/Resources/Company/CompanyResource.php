@@ -57,7 +57,7 @@ final class CompanyResource extends JsonResource
                             ->first()->abbreviation ?? '',
                         'private_note' => $this->getPrivateNote($bC->id)?->note ?? '',
                         'taxonomy' => $this->resource->taxonomies()
-                            ->where('primary', true)
+                            ->where('taxonomies.primary', true)
                             ->first()
                             ?->setHidden(['created_at', 'updated_at', 'pivot'])
                             ->toArray(),

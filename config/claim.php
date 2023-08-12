@@ -8769,11 +8769,11 @@ return [
                 ],
                 '10a' => [
                     'type' => RuleType::BOOLEAN->value,
-                    'value' => 'demographicInformation:employment_related_condition',
+                    'value' => 'claimDemographicInformation:employment_related_condition',
                 ],
                 '10ba' => [
                     'type' => RuleType::BOOLEAN->value,
-                    'value' => 'demographicInformation:auto_accident_related_condition',
+                    'value' => 'claimDemographicInformation:auto_accident_related_condition',
                 ],
                 '10bb' => [
                     'type' => RuleType::MULTIPLE->value,
@@ -8783,14 +8783,14 @@ return [
                     ],
                     'values' => [
                         'common' => [
-                            'demographicInformation:auto_accident_related_condition',
-                            'demographicInformation:auto_accident_place_state',
+                            'claimDemographicInformation:auto_accident_related_condition',
+                            'claimDemographicInformation:auto_accident_place_state',
                         ],
                     ],
                 ],
                 '10c' => [
                     'type' => RuleType::BOOLEAN->value,
-                    'value' => 'demographicInformation:other_accident_related_condition',
+                    'value' => 'claimDemographicInformation:other_accident_related_condition',
                 ],
                 '10d' => [
                     'type' => RuleType::SINGLE->value,
@@ -8871,7 +8871,7 @@ return [
                 ],
                 '11d' => [
                     'type' => RuleType::BOOLEAN->value,
-                    'value' => 'existHigherInsurancePlan',
+                    'value' => 'existLowerInsurancePlan',
                 ],
                 '12a' => [
                     'type' => RuleType::MULTIPLE->value,
@@ -9396,7 +9396,7 @@ return [
                 ],
                 '23' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'demographicInformation:prior_authorization_number| ',
+                    'value' => 'claimDemographicInformation:prior_authorization_number',
                 ],
                 '24' => [
                     'type' => RuleType::SINGLE_ARRAY->value,

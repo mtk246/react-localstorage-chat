@@ -9,7 +9,6 @@ use App\Models\ClaimCheckStatus;
 use App\Models\ClaimDateInformation;
 use App\Models\ClaimEligibility;
 use App\Models\ClaimEligibilityStatus;
-use App\Models\ClaimFormI;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
 use App\Models\ClaimStatus;
@@ -224,6 +223,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -474,7 +474,7 @@ class ClaimRepository
                             foreach ($data['claim_services'] as $service) {
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
-                                    'id' => $service['id'] ?? null
+                                    'id' => $service['id'] ?? null,
                                 ], $service);
                             }
                         }
@@ -521,7 +521,7 @@ class ClaimRepository
                                 $service['days_or_units'] = $service['units_of_service'];
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
-                                    'id' => $service['id'] ?? null
+                                    'id' => $service['id'] ?? null,
                                 ], $service);
                             }
                         }
@@ -707,9 +707,11 @@ class ClaimRepository
                 }
             }
             DB::commit();
+
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -738,7 +740,8 @@ class ClaimRepository
                     TypeCatalog::class,
                     ['description'],
                     ['relationship' => 'type', 'where' => ['description' => 'Referred or ordered provider roles']],
-                    null
+                    null,
+                    ['code']
                 ),
             ];
         } catch (\Exception $e) {
@@ -763,7 +766,7 @@ class ClaimRepository
             PlaceOfService::class,
             ['code', '-', 'name'],
             !empty($request->facility_id)
-                ? ['relationship' => 'facilities','where' => ['facility_id' => $request->facility_id]]
+                ? ['relationship' => 'facilities', 'where' => ['facility_id' => $request->facility_id]]
                 : []
         );
     }
@@ -2063,14 +2066,14 @@ class ClaimRepository
                         if ((1 == $dateInfo->field_id) || (2 == $dateInfo->field_id)) {
                             $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
                         }
-                    } else if (3 == $dateInfo->field_id) {
+                    } elseif (3 == $dateInfo->field_id) {
                         if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
                         }
                         if (!empty($dateInfo->to_date)) {
                             $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
                         }
-                    } else if (4 == $dateInfo->field_id) {
+                    } elseif (4 == $dateInfo->field_id) {
                         if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
                         }

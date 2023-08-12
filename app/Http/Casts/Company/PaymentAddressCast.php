@@ -35,6 +35,11 @@ final class PaymentAddressCast extends CastsRequest
         return $this->get('zip');
     }
 
+    public function getAptSuite(): ?string
+    {
+        return $this->get('apt_suite');
+    }
+
     public function getCountry(): ?string
     {
         return $this->get('country');

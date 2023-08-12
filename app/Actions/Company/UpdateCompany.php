@@ -168,6 +168,7 @@ final class UpdateCompany
             'city' => $request->getAddress()->getCity(),
             'state' => $request->getAddress()->getState(),
             'zip' => $request->getAddress()->getZip(),
+            'apt_suite' => $request->getAddress()->getAptSuite(),
             'country' => $request->getAddress()->getCountry(),
             'country_subdivision_code' => $request->getAddress()->getCountrySubdivisionCode(),
         ]);
@@ -189,6 +190,7 @@ final class UpdateCompany
             'city' => $request->getPaymentAddres()->getCity(),
             'state' => $request->getPaymentAddres()->getState(),
             'zip' => $request->getPaymentAddres()->getZip(),
+            'apt_suite' => $request->getPaymentAddres()->getAptSuite(),
             'country' => $request->getPaymentAddres()->getCountry(),
             'country_subdivision_code' => $request->getPaymentAddres()->getCountrySubdivisionCode(),
         ]);

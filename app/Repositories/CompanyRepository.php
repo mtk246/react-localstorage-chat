@@ -256,7 +256,7 @@ class CompanyRepository
             $edit = $request->edit ?? 'false';
 
             if (is_null($companyId)) {
-                return getList(BillingCompany::class, 'name', ['status' => true]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
             } else {
                 $ids = [];
                 $billingCompanies = Company::find($companyId)->billingCompanies;
@@ -264,9 +264,9 @@ class CompanyRepository
                     array_push($ids, $field->id);
                 }
                 if ('true' == $edit) {
-                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'companies', 'whereHas' => ['relationship' => 'companies', 'where' => ['company_id' => $companyId]]]);
+                    return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'exists' => 'companies', 'whereHas' => ['relationship' => 'companies', 'where' => ['company_id' => $companyId]]]);
                 } else {
-                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'companies', 'orWhereHas' => ['relationship' => 'companies', 'where' => ['billing_company_id', $ids]]]);
+                    return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'companies', 'orWhereHas' => ['relationship' => 'companies', 'where' => ['billing_company_id', $ids]]]);
                 }
             }
         } catch (\Exception $e) {

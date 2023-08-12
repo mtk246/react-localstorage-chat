@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\MultipleRecordsFoundException;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -25,6 +26,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $code
  * @property int|null $marital_status_id
  * @property int|null $profile_id
+ * @property int|null $main_address_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -70,6 +72,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMainAddressId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereMaritalStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereUpdatedAt($value)
@@ -87,6 +90,7 @@ class Patient extends Model implements Auditable
         'driver_license',
         'marital_status_id',
         'profile_id',
+        'main_address_id',
     ];
 
     /**
@@ -139,7 +143,13 @@ class Patient extends Model implements Auditable
 
     public function getUserAttribute(): ?User
     {
-        return $this->user()->first();
+        $results = $this->user()->get();
+
+        if (($count = $results->count()) > 1) {
+            throw new MultipleRecordsFoundException($count);
+        }
+
+        return $results->first();
     }
 
     /**

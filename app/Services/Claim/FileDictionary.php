@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\TypeCatalog;
 use Carbon\Carbon;
 use Cknow\Money\Money;
 use Illuminate\Support\Collection;
@@ -105,7 +106,7 @@ final class FileDictionary extends Dictionary
         $search = $this->claim->insType()?->{$key} ?? '';
         $index = array_search(strtolower($search), array_map('strtolower', $options));
 
-        return false !== $key
+        return false != $index
             ? $options[$index]
             : 'Other';
     }
@@ -249,9 +250,9 @@ final class FileDictionary extends Dictionary
         return $this->claim->higherInsurancePlan()?->{$key} ?? '';
     }
 
-    protected function getExistHigherInsurancePlanAttribute(): string|bool
+    protected function getExistLowerInsurancePlanAttribute(): string|bool
     {
-        return !empty($this->claim->higherInsurancePlan());
+        return !empty($this->claim->lowerInsurancePlan());
     }
 
     protected function getClaimDemographicInformationAttribute(string $key): string|bool
@@ -355,7 +356,7 @@ final class FileDictionary extends Dictionary
             ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
             /* 24F */
             $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
-            $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '';
+            $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '00';
             /* 24G */
             $resultServices['days_G'.($index + 1)] = $item['days_or_units'] ?? '';
             /* 24H */
@@ -363,7 +364,7 @@ final class FileDictionary extends Dictionary
             $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
             /** 24I */
             // $tax_id = $this->claim?->provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
-            $tax_id_BP = $billingProvider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
+            $tax_id_BP = $billingProvider?->taxonomies()->where('taxonomies.primary', true)->first()?->tax_id ?? '';
             $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id_BP) ? 'ZZ' : '';
             /* 24J */
             $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $billingProvider?->npi ?? '');
@@ -375,10 +376,10 @@ final class FileDictionary extends Dictionary
 
     protected function getReferredProviderRoleAttribute(string $key): string
     {
-        return $this->claim
+        return TypeCatalog::find($this->claim
             ?->provider()
             ?->pivot
-            ?->qualifier
+            ?->qualifier_id)
             ?->{$key} ?? '';
     }
 
