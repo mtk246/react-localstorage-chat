@@ -14,13 +14,7 @@ final class JSONDictionary extends Dictionary
 
     protected function getSingleArrayFormat(string $value): array
     {
-        return array_filter($this->getSingleFormat($value)->toArray(), function ($value) {
-            if (is_array($value)) {
-                return !empty($value);
-            }
-
-            return true;
-        });
+        return array_filter_recursive($this->getSingleFormat($value)->toArray());
     }
 
     protected function getClaimAttribute(string $key): string|Collection|null
@@ -84,14 +78,14 @@ final class JSONDictionary extends Dictionary
 
             'contactInformation' => [
                 'name' => $subscriberContact->contact_name ?? $subscriber->first_name,
-                'phoneNumber' => $subscriberContact?->phone,
-                'faxNumber' => $subscriberContact?->fax,
+                'phoneNumber' => str_replace('-', '', $subscriberContact?->phone ?? '') ?? null,
+                'faxNumber' => str_replace('-', '', $subscriberContact?->fax ?? '') ?? null,
                 'email' => $subscriberContact?->email,
                 // 'phoneExtension' => '1234'
             ],
             'address' => [
                 'address1' => $subscriberAddress?->address,
-                'address2' => '',
+                'address2' => null,
                 'city' => $subscriberAddress?->city,
                 'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? null,
@@ -125,14 +119,14 @@ final class JSONDictionary extends Dictionary
             'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
             'contactInformation' => [
                 'name' => $patientContact?->contact_name ?? $patient->profile->first_name,
-                'phoneNumber' => $patientContact?->phone,
-                'faxNumber' => $patientContact?->fax,
+                'phoneNumber' => str_replace('-', '', $patientContact?->phone ?? '') ?? null,
+                'faxNumber' => str_replace('-', '', $patientContact?->fax ?? '') ?? null,
                 'email' => $patientContact?->email,
                 'phoneExtension' => null,
             ],
             'address' => [
                 'address1' => $patientAddress?->address,
-                'address2' => '',
+                'address2' => null,
                 'city' => $patientAddress?->city,
                 'state' => substr($patientAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $patientAddress?->zip ?? '') ?? null,
@@ -366,7 +360,7 @@ final class JSONDictionary extends Dictionary
                 'organizationName' => $this->getFacilityAttribute('name'),
                 'address' => [
                     'address1' => $this->getFacilityAddressAttribute('address', '1'),
-                    'address2' => '',
+                    'address2' => null,
                     'city' => $this->getFacilityAddressAttribute('city', '1'),
                     'state' => $this->getFacilityAddressAttribute('state', '1'),
                     'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
@@ -998,19 +992,34 @@ final class JSONDictionary extends Dictionary
 
     protected function getPayToAddress(): ?array
     {
-        return [
-            'address1' => '123 address1',
-            'address2' => 'apt 000',
-            'city' => 'city1',
-            'state' => 'wa',
-            'postalCode' => '981010000',
-            'countryCode' => 'string',
-            'countrySubDivisionCode' => 'string',
-        ];
+        $billingProviderPaymentAddress = $this->claim
+            ?->demographicInformation
+            ?->company
+            ->addresses()
+            ->where('billing_company_id', $this->claim->billing_company_id)
+            ->where('address_type_id', '3')
+            ?->first() ?? null;
+
+        return isset($billingProviderPaymentAddress)
+            ? [
+                'address1' => $billingProviderPaymentAddress?->address,
+                'address2' => null,
+                'city' => $billingProviderPaymentAddress?->city,
+                'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? null,
+                'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? null,
+                'countryCode' => $billingProviderPaymentAddress?->country,
+                'countrySubDivisionCode' => $billingProviderPaymentAddress?->country_subdivision_code,
+            ]
+            : null;
     }
 
     protected function getPayToPlan(): ?array
     {
+        return null;
+        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
+         * Esta es la data del insurance al que hay que hacerle el pago
+         * Actualmente no esta considerado en el sistema
+         */
         return [
             'organizationName' => 'Example Org',
             'primaryIdentifierTypeCode' => 'PI',
@@ -1032,6 +1041,11 @@ final class JSONDictionary extends Dictionary
 
     protected function getPayerAddress(): ?array
     {
+        return null;
+        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
+         * Esta es la data del insurance al que hay que hacerle el pago
+         * Actualmente no esta considerado en el sistema
+         */
         return [
             'address1' => '123 address1',
             'address2' => 'apt 000',
@@ -1076,7 +1090,7 @@ final class JSONDictionary extends Dictionary
             'organizationName' => $billingProvider?->name,
             'address' => [
                 'address1' => $billingProviderAddress?->address,
-                'address2' => '',
+                'address2' => null,
                 'city' => $billingProviderAddress?->city,
                 'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
@@ -1085,8 +1099,8 @@ final class JSONDictionary extends Dictionary
             ],
             'contactInformation' => [
                 'name' => $billingProviderContact->contact_name ?? $billingProvider->first_name,
-                'phoneNumber' => $billingProviderContact->phone,
-                'faxNumber' => $billingProviderContact->fax,
+                'phoneNumber' => str_replace('-', '', $billingProviderContact->phone ?? '') ?? null,
+                'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
                 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
@@ -1096,8 +1110,8 @@ final class JSONDictionary extends Dictionary
     protected function getReferring(): ?array
     {
         $referringProvider = $this->claim->provider();
-        $referringProviderAddress = $referringProvider?->addresses()?->first();
-        $referringProviderContact = $referringProvider?->contacts()?->first();
+        $referringProviderAddress = $referringProvider?->profile?->addresses()?->first();
+        $referringProviderContact = $referringProvider?->profile?->contacts()?->first();
 
         return !isset($referringProvider)
         ? null
@@ -1122,7 +1136,7 @@ final class JSONDictionary extends Dictionary
             'organizationName' => $referringProvider->user?->profile?->last_name,
             'address' => [
                 'address1' => $referringProviderAddress?->address,
-                'address2' => '',
+                'address2' => null,
                 'city' => $referringProviderAddress?->city,
                 'state' => substr($referringProviderAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $referringProviderAddress?->zip ?? '') ?? null,
@@ -1131,9 +1145,9 @@ final class JSONDictionary extends Dictionary
             ],
             'contactInformation' => [
                 'name' => $referringProviderContact->contact_name ?? $referringProvider->user?->profile?->first_name,
-                'phoneNumber' => str_replace('-', '', $referringProviderContact->phone ?? ''),
-                'faxNumber' => $referringProviderContact->fax,
-                'email' => $referringProviderContact->email,
+                'phoneNumber' => str_replace('-', '', $referringProviderContact?->phone ?? '') ?? null,
+                'faxNumber' => str_replace('-', '', $referringProviderContact?->fax ?? '') ?? null,
+                'email' => $referringProviderContact?->email,
                 'phoneExtension' => '',
             ],
         ];
@@ -1294,8 +1308,7 @@ final class JSONDictionary extends Dictionary
             ->get((int) $entry);
 
         return match ($key) {
-            'code_area' => substr(str_replace('-', '', $value?->phone ?? ''), 0, 3),
-            'phone' => substr(str_replace('-', '', $value?->phone ?? ''), 3, 10),
+            'phone' => str_replace('-', '', $value?->phone ?? '') ?? null,
             default => (string) $value?->{$key} ?? '',
         };
     }
