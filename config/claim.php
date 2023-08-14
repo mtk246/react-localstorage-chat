@@ -8488,6 +8488,62 @@ return [
                         'common' => [
                             'insurancePoliciesSubscriber:last_name',
                             'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '59' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePoliciesSubscriber:relationship_code',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '60' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:policy_number',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '61' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:plan_name',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '62' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:group_number',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                            'insurancePolicies:group_number',
                         ],
                     ],
                 ],
