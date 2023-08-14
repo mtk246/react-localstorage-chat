@@ -268,7 +268,7 @@ class HealthProfessional extends Model implements Auditable
             'user.full_name' => $this->profile->first_name.' '.$this->profile->last_name,
             'user.first_name' => $this->profile->first_name,
             'user.last_name' => $this->profile->last_name,
-            'user.email' => $this->user->email,
+            'user.email' => $this->user->email ?? null,
             'user.ssn' => $this->profile->ssn,
             'user.phone' => $this->profile->phone,
             'company.name' => $this->company?->name,
