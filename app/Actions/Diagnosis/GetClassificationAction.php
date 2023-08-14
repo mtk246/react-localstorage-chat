@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Diagnosis;
 
 use App\Enums\Diagnoses\ICD10\GeneralType;
 use App\Http\Resources\Enums\TypeResource;
 
-final class GetClassificationAction {
-
+final class GetClassificationAction
+{
     public function getClassifications($code)
     {
         $letterCode = strtoupper($code[0]);
@@ -19,11 +21,11 @@ final class GetClassificationAction {
 
     private function findMatchClassifications($letterCode, $codeType)
     {
-        $matchingType = collect(GeneralType::cases())->map(function($type) use ($letterCode, $codeType) {
+        $matchingType = collect(GeneralType::cases())->map(function ($type) use ($letterCode, $codeType) {
             $typeRange = $type->getRange();
 
             if ($this->isCodeInRange($letterCode, $codeType, $typeRange)) {
-                $matchingSType = collect($type->getChild()::cases())->first(function($sType) use ($letterCode, $codeType) {
+                $matchingSType = collect($type->getChild()::cases())->first(function ($sType) use ($letterCode, $codeType) {
                     $sTypeRange = $sType->getRange();
 
                     if ($this->isCodeInRange($letterCode, $codeType, $sTypeRange)) {
@@ -33,12 +35,12 @@ final class GetClassificationAction {
 
                 return [
                     'general' => new TypeResource($type),
-                    'specific' => new TypeResource($matchingSType)
+                    'specific' => new TypeResource($matchingSType),
                 ];
             }
         });
 
-        return  $matchingType->whereNotNull()->first();
+        return $matchingType->whereNotNull()->first();
     }
 
     private function isCodeInRange($letterCode, $codeType, $typeRange)
