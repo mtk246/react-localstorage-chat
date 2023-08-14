@@ -254,6 +254,7 @@ final class FileDictionary extends Dictionary
         return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
             'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
             'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            'plan_name' => substr($policy->insurancePlan->name ?? '', 0, 21),
             default => $policy->{$key} ?? '',
         })
         ->pad(3, '');
@@ -263,6 +264,7 @@ final class FileDictionary extends Dictionary
     {
         return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
             'first_name' => ', '.$policy->subscribers->first()?->{$key} ?? null,
+            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
             default => $policy->subscribers->first()?->{$key} ?? null,
         } ?? $this->getPatientProfileAttribute($key))
         ->pad(3, '');
