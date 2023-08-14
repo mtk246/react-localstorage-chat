@@ -6117,45 +6117,43 @@ return [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
                 'align' => 'L',
+                'w' => 26,
+                'h' => 10,
+                'x' => 175,
+                'y' => 174.4,
+            ],
+        ],
+        '57a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
                 'w' => 17,
                 'h' => 10,
                 'x' => 175,
-                'y' => 175,
+                'y' => 179,
             ],
         ],
-        '57' => [
-            0 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 179,
-                ],
+        '57b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 17,
+                'h' => 10,
+                'x' => 175,
+                'y' => 183,
             ],
-            1 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 183,
-                ],
-            ],
-            2 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 187,
-                ],
+        ],
+        '57c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 17,
+                'h' => 10,
+                'x' => 175,
+                'y' => 187,
             ],
         ],
         '58' => [
@@ -8457,6 +8455,26 @@ return [
                             'insuranceCompanies:payer_id',
                             'InsurancePolicies:release_info',
                             'InsurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '56' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:npi',
+                    'values' => [
+                        'common' => [
+                            'company:npi',
+                            'company:ein',
+                        ],
+                    ],
+                ],
+                '57a' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:ein',
+                    'values' => [
+                        'common' => [
+                            'company:npi',
+                            'company:ein',
                         ],
                     ],
                 ],
