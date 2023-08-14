@@ -94,7 +94,9 @@ abstract class Dictionary implements DictionaryInterface
             return $rawDate->format(str_replace('%', ' ', $format));
         }
 
-        return Carbon::createFromFormat($rawFormat ?? 'Y-m-d', $rawDate ?? '')->format(str_replace('%', ' ', $format));
+        return $rawDate
+            ? Carbon::createFromFormat($rawFormat ?? 'Y-m-d', $rawDate)->format(str_replace('%', ' ', $format))
+            : '';
     }
 
     protected function getBooleanFormat(string $value): bool
