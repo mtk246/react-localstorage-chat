@@ -11,5 +11,6 @@ enum RuleType: string
     case SINGLE = 'single';
     case SINGLE_ARRAY = 'single-array';
     case MULTIPLE = 'multiple';
+    case MULTIPLE_ARRAY = 'multiple-array';
     case NONE = 'none';
 }
