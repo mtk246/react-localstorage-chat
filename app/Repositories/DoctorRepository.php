@@ -318,7 +318,6 @@ class DoctorRepository
             }
 
             $healthP->update([
-                'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'ein' => $data['ein'] ?? null,

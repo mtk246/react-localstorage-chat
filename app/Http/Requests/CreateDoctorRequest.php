@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class CreateDoctorRequest extends FormRequest
+class  CreateDoctorRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -56,7 +56,7 @@ class CreateDoctorRequest extends FormRequest
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
             'profile.ssn' => [
-                Rule::requiredIf(!isset($this->profile['ein'])),
+                Rule::requiredIf(!isset($this->ein)),
                 'string',
             ],
             'profile.date_of_birth' => ['required', 'date'],
