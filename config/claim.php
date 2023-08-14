@@ -8429,32 +8429,32 @@ return [
                         'common' => [
                             'insuranceCompanies:name',
                             'insuranceCompanies:payer_id',
-                            'InsurancePolicies:release_info',
-                            'InsurancePolicies:assign_benefits',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
                         ],
                     ],
                 ],
                 '52' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'InsurancePolicies:release_info',
+                    'value' => 'insurancePolicies:release_info',
                     'values' => [
                         'common' => [
                             'insuranceCompanies:name',
                             'insuranceCompanies:payer_id',
-                            'InsurancePolicies:release_info',
-                            'InsurancePolicies:assign_benefits',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
                         ],
                     ],
                 ],
                 '53' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'InsurancePolicies:assign_benefits',
+                    'value' => 'insurancePolicies:assign_benefits',
                     'values' => [
                         'common' => [
                             'insuranceCompanies:name',
                             'insuranceCompanies:payer_id',
-                            'InsurancePolicies:release_info',
-                            'InsurancePolicies:assign_benefits',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
                         ],
                     ],
                 ],
@@ -8475,6 +8475,19 @@ return [
                         'common' => [
                             'company:npi',
                             'company:ein',
+                        ],
+                    ],
+                ],
+                '58' => [
+                    'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'value' => [
+                        'insurancePoliciesSubscriber:last_name',
+                        'insurancePoliciesSubscriber:first_name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
                         ],
                     ],
                 ],
