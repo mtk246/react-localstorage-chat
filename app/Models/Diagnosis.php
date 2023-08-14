@@ -92,7 +92,7 @@ class Diagnosis extends Model implements Auditable
         'gender_id',
         'status',
         'discriminatory_id',
-        'protected'
+        'protected',
     ];
 
     /**
