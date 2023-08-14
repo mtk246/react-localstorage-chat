@@ -118,6 +118,11 @@ class Patient extends Model implements Auditable
         return $this->belongsToMany(BillingCompany::class)->withPivot(['status', 'save_as_draft'])->withTimestamps();
     }
 
+    public function mainAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'main_address_id');
+    }
+
     /**
      * The injuries that belong to the Patient.
      *
