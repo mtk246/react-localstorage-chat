@@ -641,7 +641,6 @@ class DoctorRepository
                         'roles',
                         'billingCompanies',
                     ]);
-                    $query->with(['roles']);
                 },
                 'taxonomies',
                 'companies' => function ($query) {
