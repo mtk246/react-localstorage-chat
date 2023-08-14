@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\InsurancePolicy;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
 use Cknow\Money\Money;
@@ -248,6 +249,26 @@ final class FileDictionary extends Dictionary
         };
     }
 
+    protected function getInsurancePoliciesAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
+            'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
+            'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            default => $policy->{$key} ?? '',
+        })
+        ->pad(3, '');
+    }
+
+    protected function getInsuranceCompaniesAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
+            'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
+            'payer_id' => $policy->payer_id ?? '',
+            default => $policy->insurancePlan->insuranceCompany->{$key} ?? '',
+        })
+        ->pad(3, '');
+    }
+
     protected function getHigherInsurancePlanAttribute(string $key): string
     {
         return $this->claim->higherInsurancePlan()?->{$key} ?? '';
@@ -284,8 +305,11 @@ final class FileDictionary extends Dictionary
                     'procedure_description' => substr($claimService->procedure->description, 0, 30),
                     'procedure_short_description' => $claimService->procedure->short_description,
                     'procedure_code' => $claimService->procedure->code,
-                    'procedure_start_date' => $claimService->procedure->start_date,
-                    'non_covered_charges' => $claimService->claimService->non_covered_charges ?? '',
+                    'procedure_start_date' => Carbon::createFromFormat('Y-m-d', $claimService->procedure->start_date)
+                        ->format('mdY'),
+                    'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
+                        ? Money::parse($claimService->claimService->non_covered_charges)->formatByDecimal()
+                        : '',
                     'related_group' => $claimService->claimService->diagnosisRelatedGroup?->code ?? '',
                     'total_charge' => Money::parse($claimService->total_charge)->formatByDecimal(),
                     default => $claimService->{$key},
