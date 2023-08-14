@@ -232,7 +232,7 @@ final class JSONDictionary extends Dictionary
                     ? 'Y'
                     : 'N')
                 : 'N',
-            /**'planParticipationCode' => 'A', /** Código que indica si el proveedor aceptó la asignación.
+            'planParticipationCode' => 'A', /* Código que indica si el proveedor aceptó la asignación.
             * A = Asignado
             * B = Asignación aceptada sólo en servicios de laboratorio clínico
             * C = No asignado */
