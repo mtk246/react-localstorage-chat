@@ -7331,10 +7331,12 @@ return [
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyContact:phone_fax|0',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
+                            'companyContact:phone_fax|0',
                             'companyAddress:address|0',
                             'companyAddress:city|0',
                             'companyAddress:state|0',
@@ -7397,10 +7399,12 @@ return [
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyContact:phone_fax|3',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
+                            'companyContact:phone_fax|3',
                             'companyAddress:address|3',
                             'companyAddress:city|3',
                             'companyAddress:state|3',
