@@ -318,7 +318,6 @@ class DoctorRepository
             }
 
             $healthP->update([
-                'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'ein' => $data['ein'] ?? null,
@@ -578,11 +577,11 @@ class DoctorRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $healthProfessionals = HealthProfessional::with([
+                'profile' => function ($query) {
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
+                },
                 'user' => function ($query) {
                     $query->with([
-                        'profile' => function ($query) {
-                            $query->with(['socialMedias', 'addresses', 'contacts']);
-                        },
                         'roles',
                         'billingCompanies',
                     ]);
@@ -598,19 +597,19 @@ class DoctorRepository
             $healthProfessionals = HealthProfessional::whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             })->with([
+                'profile' => function ($query) use ($bC) {
+                    $query->with([
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
                 'user' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) use ($bC) {
-                            $query->with([
-                                'socialMedias',
-                                'addresses' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
                         'roles',
                         'billingCompanies',
                     ]);
@@ -633,14 +632,12 @@ class DoctorRepository
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
             $data = HealthProfessional::with([
+                'profile' => function ($query) {
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
+                },
+                'billingCompanies',
                 'user' => function ($query) {
-                    $query->with([
-                        'profile' => function ($query) {
-                            $query->with(['socialMedias', 'addresses', 'contacts']);
-                        },
-                        'roles',
-                        'billingCompanies',
-                    ]);
+                    $query->with(['roles']);
                 },
                 'taxonomies',
                 'companies' => function ($query) {
@@ -653,22 +650,20 @@ class DoctorRepository
             $data = HealthProfessional::whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             })->with([
-                'user' => function ($query) use ($bC) {
+                'profile' => function ($query) use ($bC) {
                     $query->with([
-                        'profile' => function ($query) use ($bC) {
-                            $query->with([
-                                'socialMedias',
-                                'addresses' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                            ]);
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
                         },
-                        'roles',
-                        'billingCompanies',
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
                     ]);
+                },
+                'billingCompanies',
+                'user' => function ($query) use ($bC) {
+                    $query->with(['roles']);
                 },
                 'taxonomies',
                 'companies' => function ($query) use ($bC) {
