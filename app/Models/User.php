@@ -48,6 +48,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $devices_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FailedLoginAttempt> $failedLoginAttempts
  * @property int|null $failed_login_attempts_count
+ * @property string $language
  * @property mixed $last_modified
  * @property \App\Models\Profile|null $profile
  * @property \App\Models\HealthProfessional|null $healthProfessional

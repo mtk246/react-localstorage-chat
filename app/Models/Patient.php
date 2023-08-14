@@ -52,6 +52,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $insurance_plans_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
+ * @property \App\Models\Address|null $mainAddress
  * @property \App\Models\MaritalStatus|null $maritalStatus
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Marital> $maritals
  * @property int|null $maritals_count
