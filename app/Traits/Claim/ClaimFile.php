@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\Subscriber;
 use App\Models\TypeCatalog;
 
+/** @property ClaimDemographicInformation $demographicInformation */
 trait ClaimFile
 {
     public function insType(): ?TypeCatalog
@@ -56,11 +57,14 @@ trait ClaimFile
     public function patientAddress(): ?Address
     {
         return $this->demographicInformation
-            ?->patient
-            ?->user
-            ?->addresses()
-            ?->select('country', 'address', 'city', 'state', 'zip')
-            ?->first() ?? null;
+                ?->patient
+                ?->mainAddress
+            ?? $this->demographicInformation
+                ?->patient
+                ?->profile
+                ?->addresses
+                ?->first()
+            ?? null;
     }
 
     public function patientContact(): ?Contact
