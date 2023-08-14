@@ -995,7 +995,7 @@ class DoctorRepository
             $healthProfessionals = $healthProfessionals->whereHas('companies', function ($query) use ($companyId, $billingCompany) {
                 $query->where('company_id', $companyId);
                 if (isset($billingCompany)) {
-                    $query->where('billing_company_id', wid ?? $billingCompany);
+                    $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
                 }
             });
         }

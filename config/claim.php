@@ -9679,11 +9679,11 @@ return [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:claimInformation',
                 ],
-                /*'payToAddress' => [
+                'payToAddress' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:payToAddress',
                 ],
-                'payToPlan' => [
+                /*'payToPlan' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:payToPlan',
                 ],
