@@ -41,7 +41,7 @@ final class FileDictionary extends Dictionary
 
     protected function getCompanyAddressAttribute(string $key, string $entry): string
     {
-        $value = (string) $this->claim
+        $value = $this->claim
             ->demographicInformation
             ->company
             ->addresses
@@ -54,15 +54,17 @@ final class FileDictionary extends Dictionary
                     ? (int) $entry
                     : 1
             )
-            ->first()
-            ?->{$key};
+            ->first();
 
         return match ($key) {
-            'address' => substr($value ?? '', 0, 55),
-            'city' => substr($value ?? '', 0, 30),
-            'state' => substr($value ?? '', 0, 2),
-            'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
-            default => $value ?? '',
+            'address' => substr($value?->{$key} ?? '', 0, 55),
+            'city' => substr($value?->{$key} ?? '', 0, 30),
+            'state' => substr($value?->{$key} ?? '', 0, 2),
+            'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
+            'other_country' => 'us' != $value?->country
+                ? $value?->country.' '
+                : '',
+            default => $value?->{$key} ?? '',
         };
     }
 
@@ -279,7 +281,8 @@ final class FileDictionary extends Dictionary
             ->map(function (Services $claimService) use ($key) {
                 return match ($key) {
                     'revenue_code' => $claimService->revenueCode->code,
-                    'procedure_description' => $claimService->procedure->description,
+                    'procedure_description' => substr($claimService->procedure->description, 0, 30),
+                    'procedure_short_description' => $claimService->procedure->short_description,
                     'procedure_code' => $claimService->procedure->code,
                     'procedure_start_date' => $claimService->procedure->start_date,
                     'non_covered_charges' => $claimService->claimService->non_covered_charges ?? '',
