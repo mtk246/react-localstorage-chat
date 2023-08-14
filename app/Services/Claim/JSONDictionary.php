@@ -1133,7 +1133,7 @@ final class JSONDictionary extends Dictionary
             'lastName' => $referringProvider->user?->profile?->last_name,
             'middleName' => $referringProvider->user?->profile?->middle_name,
             'suffix' => $referringProvider->user?->profile?->nameSuffix?->code,
-            'organizationName' => $referringProvider->user?->profile?->last_name,
+            // 'organizationName' => $referringProvider->user?->profile?->last_name,
             'address' => [
                 'address1' => $referringProviderAddress?->address,
                 'address2' => null,
