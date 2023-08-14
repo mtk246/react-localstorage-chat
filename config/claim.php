@@ -7331,6 +7331,7 @@ return [
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyAddress:other_country|0',
                         'companyContact:phone_fax|0',
                     ],
                     'values' => [
@@ -7399,6 +7400,7 @@ return [
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyAddress:other_country|3',
                         'companyContact:phone_fax|3',
                     ],
                     'values' => [
@@ -8063,9 +8065,8 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
                         'HigherInsuranceCompany:city',
-                        '| ',
-                        'HigherInsuranceCompany:state',
                         '|, ',
+                        'HigherInsuranceCompany:state',
                         'HigherInsuranceCompany:zip',
                     ],
                     'values' => [
@@ -8285,11 +8286,12 @@ return [
                 ],
                 '43' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:short_description',
+                    'value' => 'claimServices:procedure_description',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
                             'claimServices:procedure_description',
+                            'claimServices:procedure_short_description',
                             'claimServices:procedure_start_date',
                             'claimServices:price',
                             'claimServices:days_or_units',
