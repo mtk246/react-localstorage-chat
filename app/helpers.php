@@ -195,3 +195,18 @@ if (!function_exists('array_empty')) {
         }));
     }
 }
+
+if (!function_exists('array_filter_recursive')) {
+    function array_filter_recursive(array $array)
+    {
+        foreach ($array as &$value) {
+            if (is_array($value)) {
+                $value = array_filter_recursive($value);
+            }
+        }
+
+        return array_filter($array, function ($value) {
+            return !is_null($value) && '' !== $value && ([] !== $value || is_array($value));
+        });
+    }
+}
