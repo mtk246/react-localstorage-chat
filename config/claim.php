@@ -7656,12 +7656,12 @@ return [
                     ],
                 ],
                 '16' => [
-                    'type' => RuleType::SINGLE->value,
+                    'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'medicalAssistanceType',
+                    'value' => 'patientInformation.discharge_time|H|H:m:s',
                     'values' => [
                         'common' => [
-                            'medicalAssistanceType',
+                            'patientInformation.discharge_time|H|H:m:s',
                         ],
                     ],
                 ],
