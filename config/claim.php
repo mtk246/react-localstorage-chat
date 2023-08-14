@@ -8065,6 +8065,7 @@ return [
                         'HigherInsuranceCompany:city',
                         '| ',
                         'HigherInsuranceCompany:state',
+                        '|, ',
                         'HigherInsuranceCompany:zip',
                     ],
                     'values' => [
