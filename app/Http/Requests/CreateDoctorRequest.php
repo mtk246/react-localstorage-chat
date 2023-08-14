@@ -56,7 +56,7 @@ class CreateDoctorRequest extends FormRequest
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
             'profile.ssn' => [
-                Rule::requiredIf(!isset($this->profile['ein'])),
+                Rule::requiredIf(!isset($this->ein)),
                 'string',
             ],
             'profile.date_of_birth' => ['required', 'date'],
