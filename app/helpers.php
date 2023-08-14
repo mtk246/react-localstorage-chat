@@ -206,7 +206,7 @@ if (!function_exists('array_filter_recursive')) {
         }
 
         return array_filter($array, function ($value) {
-            return !is_null($value) && '' !== $value && ([] !== $value || is_array($value));
+            return !is_null($value) && '' !== $value && ([] !== $value || (is_array($value) && !array_empty($value)));
         });
     }
 }
