@@ -38,8 +38,9 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::DATE->value => $this->getDateFormat($config->value),
             RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
             RuleType::SINGLE->value => $this->getSingleFormat($config->value),
-            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value, $config->glue ?? ''),
+            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value),
             RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
+            RuleType::MULTIPLE_ARRAY->value => $this->getMultipleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
@@ -53,6 +54,23 @@ abstract class Dictionary implements DictionaryInterface
                 return $this->translate((string) $key);
             }, array_keys($this->config))
         );
+    }
+
+    protected function getMultipleArrayFormat(array $values, string $glue): array
+    {
+        return Collect($values)
+            ->reduce(function (?Collection $carry, string $value) use ($glue) {
+                $items = $this->getSingleFormat($value);
+
+                if (is_null($carry)) {
+                    return $items;
+                }
+
+                return $carry->map(function ($item, $key) use ($items, $glue) {
+                    return $item.$glue.$items[$key];
+                });
+            })
+            ->toArray();
     }
 
     protected function getMultipleFormat(array $values, string $glue): string
