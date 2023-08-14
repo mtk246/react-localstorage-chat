@@ -29,6 +29,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $ein
  * @property string|null $upin
  * @property int|null $profile_id
+ * @property bool $protected
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -64,6 +65,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProtected($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpin($value)
  *

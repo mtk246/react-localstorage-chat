@@ -34,6 +34,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $gender_id
  * @property bool $status
  * @property int|null $discriminatory_id
+ * @property bool $protected
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Discriminatory|null $discriminatory
@@ -60,6 +61,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static Builder|Diagnosis whereGenderId($value)
  * @method static Builder|Diagnosis whereId($value)
  * @method static Builder|Diagnosis whereInjuryDateRequired($value)
+ * @method static Builder|Diagnosis whereProtected($value)
  * @method static Builder|Diagnosis whereStartDate($value)
  * @method static Builder|Diagnosis whereStatus($value)
  * @method static Builder|Diagnosis whereType($value)
@@ -90,6 +92,7 @@ class Diagnosis extends Model implements Auditable
         'gender_id',
         'status',
         'discriminatory_id',
+        'protected',
     ];
 
     /**

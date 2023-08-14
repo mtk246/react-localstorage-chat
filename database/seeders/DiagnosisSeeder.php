@@ -21,6 +21,7 @@ class DiagnosisSeeder extends Seeder
                 $diagnosis->end_date = null;
                 $diagnosis->active = true;
                 $diagnosis->clasifications = json_encode($diagnosis->clasifications);
+                $diagnosis->protected = true;
 
                 return (array) $diagnosis;
             })
