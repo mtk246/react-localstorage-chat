@@ -63,7 +63,7 @@ final class JSONDictionary extends Dictionary
         return [
             'memberId' => $subscriber->member_id ?? $subscriber->id,
             'ssn' => $subscriber->ssn,
-            'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()->payment_responsibility_level_code,
+            'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()->typeResponsibility->code ?? 'U',
             // 'organizationName' => 'string',
             // 'insuranceTypeCode' => '12',
             // 'subscriberGroupName' => 'Subscriber Group Name',
