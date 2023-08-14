@@ -8300,7 +8300,7 @@ return [
                 ],
                 '44' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:related_group',
+                    'value' => 'claimServices:revenue_code',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
@@ -8412,6 +8412,51 @@ return [
                     'values' => [
                         'common' => [
                             'claimServicesTotal',
+                        ],
+                    ],
+                ],
+                '50' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insuranceCompanies:name',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                        ],
+                    ],
+                ],
+                '51' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'InsurancePolicies:payer_id',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'InsurancePolicies:release_info',
+                            'InsurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '52' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'InsurancePolicies:release_info',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'InsurancePolicies:release_info',
+                            'InsurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '53' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'InsurancePolicies:assign_benefits',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'InsurancePolicies:release_info',
+                            'InsurancePolicies:assign_benefits',
                         ],
                     ],
                 ],
