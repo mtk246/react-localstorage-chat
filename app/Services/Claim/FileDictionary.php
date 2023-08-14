@@ -259,6 +259,15 @@ final class FileDictionary extends Dictionary
         ->pad(3, '');
     }
 
+    protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
+            'first_name' => ', '.$policy->subscribers->first()?->{$key} ?? null,
+            default => $policy->subscribers->first()?->{$key} ?? null,
+        } ?? $this->getPatientProfileAttribute($key))
+        ->pad(3, '');
+    }
+
     protected function getInsuranceCompaniesAttribute(string $key): Collection
     {
         return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
