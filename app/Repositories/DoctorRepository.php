@@ -40,7 +40,7 @@ class DoctorRepository
         try {
             \DB::beginTransaction();
 
-            /* Create Profile*/
+            /* Create Profile */
             if (isset($data['profile']['ssn'])) {
                 $profile = Profile::query()->updateOrCreate([
                     'ssn' => $data['profile']['ssn'] ?? null,
