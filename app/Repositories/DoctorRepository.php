@@ -636,8 +636,11 @@ class DoctorRepository
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
-                'billingCompanies',
                 'user' => function ($query) {
+                    $query->with([
+                        'roles',
+                        'billingCompanies',
+                    ]);
                     $query->with(['roles']);
                 },
                 'taxonomies',
@@ -662,9 +665,11 @@ class DoctorRepository
                         },
                     ]);
                 },
-                'billingCompanies',
                 'user' => function ($query) use ($bC) {
-                    $query->with(['roles']);
+                    $query->with([
+                        'roles',
+                        'billingCompanies',
+                    ]);
                 },
                 'taxonomies',
                 'companies' => function ($query) use ($bC) {
