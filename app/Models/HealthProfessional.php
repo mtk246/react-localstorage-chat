@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\MultipleRecordsFoundException;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -109,7 +110,13 @@ class HealthProfessional extends Model implements Auditable
 
     public function getUserAttribute(): ?User
     {
-        return $this->user()->sole();
+        $results = $this->user()->get();
+
+        if (($count = $results->count()) > 1) {
+            throw new MultipleRecordsFoundException($count);
+        }
+
+        return $results->first();
     }
 
     public function company()
@@ -259,7 +266,7 @@ class HealthProfessional extends Model implements Auditable
             'user.full_name' => $this->profile->first_name.' '.$this->profile->last_name,
             'user.first_name' => $this->profile->first_name,
             'user.last_name' => $this->profile->last_name,
-            'user.email' => $this->email,
+            'user.email' => $this->user->email,
             'user.ssn' => $this->profile->ssn,
             'user.phone' => $this->profile->phone,
             'company.name' => $this->company?->name,

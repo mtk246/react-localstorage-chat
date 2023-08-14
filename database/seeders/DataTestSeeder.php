@@ -2072,7 +2072,7 @@ class DataTestSeeder extends Seeder
                 'is_provider' => $dataHP['is_provider'] ?? false,
                 'npi_company' => $dataHP['npi_company'] ?? '',
                 'company_id' => $company->id ?? $dataHP['company_id'],
-                'user_id' => $user->id,
+                'profile_id' => $profile->id,
             ]);
 
             HealthProfessionalType::query()->create([
@@ -3157,6 +3157,7 @@ class DataTestSeeder extends Seeder
                     'last_name' => $dataP['profile']['last_name'],
                     'sex' => $dataP['profile']['sex'],
                     'date_of_birth' => $dataP['profile']['date_of_birth'],
+                    'language' => $dataP['language'] ?? 'en',
                 ]);
             } else {
                 $profile = Profile::updateOrCreate([
@@ -3170,6 +3171,7 @@ class DataTestSeeder extends Seeder
                     'last_name' => $dataP['profile']['last_name'],
                     'sex' => $dataP['profile']['sex'],
                     'date_of_birth' => $dataP['profile']['date_of_birth'],
+                    'language' => $dataP['language'] ?? 'en',
                 ]);
             }
 
@@ -3211,7 +3213,6 @@ class DataTestSeeder extends Seeder
                 'email' => $dataP['contact']['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                'language' => $dataP['language'] ?? 'en',
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
             ]);
@@ -3253,7 +3254,7 @@ class DataTestSeeder extends Seeder
             ], [
                 'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                 'marital_status_id' => $dataP['marital_status_id'] ?? null,
-                'user_id' => $user->id,
+                'profile_id' => $profile->id,
             ]);
 
             if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
