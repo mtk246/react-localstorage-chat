@@ -61,6 +61,7 @@ abstract class Dictionary implements DictionaryInterface
         return Collect($values)
             ->reduce(function (?Collection $carry, string $value) use ($glue) {
                 $items = $this->getSingleFormat($value);
+                $items = $items instanceof Collection ? $items : Collect([$items]);
 
                 if (is_null($carry)) {
                     return $items;
