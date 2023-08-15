@@ -99,7 +99,7 @@ class ClaimBatchRepository
                 }),
             )
             ->with('demographicInformation', 'service', 'insurancePolicies')
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc(true))
             ->paginate(Pagination::itemsPerPage());
 
         $data = [
