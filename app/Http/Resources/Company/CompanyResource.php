@@ -7,6 +7,7 @@ namespace App\Http\Resources\Company;
 use App\Facades\Pagination;
 use App\Models\Company;
 use App\Models\CompanyService;
+use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -50,6 +51,7 @@ final class CompanyResource extends JsonResource
                         'status' => $bC->pivot->status ?? false,
                         'miscellaneous' => $bC->pivot->miscellaneous ?? '',
                         'claim_format_ids' => $bC->pivot->claim_format_ids ?? [],
+                        'claim_formats' => getList(TypeForm::class, 'form'),
                         'edit_name' => !empty($nickname),
                         'nickname' => $nickname,
                         'abbreviation' => $this->resource->abbreviations()

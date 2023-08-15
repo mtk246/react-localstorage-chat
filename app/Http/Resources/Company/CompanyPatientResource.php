@@ -26,13 +26,13 @@ final class CompanyPatientResource extends JsonResource
         return [
             'id' => $this->resource->pivot->id,
             'patient_id' => $this->resource->pivot->patient_id,
-            'patient' => (isset($this->resource->user->profile))
+            'patient' => (isset($this->resource->profile))
                 ? [
                     'id' => $this->resource->pivot->patient_id,
                     'name' => $this->resource->code.' - '.
-                        $this->resource->user->profile->first_name.' '.
-                        substr($this->resource->user->profile->middle_name, 0, 1).' '.
-                        $this->resource->user->profile->last_name,
+                        $this->resource->profile->first_name.' '.
+                        substr($this->resource->profile->middle_name, 0, 1).' '.
+                        $this->resource->profile->last_name,
                 ]
                 : null,
             'med_num' => $this->resource->pivot->med_num ?? '',
