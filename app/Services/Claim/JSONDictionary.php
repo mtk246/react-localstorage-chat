@@ -202,6 +202,10 @@ final class JSONDictionary extends Dictionary
     protected function getClaimInformation(): array
     {
         $claimServiceLinePrincipal = $this->claim->service->services->first();
+        $diagnosisPrincipal = $this->claim->service->diagnoses->first();
+        $admittingDiagnosis = $this->claim->service->diagnoses->first(function ($diagnosis) {
+            return $diagnosis->pivot->admission ?? false;
+        });
         $relatedCausesCode = array_filter([
             (true === $this->claim->demographicInformation?->auto_accident_related_condition) ? 'AA' : null,
             (true === $this->claim->demographicInformation?->employment_related_condition) ? 'EM' : null,
@@ -287,7 +291,7 @@ final class JSONDictionary extends Dictionary
                 // 'deathDate' => 'string',
                 // 'patientWeight' => 'string',
                 // 'pregnancyIndicator' => 'Y',
-                'patientControlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
+                'patientControlNumber' => $this->claim->demographicInformation?->patient?->code,
                 'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
                 'placeOfServiceCode' => $claimServiceLinePrincipal?->placeOfService?->code ?? '11',
                 'claimFrequencyCode' => '1',
@@ -399,27 +403,27 @@ final class JSONDictionary extends Dictionary
                     ]
                     ),
                 /**'anesthesiaRelatedSurgicalProcedure' => [
-                        'string'
-                    ],*/
+                            'string'
+                        ],*/
                 /**'conditionInformation' => [
-                        [
-                            'conditionCodes' => [
-                                'string'
+                            [
+                                'conditionCodes' => [
+                                    'string'
+                                ]
                             ]
-                        ]
-                    ],*/
+                        ],*/
                 /**'claimPricingRepricingInformation' => [
-                        'pricingMethodologyCode' => '01',
-                        'repricedAllowedAmount' => '1',
-                        'repricedSavingAmount' => 'string',
-                        'repricingOrganizationIdentifier' => 'string',
-                        'repricingPerDiemOrFlatRateAmoung' => 'string',
-                        'repricedApprovedAmbulatoryPatientGroupCode' => 'string',
-                        'repricedApprovedAmbulatoryPatientGroupAmount' => 'string',
-                        'rejectReasonCode' => 'T1',
-                        'policyComplianceCode' => '1',
-                        'exceptionCode' => '1'
-                    ],*/
+                            'pricingMethodologyCode' => '01',
+                            'repricedAllowedAmount' => '1',
+                            'repricedSavingAmount' => 'string',
+                            'repricingOrganizationIdentifier' => 'string',
+                            'repricingPerDiemOrFlatRateAmoung' => 'string',
+                            'repricedApprovedAmbulatoryPatientGroupCode' => 'string',
+                            'repricedApprovedAmbulatoryPatientGroupAmount' => 'string',
+                            'rejectReasonCode' => 'T1',
+                            'policyComplianceCode' => '1',
+                            'exceptionCode' => '1'
+                        ],*/
                 'serviceFacilityLocation' => [
                     'organizationName' => $this->getFacilityAttribute('name'),
                     'address' => [
@@ -433,174 +437,174 @@ final class JSONDictionary extends Dictionary
                     ],
                     'npi' => $this->getFacilityAttribute('npi'),
                     /**'secondaryIdentifier' => [
-                            [
-                                'qualifier' => 'string',
-                                'identifier' => 'string',
-                                'otherIdentifier' => 'string'
-                            ]
-                        ],*/
+                                [
+                                    'qualifier' => 'string',
+                                    'identifier' => 'string',
+                                    'otherIdentifier' => 'string'
+                                ]
+                            ],*/
                     'phoneName' => $this->getFacilityContactAttribute('contact_name', '1'),
                     'phoneNumber' => $this->getFacilityContactAttribute('phone', '1'),
                     // 'phoneExtension' => 'string'
                 ],
                 /**'ambulancePickUpLocation' => [
-                        'address1' => '123 address1',
-                        'address2' => 'apt 000',
-                        'city' => 'city1',
-                        'state' => 'wa',
-                        'postalCode' => '981010000',
-                        'countryCode' => 'string',
-                        'countrySubDivisionCode' => 'string'
-                    ],*/
+                            'address1' => '123 address1',
+                            'address2' => 'apt 000',
+                            'city' => 'city1',
+                            'state' => 'wa',
+                            'postalCode' => '981010000',
+                            'countryCode' => 'string',
+                            'countrySubDivisionCode' => 'string'
+                        ],*/
                 /**'ambulanceDropOffLocation' => [
-                        'address1' => '123 address1',
-                        'address2' => 'apt 000',
-                        'city' => 'city1',
-                        'state' => 'wa',
-                        'postalCode' => '981010000',
-                        'countryCode' => 'string',
-                        'countrySubDivisionCode' => 'string'
-                    ],*/
+                            'address1' => '123 address1',
+                            'address2' => 'apt 000',
+                            'city' => 'city1',
+                            'state' => 'wa',
+                            'postalCode' => '981010000',
+                            'countryCode' => 'string',
+                            'countrySubDivisionCode' => 'string'
+                        ],*/
                 /*'otherSubscriberInformation' => [
-                        [
-                            'paymentResponsibilityLevelCode' => 'A',
-                            'individualRelationshipCode' => '01',
-                            'insuranceGroupOrPolicyNumber' => 'string',
-                            'otherInsuredGroupName' => 'string',
-                            'insuranceTypeCode' => '12',
-                            'claimFilingIndicatorCode' => '11',
-                            'claimLevelAdjustments' => [
-                                [
-                                    'adjustmentGroupCode' => 'CO',
-                                    'adjustmentDetails' => [
-                                        [
-                                            'adjustmentReasonCode' => 'string',
-                                            'adjustmentAmount' => 'string',
-                                            'adjustmentQuantity' => 'string'
-                                        ]
-                                    ]
-                                ]
-                            ],
-                            'payerPaidAmount' => 'string',
-                            'nonCoveredChargeAmount' => 'string',
-                            'remainingPatientLiability' => 'string',
-                            'benefitsAssignmentCertificationIndicator' => 'N',
-                            'patientSignatureGeneratedForPatient' => true,
-                            'releaseOfInformationCode' => 'I',
-                            'medicareOutpatientAdjudication' => [
-                                'reimbursementRate' => 'string',
-                                'hcpcsPayableAmount' => 'string',
-                                'claimPaymentRemarkCode' => [
-                                    'string'
-                                ],
-                                'endStageRenalDiseasePaymentAmount' => 'string',
-                                'nonPayableProfessionalComponentBilledAmount' => 'string'
-                            ],
-                            'otherSubscriberName' => [
-                                'otherInsuredQualifier' => '1',
-                                'otherInsuredLastName' => 'string',
-                                'otherInsuredFirstName' => 'string',
-                                'otherInsuredMiddleName' => 'string',
-                                'otherInsuredNameSuffix' => 'string',
-                                'otherInsuredIdentifierTypeCode' => 'II',
-                                'otherInsuredIdentifier' => 'string',
-                                'otherInsuredAddress' => [
-                                    'address1' => '123 address1',
-                                    'address2' => 'apt 000',
-                                    'city' => 'city1',
-                                    'state' => 'wa',
-                                    'postalCode' => '981010000',
-                                    'countryCode' => 'string',
-                                    'countrySubDivisionCode' => 'string'
-                                ],
-                                'otherInsuredAdditionalIdentifier' => 'string'
-                            ],
-                            'otherPayerName' => [
-                                'otherInsuredAdditionalIdentifier' => 'string',
-                                'otherPayerOrganizationName' => 'string',
-                                'otherPayerIdentifierTypeCode' => 'PI',
-                                'otherPayerIdentifier' => 'string',
-                                'otherPayerAddress' => [
-                                    'address1' => '123 address1',
-                                    'address2' => 'apt 000',
-                                    'city' => 'city1',
-                                    'state' => 'wa',
-                                    'postalCode' => '981010000',
-                                    'countryCode' => 'string',
-                                    'countrySubDivisionCode' => 'string'
-                                ],
-                                'otherPayerAdjudicationOrPaymentDate' => 'string',
-                                'otherPayerSecondaryIdentifier' => [
+                            [
+                                'paymentResponsibilityLevelCode' => 'A',
+                                'individualRelationshipCode' => '01',
+                                'insuranceGroupOrPolicyNumber' => 'string',
+                                'otherInsuredGroupName' => 'string',
+                                'insuranceTypeCode' => '12',
+                                'claimFilingIndicatorCode' => '11',
+                                'claimLevelAdjustments' => [
                                     [
-                                        'qualifier' => 'string',
-                                        'identifier' => 'string',
-                                        'otherIdentifier' => 'string'
+                                        'adjustmentGroupCode' => 'CO',
+                                        'adjustmentDetails' => [
+                                            [
+                                                'adjustmentReasonCode' => 'string',
+                                                'adjustmentAmount' => 'string',
+                                                'adjustmentQuantity' => 'string'
+                                            ]
+                                        ]
                                     ]
                                 ],
-                                'otherPayerPriorAuthorizationNumber' => 'string',
-                                'otherPayerPriorAuthorizationOrReferralNumber' => 'string',
-                                'otherPayerClaimAdjustmentIndicator' => true,
-                                'otherPayerClaimControlNumber' => 'string'
-                            ],
-                            'otherPayerReferringProvider' => [
-                                [
-                                    'otherPayerReferringProviderIdentifier' => [
+                                'payerPaidAmount' => 'string',
+                                'nonCoveredChargeAmount' => 'string',
+                                'remainingPatientLiability' => 'string',
+                                'benefitsAssignmentCertificationIndicator' => 'N',
+                                'patientSignatureGeneratedForPatient' => true,
+                                'releaseOfInformationCode' => 'I',
+                                'medicareOutpatientAdjudication' => [
+                                    'reimbursementRate' => 'string',
+                                    'hcpcsPayableAmount' => 'string',
+                                    'claimPaymentRemarkCode' => [
+                                        'string'
+                                    ],
+                                    'endStageRenalDiseasePaymentAmount' => 'string',
+                                    'nonPayableProfessionalComponentBilledAmount' => 'string'
+                                ],
+                                'otherSubscriberName' => [
+                                    'otherInsuredQualifier' => '1',
+                                    'otherInsuredLastName' => 'string',
+                                    'otherInsuredFirstName' => 'string',
+                                    'otherInsuredMiddleName' => 'string',
+                                    'otherInsuredNameSuffix' => 'string',
+                                    'otherInsuredIdentifierTypeCode' => 'II',
+                                    'otherInsuredIdentifier' => 'string',
+                                    'otherInsuredAddress' => [
+                                        'address1' => '123 address1',
+                                        'address2' => 'apt 000',
+                                        'city' => 'city1',
+                                        'state' => 'wa',
+                                        'postalCode' => '981010000',
+                                        'countryCode' => 'string',
+                                        'countrySubDivisionCode' => 'string'
+                                    ],
+                                    'otherInsuredAdditionalIdentifier' => 'string'
+                                ],
+                                'otherPayerName' => [
+                                    'otherInsuredAdditionalIdentifier' => 'string',
+                                    'otherPayerOrganizationName' => 'string',
+                                    'otherPayerIdentifierTypeCode' => 'PI',
+                                    'otherPayerIdentifier' => 'string',
+                                    'otherPayerAddress' => [
+                                        'address1' => '123 address1',
+                                        'address2' => 'apt 000',
+                                        'city' => 'city1',
+                                        'state' => 'wa',
+                                        'postalCode' => '981010000',
+                                        'countryCode' => 'string',
+                                        'countrySubDivisionCode' => 'string'
+                                    ],
+                                    'otherPayerAdjudicationOrPaymentDate' => 'string',
+                                    'otherPayerSecondaryIdentifier' => [
                                         [
                                             'qualifier' => 'string',
                                             'identifier' => 'string',
                                             'otherIdentifier' => 'string'
                                         ]
-                                    ]
-                                ]
-                            ],
-                            'otherPayerRenderingProvider' => [
-                                [
-                                    'entityTypeQualifier' => '1',
-                                    'otherPayerRenderingProviderSecondaryIdentifier' => [
-                                        [
-                                            'qualifier' => 'string',
-                                            'identifier' => 'string',
-                                            'otherIdentifier' => 'string'
+                                    ],
+                                    'otherPayerPriorAuthorizationNumber' => 'string',
+                                    'otherPayerPriorAuthorizationOrReferralNumber' => 'string',
+                                    'otherPayerClaimAdjustmentIndicator' => true,
+                                    'otherPayerClaimControlNumber' => 'string'
+                                ],
+                                'otherPayerReferringProvider' => [
+                                    [
+                                        'otherPayerReferringProviderIdentifier' => [
+                                            [
+                                                'qualifier' => 'string',
+                                                'identifier' => 'string',
+                                                'otherIdentifier' => 'string'
+                                            ]
                                         ]
                                     ]
-                                ]
-                            ],
-                            'otherPayerServiceFacilityLocation' => [
-                                [
-                                    'otherPayerServiceFacilityLocationSecondaryIdentifier' => [
-                                        [
-                                            'qualifier' => 'string',
-                                            'identifier' => 'string',
-                                            'otherIdentifier' => 'string'
+                                ],
+                                'otherPayerRenderingProvider' => [
+                                    [
+                                        'entityTypeQualifier' => '1',
+                                        'otherPayerRenderingProviderSecondaryIdentifier' => [
+                                            [
+                                                'qualifier' => 'string',
+                                                'identifier' => 'string',
+                                                'otherIdentifier' => 'string'
+                                            ]
                                         ]
                                     ]
-                                ]
-                            ],
-                            'otherPayerSupervisingProvider' => [
-                                [
-                                    'otherPayerSupervisingProviderIdentifier' => [
-                                        [
-                                            'qualifier' => 'string',
-                                            'identifier' => 'string',
-                                            'otherIdentifier' => 'string'
+                                ],
+                                'otherPayerServiceFacilityLocation' => [
+                                    [
+                                        'otherPayerServiceFacilityLocationSecondaryIdentifier' => [
+                                            [
+                                                'qualifier' => 'string',
+                                                'identifier' => 'string',
+                                                'otherIdentifier' => 'string'
+                                            ]
                                         ]
                                     ]
-                                ]
-                            ],
-                            'otherPayerBillingProvider' => [
-                                [
-                                    'entityTypeQualifier' => '1',
-                                    'otherPayerBillingProviderIdentifier' => [
-                                        [
-                                            'qualifier' => 'string',
-                                            'identifier' => 'string',
-                                            'otherIdentifier' => 'string'
+                                ],
+                                'otherPayerSupervisingProvider' => [
+                                    [
+                                        'otherPayerSupervisingProviderIdentifier' => [
+                                            [
+                                                'qualifier' => 'string',
+                                                'identifier' => 'string',
+                                                'otherIdentifier' => 'string'
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'otherPayerBillingProvider' => [
+                                    [
+                                        'entityTypeQualifier' => '1',
+                                        'otherPayerBillingProviderIdentifier' => [
+                                            [
+                                                'qualifier' => 'string',
+                                                'identifier' => 'string',
+                                                'otherIdentifier' => 'string'
+                                            ]
                                         ]
                                     ]
                                 ]
                             ]
-                        ]
-                    ],*/
+                        ],*/
                 'serviceLines' => $serviceLines, /* [
                     [
                         'assignedNumber' => 'string',
@@ -1137,29 +1141,31 @@ final class JSONDictionary extends Dictionary
                         'attachmentControlNumber' => 'string'
                     ],*/
                     'priorAuthorizationNumber' => $this->claim->demographicInformation?->prior_authorization_number ?? '',
-                    'referralNumber' => 'string',
-                    'claimControlNumber' => 'string',
-                    'repricedClaimNumber' => 'string',
-                    'investigationalDeviceExemptionNumber' => 'string',
-                    'claimNumber' => 'string',
-                    'medicalRecordNumber' => 'string',
-                    'demoProjectIdentifier' => 'string',
-                    'serviceAuthorizationExceptionCode' => '1',
-                    'autoAccidentState' => 'string',
-                    'peerReviewAuthorizationNumber' => 'string',
-                    'adjustedRepricedClaimRefNumber' => 'string',
+                    'referralNumber' => '',
+                    'claimControlNumber' => '',
+                    'repricedClaimNumber' => '',
+                    'investigationalDeviceExemptionNumber' => '',
+                    'claimNumber' => '',
+                    'medicalRecordNumber' => '',
+                    'demoProjectIdentifier' => '',
+                    'serviceAuthorizationExceptionCode' => '',
+                    'autoAccidentState' => $this->claim->demographicInformation?->auto_accident_place_state,
+                    'peerReviewAuthorizationNumber' => '',
+                    'adjustedRepricedClaimRefNumber' => '',
                 ],
-                'conditionCodes' => '1',
+                // 'conditionCodes' => '1',
                 'principalDiagnosis' => [
                     'qualifierCode' => 'ABK',
-                    'principalDiagnosisCode' => '99761',
-                    'presentOnAdmissionIndicator' => 'N',
+                    'principalDiagnosisCode' => $diagnosisPrincipal?->code,
+                    'presentOnAdmissionIndicator' => (true === $diagnosisPrincipal?->pivot?->admission ?? false) ? 'Y' : 'N',
                 ],
-                'admittingDiagnosis' => [
-                    'qualifierCode' => 'ABJ',
-                    'admittingDiagnosisCode' => 'string',
-                ],
-                'patientReasonForVisits' => [
+                'admittingDiagnosis' => isset($admittingDiagnosis)
+                    ? [
+                        'qualifierCode' => 'ABJ',
+                        'admittingDiagnosisCode' => $admittingDiagnosis->code,
+                    ]
+                    : null,
+                /*'patientReasonForVisits' => [
                     [
                         'qualifierCode' => 'APR',
                         'patientReasonForVisitCode' => 'string',
@@ -1171,32 +1177,34 @@ final class JSONDictionary extends Dictionary
                         'externalCauseOfInjury' => 'string',
                         'presentOnAdmissionIndicator' => 'N',
                     ],
-                ],
+                ],*/
                 'diagnosisRelatedGroupInformation' => [
-                    'drugRelatedGroupCode' => 'string',
+                    'drugRelatedGroupCode' => $this->claim->service?->diagnosisRelatedGroup?->code ?? null,
                 ],
                 'otherDiagnosisInformationList' => [
-                    [
-                        [
+                    $this->claim->service->diagnoses
+                        ->skip(1)
+                        ->map(fn ($diagnosis, $index) => [
                             'qualifierCode' => 'ABF',
-                            'otherDiagnosisCode' => 'string',
-                            'presentOnAdmissionIndicator' => 'N',
-                        ],
-                    ],
+                            'otherDiagnosisCode' => $diagnosis->code,
+                            'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
+                        ])->toArray(),
                 ],
-                'principalProcedureInformation' => [
-                    'qualifierCode' => 'BBR',
-                    'principalProcedureCode' => 'string',
-                    'principalProcedureDate' => 'string',
-                ],
+                'principalProcedureInformation' => isset($claimServiceLinePrincipal)
+                    ? [
+                        'qualifierCode' => null /** 'BBR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades, 'BR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades 'CAH' Códigos de conceptos avanzados de facturación (ABC). */,
+                        'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
+                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal->from_service),
+                    ]
+                    : null,
                 'otherProcedureInformationList' => [
-                    [
-                        [
+                    $this->claim->service->services
+                        ->skip(1)
+                        ->map(fn ($service, $index) => [
                             'qualifierCode' => 'BBQ',
-                            'otherProcedureCode' => 'string',
-                            'otherProcedureDate' => 'string',
-                        ],
-                    ],
+                            'otherProcedureCode' => $service->procedure?->code,
+                            'otherProcedureDate' => str_replace('-', '', $service->from_service),
+                        ])->toArray()
                 ],
                 'occurrenceSpanInformations' => [
                     [
@@ -1267,7 +1275,7 @@ final class JSONDictionary extends Dictionary
                     'secondaryIdentifier' => 'string',
                     'identificationCode' => 'string',
                 ],
-                'otherSubscriberInformation' => [
+                /*'otherSubscriberInformation' => [
                     'paymentResponsibilityLevelCode' => 'A',
                     'individualRelationshipCode' => '01',
                     'claimFilingIndicatorCode' => '11',
@@ -1427,8 +1435,8 @@ final class JSONDictionary extends Dictionary
                     'payerPaidAmount' => 'string',
                     'remainingPatientLiability' => 'string',
                     'nonCoveredChargeAmount' => 'string',
-                ],
-                'serviceLines' => [
+                ],*/
+                'serviceLines' => $serviceLines, /*[
                     [
                         'lineAdjudicationInformation' => [
                             [
@@ -1631,26 +1639,25 @@ final class JSONDictionary extends Dictionary
                         'adjustedRepricedLineItemReferenceNumber' => 'string',
                         'lineNoteText' => 'string',
                     ],
-                ],
+                ],*/
                 'claimCodeInformation' => [
-                    'admissionTypeCode' => '1',
-                    'admissionSourceCode' => 'string',
-                    'patientStatusCode' => '10',
+                    'admissionTypeCode' => $this->claim->patientInformation?->admissionType?->code,
+                    'admissionSourceCode' => $this->claim->patientInformation?->admissionSource?->code,
+                    'patientStatusCode' => $this->claim->patientInformation?->patientStatus?->code,
                 ],
                 'epsdtReferral' => [
-                    'certificationConditionCodeAppliesIndicator' => 'N',
+                    'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
                     'conditionCodes' => [
-                        'AV',
+                        $claimServiceLinePrincipal?->epsdt?->code ?? 'NU',
                     ],
                 ],
-                'propertyCasualtyClaimNumber' => 'string',
-                'patientControlNumber' => '12345',
-                'claimChargeAmount' => '375',
-                'placeOfServiceCode' => '11',
+                'propertyCasualtyClaimNumber' => '',
+                'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
+                'placeOfServiceCode' => $claimServiceLinePrincipal?->placeOfService?->code ?? '11',
                 'claimFrequencyCode' => '1',
-                'delayReasonCode' => '1',
-                'patientEstimatedAmountDue' => 'string',
-                'billingNote' => 'string',
+                'delayReasonCode' => '',
+                'patientEstimatedAmountDue' => '',
+                'billingNote' => '',
             ]
         };
     }

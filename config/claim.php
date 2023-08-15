@@ -8692,7 +8692,7 @@ return [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:dependent',
                 ],
-                'providers' => [
+                /*'providers' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:providers',
                 ],
@@ -8711,7 +8711,7 @@ return [
                 'otherOperatingPhysician' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:otherOperatingPhysician',
-                ],
+                ],*/
                 'claimInformation' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:claimInformation',
@@ -8728,14 +8728,14 @@ return [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:referring',
                 ],
-                'rendering' => [
+                /*'rendering' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:rendering',
                 ],
                 'attending' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
                     'value' => 'claim:attending',
-                ],
+                ],*/
             ],
         ],
         ClaimType::PROFESSIONAL->value => [
