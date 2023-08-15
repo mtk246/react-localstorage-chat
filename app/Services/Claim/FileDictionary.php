@@ -336,7 +336,7 @@ final class FileDictionary extends Dictionary
 
         return match ($key) {
             'type' => $diagnosisDx?->type->getCode(),
-            'code' => $diagnosisDx?->code
+            'code_poa' => $diagnosisDx?->code
                 .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? ($diagnosisDx->pivot->poa ? ' Y' : ' N')
                     : ''),
@@ -348,6 +348,10 @@ final class FileDictionary extends Dictionary
     {
         return $this->claim->service->diagnoses()->wherePivot('admission', false)->get()
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
+                'code_poa' => $diagnosis?->code
+                    .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
+                        ? ($diagnosis->pivot->poa ? ' Y' : ' N')
+                        : ''),
                 default => $diagnosis?->{$key} ?? '',
             })
             ->pad(17, '');
