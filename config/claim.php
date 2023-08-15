@@ -2998,7 +2998,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 200,
+                'x' => 198,
                 'y' => 8.5,
             ],
         ],
@@ -3174,7 +3174,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 60,
+                'x' => 59,
                 'y' => 34,
             ],
         ],
@@ -6903,7 +6903,7 @@ return [
                 'w' => 70,
                 'h' => 10,
                 'x' => 151,
-                'y' => 239,
+                'y' => 238,
             ],
         ],
         '76b' => [
@@ -6914,7 +6914,7 @@ return [
                 'w' => 70,
                 'h' => 10,
                 'x' => 187,
-                'y' => 239,
+                'y' => 238,
             ],
         ],
         '76c' => [
@@ -8074,6 +8074,7 @@ return [
                         'HigherInsuranceCompany:city',
                         '|, ',
                         'HigherInsuranceCompany:state',
+                        '| ',
                         'HigherInsuranceCompany:zip',
                     ],
                     'values' => [
