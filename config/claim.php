@@ -6448,6 +6448,17 @@ return [
             ],
         ],
         '67' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 10,
+                'y' => 225,
+            ],
+        ],
+        '67l' => [
             0 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -8555,6 +8566,50 @@ return [
                     'values' => [
                         'common' => [
                             'demographicInformation.prior_authorization_number',
+                        ],
+                    ],
+                ],
+                '64' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '65' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '66' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:type',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                        ],
+                    ],
+                ],
+                '67' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:code',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '67l' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'ClaimDiagnosis:code',
+                    'values' => [
+                        'common' => [
+                            'ClaimDiagnosis:code',
                         ],
                     ],
                 ],
