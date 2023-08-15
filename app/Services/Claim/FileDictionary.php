@@ -6,6 +6,8 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\Diagnosis;
+use App\Models\InsurancePolicy;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
 use Cknow\Money\Money;
@@ -41,7 +43,7 @@ final class FileDictionary extends Dictionary
 
     protected function getCompanyAddressAttribute(string $key, string $entry): string
     {
-        $value = (string) $this->claim
+        $value = $this->claim
             ->demographicInformation
             ->company
             ->addresses
@@ -54,15 +56,17 @@ final class FileDictionary extends Dictionary
                     ? (int) $entry
                     : 1
             )
-            ->first()
-            ?->{$key};
+            ->first();
 
         return match ($key) {
-            'address' => substr($value ?? '', 0, 55),
-            'city' => substr($value ?? '', 0, 30),
-            'state' => substr($value ?? '', 0, 2),
-            'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
-            default => $value ?? '',
+            'address' => substr($value?->{$key} ?? '', 0, 55),
+            'city' => substr($value?->{$key} ?? '', 0, 30),
+            'state' => substr($value?->{$key} ?? '', 0, 2),
+            'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
+            'other_country' => 'us' != $value?->country
+                ? $value?->country.' '
+                : '',
+            default => $value?->{$key} ?? '',
         };
     }
 
@@ -77,6 +81,7 @@ final class FileDictionary extends Dictionary
         return match ($key) {
             'code_area' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
             'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
+            'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 3, 10)),
             default => (string) $value?->{$key} ?? '',
         };
     }
@@ -245,6 +250,37 @@ final class FileDictionary extends Dictionary
         };
     }
 
+    protected function getInsurancePoliciesAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
+            'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
+            'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            'plan_name' => substr($policy->insurancePlan->name ?? '', 0, 21),
+            default => $policy->{$key} ?? '',
+        })
+        ->pad(3, '');
+    }
+
+    protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
+            'first_name' => ', '.$policy->subscribers->first()?->{$key} ?? null,
+            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
+            default => $policy->subscribers->first()?->{$key} ?? null,
+        } ?? $this->getPatientProfileAttribute($key))
+        ->pad(3, '');
+    }
+
+    protected function getInsuranceCompaniesAttribute(string $key): Collection
+    {
+        return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
+            'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
+            'payer_id' => $policy->payer_id ?? '',
+            default => $policy->insurancePlan->insuranceCompany->{$key} ?? '',
+        })
+        ->pad(3, '');
+    }
+
     protected function getHigherInsurancePlanAttribute(string $key): string
     {
         return $this->claim->higherInsurancePlan()?->{$key} ?? '';
@@ -278,15 +314,58 @@ final class FileDictionary extends Dictionary
             ->map(function (Services $claimService) use ($key) {
                 return match ($key) {
                     'revenue_code' => $claimService->revenueCode->code,
-                    'procedure_description' => $claimService->procedure->description,
+                    'procedure_description' => substr($claimService->procedure->description, 0, 30),
+                    'procedure_short_description' => $claimService->procedure->short_description,
                     'procedure_code' => $claimService->procedure->code,
-                    'procedure_start_date' => $claimService->procedure->start_date,
-                    'non_covered_charges' => $claimService->claimService->non_covered_charges ?? '',
+                    'procedure_start_date' => Carbon::createFromFormat('Y-m-d', $claimService->procedure->start_date)
+                        ->format('mdY'),
+                    'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
+                        ? Money::parse($claimService->claimService->non_covered_charges)->formatByDecimal()
+                        : '',
                     'related_group' => $claimService->claimService->diagnosisRelatedGroup?->code ?? '',
                     'total_charge' => Money::parse($claimService->total_charge)->formatByDecimal(),
                     default => $claimService->{$key},
                 };
             });
+    }
+
+    protected function getClaimDiagnosisDxAttribute(string $key): string
+    {
+        /** @var \App\Models\Diagnosis|null */
+        $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('admission', true)->first();
+
+        return match ($key) {
+            'type' => $diagnosisDx?->type->getCode(),
+            'code_poa' => $diagnosisDx?->code
+                .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
+                    ? ($diagnosisDx->pivot->poa ? ' Y' : ' N')
+                    : ''),
+            default => $diagnosisDx?->{$key} ?? '',
+        };
+    }
+
+    protected function getClaimDiagnosisAttribute(string $key): Collection
+    {
+        return $this->claim->service->diagnoses()->wherePivot('admission', false)->get()
+            ->map(fn (Diagnosis $diagnosis) => match ($key) {
+                'code_poa' => $diagnosis?->code
+                    .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
+                        ? ($diagnosis->pivot->poa ? ' Y' : ' N')
+                        : ''),
+                default => $diagnosis?->{$key} ?? '',
+            })
+            ->pad(17, '');
+    }
+
+    protected function getHealthProfessionalAttribute(string $key, string $qualifierId): string
+    {
+        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('qualifier_id', $qualifierId)->first();
+
+        return match ($key) {
+            'first_name' => $healthProfessional?->profile->first_name ?? '',
+            'last_name' => $healthProfessional?->profile->last_name ?? '',
+            default => $healthProfessional?->{$key} ?? '',
+        };
     }
 
     protected function getClaimServicesTotalAttribute(): string

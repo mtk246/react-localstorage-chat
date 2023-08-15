@@ -2998,7 +2998,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 200,
+                'x' => 198,
                 'y' => 8.5,
             ],
         ],
@@ -3174,7 +3174,7 @@ return [
                 'align' => 'L',
                 'w' => 70,
                 'h' => 10,
-                'x' => 60,
+                'x' => 59,
                 'y' => 34,
             ],
         ],
@@ -6117,45 +6117,43 @@ return [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
                 'align' => 'L',
+                'w' => 26,
+                'h' => 10,
+                'x' => 175,
+                'y' => 174.4,
+            ],
+        ],
+        '57a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
                 'w' => 17,
                 'h' => 10,
                 'x' => 175,
-                'y' => 175,
+                'y' => 179,
             ],
         ],
-        '57' => [
-            0 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 179,
-                ],
+        '57b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 17,
+                'h' => 10,
+                'x' => 175,
+                'y' => 183,
             ],
-            1 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 183,
-                ],
-            ],
-            2 => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 17,
-                    'h' => 10,
-                    'x' => 175,
-                    'y' => 187,
-                ],
+        ],
+        '57c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 17,
+                'h' => 10,
+                'x' => 175,
+                'y' => 187,
             ],
         ],
         '58' => [
@@ -6450,6 +6448,17 @@ return [
             ],
         ],
         '67' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 10,
+                'y' => 225,
+            ],
+        ],
+        '67l' => [
             0 => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -6886,50 +6895,48 @@ return [
                 ],
             ],
         ],
-        '76' => [
-            'NPI' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 151,
-                    'y' => 239,
-                ],
+        '76a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 151,
+                'y' => 238,
             ],
-            'QUALIFIER' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 187,
-                    'y' => 239,
-                ],
+        ],
+        '76b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 187,
+                'y' => 238,
             ],
-            'FIRST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 181,
-                    'y' => 242,
-                ],
+        ],
+        '76c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 181,
+                'y' => 242,
             ],
-            'LAST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 136,
-                    'y' => 242,
-                ],
+        ],
+        '76d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 136,
+                'y' => 242,
             ],
         ],
         '77' => [
@@ -7331,10 +7338,13 @@ return [
                 '1d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyAddress:other_country|0',
+                        'companyContact:phone_fax|0',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
+                            'companyContact:phone_fax|0',
                             'companyAddress:address|0',
                             'companyAddress:city|0',
                             'companyAddress:state|0',
@@ -7397,10 +7407,13 @@ return [
                 '2d' => [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
+                        'companyAddress:other_country|3',
+                        'companyContact:phone_fax|3',
                     ],
                     'values' => [
                         'common' => [
                             'demographicInformation.company.name',
+                            'companyContact:phone_fax|3',
                             'companyAddress:address|3',
                             'companyAddress:city|3',
                             'companyAddress:state|3',
@@ -7652,12 +7665,12 @@ return [
                     ],
                 ],
                 '16' => [
-                    'type' => RuleType::SINGLE->value,
+                    'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'medicalAssistanceType',
+                    'value' => 'patientInformation.discharge_time|H|H:m:s',
                     'values' => [
                         'common' => [
-                            'medicalAssistanceType',
+                            'patientInformation.discharge_time|H|H:m:s',
                         ],
                     ],
                 ],
@@ -8059,8 +8072,9 @@ return [
                     'type' => RuleType::MULTIPLE->value,
                     'value' => [
                         'HigherInsuranceCompany:city',
-                        '| ',
+                        '|, ',
                         'HigherInsuranceCompany:state',
+                        '| ',
                         'HigherInsuranceCompany:zip',
                     ],
                     'values' => [
@@ -8280,11 +8294,12 @@ return [
                 ],
                 '43' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:short_description',
+                    'value' => 'claimServices:procedure_description',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
                             'claimServices:procedure_description',
+                            'claimServices:procedure_short_description',
                             'claimServices:procedure_start_date',
                             'claimServices:price',
                             'claimServices:days_or_units',
@@ -8293,7 +8308,7 @@ return [
                 ],
                 '44' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:related_group',
+                    'value' => 'claimServices:revenue_code',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
@@ -8405,6 +8420,239 @@ return [
                     'values' => [
                         'common' => [
                             'claimServicesTotal',
+                        ],
+                    ],
+                ],
+                '50' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insuranceCompanies:name',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                        ],
+                    ],
+                ],
+                '51' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'InsurancePolicies:payer_id',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '52' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:release_info',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '53' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:assign_benefits',
+                    'values' => [
+                        'common' => [
+                            'insuranceCompanies:name',
+                            'insuranceCompanies:payer_id',
+                            'insurancePolicies:release_info',
+                            'insurancePolicies:assign_benefits',
+                        ],
+                    ],
+                ],
+                '56' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:npi',
+                    'values' => [
+                        'common' => [
+                            'company:npi',
+                            'company:ein',
+                        ],
+                    ],
+                ],
+                '57a' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'company:ein',
+                    'values' => [
+                        'common' => [
+                            'company:npi',
+                            'company:ein',
+                        ],
+                    ],
+                ],
+                '58' => [
+                    'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'value' => [
+                        'insurancePoliciesSubscriber:last_name',
+                        'insurancePoliciesSubscriber:first_name',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '59' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePoliciesSubscriber:relationship_code',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '60' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:policy_number',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '61' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:plan_name',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                        ],
+                    ],
+                ],
+                '62' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'insurancePolicies:group_number',
+                    'values' => [
+                        'common' => [
+                            'insurancePoliciesSubscriber:last_name',
+                            'insurancePoliciesSubscriber:first_name',
+                            'insurancePoliciesSubscriber:relationship_code',
+                            'insurancePolicies:policy_number',
+                            'insurancePolicies:plan_name',
+                            'insurancePolicies:group_number',
+                        ],
+                    ],
+                ],
+                '63' => [
+                    'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'value' => [
+                        'demographicInformation.prior_authorization_number',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.prior_authorization_number',
+                        ],
+                    ],
+                ],
+                '64' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '65' => [
+                    'type' => RuleType::NONE->value,
+                    'value' => [
+                    ],
+                    'values' => [
+                        'common' => [],
+                    ],
+                ],
+                '66' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:type',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '67' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:code_poa',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code_poa',
+                        ],
+                    ],
+                ],
+                '67l' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'ClaimDiagnosis:code_poa',
+                    'values' => [
+                        'common' => [
+                            'ClaimDiagnosis:code_poa',
+                        ],
+                    ],
+                ],
+                '69' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:code',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'ClaimDiagnosis:code_poa',
+                            'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '76a' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:npi|1',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '76c' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:first_name|1',
+                    'values' => [
+                        'common' => [
+                            'healthProfessional:npi|1',
+                            'healthProfessional:first_name|1',
+                            'healthProfessional:last_name|1',
+                        ],
+                    ],
+                ],
+                '76d' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:last_name|1',
+                    'values' => [
+                        'common' => [
+                            'healthProfessional:npi|1',
+                            'healthProfessional:first_name|1',
+                            'healthProfessional:last_name|1',
                         ],
                     ],
                 ],
