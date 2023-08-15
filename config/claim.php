@@ -8591,25 +8591,37 @@ return [
                     'values' => [
                         'common' => [
                             'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code',
                         ],
                     ],
                 ],
                 '67' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'claimDiagnosisDx:code',
+                    'value' => 'claimDiagnosisDx:code_poa',
                     'values' => [
                         'common' => [
                             'claimDiagnosisDx:type',
-                            'claimDiagnosisDx:code',
+                            'claimDiagnosisDx:code_poa',
                         ],
                     ],
                 ],
                 '67l' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'ClaimDiagnosis:code',
+                    'value' => 'ClaimDiagnosis:code_poa',
                     'values' => [
                         'common' => [
-                            'ClaimDiagnosis:code',
+                            'ClaimDiagnosis:code_poa',
+                        ],
+                    ],
+                ],
+                '69' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claimDiagnosisDx:code',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'ClaimDiagnosis:code_poa',
+                            'claimDiagnosisDx:code',
                         ],
                     ],
                 ],
