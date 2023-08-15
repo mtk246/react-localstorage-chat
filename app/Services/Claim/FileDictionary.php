@@ -357,6 +357,17 @@ final class FileDictionary extends Dictionary
             ->pad(17, '');
     }
 
+    protected function getHealthProfessionalAttribute(string $key, string $qualifierId): string
+    {
+        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('qualifier_id', $qualifierId)->first();
+
+        return match ($key) {
+            'first_name' => $healthProfessional?->profile->first_name ?? '',
+            'last_name' => $healthProfessional?->profile->last_name ?? '',
+            default => $healthProfessional?->{$key} ?? '',
+        };
+    }
+
     protected function getClaimServicesTotalAttribute(): string
     {
         return Money::parse($this->claim->service->services->sum('price'))->formatByDecimal();
