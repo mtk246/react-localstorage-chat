@@ -29,6 +29,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $ein
  * @property string|null $upin
  * @property int|null $profile_id
+ * @property bool $protected
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -64,6 +65,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProtected($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpin($value)
  *
@@ -266,7 +268,7 @@ class HealthProfessional extends Model implements Auditable
             'user.full_name' => $this->profile->first_name.' '.$this->profile->last_name,
             'user.first_name' => $this->profile->first_name,
             'user.last_name' => $this->profile->last_name,
-            'user.email' => $this->user->email,
+            'user.email' => $this->user->email ?? null,
             'user.ssn' => $this->profile->ssn,
             'user.phone' => $this->profile->phone,
             'company.name' => $this->company?->name,

@@ -14,6 +14,7 @@ use App\Http\Resources\Enums\TypeResource;
 use App\Http\Requests\Diagnosis\UpdateNotesRequest;
 use App\Actions\Diagnosis\UpdateDiagnosis;
 use App\Models\Diagnosis;
+use App\Actions\Diagnosis\GetClassificationAction;
 
 class DiagnosisController extends Controller
 {
@@ -107,5 +108,10 @@ class DiagnosisController extends Controller
         $rs = $updateDiagnosis->notes($diagnosis, $request->validated());
 
         return response()->json($rs);
+    }
+
+    public function getClassificationsByCode(GetClassificationAction $action, $code)
+    {
+        return response()->json($action->getClassifications($code));
     }
 }

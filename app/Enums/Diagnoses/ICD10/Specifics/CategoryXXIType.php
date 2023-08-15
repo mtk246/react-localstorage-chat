@@ -128,7 +128,7 @@ enum CategoryXXIType: int implements ProcedureClassificationInterface
     #[PublicAttribute(true)]
     case ACCIDENTAL_EXPOSURE_OTHER_FACTORS = 22;
 
-    #[NameAttribute('Intentional self', 'harm')]
+    #[NameAttribute('Intentional self-harm')]
     #[RangeAttribute('X71', 'X83')]
     #[PublicAttribute(true)]
     case INTENTIONAL_SELF_HARM = 23;

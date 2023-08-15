@@ -8660,6 +8660,84 @@ return [
             ],
             FormatType::X12->value => [
             ],
+            FormatType::JSON->value => [
+                'controlNumber' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claim:controlNumber',
+                ],
+                'tradingPartnerServiceId' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claim:tradingPartnerServiceId',
+                ],
+                'tradingPartnerName' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claim:tradingPartnerName',
+                ],
+                'usageIndicator' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'claim:usageIndicator',
+                ],
+                'submitter' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:submitter',
+                ],
+                'receiver' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:receiver',
+                ],
+                'subscriber' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:subscriber',
+                ],
+                'dependent' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:dependent',
+                ],
+                /*'providers' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:providers',
+                ],
+                'billingPayToPlanName' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:billingPayToPlanName',
+                ],
+                'billingPayToAddressName' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:billingPayToAddressName',
+                ],
+                'operatingPhysician' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:operatingPhysician',
+                ],
+                'otherOperatingPhysician' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:otherOperatingPhysician',
+                ],*/
+                'claimInformation' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:claimInformation',
+                ],
+                'payToAddress' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:payToAddress',
+                ],
+                'billing' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:billing',
+                ],
+                'referring' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:referring',
+                ],
+                /*'rendering' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:rendering',
+                ],
+                'attending' => [
+                    'type' => RuleType::SINGLE_ARRAY->value,
+                    'value' => 'claim:attending',
+                ],*/
+            ],
         ],
         ClaimType::PROFESSIONAL->value => [
             FormatType::FILE->value => [
@@ -9965,9 +10043,15 @@ return [
     ],
 
     'connections' => [
+        ClaimType::PROFESSIONAL->value => [
+            'professional_url_validation' => env('PROF_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
+            'professional_url_submission' => env('PROF_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
+        ],
+        ClaimType::INSTITUTIONAL->value => [
+            'institutional_url_validation' => env('INST_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/validation'),
+            'institutional_url_submission' => env('INST_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/submission'),
+        ],
         'url_eligibility' => env('URL_ELIGIBILITY', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3'),
-        'url_validation' => env('URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
-        'url_submission' => env('URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
         'url_token' => env('URL_TOKEN', 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token'),
         'client_id' => env('CLIENT_ID', '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF'),
         'client_secret' => env('CLIENT_SECRET', 'EBPadsDKoOuEoOWv'),

@@ -318,7 +318,6 @@ class DoctorRepository
             }
 
             $healthP->update([
-                'code' => generateNewCode('HP', 5, date('Y'), HealthProfessional::class, 'code'),
                 'is_provider' => $data['is_provider'] ?? false,
                 'npi_company' => $data['npi_company'] ?? '',
                 'ein' => $data['ein'] ?? null,
@@ -636,11 +635,9 @@ class DoctorRepository
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
+                'billingCompanies',
                 'user' => function ($query) {
-                    $query->with([
-                        'roles',
-                        'billingCompanies',
-                    ]);
+                    $query->with(['roles']);
                 },
                 'taxonomies',
                 'companies' => function ($query) {
@@ -664,11 +661,9 @@ class DoctorRepository
                         },
                     ]);
                 },
+                'billingCompanies',
                 'user' => function ($query) use ($bC) {
-                    $query->with([
-                        'roles',
-                        'billingCompanies',
-                    ]);
+                    $query->with(['roles']);
                 },
                 'taxonomies',
                 'companies' => function ($query) use ($bC) {

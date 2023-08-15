@@ -37,6 +37,7 @@ final class DoctorBodyResource extends JsonResource
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
             'public_note' => $this->resource->publicNote,
+            'profile' => $this->profile,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $type = $this->getHealthProfessionalType($model->id);

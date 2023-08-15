@@ -38,7 +38,7 @@ enum CategoryIIIType: int implements ProcedureClassificationInterface
     #[PublicAttribute(true)]
     case COAGULATION_DEFECTS = 4;
 
-    #[NameAttribute('Other disorders of blood and blood', 'forming organs')]
+    #[NameAttribute('Other disorders of blood and blood-forming organs')]
     #[RangeAttribute('D70', 'D77')]
     #[PublicAttribute(true)]
     case OTHER_BLOOD_DISORDERS = 5;
