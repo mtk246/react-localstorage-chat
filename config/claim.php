@@ -8547,6 +8547,17 @@ return [
                         ],
                     ],
                 ],
+                '63' => [
+                    'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'value' => [
+                        'demographicInformation.prior_authorization_number',
+                    ],
+                    'values' => [
+                        'common' => [
+                            'demographicInformation.prior_authorization_number',
+                        ],
+                    ],
+                ],
             ],
             FormatType::X12->value => [
             ],
