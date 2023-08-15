@@ -6895,50 +6895,48 @@ return [
                 ],
             ],
         ],
-        '76' => [
-            'NPI' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 151,
-                    'y' => 239,
-                ],
+        '76a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 151,
+                'y' => 239,
             ],
-            'QUALIFIER' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 187,
-                    'y' => 239,
-                ],
+        ],
+        '76b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 187,
+                'y' => 239,
             ],
-            'FIRST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 181,
-                    'y' => 242,
-                ],
+        ],
+        '76c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 181,
+                'y' => 242,
             ],
-            'LAST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 136,
-                    'y' => 242,
-                ],
+        ],
+        '76d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 136,
+                'y' => 242,
             ],
         ],
         '77' => [
@@ -8622,6 +8620,38 @@ return [
                             'claimDiagnosisDx:type',
                             'ClaimDiagnosis:code_poa',
                             'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '76a' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:npi|1',
+                    'values' => [
+                        'common' => [
+                            'claimDiagnosisDx:type',
+                            'claimDiagnosisDx:code',
+                        ],
+                    ],
+                ],
+                '76c' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:first_name|1',
+                    'values' => [
+                        'common' => [
+                            'healthProfessional:npi|1',
+                            'healthProfessional:first_name|1',
+                            'healthProfessional:last_name|1',
+                        ],
+                    ],
+                ],
+                '76d' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:last_name|1',
+                    'values' => [
+                        'common' => [
+                            'healthProfessional:npi|1',
+                            'healthProfessional:first_name|1',
+                            'healthProfessional:last_name|1',
                         ],
                     ],
                 ],
