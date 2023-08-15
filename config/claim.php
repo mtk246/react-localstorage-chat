@@ -8615,12 +8615,13 @@ return [
                 ],
                 '69' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'claimDiagnosisDx:code',
+                    'value' => 'claimDiagnosisDx:cond_code',
                     'values' => [
                         'common' => [
                             'claimDiagnosisDx:type',
                             'ClaimDiagnosis:code_poa',
                             'claimDiagnosisDx:code',
+                            'claimDiagnosisDx:cond_code',
                         ],
                     ],
                 ],
