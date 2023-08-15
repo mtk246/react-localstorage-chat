@@ -332,7 +332,7 @@ final class FileDictionary extends Dictionary
     protected function getClaimDiagnosisDxAttribute(string $key): string
     {
         /** @var \App\Models\Diagnosis|null */
-        $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('admission', true)->first();
+        $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('item', 'A')->first();
 
         return match ($key) {
             'type' => $diagnosisDx?->type->getCode(),
@@ -346,7 +346,7 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimDiagnosisAttribute(string $key): Collection
     {
-        return $this->claim->service->diagnoses()->wherePivot('admission', false)->get()
+        return $this->claim->service->diagnoses()->wherePivot('item', '!=', 'A')->get()
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
                 'code_poa' => $diagnosis?->code
                     .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
