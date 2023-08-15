@@ -1192,7 +1192,7 @@ final class JSONDictionary extends Dictionary
                 ],
                 'principalProcedureInformation' => isset($claimServiceLinePrincipal)
                     ? [
-                        'qualifierCode' => null /** 'BBR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades, 'BR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades 'CAH' Códigos de conceptos avanzados de facturación (ABC). */,
+                        'qualifierCode' => null /* 'BBR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades, 'BR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades 'CAH' Códigos de conceptos avanzados de facturación (ABC). */,
                         'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
                         'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal->from_service),
                     ]
@@ -1204,7 +1204,7 @@ final class JSONDictionary extends Dictionary
                             'qualifierCode' => 'BBQ',
                             'otherProcedureCode' => $service->procedure?->code,
                             'otherProcedureDate' => str_replace('-', '', $service->from_service),
-                        ])->toArray()
+                        ])->toArray(),
                 ],
                 'occurrenceSpanInformations' => [
                     [
