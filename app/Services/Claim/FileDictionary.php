@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\Diagnosis;
 use App\Models\InsurancePolicy;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
@@ -326,6 +327,30 @@ final class FileDictionary extends Dictionary
                     default => $claimService->{$key},
                 };
             });
+    }
+
+    protected function getClaimDiagnosisDxAttribute(string $key): string
+    {
+        /** @var \App\Models\Diagnosis|null */
+        $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('admission', true)->first();
+
+        return match ($key) {
+            'type' => $diagnosisDx?->type->getCode(),
+            'code' => $diagnosisDx?->code
+                .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
+                    ? ($diagnosisDx->pivot->poa ? ' Y' : ' N')
+                    : ''),
+            default => $diagnosisDx?->{$key} ?? '',
+        };
+    }
+
+    protected function getClaimDiagnosisAttribute(string $key): Collection
+    {
+        return $this->claim->service->diagnoses()->wherePivot('admission', false)->get()
+            ->map(fn (Diagnosis $diagnosis) => match ($key) {
+                default => $diagnosis?->{$key} ?? '',
+            })
+            ->pad(17, '');
     }
 
     protected function getClaimServicesTotalAttribute(): string
