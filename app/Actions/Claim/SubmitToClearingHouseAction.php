@@ -63,7 +63,7 @@ final class SubmitToClearingHouseAction
             );
 
             $response = Http::withToken($token)->acceptJson()->post(
-                config('claim.connections.url_submission'),
+                config("claim.connections.{$claim->type->value}.url_submission"),
                 $body
             );
             $responseData['response'] = json_decode($response->body());
