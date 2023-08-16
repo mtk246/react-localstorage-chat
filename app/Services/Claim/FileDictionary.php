@@ -468,10 +468,10 @@ final class FileDictionary extends Dictionary
     protected function getProviderProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => $this->claim->provider()?->user?->profile?->{$key} ?? '',
-            'last_name' => $this->claim->provider()?->user?->profile?->{$key} ?? '',
-            'name_suffix' => $this->claim->provider()?->user?->profile?->{$key}?->code ?? '',
-            'middle_name' => substr($this->claim->provider()?->user?->profile?->{$key} ?? '', 0, 1),
+            'first_name' => $this->claim->provider()?->profile?->{$key} ?? '',
+            'last_name' => $this->claim->provider()?->profile?->{$key} ?? '',
+            'name_suffix' => $this->claim->provider()?->profile?->{$key}?->code ?? '',
+            'middle_name' => substr($this->claim->provider()?->profile?->{$key} ?? '', 0, 1),
             'qualifier' => !empty($this->claim->provider()?->upin) ? 'G2' : '',
             'qualifierValue' => str_replace('-', '', $this->claim->provider()?->upin ?? ''),
             'npi' => str_replace('-', '', $this->claim->provider()?->npi ?? ''),
@@ -482,10 +482,10 @@ final class FileDictionary extends Dictionary
     protected function getBillingProviderProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => $this->claim->billingProvider()?->user?->profile?->{$key} ?? '',
-            'last_name' => $this->claim->billingProvider()?->user?->profile?->{$key} ?? '',
-            'name_suffix' => $this->claim->billingProvider()?->user?->profile?->{$key}?->code ?? '',
-            'middle_name' => substr($this->claim->billingProvider()?->user?->profile?->{$key} ?? '', 0, 1),
+            'first_name' => $this->claim->billingProvider()?->profile?->{$key} ?? '',
+            'last_name' => $this->claim->billingProvider()?->profile?->{$key} ?? '',
+            'name_suffix' => $this->claim->billingProvider()?->profile?->{$key}?->code ?? '',
+            'middle_name' => substr($this->claim->billingProvider()?->profile?->{$key} ?? '', 0, 1),
             default => $this->claim->billingProvider()?->{$key} ?? '',
         };
     }

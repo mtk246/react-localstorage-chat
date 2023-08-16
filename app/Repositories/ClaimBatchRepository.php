@@ -98,9 +98,11 @@ class ClaimBatchRepository
                     $query->where('company_id', $request->company_id);
                 }),
             )
-            ->with('demographicInformation', 'service', 'insurancePolicies')
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-            ->paginate(Pagination::itemsPerPage());
+            ->with('demographicInformation', 'service', 'insurancePolicies');
+            //->orderBy(Pagination::sortBy(), Pagination::sortDesc(true))
+            //->paginate(Pagination::itemsPerPage());
+
+        return ClaimBodyResource::collection($claimsQuery->get());
 
         $data = [
             'data' => ClaimBodyResource::collection($claimsQuery->items()),

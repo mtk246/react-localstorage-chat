@@ -10045,12 +10045,12 @@ return [
 
     'connections' => [
         ClaimType::PROFESSIONAL->value => [
-            'professional_url_validation' => env('PROF_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
-            'professional_url_submission' => env('PROF_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
+            'url_validation' => env('PROF_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/validation'),
+            'url_submission' => env('PROF_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/professionalclaims/v3/submission'),
         ],
         ClaimType::INSTITUTIONAL->value => [
-            'institutional_url_validation' => env('INST_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/validation'),
-            'institutional_url_submission' => env('INST_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/submission'),
+            'url_validation' => env('INST_URL_VALIDATION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/validation'),
+            'url_submission' => env('INST_URL_SUBMISSION', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/institutionalclaims/v1/submission'),
         ],
         'url_eligibility' => env('URL_ELIGIBILITY', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3'),
         'url_token' => env('URL_TOKEN', 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token'),
