@@ -37,7 +37,6 @@ trait ClaimFile
     {
         return $this->demographicInformation
             ?->patient
-            ?->user
             ?->profile ?? null;
     }
 
