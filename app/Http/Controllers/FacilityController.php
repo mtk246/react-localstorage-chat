@@ -15,6 +15,7 @@ use App\Models\FacilityType;
 use App\Http\Resources\Facility\BillClassificationResource;
 use App\Actions\GetAPIAction;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\Facility\FacilityResource;
 
 class FacilityController extends Controller
 {
@@ -93,19 +94,19 @@ class FacilityController extends Controller
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
-                return response()->json(['data' => $rs['data'], 'api' => $apiResponse], 200);
+                return response()->json(FacilityResource::make(['data' => $rs['data'], 'api' => $apiResponse, 'type' => 'public']), 200);
             } else {
                 if (Gate::check('is-admin')) {
-                    return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
+                    return response()->json(__('Forbidden, The facility has already been associated with all the billing companies'), 403);
                 } else {
-                    return response()->json(__('Forbidden, The company has already been associated with the billing company'), 403);
+                    return response()->json(__('Forbidden, The facility has already been associated with the billing company'), 403);
                 }
             }
         } else {
             if ($apiResponse) {
                 return ('NPI-2' === $apiResponse->enumeration_type)
-                    ? response()->json($apiResponse, 200)
-                    : response()->json(__('Error, The entered NPI does not belong to a company but to a health care professional, please verify it and enter a valid NPI.'), 404);
+                    ? response()->json(FacilityResource::make(['api' => $apiResponse, 'type' => 'api']), 200)
+                    : response()->json(__('Error, The entered NPI does not belong to a facility but to a health care professional, please verify it and enter a valid NPI.'), 404);
             }
 
             return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
