@@ -97,7 +97,7 @@ trait ClaimFile
 
         $subscriber =
             $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->user ?? null
+                ? $this->demographicInformation?->patient?->profile ?? null
                 : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber
@@ -113,7 +113,7 @@ trait ClaimFile
 
         $subscriber =
             $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->user ?? null
+                ? $this->demographicInformation?->patient?->profile ?? null
                 : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber
