@@ -4,26 +4,24 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Facility;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
 use App\Http\Resources\API\TaxonomiesResource as ApiTaxonomiesResource;
 use App\Http\Resources\Company\TaxonomiesResource as PublicTaxonomiesResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 final class FacilityResource extends JsonResource
 {
-    //** @return array<key, string> */
+    // ** @return array<key, string> */
     public function toArray($request): array
     {
-
         $address = array_first($this->resource['api']->addresses, function ($address) {
             return 'MAILING' == $address->address_purpose;
         });
 
-        if ( $this->resource['type'] == 'public' ) {
+        if ('public' == $this->resource['type']) {
             return $this->getPublicData($address);
         }
-        
-        if ( $this->resource['type'] == 'api' ) {
+
+        if ('api' == $this->resource['type']) {
             return $this->getApiData($address);
         }
     }
