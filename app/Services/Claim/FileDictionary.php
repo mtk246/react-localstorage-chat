@@ -360,13 +360,14 @@ final class FileDictionary extends Dictionary
             ->pad(17, '');
     }
 
-    protected function getHealthProfessionalAttribute(string $key, string $qualifierId): string
+    protected function getHealthProfessionalAttribute(string $key, string $fielId): string
     {
-        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('qualifier_id', $qualifierId)->first();
+        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('field_id', $fielId)->first();
 
         return match ($key) {
             'first_name' => $healthProfessional?->profile->first_name ?? '',
             'last_name' => $healthProfessional?->profile->last_name ?? '',
+            'qualifier' => TypeCatalog::find($healthProfessional->pivot->qualifier_id ?? 0)?->code ?? '',
             default => $healthProfessional?->{$key} ?? '',
         };
     }
