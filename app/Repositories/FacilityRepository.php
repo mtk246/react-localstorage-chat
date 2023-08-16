@@ -703,20 +703,30 @@ class FacilityRepository
                 ], $data['address']);
             }
 
-            PrivateNote::updateOrCreate([
-                'publishable_type' => Facility::class,
-                'publishable_id' => $facility->id,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            ], [
-                'note' => $data['private_note'],
-            ]);
+            if (isset($data['private_note'])) {
+                PrivateNote::updateOrCreate([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], [
+                    'note' => $data['private_note'],
+                ]);
+            }
+            else {
+                $facility->privateNotes()->delete();
+            }
 
-            PublicNote::updateOrCreate([
-                'publishable_type' => Facility::class,
-                'publishable_id' => $facility->id,
-            ], [
-                'note' => $data['public_note'],
-            ]);
+            if (isset($data['public_note'])) {
+                PublicNote::updateOrCreate([
+                    'publishable_type' => Facility::class,
+                    'publishable_id' => $facility->id,
+                ], [
+                    'note' => $data['public_note'],
+                ]);
+            }
+            else {
+                $facility->publicNote()->delete();
+            }
 
             if (isset($data['types'])) {
 
