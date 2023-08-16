@@ -176,14 +176,11 @@ class CompanyRepository
                     ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
                 );
 
-                return array_reduce($companies, function ($resultado, $object) {
-                    $resultado[] = [
-                        'id' => $object['id'],
-                        'name' => $object['name'],
-                        'name_batch' => ('' != $object['abbreviation']) ? ($object['abbreviation'].'-'.date('Ymd')) : '',
-                    ];
+                return array_reduce($companies, function ($result, $item) {
+                    $item['name_batch'] = ('' != $item['abbreviation']) ? ($item['abbreviation'].'-'.date('Ymd')) : '';
+                    $result[] = $item;
 
-                    return $resultado;
+                    return $result;
                 }, []);
             } else {
                 if (isset($request->except_ids)) {

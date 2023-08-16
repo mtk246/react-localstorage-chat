@@ -245,6 +245,10 @@ class FacilityRepository
                     'id' => $facility->id,
                     'name' => $facility->name,
                     'code' => $facility->code,
+                    'facility_types' => $facility->facilityTypes->map(fn ($fType) => [
+                        'name' => $fType->type,
+                        'code' => $fType->code,
+                    ]),
                     'abreviation' => $facility
                         ->abbreviations
                         ->where('billing_company_id', $billingCompany)
