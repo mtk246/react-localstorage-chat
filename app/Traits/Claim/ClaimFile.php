@@ -47,7 +47,7 @@ trait ClaimFile
 
         $subscriber =
             $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->user?->profile ?? null
+                ? $this->demographicInformation?->patient?->profile ?? null
                 : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber ?? null;
@@ -70,7 +70,7 @@ trait ClaimFile
     {
         return $this->demographicInformation
             ?->patient
-            ?->user
+            ?->profile
             ?->contacts()
             ?->select('phone')
             ?->first() ?? null;
@@ -84,7 +84,7 @@ trait ClaimFile
 
         $subscriber =
             $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->user?->profile ?? null
+                ? $this->demographicInformation?->patient?->profile ?? null
                 : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber?->relationship ?? null;
@@ -130,7 +130,7 @@ trait ClaimFile
         if ($lowerOrderPolicy) {
             $subscriber =
                 $lowerOrderPolicy->own ?? true
-                    ? $this->demographicInformation?->patient?->user?->profile ?? null
+                    ? $this->demographicInformation?->patient?->profile ?? null
                     : $lowerOrderPolicy?->subscribers->first();
         }
 
