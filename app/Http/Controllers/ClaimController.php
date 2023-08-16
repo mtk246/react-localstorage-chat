@@ -118,7 +118,7 @@ class ClaimController extends Controller
         $search = $request->search ?? '';
 
         return response()->json(
-            $this->procedureRepository->getList($company_id, $search)
+            $this->claimRepository->getListRev($company_id, $search)
         );
     }
 

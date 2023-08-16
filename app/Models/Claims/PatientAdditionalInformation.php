@@ -15,8 +15,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property int $claim_id
- * @property string $admission_date
- * @property string $admission_time
+ * @property string|null $admission_date
+ * @property string|null $admission_time
  * @property string|null $discharge_date
  * @property string|null $discharge_time
  * @property array $condition_code_ids
