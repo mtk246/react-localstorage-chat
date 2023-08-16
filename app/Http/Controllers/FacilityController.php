@@ -13,6 +13,8 @@ use App\Http\Requests\Facility\RemoveCompanyRequest;
 use App\Models\Facility;
 use App\Models\FacilityType;
 use App\Http\Resources\Facility\BillClassificationResource;
+use App\Actions\GetAPIAction;
+use Illuminate\Support\Facades\Gate;
 
 class FacilityController extends Controller
 {
@@ -84,11 +86,30 @@ class FacilityController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, facility not found'), 404);
     }
 
-    public function getOneByNpi(string $npi): JsonResponse
+    public function getOneByNpi(string $npi, GetAPIAction $APIAction): JsonResponse
     {
+        $apiResponse = $APIAction->getByNPI($npi);
         $rs = $this->facilityRepository->getOneByNpi($npi);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, facility not found'), 404);
+        if ($rs) {
+            if (isset($rs['result']) && $rs['result']) {
+                return response()->json(['data' => $rs['data'], 'api' => $apiResponse], 200);
+            } else {
+                if (Gate::check('is-admin')) {
+                    return response()->json(__('Forbidden, The company has already been associated with all the billing companies'), 403);
+                } else {
+                    return response()->json(__('Forbidden, The company has already been associated with the billing company'), 403);
+                }
+            }
+        } else {
+            if ($apiResponse) {
+                return ('NPI-2' === $apiResponse->enumeration_type)
+                    ? response()->json($apiResponse, 200)
+                    : response()->json(__('Error, The entered NPI does not belong to a company but to a health care professional, please verify it and enter a valid NPI.'), 404);
+            }
+
+            return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
+        }
     }
 
     public function getListBillingCompanies(Request $request)

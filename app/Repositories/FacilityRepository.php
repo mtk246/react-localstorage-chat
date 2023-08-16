@@ -699,24 +699,20 @@ class FacilityRepository
                 ], $data['address']);
             }
 
-            if (isset($data['private_note'])) {
-                PrivateNote::updateOrCreate([
-                    'publishable_type' => Facility::class,
-                    'publishable_id' => $facility->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], [
-                    'note' => $data['private_note'],
-                ]);
-            }
+            PrivateNote::updateOrCreate([
+                'publishable_type' => Facility::class,
+                'publishable_id' => $facility->id,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
+            ], [
+                'note' => $data['private_note'],
+            ]);
 
-            if (isset($data['public_note'])) {
-                PublicNote::updateOrCreate([
-                    'publishable_type' => Facility::class,
-                    'publishable_id' => $facility->id,
-                ], [
-                    'note' => $data['public_note'],
-                ]);
-            }
+            PublicNote::updateOrCreate([
+                'publishable_type' => Facility::class,
+                'publishable_id' => $facility->id,
+            ], [
+                'note' => $data['public_note'],
+            ]);
 
             if (isset($data['types'])) {
 
@@ -769,7 +765,11 @@ class FacilityRepository
             'addresses', 'contacts', 'billingCompanies',
         ])->first();
 
-        return !is_null($facility) ? $facility : null;
+        return !is_null($facility) ? [
+                    'data' => $facility,
+                    'result' => true,
+                ]
+            : null;
     }
 
     public function getListBillingCompanies(Request $request)
