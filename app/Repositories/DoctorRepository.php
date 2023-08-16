@@ -979,7 +979,7 @@ class DoctorRepository
             $billingCompany = auth()->user()->billingCompanies->first();
         }
 
-        $healthProfessionals = HealthProfessional::query()->with('user.profile', 'companies');
+        $healthProfessionals = HealthProfessional::query()->with('profile', 'companies');
 
         if (isset($billingCompany)) {
             $healthProfessionals = $healthProfessionals->whereHas('billingCompanies', function ($query) use ($billingCompany) {
@@ -995,7 +995,7 @@ class DoctorRepository
             });
         }
         if (!isset($billingCompany) && !isset($companyId)) {
-            $healthProfessionals = HealthProfessional::Query()->with('user.profile', 'companies')->get();
+            $healthProfessionals = HealthProfessional::Query()->with('profile', 'companies')->get();
         } else {
             $healthProfessionals = $healthProfessionals->get();
         }
@@ -1026,21 +1026,21 @@ class DoctorRepository
                     if (in_array($billing_provider->id, $auth)) {
                         array_push($records['billing_provider'], [
                             'id' => $healthProfessional->id,
-                            'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'name' => $healthProfessional->profile->first_name.' '.$healthProfessional->profile->last_name,
                             'npi' => $healthProfessional->npi,
                         ]);
                     }
                     if (in_array($referred->id, $auth)) {
                         array_push($records['referred'], [
                             'id' => $healthProfessional->id,
-                            'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'name' => $healthProfessional->profile->first_name.' '.$healthProfessional->profile->last_name,
                             'npi' => $healthProfessional->npi,
                         ]);
                     }
                     if (in_array($service_provider->id, $auth)) {
                         array_push($records['service_provider'], [
                             'id' => $healthProfessional->id,
-                            'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                            'name' => $healthProfessional->profile->first_name.' '.$healthProfessional->profile->last_name,
                             'npi' => $healthProfessional->npi,
                         ]);
                     }
@@ -1048,7 +1048,7 @@ class DoctorRepository
             } else {
                 $field = [
                     'id' => $healthProfessional->id,
-                    'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                    'name' => $healthProfessional->profile->first_name.' '.$healthProfessional->profile->last_name,
                     'npi' => $healthProfessional->npi,
                 ];
                 if ('true' == $taxonomy) {
