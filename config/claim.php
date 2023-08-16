@@ -7605,12 +7605,12 @@ return [
                 '10' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                    'value' => 'demographicInformation.patient.profile.date_of_birth|mdY',
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.user.profile.date_of_birth|m/d/y',
-                            'demographicInformation.patient.user.profile.date_of_birth|m-d-y',
-                            'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                            'demographicInformation.patient.profile.date_of_birth|m/d/y',
+                            'demographicInformation.patient.profile.date_of_birth|m-d-y',
+                            'demographicInformation.patient.profile.date_of_birth|mdY',
                         ],
                     ],
                 ],
@@ -8308,10 +8308,11 @@ return [
                 ],
                 '44' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:revenue_code',
+                    'value' => 'claimServices:procedure_code',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
+                            'claimServices:procedure_code',
                             'claimServices:procedure_description',
                             'claimServices:procedure_start_date',
                             'claimServices:price',
