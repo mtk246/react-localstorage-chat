@@ -124,15 +124,13 @@ final class UpdateRequest extends FormRequest
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
             'additional_information.patient_information.admission_date' => [
-                Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'date',
                 'nullable',
+                'date',
             ],
             'additional_information.patient_information.admission_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.patient_information.discharge_date' => [
-                Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'date',
                 'nullable',
+                'date',
             ],
             'additional_information.patient_information.discharge_time' => ['nullable', 'date_format:H:i:s'],
             'additional_information.patient_information.condition_code_ids' => ['nullable', 'array'],
