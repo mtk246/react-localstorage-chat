@@ -60,6 +60,7 @@ return [
     ],
     '1d' => [
         'type' => RuleType::MULTIPLE->value,
+        'glue' => ' ',
         'value' => [
             'companyAddress:other_country|0',
             'companyContact:phone_fax|0',

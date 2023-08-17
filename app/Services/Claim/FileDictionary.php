@@ -64,7 +64,7 @@ final class FileDictionary extends Dictionary
             'state' => substr($value?->{$key} ?? '', 0, 2),
             'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
             'other_country' => 'US' != $value?->country
-                ? $value?->country.' '
+                ? $value?->country
                 : '',
             default => $value?->{$key} ?? '',
         };
