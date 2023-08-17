@@ -2,23 +2,47 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.2",
+        "ext-json": "*",
+        "bensampo/laravel-enum": "^5.3",
+        "binarytorch/larecipe": "^2.4",
+        "binarytorch/larecipe-dark-theme": "^0.1.5",
+        "cknow/laravel-money": "^7.1",
+        "darkaonline/l5-swagger": "^8.0",
+        "elibyy/tcpdf-laravel": "^9.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.65",
+        "http-interop/http-factory-guzzle": "^1.2",
+        "laravel/framework": "^9.0",
+        "laravel/helpers": "^1.5",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/scout": "^10.1",
+        "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.4",
+        "meilisearch/meilisearch-php": "^1.1",
+        "mobiledetect/mobiledetectlib": "^3.74",
+        "owen-it/laravel-auditing": "^13.0",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
+        "barryvdh/laravel-ide-helper": "^2.10",
+        "beyondcode/laravel-dump-server": "^1.7",
         "fakerphp/faker": "^1.9.1",
+        "laravel/pint": "^1.5",
         "laravel/sail": "^1.0.1",
+        "laravel/telescope": "^4.14",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.10",
+        "slevomat/coding-standard": "^8.8",
+        "spatie/laravel-ignition": "^1.0",
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
         "psr-4": {
@@ -30,7 +54,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [
@@ -55,7 +82,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

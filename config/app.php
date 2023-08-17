@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -135,7 +136,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -161,10 +161,14 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
+        OwenIt\Auditing\AuditingServiceProvider::class,
+        Elibyy\TCPDF\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -174,7 +178,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\TelescopeServiceProvider::class,
+        App\Roles\RolesServiceProvider::class,
+        App\Providers\ActionsServiceProvider::class,
+        App\Providers\FacadesServiceProvider::class,
     ],
 
     /*
@@ -189,7 +196,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -229,7 +235,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class,
+        'Pagination' => App\Facades\PaginationFacade::class,
     ],
-
 ];

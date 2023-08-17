@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
@@ -25,10 +26,9 @@ return [
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['inactivity-time'],
 
     'max_age' => 0,
 
     'supports_credentials' => false,
-
 ];

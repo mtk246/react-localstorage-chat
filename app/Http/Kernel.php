@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http;
 
+use App\Http\Middleware\AuditoryMiddleware;
+use App\Http\Middleware\CheckAvailableUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -21,6 +25,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\AddInactivityTimeHeader::class,
     ];
 
     /**
@@ -43,6 +48,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'localization',
         ],
     ];
 
@@ -63,5 +69,18 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'localization' => \App\Http\Middleware\Localization::class,
+
+        /*
+         * App Roles and Permissions
+         */
+        'role' => \App\Roles\Middleware\VerifyRole::class,
+        'permission' => \App\Roles\Middleware\VerifyPermission::class,
+        'level' => \App\Roles\Middleware\VerifyLevel::class,
+
+        'audit' => AuditoryMiddleware::class,
+        'checkAvailable' => CheckAvailableUser::class,
+        'restrictIpAddress' => \App\Http\Middleware\RestrictIpAddress::class,
+        'lastActivity' => \App\Http\Middleware\LastActivity::class,
     ];
 }

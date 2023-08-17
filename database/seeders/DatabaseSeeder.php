@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -14,5 +16,30 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call([
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            FacilityTypeSeeder::class,
+            ModifierSeeder::class,
+            DiagnosisSeeder::class,
+            // ServiceDataSeeder::class,
+            GeneralSeeder::class,
+            SocialNetworkSeeder::class,
+            MaritalStatusSeeder::class,
+            HealthProfessionalTypeSeeder::class,
+            InsurancePolicyTypeSeeder::class,
+            ClearingHouseDataSeeder::class,
+            TypeCatalogSeeder::class,
+            ClaimDataSeeder::class,
+            AddressTypeSeeder::class,
+            KeyboardShortcutSeeder::class,
+            CountrySubdivisionSeeder::class,
+            DataTestSeeder::class,
+            UserSeeder::class,
+            ProcedureSeeder::class,
+            BillClassificationSeeder::class,
+            ConditionCodeSeeder::class,
+            DiagnosisRelatedGroupSeeder::class,
+        ]);
     }
 }
