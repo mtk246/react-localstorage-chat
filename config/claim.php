@@ -8491,6 +8491,7 @@ return [
                 ],
                 '58' => [
                     'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'glue' => ', ',
                     'value' => [
                         'insurancePoliciesSubscriber:last_name',
                         'insurancePoliciesSubscriber:first_name',
