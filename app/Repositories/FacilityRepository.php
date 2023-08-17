@@ -713,7 +713,7 @@ class FacilityRepository
                 ]);
             }
             else {
-                $facility->privateNotes()->delete();
+                $facility->privateNotes()->where('billing_company_id', $billingCompany)->delete();
             }
 
             if (isset($data['public_note'])) {
