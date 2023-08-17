@@ -264,10 +264,9 @@ final class FileDictionary extends Dictionary
     protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
     {
         return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
-            'first_name' => ', '.$policy->subscribers->first()?->{$key} ?? null,
             'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
             default => $policy->subscribers->first()?->{$key} ?? null,
-        } ?? $this->getPatientProfileAttribute($key))
+        } ?? str_replace(', ', '', $this->getPatientProfileAttribute($key)))
         ->pad(3, '');
     }
 
@@ -337,10 +336,10 @@ final class FileDictionary extends Dictionary
         return match ($key) {
             'type' => $diagnosisDx?->type->getCode(),
             'code_poa' => $diagnosisDx?->code
-                .('inpatient' != $this->claim->demographicInformation->type_of_medical_assistance
+                .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? ($diagnosisDx->pivot->poa)
                     : ''),
-            'cond_code' => 'inpatient' != $this->claim->demographicInformation->type_of_medical_assistance
+            'cond_code' => 'inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? $diagnosisDx?->code
                     : '',
             default => $diagnosisDx?->{$key} ?? '',
@@ -352,7 +351,7 @@ final class FileDictionary extends Dictionary
         return $this->claim->service->diagnoses()->wherePivot('item', '!=', 'A')->get()
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
                 'code_poa' => $diagnosis?->code
-                    .('inpatient' != $this->claim->demographicInformation->type_of_medical_assistance
+                    .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                         ? ($diagnosis->pivot->poa)
                         : ''),
                 default => $diagnosis?->{$key} ?? '',
@@ -360,13 +359,14 @@ final class FileDictionary extends Dictionary
             ->pad(17, '');
     }
 
-    protected function getHealthProfessionalAttribute(string $key, string $qualifierId): string
+    protected function getHealthProfessionalAttribute(string $key, string $fielId): string
     {
-        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('qualifier_id', $qualifierId)->first();
+        $healthProfessional = $this->claim->demographicInformation->healthProfessionals()->wherePivot('field_id', $fielId)->first();
 
         return match ($key) {
             'first_name' => $healthProfessional?->profile->first_name ?? '',
             'last_name' => $healthProfessional?->profile->last_name ?? '',
+            'qualifier' => TypeCatalog::find($healthProfessional->pivot->qualifier_id ?? 0)?->code ?? '',
             default => $healthProfessional?->{$key} ?? '',
         };
     }

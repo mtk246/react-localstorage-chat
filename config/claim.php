@@ -7605,12 +7605,12 @@ return [
                 '10' => [
                     'type' => RuleType::DATE->value,
                     'length' => 30,
-                    'value' => 'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                    'value' => 'demographicInformation.patient.profile.date_of_birth|mdY',
                     'values' => [
                         'common' => [
-                            'demographicInformation.patient.user.profile.date_of_birth|m/d/y',
-                            'demographicInformation.patient.user.profile.date_of_birth|m-d-y',
-                            'demographicInformation.patient.user.profile.date_of_birth|mdY',
+                            'demographicInformation.patient.profile.date_of_birth|m/d/y',
+                            'demographicInformation.patient.profile.date_of_birth|m-d-y',
+                            'demographicInformation.patient.profile.date_of_birth|mdY',
                         ],
                     ],
                 ],
@@ -8308,10 +8308,11 @@ return [
                 ],
                 '44' => [
                     'type' => RuleType::SINGLE_ARRAY->value,
-                    'value' => 'claimServices:revenue_code',
+                    'value' => 'claimServices:procedure_code',
                     'values' => [
                         'common' => [
                             'claimServices:revenue_code',
+                            'claimServices:procedure_code',
                             'claimServices:procedure_description',
                             'claimServices:procedure_start_date',
                             'claimServices:price',
@@ -8490,6 +8491,7 @@ return [
                 ],
                 '58' => [
                     'type' => RuleType::MULTIPLE_ARRAY->value,
+                    'glue' => ', ',
                     'value' => [
                         'insurancePoliciesSubscriber:last_name',
                         'insurancePoliciesSubscriber:first_name',
@@ -8627,33 +8629,49 @@ return [
                 ],
                 '76a' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'healthProfessional:npi|1',
+                    'value' => 'healthProfessional:npi|76',
                     'values' => [
                         'common' => [
-                            'claimDiagnosisDx:type',
-                            'claimDiagnosisDx:code',
+                            'healthProfessional:npi|76',
+                            'healthProfessional:qualifier|76',
+                            'healthProfessional:first_name|76',
+                            'healthProfessional:last_name|76',
+                        ],
+                    ],
+                ],
+                '76b' => [
+                    'type' => RuleType::SINGLE->value,
+                    'value' => 'healthProfessional:qualifier|76',
+                    'values' => [
+                        'common' => [
+                            'healthProfessional:npi|76',
+                            'healthProfessional:qualifier|76',
+                            'healthProfessional:first_name|76',
+                            'healthProfessional:last_name|76',
                         ],
                     ],
                 ],
                 '76c' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'healthProfessional:first_name|1',
+                    'value' => 'healthProfessional:first_name|76',
                     'values' => [
                         'common' => [
-                            'healthProfessional:npi|1',
-                            'healthProfessional:first_name|1',
-                            'healthProfessional:last_name|1',
+                            'healthProfessional:npi|76',
+                            'healthProfessional:qualifier|76',
+                            'healthProfessional:first_name|76',
+                            'healthProfessional:last_name|76',
                         ],
                     ],
                 ],
                 '76d' => [
                     'type' => RuleType::SINGLE->value,
-                    'value' => 'healthProfessional:last_name|1',
+                    'value' => 'healthProfessional:last_name|76',
                     'values' => [
                         'common' => [
-                            'healthProfessional:npi|1',
-                            'healthProfessional:first_name|1',
-                            'healthProfessional:last_name|1',
+                            'healthProfessional:npi|76',
+                            'healthProfessional:qualifier|76',
+                            'healthProfessional:first_name|76',
+                            'healthProfessional:last_name|76',
                         ],
                     ],
                 ],
