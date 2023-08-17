@@ -25,11 +25,11 @@
     },
     {
         "code": "7",
-        "description": "Replacement of Prior Claim (See adjustment third digit)"
+        "description": "Replacement of Prior Claim"
     },
     {
         "code": "8",
-        "description": "Void/Cancel of Prior Claim (See adjustment third digit)"
+        "description": "Void/Cancel of Prior Claim"
     },
     {
         "code": "9",
