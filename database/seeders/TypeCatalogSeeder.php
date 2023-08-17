@@ -1051,11 +1051,11 @@ class TypeCatalogSeeder extends Seeder
                     ],
                     [
                         'code' => '5',
-                        'description' => 'Trauma',
+                        'description' => 'Trauma Center',
                     ],
                     [
                         'code' => '9',
-                        'description' => 'Information not available',
+                        'description' => 'Information Unavailable',
                     ],
                 ],
             ],
