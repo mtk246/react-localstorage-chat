@@ -245,6 +245,10 @@ class FacilityRepository
                     'id' => $facility->id,
                     'name' => $facility->name,
                     'code' => $facility->code,
+                    'facility_types' => $facility->facilityTypes->map(fn ($fType) => [
+                        'name' => $fType->type,
+                        'code' => $fType->code,
+                    ]),
                     'abreviation' => $facility
                         ->abbreviations
                         ->where('billing_company_id', $billingCompany)
@@ -708,6 +712,9 @@ class FacilityRepository
                     'note' => $data['private_note'],
                 ]);
             }
+            else {
+                $facility->privateNotes()->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
+            }
 
             if (isset($data['public_note'])) {
                 PublicNote::updateOrCreate([
@@ -716,6 +723,9 @@ class FacilityRepository
                 ], [
                     'note' => $data['public_note'],
                 ]);
+            }
+            else {
+                $facility->publicNote()->delete();
             }
 
             if (isset($data['types'])) {
@@ -769,7 +779,11 @@ class FacilityRepository
             'addresses', 'contacts', 'billingCompanies',
         ])->first();
 
-        return !is_null($facility) ? $facility : null;
+        return !is_null($facility) ? [
+                    'data' => $facility,
+                    'result' => true,
+                ]
+            : null;
     }
 
     public function getListBillingCompanies(Request $request)

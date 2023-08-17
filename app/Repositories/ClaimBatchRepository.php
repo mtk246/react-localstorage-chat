@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Facades\Pagination;
 use App\Http\Resources\Claim\BatchClaimBodyResource;
 use App\Http\Resources\Claim\ClaimBodyResource;
+use App\Http\Resources\Company\CompanyDataResource;
 use App\Models\Billingcompany;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
@@ -172,7 +173,16 @@ class ClaimBatchRepository
                 'total_denied_by_clearing_house' => $claimBatch->total_denied_by_clearing_house,
                 'total_accepted_by_payer' => $claimBatch->total_accepted_by_payer,
                 'total_denied_by_payer' => $claimBatch->total_denied_by_payer,
-                'company' => $claimBatch->company,
+                'company' => isset($claimBatch->company)
+                    ? [
+                        'id' => $claimBatch->company->id,
+                        'npi' => $claimBatch->company->npi,
+                        'name' => $claimBatch->company->name,
+                        'abbreviation' => $claimBatch->company
+                            ->abbreviations()
+                            ->where('billing_company_id', $claimBatch->billing_company_id)
+                            ->first()?->abbreviation ?? '',
+                    ]: null,
                 'claims' => $claims,
                 'billing_company' => [
                     'id' => $claimBatch->billingCompany->id,
