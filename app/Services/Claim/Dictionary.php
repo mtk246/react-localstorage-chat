@@ -67,9 +67,11 @@ abstract class Dictionary implements DictionaryInterface
                     return $items;
                 }
 
-                return $carry->map(function ($item, $key) use ($items, $glue) {
-                    return $item.$glue.$items[$key];
-                });
+                return $carry
+                    ->filter(fn (string $value) => !empty($value))
+                    ->map(function ($item, $key) use ($items, $glue) {
+                        return $item.$glue.$items[$key];
+                    });
             })
             ->toArray();
     }
