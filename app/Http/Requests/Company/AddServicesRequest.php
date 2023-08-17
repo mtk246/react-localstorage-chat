@@ -46,18 +46,18 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication' => ['nullable', 'array'],
             'services.*.medication.id' => ['nullable', 'integer'],
             'services.*.medication.drug_code' => [
-                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'string',
                 'max:10',
             ],
             'services.*.medication.measurement_unit_id' => [
-                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'integer',
             ],
             'services.*.medication.units' => [
-                Rule::excludeIf(fn () => false === $this->input('medication_application', false)),
+                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'numeric',
             ],
@@ -66,10 +66,10 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication.pharmacy_prescription_number' => ['nullable', 'numeric'],
             'services.*.medication.repackaged_NDC' => ['nullable', 'boolean'],
             'services.*.medication.code_NDC' => [
-                Rule::excludeIf(
+                Rule::requiredIf(
                     fn () => (
-                        false === $this->input('medication_application', false) &&
-                        false === $this->input('repackaged_NDC', false)
+                        true === $this->input('medication_application', false) &&
+                        true === $this->input('repackaged_NDC', false)
                     )
                 ),
                 'nullable',
