@@ -125,7 +125,7 @@ final class FileDictionary extends Dictionary
     protected function getPatientProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => ', '.$this->claim->patientProfile()?->{$key} ?? '',
+            'first_name' => ', '.$this->claim->patientProfile()?->first_name ?? '',
             'name_suffix' => !empty($this->claim->patientProfile()?->{$key}?->code)
                 ? ' '.$this->claim->patientProfile()?->{$key}?->code
                 : '',
