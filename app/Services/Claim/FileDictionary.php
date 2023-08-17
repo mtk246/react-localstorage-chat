@@ -26,6 +26,7 @@ final class FileDictionary extends Dictionary
                 : (!empty($this->company->ssn)
                     ? 'SSN'
                     : ''),
+            'ein' => str_replace('-', '', $this->company->ein ?? ''),
             default => (string) $this->company->getAttribute($key),
         };
     }
