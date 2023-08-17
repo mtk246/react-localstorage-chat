@@ -255,7 +255,7 @@ final class FileDictionary extends Dictionary
     {
         return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
             'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
-            'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            'assign_benefits' => (bool) $this->claim->demographicInformation->accept_assignment ? 'Y' : 'N',
             'plan_name' => substr($policy->insurancePlan->name ?? '', 0, 21),
             default => $policy->{$key} ?? '',
         })
