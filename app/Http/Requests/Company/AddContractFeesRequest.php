@@ -12,6 +12,8 @@ use App\Models\Modifier;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 final class AddContractFeesRequest extends FormRequest
 {
@@ -30,7 +32,8 @@ final class AddContractFeesRequest extends FormRequest
         return [
             'contract_fees' => ['nullable', 'array'],
             'contract_fees.*.billing_company_id' => [
-                'nullable',
+                Rule::excludeIf(Gate::denies('is-admin')),
+                'required',
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
@@ -44,7 +47,7 @@ final class AddContractFeesRequest extends FormRequest
                 new IntegerOrArrayKeyExists(InsuranceCompany::class),
             ],
             'contract_fees.*.insurance_plan_ids' => [
-                'nullable',
+                'required',
                 new IntegerOrArrayKeyExists(InsurancePlan::class),
             ],
             'contract_fees.*.procedure_ids' => [
@@ -56,7 +59,7 @@ final class AddContractFeesRequest extends FormRequest
                 new IntegerOrArrayKeyExists(Modifier::class),
             ],
             'contract_fees.*.price' => ['nullable', 'numeric'],
-            'contract_fees.*.type_id' => ['nullable', 'integer'],
+            'contract_fees.*.type_id' => ['required', 'integer'],
             'contract_fees.*.start_date' => [
                 'nullable',
                 'date',

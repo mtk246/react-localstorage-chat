@@ -26,6 +26,7 @@ final class FileDictionary extends Dictionary
                 : (!empty($this->company->ssn)
                     ? 'SSN'
                     : ''),
+            'ein' => str_replace('-', '', $this->company->ein ?? ''),
             default => (string) $this->company->getAttribute($key),
         };
     }
@@ -63,8 +64,8 @@ final class FileDictionary extends Dictionary
             'city' => substr($value?->{$key} ?? '', 0, 30),
             'state' => substr($value?->{$key} ?? '', 0, 2),
             'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
-            'other_country' => 'us' != $value?->country
-                ? $value?->country.' '
+            'other_country' => 'US' != $value?->country
+                ? $value?->country
                 : '',
             default => $value?->{$key} ?? '',
         };
@@ -124,7 +125,7 @@ final class FileDictionary extends Dictionary
     protected function getPatientProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => ', '.$this->claim->patientProfile()?->{$key} ?? '',
+            'first_name' => ', '.$this->claim->patientProfile()?->first_name ?? '',
             'name_suffix' => !empty($this->claim->patientProfile()?->{$key}?->code)
                 ? ' '.$this->claim->patientProfile()?->{$key}?->code
                 : '',
@@ -254,7 +255,7 @@ final class FileDictionary extends Dictionary
     {
         return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
             'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
-            'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            'assign_benefits' => (bool) $this->claim->demographicInformation->accept_assignment ? 'Y' : 'N',
             'plan_name' => substr($policy->insurancePlan->name ?? '', 0, 21),
             default => $policy->{$key} ?? '',
         })
@@ -264,7 +265,7 @@ final class FileDictionary extends Dictionary
     protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
     {
         return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
-            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
+            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? '18',
             default => $policy->subscribers->first()?->{$key} ?? null,
         } ?? str_replace(', ', '', $this->getPatientProfileAttribute($key)))
         ->pad(3, '');

@@ -21,7 +21,7 @@ final class GetBilllingProviderAction
 
         $billing_provider = CompanyHealthProfessionalType::whereType('Billing provider')->first();
         $healthProfessionals = HealthProfessional::query()
-            ->with('user.profile', 'companies')
+            ->with('profile', 'companies')
             ->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
                 $query->where('billing_company_id', $billingCompanyId);
             })
@@ -46,20 +46,20 @@ final class GetBilllingProviderAction
                 if (!empty($healthProfessional->ein)) {
                     $taxIdOptions[] = [
                         'id' => str_replace('-', '', $healthProfessional->ein ?? ''),
-                        'name' => str_replace('-', '', $healthProfessional->ein ?? ''),
+                        'name' => 'EIN - '.str_replace('-', '', $healthProfessional->ein ?? ''),
                     ];
                 }
 
                 if (!empty($healthProfessional->ssn)) {
                     $taxIdOptions[] = [
                         'id' => str_replace('-', '', $healthProfessional->ssn ?? ''),
-                        'name' => str_replace('-', '', $healthProfessional->ssn ?? ''),
+                        'name' => 'SSN - '.str_replace('-', '', $healthProfessional->ssn ?? ''),
                     ];
                 }
 
                 return [
                     'id' => 'healthProfessional:'.$healthProfessional->id,
-                    'name' => $healthProfessional->user->profile->first_name.' '.$healthProfessional->user->profile->last_name,
+                    'name' => $healthProfessional?->profile->first_name.' '.$healthProfessional?->profile->last_name,
                     'npi' => $healthProfessional->npi,
                     'tax_id_options' => $taxIdOptions,
                     'taxonomy_options' => $healthProfessional->taxonomies->map(fn ($model) => [
@@ -75,7 +75,7 @@ final class GetBilllingProviderAction
         if (!empty($company->ein)) {
             $taxIdOptions[] = [
                 'id' => str_replace('-', '', $company->ein ?? ''),
-                'name' => str_replace('-', '', $company->ein ?? ''),
+                'name' => 'EIN - '.str_replace('-', '', $company->ein ?? ''),
             ];
         }
 
