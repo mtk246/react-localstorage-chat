@@ -177,76 +177,36 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Patient relationship',
                 'type_catalogs' => [
                     [
-                        'code' => '2',
+                        'code' => '01',
                         'description' => 'Spouse',
                     ],
                     [
-                        'code' => '3',
-                        'description' => 'Natural Child/Insured Financial Resp.',
+                        'code' => '19',
+                        'description' => 'Child',
                     ],
                     [
-                        'code' => '4',
-                        'description' => 'Natural Child/Insured no Financial Resp.',
-                    ],
-                    [
-                        'code' => '5',
-                        'description' => 'Step Child',
-                    ],
-                    [
-                        'code' => '6',
-                        'description' => 'Foster Child',
-                    ],
-                    [
-                        'code' => '7',
-                        'description' => 'Ward of the Court',
-                    ],
-                    [
-                        'code' => '8',
+                        'code' => '20',
                         'description' => 'Employee',
                     ],
                     [
-                        'code' => '9',
-                        'description' => 'Other',
+                        'code' => '21',
+                        'description' => 'Unknown',
                     ],
                     [
-                        'code' => '10',
-                        'description' => 'Handicapped Dependent',
-                    ],
-                    [
-                        'code' => '11',
+                        'code' => '39',
                         'description' => 'Organ Donor',
                     ],
                     [
-                        'code' => '12',
+                        'code' => '40',
                         'description' => 'Cadaver Donor',
                     ],
                     [
-                        'code' => '13',
-                        'description' => 'Grandchild',
+                        'code' => '53',
+                        'description' => 'Life Partner',
                     ],
                     [
-                        'code' => '14',
-                        'description' => 'Nice/Nephew',
-                    ],
-                    [
-                        'code' => '15',
-                        'description' => 'Injured Plaintiff',
-                    ],
-                    [
-                        'code' => '16',
-                        'description' => 'Sponsored Dependent',
-                    ],
-                    [
-                        'code' => '17',
-                        'description' => 'Minor Dependent of a Minor Dependent',
-                    ],
-                    [
-                        'code' => '18',
-                        'description' => 'Parent',
-                    ],
-                    [
-                        'code' => '19',
-                        'description' => 'Granparent',
+                        'code' => 'G8',
+                        'description' => 'Other relationship',
                     ],
                 ],
             ],
@@ -1091,11 +1051,11 @@ class TypeCatalogSeeder extends Seeder
                     ],
                     [
                         'code' => '5',
-                        'description' => 'Trauma',
+                        'description' => 'Trauma Center',
                     ],
                     [
                         'code' => '9',
-                        'description' => 'Information not available',
+                        'description' => 'Information Unavailable',
                     ],
                 ],
             ],
