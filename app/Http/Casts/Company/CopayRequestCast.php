@@ -21,7 +21,7 @@ final class CopayRequestCast extends CastsRequest
     {
         return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
             ? (int) $this->inputs['billing_company_id']
-            : $this->user->billingCompanies->first()?->id;
+            : $this->user->billing_company_id;
     }
 
     public function getProceduresIds(): Collection
@@ -29,24 +29,20 @@ final class CopayRequestCast extends CastsRequest
         return collect($this->inputs['procedure_ids'] ?? []);
     }
 
-    public function getInsurancePlanId(): ?int
+    public function getInsurancePlanIds(): Collection
     {
-        return array_key_exists('insurance_plan_id', $this->inputs)
-            ? (int) $this->inputs['insurance_plan_id']
-            : null;
+        return collect($this->inputs['insurance_plan_ids'] ?? []);
     }
 
-    public function getInsuranceCompanyId(): ?int
+    public function getInsuranceCompanyIds(): Collection
     {
-        return array_key_exists('insurance_company_id', $this->inputs)
-            ? (int) $this->inputs['insurance_company_id']
-            : null;
+        return collect($this->inputs['insurance_company_ids'] ?? []);
     }
 
-    public function getCopay(): ?int
+    public function getCopay(): ?float
     {
         return array_key_exists('copay', $this->inputs)
-            ? (int) $this->inputs['copay']
+            ? (float) $this->inputs['copay']
             : null;
     }
 

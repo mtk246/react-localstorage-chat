@@ -14,14 +14,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Roles\Models\Role.
  *
- * @class Role
- *
- * @brief Modelo para la gestión de roles
- *
- * Gestiona información sobre los roles de acceso
- *
- * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
- *
  * @property int $id
  * @property string $name
  * @property string $slug
@@ -48,15 +40,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  *
  * @mixin \Eloquent
  */

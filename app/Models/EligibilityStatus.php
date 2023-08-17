@@ -29,11 +29,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|EligibilityStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EligibilityStatus whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibilityStatus> $claimEligibilityStatuses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibilityStatus> $claimEligibilityStatuses
- *
  * @mixin \Eloquent
  */
 class EligibilityStatus extends Model implements Auditable

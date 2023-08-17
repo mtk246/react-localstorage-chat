@@ -14,14 +14,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Roles\Models\Permission.
  *
- * @class Permission
- *
- * @brief Modelo para la gestión de permisos
- *
- * Gestiona información sobre los permisos de acceso
- *
- * @author ultraware\roles <a href="https://github.com/ultraware/roles.git">Ultraware\Roles</a>
- *
  * @property int $id
  * @property string $name
  * @property string $slug
@@ -48,13 +40,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Role> $roles
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Role> $roles
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  *
  * @mixin \Eloquent
  */

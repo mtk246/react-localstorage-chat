@@ -8,8 +8,8 @@
 - [Add to billing company](#add-to-billing-company)
 - [Add facilities to company](#add-facilities)
 - [Add service to company](#add-services)
-- [Add service to company](#add-copay)
-- [Add service to contract fee](#add-contracts-fee)
+- [Add copays to company](#add-copay)
+- [Add contract fee to company](#add-contracts-fee)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -20,8 +20,8 @@
 | 17 |PATCH | `Change status company`          | `/company/change-status/{id}`|yes|Change status company|
 | 18 |PATCH | `Add to billing company`          | `/company/add-to-billing-company/{id}`|yes|Add company to billing company|
 | 19 |PATCH | `Add facilities to company`       | `/company/add-facilities-to-company/{id}`|yes|Add facilities to company|
-| 20 |PATCH | `Add services to company`       | `/company/add-services-to-company/{id}`|yes|Add services to company|
-| 21 |PATCH | `Add copays to company`       | `/company/add-copays-to-company/{id}`|yes|Add copays to company|
+| 20 |PATCH | `Add services to company`       | `/company/{id}/services`|yes|Add services to company|
+| 21 |PATCH | `Add copays to company`       | `/company/{id}/copays`|yes|Add copays to company|
 | 22 |PATCH | `Add contract fee to company`       | `/company/add-contract-fee-to-company/{id}`|yes|Add contract fee to company|
 
 <a name="change-status-company"></a>
@@ -124,10 +124,23 @@
     {
         "billing_company_id": 1,
         "facility_id": 2,
-        "facility_type_id": 6,
+        "facility_type_ids": [1,2,3],
         "billing_company": "Medical Claims Consultants",
         "facility": "Isa Home Corp.",
-        "facility_type": "AL - Assisted Living Facility"
+        "facility_types": [
+          {
+            "id": 1,
+            "name": "AL - Assisted Living Facility"
+          },
+          {
+            "id": 2,
+            "name": "AL - Assisted Living Facility"
+          },
+          {
+            "id": 3,
+            "name": "AL - Assisted Living Facility"
+          }
+        ]
     }
 ]
 ```
@@ -158,11 +171,10 @@
 {
     "services": [
         {
-            "billing_company_id": 1,  /** Only required by superuser */
             "id":87,
-            "procedure_id": 1,
-            "description": "Description procedure",
-            "modifier_id": 2,
+            "billing_company_id": 1,  /** Only required by superuser */
+            "procedure_ids": [1,3],
+            "modifier_ids": [1,2],
             "price": 20.2,
             "mac": "02102",
             "locality_number":"01",
@@ -170,32 +182,28 @@
             "fsa": "STATEWIDE",
             "counties": "ALL COUNTIES",
             "insurance_label_fee_id": 1,
+            "rate": "",
             "price_percentage": "70",
             "clia": "00001A",
-            "medications": [
-                {
-                    "id": 2,
-                    "date": "2022-03-16",
-                    "drug_code": "001A23X",
-                    "batch": "0101AS",
-                    "quantity": 2,
-                    "frequency": 3
-                },
-                {
-                    "id": 0, /** zero for new entries */
-                    "date": "2022-03-16",
-                    "drug_code": "002A23X",
-                    "batch": "0201AS",
-                    "quantity": 2,
-                    "frequency": 3
-                }
-            ]
+            "medication_application": true,
+            "medication": {
+                "id": 2,
+                "drug_code": "1472583691",
+                "measurement_unit_id": 1,
+                "units": 30.5,
+                "units_limit": 30,
+                "link_sequence_number": "124585154",
+                "pharmacy_prescription_number": "123456",
+                "repackaged_NDC": false,
+                "Code_NDC": "1010524871",
+                "claim_note_required": true,
+                "note": "Note Medication",
+            },
         },
         {
             "billing_company_id": 1,  /** Only required by superuser */
             "id": 88, /** zero for new entries */
-            "procedure_id": 2,
-            "description": "Description procedure",
+            "procedure_ids": [1,2],
             "price": 300
         }
     ]
@@ -212,9 +220,28 @@
   {
     "id": 87,
     "billing_company_id": 1,
-    "procedure_id": 1,
-    "description": "Office o/p new low 30-44 min",
-    "modifier_id": 2,
+    "procedure_ids": [1,2],
+    "procedures": [
+      {
+        "id": 1,
+        "name": "Procedure",
+      },
+      {
+        "id": 2,
+        "name": "Procedure2",
+      }
+    ],
+    "modifier_ids": [1,3],
+    "modifiers": [
+      {
+        "id": 1,
+        "name": "Modifier",
+      },
+      {
+        "id": 3,
+        "name": "Modifier3",
+      }
+    ],
     "mac": "02102",
     "locality_number": "01",
     "state": "ALASKA",
@@ -224,34 +251,34 @@
     "price": "20.2",
     "price_percentage": "70",
     "clia": "00001A",
-    "medication_application": false,
-    "medications": [
-      {
-        "id": 2,
-        "code": "87001A23X0101AS54",
-        "drug_code": "001A23X",
-        "batch": "0101AS",
-        "quantity": 2,
-        "frequency": 3,
-        "date": "2022-03-16"
-      },
-      {
-        "id": 3,
-        "code": "87002A23X0201AS55",
-        "drug_code": "002A23X",
-        "batch": "0201AS",
-        "quantity": 2,
-        "frequency": 3,
-        "date": "2022-03-16"
-      }
-    ]
+    "rate": "",
+    "medication_application": true,
+    "medication": {
+      "id": 2,
+      "drug_code": "1472583691",
+      "measurement_unit_id": 1,
+      "units": 30.5,
+      "units_limit": 30,
+      "link_sequence_number": "124585154",
+      "pharmacy_prescription_number": "123456",
+      "repackaged_NDC": false,
+      "Code_NDC": "1010524871",
+      "claim_note_required": true,
+      "note": "Note Medication",
+    },
   },
   {
     "id": 88,
     "billing_company_id": 1,
-    "procedure_id": 2,
-    "description": "Office o/p new mod 45-59 min",
-    "modifier_id": null,
+    "procedure_ids": [2],
+    "procedures": [
+      {
+        "id": 2,
+        "name": "Procedure2"
+      }
+    ],
+    "modifier_ids": [],
+    "modifiers": [],
     "mac": "10112",
     "locality_number": "00",
     "state": "ALABAMA",
@@ -261,6 +288,7 @@
     "price": "300",
     "price_percentage": null,
     "clia": null,
+    "rate": "",
     "medication_application": false,
     "medications": []
   }
@@ -293,10 +321,11 @@
 {
     "copays": [
         {
+            "id": 1, /**Only edit */
             "billing_company_id": 1, /** Only required by superuser */
             "procedure_ids": [1,2,3],
-            "insurance_plan_id": 1,
-            "insurance_company_id": 1,
+            "insurance_plan_ids": [1,2],
+            "insurance_company_ids": [1,2],
             "copay": 150.2,
             "private_note": "Note private by billing_company"
         }
@@ -313,9 +342,11 @@
 [
   {
     "billing_company_id": 1,
-    "insurance_plan_id": 1,
-    "company_id": 1,
+    "insurance_plan_ids": [1,2],
+    "insurance_company_ids": [1,2],
     "copay": "150.00",
+    "private_note": "Note private by billing_company",
+    "procedure_ids": [1,2,3],
     "procedures": [
       {
         "id": 1,
@@ -356,13 +387,13 @@
     {
         "billing_company_id": 1, /** Only required by superuser */
         "contract_fee_id": 1, /** Only wen contract update */
-        "insurance_company_id": 1,
-        "insurance_plan_id": 1,
+        "insurance_company_ids": [1,2],
+        "insurance_plan_ids": [1,2],
         "type_id": 1,
         "start_date": "2022-03-16",
         "end_date": "2022-03-16",
-        "procedure_id": [1,2],
-        "modifier_id": 1,
+        "procedure_ids": [1,2],
+        "modifier_ids": [1,2],
         "price": 120.5,
         "mac": "02102",
         "locality_number":"01",
@@ -370,8 +401,27 @@
         "fsa": "STATEWIDE",
         "counties": "ALL COUNTIES",
         "insurance_label_fee_id": 1,
+        "rate": "02102",
         "price_percentage": 70,
-        "private_note": "Note private by billing_company"
+        "private_note": "Note private by billing_company",
+        "patients": [
+            {
+                "patient_id": 1,
+                "start_date": "2022-03-16",
+                "end_date": "2022-03-16",
+            }
+        ],
+        "have_contract_specifications": true,
+        "contract_specifications": [
+            {
+                "billing_provider_id": 1,
+                "billing_provider_tax_id": "111q322",
+                "billing_provider_taxonomy_id": 1,
+                "health_professional_id": 1,
+                "health_professional_tax_id": "111q322",
+                "health_professional_taxonomy_id": 1,
+            }
+        ],
     }
 ]
 ```

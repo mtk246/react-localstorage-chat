@@ -2,16 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Facades\Pagination;
+use App\Http\Resources\Claim\BatchClaimBodyResource;
+use App\Http\Resources\Claim\ClaimBodyResource;
+use App\Http\Resources\Company\CompanyDataResource;
 use App\Models\Billingcompany;
-use App\Models\Claim;
-use App\Models\ClaimBatch;
-use App\Models\ClaimBatchStatus;
-use App\Models\ClaimStatus;
+use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimBatch;
+use App\Models\Claims\ClaimBatchStatus;
+use App\Models\Claims\ClaimStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ClaimBatchRepository
 {
@@ -64,98 +69,49 @@ class ClaimBatchRepository
     public function getServerAllClaims(Request $request)
     {
         $status = ClaimStatus::where('status', 'Verified - Not submitted')->first();
-
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $data = Claim::whereHas('claimStatusClaims', function ($query) use ($status) {
+        $claimsQuery = Claim::query()
+            ->whereHas('claimStatusClaims', function ($query) use ($status) {
                 $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
                     ->where('claim_status_claim.claim_status_id', $status->id)
                     ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
-            })->with([
-                /**"insuranceCompany" => function ($query) {
-                    $query->with('nicknames');
-                },*/
-                'company' => function ($query) {
-                    $query->with('nicknames');
-                },
-                'patient' => function ($query) {
-                    $query->with([
-                        'user' => function ($q) {
-                            $q->with(['profile', 'addresses', 'contacts']);
-                        },
-                    ]);
-                },
-            ]);
-        } else {
-            $data = Claim::whereHas('claimStatusClaims', function ($query) use ($status) {
-                $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
-                    ->where('claim_status_claim.claim_status_id', $status->id)
-                    ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
-            })->with([
-                /**"insuranceCompany" => function ($query) use ($bC) {
-                    $query->with([
-                        "nicknames" => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        }
-                    ]);
-                },*/
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                        'nicknames' => function ($q) use ($bC) {
-                            $q->where('billing_company_id', $bC);
-                        },
-                    ]);
-                },
-                'patient' => function ($query) use ($bC) {
-                    $query->with([
-                        'user' => function ($q) use ($bC) {
-                            $q->with([
-                                'profile',
-                                'addresses' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($qq) use ($bC) {
-                                    $qq->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
-                    ]);
-                },
-            ]);
-        }
-        if ($request->billing_company_id) {
-            $data = $data->whereHas('company', function ($query) use ($request) {
-                $query->whereHas('billingCompanies', function ($q) use ($request) {
-                    $q->where('billing_company_id', $request->billing_company_id);
-                });
-            });
-        }
-        if ($request->company_id) {
-            $data = $data->where('company_id', $request->company_id);
-        }
+            })
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('billing_company_id', $request->user()->billing_company_id),
+            )
+            ->when(
+                !empty($request->query('query')) && '{}' !== $request->query('query'),
+                fn ($query) => $query->search($request->query('query')),
+            )
+            ->when(
+                !empty($request->billing_company_id),
+                fn ($query) => $query->whereHas('demographicInformation', function ($query) use ($request) {
+                    $query->whereHas('company', function ($query) use ($request) {
+                        $query->whereHas('billingCompanies', function ($q) use ($request) {
+                            $q->where('billing_company_id', $request->billing_company_id);
+                        });
+                    });
+                }),
+            )
+            ->when(
+                !empty($request->company_id),
+                fn ($query) => $query->whereHas('demographicInformation', function ($query) use ($request) {
+                    $query->where('company_id', $request->company_id);
+                }),
+            )
+            ->with('demographicInformation', 'service', 'insurancePolicies');
+            //->orderBy(Pagination::sortBy(), Pagination::sortDesc(true))
+            //->paginate(Pagination::itemsPerPage());
 
-        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
-        }
+        return ClaimBodyResource::collection($claimsQuery->get());
 
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'company.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
+        $data = [
+            'data' => ClaimBodyResource::collection($claimsQuery->items()),
+            'numberOfPages' => $claimsQuery->lastPage(),
+            'count' => $claimsQuery->total(),
+        ];
 
-        $data = $data->paginate($request->itemsPerPage ?? 10);
-
-        return response()->json([
-            'data' => $data->items(),
-            'numberOfPages' => $data->lastPage(),
-            'count' => $data->total(),
-        ], 200);
+        return $data;
     }
 
     /**
@@ -169,20 +125,7 @@ class ClaimBatchRepository
                 'company' => function ($query) {
                     $query->with('nicknames');
                 },
-                'claims' => function ($query) {
-                    $query->with([
-                        /**"insuranceCompany" => function ($query) {
-                            $query->with('nicknames');
-                        },*/
-                        'patient' => function ($query) {
-                            $query->with([
-                                'user' => function ($q) {
-                                    $q->with('profile');
-                                },
-                            ]);
-                        },
-                    ]);
-                },
+                'claims',
                 'billingCompany',
             ])->whereId($id)->first();
         } else {
@@ -194,40 +137,17 @@ class ClaimBatchRepository
                         },
                     ]);
                 },
-                'claims' => function ($query) {
-                    $query->with([
-                        /**"insuranceCompany" => function ($query) use ($bC){
-                            $query->with([
-                                "nicknames" => function ($q) use ($bC) {
-                                    $q->where('billing_company_id', $bC);
-                                }
-                            ]);
-                        },*/
-                        'patient' => function ($query) {
-                            $query->with([
-                                'user' => function ($q) {
-                                    $q->with([
-                                        'profile',
-                                    ]);
-                                },
-                            ]);
-                        },
-                    ]);
-                },
+                'claims',
                 'billingCompany',
             ])->whereId($id)->first();
         }
         if (isset($claimBatch)) {
             $claims = [];
             foreach ($claimBatch->claims as $key => $claim) {
-                $claims[$key] = $claim;
-                $transmissionCurrent = $claim->claimTransmissionResponses()
-                                             ->where('claim_batch_id', $claimBatch->id)
-                                             ->orderBy('created_at', 'desc')
-                                             ->orderBy('id', 'asc')->first();
-
-                $claims[$key]['transmission_status'] = $transmissionCurrent->claimTransmissionStatus ?? null;
-                $claims[$key]['transmission_response'] = json_decode($transmissionCurrent->response_details ?? null);
+                $claims[$key] = new BatchClaimBodyResource(
+                    $claim->load(['demographicInformation', 'service', 'insurancePolicies']),
+                    $claimBatch->id
+                );
             }
 
             $record = [
@@ -253,7 +173,16 @@ class ClaimBatchRepository
                 'total_denied_by_clearing_house' => $claimBatch->total_denied_by_clearing_house,
                 'total_accepted_by_payer' => $claimBatch->total_accepted_by_payer,
                 'total_denied_by_payer' => $claimBatch->total_denied_by_payer,
-                'company' => $claimBatch->company,
+                'company' => isset($claimBatch->company)
+                    ? [
+                        'id' => $claimBatch->company->id,
+                        'npi' => $claimBatch->company->npi,
+                        'name' => $claimBatch->company->name,
+                        'abbreviation' => $claimBatch->company
+                            ->abbreviations()
+                            ->where('billing_company_id', $claimBatch->billing_company_id)
+                            ->first()?->abbreviation ?? '',
+                    ]: null,
                 'claims' => $claims,
                 'billing_company' => [
                     'id' => $claimBatch->billingCompany->id,

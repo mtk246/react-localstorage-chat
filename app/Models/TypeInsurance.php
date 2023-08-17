@@ -27,9 +27,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|TypeInsurance whereInsurance($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TypeInsurance whereUpdatedAt($value)
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- *
  * @mixin \Eloquent
  */
 class TypeInsurance extends Model implements Auditable

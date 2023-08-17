@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\FacilityType.
@@ -14,19 +15,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $code
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $bill_classifications
+ * @property int|null $bill_classifications_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  *
+ * @method static \Database\Factories\FacilityTypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FacilityType whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  *
  * @mixin \Eloquent
  */
@@ -34,7 +37,7 @@ class FacilityType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type'];
+    protected $fillable = ['code', 'type'];
 
     /**
      * Company has many facilities.
@@ -44,5 +47,10 @@ class FacilityType extends Model
     public function facilities()
     {
         return $this->hasMany(Facility::class);
+    }
+
+    public function bill_classifications(): BelongsToMany
+    {
+        return $this->belongsToMany(BillClassification::class);
     }
 }

@@ -8,6 +8,11 @@ use App\Http\Requests\UpdateFacilityRequest;
 use App\Repositories\FacilityRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\Facility\AddCompanyRequest;
+use App\Http\Requests\Facility\RemoveCompanyRequest;
+use App\Models\Facility;
+use App\Models\FacilityType;
+use App\Http\Resources\Facility\BillClassificationResource;
 
 class FacilityController extends Controller
 {
@@ -110,20 +115,17 @@ class FacilityController extends Controller
     /**
      * @param int $id
      */
-    public function addToCompany(int $facilityId, int $companyId): JsonResponse
+    public function addToCompany(Facility $facility, AddCompanyRequest $request): JsonResponse
     {
-        $rs = $this->facilityRepository->addToCompany($facilityId, $companyId);
+        $rs = $this->facilityRepository->addToCompany($facility, $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error add facility to company'), 404);
     }
 
-    /**
-     * @param int $id
-     */
-    public function removeToCompany(int $facilityId, int $companyId): JsonResponse
+    public function getBillClassifiations(FacilityType $facilityType)
     {
-        $rs = $this->facilityRepository->removeToCompany($facilityId, $companyId);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error remove facility to company'), 404);
+        return response()->json(
+            BillClassificationResource::collection($facilityType->bill_classifications)
+        );
     }
 }

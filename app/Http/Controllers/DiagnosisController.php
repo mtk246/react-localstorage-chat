@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Diagnoses\DiagnosesType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Diagnosis\DiagnosisCreateRequest;
 use App\Http\Requests\Diagnosis\DiagnosisUpdateRequest;
@@ -9,6 +10,11 @@ use App\Repositories\DiagnosisRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\Diagnoses\ClassificationResource;
+use App\Http\Resources\Enums\TypeResource;
+use App\Http\Requests\Diagnosis\UpdateNotesRequest;
+use App\Actions\Diagnosis\UpdateDiagnosis;
+use App\Models\Diagnosis;
+use App\Actions\Diagnosis\GetClassificationAction;
 
 class DiagnosisController extends Controller
 {
@@ -66,7 +72,7 @@ class DiagnosisController extends Controller
     {
         $rs = $this->diagnosisRepository->changeStatus($request->input('status'), $id);
 
-        return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error updating status'), 400);
     }
 
     public function getList(): JsonResponse
@@ -76,10 +82,36 @@ class DiagnosisController extends Controller
         );
     }
 
+    public function getType(): JsonResponse
+    {
+        return response()->json(
+            TypeResource::collection(DiagnosesType::cases())
+        );
+    }
+
     public function getClassifications(int $type): JsonResponse
     {
         return response()->json(
             new ClassificationResource($type)
         );
+    }
+
+    public function deleteDiagnosis(int $id)
+    {
+        $rs = $this->diagnosisRepository->deleteDiagnosis($id);
+
+        return $rs ? response()->json([], 200) : response()->json(__('Error updating status'), 400);
+    }
+
+    public function updateDiagnosisNote(UpdateNotesRequest $request, UpdateDiagnosis $updateDiagnosis, Diagnosis $diagnosis): JsonResponse
+    {
+        $rs = $updateDiagnosis->notes($diagnosis, $request->validated());
+
+        return response()->json($rs);
+    }
+
+    public function getClassificationsByCode(GetClassificationAction $action, $code)
+    {
+        return response()->json($action->getClassifications($code));
     }
 }

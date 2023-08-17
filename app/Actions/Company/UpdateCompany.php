@@ -6,14 +6,14 @@ namespace App\Actions\Company;
 
 use App\Http\Casts\Company\ExectionInsuranceCompanyCast;
 use App\Http\Casts\Company\StatementCast;
-use App\Http\Casts\Company\StoreExectionICRequestCast;
+use App\Http\Casts\Company\StoreExceptionICRequestCast;
 use App\Http\Casts\Company\StoreStatementRequestCast;
 use App\Http\Casts\Company\UpdateCompanyRequestCast;
 use App\Http\Casts\Company\UpdateContactDataRequestCast;
 use App\Http\Casts\Company\UpdateNotesRequestCast;
 use App\Http\Resources\Company\CompanyDataResource;
 use App\Http\Resources\Company\ContactDataResource;
-use App\Http\Resources\Company\ExectionICResource;
+use App\Http\Resources\Company\ExceptionICResource;
 use App\Http\Resources\Company\NotesResource;
 use App\Http\Resources\Company\StatementResource;
 use App\Models\Company;
@@ -28,6 +28,13 @@ final class UpdateCompany
         return DB::transaction(function () use ($company, $request): CompanyDataResource {
             $company->update($request->getCompanyValues());
             $company->billingCompanies()->syncWithoutDetaching($request->getBillingCompanyId());
+            $company->billingCompanies()->updateExistingPivot(
+                $request->getBillingCompanyId(),
+                [
+                    'miscellaneous' => $request->getMiscellaneous(),
+                    'claim_format_ids' => $request->getClaimFormats(),
+                ]
+            );
 
             if ($request->getNickname()) {
                 $company->nicknames()->updateOrCreate(
@@ -106,7 +113,7 @@ final class UpdateCompany
 
     public function exectionInsuranceCompanies(
         Company $company,
-        StoreExectionICRequestCast $request
+        StoreExceptionICRequestCast $request
     ): AnonymousResourceCollection {
         return DB::transaction(function () use ($company, $request): AnonymousResourceCollection {
             $company->exceptionInsuranceCompanies()
@@ -125,7 +132,7 @@ final class UpdateCompany
                         ], ['insurance_company_id' => $store->getInsuranceCompanyId()]);
                 });
 
-            return ExectionICResource::collection(
+            return ExceptionICResource::collection(
                 $company->exceptionInsuranceCompanies()
                     ->where('billing_company_id', $request->getBillingCompanyId())
                     ->orderBy('id')
@@ -161,6 +168,7 @@ final class UpdateCompany
             'city' => $request->getAddress()->getCity(),
             'state' => $request->getAddress()->getState(),
             'zip' => $request->getAddress()->getZip(),
+            'apt_suite' => $request->getAddress()->getAptSuite(),
             'country' => $request->getAddress()->getCountry(),
             'country_subdivision_code' => $request->getAddress()->getCountrySubdivisionCode(),
         ]);
@@ -182,6 +190,7 @@ final class UpdateCompany
             'city' => $request->getPaymentAddres()->getCity(),
             'state' => $request->getPaymentAddres()->getState(),
             'zip' => $request->getPaymentAddres()->getZip(),
+            'apt_suite' => $request->getPaymentAddres()->getAptSuite(),
             'country' => $request->getPaymentAddres()->getCountry(),
             'country_subdivision_code' => $request->getPaymentAddres()->getCountrySubdivisionCode(),
         ]);

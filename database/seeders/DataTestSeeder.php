@@ -10,6 +10,7 @@ use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTyp
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\ClearingHouse;
 use App\Models\Company;
 use App\Models\CompanyHealthProfessionalType;
@@ -21,7 +22,6 @@ use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\ExceptionInsuranceCompany;
 use App\Models\Facility;
-use App\Models\FacilityType;
 use App\Models\Guarantor;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
@@ -149,6 +149,14 @@ class DataTestSeeder extends Seeder
                     'billing_company_id' => $bc->id,
                 ]);
             }
+
+            collect(config('memberships.default_roles'))
+                ->map(function (array $role) use ($bc) {
+                    $role['billing_company_id'] = $bc->id;
+
+                    return $role;
+                })
+                ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
         }
 
         /****** SEDEER DE COMPANIES - FACILITIES *****/
@@ -190,7 +198,6 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
                         'name' => 'CARING FAMILY CORP',
                         'npi' => '1215297064',
                         'nppes_verified_at' => now(),
@@ -234,7 +241,6 @@ class DataTestSeeder extends Seeder
                 ],
                 'facilities' => [
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
                         'name' => 'ISA HOME CORP.',
                         'npi' => '1205277944',
                         'nppes_verified_at' => now(),
@@ -259,7 +265,6 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
                         'name' => 'MACARENA ASSISTED LIVING FACILITY, INC.',
                         'npi' => '1851778658',
                         'nppes_verified_at' => now(),
@@ -284,7 +289,6 @@ class DataTestSeeder extends Seeder
                         ],
                     ],
                     [
-                        'facility_type_id' => FacilityType::whereType('AL - Assisted Living Facility')->first()->id,
                         'name' => 'MY NEW HOME ALF I, INC.',
                         'npi' => '1699160762',
                         'nppes_verified_at' => now(),
@@ -319,7 +323,6 @@ class DataTestSeeder extends Seeder
                 'code' => generateNewCode('CO', 5, date('Y'), Company::class, 'code'),
                 'npi' => $data['npi'],
                 'ein' => $data['ein'] ?? null,
-                'upin' => $data['upin'] ?? null,
                 'clia' => $data['clia'] ?? null,
             ]);
 
@@ -438,7 +441,6 @@ class DataTestSeeder extends Seeder
                 ], [
                     'code' => generateNewCode('FA', 5, date('Y'), Facility::class, 'code'),
                     'name' => $dataF['name'],
-                    'facility_type_id' => $dataF['facility_type_id'],
                     'nppes_verified_at' => $dataF['nppes_verified_at'],
                 ]);
 
@@ -658,7 +660,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -704,7 +705,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -750,7 +750,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -796,7 +795,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -842,7 +840,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -888,7 +885,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -973,7 +969,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1019,7 +1014,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1065,7 +1059,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1111,7 +1104,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1157,7 +1149,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1203,7 +1194,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1288,7 +1278,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1334,7 +1323,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1380,7 +1368,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1426,7 +1413,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1472,7 +1458,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1518,7 +1503,6 @@ class DataTestSeeder extends Seeder
                         'plan_type_id' => TypeCatalog::whereDescription('Health Maintenance Organization')->first()->id,
                         'abbreviation' => null,
                         'eff_date' => '2020-10-09',
-                        'charge_using_id' => null,
 
                         'accept_assign' => true,
                         'pre_authorization' => true,
@@ -1697,7 +1681,7 @@ class DataTestSeeder extends Seeder
                         'pqrs_eligible' => $dataIP['pqrs_eligible'],
                         'allow_attached_files' => $dataIP['allow_attached_files'],
                         'eff_date' => $dataIP['eff_date'],
-                        'charge_using_id' => $dataIP['charge_using_id'],
+
                         'insurance_company_id' => $insurance->id,
                     ]);
 
@@ -1973,32 +1957,40 @@ class DataTestSeeder extends Seeder
                     }
                 }
             }
+
             /** Create User */
-            $user = User::firstOrCreate([
+            $user = User::query()->firstOrCreate([
                 'email' => $dataHP['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
+                'billing_company_id' => null,
             ]);
 
             $billingCompany = BillingCompany::whereAbbreviation($dataHP['billing_company'])->first();
 
             /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::whereSlug('healthprofessional')->first()->id);
 
             if (isset($dataHP['contact'])) {
                 Contact::firstOrCreate([
-                    'contactable_id' => $user->id,
-                    'contactable_type' => User::class,
+                    'contactable_id' => $user->profile_id,
+                    'contactable_type' => Profile::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataHP['contact']);
             }
 
             if (isset($dataHP['address'])) {
                 Address::firstOrCreate([
-                    'addressable_id' => $user->id,
-                    'addressable_type' => User::class,
+                    'addressable_id' => $user->profile_id,
+                    'addressable_type' => Profile::class,
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 ], $dataHP['address']);
             }
@@ -2080,7 +2072,7 @@ class DataTestSeeder extends Seeder
                 'is_provider' => $dataHP['is_provider'] ?? false,
                 'npi_company' => $dataHP['npi_company'] ?? '',
                 'company_id' => $company->id ?? $dataHP['company_id'],
-                'user_id' => $user->id,
+                'profile_id' => $profile->id,
             ]);
 
             HealthProfessionalType::query()->create([
@@ -3165,6 +3157,7 @@ class DataTestSeeder extends Seeder
                     'last_name' => $dataP['profile']['last_name'],
                     'sex' => $dataP['profile']['sex'],
                     'date_of_birth' => $dataP['profile']['date_of_birth'],
+                    'language' => $dataP['language'] ?? 'en',
                 ]);
             } else {
                 $profile = Profile::updateOrCreate([
@@ -3178,6 +3171,7 @@ class DataTestSeeder extends Seeder
                     'last_name' => $dataP['profile']['last_name'],
                     'sex' => $dataP['profile']['sex'],
                     'date_of_birth' => $dataP['profile']['date_of_birth'],
+                    'language' => $dataP['language'] ?? 'en',
                 ]);
             }
 
@@ -3215,11 +3209,10 @@ class DataTestSeeder extends Seeder
             }
 
             /** Create User */
-            $user = User::firstOrCreate([
+            $user = User::query()->firstOrCreate([
                 'email' => $dataP['contact']['email'],
             ], [
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                'language' => $dataP['language'] ?? 'en',
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
             ]);
@@ -3227,7 +3220,13 @@ class DataTestSeeder extends Seeder
             $billingCompany = BillingCompany::whereAbbreviation($dataP['billing_company'])->first();
 
             /* Attach billing company */
-            $user->billingCompanies()->sync($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
+            $user->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithoutDetaching(MembershipRole::query()->whereSlug('patient')->where('billing_company_id', null)->first()->id);
 
             /* Create Contact */
             if (isset($dataP['contact'])) {
@@ -3255,7 +3254,7 @@ class DataTestSeeder extends Seeder
             ], [
                 'code' => generateNewCode('PA', 5, date('Y'), Patient::class, 'code'),
                 'marital_status_id' => $dataP['marital_status_id'] ?? null,
-                'user_id' => $user->id,
+                'profile_id' => $profile->id,
             ]);
 
             if (is_null($patient->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {

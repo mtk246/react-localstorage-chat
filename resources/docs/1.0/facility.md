@@ -16,9 +16,9 @@
 - [Get list facility types](#get-list-facility-types)
 - [Get list place of services](#get-list-place-of-services)
 - [Add to company](#add-to-company)
-- [Remove to company](#remove-to-company)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list facilities](#get-list)
+- [Get list bill classifications](#get-bill-classifications)
 
 
 <a name="basic-data"></a>
@@ -39,10 +39,10 @@
 | 10 |PATCH | `Add to billing company`          | `/facility/add-to-billing-company/{id}`|yes|Add facility to billing company|
 | 11 |GET | `Get list facility types`| `/facility/get-list-facility-types`        |yes            |Get list facility types|
 | 12 |GET | `Get list facility types`| `/facility/get-list-place-of-services`        |yes            |Get list place of services|
-| 13 |PATCH | `Add to company`          | `/facility/{facility_id}/add-to-company/{company_id}`|yes|Add facility to company|
-| 14 |PATCH | `Remove to company`          | `/facility/{facility_id}/remove-to-company/{company_id}`|yes|Remove facility to company|
-| 15 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
-| 16 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
+| 13 |PATCH | `Add to company`          | `/facility/{facility_id}/company/`|yes|Add facility to company|
+| 14 |GET | `Get list billing companies`| `/facility/get-list-billing-companies?facility_id={facilityID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 15 |GET   | `Get list facilities`  | `/facility/get-list?billing_company_id={ID?}&company_id={ID?}`|yes|Get list facilities|
+| 16 |GET   | `Get list bill classifications`  | `/bill-classifications/{facility_type}`|yes|Get list bill classifications|
 
 
 
@@ -77,12 +77,11 @@
 ```json
 {
     "name":"facilityName",
-    "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
     "abbreviation":"ABBFAC",
     "billing_company_id": 1, /** Only required by superuser */
-    "place_of_services": [1,2],
+    "place_of_services": [1,2,5,6],
     "taxonomies": [
         {
             "tax_id": "TAX01213",
@@ -90,29 +89,40 @@
             "primary": true
         },
         {
-            "tax_id": "TAX01213",
+            "tax_id": "TAX01214",
             "name": "NameTaxonomy",
             "primary": false
         },
         {
-            "tax_id": "TAX01213",
+            "tax_id": "TAX01215",
             "name": "NameTaxonomy",
             "primary": false
         }
     ],
-    "npi":"123fac321",
+    "npi":"123fa1c321",
     "address":{
-        "address":"address Facility",
+        "address":"pob address Facility",
         "city":"city Facility",
         "state":"state Facility",
-        "zip":234
+        "country": "country Facility",
+        "zip":"234",
+        "apt_suite": "Apt suite value"
     },
     "contact":{
         "phone":"34324234",
         "mobile":"34324234",
         "fax":"567674576457",
-        "email":"facility@facility.com"
-    }
+        "email":"facility4@facility.com"
+    },
+    "public_note": "Public Note",
+    "private_note": "Private Note",
+    "types": [
+        {
+            "id": 1,
+            "bill_classifications": [3,4]
+        }
+    ],
+    "other_name": "Other name test"
 }
 ```
 
@@ -133,15 +143,18 @@
 
 ```json
 {
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
-    "verified_on_nppes": true,
+    "code": "NAME-00001-2023",
+    "name": "Facilityname",
+    "npi": "123fa1c321",
     "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "id": 1,
-    "status": false
+    "nppes_verified_at": "2023-07-13T20:08:16.482022Z",
+    "abbreviation": "ABBFAC",
+    "other_name": "Other name test",
+    "updated_at": "2023-07-13T20:08:16.000000Z",
+    "created_at": "2023-07-13T20:08:16.000000Z",
+    "id": 20,
+    "status": false,
+    "verified_on_nppes": true
 }
 ```
 
@@ -475,7 +488,6 @@
 ```json
 {
     "id": 1,
-    "facility_type_id": 1,
     "name": "facilityName",
     "npi": "123fac321",
     "created_at": "2022-03-16T10:03:40.000000Z",
@@ -483,12 +495,27 @@
     "verified_on_nppes": true,
     "code": "FA-00001-2022",
     "status": false,
-    "facility_type": {
-        "id": 1,
-        "type": "01 - Clinics",
-        "created_at": "2022-04-07T20:50:55.000000Z",
-        "updated_at": "2022-04-07T20:50:55.000000Z"
-    },
+    "facility_types": [
+        {
+            "id": 8,
+            "type": "Special Facility or Hospital ASC Surgery",
+            "created_at": "2023-07-14T21:26:35.000000Z",
+            "updated_at": "2023-07-14T21:26:35.000000Z",
+            "bill_classifications": [
+                {
+                    "id": 15,
+                    "name": "Hospice (Non-Hospital Based)",
+                    "created_at": "2023-07-14T21:31:02.000000Z",
+                    "updated_at": "2023-07-14T21:31:02.000000Z"
+                }
+            ],
+            "pivot": {
+                "facility_id": 31,
+                "facility_type_id": 8,
+                "bill_classifications": "[15]"
+            }
+        }
+    ],
     "taxonomies": [
         {
             "id": 1,
@@ -596,7 +623,6 @@
 ```json
 {
     "name":"facilityName",
-    "facility_type_id": 1,
     "companies": [1,2],
     "nickname":"alias facilityName",
     "abbreviation":"ABBFAC",
@@ -631,7 +657,16 @@
         "mobile":"34324234",
         "fax":"567674576457",
         "email":"facility@facility.com"
-    }
+    },
+    "public_note": "Public Note",
+    "private_note": "Private Note",
+    "types": [
+        {
+            "id": 8,
+            "bill_classifications": [15]
+        }
+    ],
+    "other_name": "Other name test"
 }
 ```
 
@@ -867,47 +902,35 @@
 [
     {
         "id": 1,
-        "name": "01 - Clinics"
+        "name": "1 - Hospital"
     },
     {
         "id": 2,
-        "name": "02 - Hospitals"
+        "name": "2 - Skilled Nursing"
     },
     {
         "id": 3,
-        "name": "03 - Labs"
+        "name": "3 - Home Health"
     },
     {
         "id": 4,
-        "name": "75X - Comprehensive Outpa..."
+        "name": "4 - Christian Science (Hospital)"
     },
     {
         "id": 5,
-        "name": "86X - Specialty Facility Res..."
+        "name": "5 - Christian Science (Extended Care)"
     },
     {
         "id": 6,
-        "name": "AL - Assisted Living Facility"
+        "name": "6 - Intermediate Care"
     },
     {
         "id": 7,
-        "name": "ASC - Ambulatory Surgery Center"
+        "name": "7 - Clinic "
     },
     {
         "id": 8,
-        "name": "LAB - Free Standing Lab Facility"
-    },
-    {
-        "id": 9,
-        "name": "OT - Special Facility - Other"
-    },
-    {
-        "id": 10,
-        "name": "RRH - Rural Health Clinic"
-    },
-    {
-        "id": 11,
-        "name": "SN - Skilled Nursing Facility"
+        "name": "8 - Special Facility or Hospital ASC Surgery"
     }
 ]
 ```
@@ -1107,8 +1130,24 @@
 ## Param in path
 
 `facility_id required integer`
-`company_id  required integer`
 
+### Body request example
+#
+
+```json
+{
+    "companies": [
+        {
+            "billing_company_id": 2, /** Only required by superuser */
+            "company_id": 2
+        },
+        {
+            "billing_company_id": 1,
+            "company_id": 2
+        },
+    ]
+}
+```
 
 ## Response
 
@@ -1116,15 +1155,18 @@
 
 ```json
 {
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
+    "id": 20,
     "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "verified_on_nppes": true,
-    "id": 1,
-    "status": true
+    "name": "Facilityname",
+    "npi": "123fa1c321",
+    "created_at": "2023-07-13T20:08:16.000000Z",
+    "updated_at": "2023-07-13T20:08:16.000000Z",
+    "code": "NAME-00001-2023",
+    "nppes_verified_at": "2023-07-13",
+    "abbreviation": "ABBFAC",
+    "other_name": "Other name test",
+    "status": false,
+    "verified_on_nppes": true
 }
 ```
 
@@ -1133,45 +1175,6 @@
 >{warning} 404 error add facility to company
 
 #
-
-<a name="remove-to-company"></a>
-## Remove to company
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`facility_id required integer`
-`company_id  required integer`
-
-
-## Response
-
-> {success} 200 Good response
-
-```json
-{
-    "code": "FA-00001-2022",
-    "name": "facilityName",
-    "npi": "123fac321",
-    "facility_type_id": 1,
-    "updated_at": "2022-03-16T10:03:40.000000Z",
-    "created_at": "2022-03-16T10:03:40.000000Z",
-    "verified_on_nppes": true,
-    "id": 1,
-    "status": true
-}
-```
-
-#
-
->{warning} 404 error remove facility to company
 
 <a name="get-list-billing-companies"></a>
 ## Get list billing companies
@@ -1277,3 +1280,59 @@
     }
 ]
 ```
+
+<a name="get-bill-classifications"></a>
+## Get bill classifications from facility type
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+`facility_type_id <facility_type>`
+
+
+## Response
+
+> {success} 200 
+
+```json
+[
+    {
+        "id": 9,
+        "name": "1 - Rural Health"
+    },
+    {
+        "id": 10,
+        "name": "2 - Hospital Based or Independent Renal Dialysis Center"
+    },
+    {
+        "id": 11,
+        "name": "3 - Free-standing"
+    },
+    {
+        "id": 12,
+        "name": "4 - Outpatient Rehabilitation Facility (ORF)"
+    },
+    {
+        "id": 13,
+        "name": "5 - Comprehensive Outpatient Rehabilitation Facilities (CORFS)"
+    },
+    {
+        "id": 14,
+        "name": "6 - Community Mental Health Center (CMHC)"
+    },
+    {
+        "id": 21,
+        "name": "9 - Other"
+    }
+]
+```
+#
+
+>{warning} 404 Error, get classifications not found

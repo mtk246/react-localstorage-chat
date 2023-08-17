@@ -165,7 +165,7 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             BillingCompany::class => [
-                'filterableAttributes' => ['name', 'code', 'abbreviation'],
+                'filterableAttributes' => ['tax_id', 'name', 'code', 'abbreviation'],
                 'sortableAttributes' => ['created_at'],
             ],
             Claim::class => [
@@ -181,7 +181,18 @@ return [
                 'sortableAttributes' => ['created_at'],
             ],
             Company::class => [
-                'filterableAttributes' => ['code', 'name', 'npi', 'ein', 'upin', 'clia'],
+                'filterableAttributes' => [
+                    'code',
+                    'name',
+                    'npi',
+                    'ein',
+                    'upin',
+                    'clia',
+                    'contacts.phone',
+                    'contacts.fax',
+                    'contacts.email',
+                    'contacts.mobile',
+                ],
                 'sortableAttributes' => ['created_at'],
             ],
             Facility::class => [

@@ -9,7 +9,6 @@ use App\Models\ClaimCheckStatus;
 use App\Models\ClaimDateInformation;
 use App\Models\ClaimEligibility;
 use App\Models\ClaimEligibilityStatus;
-use App\Models\ClaimFormI;
 use App\Models\ClaimFormP;
 use App\Models\ClaimFormPService;
 use App\Models\ClaimStatus;
@@ -25,6 +24,7 @@ use App\Models\PatientOrInsuredInformation;
 use App\Models\PhysicianOrSupplierInformation;
 use App\Models\PlaceOfService;
 use App\Models\PrivateNote;
+use App\Models\Procedure;
 use App\Models\PublicNote;
 use App\Models\TypeCatalog;
 use App\Models\TypeDiag;
@@ -224,6 +224,7 @@ class ClaimRepository
             return $claim;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -474,7 +475,7 @@ class ClaimRepository
                             foreach ($data['claim_services'] as $service) {
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
-                                    'id' => $service['id'] ?? null
+                                    'id' => $service['id'] ?? null,
                                 ], $service);
                             }
                         }
@@ -521,7 +522,7 @@ class ClaimRepository
                                 $service['days_or_units'] = $service['units_of_service'];
                                 $service['claim_form_p_id'] = $claimForm->id;
                                 ClaimFormPService::updateOrCreate([
-                                    'id' => $service['id'] ?? null
+                                    'id' => $service['id'] ?? null,
                                 ], $service);
                             }
                         }
@@ -707,9 +708,11 @@ class ClaimRepository
                 }
             }
             DB::commit();
+
             return Claim::whereId($id)->first();
         } catch (\Exception $e) {
             DB::rollBack();
+
             return null;
         }
     }
@@ -738,7 +741,8 @@ class ClaimRepository
                     TypeCatalog::class,
                     ['description'],
                     ['relationship' => 'type', 'where' => ['description' => 'Referred or ordered provider roles']],
-                    null
+                    null,
+                    ['code']
                 ),
             ];
         } catch (\Exception $e) {
@@ -763,9 +767,62 @@ class ClaimRepository
             PlaceOfService::class,
             ['code', '-', 'name'],
             !empty($request->facility_id)
-                ? ['relationship' => 'facilities','where' => ['facility_id' => $request->facility_id]]
+                ? ['relationship' => 'facilities', 'where' => ['facility_id' => $request->facility_id]]
                 : []
         );
+    }
+
+    public function getListRev($company_id = null, $search = '')
+    {
+        try {
+            if (null == $company_id) {
+                if ('' == $search) {
+                    return getList(Procedure::class, 'code', [], null, ['description']);
+                } else {
+                    return getList(Procedure::class, 'code', [
+                        'whereRaw' => ['search' => $search],
+                        'where' => ['type' => '4']
+                    ], null, ['description']);
+                }
+            } else {
+                return Procedure::query()
+                    ->when('' !== $search, function ($query) use ($search, $company_id) {
+                        $query->where(function ($query) use ($search, $company_id) {
+                            $query->whereHas('companyServices', function ($query) use ($company_id) {
+                                $query->where('company_id', $company_id);
+                            })->where('code', 'like', "%$search%");
+                        })
+                        ->orWhere(function ($query) use ($search) {
+                            $search = str_replace(['f', 'F'], '', $search);
+                            $query->whereJsonContains('clasifications->general', 2)
+                                ->where('code', 'like', "%$search%F");
+                        });
+                    }, function ($query) use ($company_id) {
+                        $query->whereHas('companyServices', function ($query) use ($company_id) {
+                            $query->where('company_id', $company_id);
+                        });
+                    })
+                    ->where('type', '4')
+                    ->with(['companyServices' => function ($query) use ($company_id) {
+                        $query->where('company_id', $company_id);
+                    }])
+                    ->get()
+                    ->map(function ($procedure) use ($company_id) {
+                        return [
+                            'id' => $procedure->id,
+                            'name' => $procedure->code,
+                            'description' => $procedure->description,
+                            'price' => (float) $procedure->companyServices
+                                ->firstWhere('company_id', $company_id)?->price ?? 0,
+                        ];
+                    })
+                    ->sortByDesc('price')
+                    ->values()
+                    ->toArray();
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function getListRevCenters()
@@ -2060,19 +2117,24 @@ class ClaimRepository
                 foreach ($claim->claimFormattable?->physicianOrSupplierInformation?->claimDateInformations ?? [] as $dateInfo) {
                     $qualifier = $dateInfo?->qualifier?->code ?? '';
                     if (isset($qualifierFields[$qualifier])) {
-                        if (1 == $dateInfo->field_id) {
+                        if ((1 == $dateInfo->field_id) || (2 == $dateInfo->field_id)) {
                             $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (2 == $dateInfo->field_id) {
-                            $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date_or_current;
-                        } else if (3 == $dateInfo->field_id) {
+                        }
+                    } elseif (3 == $dateInfo->field_id) {
+                        if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date_or_current;
+                        }
+                        if (!empty($dateInfo->to_date)) {
                             $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
-                        } else if (4 == $dateInfo->field_id) {
+                        }
+                    } elseif (4 == $dateInfo->field_id) {
+                        if (!empty($dateInfo->from_date_or_current)) {
                             $claimDateInfo['admissionDate'] = $dateInfo->from_date_or_current;
+                        }
+                        if (!empty($dateInfo->to_date)) {
                             $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
                         }
                     }
-
                 }
 
                 $dataReal = [

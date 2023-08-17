@@ -1,30 +1,44 @@
 <?php
 
-//declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\ChangeStatusAction;
+use App\Actions\Claim\CreateAction;
+use App\Actions\Claim\CreateCheckEligibilityAction;
+use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
 use App\Actions\Claim\GetFieldAction;
 use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
+use App\Actions\Claim\GetSecurityAuthorizationAction;
+use App\Actions\Claim\UpdateClaimAction;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
-use App\Http\Requests\Claim\ClaimDraftRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
+use App\Http\Requests\Claim\CreateNoteRequest;
+use App\Http\Requests\Claim\StoreRequest;
+use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\PreviewResource;
-use App\Models\Claim;
+use App\Models\BillClassification;
+use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
+use App\Models\Facility;
+use App\Models\FacilityType;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
 use App\Repositories\ReportRepository;
 use App\Services\Claim\ClaimPreviewService;
+use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClaimController extends Controller
 {
@@ -35,37 +49,11 @@ class ClaimController extends Controller
     }
 
     /**
-     * @param claimCreateRequest $request
-     *
      * @return JsonResponse
      */
-    public function saveAsDraft(ClaimDraftRequest $request)
+    public function createClaim(StoreRequest $request, CreateAction $createClaim)
     {
-        $rs = $this->claimRepository->createClaim($request->validated());
-
-        return $rs ? response()->json($rs) : response()->json(__('Error creating claim'), 400);
-    }
-
-    /**
-     * @param claimCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateAsDraft(ClaimDraftRequest $request, $id)
-    {
-        $data = $request->validated();
-        $data['draft'] = true;
-        $rs = $this->claimRepository->updateClaim($data, $id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error updating claim'), 400);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function createClaim(ClaimCreateRequest $request)
-    {
-        $rs = $this->claimRepository->createClaim($request->validated());
+        $rs = $createClaim->invoke($request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error creating claim'), 400);
     }
@@ -73,27 +61,9 @@ class ClaimController extends Controller
     /**
      * @return JsonResponse
      */
-    public function updateClaim(ClaimVerifyRequest $request, int $id)
+    public function updateClaim(UpdateRequest $request, UpdateClaimAction $update, Claim $claim)
     {
-        $claim = $this->claimRepository->updateClaim($request->validated(), $id);
-        if (is_null($claim)) {
-            return response()->json(__('Error update claim'), 400);
-        }
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
-        if (($request->validate ?? false) == true) {
-            $rs = $this->claimValidation($claim->id);
-            $this->claimRepository->changeStatus([
-                'status_id' => $statusVerify->id,
-                'private_note' => 'API verification',
-            ], $claim->id);
-        } else {
-            $this->claimRepository->changeStatus([
-                'status_id' => $statusVerify->id,
-                'private_note' => 'Manual verification',
-            ], $claim->id);
-        }
-
-        return $claim ? response()->json($claim) : response()->json(__('Error updating claim'), 400);
+        return response()->json($update->invoke($claim, $request->casted()));
     }
 
     public function getAllClaims(Request $request)
@@ -106,16 +76,19 @@ class ClaimController extends Controller
         );
     }
 
-    public function getServerAll(Request $request)
-    {
-        return $this->claimRepository->getServerAll($request);
+    public function getServerAll(
+        Request $request,
+        Claim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->all($claim, $request));
     }
 
-    public function getOneClaim(int $id): JsonResponse
-    {
-        $rs = $this->claimRepository->getOneClaim($id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error, claim not found'), 404);
+    public function getOneClaim(
+        Claim $claim,
+        GetClaimAction $getClaim
+    ): JsonResponse {
+        return response()->json($getClaim->single($claim));
     }
 
     public function getListClaimServices(Request $request)
@@ -145,7 +118,7 @@ class ClaimController extends Controller
         $search = $request->search ?? '';
 
         return response()->json(
-            $this->procedureRepository->getList($company_id, $search)
+            $this->claimRepository->getListRev($company_id, $search)
         );
     }
 
@@ -160,6 +133,40 @@ class ClaimController extends Controller
     {
         return response()->json(
             $this->claimRepository->getListAdmissionSources()
+        );
+    }
+
+    public function getBillClassifications(Request $request, string $facilityId): JsonResponse
+    {
+        return response()->json(
+            Facility::query()
+                ->where('id', $facilityId)
+                ->whereHas('billingCompanies', function ($query) use($request) {
+                    $query->where('billing_company_id', Gate::check('is-admin')
+                        ? $request->billing_company_id ?? 0
+                        : Auth::user()->billing_company_id
+                    );
+                })
+                ->first()
+                ?->facilityTypes
+                ->reduce(function (array $response, FacilityType $facilityType) {
+                    BillClassification::query()
+                        ->whereIn('id', json_decode($facilityType->pivot->bill_classifications))
+                        ->get()
+                        ->each(function (BillClassification $billClassification) use (&$response, $facilityType){
+                            $response[] = [
+                                'id' => $facilityType->code.$billClassification->code,
+                                'name' => $facilityType->code
+                                    .$billClassification->code
+                                    .' - '
+                                    .$facilityType->type
+                                    .' / '
+                                    .$billClassification->name,  
+                            ];
+                        });
+
+                    return $response;
+                }, []),
         );
     }
 
@@ -260,17 +267,18 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error claim eligibility'), 400);
     }
 
-    public function storeCheckEligibility(ClaimEligibilityRequest $request)
-    {
-        if (true == ($request->automatic_eligibility ?? false)) {
-            $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+    public function storeCheckEligibility(
+        ClaimEligibilityRequest $request,
+        GetSecurityAuthorizationAction $getAccessToken,
+        CreateCheckEligibilityAction $createEligibility
+    ) {
+        $token = $getAccessToken->invoke();
 
-            if (!isset($token)) {
-                return response()->json(__('Error get security authorization access token'), 400);
-            }
+        if (empty($token) && true === $request->demographic_information['automatic_eligibility']) {
+            return response()->json(__('Error get security authorization access token'), 400);
         }
 
-        $rs = $this->claimRepository->storeCheckEligibility($token->access_token ?? '', $request->validated());
+        $rs = $createEligibility->invoke($token ?? '', $request->validated());
 
         return $rs ? response()->json($rs) : response()->json(__('Error claim eligibility'), 400);
     }
@@ -293,25 +301,6 @@ class ClaimController extends Controller
         $rs = $this->claimRepository->claimValidation($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error claim validation'), 400);
-    }
-
-    /**
-     * @param claimCreateRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function saveAsDraftAndEligibility(ClaimDraftRequest $request)
-    {
-        if (isset($request->claim_id)) {
-            $claim = Claim::find($request->claim_id);
-        } else {
-            $claim = $this->claimRepository->createClaim($request->validated());
-            if (!isset($claim)) {
-                return response()->json(__('Error save claim'), 400);
-            }
-        }
-
-        return $this->checkEligibility($claim->id);
     }
 
     /**
@@ -371,85 +360,6 @@ class ClaimController extends Controller
         return $claim ? response()->json($claim) : response()->json(__('Error save claim'), 400);
     }
 
-    public function showPreview(Request $request, ClaimPreviewService $preview)
-    {
-        $id = $request->id ?? null;
-        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
-        $data = new PreviewResource($claim);
-        $preview->setConfig([
-            'urlVerify' => 'www.google.com.ve',
-            'print' => $request->print ?? false,
-            'typeFormat' => $claim->format ?? null,
-            'data' => $data->toArray($request),
-        ]);
-        $preview->setHeader('');
-
-        return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
-            'pdf' => $preview,
-        ]))[1];
-    }
-
-    public function showReport(Request $request)
-    {
-        $pdf = new ReportRepository();
-        $id = $request->id ?? null;
-
-        $claim = Claim::with(['claimFormattable', 'insurancePolicies', 'claimFormattable'])->find($id);
-
-        if (isset($claim)) {
-            $insurancePolicies = [];
-
-            foreach ($claim->insurancePolicies ?? [] as $insurancePolicy) {
-                array_push($insurancePolicies, $insurancePolicy->id);
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'print' => $request->print ?? false,
-                'typeFormat' => $claim->format ?? null,
-                'patient_id' => $claim->patient_id ?? null,
-                'claim_form_services' => $claim->claimFormattable->claimFormServices ?? [],
-                'patient_or_insured_information' => $claim->claimFormattable->patientOrInsuredInformation ?? null,
-                'physician_or_supplier_information' => $claim->claimFormattable->physicianOrSupplierInformation ?? null,
-                'billing_company_id' => $claim->claimFormattable->billing_company_id ?? null,
-                'billing_provider_id' => $claim->billing_provider_id ?? null,
-                'service_provider_id' => $claim->service_provider_id ?? null,
-                'referred_id' => $claim->referred_id ?? null,
-                'company_id' => $claim->company_id ?? null,
-                'facility_id' => $claim->facility_id ?? null,
-                'insurance_policies' => $insurancePolicies ?? [],
-                'diagnoses' => $claim->diagnoses ?? [],
-            ]);
-        } else {
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $request->billing_company_id;
-            } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
-            }
-            $pdf->setConfig([
-                'urlVerify' => 'www.google.com.ve',
-                'print' => $request->print ?? false,
-                'typeFormat' => ('' != $request->format) ? $request->format : null,
-                'patient_id' => ('' != $request->patient_id) ? $request->patient_id : null,
-                'claim_form_services' => $request->claim_services ?? [],
-                'patient_or_insured_information' => $request->patient_or_insured_information ?? null,
-                'physician_or_supplier_information' => $request->physician_or_supplier_information ?? null,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                'billing_provider_id' => $request->billing_provider_id ?? null,
-                'service_provider_id' => $request->service_provider_id ?? null,
-                'referred_id' => $request->referred_id ?? null,
-                'company_id' => $request->company_id ?? null,
-                'facility_id' => $request->facility_id ?? null,
-                'insurance_policies' => $request->insurance_policies ?? [],
-                'diagnoses' => $request->diagnoses ?? [],
-            ]);
-        }
-        $pdf->setHeader('');
-
-        return explode("\n\r\n", $pdf->setBody('pdf.837P', true, [
-            'pdf' => $pdf,
-        ]))[1];
-    }
-
     /**
      * changeStatus.
      *
@@ -457,9 +367,12 @@ class ClaimController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function changeStatus(ClaimChangeStatusRequest $request, int $id): JsonResponse
-    {
-        $rs = $this->claimRepository->changeStatus($request->validated(), $id);
+    public function changeStatus(
+        ClaimChangeStatusRequest $request,
+        ChangeStatusAction $change,
+        Claim $claim
+    ): JsonResponse {
+        $rs = $change->invoke($claim, $request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, change claim status'), 400);
     }
@@ -481,11 +394,14 @@ class ClaimController extends Controller
      *
      * @method addNoteCurrentStatus
      */
-    public function addNoteCurrentStatus(Request $request, int $id): JsonResponse
-    {
-        $rs = $this->claimRepository->addNoteCurrentStatus($request, $id);
+    public function addNoteCurrentStatus(
+        CreateNoteRequest $request,
+        CreateNoteAction $create,
+        Claim $claim
+    ): JsonResponse {
+        $rs = $create->invoke($claim, $request->casted());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, change claim status'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error, create note in status claim'), 400);
     }
 
     /**

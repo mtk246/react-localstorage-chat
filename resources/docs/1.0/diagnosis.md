@@ -39,13 +39,19 @@
 {
     "code": "D1",
     "start_date": "2022-07-05",
+    "end_date": "2022-08-05", // Not required
     "description": "Description diagnosis 1",
-    "injury_date_required": true,
+    "injury_date_required": false, // Not required
+    "gender_id": 1, /*Not required */
+    "age": "15", // Not required
+    "age_end": "20", // Not required
+    "discriminatory_id": 1, // Not required
+    "description_long": "Long Description Example", // Not required
     "note": "Note diagnosis 1",
-    "type": 1, // type of preocedure
+    "type": 2, // type of preocedure
     "clasifications": {
-        "specific": 2, // not required
-        "sub_specific": 2 // not required
+        "general": 1, // not required
+        "specific": 1 // not required
     }
 }
 ```
@@ -73,7 +79,12 @@
     "end_date": null,
     "updated_at": "2022-06-20T07:53:23.000000Z",
     "created_at": "2022-06-20T07:53:23.000000Z",
-    "id": 72751
+    "id": 72751,
+    "gender": null,
+    "discriminatory": {
+        "id": 1,
+        "description": "Greater or equal",
+    }
 }
 ```
 
@@ -281,14 +292,18 @@
 ```json
 {
     "start_date": "2022-07-05",
-    "end_date": "2022-08-05",
+    "end_date": "2022-08-05", // Optional
     "description": "Description diagnosis 1 edited",
-    "injury_date_required": true,
-    "note": "Note diagnosis 1 edited",
-    "type": 1, // type of preocedure
+    "injury_date_required": true, // Optional
+    "description_long": "Descripcion larga", // Optional
+    "gender_id":1, // Optional
+    "age": "20", // Optional
+    "age_end": "23", // Optional
+    "discriminatory_id": 1, // Optional
+    "type": 2, // required
     "clasifications": {
-        "specific": 1, // not required
-        "sub_specific": 1 // not required
+        "general": 5, // Not required
+        "specific": 5 // Not required
     }
 }
 ```
@@ -324,7 +339,12 @@
     "end_date": "2022-08-05",
     "active": true,
     "created_at": "2022-06-20T07:53:23.000000Z",
-    "updated_at": "2022-06-20T08:04:59.000000Z"
+    "updated_at": "2022-06-20T08:04:59.000000Z",
+    "gender": null,
+    "discriminatory": {
+        "id": 1,
+        "description": "Greater or equal",
+    }
 }
 ```
 
@@ -358,8 +378,36 @@
 
 ## Response
 
-> {success} 204 Status changed
+> {success} 200 Status changed
+```json
+{
+    "active": true
+}
+```
 
+<a name="get-type"></a>
+## Get diagnosis type
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 
+
+```json
+[
+    {
+        "id": 2,
+        "name": "ICD-10"
+    }
+]
+```
 
 <a name="get-classification"></a>
 ## Get diagnosis classification types
@@ -374,8 +422,7 @@
 
 ## Param in path
 
-`specific optional <>`
-`sub_specific optional <specific>`
+`general optional <general>`
 
 
 ## Response
@@ -384,51 +431,37 @@
 
 ```json
 {
-  "type": [
-    {
-      "id": 1,
-      "name": "Category I Codes"
-    },
-    {
-      "id": 2,
-      "name": "Category II Codes"
-    },
-    {
-      "id": 3,
-      "name": "Category III Codes"
-    },
-    ...
-  ],
-  "specific": [ // null when general not passed
-    {
-      "id": 1,
-      "name": "Anesthesia"
-    },
-    {
-      "id": 2,
-      "name": "Surgery"
-    },
-    {
-      "id": 3,
-      "name": "Radiology Procedures"
-    },
-    ...
-  ],
-  "sub_specific": [ // null when general or specific not passed
-    {
-      "id": 1,
-      "name": "Anesthesia for Procedures on the Head"
-    },
-    {
-      "id": 2,
-      "name": "Anesthesia for Procedures on the Neck"
-    },
-    {
-      "id": 3,
-      "name": "Anesthesia for Procedures on the Thorax (Chest Wall and Shoulder Girdle)"
-    },
-    ...
-  ]
+    "general": [
+        {
+            "id": 1,
+            "color": "#FFFFFF",
+            "name": "Certain Infectious and Parasitic Diseases"
+        },
+        {
+            "id": 2,
+            "color": "#FF9B95",
+            "name": "Neoplasms"
+        },
+        {
+            "id": 3,
+            "color": "#980E04",
+            "name": "Disease of the blood and blood-forming organs and certain disorders involving the immune mechanism"
+        },
+    ],
+    "specific": [
+        {
+            "id": 1,
+            "name": "Acute upper respiratory infections"
+        },
+        {
+            "id": 2,
+            "name": "Influenza and pneumonia"
+        },
+        {
+            "id": 3,
+            "name": "Other acute lower respiratory infections"
+        },
+    ]
 }
 ```
 

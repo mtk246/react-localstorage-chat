@@ -6,6 +6,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\MultipleRecordsFoundException;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -16,15 +19,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string $npi
- * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
  * @property bool $is_provider
  * @property string|null $npi_company
- * @property int|null $health_professional_type_id
  * @property int|null $company_id
  * @property string|null $nppes_verified_at
+ * @property string|null $ein
+ * @property string|null $upin
+ * @property int|null $profile_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -32,17 +36,19 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
  * @property int|null $companies_count
  * @property \App\Models\Company|null $company
- * @property \Illuminate\Support\collection $companies_providers
+ * @property Collection $companies_providers
  * @property mixed $last_modified
  * @property mixed $status
+ * @property \App\Models\User|null $user
  * @property mixed $verified_on_nppes
- * @property \App\Models\HealthProfessionalType|null $healthProfessionalType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\HealthProfessionalType> $healthProfessionalType
+ * @property int|null $health_professional_type_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
+ * @property \App\Models\Profile|null $profile
  * @property \App\Models\PublicNote|null $publicNote
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
- * @property \App\Models\User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
@@ -51,25 +57,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereHealthProfessionalTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereEin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereIsProvider($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNpiCompany($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereNppesVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereProfileId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUserId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company> $companies
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
+ * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereUpin($value)
  *
  * @mixin \Eloquent
  */
@@ -86,7 +82,7 @@ class HealthProfessional extends Model implements Auditable
         'upin',
         'npi_company',
         'is_provider',
-        'user_id',
+        'profile_id',
         'company_id',
         'health_professional_type_id',
         'nppes_verified_at',
@@ -100,18 +96,27 @@ class HealthProfessional extends Model implements Auditable
     protected $appends = ['user', 'status', 'last_modified', 'companies_providers', 'verified_on_nppes'];
 
     /**
-     * HealthProfessional belongs to User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Patient belongs to user.
      */
-    public function user()
+    public function user(): HasOneThrough
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
-    public function getUserAttribute(): User
+    public function profile(): BelongsTo
     {
-        return $this->user()->sole();
+        return $this->belongsTo(Profile::class);
+    }
+
+    public function getUserAttribute(): ?User
+    {
+        $results = $this->user()->get();
+
+        if (($count = $results->count()) > 1) {
+            throw new MultipleRecordsFoundException($count);
+        }
+
+        return $results->first();
     }
 
     public function company()
@@ -258,12 +263,12 @@ class HealthProfessional extends Model implements Auditable
         return [
             'code' => $this->code,
             'npi' => $this->npi,
-            'user.full_name' => $this->user->profile->first_name.' '.$this->user->profile->last_name,
-            'user.first_name' => $this->user->profile->first_name,
-            'user.last_name' => $this->user->profile->last_name,
-            'user.email' => $this->user->email,
-            'user.ssn' => $this->user->profile->ssn,
-            'user.phone' => $this->user->profile->phone,
+            'user.full_name' => $this->profile->first_name.' '.$this->profile->last_name,
+            'user.first_name' => $this->profile->first_name,
+            'user.last_name' => $this->profile->last_name,
+            'user.email' => $this->user->email ?? null,
+            'user.ssn' => $this->profile->ssn,
+            'user.phone' => $this->profile->phone,
             'company.name' => $this->company?->name,
             'company.npi' => $this->company?->npi,
             'company.code' => $this->company?->code,

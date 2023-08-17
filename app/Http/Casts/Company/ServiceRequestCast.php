@@ -7,7 +7,6 @@ namespace App\Http\Casts\Company;
 use App\Http\Casts\CastsRequest;
 use App\Models\MacLocality;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 final class ServiceRequestCast extends CastsRequest
 {
@@ -25,18 +24,14 @@ final class ServiceRequestCast extends CastsRequest
             : null;
     }
 
-    public function getProcedureId(): ?int
+    public function getProcedureIds(): ?array
     {
-        return array_key_exists('procedure_id', $this->inputs)
-            ? $this->inputs['procedure_id']
-            : null;
+        return $this->get('procedure_ids');
     }
 
-    public function getModifierId(): ?int
+    public function getModifierIds(): ?array
     {
-        return array_key_exists('modifier_id', $this->inputs)
-            ? $this->inputs['modifier_id']
-            : null;
+        return $this->get('modifier_ids');
     }
 
     public function getPrice(): ?float
@@ -83,9 +78,7 @@ final class ServiceRequestCast extends CastsRequest
 
     public function getInsuranceLabelFeeId(): ?int
     {
-        return array_key_exists('insurance_label_fee_id', $this->inputs)
-            ? (int) $this->inputs['insurance_label_fee_id']
-            : null;
+        return $this->get('insurance_label_fee_id');
     }
 
     public function getPricePercentage(): ?int
@@ -102,16 +95,16 @@ final class ServiceRequestCast extends CastsRequest
             : null;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<TKey, TValue>
-     *
-     * @template TKey of array-key
-     * @template TValue of \App\Http\Requests\Models\Medicament
-     */
-    public function getMedications(): Collection
+    public function getMedicationApplication(): bool
     {
-        return collect($this->inputs['medications'] ?? [])
-            ->map(fn (array $item) => new MedicationRequestCast($item, $this->querys, $this->user));
+        return array_key_exists('medication_application', $this->inputs)
+            ? (bool) $this->inputs['medication_application']
+            : false;
+    }
+
+    public function getMedication(): MedicationRequestCast
+    {
+        return $this->cast('medication', MedicationRequestCast::class);
     }
 
     public function getMacLocality(): ?MacLocality

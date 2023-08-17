@@ -32,9 +32,9 @@ function middleRedactor($string, $char)
 
 if (!function_exists('generateNewCode')) {
     function generateNewCode(
-        ?string $prefix = null,
+        ?string $prefix,
         int $code_length,
-        ?string $suffix = null,
+        ?string $suffix,
         string $model,
         string $field = 'code',
     ): string {
@@ -193,5 +193,20 @@ if (!function_exists('array_empty')) {
         return empty(array_filter($array, function ($value) {
             return !empty($value);
         }));
+    }
+}
+
+if (!function_exists('array_filter_recursive')) {
+    function array_filter_recursive(array $array)
+    {
+        foreach ($array as &$value) {
+            if (is_array($value)) {
+                $value = array_filter_recursive($value);
+            }
+        }
+
+        return array_filter($array, function ($value) {
+            return !is_null($value) && '' !== $value && ([] !== $value || (is_array($value) && !array_empty($value)));
+        });
     }
 }

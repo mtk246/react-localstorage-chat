@@ -25,6 +25,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $date_of_birth
  * @property int|null $relationship_id
+ * @property int|null $name_suffix_id
+ * @property string|null $sex
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -33,6 +35,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $claim_eligibilities_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
  * @property int|null $contacts_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
+ * @property int|null $insurance_policies_count
+ * @property \App\Models\TypeCatalog|null $nameSuffix
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
  * @property \App\Models\TypeCatalog|null $relationship
@@ -46,22 +51,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereMemberId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereNameSuffixId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereRelationshipId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereSex($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereSsn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimEligibility> $claimEligibilities
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\InsurancePolicy> $insurancePolicies
- * @property int|null $insurance_policies_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  *
  * @mixin \Eloquent
  */

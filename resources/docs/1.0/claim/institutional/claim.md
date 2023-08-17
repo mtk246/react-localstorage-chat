@@ -72,88 +72,105 @@
 ```json
 {
     "billing_company_id": 1, /** Only by superuser */
-    "format": 2,
-    "type_of_medical_assistance": "inpatient", //outpatient
-    "validate": false,
-    "automatic_eligibility": false,
-    "company_id": 1,
-    "facility_id": 1,
-    "patient_id": 2,
-    "health_professional_qualifier": [
-        {
-            "field":76,
-            "health_professional_id": 1,
-            "qualifier_id": 1,
-        },
-        {
-            "field":77,
-            "health_professional_id": 1,
-            "qualifier_id": 1,
-        },
-        {
-            "field":78,
-            "health_professional_id": 1,
-            "qualifier_id": 1,
-        },
-        {
-            "field":79,
-            "health_professional_id": 1,
-            "qualifier_id": 1,
-        }
-    ],
-    "prior_authorization_number": "1234567890A",
-    "employment_related_condition": true,
-    "auto_accident_related_condition": true,
-    "auto_accident_place_state": "AS",
-    "other_accident_related_condition": true,
-    "accept_assignment": false,
-    "patient_signature": false,
-    "insured_signature": false,
-    "outside_lab": true,
-    
-    "diagnoses": [
-        {
-            "item": "A",
-            "diagnosis_id": 1,
-            "admission": true,
-            "poa": 1,
-        }
-    ],
-    "claim_services": [
-        {
-            "from_service": "2022-07-05",
-            "to_service": "2022-07-05",
-            "procedure_id": 11,
-            "revenue_code_id": 3,
-            "price": 200,
-            "units_of_service": 1.5,
-            "total_charge": 200,
-            "copay": 200,
-        }
-    ],
-    "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
-        "discharge_date":"2022-07-05",
-        "discharge_time": "07:05",
-        "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
-        "patient_status_id": 2,
-        "bill_classification_id": 2,
-        "diagnosis_related_group_id": 1,
-        "non_covered_charges": 20.15,
-        "claim_date_informations": [
+    "type": 1,
+    "draft": false,
+
+    "demographic_information": {
+        "validate": false,
+        "automatic_eligibility": false,
+        "type_of_medical_assistance": "inpatient", //outpatient
+        "company_id": 1,
+        "facility_id": 1,
+        "patient_id": 2,
+        "prior_authorization_number": "1234567890A",
+        "accept_assignment": false,
+        "patient_signature": false,
+        "insured_signature": false,
+        "outside_lab": true,
+        "charges": 200,
+        "employment_related_condition": true,
+        "auto_accident_related_condition": true,
+        "auto_accident_place_state": "AS",
+        "other_accident_related_condition": true,
+
+        "health_professional_qualifier": [ /** Only required by draft is false. Min(4) Max(4) */
             {
-                "field_id": 1,
-                "code_id": 1,
-                "from_date": "2022-07-05",
-                "to_date": "2022-07-05",
-                "through": "Lorem ipsum",
-                "amount": 200,
+                "field":76,
+                "health_professional_id": 1,
+                "qualifier_id": 1,
+            },
+            {
+                "field":77,
+                "health_professional_id": 1,
+                "qualifier_id": 1,
+            },
+            {
+                "field":78,
+                "health_professional_id": 1,
+                "qualifier_id": 1,
+            },
+            {
+                "field":79,
+                "health_professional_id": 1,
+                "qualifier_id": 1,
             }
         ],
     },
+
+    "claim_services": {
+        "diagnosis_related_group_id": 1,
+        "non_covered_charges": 200,
+        "diagnoses": [
+            {
+                "item": "A",
+                "diagnosis_id": 1,
+                "admission": true,
+                "poa": 1,
+            }
+        ],
+        "services": [
+            {
+                "id": "",
+                "from_service": "2022-07-05",
+                "to_service": "2022-07-05",
+                "procedure_id": 11,
+                "revenue_code_id": 11,
+                "price": 200,
+                "days_or_units": 1.5,
+                "total_charge": 200,
+                "copay": 200,
+            }
+        ],
+    },
+
+    "additional_information": {
+        "from": "2022-07-05",
+        "to": "2022-07-05",
+        "patient_information": {
+            "admission_date": "2022-07-05",
+            "admission_time": "07:05",
+            "discharge_date":"2022-07-05",
+            "discharge_time": "07:05",
+            "condition_code_ids": [1,2], /** Max(11) */
+            "admission_type_id": 1,
+            "admission_source_id": 2,
+            "patient_status_id": 2,
+            "bill_classification_id": 2,
+        },
+        "claim_date_informations": [
+            {
+                "id": "",
+                "field_id": 1,
+                "qualifier_id": 1,
+                "from_date": "2022-07-05",
+                "to_date": "2022-07-05",
+                "description": "Lorem ipsum",
+                "amount": 200,
+            }
+        ],
+        "extra_information": "",
+    },
+
     "insurance_policies": [
         {"insurance_policy_id": 8, "order": 1},
         {"insurance_policy_id": 10, "order": 2},
@@ -257,13 +274,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
@@ -396,13 +413,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
@@ -493,13 +510,13 @@
         }
     ],
     "additional_information": {
-        "admisison_date": "2022-07-05",
-        "admisison_time": "07:05",
+        "admission_date": "2022-07-05",
+        "admission_time": "07:05",
         "discharge_date":"2022-07-05",
         "discharge_time": "07:05",
         "condition_codes": [1,2],
-        "admisison_type_id": 1,
-        "admisison_source_id": 2,
+        "admission_type_id": 1,
+        "admission_source_id": 2,
         "patient_status_id": 2,
         "bill_classification_id": 2,
         "diagnosis_related_group_id": 1,
@@ -655,7 +672,7 @@
 
 ## Example path 1
 
-> {primary} /get-list-claim-field-informations?type=health-care-institutional
+> {primary} /get-list-claim-field-informations?type=healthcare-professional
 
 ## Example path 2
 

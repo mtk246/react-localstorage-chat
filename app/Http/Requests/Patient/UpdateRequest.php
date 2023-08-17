@@ -13,24 +13,13 @@ use Illuminate\Validation\Rule;
 class UpdateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        $id = $this->route('id');
-        $patient = Patient::find($id);
+        $patient = Patient::query()->find($this->route('id'));
 
         return [
             'billing_company_id' => [
@@ -40,15 +29,17 @@ class UpdateRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'driver_license' => ['nullable', 'string'],
+            'create_user' => ['required', 'boolean'],
 
             'profile' => ['required', 'array'],
-            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->user?->profile_id ?? null), 'nullable', 'string'],
+            'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],
             'profile.last_name' => ['required', 'string', 'max:20'],
             'profile.middle_name' => ['nullable', 'string', 'max:20'],
             'profile.name_suffix_id' => ['nullable', 'integer'],
             'profile.date_of_birth' => ['required', 'date'],
             'profile.sex' => ['required', 'string', 'max:1'],
+            'profile.deceased_date' => ['nullable', 'date'],
 
             'marital_status_id' => ['nullable', 'integer'],
             'marital' => [
@@ -72,7 +63,13 @@ class UpdateRequest extends FormRequest
             'contact.phone' => ['nullable', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', Rule::unique('users', 'email')->ignore($patient->user_id), 'string', 'email:rfc'],
+            'contact.email' => [
+                Rule::requiredIf(fn () => (bool) $this->input('create_user')),
+                'nullable',
+                Rule::unique('users', 'email')->ignore($patient->user?->id ?? null),
+                'string',
+                'email:rfc',
+            ],
 
             'addresses' => ['required', 'array'],
             'addresses.*.address_type_id' => ['required', 'integer'],
@@ -80,7 +77,9 @@ class UpdateRequest extends FormRequest
             'addresses.*.country' => ['required', 'string'],
             'addresses.*.city' => ['required', 'string'],
             'addresses.*.state' => ['required', 'string'],
-            'addresses.*.zip' => ['required', 'string'],
+            'addresses.*.zip' => ['required', 'string', 'regex:/^.{5}$|^.{9}$/'],
+            'addresses.*.apt_suite' => ['nullable', 'string'],
+            'addresses.*.main_address' => ['nullable', 'boolean'],
 
             'guarantor' => ['nullable', 'array'],
             'guarantor.name' => ['nullable', 'string'],

@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * App\Models\CustomShortcuts.
+ *
+ * @property Model|\Eloquent $billingCompany
+ * @property \App\Models\KeyboardShortcut $keyboardShortcut
+ * @property Model|\Eloquent $user
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomShortcuts newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomShortcuts newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CustomShortcuts query()
+ *
+ * @mixin \Eloquent
+ */
 final class CustomShortcuts extends Model
 {
     /** @var string[] */

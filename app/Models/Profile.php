@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -25,13 +26,23 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property bool $credit_score
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $name_suffix_id
+ * @property string|null $deceased_date
+ * @property string|null $language
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
+ * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contact> $contacts
+ * @property int|null $contacts_count
+ * @property bool $deceased
+ * @property \App\Models\TypeCatalog|null $name_suffix
+ * @property \App\Models\TypeCatalog|null $nameSuffix
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
  * @property int|null $social_medias_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $user
- * @property int|null $user_count
+ * @property \App\Models\User|null $user
  *
+ * @method static \Database\Factories\ProfileFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Profile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Profile newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Profile query()
@@ -39,20 +50,16 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereCreditScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDateOfBirth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDeceasedDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereMiddleName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereNameSuffixId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereSex($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereSsn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $user
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\SocialMedia> $socialMedias
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $user
  *
  * @mixin \Eloquent
  */
@@ -71,15 +78,23 @@ final class Profile extends Model implements Auditable
         'avatar',
         'credit_score',
         'name_suffix_id',
+        'deceased_date',
+        'language',
     ];
 
     protected $appends = [
         'name_suffix',
+        'deceased',
     ];
 
     public function getNameSuffixAttribute(): ?TypeCatalog
     {
         return $this->nameSuffix()->first();
+    }
+
+    public function getDeceasedAttribute(): bool
+    {
+        return isset($this->deceased_date);
     }
 
     /**
@@ -108,6 +123,16 @@ final class Profile extends Model implements Auditable
     public function socialMedias()
     {
         return $this->hasMany(SocialMedia::class);
+    }
+
+    public function contacts(): MorphMany
+    {
+        return $this->morphMany(Contact::class, 'contactable');
+    }
+
+    public function addresses(): MorphMany
+    {
+        return $this->morphMany(Address::class, 'addressable');
     }
 
     /**

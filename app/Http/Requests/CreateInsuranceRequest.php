@@ -45,13 +45,14 @@ class CreateInsuranceRequest extends FormRequest
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.zip' => ['required', 'string'],
-            'address.country' => ['nullable', 'string'],
+            'address.country' => ['required', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
 
-            'contact' => ['required', 'array'],
+            'contact' => ['nullable', 'array'],
             'contact.phone' => ['required', 'string'],
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
-            'contact.email' => ['required', 'email:rfc'],
+            'contact.email' => ['nullable', 'email:rfc'],
             'contact.contact_name' => ['nullable', 'string'],
 
             'billing_incomplete_reasons' => ['nullable', 'array'],

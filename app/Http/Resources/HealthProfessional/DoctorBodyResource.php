@@ -37,6 +37,7 @@ final class DoctorBodyResource extends JsonResource
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies,
             'public_note' => $this->resource->publicNote,
+            'profile' => $this->profile,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $type = $this->getHealthProfessionalType($model->id);
@@ -61,7 +62,6 @@ final class DoctorBodyResource extends JsonResource
     private function getSocialMedias(int $billingCompanyId): Collection
     {
         return $this->resource
-            ->user
             ->profile
             ->socialMedias
             ->filter(
@@ -72,7 +72,7 @@ final class DoctorBodyResource extends JsonResource
     private function getAddress(int $billingCompanyId)
     {
         return $this->resource
-            ->user
+            ->profile
             ->addresses
             ->first(
                 fn ($address) => $address->billing_company_id === $billingCompanyId,
@@ -82,7 +82,7 @@ final class DoctorBodyResource extends JsonResource
     private function getContact(int $billingCompanyId)
     {
         return $this->resource
-            ->user
+            ->profile
             ->contacts
             ->filter(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
@@ -127,7 +127,9 @@ final class DoctorBodyResource extends JsonResource
                 'nickname' => $company->nicknames->filter(
                     fn ($nickname) => $nickname->billing_company_id === $billingCompanyId,
                 )[0]->nickname ?? '',
-                'taxonomies' => $company->taxonomies ?? [],
+                'taxonomies' => $company->taxonomies()->wherePivot(
+                    'billing_company_id', '=', $billingCompanyId
+                )->get() ?? [],
             ]
             : null;
     }

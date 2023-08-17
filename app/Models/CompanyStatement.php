@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\Company\ApplyToType;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -26,6 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property array|null $apply_to_ids
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\Company $company
  * @property \App\Models\TypeCatalog|null $rule
  * @property \App\Models\TypeCatalog|null $when
@@ -43,10 +42,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyStatement whereWhenId($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \App\Models\BillingCompany $billingCompany
  *
  * @mixin \Eloquent
  */
@@ -111,6 +106,6 @@ class CompanyStatement extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'apply_to_ids' => AsEnumCollection::class.':'.ApplyToType::class,
+        'apply_to_ids' => 'array',
     ];
 }

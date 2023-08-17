@@ -13,28 +13,13 @@ use OwenIt\Auditing\Contracts\Auditable;
 /**
  * App\Models\ClaimFormICodeAmount.
  *
- * @property int $id
- * @property string $code
- * @property string $amount
- * @property int $claim_form_i_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\ClaimFormI $claimFormI
+ * @property \App\Models\ClaimFormI|null $claimFormI
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount query()
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereClaimFormIId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimFormICodeAmount whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  *
  * @mixin \Eloquent
  */

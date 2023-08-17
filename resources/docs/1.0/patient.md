@@ -73,7 +73,10 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "driver_license": "Driver License", /** Optional */
+    "deceased": false,
+    "create_user": false,
     "profile": {
+        "deceased_date": "2005-10-10",
         "ssn":"237891812", /** Optional */
         "first_name":"Fisrt Name", /** Required */
         "last_name":"Last Name", /** Required */
@@ -114,7 +117,9 @@
             "address": "Direction address", /** Required */
             "city": "city address", /** Required */
             "state": "state address", /** Required */
-            "zip": "123456789" /** Required */
+            "zip": "123456789", /** Required */
+            "apt_suite": "",
+            "main_address": false /** Optional */
         }
     ],
     "guarantor": {
@@ -854,6 +859,7 @@
 {
     "billing_company_id": 1, /** Only required by superuser */
     "driver_license": "Driver License", /** Optional */
+    "deceased": true,
     "profile": {
         "ssn":"237891812", /** Optional */
         "first_name":"Fisrt Name", /** Required */

@@ -40,7 +40,7 @@ class CompanyRepository
                 $company->update([
                     'name' => $data['name'],
                     'ein' => $data['ein'] ?? null,
-                    'upin' => $data['upin'] ?? null,
+                    'other_name' => $data['other_name'] ?? null,
                     'clia' => $data['clia'] ?? null,
                 ]);
             } else {
@@ -49,7 +49,7 @@ class CompanyRepository
                     'name' => $data['name'],
                     'npi' => $data['npi'],
                     'ein' => $data['ein'] ?? null,
-                    'upin' => $data['upin'] ?? null,
+                    'other_name' => $data['other_name'] ?? null,
                     'clia' => $data['clia'] ?? null,
                 ]);
             }
@@ -70,7 +70,13 @@ class CompanyRepository
             }
 
             /* Attach billing company */
-            $company->billingCompanies()->attach($billingCompany->id ?? $billingCompany);
+            $company->billingCompanies()->attach(
+                $billingCompany->id ?? $billingCompany,
+                [
+                    'miscellaneous' => $data['miscellaneous'] ?? null,
+                    'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                ]
+            );
 
             if (isset($data['nickname'])) {
                 EntityNickname::create([
@@ -111,29 +117,6 @@ class CompanyRepository
                 $data['contact']['contactable_id'] = $company->id;
                 $data['contact']['contactable_type'] = Company::class;
                 Contact::create($data['contact']);
-            }
-
-            if (isset($data['statements'])) {
-                foreach ($data['statements'] as $statement) {
-                    CompanyStatement::create([
-                        'start_date' => $statement['start_date'] ?? null,
-                        'end_date' => $statement['end_date'] ?? null,
-                        'rule_id' => $statement['rule_id'] ?? null,
-                        'when_id' => $statement['when_id'] ?? null,
-                        'apply_to_ids' => $statement['apply_to_ids'] ?? null,
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ]);
-                }
-            }
-            if (isset($data['exception_insurance_companies'])) {
-                foreach ($data['exception_insurance_companies'] as $exceptionIC) {
-                    ExceptionInsuranceCompany::create([
-                        'company_id' => $company->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                        'insurance_company_id' => $exceptionIC,
-                    ]);
-                }
             }
 
             if (isset($data['private_note'])) {
@@ -193,14 +176,11 @@ class CompanyRepository
                     ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
                 );
 
-                return array_reduce($companies, function ($resultado, $object) {
-                    $resultado[] = [
-                        'id' => $object['id'],
-                        'name' => $object['name'],
-                        'name_batch' => ('' != $object['abbreviation']) ? ($object['abbreviation'].'-'.date('Ymd')) : '',
-                    ];
+                return array_reduce($companies, function ($result, $item) {
+                    $item['name_batch'] = ('' != $item['abbreviation']) ? ($item['abbreviation'].'-'.date('Ymd')) : '';
+                    $result[] = $item;
 
-                    return $resultado;
+                    return $result;
                 }, []);
             } else {
                 if (isset($request->except_ids)) {
@@ -211,7 +191,9 @@ class CompanyRepository
                     Company::class,
                     ['name'],
                     ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
-                    $except_ids ?? null
+                    $except_ids ?? null,
+                    [],
+                    ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
                 );
             }
         } catch (\Exception $e) {
@@ -271,7 +253,7 @@ class CompanyRepository
             $edit = $request->edit ?? 'false';
 
             if (is_null($companyId)) {
-                return getList(BillingCompany::class, 'name', ['status' => true]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
             } else {
                 $ids = [];
                 $billingCompanies = Company::find($companyId)->billingCompanies;
@@ -279,9 +261,9 @@ class CompanyRepository
                     array_push($ids, $field->id);
                 }
                 if ('true' == $edit) {
-                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'companies', 'whereHas' => ['relationship' => 'companies', 'where' => ['company_id' => $companyId]]]);
+                    return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'exists' => 'companies', 'whereHas' => ['relationship' => 'companies', 'where' => ['company_id' => $companyId]]]);
                 } else {
-                    return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'companies', 'orWhereHas' => ['relationship' => 'companies', 'where' => ['billing_company_id', $ids]]]);
+                    return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'companies', 'orWhereHas' => ['relationship' => 'companies', 'where' => ['billing_company_id', $ids]]]);
                 }
             }
         } catch (\Exception $e) {
@@ -328,6 +310,7 @@ class CompanyRepository
                 'addresses',
                 'contacts',
                 'nicknames',
+                'abbreviations',
                 'billingCompanies',
             ]);
         } else {
@@ -341,6 +324,9 @@ class CompanyRepository
                 $query->where('billing_company_id', $bC);
             },
             'nicknames' => function ($query) use ($bC) {
+                $query->where('billing_company_id', $bC);
+            },
+            'abbreviations' => function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             },
             'billingCompanies' => function ($query) use ($bC) {
@@ -446,10 +432,9 @@ class CompanyRepository
             array_push($facilityFields, [
                 'billing_company_id' => $facility->pivot->billing_company_id,
                 'facility_id' => $facility->id,
-                'facility_type_id' => $facility->facility_type_id,
                 'billing_company' => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name ?? null,
                 'facility' => $facility->name,
-                'facility_type' => $facility->facilityType->type,
+                'facility_types' => $facility->facilityTypes ?? [],
             ]);
         }
 
@@ -859,6 +844,7 @@ class CompanyRepository
                         ->take(1)
                         ->pluck('id')
                         ->toArray();
+
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
                 ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
@@ -867,12 +853,17 @@ class CompanyRepository
                 ->toArray();
 
             if (empty($billingCompanies)) {
-                //return ['result' => false];
-                return !is_null($company) ? $company : null;
+                return ['result' => false];
             }
         }
-        //return !is_null($company) ? ['data' => $company, 'result' => true] : null;
-        return null;
+
+        return !is_null($company)
+            ?
+                [
+                    'data' => $company,
+                    'result' => true,
+                ]
+            : null;
     }
 
     /**
@@ -956,10 +947,9 @@ class CompanyRepository
             array_push($records, [
                 'billing_company_id' => $facility->pivot->billing_company_id,
                 'facility_id' => $facility->id,
-                'facility_type_id' => $facility->facility_type_id,
                 'billing_company' => $facility->billingCompanies()->find($facility->pivot->billing_company_id)->name ?? '',
                 'facility' => $facility->name,
-                'facility_type' => $facility->facilityType->type,
+                'facility_types' => $facility->facilityTypes ?? [],
             ]);
         }
 

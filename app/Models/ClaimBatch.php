@@ -44,6 +44,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimBatchStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimsReconciled($value)
@@ -55,13 +56,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claim> $claims
  *
  * @mixin \Eloquent
  */

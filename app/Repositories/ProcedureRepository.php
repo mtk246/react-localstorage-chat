@@ -196,7 +196,7 @@ class ProcedureRepository
     {
         $procedure = Procedure::whereId($id)->with([
             'publicNote',
-            'procedureCosiderations' => function($query) {
+            'procedureCosiderations' => function ($query) {
                 $query->with([
                     'gender',
                     'discriminatory',
@@ -433,12 +433,12 @@ class ProcedureRepository
                 'note' => $note,
             ]);
         },
-        function (Builder $query) use ($procedure): void {
-            $query->where([
-                'publishable_type' => Procedure::class,
-                'publishable_id' => $procedure->id,
-            ])->delete();
-        });
+            function (Builder $query) use ($procedure): void {
+                $query->where([
+                    'publishable_type' => Procedure::class,
+                    'publishable_id' => $procedure->id,
+                ])->delete();
+            });
 
         return $procedure->load(['publicNote']);
     }
@@ -639,9 +639,9 @@ class ProcedureRepository
                 }
             } else {
                 return Procedure::query()
-                    ->when(('' !== $search), function ($query) use ($search, $company_id) {
+                    ->when('' !== $search, function ($query) use ($search, $company_id) {
                         $query->where(function ($query) use ($search, $company_id) {
-                            $query->whereHas('companies', function ($query) use ($company_id) {
+                            $query->whereHas('companyServices', function ($query) use ($company_id) {
                                 $query->where('company_id', $company_id);
                             })->where('code', 'like', "%$search%");
                         })
@@ -651,27 +651,26 @@ class ProcedureRepository
                                 ->where('code', 'like', "%$search%F");
                         });
                     }, function ($query) use ($company_id) {
-                        $query->whereHas('companies', function ($query) use ($company_id) {
+                        $query->whereHas('companyServices', function ($query) use ($company_id) {
                             $query->where('company_id', $company_id);
                         });
                     })
-                    ->with(['companies' => function ($query) use ($company_id) {
-                        $query->where('company_id', $company_id)
-                            ->select('company_id', 'procedure_id', 'price');
-                    }])->get()
-                    ->sortByDesc(function ($procedure) use ($company_id) {
-                        $company = $procedure->companies->firstWhere('company_id', $company_id);
-                        return $company ? $company->pivot->price : 0;
-                    })
+                    ->with(['companyServices' => function ($query) use ($company_id) {
+                        $query->where('company_id', $company_id);
+                    }])
+                    ->get()
                     ->map(function ($procedure) use ($company_id) {
                         return [
                             'id' => $procedure->id,
                             'name' => $procedure->code,
                             'description' => $procedure->description,
-                            'price' => $procedure->companies
-                                ->firstWhere('company_id', $company_id)?->pivot->price ?? 0,
+                            'price' => (float) $procedure->companyServices
+                                ->firstWhere('company_id', $company_id)?->price ?? 0,
                         ];
-                    });
+                    })
+                    ->sortByDesc('price')
+                    ->values()
+                    ->toArray();
             }
         } catch (\Exception $e) {
             return [];

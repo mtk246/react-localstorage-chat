@@ -14,7 +14,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\PublicNote.
  *
  * @property int $id
- * @property string $note
+ * @property string|null $note
  * @property string $publishable_type
  * @property int $publishable_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -22,6 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property mixed $last_modified
+ * @property Model|\Eloquent $publishable
  *
  * @method static \Illuminate\Database\Eloquent\Builder|PublicNote newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PublicNote newQuery()
@@ -32,10 +33,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|PublicNote wherePublishableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PublicNote wherePublishableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PublicNote whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property Model|\Eloquent $publishable
  *
  * @mixin \Eloquent
  */

@@ -10,7 +10,8 @@ use App\Http\Casts\Company\ServiceRequestCast;
 use App\Http\Resources\Company\ServiceResource;
 use App\Models\BillingCompany;
 use App\Models\Company;
-use App\Models\CompanyProcedure;
+use App\Models\CompanyService;
+use App\Models\Medication;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,46 +29,60 @@ final class AddServices
             $this->syncServices($company, $services, $billingCompany?->id);
 
             $services->each(fn (ServiceRequestCast $service) => tap(
-                CompanyProcedure::updateOrCreate([
+                CompanyService::updateOrCreate([
                     'id' => $service->getId(),
                     'company_id' => $company->id,
                     'billing_company_id' => $service->getBillingCompanyId() ?? $billingCompany->id,
                 ], [
-                    'procedure_id' => $service->getProcedureId(),
                     'mac_locality_id' => $service->getMacLocality()?->id,
                     'price' => $service->getPrice(),
                     'price_percentage' => $service->getPricePercentage(),
-                    'modifier_id' => $service->getModifierId(),
                     'insurance_label_fee_id' => $service->getInsuranceLabelFeeId(),
                     'clia' => $service->getClia(),
                 ]),
-                fn (CompanyProcedure $cProcedure) => $this->setMedications(
-                    $cProcedure,
-                    $service->getMedications(),
-                )
+                function (CompanyService $cService) use ($service): void {
+                    $cService->procedures()->sync($service->getProcedureIds());
+                    $cService->modifiers()->sync($service->getModifierIds());
+                    if ($service->getMedicationApplication()) {
+                        $this->setMedication(
+                            $cService,
+                            $service->getMedication()
+                        );
+                    } else {
+                        $cService->medication()->delete();
+                    }
+                }
             ));
 
-            $procedures = CompanyProcedure::query()
+            $services = CompanyService::query()
                 ->where('company_id', $company->id)
                 ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompany): void {
                     $query->where('billing_company_id', $billingCompany->id);
                 })
                 ->get();
 
-            return ServiceResource::collection($procedures);
+            return ServiceResource::collection($services);
         });
     }
 
     private function syncServices(Company $company, collection $services, ?int $billingCompanyId): void
     {
-        CompanyProcedure::query()
+        $companyServices = CompanyService::query()
             ->where('company_id', $company->id)
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompanyId): void {
                 $query->where('billing_company_id', $billingCompanyId);
             })
             ->whereNotIn('id', $services->map(fn (ServiceRequestCast $services) => $services->getId())
-                ->toArray())
-            ->delete();
+                ->toArray());
+
+        $companyServices
+            ->get()
+            ->each(function (CompanyService $companyService) {
+                $companyService->procedures()->detach();
+                $companyService->modifiers()->detach();
+            });
+
+        $companyServices->delete();
     }
 
     /** @todo move to model */
@@ -82,27 +97,21 @@ final class AddServices
         return $billingCompany;
     }
 
-    private function setMedications(CompanyProcedure $cProcedure, Collection $medications): void
+    private function setMedication(CompanyService $cService, MedicationRequestCast $medication): void
     {
-        $cProcedure->medications()
-            ->whereNotIn(
-                'id',
-                $medications->map(fn (MedicationRequestCast $medication) => $medication->getId())
-                    ->toArray(),
-            )
-            ->delete();
-
-        $medications->each(
-            fn (MedicationRequestCast $medication) => $cProcedure->medications()->updateOrCreate(
-                ['id' => $medication->getId()],
-                [
-                    'date' => $medication->getDate(),
-                    'drug_code' => $medication->getDrugCode(),
-                    'batch' => $medication->getBatch(),
-                    'quantity' => $medication->getQuantity(),
-                    'frequency' => $medication->getFrequency(),
-                ],
-            )
+        Medication::query()->updateOrCreate(
+            ['company_service_id' => $cService->id],
+            [
+                'drug_code' => $medication->getDrugCode(),
+                'measurement_unit_id' => $medication->getMeasurementUnitId(),
+                'units' => $medication->getUnits(),
+                'units_limit' => $medication->getUnitsLimit(),
+                'link_sequence_number' => $medication->getLinkSequenceNumber(),
+                'pharmacy_prescription_number' => $medication->getPharmacyPrescriptionNumber(),
+                'repackaged_NDC' => $medication->getRepackagedNDC(),
+                'code_NDC' => $medication->getCodeNDC(),
+                'note' => $medication->getNote(),
+            ],
         );
     }
 }

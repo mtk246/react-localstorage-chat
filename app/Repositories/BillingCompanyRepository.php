@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Requests\ImgBillingCompanyRequest;
 use App\Models\Address;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\MembershipRole;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,22 +27,34 @@ final class BillingCompanyRepository
         }
 
         $company = BillingCompany::create([
+            'tax_id' => $data['tax_id'],
             'name' => $data['name'],
             'abbreviation' => strtoupper($data['abbreviation'] ?? ''),
             'code' => generateNewCode(getPrefix($data['name']), 5, date('Y'), BillingCompany::class, 'code'),
             'logo' => $pathNameFile ?? '',
+            'status' => true
         ]);
+
+        collect(config('memberships.default_roles'))
+            ->map(function (array $role) use ($company) {
+                $role['billing_company_id'] = $company->id;
+
+                return $role;
+            })
+            ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
 
         if (isset($data['address']['address'])) {
             $data['address']['billing_company_id'] = $company->id;
             $data['address']['addressable_id'] = $company->id;
             $data['address']['addressable_type'] = BillingCompany::class;
+            $data['address']['apt_suite'] = $data['address']['apt_suite'] ?? null;
             Address::create($data['address']);
         }
         if (isset($data['contact']['email'])) {
             $data['contact']['billing_company_id'] = $company->id;
             $data['contact']['contactable_id'] = $company->id;
             $data['contact']['contactable_type'] = BillingCompany::class;
+            $data['contact']['contact_name'] = $data['contact']['contact_name'] ?? null;
             Contact::create($data['contact']);
         }
 
@@ -56,6 +69,7 @@ final class BillingCompanyRepository
         $billingCompany = BillingCompany::find($id);
         if (isset($billingCompany)) {
             $billingCompany->update([
+                'tax_id' => $data['tax_id'],
                 'name' => $data['name'],
                 'abbreviation' => $data['abbreviation'] ?? '',
             ]);
@@ -64,6 +78,7 @@ final class BillingCompanyRepository
                 $data['address']['billing_company_id'] = $id;
                 $data['address']['addressable_id'] = $billingCompany->id;
                 $data['address']['addressable_type'] = BillingCompany::class;
+                $data['address']['apt_suite'] = $data['address']['apt_suite'] ?? null;
                 $address = Address::updateOrCreate([
                     'billing_company_id' => $billingCompany->id,
                     'addressable_id' => $billingCompany->id,
@@ -74,6 +89,7 @@ final class BillingCompanyRepository
                 $data['contact']['billing_company_id'] = $id;
                 $data['contact']['contactable_id'] = $billingCompany->id;
                 $data['contact']['contactable_type'] = BillingCompany::class;
+                $data['contact_name'] = $data['contact']['contact_name'] ?? null;
                 $contact = Contact::updateOrCreate([
                     'billing_company_id' => $billingCompany->id,
                     'contactable_id' => $billingCompany->id,

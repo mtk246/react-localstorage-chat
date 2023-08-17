@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\User\Recovery;
+use App\Actions\User\StoreUserAction;
+use App\Actions\User\UpdateUserAction;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
@@ -100,9 +102,9 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function createUser(UserCreateRequest $request): JsonResponse
+    public function createUser(UserCreateRequest $request, StoreUserAction $storeUser): JsonResponse
     {
-        $rs = $this->userRepository->create($request->validated());
+        $rs = $storeUser->invoke($request->casted());
 
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating user'), 400);
     }
@@ -245,12 +247,9 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * @param null $id
-     */
-    public function editUser(EditUserRequest $request, $id): JsonResponse
+    public function editUser(EditUserRequest $request, UpdateUserAction $updateUser, User $user): JsonResponse
     {
-        $rs = $this->userRepository->editUser($request->validated(), $id);
+        $rs = $updateUser->invoke($request->casted(), $user);
 
         return $rs ? response()->json($rs) : response()->json(__('Error updating user'), 400);
     }
@@ -273,9 +272,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getAllUsers(Request $request): JsonResponse
     {
         $rs = $this->userRepository->getAllUsers();
@@ -283,17 +279,14 @@ class UserController extends Controller
         return response()->json($rs);
     }
 
-    /**
-     * @param Illuminate\Http\Request $request
-     */
     public function getServerAllUsers(Request $request): JsonResponse
     {
-        return $this->userRepository->getServerAllUsers($request);
+        return response()->json($this->userRepository->getServerAllUsers($request));
     }
 
-    public function getOneUser(Request $request, int $id): JsonResponse
+    public function getOneUser(Request $request, User $user): JsonResponse
     {
-        $rs = $this->userRepository->getOneUser($id);
+        $rs = $this->userRepository->getOneUser($user);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
     }
@@ -390,7 +383,7 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->search($request);
 
-        return ($rs) ? response()->json($rs) : response()->json(__('Error, user not found'), 404);
+        return ($rs) ? response()->json($rs) : response()->json(__('Error, User already exists for this email'), 403);
     }
 
     public function updateLang(Request $request)

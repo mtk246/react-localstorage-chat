@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Resources\User\UserResource;
 use App\Mail\GenerateNewPassword;
 use App\Mail\SendEmailChangePassword;
 use App\Mail\SendEmailRecoveryPassword;
@@ -24,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use phpDocumentor\Reflection\Types\Resource_;
 
 class UserRepository
 {
@@ -93,8 +95,8 @@ class UserRepository
             ]);
 
             /* Attach billing company */
-            if (isset($data['company-billing'])) {
-                $user->billingCompanies()->attach($data['company-billing']);
+            if (isset($data['billing_company_id'])) {
+                $user->billingCompanies()->attach($data['billing_company_id']);
             }
 
             /* Attach Role and permission */
@@ -116,14 +118,14 @@ class UserRepository
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $user->id;
                 $data['contact']['contactable_type'] = User::class;
-                $data['contact']['billing_company_id'] = $data['company-billing'] ?? null;
+                $data['contact']['billing_company_id'] = $data['billing_company_id'] ?? null;
                 Contact::create($data['contact']);
             }
 
             if (isset($data['address'])) {
                 $data['address']['addressable_id'] = $user->id;
                 $data['address']['addressable_type'] = User::class;
-                $data['address']['billing_company_id'] = $data['company-billing'] ?? null;
+                $data['address']['billing_company_id'] = $data['billing_company_id'] ?? null;
                 Address::create($data['address']);
             }
 
@@ -142,7 +144,7 @@ class UserRepository
 
             DB::commit();
 
-            return $user;
+            return new UserResource($user);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -190,19 +192,19 @@ class UserRepository
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         }
 
-        return is_null($users) ? null : $users;
+        return UserResource::collection($users);
     }
 
     public function getServerAllUsers(Request $request)
     {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $data = User::with([
+            $data = User::query()->with([
                 'profile',
                 'roles',
             ]);
         } else {
-            $data = User::whereHas('billingCompanies', function ($query) use ($bC) {
+            $data = User::query()->whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             })->with([
                 'profile',
@@ -230,11 +232,7 @@ class UserRepository
 
         $data = $data->paginate($request->itemsPerPage);
 
-        return response()->json([
-            'data' => $data->items(),
-            'numberOfPages' => $data->lastPage(),
-            'count' => $data->total(),
-        ], 200);
+        return UserResource::collection($data)->resource;
     }
 
     /**
@@ -329,7 +327,11 @@ class UserRepository
      */
     public function editUser(array $data, int $id)
     {
-        $user = User::find($id);
+        $user = User::query()->find($id);
+        if (is_null($user)) {
+            return null;
+        }
+
         $profile = $user->profile;
         /* Create Profile */
         $profile->update([
@@ -381,8 +383,8 @@ class UserRepository
         ]);
 
         /* Attach billing company */
-        if (isset($data['company-billing'])) {
-            $user->billingCompanies()->sync($data['company-billing']);
+        if (isset($data['billing_company_id'])) {
+            $user->billingCompanies()->sync($data['billing_company_id']);
         }
 
         $user->detachAllPermissions();
@@ -406,7 +408,7 @@ class UserRepository
 
         if (isset($data['contact'])) {
             $data['contact']['email'] = $data['email'];
-            $data['contact']['billing_company_id'] = $data['company-billing'] ?? null;
+            $data['contact']['billing_company_id'] = $data['billing_company_id'] ?? null;
             Contact::updateOrCreate([
                 'contactable_id' => $user->id,
                 'contactable_type' => User::class,
@@ -414,14 +416,14 @@ class UserRepository
         }
 
         if (isset($data['address'])) {
-            $data['address']['billing_company_id'] = $data['company-billing'] ?? null;
+            $data['address']['billing_company_id'] = $data['billing_company_id'] ?? null;
             Address::updateOrCreate([
                 'addressable_id' => $user->id,
                 'addressable_type' => User::class,
             ], $data['address']);
         }
 
-        return $user->refresh()->load('profile');
+        return  new UserResource($user->refresh()->load('profile'));
     }
 
     /**
@@ -432,39 +434,37 @@ class UserRepository
         return User::whereId($id)->update(['status' => $status]);
     }
 
-    /**
-     * @return User|Builder|Model|object|null
-     */
-    public function getOneUser(int $id)
+    public function getOneUser(User $user)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
+        $bC = $user->billing_company_id ?? null;
+
         if (!$bC) {
-            $user = User::whereId($id)->with([
+            $user = $user->load([
                 'profile' => function ($query) {
-                    $query->with('socialMedias');
+                    $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
                 'roles',
-                'addresses',
-                'contacts',
                 'billingCompanies',
-            ])->first();
+            ]);
         } else {
-            $user = User::whereId($id)->with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
+            $user = $user = $user->load([
+                'profile' => function ($query) use ($bC) {
+                    $query->with([
+                        'socialMedias',
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
                 },
                 'roles',
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
                 'billingCompanies',
-            ])->first();
+            ]);
         }
 
-        return is_null($user) ? null : $user;
+        return new UserResource($user);
     }
 
     public function updateImgProfile(ImgProfileRequest $request): string
@@ -655,21 +655,23 @@ class UserRepository
 
         $bC = Gate::check('is-admin') ? $billing_company_id : auth()->user()->billing_company_id;
         $user = User::with([
-            'profile' => function ($query) {
-                $query->with('socialMedias');
+            'profile' => function ($query) use ($bC) {
+                $query->with([
+                    'socialMedias',
+                    'addresses' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                    'contacts' => function ($query) use ($bC) {
+                        if (!empty($bC)) {
+                            $query->where('billing_company_id', $bC);
+                        }
+                    },
+                ]);
             },
             'roles',
             'billingCompanies',
-            'addresses' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
-            'contacts' => function ($query) use ($bC) {
-                if (!empty($bC)) {
-                    $query->where('billing_company_id', $bC);
-                }
-            },
         ])->whereHas('profile', function ($query) use ($ssn) {
             $query->where('ssn', $ssn)
                 ->orWhere('ssn', str_replace('-', '', $ssn ?? ''));
@@ -684,53 +686,42 @@ class UserRepository
 
     public function search(Request $request)
     {
-        $date_of_birth = $request->date_of_birth ?? '';
-        $first_name = upperCaseWords($request->first_name ?? '');
-        $last_name = upperCaseWords($request->last_name ?? '');
-        $ssn = $request->ssn ?? '';
-        $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
+        $email = $request->get('email');
 
         $bC = auth()->user()->billing_company_id ?? null;
 
-        if (!$bC) {
-            $users = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses',
-                'contacts',
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->where('ssn', 'LIKE', "%{$ssn}")
-                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-            })->get();
-        } else {
-            $users = User::with([
-                'profile' => function ($query) {
-                    $query->with('socialMedias');
-                },
-                'roles',
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'billingCompanies',
-            ])->whereHas('profile', function ($query) use ($ssn, $ssnFormated, $date_of_birth, $first_name, $last_name) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->where('ssn', 'LIKE', "%{$ssn}")
-                    ->orWhere('ssn', 'LIKE', "%{$ssnFormated}");
-            })->get();
+        if (User::query()->where('email', $email)->whereHas('roles', function(Builder $query) {
+                        $query->whereNot('level', 4);
+        })->exists()) {
+            return null;
         }
 
-        return (0 == count($users)) ? null : $users;
+        if (!$bC) {
+            $profile = Profile::query()
+                ->with(['user', 'socialMedias', 'addresses', 'contacts'])
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
+                ->get();
+        } else {
+            $profile = Profile::query()
+                ->with([
+                    'user',
+                    'socialMedias',
+                    'addresses' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    },
+                    'contacts' => function ($query) use ($bC) {
+                        $query->where('billing_company_id', $bC);
+                    }
+                ])
+                ->whereHas('contacts', function (Builder $query) use ($email) {
+                    $query->where('email', $email);
+                })
+                ->get();
+        }
+
+        return $profile;
     }
 
     public function updateLang(string $lang)
