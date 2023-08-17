@@ -17,11 +17,11 @@ final class FacilityResource extends JsonResource
             return 'MAILING' == $address->address_purpose;
         });
 
-        if ('public' == $this->resource['type']) {
+        if ( $this->resource['type'] == 'public') {
             return $this->getPublicData($address);
         }
 
-        if ('api' == $this->resource['type']) {
+        if ($this->resource['type'] == 'api') {
             return $this->getApiData($address);
         }
     }
