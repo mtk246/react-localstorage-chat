@@ -264,10 +264,9 @@ final class FileDictionary extends Dictionary
     protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
     {
         return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
-            'first_name' => ', '.$policy->subscribers->first()?->{$key} ?? null,
             'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
             default => $policy->subscribers->first()?->{$key} ?? null,
-        } ?? $this->getPatientProfileAttribute($key))
+        } ?? str_replace(', ', '', $this->getPatientProfileAttribute($key)))
         ->pad(3, '');
     }
 

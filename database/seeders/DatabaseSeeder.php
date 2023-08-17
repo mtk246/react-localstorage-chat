@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $this->call([
+        $callGroup = [
             RoleSeeder::class,
             PermissionSeeder::class,
             FacilityTypeSeeder::class,
@@ -34,12 +34,17 @@ class DatabaseSeeder extends Seeder
             AddressTypeSeeder::class,
             KeyboardShortcutSeeder::class,
             CountrySubdivisionSeeder::class,
-            DataTestSeeder::class,
             UserSeeder::class,
             ProcedureSeeder::class,
             BillClassificationSeeder::class,
             ConditionCodeSeeder::class,
             DiagnosisRelatedGroupSeeder::class,
-        ]);
+        ];
+
+        if ('production' !== env('APP_ENV', 'local')) {
+            $callGroup[] = DataTestSeeder::class;
+        }
+
+        $this->call($callGroup);
     }
 }
