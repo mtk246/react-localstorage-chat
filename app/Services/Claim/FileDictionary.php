@@ -317,7 +317,7 @@ final class FileDictionary extends Dictionary
                     'procedure_description' => substr($claimService->procedure->description, 0, 30),
                     'procedure_short_description' => $claimService->procedure->short_description,
                     'procedure_code' => $claimService->procedure->code,
-                    'procedure_start_date' => Carbon::createFromFormat('Y-m-d', $claimService->procedure->start_date)
+                    'start_date' => Carbon::createFromFormat('Y-m-d', $claimService->from_service)
                         ->format('mdY'),
                     'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
                         ? Money::parse($claimService->claimService->non_covered_charges)->formatByDecimal()
@@ -374,7 +374,9 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimServicesTotalAttribute(): string
     {
-        return Money::parse($this->claim->service->services->sum('price'))->formatByDecimal();
+        return $this->claim->service->services->reduce(function (Money $carry, Services $ammount) {
+            return $carry->add(Money::parse($ammount->price));
+        }, Money::parse('000'))->formatByDecimal();
     }
 
     protected function getClaimServicesTotalKeyAttribute(string $key): Collection
