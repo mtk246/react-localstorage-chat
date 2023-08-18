@@ -14,6 +14,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -23,13 +24,15 @@ return [
     ],
     '1b' => [
         'type' => RuleType::MULTIPLE->value,
-        'length' => 30,
+        'glue' => ' ',
         'value' => [
             'companyAddress:address|0',
+            'companyAddress:apt_suite|0',
         ],
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -50,6 +53,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -68,6 +72,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyContact:phone_fax|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
@@ -85,6 +90,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -94,13 +100,15 @@ return [
     ],
     '2b' => [
         'type' => RuleType::MULTIPLE->value,
-        'length' => 30,
+        'glue' => ' ',
         'value' => [
             'companyAddress:address|3',
+            'companyAddress:apt_suite|3',
         ],
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -121,6 +129,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -130,6 +139,7 @@ return [
     ],
     '2d' => [
         'type' => RuleType::MULTIPLE->value,
+        'glue' => ' ',
         'value' => [
             'companyAddress:other_country|3',
             'companyContact:phone_fax|3',
@@ -137,6 +147,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyContact:phone_fax|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
@@ -1396,6 +1407,54 @@ return [
                 'healthProfessional:qualifier|76',
                 'healthProfessional:first_name|76',
                 'healthProfessional:last_name|76',
+            ],
+        ],
+    ],
+    '77a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
             ],
         ],
     ],
