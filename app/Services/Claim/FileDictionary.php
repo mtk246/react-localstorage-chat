@@ -338,7 +338,7 @@ final class FileDictionary extends Dictionary
             'type' => $diagnosisDx?->type->getCode(),
             'code_poa' => $diagnosisDx?->code
                 .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
-                    ? ($diagnosisDx->pivot->poa)
+                    ? ' '.($diagnosisDx->pivot->poa)
                     : ''),
             'cond_code' => 'inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? $diagnosisDx?->code
