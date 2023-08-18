@@ -128,8 +128,8 @@ final class JSONDictionary extends Dictionary
                     'city' => $subscriberAddress?->city,
                     'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? null,
                     'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? null,
-                    'countryCode' => $subscriberAddress?->country,
-                    'countrySubDivisionCode' => $subscriberAddress?->country_subdivision_code,
+                    'countryCode' => ('US' === $subscriberAddress?->country) ? $subscriberAddress?->country : '',
+                    'countrySubDivisionCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country_subdivision_code : '',
                 ],
             ],
         };
@@ -266,22 +266,159 @@ final class JSONDictionary extends Dictionary
             foreach ($service->diagnostic_pointers as $point) {
                 array_push($valuesPoint, $pointers[$point]);
             }
-            array_push($serviceLines, [
-                'serviceDate' => str_replace('-', '', $service->from_service),
-                'serviceDateEnd' => !empty($service->to_service)
-                    ? str_replace('-', '', $service->to_service)
-                    : null,
-                'professionalService' => [
-                    'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
-                    'lineItemChargeAmount' => str_replace(',', '', $service->price),
-                    'procedureCode' => $service->procedure->code,
-                    'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
-                    'serviceUnitCount' => $service->days_or_units ?? '1',
-                    'compositeDiagnosisCodePointers' => [
-                        'diagnosisCodePointers' => $valuesPoint ?? [],
+            $serviceLine = match ($this->claim->type) {
+                ClaimType::PROFESSIONAL => [
+                    'serviceDate' => str_replace('-', '', $service->from_service),
+                    'serviceDateEnd' => !empty($service->to_service)
+                        ? str_replace('-', '', $service->to_service)
+                        : null,
+                    'professionalService' => [
+                        'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
+                        'lineItemChargeAmount' => str_replace(',', '', $service->price),
+                        'procedureCode' => $service->procedure->code,
+                        'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
+                        'serviceUnitCount' => $service->days_or_units ?? '1',
+                        'compositeDiagnosisCodePointers' => [
+                            'diagnosisCodePointers' => $valuesPoint ?? [],
+                        ],
                     ],
                 ],
-            ]);
+                ClaimType::INSTITUTIONAL => [
+                    'renderingProvider' => [
+                        'providerType' => 'BillingProvider',
+                        'address' => [
+                            'address1' => '000 address1',
+                            'address2' => '',
+                            'city' => 'city1',
+                            'state' => 'tn',
+                            'postalCode' => '372030000',
+                            'countryCode' => '',
+                            'countrySubDivisionCode' => '',
+                        ],
+                        'contactInformation' => [
+                            'name' => 'janetwo doetwo',
+                            'phoneNumber' => '0000000001',
+                            'faxNumber' => '0000000002',
+                            'email' => 'email@email.com',
+                            'validContact' => true,
+                        ],
+                        'referenceIdentification' => [
+                            [
+                                'qualifier' => '',
+                                'identifier' => '',
+                            ],
+                        ],
+                        'npi' => '1760854442',
+                        'secondaryIdentificationQualifierCode' => '0B',
+                        'secondaryIdentifier' => '',
+                        'employerId' => '',
+                        'taxonomyCode' => '',
+                        'firstName' => 'johntwo',
+                        'lastName' => 'doetwo',
+                        'middleName' => 'middletwo',
+                        'suffix' => '',
+                        'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
+                    ],
+                    'referringProvider' => [
+                        'providerType' => 'BillingProvider',
+                        'address' => [
+                            'address1' => '000 address1',
+                            'address2' => '',
+                            'city' => 'city1',
+                            'state' => 'tn',
+                            'postalCode' => '372030000',
+                            'countryCode' => '',
+                            'countrySubDivisionCode' => '',
+                        ],
+                        'contactInformation' => [
+                            'name' => 'janetwo doetwo',
+                            'phoneNumber' => '0000000001',
+                            'faxNumber' => '0000000002',
+                            'email' => 'email@email.com',
+                            'validContact' => true,
+                        ],
+                        'referenceIdentification' => [
+                            [
+                                'qualifier' => '',
+                                'identifier' => '',
+                            ],
+                        ],
+                        'npi' => '1760854442',
+                        'secondaryIdentificationQualifierCode' => '0B',
+                        'secondaryIdentifier' => '',
+                        'employerId' => '',
+                        'taxonomyCode' => '',
+                        'firstName' => 'johntwo',
+                        'lastName' => 'doetwo',
+                        'middleName' => 'middletwo',
+                        'suffix' => '',
+                        'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
+                    ],
+                    'lineSupplementInformation' => [
+                        'priorAuthorizationNumber' => '',
+                        'referralNumber' => '',
+                        'claimControlNumber' => '',
+                        'repricedClaimNumber' => '',
+                        'investigationalDeviceExemptionNumber' => '',
+                        'claimNumber' => '',
+                        'medicalRecordNumber' => '',
+                        'demoProjectIdentifier' => '',
+                        'serviceAuthorizationExceptionCode' => '1',
+                        'autoAccidentState' => '',
+                        'peerReviewAuthorizationNumber' => '',
+                        'adjustedRepricedClaimRefNumber' => '',
+                    ],
+                    'institutionalService' => [
+                        'procedureModifiers' => $service?->modifiers->map(fn ($mod) => $mod?->modifier)?->toArray(),
+                        'measurementUnit' => 'UN',
+                        'serviceLineRevenueCode' => '',
+                        'procedureIdentifier' => 'HC',
+                        'procedureCode' => $service->procedure->code,
+                        'description' => $service->procedure?->description,
+                        'lineItemChargeAmount' => str_replace(',', '', $service->price),
+                        'serviceUnitCount' => $service->days_or_units ?? '1',
+                        'nonCoveredChargeAmount' => '',
+                    ],
+                    'drugIdentification' => [
+                        'measurementUnitCode' => 'F2',
+                        'nationalDrugCode' => '',
+                        'nationalDrugUnitCount' => '',
+                        'linkSequenceNumber' => '',
+                        'pharmacyPrescriptionNumber' => '',
+                    ],
+                    'operatingPhysician' => [
+                        'organizationName' => '',
+                        'identificationQualifierCode' => '0B',
+                        'secondaryIdentifier' => '',
+                        'firstName' => '',
+                        'lastName' => '',
+                        'middleName' => '',
+                        'suffix' => '',
+                        'npi' => '',
+                    ],
+                    /*'otherOperatingPhysician' => [
+                        'organizationName' => '',
+                        'identificationQualifierCode' => '0B',
+                        'secondaryIdentifier' => '',
+                        'firstName' => '',
+                        'lastName' => '',
+                        'middleName' => '',
+                        'suffix' => '',
+                        'npi' => '',
+                    ],*/
+                    'assignedNumber' => $service->id,
+                    'serviceDate' => '',
+                    'serviceDateEnd' => '',
+                    'serviceTaxAmount' => '',
+                    'facilityTaxAmount' => '',
+                    'lineItemControlNumber' => '',
+                    'repricedLineItemReferenceNumber' => '',
+                    'description' => '',
+                    'adjustedRepricedLineItemReferenceNumber' => '',
+                    'lineNoteText' => '',
+                ]
+            };
+            array_push($serviceLines, $serviceLine);
         }
 
         return match ($this->claim->type) {
@@ -432,8 +569,12 @@ final class JSONDictionary extends Dictionary
                         'city' => $this->getFacilityAddressAttribute('city', '1'),
                         'state' => $this->getFacilityAddressAttribute('state', '1'),
                         'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
-                        'countryCode' => $this->getFacilityAddressAttribute('country', '1'),
-                        'countrySubDivisionCode' => $this->getFacilityAddressAttribute('country_subdivision_code', '1'),
+                        'countryCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                            ? $this->getFacilityAddressAttribute('country', '1')
+                            : '',
+                        'countrySubDivisionCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                            ? $this->getFacilityAddressAttribute('country_subdivision_code', '1')
+                            : '',
                     ],
                     'npi' => $this->getFacilityAttribute('npi'),
                     /**'secondaryIdentifier' => [
@@ -1122,8 +1263,8 @@ final class JSONDictionary extends Dictionary
                 ],*/
                 'claimDateInformation' => [
                     'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 3),
-                    'statementBeginDate' => str_replace('-', '', $this->claim->from ?? ''),
-                    'statementEndDate' => str_replace('-', '', $this->claim->to ?? ''),
+                    'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
+                    'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
                     'dischargeHour' => str_replace('-', '', $this->claim->patientInformation->discharge_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 3),
                     'repricerReceivedDate' => Carbon::now()->format('Ymd'),
                 ],
@@ -1193,12 +1334,12 @@ final class JSONDictionary extends Dictionary
                 ],
                 'principalProcedureInformation' => isset($claimServiceLinePrincipal)
                     ? [
-                        'qualifierCode' => null /* 'BBR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades, 'BR' Códigos de procedimiento principal de modificación clínica de la clasificación internacional de enfermedades 'CAH' Códigos de conceptos avanzados de facturación (ABC). */,
+                        'qualifierCode' => 'BBR',
                         'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
                         'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal->from_service),
                     ]
                     : null,
-                'otherProcedureInformationList' => [
+                /*'otherProcedureInformationList' => [
                     $this->claim->service->services
                         ->skip(1)
                         ->map(fn ($service, $index) => [
@@ -1206,7 +1347,7 @@ final class JSONDictionary extends Dictionary
                             'otherProcedureCode' => $service->procedure?->code,
                             'otherProcedureDate' => str_replace('-', '', $service->from_service),
                         ])->toArray(),
-                ],
+                ],*/
                 'occurrenceSpanInformations' => [
                     [
                         [
@@ -1244,7 +1385,7 @@ final class JSONDictionary extends Dictionary
                         ],
                     ],
                 ],
-                'claimPricingInformation' => [
+                /*'claimPricingInformation' => [
                     'pricingMethodologyCode' => '00',
                     'repricedAllowedAmount' => '',
                     'repricedSavingAmount' => '',
@@ -1260,7 +1401,7 @@ final class JSONDictionary extends Dictionary
                     'exceptionCode' => '1',
                     'productOrServiceIDQualifier' => 'ER',
                     'repricedApprovedHCPCSCode' => '',
-                ],
+                ],*/
                 'serviceFacilityLocation' => [
                     'address' => [
                         'address1' => $this->getFacilityAddressAttribute('address', '1'),
@@ -1268,8 +1409,12 @@ final class JSONDictionary extends Dictionary
                         'city' => $this->getFacilityAddressAttribute('city', '1'),
                         'state' => $this->getFacilityAddressAttribute('state', '1'),
                         'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
-                        'countryCode' => $this->getFacilityAddressAttribute('country', '1'),
-                        'countrySubDivisionCode' => $this->getFacilityAddressAttribute('country_subdivision_code', '1'),
+                        'countryCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                            ? $this->getFacilityAddressAttribute('country', '1')
+                            : '',
+                        'countrySubDivisionCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                            ? $this->getFacilityAddressAttribute('country_subdivision_code', '1')
+                            : '',
                     ],
                     'organizationName' => $this->getFacilityAttribute('name'),
                     // 'secondaryIdentificationQualifierCode' => '0B',
@@ -1767,8 +1912,12 @@ final class JSONDictionary extends Dictionary
                 'city' => $billingProviderAddress?->city,
                 'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                'countryCode' => $billingProviderAddress?->country,
-                'countrySubDivisionCode' => $billingProviderAddress?->country_subdivision_code,
+                'countryCode' => ('US' !== $billingProviderAddress?->country)
+                    ? $billingProviderAddress?->country
+                    : '',
+                'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
+                    ? $billingProviderAddress?->country_subdivision_code
+                    : '',
             ],
             'contactInformation' => [
                 'name' => $billingProviderContact->contact_name ?? $billingProvider->name,
