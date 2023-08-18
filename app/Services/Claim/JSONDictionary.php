@@ -128,7 +128,7 @@ final class JSONDictionary extends Dictionary
                     'city' => $subscriberAddress?->city,
                     'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? null,
                     'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? null,
-                    'countryCode' => ('US' === $subscriberAddress?->country) ? $subscriberAddress?->country : '',
+                    'countryCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country : '',
                     'countrySubDivisionCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country_subdivision_code : '',
                 ],
             ],
@@ -284,7 +284,7 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],
                 ClaimType::INSTITUTIONAL => [
-                    'renderingProvider' => [
+                    /*'renderingProvider' => [
                         'providerType' => 'BillingProvider',
                         'address' => [
                             'address1' => '000 address1',
@@ -353,7 +353,7 @@ final class JSONDictionary extends Dictionary
                         'middleName' => 'middletwo',
                         'suffix' => '',
                         'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                    ],
+                    ],*/
                     'lineSupplementInformation' => [
                         'priorAuthorizationNumber' => '',
                         'referralNumber' => '',
@@ -369,9 +369,9 @@ final class JSONDictionary extends Dictionary
                         'adjustedRepricedClaimRefNumber' => '',
                     ],
                     'institutionalService' => [
-                        'procedureModifiers' => $service?->modifiers->map(fn ($mod) => $mod?->modifier)?->toArray(),
+                        'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
                         'measurementUnit' => 'UN',
-                        'serviceLineRevenueCode' => '',
+                        'serviceLineRevenueCode' => $service->revenueCode->code,
                         'procedureIdentifier' => 'HC',
                         'procedureCode' => $service->procedure->code,
                         'description' => $service->procedure?->description,
@@ -379,7 +379,7 @@ final class JSONDictionary extends Dictionary
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
                     ],
-                    'drugIdentification' => [
+                    /*'drugIdentification' => [
                         'measurementUnitCode' => 'F2',
                         'nationalDrugCode' => '',
                         'nationalDrugUnitCount' => '',
@@ -395,7 +395,7 @@ final class JSONDictionary extends Dictionary
                         'middleName' => '',
                         'suffix' => '',
                         'npi' => '',
-                    ],
+                    ],*/
                     /*'otherOperatingPhysician' => [
                         'organizationName' => '',
                         'identificationQualifierCode' => '0B',
