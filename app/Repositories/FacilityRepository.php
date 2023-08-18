@@ -454,7 +454,7 @@ class FacilityRepository
         }
 
         if (!is_null($facility)) {
-            $taxonomies = $facility->taxonomies;
+            $taxonomies = $facility->taxonomies()->distinct('taxonomy_id')->get();
 
             $record = [
                 'id' => $facility->id,
