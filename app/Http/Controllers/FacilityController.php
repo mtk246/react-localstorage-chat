@@ -147,7 +147,7 @@ class FacilityController extends Controller
     public function getBillClassifiations(FacilityType $facilityType)
     {
         return response()->json(
-            BillClassificationResource::collection($facilityType->bill_classifications()->distinct('name')->get())
+            BillClassificationResource::collection($facilityType->billClasifications()->distinct('name')->get())
         );
     }
 }
