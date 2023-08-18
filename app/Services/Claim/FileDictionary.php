@@ -53,7 +53,7 @@ final class FileDictionary extends Dictionary
                 ->company
                 ->addresses
                 ->where('address_type_id', (int) $entry)
-                ->count() > 1
+                ->count() >= 1
                     ? (int) $entry
                     : 1
             )
@@ -64,7 +64,7 @@ final class FileDictionary extends Dictionary
             'city' => substr($value?->{$key} ?? '', 0, 30),
             'state' => substr($value?->{$key} ?? '', 0, 2),
             'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
-            'other_country' => 'US' != $value?->country
+            'other_country' => $value?->country && 'US' != $value?->country
                 ? $value?->country
                 : '',
             default => $value?->{$key} ?? '',
@@ -81,8 +81,8 @@ final class FileDictionary extends Dictionary
 
         return match ($key) {
             'code_area' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
-            'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
-            'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 3, 10)),
+            'phone' => str_replace('-', '', substr($value?->phone ?? '', 0, 10)),
+            'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 0, 10)),
             default => (string) $value?->{$key} ?? '',
         };
     }
