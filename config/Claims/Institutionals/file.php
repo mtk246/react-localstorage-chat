@@ -1021,7 +1021,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1035,7 +1035,7 @@ return [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
                 'claimServices:procedure_short_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1049,7 +1049,7 @@ return [
                 'claimServices:revenue_code',
                 'claimServices:procedure_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1057,12 +1057,12 @@ return [
     ],
     '45' => [
         'type' => RuleType::SINGLE_ARRAY->value,
-        'value' => 'claimServices:procedure_start_date',
+        'value' => 'claimServices:start_date',
         'values' => [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1075,7 +1075,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1088,7 +1088,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1101,7 +1101,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
