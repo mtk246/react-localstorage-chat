@@ -1458,4 +1458,100 @@ return [
             ],
         ],
     ],
+    '78a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '79a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
 ];
