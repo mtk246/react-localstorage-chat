@@ -102,7 +102,7 @@ final class ServiceRequestCast extends CastsRequest
             : false;
     }
 
-    public function getMedication(): MedicationRequestCast
+    public function getMedication(): ?MedicationRequestCast
     {
         return $this->cast('medication', MedicationRequestCast::class);
     }
