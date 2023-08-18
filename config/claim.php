@@ -6938,142 +6938,136 @@ return [
                 'y' => 242,
             ],
         ],
-        '77' => [
-            'NPI' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 152,
-                    'y' => 247,
-                ],
-            ],
-            'QUALIFIER' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 188,
-                    'y' => 247,
-                ],
-            ],
-            'FIRST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 181,
-                    'y' => 251,
-                ],
-            ],
-            'LAST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 136,
-                    'y' => 251,
-                ],
+        '77a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 152,
+                'y' => 247,
             ],
         ],
-        '78' => [
-            'NPI' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 152,
-                    'y' => 255.5,
-                ],
-            ],
-            'QUALIFIER' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 188,
-                    'y' => 255.5,
-                ],
-            ],
-            'FIRST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 181,
-                    'y' => 259.5,
-                ],
-            ],
-            'LAST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 136,
-                    'y' => 259.5,
-                ],
+        '77b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 188,
+                'y' => 247,
             ],
         ],
-        '79' => [
-            'NPI' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 152,
-                    'y' => 264,
-                ],
+        '77c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 181,
+                'y' => 251,
             ],
-            'QUALIFIER' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 188,
-                    'y' => 264,
-                ],
+        ],
+        '77d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 136,
+                'y' => 251,
             ],
-            'FIRST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 181,
-                    'y' => 268,
-                ],
+        ],
+        '78a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 152,
+                'y' => 255.5,
             ],
-            'LAST' => [
-                'properties' => [
-                    'fontFamily' => 'helvetica',
-                    'fontSize' => '10px',
-                    'align' => 'L',
-                    'w' => 70,
-                    'h' => 10,
-                    'x' => 136,
-                    'y' => 268,
-                ],
+        ],
+        '78b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 188,
+                'y' => 255.5,
+            ],
+        ],
+        '78c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 181,
+                'y' => 259.5,
+            ],
+        ],
+        '78d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 136,
+                'y' => 259.5,
+            ],
+        ],
+        '79a' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 152,
+                'y' => 264,
+            ],
+        ],
+        '79b' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 188,
+                'y' => 264,
+            ],
+        ],
+        '79c' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 181,
+                'y' => 268,
+            ],
+        ],
+        '79d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '10px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 136,
+                'y' => 268,
             ],
         ],
         '80' => [
