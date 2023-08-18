@@ -14,6 +14,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -23,13 +24,15 @@ return [
     ],
     '1b' => [
         'type' => RuleType::MULTIPLE->value,
-        'length' => 30,
+        'glue' => ' ',
         'value' => [
             'companyAddress:address|0',
+            'companyAddress:apt_suite|0',
         ],
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -50,6 +53,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
                 'companyAddress:state|0',
@@ -68,6 +72,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|0',
                 'companyContact:phone_fax|0',
                 'companyAddress:address|0',
                 'companyAddress:city|0',
@@ -85,6 +90,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -94,13 +100,15 @@ return [
     ],
     '2b' => [
         'type' => RuleType::MULTIPLE->value,
-        'length' => 30,
+        'glue' => ' ',
         'value' => [
             'companyAddress:address|3',
+            'companyAddress:apt_suite|3',
         ],
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -121,6 +129,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
                 'companyAddress:state|3',
@@ -130,6 +139,7 @@ return [
     ],
     '2d' => [
         'type' => RuleType::MULTIPLE->value,
+        'glue' => ' ',
         'value' => [
             'companyAddress:other_country|3',
             'companyContact:phone_fax|3',
@@ -137,6 +147,7 @@ return [
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
+                'companyAddress:apt_suite|3',
                 'companyContact:phone_fax|3',
                 'companyAddress:address|3',
                 'companyAddress:city|3',
@@ -1010,7 +1021,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1024,7 +1035,7 @@ return [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
                 'claimServices:procedure_short_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1038,7 +1049,7 @@ return [
                 'claimServices:revenue_code',
                 'claimServices:procedure_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1046,12 +1057,12 @@ return [
     ],
     '45' => [
         'type' => RuleType::SINGLE_ARRAY->value,
-        'value' => 'claimServices:procedure_start_date',
+        'value' => 'claimServices:start_date',
         'values' => [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1064,7 +1075,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1077,7 +1088,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1090,7 +1101,7 @@ return [
             'common' => [
                 'claimServices:revenue_code',
                 'claimServices:procedure_description',
-                'claimServices:procedure_start_date',
+                'claimServices:start_date',
                 'claimServices:price',
                 'claimServices:days_or_units',
             ],
@@ -1396,6 +1407,150 @@ return [
                 'healthProfessional:qualifier|76',
                 'healthProfessional:first_name|76',
                 'healthProfessional:last_name|76',
+            ],
+        ],
+    ],
+    '77a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '77d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|77',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|77',
+                'healthProfessional:qualifier|77',
+                'healthProfessional:first_name|77',
+                'healthProfessional:last_name|77',
+            ],
+        ],
+    ],
+    '78a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '78d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|78',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|78',
+                'healthProfessional:qualifier|78',
+                'healthProfessional:first_name|78',
+                'healthProfessional:last_name|78',
+            ],
+        ],
+    ],
+    '79a' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:npi|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79b' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:qualifier|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79c' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:first_name|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
+            ],
+        ],
+    ],
+    '79d' => [
+        'type' => RuleType::SINGLE->value,
+        'value' => 'healthProfessional:last_name|79',
+        'values' => [
+            'common' => [
+                'healthProfessional:npi|79',
+                'healthProfessional:qualifier|79',
+                'healthProfessional:first_name|79',
+                'healthProfessional:last_name|79',
             ],
         ],
     ],
