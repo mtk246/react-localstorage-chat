@@ -17,7 +17,7 @@ definitions:
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
-          - php artisan test -p --coverage --configuration phpunit.xml --min=$COVERAGE_MIN
+          - ./vendor/bin/phpunit -p --coverage --configuration phpunit.xml --min=$COVERAGE_MIN
         services:
           - pgsql
         caches:
