@@ -24,7 +24,7 @@ RUN apt-get update \
     php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
     php8.0-intl php8.0-readline php8.0-pcov \
     php8.0-msgpack php8.0-igbinary php8.0-ldap \
-    php8.0-redis php8.0-swoole php8.0-xdebug \
+    php8.0-redis php8.0-swoole \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /usr/share/keyrings/pgdg.gpg >/dev/null \
     && echo "deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
@@ -38,6 +38,22 @@ RUN apt-get update \
 RUN update-alternatives --set php /usr/bin/php8.0
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
+
+ARG XDEBUG
+ARG XDEBUG_PORT
+RUN if [ "${XDEBUG}" = 'true' ] ; then \
+    apt-get update \
+    && apt-get install -y php8.0-xdebug \
+    && echo "[XDebug]" > /etc/php/8.0/cli/php.ini \
+    && echo "zend_extension="$(find /usr/lib/php/20200930/ -name xdebug.so)" > /etc/php/8.0/cli/php.ini" \
+    && echo "xdebug.mode = debug" >> /etc/php/8.0/cli/php.ini \
+    && echo "xdebug.discover_client_host = true" >> /etc/php/8.0/cli/php.ini \
+    && echo "xdebug.client_host = host.docker.internal" >> /etc/php/8.0/cli/php.ini \
+    && echo "xdebug.client_port = ${XDEBUG_PORT}" >> /etc/php/8.0/cli/php.ini \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ;\
+    fi;
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
