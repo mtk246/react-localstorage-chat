@@ -12,7 +12,11 @@ definitions:
     - step: &testin-app
         name: Testing app
         script:
-          - pecl install php8.2-xdebug && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
+          - pecl install php8.2-xdebug && echo "zend_extension=$(find /usr/local/lib/php/20200930/ -name xdebug.so)" > /etc/php/8.2/cli/php.ini
+          - echo "xdebug.mode = debug,coverage" >> /etc/php/8.2/cli/php.ini
+          - echo "xdebug.discover_client_host = true" >> /etc/php/8.2/cli/php.ini
+          - echo "xdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php
+          - echo "xdebug.client_port = ${XDEBUG_PORT}" >> /etc/php/8.2/cli/php.ini
           - ln -f -s .env.testing .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
