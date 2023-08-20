@@ -16,7 +16,7 @@ definitions:
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
-          - php artisan test
+          - php artisan test -p --coverage --min=$COVERAGE_MIN
         services:
           - pgsql
         caches:
@@ -52,9 +52,8 @@ pipelines:
               - step: *testin-app
               - step: *syntax-test
       - step:
-          name: Run Deployment Trigger
-          script:
-            - echo "no deployment trigger set"
+          <<: *deploy-forge
+          deployment: Production
       - step:
           name: Test success deployment
           deployment: staging
