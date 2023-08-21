@@ -18,7 +18,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\TypeCatalog|null $admissionType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \App\Models\TypeCatalog|null $billClassification
+ * @property \App\Models\TypeCatalog $billClassification
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimDateInformation> $claimDateInformations
  * @property int|null $claim_date_informations_count
  * @property \App\Models\ClaimFormP|null $claimFormP
