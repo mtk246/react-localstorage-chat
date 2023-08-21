@@ -184,7 +184,7 @@ class Modifier extends Model implements Auditable
     }
 
     /**
-     * Set default value to upper string
+     * Set default value to upper string.
      */
     protected function modifier(): Attribute
     {
