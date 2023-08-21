@@ -13,34 +13,36 @@ definitions:
   steps:
     - build: &build
         name: Build app
+        caches:
+          - composer
+          - vendor
         script:
           - ln -f -s .env.example .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
           - XDEBUG_MODE=coverage
+    - step: &testin-app
+        name: Testing app
         caches:
           - composer
           - vendor
-    - step: &testin-app
-        name: Testing app
         script:
           ## - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
         services:
           - pgsql
-        caches:
-          - composer
     - step: &syntax-test
         name: syntax test
+        caches:
+          - composer
+          - vendor
         script:
           - ln -f -s .env.example .env
           - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
           ## - ./vendor/bin/phpcs
           ## - ./vendor/bin/pstan
-        caches:
-          - composer
     - step: &deploy-forge
           name: Run Forge Quik Deployment
           deployment: Test
@@ -51,6 +53,9 @@ pipelines:
   default:
       - stage:
           name: Test app
+          caches:
+            - composer
+            - vendor
           steps:
               - step: *build
               - step: *testin-app
