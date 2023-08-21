@@ -3,11 +3,6 @@ image: composer:2.5.8
 definitions:
   caches:
     vendor: vendor
-    env:
-      key:
-        files:
-          - .env
-      path: ~/
   services:
     pgsql:
       image: postgres:13-alpine
@@ -21,20 +16,17 @@ definitions:
         caches:
           - composer
           - vendor
-          - env
         script:
           - ln -f -s .env.example .env
           - composer install --ignore-platform-reqs
-          - php artisan key:generate
-          - php artisan jwt:secret
-          - XDEBUG_MODE=debug,coverage
     - step: &testin-app
         name: Testing app
         caches:
           - composer
           - vendor
-          - env
         script:
+          - ln -f -s .env.example .env
+          - XDEBUG_MODE=debug,coverage
           - php artisan test -p --min=$COVERAGE_MIN --configuration phpunit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
         services:
           - pgsql
@@ -43,10 +35,8 @@ definitions:
         caches:
           - composer
           - vendor
-          - env
         script:
           - ln -f -s .env.example .env
-          - composer install --ignore-platform-reqs
           - ./vendor/bin/pint --test
           ## - ./vendor/bin/phpcs
           ## - ./vendor/bin/pstan
