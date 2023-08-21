@@ -1,4 +1,4 @@
-image: composer:2.5.5
+image: composer:2.5.8
 
 definitions:
   caches:
@@ -13,18 +13,17 @@ definitions:
   steps:
     - build: &build
         name: Build app
-        image: pawelgradziel/php82-cli-xdebug-composer:latest
         script:
           - ln -f -s .env.example .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
+          - XDEBUG_MODE=coverage
         caches:
           - composer
           - vendor
     - step: &testin-app
         name: Testing app
-        image: pawelgradziel/php82-cli-xdebug-composer:latest
         script:
           ## - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
