@@ -370,11 +370,18 @@ final class JSONDictionary extends Dictionary
                     ],
                     'institutionalService' => [
                         'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
-                        'measurementUnit' => 'UN',
+                        'measurementUnit' => 'UN', /* DA = Days UN = Unit */
                         'serviceLineRevenueCode' => $service->revenueCode->code,
-                        'procedureIdentifier' => 'HC',
+                        'procedureIdentifier' => match ($service->procedure?->type?->getName()) {
+                            'HCPCS' => 'HC',
+                            'HIPPS' => 'HP',
+                            'HIEC' => 'IV',
+                            'ABC' => 'WK',
+                            '' => 'ER',
+                            default => ''
+                        },
                         'procedureCode' => $service->procedure->code,
-                        'description' => $service->procedure?->description,
+                        // 'description' => $service->procedure?->description,
                         'lineItemChargeAmount' => str_replace(',', '', $service->price),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
@@ -1262,10 +1269,10 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 3),
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 4),
                     'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
                     'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
-                    'dischargeHour' => str_replace('-', '', $this->claim->patientInformation->discharge_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 3),
+                    'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
                     'repricerReceivedDate' => Carbon::now()->format('Ymd'),
                 ],
                 /**'claimContractInformation' => [
@@ -1325,20 +1332,20 @@ final class JSONDictionary extends Dictionary
                 ],
                 'otherDiagnosisInformationList' => [
                     $this->claim->service->diagnoses
-                        // ->skip(1)
+                        ->skip(1)
                         ->map(fn ($diagnosis, $index) => [
                             'qualifierCode' => 'ABF',
                             'otherDiagnosisCode' => $diagnosis->code,
                             'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
                         ])->values()->toArray(),
                 ],
-                'principalProcedureInformation' => isset($claimServiceLinePrincipal)
+                /*'principalProcedureInformation' => isset($claimServiceLinePrincipal)
                     ? [
                         'qualifierCode' => 'BBR',
                         'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
-                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal->from_service),
+                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal?->from_service ?? ''),
                     ]
-                    : null,
+                    : null,*/
                 /*'otherProcedureInformationList' => [
                     $this->claim->service->services
                         ->skip(1)
@@ -1789,7 +1796,9 @@ final class JSONDictionary extends Dictionary
                 'claimCodeInformation' => [
                     'admissionTypeCode' => $this->claim->patientInformation?->admissionType?->code,
                     'admissionSourceCode' => $this->claim->patientInformation?->admissionSource?->code,
-                    'patientStatusCode' => $this->claim->patientInformation?->patientStatus?->code,
+                    'patientStatusCode' => !is_null($this->claim?->patientInformation?->patientStatus?->code)
+                        ? str_pad((string) $this->claim->patientInformation->patientStatus->code, 2, '0', STR_PAD_LEFT)
+                        : '',
                 ],
                 'epsdtReferral' => [
                     'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
@@ -1799,7 +1808,7 @@ final class JSONDictionary extends Dictionary
                 ],
                 'propertyCasualtyClaimNumber' => '',
                 'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
-                'placeOfServiceCode' => $claimServiceLinePrincipal?->placeOfService?->code ?? '11',
+                'placeOfServiceCode' => $this->claim->demographicInformation?->bill_classification,
                 'claimFrequencyCode' => '1',
                 'delayReasonCode' => '',
                 'patientEstimatedAmountDue' => '',

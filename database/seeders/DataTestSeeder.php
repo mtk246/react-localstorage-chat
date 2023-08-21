@@ -2216,7 +2216,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '2020-04-11',
                             'first_name' => 'David',
@@ -2351,7 +2351,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1999-04-11',
                             'first_name' => 'Davidd',
@@ -2486,7 +2486,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1998-04-11',
                             'first_name' => 'Carlos',
@@ -2588,7 +2588,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1950-04-11',
                             'first_name' => 'Antonio',
@@ -2690,7 +2690,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1940-04-11',
                             'first_name' => 'Carla',
@@ -2792,7 +2792,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1996-04-11',
                             'first_name' => 'Car',
@@ -2927,7 +2927,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1965-04-11',
                             'first_name' => 'Fab',
@@ -3062,7 +3062,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1975-04-11',
                             'first_name' => 'Mary',
