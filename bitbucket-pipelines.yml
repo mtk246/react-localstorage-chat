@@ -28,8 +28,7 @@ definitions:
           - composer
           - vendor
         script:
-          ## - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
-          - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
+          - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
         services:
           - pgsql
     - step: &syntax-test
