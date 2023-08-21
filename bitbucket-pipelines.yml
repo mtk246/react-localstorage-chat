@@ -11,17 +11,13 @@ definitions:
   steps:
     - step: &testin-app
         name: Testing app
+        image: pawelgradziel/php82-cli-xdebug-composer:latest
         script:
-          - pecl install php8.2-xdebug && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-            - echo "xdebug.mode = debug,coverage" >> /usr/local/etc/php/conf.d/xdebug.ini
-            - echo "xdebug.discover_client_host = true" >> /usr/local/etc/php/conf.d/xdebug.ini
-            - echo "xdebug.client_host = host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini
-            - echo "xdebug.client_port = ${XDEBUG_PORT}" >> /usr/local/etc/php/conf.d/xdebug.ini
           - ln -f -s .env.testing .env
           - composer install --ignore-platform-reqs
           - php artisan key:generate
           - php artisan jwt:secret
-          - php artisan test -p --coverage --configuration phpunit.xml --min=$COVERAGE_MIN
+          - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
         services:
           - pgsql
         caches:
