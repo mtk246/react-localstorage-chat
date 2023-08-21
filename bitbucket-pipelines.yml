@@ -9,6 +9,17 @@ definitions:
         POSTGRES_USER: $DB_USERNAME
         POSTGRES_PASSWORD: $DB_PASSWORD
   steps:
+    - build: &build
+        name: Build app
+        image: pawelgradziel/php82-cli-xdebug-composer:latest
+        script:
+          - ln -f -s .env.example .env
+          - composer install --ignore-platform-reqs
+          - php artisan key:generate
+          - php artisan jwt:secret
+        caches:
+          - composer
+          - vendor
     - step: &testin-app
         name: Testing app
         image: pawelgradziel/php82-cli-xdebug-composer:latest
@@ -44,6 +55,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
   branches:
