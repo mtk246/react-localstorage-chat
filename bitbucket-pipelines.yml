@@ -28,7 +28,7 @@ definitions:
           - composer
           - vendor
         script:
-          - php artisan test -p --coverage-clover --configuration phpunit.xml --min=$COVERAGE_MIN
+          - php artisan test -p --coverage --configuration phpunit.xml --min=$COVERAGE_MIN
         services:
           - pgsql
     - step: &syntax-test
@@ -52,9 +52,6 @@ pipelines:
   default:
       - stage:
           name: Test app
-          caches:
-            - composer
-            - vendor
           steps:
               - step: *build
               - step: *testin-app
