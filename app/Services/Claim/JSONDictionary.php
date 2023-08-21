@@ -1339,14 +1339,13 @@ final class JSONDictionary extends Dictionary
                             'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
                         ])->values()->toArray(),
                 ],
-                'principalProcedureInformation' => isset($claimServiceLinePrincipal)
+                /*'principalProcedureInformation' => isset($claimServiceLinePrincipal)
                     ? [
                         'qualifierCode' => 'BBR',
                         'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
-                        'principalProcedureDate' => Carbon::createFromFormat('Y-m-d', $claimServiceLinePrincipal->from_service)
-                            ->format('mdY'),
+                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal?->from_service ?? ''),
                     ]
-                    : null,
+                    : null,*/
                 /*'otherProcedureInformationList' => [
                     $this->claim->service->services
                         ->skip(1)
