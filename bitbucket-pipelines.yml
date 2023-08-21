@@ -18,7 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - composer install --ignore-platform-reqs
+          - composer install --no-interaction --prefer-dist --no-suggest
     - step: &testin-app
         name: Testing app
         caches:
