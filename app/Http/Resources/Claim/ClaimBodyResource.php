@@ -264,7 +264,7 @@ final class ClaimBodyResource extends JsonResource
             ->first();
 
         return !empty($billing)
-            ? $billing->user->profile->first_name.' '.$billing->user->profile->last_name
+            ? $billing->profile->first_name.' '.$billing->profile->last_name
             : '';
     }
 }
