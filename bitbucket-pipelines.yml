@@ -1,6 +1,9 @@
 image: composer:2.5.5
 
 definitions:
+  caches:
+    - composer
+    - vendor
   services:
     pgsql:
       image: postgres:13-alpine
