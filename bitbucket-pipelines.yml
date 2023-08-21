@@ -27,7 +27,7 @@ definitions:
         script:
           - ln -f -s .env.example .env
           - XDEBUG_MODE=debug,coverage
-          - php artisan test -p --min=$COVERAGE_MIN --configuration phpunit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
+          - php artisan test -p --min=$COVERAGE_MIN --configuration phpunit.xml ##--coverage-clover ./test-reports/phpunit.coverage.xml
         services:
           - pgsql
     - step: &syntax-test
