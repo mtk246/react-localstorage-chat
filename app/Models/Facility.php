@@ -265,8 +265,15 @@ class Facility extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
+            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereHas('companies', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('facilityTypes', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(type) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('billingCompanies', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            });
         }
 
         return $query;

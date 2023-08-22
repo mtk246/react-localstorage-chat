@@ -84,23 +84,31 @@ final class BillClassificationSeeder extends Seeder
 
         foreach ($data['bill_classifications'] as $key => $value) {
             if ($key <= 7) {
-                $bill_classification = BillClassification::create($value);
-                $bill_classification->facility_types()->attach($facility_type_1);
+                $bill_classification = BillClassification::updateOrCreate([
+                    'code' => $value['code'], 'name' => $value['name'],
+                ], $value);
+                $bill_classification->facilityTypes()->attach($facility_type_1);
             }
 
             if ($key >= 8 && $key <= 13) {
-                $bill_classification = BillClassification::create($value);
-                $bill_classification->facility_types()->attach($facility_type_2);
+                $bill_classification = BillClassification::updateOrCreate([
+                    'code' => $value['code'], 'name' => $value['name'],
+                ], $value);
+                $bill_classification->facilityTypes()->attach($facility_type_2);
             }
 
             if ($key >= 14 && $key <= 19) {
-                $bill_classification = BillClassification::create($value);
-                $bill_classification->facility_types()->attach($facility_type_3);
+                $bill_classification = BillClassification::updateOrCreate([
+                    'code' => $value['code'], 'name' => $value['name'],
+                ], $value);
+                $bill_classification->facilityTypes()->attach($facility_type_3);
             }
 
             if (20 == $key) {
-                $bill_classification = BillClassification::create($value);
-                $bill_classification->facility_types()->attach([$facility_type_2->id, $facility_type_3->id]);
+                $bill_classification = BillClassification::updateOrCreate([
+                    'code' => $value['code'], 'name' => $value['name'],
+                ], $value);
+                $bill_classification->facilityTypes()->attach([$facility_type_2->id, $facility_type_3->id]);
             }
         }
     }

@@ -772,56 +772,44 @@ class ClaimRepository
         );
     }
 
-    public function getListRev($company_id = null, $search = '')
+    public function getListRev(?string $company_id = null, $search = '')
     {
         try {
-            if (null == $company_id) {
-                if ('' == $search) {
-                    return getList(Procedure::class, 'code', [], null, ['description']);
-                } else {
-                    return getList(Procedure::class, 'code', [
-                        'whereRaw' => ['search' => $search],
-                        'where' => ['type' => '4']
-                    ], null, ['description']);
-                }
-            } else {
-                return Procedure::query()
-                    ->when('' !== $search, function ($query) use ($search, $company_id) {
-                        $query->where(function ($query) use ($search, $company_id) {
-                            $query->whereHas('companyServices', function ($query) use ($company_id) {
-                                $query->where('company_id', $company_id);
-                            })->where('code', 'like', "%$search%");
-                        })
-                        ->orWhere(function ($query) use ($search) {
-                            $search = str_replace(['f', 'F'], '', $search);
-                            $query->whereJsonContains('clasifications->general', 2)
-                                ->where('code', 'like', "%$search%F");
-                        });
-                    }, function ($query) use ($company_id) {
-                        $query->whereHas('companyServices', function ($query) use ($company_id) {
-                            $query->where('company_id', $company_id);
-                        });
-                    })
-                    ->where('type', '4')
-                    ->with(['companyServices' => function ($query) use ($company_id) {
+            return Procedure::query()
+                ->when(null != $company_id, function (Builder $query) use($company_id) {
+                    $query->whereHas('companyServices', function ($query) use ($company_id) {
                         $query->where('company_id', $company_id);
-                    }])
-                    ->get()
-                    ->map(function ($procedure) use ($company_id) {
-                        return [
-                            'id' => $procedure->id,
-                            'name' => $procedure->code,
-                            'description' => $procedure->description,
-                            'price' => (float) $procedure->companyServices
-                                ->firstWhere('company_id', $company_id)?->price ?? 0,
-                        ];
+                    });
+                })
+                ->when('' !== $search, function ($query) use ($search) {
+                    $query->where(function ($query) use ($search) {
+                        $query->where('code', 'like', "%$search%");
                     })
-                    ->sortByDesc('price')
-                    ->values()
-                    ->toArray();
-            }
+                    ->orWhere(function ($query) use ($search) {
+                        $search = str_replace(['f', 'F'], '', $search);
+                        $query->whereJsonContains('clasifications->general', 2)
+                            ->where('code', 'like', "%$search%F");
+                    });
+                })
+                ->where('type', '4')
+                ->with(['companyServices' => function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                }])
+                ->get()
+                ->map(function ($procedure) use ($company_id) {
+                    return [
+                        'id' => $procedure->id,
+                        'name' => $procedure->code,
+                        'description' => $procedure->description,
+                        'price' => (float) $procedure->companyServices
+                            ->firstWhere('company_id', $company_id)?->price ?? 0,
+                    ];
+                })
+                ->sortByDesc('price')
+                ->values()
+                ->toArray();
         } catch (\Exception $e) {
-            return [];
+            throw $e;
         }
     }
 

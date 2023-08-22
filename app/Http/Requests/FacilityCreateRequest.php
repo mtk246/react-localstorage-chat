@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Models\Facility;
+use App\Rules\AddressValidationRule;
 use App\Rules\CountInArray;
 use App\Rules\IUnique;
+use App\Rules\PhoneFormat;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -53,19 +55,19 @@ final class FacilityCreateRequest extends FormRequest
             'address.address' => [
                 'required',
                 'string',
-                'doesnt_start_with:POB,pob',
+                new AddressValidationRule(),
             ],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
             'address.country' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
+            'address.zip' => ['nullable', 'string'],
             'address.apt_suite' => ['nullable', 'string'],
 
             'contact' => ['required', 'array'],
             'contact.contact_name' => ['nullable', 'string'],
-            'contact.phone' => ['nullable', 'string'],
-            'contact.mobile' => ['nullable', 'string'],
-            'contact.fax' => ['nullable', 'string'],
+            'contact.phone' => ['nullable', 'string', new PhoneFormat()],
+            'contact.mobile' => ['nullable', 'string', new PhoneFormat()],
+            'contact.fax' => ['nullable', 'string', new PhoneFormat()],
             'contact.email' => ['nullable', 'email:rfc'],
 
             'public_note' => ['nullable', 'string'],
