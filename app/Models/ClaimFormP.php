@@ -18,7 +18,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\BillingCompany $billingCompany
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimFormPService> $claimFormServices
  * @property int|null $claim_form_services_count
- * @property \App\Models\Facility|null $facility
+ * @property \App\Models\Facility $facility
  * @property \App\Models\InsurancePolicy $insurancePolicy
  * @property \App\Models\Patient $patient
  * @property \App\Models\PatientOrInsuredInformation|null $patientOrInsuredInformation

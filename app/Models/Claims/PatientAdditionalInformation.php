@@ -30,7 +30,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property TypeCatalog|null $admissionType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property TypeCatalog|null $billClassification
+ * @property TypeCatalog $billClassification
  * @property \App\Models\Claims\Claim $claim
  * @property mixed $condition_codes
  * @property TypeCatalog|null $patientStatus

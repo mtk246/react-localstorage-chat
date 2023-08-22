@@ -21,13 +21,16 @@ return [
     '0b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'glue' => ' ',
         'value' => [
             'higherInsuranceCompany:address',
+            'higherInsuranceCompany:apt_suite',
         ],
         'values' => [
             'common' => [
                 'higherInsuranceCompany:name',
                 'higherInsuranceCompany:address',
+                'higherInsuranceCompany:apt_suite',
             ],
         ],
     ],
@@ -132,12 +135,15 @@ return [
     '5a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'glue' => ' ',
         'value' => [
             'patientAddress:address',
+            'patientAddress:apt_suite',
         ],
         'values' => [
             'common' => [
                 'patientAddress:address',
+                'patientAddress:apt_suite',
                 'patientAddress:city',
                 'patientAddress:state',
                 'patientAddress:zip',
@@ -239,12 +245,15 @@ return [
     '7a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'glue' => ' ',
         'value' => [
             'subscriberAddress:address',
+            'subscriberAddress:apt_suite',
         ],
         'values' => [
             'common' => [
                 'subscriberAddress:address',
+                'subscriberAddress:apt_suite',
                 'subscriberAddress:city',
                 'subscriberAddress:state',
                 'subscriberAddress:zip',
@@ -1064,13 +1073,16 @@ return [
     '32A1' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 20,
+        'glue' => ' ',
         'value' => [
             'facilityAddress:address|0',
+            'facilityAddress:apt_suite|0',
         ],
         'values' => [
             'common' => [
                 'facility:name',
                 'facilityAddress:address',
+                'facilityAddress:apt_suite|0',
                 'facilityAddress:city',
                 'facilityAddress:state',
                 'facilityAddress:zip',
@@ -1084,6 +1096,7 @@ return [
         'glue' => ' ',
         'value' => [
             'facilityAddress:city|0',
+            '|, ',
             'facilityAddress:state|0',
             'facilityAddress:zip|0',
         ],
@@ -1137,13 +1150,16 @@ return [
     '33A1' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 20,
+        'glue' => ' ',
         'value' => [
             'companyAddress:address|0',
+            'companyAddress:apt_suite|0',
         ],
         'values' => [
             'common' => [
                 'company:name',
                 'companyAddress:address',
+                'companyAddress:apt_suite|0',
                 'companyAddress:city',
                 'companyAddress:state',
                 'companyAddress:zip',
@@ -1159,6 +1175,7 @@ return [
         'glue' => ' ',
         'value' => [
             'companyAddress:city|0',
+            '|, ',
             'companyAddress:state|0',
             'companyAddress:zip|0',
         ],

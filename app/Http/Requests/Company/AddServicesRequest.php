@@ -49,7 +49,7 @@ final class AddServicesRequest extends FormRequest
                 Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'string',
-                'max:10',
+                'max:11',
             ],
             'services.*.medication.measurement_unit_id' => [
                 Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
@@ -74,7 +74,7 @@ final class AddServicesRequest extends FormRequest
                 ),
                 'nullable',
                 'string',
-                'max:10',
+                'max:11',
             ],
             'services.*.medication.claim_note_required' => ['nullable', 'boolean'],
             'services.*.medication.note' => ['nullable', 'string'],

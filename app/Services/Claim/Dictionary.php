@@ -80,6 +80,7 @@ abstract class Dictionary implements DictionaryInterface
     {
         return Collect($values)
             ->map(fn (string $value) => (string) $this->getSingleFormat($value))
+            ->filter(fn (string $value) => !empty($value))
             ->implode($glue);
     }
 

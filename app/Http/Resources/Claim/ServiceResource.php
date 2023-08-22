@@ -37,6 +37,8 @@ final class ServiceResource extends JsonResource
                                 $this->company_id
                             )
                             ?->price ?? 0,
+                        'is_medication' => isset($this->resource->procedure?->companyServices
+                            ->firstWhere('company_id', $this->company_id)?->medication),
                     ],
                 ]
                 : [],

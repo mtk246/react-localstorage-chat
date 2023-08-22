@@ -18,7 +18,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string $modifier
- * @property string $special_coding_instructions
+ * @property string|null $special_coding_instructions
  * @property bool $active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -181,5 +181,16 @@ class Modifier extends Model implements Auditable
             'description' => $this->description,
             'public_note' => $this->publicNote?->note,
         ];
+    }
+
+    /**
+     * Set default value to upper string.
+     */
+    protected function modifier(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => strtoupper($value),
+            set: fn (string $value) => strtoupper($value),
+        );
     }
 }
