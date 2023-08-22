@@ -41,7 +41,7 @@ final class UpdateContactDataRequest extends FormRequest
             'address.address' => [
                 'required',
                 'string',
-                'doesnt_start_with:POB,pob',
+                'doesnt_start_with:POB,pob,Post Office Box,P.O. Box,PO Box,P O Box,P. O. BOX,PO  BOX,Lock Box,Lock Bin,LOCKBOX,DRAWER,P O. Box,PO. Box,P. O Box,PO   BOX,P.O.  Box,P O  Box,PO BX,PO B OX,PO B',
             ],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],

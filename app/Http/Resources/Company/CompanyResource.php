@@ -43,6 +43,7 @@ final class CompanyResource extends JsonResource
                     Gate::denies('is-admin'),
                     fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
                 )
+                ->distinct('id')
                 ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
                 ->map(function ($bC) {
