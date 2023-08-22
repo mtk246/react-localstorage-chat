@@ -370,7 +370,14 @@ final class JSONDictionary extends Dictionary
                     ],
                     'institutionalService' => [
                         'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
-                        'measurementUnit' => 'UN', /* DA = Days UN = Unit */
+                        'measurementUnit' => match (isset($service->procedure?->companyServices
+                        ->firstWhere('company_id', $this->claim
+                            ?->demographicInformation
+                            ?->company_id)?->medication)) {
+                            true => 'DA',
+                            false => 'UN',
+                            default => 'UN', /* DA = Days UN = Unit */
+                        },
                         'serviceLineRevenueCode' => $service->revenueCode->code,
                         'procedureIdentifier' => match ($service->procedure?->type?->getName()) {
                             'HCPCS' => 'HC',
@@ -381,7 +388,11 @@ final class JSONDictionary extends Dictionary
                             default => ''
                         },
                         'procedureCode' => $service->procedure->code,
-                        // 'description' => $service->procedure?->description,
+                        'description' => match ($service->procedure?->type?->getName()) {
+                            'HCPCS' => '',
+                            'HIPPS' => '',
+                            default => $service->procedure?->description,
+                        },
                         'lineItemChargeAmount' => str_replace(',', '', $service->price),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
