@@ -200,12 +200,12 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'value' => [
-            'demographicInformation.company.ein',
+            'company:ein',
         ],
         'values' => [
             'common' => [
-                'demographicInformation.company.npi',
-                'demographicInformation.company.ein',
+                'company:npi',
+                'company:ein',
             ],
         ],
     ],
