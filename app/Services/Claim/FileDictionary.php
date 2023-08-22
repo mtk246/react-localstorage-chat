@@ -335,7 +335,7 @@ final class FileDictionary extends Dictionary
         $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('item', 'A')->first();
 
         return match ($key) {
-            'type' => $diagnosisDx?->type->getCode(),
+            'type' => $diagnosisDx?->type?->getCode() ?? '',
             'code_poa' => $diagnosisDx?->code
                 .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? ' '.($diagnosisDx->pivot->poa)
