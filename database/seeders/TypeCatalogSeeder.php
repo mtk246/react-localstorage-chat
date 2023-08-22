@@ -1099,10 +1099,6 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Information Not Available',
                     ],
                     [
-                        'code' => 'A',
-                        'description' => 'Transfer from a Rural Primary Care Hospital (Only valid for discharges prior to 10/1/2007)',
-                    ],
-                    [
                         'code' => 'D',
                         'description' => 'Transfer from One Distinct Unit of the Hospital to another Distinct Unit of the Same Hospital Resulting in a Separate Claim to the Payer',
                     ],
@@ -1120,80 +1116,36 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Patient status code',
                 'type_catalogs' => [
                     [
-                        'code' => '1',
+                        'code' => '01',
                         'description' => 'Discharged to home or self-care (routine discharge)',
                     ],
                     [
-                        'code' => '2',
-                        'description' => 'Discharged/transferred to a short-term general hospital for inpatient care',
+                        'code' => '02',
+                        'description' => "Discharged\/transferred to a short-term general hospital for inpatient care",
                     ],
                     [
-                        'code' => '3',
-                        'description' => 'Discharged/transferred to skilled nursing facility (SNF) with Medicare certification',
+                        'code' => '03',
+                        'description' => "Discharged\/transferred to skilled nursing facility (SNF) with Medicare certification in anticipation of covered skilled care ",
                     ],
                     [
-                        'code' => '4',
-                        'description' => 'Discharged/transferred to a facility that provides custodial or supportive care',
+                        'code' => '04',
+                        'description' => "Discharged\/transferred to a facility that provides custodial or supportive care",
                     ],
                     [
-                        'code' => '5',
-                        'description' => "Discharged/transferred to a designated cancer center or children's hospital",
+                        'code' => '05',
+                        'description' => "Discharged\/transferred to a designated cancer center or children's hospital",
                     ],
                     [
-                        'code' => '6',
-                        'description' => 'Discharged/transferred to home under care of organized home health service organization in anticipation of covered skilled care',
+                        'code' => '06',
+                        'description' => "Discharged\/transferred to home under care of organized home health service organization in anticipation of covered skilled care",
                     ],
                     [
-                        'code' => '7',
+                        'code' => '07',
                         'description' => 'Left against medical advice or discontinued care',
                     ],
                     [
-                        'code' => '8',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '9',
+                        'code' => '09',
                         'description' => 'Admitted as an inpatient to this hospital',
-                    ],
-                    [
-                        'code' => '10',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '11',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '12',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '13',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '14',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '15',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '16',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '17',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '18',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '19',
-                        'description' => 'Reserved for national assignment',
                     ],
                     [
                         'code' => '20',
@@ -1201,79 +1153,11 @@ class TypeCatalogSeeder extends Seeder
                     ],
                     [
                         'code' => '21',
-                        'description' => 'Discharged/transferred to court/law enforcement',
-                    ],
-                    [
-                        'code' => '22',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '23',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '24',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '25',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '26',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '27',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '28',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '29',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to court\/law enforcement",
                     ],
                     [
                         'code' => '30',
-                        'description' => 'Still patient',
-                    ],
-                    [
-                        'code' => '31',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '32',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '33',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '34',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '35',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '36',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '37',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '38',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '39',
-                        'description' => 'Reserved for national assignment',
+                        'description' => 'Still patient or expected to return for outpatient services',
                     ],
                     [
                         'code' => '40',
@@ -1289,231 +1173,107 @@ class TypeCatalogSeeder extends Seeder
                     ],
                     [
                         'code' => '43',
-                        'description' => 'Discharged/transferred to a federal health care facility',
-                    ],
-                    [
-                        'code' => '44',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '45',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '46',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '47',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '48',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '49',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to a federal health care facility",
                     ],
                     [
                         'code' => '50',
-                        'description' => 'Hospice - home',
+                        'description' => "Discharged\/transferred to Hospice - home",
                     ],
                     [
                         'code' => '51',
-                        'description' => 'Hospice - medical facility (certified) providing hospice level of care',
-                    ],
-                    [
-                        'code' => '52',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '53',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '54',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '55',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '56',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '57',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '58',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '59',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '60',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to Hospice - medical facility",
                     ],
                     [
                         'code' => '61',
-                        'description' => 'Discharged/transferred to a hospital-based Medicare approved swing bed',
+                        'description' => "Discharged\/transferred to a hospital-based Medicare approved swing bed",
                     ],
                     [
                         'code' => '62',
-                        'description' => 'Discharged/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital',
+                        'description' => "Discharged\/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital",
                     ],
                     [
                         'code' => '63',
-                        'description' => 'Discharged/transferred to a Medicare certified long term care hospital (LTCH)',
+                        'description' => "Discharged\/transferred to a Medicare certified long term care hospital (LTCH)",
                     ],
                     [
                         'code' => '64',
-                        'description' => 'Discharged/transferred to a nursing facility certified under Medicaid but not certified under Medicare',
+                        'description' => "Discharged\/transferred to a nursing facility certified under Medicaid but not certified under Medicare",
                     ],
                     [
                         'code' => '65',
-                        'description' => 'Discharged/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital',
+                        'description' => "Discharged\/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital",
                     ],
                     [
                         'code' => '66',
-                        'description' => 'Discharged/transferred to a critical access hospital (CAH)',
-                    ],
-                    [
-                        'code' => '67',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '68',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to a critical access hospital (CAH)",
                     ],
                     [
                         'code' => '69',
-                        'description' => 'Discharged/transferred to a designated disaster alternate care site (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a designated disaster alternate care site",
                     ],
                     [
                         'code' => '70',
-                        'description' => 'Discharged/transferred to another type of health care institution not defined elsewhere in this code list',
-                    ],
-                    [
-                        'code' => '71',
-                        'description' => 'Discontinued 4/1/03',
-                    ],
-                    [
-                        'code' => '72',
-                        'description' => 'Discontinued 4/1/03',
-                    ],
-                    [
-                        'code' => '73',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '74',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '75',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '76',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '77',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '78',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '79',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '80',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to another type of health care institution not defined elsewhere in this code list",
                     ],
                     [
                         'code' => '81',
-                        'description' => 'Discharged to home or self-care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => 'Discharged to home or self-care with a planned acute care hospital inpatient readmission ',
                     ],
                     [
                         'code' => '82',
-                        'description' => 'Discharged/transferred to a short-term general hospital for inpatient care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a short-term general hospital for inpatient care with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '83',
-                        'description' => 'Discharged/transferred to a skilled nursing facility (SNF) with Medicare certification with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a skilled nursing facility (SNF) with Medicare certification with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '84',
-                        'description' => 'Discharged/transferred to a facility that provides custodial or supportive care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a facility that provides custodial or supportive care with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '85',
-                        'description' => "Discharged/transferred to a designated cancer center or children's hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)",
+                        'description' => "Discharged\/transferred to a designated cancer center or children's hospital with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '86',
-                        'description' => 'Discharged/transferred to home under care of organized home health service organization in anticipation of covered skilled care with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to home under care of organized home health service organization in anticipation of covered skilled care with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '87',
-                        'description' => 'Discharged/transferred to court/law enforcement with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to court\/law enforcement with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '88',
-                        'description' => 'Discharged/transferred to a federal health care facility with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a federal health care facility with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '89',
-                        'description' => 'Discharged/transferred to a hospital-based Medicare approved swing bed with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a hospital-based Medicare approved swing bed with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '90',
-                        'description' => 'Discharged/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to an inpatient rehabilitation facility (IRF) including rehabilitation distinct part units of a hospital with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '91',
-                        'description' => 'Discharged/transferred to a Medicare certified long term care hospital (LTCH) with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a Medicare certified long term care hospital (LTCH) with a planned acute care hospital inpatient readmission",
                     ],
                     [
                         'code' => '92',
-                        'description' => 'Discharged/transferred to a nursing facility certified under Medicaid but not certified under Medicare with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a nursing facility certified under Medicaid but not certified under Medicare with a planned acute care hospital inpatient readmission",
                     ],
                     [
                         'code' => '93',
-                        'description' => 'Discharged/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a psychiatric hospital or psychiatric distinct part unit of a hospital with a planned acute care hospital inpatient readmission ",
                     ],
                     [
                         'code' => '94',
-                        'description' => 'Discharged/transferred to a critical access hospital (CAH) with a planned acute care hospital inpatient readmission (effective 10/1/13)',
+                        'description' => "Discharged\/transferred to a critical access hospital (CAH) with a planned acute care hospital inpatient readmissio",
                     ],
                     [
                         'code' => '95',
-                        'description' => 'Discharged/transferred to another type of health care institution not defined elsewhere in this code list with a planned acute care hospital inpatient readmission (effective 10/1/13)',
-                    ],
-                    [
-                        'code' => '96',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '97',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '98',
-                        'description' => 'Reserved for national assignment',
-                    ],
-                    [
-                        'code' => '99',
-                        'description' => 'Reserved for national assignment',
+                        'description' => "Discharged\/transferred to another type of health care institution not defined elsewhere in this code list with a planned acute care hospital inpatient readmission ",
                     ],
                 ],
             ],
