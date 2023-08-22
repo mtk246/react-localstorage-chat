@@ -67,13 +67,13 @@ return [
         'glue' => ' ',
         'value' => [
             'companyAddress:other_country|1',
-            'companyContact:phone_fax|1',
+            'companyContact:phone_fax|0',
         ],
         'values' => [
             'common' => [
                 'demographicInformation.company.name',
                 'companyAddress:apt_suite|1',
-                'companyContact:phone_fax|1',
+                'companyContact:phone_fax|0',
                 'companyAddress:address|1',
                 'companyAddress:city|1',
                 'companyAddress:state|1',
