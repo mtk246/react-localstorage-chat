@@ -41,9 +41,9 @@ class DatabaseSeeder extends Seeder
             DiagnosisRelatedGroupSeeder::class,
         ];
 
-        /*if ('production' !== env('APP_ENV', 'local')) {
+        if ('production' !== env('APP_ENV', 'local')) {
             $callGroup[] = DataTestSeeder::class;
-        }*/
+        }
 
         $this->call($callGroup);
     }

@@ -48,6 +48,7 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->addresses
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
             ->where('address_type_id', $this->claim
                 ->demographicInformation
                 ->company
@@ -77,6 +78,7 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->contacts
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
             ->get((int) $entry);
 
         return match ($key) {
@@ -353,7 +355,7 @@ final class FileDictionary extends Dictionary
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
                 'code_poa' => $diagnosis?->code
                     .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
-                        ? ($diagnosis->pivot->poa)
+                        ? ' '.($diagnosis->pivot->poa)
                         : ''),
                 default => $diagnosis?->{$key} ?? '',
             })
@@ -375,7 +377,7 @@ final class FileDictionary extends Dictionary
     protected function getClaimServicesTotalAttribute(): string
     {
         return $this->claim->service->services->reduce(function (Money $carry, Services $ammount) {
-            return $carry->add(Money::parse($ammount->price, null, true));
+            return $carry->add(Money::parse($ammount->total_charge, null, true));
         }, Money::parse('0', null, true))->formatByDecimal();
     }
 
