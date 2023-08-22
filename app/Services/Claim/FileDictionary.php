@@ -48,6 +48,7 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->addresses
+            ->where('billing_company_id', $this->company->id ?? null)
             ->where('address_type_id', $this->claim
                 ->demographicInformation
                 ->company
@@ -77,6 +78,7 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->contacts
+            ->where('billing_company_id', $this->company->id ?? null)
             ->get((int) $entry);
 
         return match ($key) {
@@ -353,7 +355,7 @@ final class FileDictionary extends Dictionary
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
                 'code_poa' => $diagnosis?->code
                     .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
-                        ? ($diagnosis->pivot->poa)
+                        ? ' '.($diagnosis->pivot->poa)
                         : ''),
                 default => $diagnosis?->{$key} ?? '',
             })
