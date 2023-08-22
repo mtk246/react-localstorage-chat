@@ -1084,6 +1084,7 @@ return [
         'glue' => ' ',
         'value' => [
             'facilityAddress:city|0',
+            '|, ',
             'facilityAddress:state|0',
             'facilityAddress:zip|0',
         ],
@@ -1159,6 +1160,7 @@ return [
         'glue' => ' ',
         'value' => [
             'companyAddress:city|0',
+            '|, ',
             'companyAddress:state|0',
             'companyAddress:zip|0',
         ],
