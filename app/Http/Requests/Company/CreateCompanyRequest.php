@@ -42,7 +42,11 @@ final class CreateCompanyRequest extends FormRequest
             'contact.email' => ['required', 'email:rfc'],
 
             'address' => ['required', 'array'],
-            'address.address' => ['required', 'string'],
+            'address.address' => [
+                'required',
+                'string',
+                'doesnt_start_with:POB,pob',
+            ],
             'address.apt_suite' => ['nullable', 'string'],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
