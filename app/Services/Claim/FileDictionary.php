@@ -422,6 +422,14 @@ final class FileDictionary extends Dictionary
                 ?->first() ?? null;
 
             /* 24A */
+            $medication = $item->procedure?->companyServices
+                ->firstWhere('company_id', $this->claim
+                    ?->demographicInformation
+                    ?->company_id)?->medication;
+
+            $resultServices['medication_A'.($index + 1)] = isset($medication)
+                ? ('N4'.$medication->drug_code.' '.$medication->measurement_unit_id->getCode().(string) $medication->units).((true === $medication->repackaged_NDC ?? false) ? (' ORIGN4'.$medication->code_NDC) : '')
+                : '';
             $resultServices['from_year_A'.($index + 1)] = substr($fromService[0] ?? '', 2, 2);
             $resultServices['from_month_A'.($index + 1)] = $fromService[1] ?? '';
             $resultServices['from_day_A'.($index + 1)] = $fromService[2] ?? '';

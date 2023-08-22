@@ -1159,6 +1159,17 @@ return [
             ],
         ],
         '24' => [
+            'medication_A1' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 186,
+                ],
+            ],
             'from_year_A1' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -1402,6 +1413,17 @@ return [
                 ],
             ],
 
+            'medication_A2' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 184.3,
+                ],
+            ],
             'from_year_A2' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -1642,6 +1664,17 @@ return [
                     'h' => 10,
                     'x' => 176,
                     'y' => 195.3,
+                ],
+            ],
+            'medication_A3' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 202.6,
                 ],
             ],
             'from_year_A3' => [
@@ -1886,6 +1919,17 @@ return [
                     'y' => 203.6,
                 ],
             ],
+            'medication_A4' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 210.9,
+                ],
+            ],
             'from_year_A4' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -2128,6 +2172,17 @@ return [
                     'y' => 211.9,
                 ],
             ],
+            'medication_A5' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 219.2,
+                ],
+            ],
             'from_year_A5' => [
                 'properties' => [
                     'fontFamily' => 'helvetica',
@@ -2368,6 +2423,17 @@ return [
                     'h' => 10,
                     'x' => 176,
                     'y' => 220.2,
+                ],
+            ],
+            'medication_A6' => [
+                'properties' => [
+                    'fontFamily' => 'helvetica',
+                    'fontSize' => '9px',
+                    'align' => 'L',
+                    'w' => 170,
+                    'h' => 10,
+                    'x' => 9,
+                    'y' => 227.5,
                 ],
             ],
             'from_year_A6' => [
