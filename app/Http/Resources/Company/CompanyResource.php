@@ -30,7 +30,7 @@ final class CompanyResource extends JsonResource
             'public_note' => $this->resource->publicNote?->note ?? '',
             'last_modified' => $this->resource->last_modified,
 
-            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies()->distinct('taxonomy_id')->get()),
             'facilities' => $this->getFacilities(),
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
