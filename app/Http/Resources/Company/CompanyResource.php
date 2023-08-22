@@ -30,7 +30,7 @@ final class CompanyResource extends JsonResource
             'public_note' => $this->resource->publicNote?->note ?? '',
             'last_modified' => $this->resource->last_modified,
 
-            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies()->distinct('taxonomy_id')->get()),
             'facilities' => $this->getFacilities(),
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
@@ -39,6 +39,10 @@ final class CompanyResource extends JsonResource
             'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
             'billing_companies' => $this->resource->billingCompanies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
                 ->distinct('id')
                 ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
