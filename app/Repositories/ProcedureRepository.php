@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use App\Http\Resources\Procedure\ListModifierResource;
@@ -666,6 +668,8 @@ class ProcedureRepository
                             'description' => $procedure->description,
                             'price' => (float) $procedure->companyServices
                                 ->firstWhere('company_id', $company_id)?->price ?? 0,
+                            'is_medication' => isset($procedure?->companyServices
+                            ->firstWhere('company_id', $company_id)?->medication),
                         ];
                     })
                     ->sortByDesc('price')
