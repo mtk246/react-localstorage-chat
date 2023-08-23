@@ -18,6 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
+          - apt-get update && apt-get install -y gnupg
           - docker-php-ext-install pgsql gd curl imap mbstring xml zip bcmath soap intl readline ldap
           - XDEBUG_MODE=debug,coverage
           - php -v
