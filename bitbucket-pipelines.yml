@@ -18,6 +18,8 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
+          - apt-get install php8.2-bcmath php8.2-intl
+          - XDEBUG_MODE=debug,coverage
           - php -v
           - composer install --no-interaction --prefer-dist
     - step: &testin-app
