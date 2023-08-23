@@ -228,8 +228,6 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
-                $company->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
@@ -521,9 +519,6 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
-
-                $company->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
