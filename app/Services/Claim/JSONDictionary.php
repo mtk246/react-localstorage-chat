@@ -23,11 +23,8 @@ final class JSONDictionary extends Dictionary
     {
         return match ($key) {
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
-            'tradingPartnerServiceId' => match ($this->claim->type) {
-                ClaimType::PROFESSIONAL => '9496', /* Caso de prueba */
-                ClaimType::INSTITUTIONAL => $this->claim->higherInsurancePlan()?->payer_id ?? '9496',
-            },
-            'tradingPartnerName' => $this->claim->higherInsurancePlan()?->name ?? 'Begento Technologies LLC',
+            'tradingPartnerServiceId' => $this->claim->higherInsurancePlan()?->payer_id,
+            'tradingPartnerName' => $this->claim->higherInsurancePlan()?->name,
             'usageIndicator' => 'T',  /* Caso de prueba */
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
