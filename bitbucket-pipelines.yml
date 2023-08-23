@@ -18,7 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - docker-php-ext-install pgsql gd curl imap mbstring xml zip bcmath soap intl readline ldap redis swoole memcached pcov
+          - docker-php-ext-install pgsql gd curl imap mbstring xml zip bcmath soap intl readline ldap
           - XDEBUG_MODE=debug,coverage
           - php -v
           - composer install --no-interaction --prefer-dist
