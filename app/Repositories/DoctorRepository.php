@@ -203,7 +203,6 @@ class DoctorRepository
                 $data['address']['addressable_id'] = $profile->id;
                 $data['address']['addressable_type'] = Profile::class;
                 $data['address']['billing_company_id'] = $billingCompany;
-                $data['address']['address_type_id'] = 1;
                 Address::create($data['address']);
             }
 
@@ -416,7 +415,6 @@ class DoctorRepository
                     $data['contact']['contactable_id'] = $company->id;
                     $data['contact']['contactable_type'] = Company::class;
                     $data['contact']['billing_company_id'] = $billingCompany;
-                    $data['address']['address_type_id'] = 1;
                     Contact::updateOrCreate(
                         [
                             'contactable_id' => $company->id,
@@ -435,7 +433,8 @@ class DoctorRepository
                         [
                             'addressable_id' => $company->id,
                             'addressable_type' => Company::class,
-                            'billing_company_id' => $billingCompany
+                            'billing_company_id' => $billingCompany,
+                            'address_type_id' => 1
                         ],
                         $data['address']
                     );
@@ -490,7 +489,6 @@ class DoctorRepository
                 $data['address']['addressable_id'] = $healthP->profile->id;
                 $data['address']['addressable_type'] = Profile::class;
                 $data['address']['billing_company_id'] = $billingCompany;
-                $data['address']['address_type_id'] = 1;
                 Address::updateOrCreate(
                     [
                         'addressable_id' => $healthP->profile->id,
