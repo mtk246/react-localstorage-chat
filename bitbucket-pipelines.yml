@@ -19,6 +19,7 @@ definitions:
         script:
           - ln -f -s .env.example .env
           - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev
+          - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
           - docker-php-ext-install pgsql gd curl zip
           - XDEBUG_MODE=debug,coverage
           - php -v
