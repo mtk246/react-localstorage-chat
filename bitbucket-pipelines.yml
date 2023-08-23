@@ -18,7 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev
+          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev
           - docker-php-ext-install pgsql gd curl zip
           - XDEBUG_MODE=debug,coverage
           - php -v
