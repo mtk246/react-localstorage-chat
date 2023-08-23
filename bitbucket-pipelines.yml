@@ -32,6 +32,8 @@ definitions:
         script:
           - ln -f -s .env.example .env
           - XDEBUG_MODE=debug,coverage
+          - php artisan serve &
+          - sleep 5
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
         services:
           - pgsql
