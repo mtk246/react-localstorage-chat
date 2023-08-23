@@ -18,8 +18,8 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev
-          - docker-php-ext-install pgsql gd curl imap mbstring xml zip bcmath soap intl readline ldap
+          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev
+          - docker-php-ext-install pgsql gd curl zip
           - XDEBUG_MODE=debug,coverage
           - php -v
           - composer install --no-interaction --prefer-dist
