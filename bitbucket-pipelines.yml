@@ -18,7 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - apt-get update && apt-get install -y libpq-dev zlib gd bcmath json
+          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev python2 dnsutils
           - docker-php-ext-install pgsql gd curl imap mbstring xml zip bcmath soap intl readline ldap
           - XDEBUG_MODE=debug,coverage
           - php -v
