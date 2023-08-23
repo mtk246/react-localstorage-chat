@@ -21,7 +21,7 @@ class ModifierRepository
                 'modifier' => $data['modifier'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
-                'special_coding_instructions' => $data['special_coding_instructions'],
+                'special_coding_instructions' => $data['special_coding_instructions'] ?? null,
                 'classification' => $data['classification'],
                 'type' => $data['type'],
                 'description' => $data['description'],
@@ -135,7 +135,7 @@ class ModifierRepository
             $modifier->update([
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
-                'special_coding_instructions' => $data['special_coding_instructions'],
+                'special_coding_instructions' => $data['special_coding_instructions'] ?? null,
                 'classification' => $data['classification'],
                 'type' => $data['type'],
                 'description' => $data['description'],
@@ -167,6 +167,18 @@ class ModifierRepository
                         'invalid_combination' => $invalidCombination,
                     ]);
                 }
+            }
+
+            if (isset($data['note'])) {
+                PublicNote::updateOrCreate([
+                    'publishable_type' => Modifier::class,
+                    'publishable_id' => $modifier->id,
+                ],
+                [
+                    'publishable_type' => Modifier::class,
+                    'publishable_id' => $modifier->id,
+                    'note' => $data['note'],
+                ]);
             }
 
             DB::commit();

@@ -2216,7 +2216,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '2020-04-11',
                             'first_name' => 'David',
@@ -2278,7 +2278,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Estela Cardenas',
                         'cellphone' => '7862089235',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2351,7 +2351,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1999-04-11',
                             'first_name' => 'Davidd',
@@ -2413,7 +2413,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Dioshila Cardenas',
                         'cellphone' => '7862089999',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2486,7 +2486,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1998-04-11',
                             'first_name' => 'Carlos',
@@ -2515,7 +2515,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Carlos Cardenas',
                         'cellphone' => '7862089888',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2588,7 +2588,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1950-04-11',
                             'first_name' => 'Antonio',
@@ -2617,7 +2617,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Antonio Cardenas',
                         'cellphone' => '7862089444',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2690,7 +2690,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1940-04-11',
                             'first_name' => 'Carla',
@@ -2719,7 +2719,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Carla Cardenas',
                         'cellphone' => '7867089444',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2792,7 +2792,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1996-04-11',
                             'first_name' => 'Car',
@@ -2854,7 +2854,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Car Cardenas',
                         'cellphone' => '7862879999',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -2927,7 +2927,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1965-04-11',
                             'first_name' => 'Fab',
@@ -2989,7 +2989,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Fab Cardenas',
                         'cellphone' => '7862879933',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 
@@ -3062,7 +3062,7 @@ class DataTestSeeder extends Seeder
                         'own_insurance' => false,
 
                         'subscriber' => [
-                            'relationship_id' => TypeCatalog::whereDescription('Step Child')->first()->id,
+                            'relationship_id' => TypeCatalog::whereDescription('Child')->first()->id,
                             'ssn' => null,
                             'date_of_birth' => '1975-04-11',
                             'first_name' => 'Mary',
@@ -3124,7 +3124,7 @@ class DataTestSeeder extends Seeder
                     [
                         'name' => 'Jesus Medina',
                         'cellphone' => '7862878883',
-                        'relationship_id' => TypeCatalog::whereDescription('Parent')->first()->id,
+                        'relationship_id' => TypeCatalog::whereDescription('Spouse')->first()->id,
                     ],
                 ],
 

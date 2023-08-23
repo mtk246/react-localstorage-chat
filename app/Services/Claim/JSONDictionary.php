@@ -23,8 +23,11 @@ final class JSONDictionary extends Dictionary
     {
         return match ($key) {
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
-            'tradingPartnerServiceId' => '9496', /* Caso de prueba */
-            'tradingPartnerName' => 'Begento Technologies LLC',
+            'tradingPartnerServiceId' => match ($this->claim->type) {
+                ClaimType::PROFESSIONAL => '9496', /* Caso de prueba */
+                ClaimType::INSTITUTIONAL => $this->claim->higherInsurancePlan()?->payer_id ?? '9496',
+            },
+            'tradingPartnerName' => $this->claim->higherInsurancePlan()?->name ?? 'Begento Technologies LLC',
             'usageIndicator' => 'T',  /* Caso de prueba */
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
@@ -370,7 +373,14 @@ final class JSONDictionary extends Dictionary
                     ],
                     'institutionalService' => [
                         'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
-                        'measurementUnit' => 'UN', /* DA = Days UN = Unit */
+                        'measurementUnit' => match (isset($service->procedure?->companyServices
+                        ->firstWhere('company_id', $this->claim
+                            ?->demographicInformation
+                            ?->company_id)?->medication)) {
+                            true => 'DA',
+                            false => 'UN',
+                            default => 'UN', /* DA = Days UN = Unit */
+                        },
                         'serviceLineRevenueCode' => $service->revenueCode->code,
                         'procedureIdentifier' => match ($service->procedure?->type?->getName()) {
                             'HCPCS' => 'HC',
@@ -381,7 +391,11 @@ final class JSONDictionary extends Dictionary
                             default => ''
                         },
                         'procedureCode' => $service->procedure->code,
-                        // 'description' => $service->procedure?->description,
+                        'description' => match ($service->procedure?->type?->getName()) {
+                            'HCPCS' => '',
+                            'HIPPS' => '',
+                            default => $service->procedure?->description,
+                        },
                         'lineItemChargeAmount' => str_replace(',', '', $service->price),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
@@ -1339,14 +1353,13 @@ final class JSONDictionary extends Dictionary
                             'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
                         ])->values()->toArray(),
                 ],
-                'principalProcedureInformation' => isset($claimServiceLinePrincipal)
+                /*'principalProcedureInformation' => isset($claimServiceLinePrincipal)
                     ? [
                         'qualifierCode' => 'BBR',
                         'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
-                        'principalProcedureDate' => Carbon::createFromFormat('Y-m-d', $claimServiceLinePrincipal->from_service)
-                            ->format('mdY'),
+                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal?->from_service ?? ''),
                     ]
-                    : null,
+                    : null,*/
                 /*'otherProcedureInformationList' => [
                     $this->claim->service->services
                         ->skip(1)

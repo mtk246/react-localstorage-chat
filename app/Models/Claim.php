@@ -36,7 +36,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\Company $company
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Diagnosis> $diagnoses
  * @property int|null $diagnoses_count
- * @property \App\Models\Facility|null $facility
+ * @property \App\Models\Facility $facility
  * @property mixed $amount_paid
  * @property mixed $billed_amount
  * @property Attribute $billing_provider_name
