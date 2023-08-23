@@ -66,6 +66,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:
@@ -80,6 +81,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:
@@ -89,6 +91,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:
