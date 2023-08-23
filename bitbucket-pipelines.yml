@@ -18,7 +18,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - docker-php-ext-install php-bcmath php-intl
+          - docker-php-ext-install bcmath intl
           - XDEBUG_MODE=debug,coverage
           - php -v
           - composer install --no-interaction --prefer-dist
