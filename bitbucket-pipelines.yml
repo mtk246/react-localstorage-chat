@@ -1,6 +1,8 @@
-image: composer:2.5.5
+image: php:8.2.9
 
 definitions:
+  caches:
+    vendor: vendor
   services:
     pgsql:
       image: postgres:13-alpine
@@ -9,28 +11,42 @@ definitions:
         POSTGRES_USER: $DB_USERNAME
         POSTGRES_PASSWORD: $DB_PASSWORD
   steps:
-    - step: &testin-app
-        name: Testing app
-        script:
-          - ln -f -s .env.testing .env
-          - composer install --ignore-platform-reqs
-          - php artisan key:generate
-          - php artisan jwt:secret
-          - php artisan test
-        services:
-          - pgsql
+    - build: &build
+        name: Build app
         caches:
           - composer
-    - step: &syntax-test
-        name: syntax test
+          - vendor
         script:
           - ln -f -s .env.example .env
-          - composer install --ignore-platform-reqs
+          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev
+          - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+          - docker-php-ext-install pgsql gd curl zip bcmath intl
+          - composer install --no-interaction --prefer-dist
+    - step: &testin-app
+        name: Testing app
+        caches:
+          - composer
+          - vendor
+        script:
+          - ln -f -s .env.example .env
+          - XDEBUG_MODE=debug,coverage
+          - php artisan key:generate
+          - php artisan jwt:secret
+          - php artisan serve &
+          - sleep 5
+          - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
+        services:
+          - pgsql
+    - step: &syntax-test
+        name: syntax test
+        caches:
+          - composer
+          - vendor
+        script:
+          - ln -f -s .env.example .env
           - ./vendor/bin/pint --test
           ## - ./vendor/bin/phpcs
           ## - ./vendor/bin/pstan
-        caches:
-          - composer
     - step: &deploy-forge
           name: Run Forge Quik Deployment
           deployment: Test
@@ -42,6 +58,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
   branches:
@@ -49,12 +66,12 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:
-          name: Run Deployment Trigger
-          script:
-            - echo "no deployment trigger set"
+          <<: *deploy-forge
+          deployment: Production
       - step:
           name: Test success deployment
           deployment: staging
@@ -64,6 +81,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:
@@ -73,6 +91,7 @@ pipelines:
       - stage:
           name: Test app
           steps:
+              - step: *build
               - step: *testin-app
               - step: *syntax-test
       - step:

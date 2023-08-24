@@ -15,6 +15,7 @@ class ExampleTest extends TestCase
      */
     public function testExample()
     {
+        $this->withoutExceptionHandling();
         $response = $this->get('/');
 
         $response->assertStatus(200);
