@@ -298,7 +298,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::post('/create', [\App\Http\Controllers\DoctorController::class, 'create']);
         Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
         Route::get('/get-list-health-professional-types', [\App\Http\Controllers\DoctorController::class, 'getListTypes']);
