@@ -1349,7 +1349,7 @@ class PatientRepository
         $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
         $subscriber = $insurancePolicy->subscribers->first();
         if (isset($subscriber)) {
-            $address = Address::where([
+            $address = Address::query()->where([
                 'addressable_id' => $subscriber->id,
                 'addressable_type' => Subscriber::class,
                 'billing_company_id' => $insurancePolicy->billing_company_id,
@@ -1369,6 +1369,7 @@ class PatientRepository
                     'address_type_id' => $address->address_type_id ?? '',
                     'address_type' => $address->addressType->name ?? '',
                     'country_subdivision_code' => $address->country_subdivision_code ?? '',
+                    'apt_suite' => $address->apt_suite ?? '',
                 ];
             }
 
