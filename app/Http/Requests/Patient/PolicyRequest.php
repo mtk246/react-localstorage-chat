@@ -61,6 +61,7 @@ class PolicyRequest extends FormRequest
             'subscriber.address.city' => ['sometimes', 'required_if:own_insurance,false', 'string'],
             'subscriber.address.state' => ['sometimes', 'required_if:own_insurance,false', 'string'],
             'subscriber.address.zip' => ['sometimes', 'required_if:own_insurance,false', 'string'],
+            'subscriber.address.apt_suite' => ['sometimes', 'required_if:own_insurance,false', 'string'],
 
             'subscriber.contact' => ['nullable', 'array'],
             'subscriber.contact.phone' => ['nullable', 'string'],

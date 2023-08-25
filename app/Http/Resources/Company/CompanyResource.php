@@ -62,11 +62,9 @@ final class CompanyResource extends JsonResource
                             ->where('billing_company_id', $bC->id)
                             ->first()->abbreviation ?? '',
                         'private_note' => $this->getPrivateNote($bC->id)?->note ?? '',
-                        'taxonomy' => $this->resource->taxonomies()
-                            ->where('taxonomies.primary', true)
-                            ->first()
-                            ?->setHidden(['created_at', 'updated_at', 'pivot'])
-                            ->toArray(),
+                        'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
+                            ->where('company_taxonomy.billing_company_id', $bC->id)
+                            ->get()),
                         'address' => $this->getAddress($bC->id, 1),
                         'payment_address' => $this->getAddress($bC->id, 3),
                         'contact' => $this->getContact($bC->id),

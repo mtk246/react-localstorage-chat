@@ -54,19 +54,32 @@ class CompanyRepository
                 ]);
             }
 
-            if (isset($data['taxonomies'])) {
-                $tax_array = [];
-                foreach ($data['taxonomies'] as $taxonomy) {
-                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-                    array_push($tax_array, $tax->id);
-                }
-                $company->taxonomies()->sync($tax_array);
-            }
-
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
                 $billingCompany = auth()->user()->billingCompanies->first();
+            }
+
+            if (isset($data['taxonomies'])) {
+                foreach ($data['taxonomies'] as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
+                    $check = $company->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->find($tax->id);
+
+                    if ($check) {
+                        $company->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompany)
+                        ->updateExistingPivot($tax->id, [
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    } else {
+                        $company->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    }
+                }
             }
 
             /* Attach billing company */
@@ -645,14 +658,28 @@ class CompanyRepository
         ]);
 
         if (isset($data['taxonomies'])) {
-            $tax_array = [];
             foreach ($data['taxonomies'] as $taxonomy) {
                 $tax = Taxonomy::updateOrCreate([
                     'tax_id' => $taxonomy['tax_id'],
                 ], $taxonomy);
-                array_push($tax_array, $tax->id);
+                $check = $company->taxonomies()
+                    ->wherePivot('billing_company_id', $billingCompany)
+                    ->find($tax->id);
+
+                if($check) {
+                    $company->taxonomies()
+                    ->wherePivot('billing_company_id', $billingCompany)
+                    ->updateExistingPivot($tax->id, [
+                        'primary' => $taxonomy['primary']
+                    ]);
+                }
+                else {
+                    $company->taxonomies()->attach($tax->id, [
+                        'billing_company_id' => $billingCompany,
+                        'primary' => $taxonomy['primary']
+                    ]);
+                }
             }
-            $company->taxonomies()->sync($tax_array);
         }
 
         if (isset($data['nickname'])) {
