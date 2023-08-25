@@ -162,7 +162,7 @@ final class Company extends Model implements Auditable
      */
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class)->withTimestamps();
+        return $this->belongsToMany(Taxonomy::class)->withPivot(['billing_company_id', 'primary'])->withTimestamps();
     }
 
     /**
