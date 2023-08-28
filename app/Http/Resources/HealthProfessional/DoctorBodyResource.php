@@ -35,7 +35,7 @@ final class DoctorBodyResource extends JsonResource
             'last_modified' => $this->resource->last_modified,
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
-            'taxonomies' => $this->resource->taxonomies,
+            'taxonomies' => $this->resource->taxonomies()->distinct('name')->get(),
             'public_note' => $this->resource->publicNote,
             'profile' => $this->profile,
             'billing_companies' => $this->resource->billingCompanies
