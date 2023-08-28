@@ -52,7 +52,7 @@ final class DoctorBodyResource extends JsonResource
                         'health_professional_type' => $type,
                         'company_id' => $model->pivot->company_id,
                         'company' => $this->getCompany($model->pivot->company_id, $model->id),
-                        'miscellaneous' => $model->pivot->miscellaneous
+                        'miscellaneous' => $model->pivot->miscellaneous,
                     ];
 
                     return $model;
