@@ -62,6 +62,7 @@ final class BillingCompanyHealthProfessional extends Pivot
         'is_provider',
         'company_id',
         'health_professional_type_id',
+        'miscellaneous',
     ];
 
     public function healthProfessional()

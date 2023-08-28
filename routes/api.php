@@ -298,7 +298,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::post('/create', [\App\Http\Controllers\DoctorController::class, 'create']);
         Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
         Route::get('/get-list-health-professional-types', [\App\Http\Controllers\DoctorController::class, 'getListTypes']);
@@ -312,7 +311,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{npi}/get-by-npi', [\App\Http\Controllers\DoctorController::class, 'getOneByNpi']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\DoctorController::class, 'changeStatus']);
         Route::put('/{id}/update-companies', [\App\Http\Controllers\DoctorController::class, 'updateCompanies']);
-        Route::get('{doctor}/billing-company', [\App\Http\Controllers\DoctorController::class, 'getDoctorBillingCompany']);
     });
 
     Route::prefix('patient')->middleware([
