@@ -338,14 +338,13 @@ class Patient extends Model implements Auditable
             return $query->whereHas('profile', function ($qq) use ($search) {
                 $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
                     ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")])
-                    ->orWhereHas('billingCompanies', function ($qqa) use ($search) {
-                        $qqa->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-                    });
+                    ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
             })->whereHas('user', function ($q) use ($search): void {
                 $q->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereHas('companies', function ($qq) use ($search) {
                 $qq->whereRaw('LOWER(med_num) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('billingCompanies', function ($qq) use ($search) {
+                $qq->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 
