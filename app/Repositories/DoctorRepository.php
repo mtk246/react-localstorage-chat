@@ -114,7 +114,7 @@ class DoctorRepository
                     'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
                     'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
                     'npi' => $data['npi'],
-                    'ein' => $data['ein'] ?? null,
+                    'ein' => $data['ein'] ?? $data['profile']['ssn'],
                     'upin' => $data['upin'] ?? null,
                 ]);
 
@@ -358,7 +358,7 @@ class DoctorRepository
                             'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
                             'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
                             'npi' => $data['npi'],
-                            'ein' => $data['ein'] ?? null,
+                            'ein' => $data['ein'] ?? $data['profile']['ssn'],
                             'upin' => $data['upin'] ?? null,
                         ],
                     );
