@@ -37,6 +37,8 @@ class UpdateDoctorRequest extends FormRequest
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
+            'is_provider' => ['required', 'boolean'],
+
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
             'company_id' => ['required', 'integer', 'nullable'],

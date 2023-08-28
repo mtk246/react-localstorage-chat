@@ -37,7 +37,7 @@ final class DoctorBodyResource extends JsonResource
             'user' => $this->resource->user,
             'taxonomies' => $this->resource->taxonomies()->distinct('name')->get(),
             'public_note' => $this->resource->publicNote,
-            'profile' => $this->profile,
+            'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {
                     $type = $this->getHealthProfessionalType($model->id);
@@ -52,6 +52,7 @@ final class DoctorBodyResource extends JsonResource
                         'health_professional_type' => $type,
                         'company_id' => $model->pivot->company_id,
                         'company' => $this->getCompany($model->pivot->company_id, $model->id),
+                        'miscellaneous' => $model->pivot->miscellaneous
                     ];
 
                     return $model;

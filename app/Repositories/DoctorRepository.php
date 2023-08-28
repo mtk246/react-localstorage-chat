@@ -41,6 +41,12 @@ class DoctorRepository
         try {
             \DB::beginTransaction();
 
+            if (auth()->user()->hasRole('superuser')) {
+                $billingCompany = $data['billing_company_id'];
+            } else {
+                $billingCompany = auth()->user()->billing_company_id;
+            }
+
             if (isset($data['profile']['ssn'])) {
                 $profile = Profile::query()->updateOrCreate([
                     'ssn' => $data['profile']['ssn'] ?? null,
@@ -55,19 +61,26 @@ class DoctorRepository
 
             /* Create User si boolean create user its true */
             if ($data['create_user']) {
-                $user = User::query()->updateOrCreate([
-                    'email' => $data['contact']['email'],
-                ], [
-                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                    'userkey' => encrypt(uniqid('', true)),
-                    'profile_id' => $profile->id,
-                ]);
-            }
+                if(isset($profile->user)) {
 
-            if (auth()->user()->hasRole('superuser')) {
-                $billingCompany = $data['billing_company_id'];
-            } else {
-                $billingCompany = auth()->user()->billing_company_id;
+                    if ($profile->user->billing_company_id != $billingCompany) {
+                        throw new \Exception('Cannot create user because it already exists for another billing company');
+                    }
+
+                    $user = $profile->user;
+                    $user->update([
+                        'email' => $data['contact']['email']
+                    ]);
+                }
+                else {
+                    $user = User::query()->create([
+                            'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+                            'userkey' => encrypt(uniqid('', true)),
+                            'profile_id' => $profile->id,
+                            'email' => $data['contact']['email'],
+                            'billing_company_id' => $billingCompany
+                        ]);
+                }
             }
 
             /* Attach billing company if user was created*/
@@ -219,6 +232,7 @@ class DoctorRepository
                     'npi_company' => $data['npi_company'] ?? '',
                     'company_id' => $company->id ?? $data['company_id'],
                     'health_professional_type_id' => $type?->id,
+                    'miscellaneous' => $data['miscellaneous'] ?? null
                 ]);
             } else {
                 $healthP->billingCompanies()->updateExistingPivot(
@@ -299,15 +313,28 @@ class DoctorRepository
                 'date_of_birth' => $data['profile']['date_of_birth'],
             ]);
 
-            /** Create User si boolean create user its true */
+            /* Create User si boolean create user its true */
             if ($data['create_user']) {
-                $user = User::query()->updateOrCreate([
-                    'email' => $data['contact']['email'],
-                ], [
-                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                    'userkey' => encrypt(uniqid('', true)),
-                    'profile_id' => $healthP->profile->id, // Revisar esto cuando se vaya a probar
-                ]);
+                if(isset($healthP->profile->user)) {
+
+                    if ($healthP->profile->user->billing_company_id != $billingCompany) {
+                        throw new \Exception('Cannot create user because it already exists for another billing company');
+                    }
+
+                    $user = $healthP->profile->user;
+                    $user->update([
+                        'email' => $data['contact']['email']
+                    ]);
+                }
+                else {
+                    $user = User::query()->create([
+                            'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+                            'userkey' => encrypt(uniqid('', true)),
+                            'profile_id' => $healthP->profile->id,
+                            'email' => $data['contact']['email'],
+                            'billing_company_id' => $billingCompany
+                        ]);
+                }
             }
 
             /* Attach billing company */
@@ -487,6 +514,7 @@ class DoctorRepository
                     'npi_company' => $data['npi_company'] ?? '',
                     'company_id' => $data['company_id'],
                     'health_professional_type_id' => $type?->id,
+                    'miscellaneous' => $data['miscellaneous'] ?? null
                 ]);
             } else {
                 $healthP->billingCompanies()->updateExistingPivot(
@@ -939,8 +967,11 @@ class DoctorRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($healthProfessionalId)) {
+            dd("superuser");
             return getList(BillingCompany::class, 'name', ['status' => true]);
         } else {
+            dd("no superuser superuser");
+
             $ids = [];
             $billingCompanies = HealthProfessional::find($healthProfessionalId)->billingCompanies;
             foreach ($billingCompanies as $field) {

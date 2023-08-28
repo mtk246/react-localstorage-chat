@@ -311,7 +311,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{npi}/get-by-npi', [\App\Http\Controllers\DoctorController::class, 'getOneByNpi']);
         Route::patch('/{id}/change-status', [\App\Http\Controllers\DoctorController::class, 'changeStatus']);
         Route::put('/{id}/update-companies', [\App\Http\Controllers\DoctorController::class, 'updateCompanies']);
-        Route::get('{doctor}/billing-company', [\App\Http\Controllers\DoctorController::class, 'getDoctorBillingCompany']);
     });
 
     Route::prefix('patient')->middleware([
