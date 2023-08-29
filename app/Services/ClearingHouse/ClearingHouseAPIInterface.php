@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Claim;
+namespace App\Services\ClearingHouse;
 
-interface InsurancePlanDictionaryInterface
+interface ClearingHouseAPIInterface
 {
     public function getCPIDByPayerID(string $payerID, string $type): ?string;
 }

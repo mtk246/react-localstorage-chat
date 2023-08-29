@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Claim;
+namespace App\Services\ClearingHouse;
 
-use App\Models\ClearingHouse;
 use App\Models\InsurancePlan;
 
-abstract class InsurancePlanDictionary implements InsurancePlanDictionaryInterface
+abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
     protected $data;
 
     public function __construct(
         protected readonly ?InsurancePlan $insurance,
         protected readonly ?string $type,
-        protected readonly ?ClearingHouse $clearingHouse,
+        protected readonly string $file = ,
     ) {
         $this->setConfigData();
     }
@@ -30,7 +29,7 @@ abstract class InsurancePlanDictionary implements InsurancePlanDictionaryInterfa
 
     protected function setConfigData(): void
     {
-        $jsonData = file_get_contents(database_path('data/claim/CPIDPayers.json'));
+        $jsonData = file_get_contents(database_path('data/ClearingHouse/ChangeHC-Payers.json'));
         $this->data = json_decode($jsonData, true);
     }
 }
