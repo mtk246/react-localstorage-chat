@@ -40,6 +40,7 @@ final class HealthProfessionalResource extends JsonResource
             'billing_companies' => $this->resource->billingCompanies,
             'taxonomies' => $this->resource->taxonomies,
             'companies' => $this->getCompanies(),
+            'health_professional_type' => $this->resource->healthProfessionalType,
         ];
     }
 
