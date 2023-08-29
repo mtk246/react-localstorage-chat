@@ -799,11 +799,11 @@ class PatientRepository
                     $data = $data->orderBy('profiles.date_of_birth');
                     break;
                 case 'code':
-                    $data->orderBy('code');
+                    $data->orderBy('patients.code');
                     break;
             }
         } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
+            $data = $data->orderBy('patients.created_at', 'desc')->orderBy('patients.id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
