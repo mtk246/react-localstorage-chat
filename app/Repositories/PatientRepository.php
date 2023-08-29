@@ -740,12 +740,10 @@ class PatientRepository
     {
         $bC = auth()->user()->billing_company_id ?? null;
         if (!$bC) {
-            $data = Patient::with([
+            $data = Patient::query()->with([
                 'user' => function ($query) {
                     $query->with(['roles', 'billingCompanies']);
                 },
-                // "marital",
-                // "guarantor",
                 'profile' => function ($q) {
                     $q->with(['socialMedias', 'addresses', 'contacts']);
                 },
@@ -755,10 +753,12 @@ class PatientRepository
                 'publicNote',
                 'privateNotes',
                 'insurancePolicies',
+                'billingCompanies',
                 'insurancePlans' => function ($query) {
                     $query->with('insuranceCompany');
                 },
-            ]);
+            ])
+            ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         } else {
             $data = Patient::query()
                 ->whereHas('billingCompanies', function ($query) use ($bC) {
@@ -767,8 +767,6 @@ class PatientRepository
                     'user' => function ($query) {
                         $query->with(['roles', 'billingCompanies']);
                     },
-                    // "marital",
-                    // "guarantor",
                     'profile' => function ($q) {
                         $q->with(['socialMedias', 'addresses', 'contacts']);
                     },
@@ -784,7 +782,8 @@ class PatientRepository
                     'insurancePlans' => function ($query) {
                         $query->with('insuranceCompany');
                     },
-                ]);
+                ])
+                ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
@@ -792,14 +791,16 @@ class PatientRepository
         }
 
         if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'patients.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } /**elseif (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy(
-                    Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } */ else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            switch($request->sortBy) {
+                case 'name':
+                    $data = $data->orderBy('profiles.first_name');
+                    break;
+                case 'bod':
+                    $data = $data->orderBy('profiles.date_of_birth');
+                    break;
+                case 'code':
+                    $data->orderBy('code');
+                    break;
             }
         } else {
             $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
