@@ -967,11 +967,8 @@ class DoctorRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($healthProfessionalId)) {
-            dd("superuser");
             return getList(BillingCompany::class, 'name', ['status' => true]);
         } else {
-            dd("no superuser superuser");
-
             $ids = [];
             $billingCompanies = HealthProfessional::find($healthProfessionalId)->billingCompanies;
             foreach ($billingCompanies as $field) {
