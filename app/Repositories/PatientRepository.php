@@ -758,6 +758,7 @@ class PatientRepository
                     $query->with('insuranceCompany');
                 },
             ])
+            ->select('patients.*')
             ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         } else {
             $data = Patient::query()
@@ -783,6 +784,7 @@ class PatientRepository
                         $query->with('insuranceCompany');
                     },
                 ])
+                ->select('patients.*')
                 ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         }
 
