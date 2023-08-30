@@ -22,7 +22,7 @@ class CreateDoctorRequest extends FormRequest
             'npi' => ['required', 'string'],
             'ein' => [
                 Rule::requiredIf(!isset($this->profile['ssn'])),
-                'string'
+                'string',
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 

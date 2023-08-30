@@ -463,18 +463,20 @@ class DoctorRepository
             ]);
 
             if (isset($data['private_note'])) {
-                PrivateNote::create([
+                PrivateNote::updateOrCreate([
                     'publishable_type' => HealthProfessional::class,
                     'publishable_id' => $healthP->id,
                     'billing_company_id' => $billingCompany,
+                ], [
                     'note' => $data['private_note'],
                 ]);
             }
 
             if (isset($data['public_note'])) {
-                PublicNote::create([
+                PublicNote::updateOrCreate([
                     'publishable_type' => HealthProfessional::class,
                     'publishable_id' => $healthP->id,
+                ], [
                     'note' => $data['public_note'],
                 ]);
             }
