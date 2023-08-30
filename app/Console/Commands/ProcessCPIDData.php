@@ -65,7 +65,7 @@ final class ProcessCPIDData extends Command
             $processedData[$payerId][$claimType]['CPID'] = $CPID;
         }
 
-        $outputFilePath = database_path('data/claim/CPIDPayers.json');
+        $outputFilePath = database_path('data/ClearingHouse/ChangeHC-Payers.json');
         file_put_contents($outputFilePath, json_encode($processedData, JSON_PRETTY_PRINT));
 
         $this->info('CSV data processed and JSON file generated successfully.');
