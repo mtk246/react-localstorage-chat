@@ -967,7 +967,7 @@ class DoctorRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($healthProfessionalId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = HealthProfessional::find($healthProfessionalId)->billingCompanies;
@@ -975,9 +975,9 @@ class DoctorRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'healthProfessionals', 'whereHas' => ['relationship' => 'healthProfessionals', 'where' => ['health_professional_id' => $healthProfessionalId]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'exists' => 'healthProfessionals', 'whereHas' => ['relationship' => 'healthProfessionals', 'where' => ['health_professional_id' => $healthProfessionalId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'healthProfessionals', 'orWhereHas' => ['relationship' => 'healthProfessionals', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['abbreviation', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'healthProfessionals', 'orWhereHas' => ['relationship' => 'healthProfessionals', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }
