@@ -33,7 +33,6 @@ class UpdateDoctorRequest extends FormRequest
             'ein' => [
                 Rule::requiredIf(!isset($this->profile['ssn'])),
                 'string',
-                'regex:/^\d{2}-\d{7}$/',
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
