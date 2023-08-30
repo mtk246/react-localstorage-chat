@@ -13,7 +13,6 @@ abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
     public function __construct(
         protected readonly ?InsurancePlan $insurance,
         protected readonly ?string $type,
-        protected readonly string $file = ,
     ) {
         $this->setConfigData();
     }
@@ -29,6 +28,7 @@ abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
 
     protected function setConfigData(): void
     {
+        /** @todo Aplicar consulta para todos los files .json. Recorer todos los ClearingHouseEnums */
         $jsonData = file_get_contents(database_path('data/ClearingHouse/ChangeHC-Payers.json'));
         $this->data = json_decode($jsonData, true);
     }
