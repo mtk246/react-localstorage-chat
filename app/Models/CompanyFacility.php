@@ -40,6 +40,8 @@ final class CompanyFacility extends Pivot implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    public $incrementing = true;
+
     public function company()
     {
         return $this->belongsTo(Company::class);
