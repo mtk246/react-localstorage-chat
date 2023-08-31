@@ -42,6 +42,8 @@ final class FacilityTaxonomy extends Pivot implements Auditable
     use AuditableTrait;
     use HasFactory;
 
+    public $incrementing = true;
+
     public function facility()
     {
         return $this->belongsTo(Facility::class);
