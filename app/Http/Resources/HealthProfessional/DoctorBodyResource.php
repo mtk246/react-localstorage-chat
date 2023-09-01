@@ -35,7 +35,7 @@ final class DoctorBodyResource extends JsonResource
             'last_modified' => $this->resource->last_modified,
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
-            'taxonomies' => $this->resource->taxonomies()->distinct('name')->get(),
+            'taxonomies' => $this->resource->taxonomies->unique('name'),
             'public_note' => $this->resource->publicNote,
             'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies
@@ -85,9 +85,9 @@ final class DoctorBodyResource extends JsonResource
         return $this->resource
             ->profile
             ->contacts
-            ->filter(
+            ->first(
                 fn ($contact) => $contact->billing_company_id === $billingCompanyId,
-            )[0] ?? null;
+            ) ?? null;
     }
 
     private function getPrivateNote(int $billingCompanyId)
