@@ -123,13 +123,18 @@ class DoctorRepository
             if (!$data['is_provider']) {
                 $company = Company::query()->find($data['company_id']);
             } else {
-                $company = Company::query()->firstOrCreate([
-                    'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
-                    'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
-                    'npi' => $data['npi'],
-                    'ein' => $data['ein'] ?? $data['profile']['ssn'],
-                    'upin' => $data['upin'] ?? null,
-                ]);
+                $company = Company::query()->firstOrCreate(
+                    [
+                        'npi' => $data['npi']
+                    ],
+                    [
+                        'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
+                        'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
+                        'npi' => $data['npi'],
+                        'ein' => $data['ein'] ?? $data['profile']['ssn'],
+                        'upin' => $data['upin'] ?? null,
+                    ]
+                );
 
                 if (isset($data['nickname'])) {
                     EntityNickname::updateOrCreate([
