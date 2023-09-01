@@ -123,7 +123,7 @@ class DoctorRepository
             if (!$data['is_provider']) {
                 $company = Company::query()->find($data['company_id']);
             } else {
-                $company = Company::query()->create([
+                $company = Company::query()->firstOrCreate([
                     'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
                     'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
                     'npi' => $data['npi'],
@@ -216,14 +216,28 @@ class DoctorRepository
                 $data['contact']['contactable_id'] = $profile->id;
                 $data['contact']['contactable_type'] = Profile::class;
                 $data['contact']['billing_company_id'] = $billingCompany;
-                Contact::create($data['contact']);
+                Contact::updateOrCreate(
+                    [
+                        'contactable_id' => $profile->id,
+                        'contactable_type' => Profile::class,
+                        'billing_company_id' => $billingCompany
+                    ],
+                    $data['contact']
+                );
             }
 
             if (isset($data['address'])) {
                 $data['address']['addressable_id'] = $profile->id;
                 $data['address']['addressable_type'] = Profile::class;
                 $data['address']['billing_company_id'] = $billingCompany;
-                Address::create($data['address']);
+                Address::updateOrCreate(
+                    [
+                        'addressable_id' => $profile->id,
+                        'addressable_type' => Profile::class,
+                        'billing_company_id' => $billingCompany
+                    ],
+                    $data['address']
+                );
             }
 
             if (is_null($healthP->billingCompanies()->find($billingCompany))) {
