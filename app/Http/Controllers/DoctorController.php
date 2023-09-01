@@ -7,10 +7,13 @@ use App\Http\Requests\CreateDoctorRequest;
 use App\Http\Requests\DoctorChangeStatusRequest;
 use App\Http\Requests\HealthProfessional\UpdateCompaniesRequest;
 use App\Http\Requests\UpdateDoctorRequest;
+use App\Http\Resources\HealthProfessional\HealthProfessionalNpiResource;
 use App\Models\HealthProfessional;
 use App\Repositories\DoctorRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Actions\GetAPIAction;
+use Illuminate\Support\Facades\Gate;
 
 class DoctorController extends Controller
 {
@@ -53,11 +56,30 @@ class DoctorController extends Controller
         return response()->json($getDoctor->single($doctor, $request->user()));
     }
 
-    public function getOneByNpi(string $npi): JsonResponse
+    public function getOneByNpi(string $npi, GetAPIAction $APIAction): JsonResponse
     {
+        $apiResponse = $APIAction->getByNPI($npi);
         $rs = $this->doctorRepository->getOneByNpi($npi);
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, health professional not found'), 404);
+        if ($rs) {
+            if (isset($rs['result']) && $rs['result']) {
+                return response()->json(HealthProfessionalNpiResource::make(['data' => $rs['data'], 'api' => $apiResponse, 'type' => 'public']), 200);
+            } else {
+                if (Gate::check('is-admin')) {
+                    return response()->json(__('Forbidden, The health porfessional has already been associated with all the billing companies'), 403);
+                } else {
+                    return response()->json(__('Forbidden, The health porfessional has already been associated with the billing company'), 403);
+                }
+            }
+        } else {
+            if ($apiResponse) {
+                return ('NPI-1' === $apiResponse->enumeration_type)
+                    ? response()->json(HealthProfessionalNpiResource::make(['api' => $apiResponse, 'type' => 'api']), 200)
+                    : response()->json(__('Error, The entered NPI does not belong to a facility but to a health care professional, please verify it and enter a valid NPI.'), 404);
+            }
+
+            return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
+        }
     }
 
     public function changeStatus(DoctorChangeStatusRequest $request, int $id): JsonResponse

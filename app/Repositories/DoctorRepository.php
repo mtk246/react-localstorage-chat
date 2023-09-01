@@ -96,7 +96,7 @@ class DoctorRepository
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMediaNames = array_column($data['profile']['social_medias'], 'name');
-            
+
                 // Delete socialMedia
                 $profile->socialMedias->each(function ($socialMedia) use ($socialMediaNames) {
                     $socialNetwork = $socialMedia->SocialNetwork;
@@ -104,7 +104,7 @@ class DoctorRepository
                         $socialMedia->delete();
                     }
                 });
-            
+
                 // Update or create new social medias
                 foreach ($data['profile']['social_medias'] as $socialMedia) {
                     $socialNetwork = SocialNetwork::whereName($socialMedia['name'])->first();
@@ -164,7 +164,7 @@ class DoctorRepository
                 if (isset($data['taxonomies'])) {
                     foreach ($data['taxonomies'] as $taxonomy) {
                         $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-    
+
                         $company->taxonomies()->attach($tax->id, [
                             'billing_company_id' => $billingCompany,
                             'primary' => $taxonomy['primary']
@@ -270,7 +270,7 @@ class DoctorRepository
             if (isset($data['taxonomies'])) {
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-                    
+
                     $healthP->taxonomies()->attach($tax->id, [
                         'billing_company_id' => $billingCompany,
                         'primary' => $taxonomy['primary'],
@@ -451,7 +451,7 @@ class DoctorRepository
                     if (isset($data['taxonomies'])) {
                         foreach ($data['taxonomies'] as $taxonomy) {
                             $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-        
+
                             $company->taxonomies()->attach($tax->id, [
                                 'billing_company_id' => $billingCompany,
                                 'primary' => $taxonomy['primary']
@@ -595,7 +595,7 @@ class DoctorRepository
                     )
                 );
             }
-            
+
             \DB::commit();
 
             return new DoctorBodyResource($healthP);
@@ -821,7 +821,7 @@ class DoctorRepository
     {
         $healthP = HealthProfessional::query()
             ->whereNpi($npi)
-            // ->with(['taxonomies', 'publicNote'])
+            ->with(['taxonomies', 'publicNote'])
             ->first();
 
         if ($healthP) {
