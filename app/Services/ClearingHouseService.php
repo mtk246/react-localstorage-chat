@@ -15,10 +15,9 @@ final class ClearingHouseService
 {
     public function create(InsurancePlan $insurancePlan, ?string $type, ?ClearingHouse $clearingHouse): ClearingHouseAPIInterface
     {
-        /** @todo Falta agregar en el campo clearing house en la insuance company */
-        return match($insurancePlan?->insuranceComapany?->clearing_house_id) {
-             ClearingHouseEnum::CHANGE->value => new ChangeHCAPI($insurancePlan, $type),
-             default => new ClearingHouseAPI($insurancePlan, $type),
+        return match ($clearingHouse) {
+            ClearingHouseEnum::CHANGE->value => new ChangeHCAPI($insurancePlan, $type),
+            default => new ClearingHouseAPI($insurancePlan, $type),
         };
     }
 }
