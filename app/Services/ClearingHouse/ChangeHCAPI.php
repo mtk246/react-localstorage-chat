@@ -13,7 +13,7 @@ final class ChangeHCAPI extends ClearingHouseAPI
 
     protected function setConfigData(): void
     {
-        $jsonData = file_get_contents(database_path('data/ClearingHouse/' . $this->clearingHouse->getFile()));
+        $jsonData = file_get_contents(database_path('data/ClearingHouse/'.$this->clearingHouse->getFile()));
         $this->data = json_decode($jsonData, true);
     }
 }
