@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\HealthProfessional;
 
+use App\Facades\Pagination;
 use App\Http\Resources\HealthProfessional\CompanyHealthProfessionalResource;
 use App\Models\CompanyHealthProfessional;
 use App\Models\HealthProfessional;
@@ -25,7 +26,8 @@ final class GetCompanyAction
                 'company',
                 'healthProfessional',
             ])
-            ->get();
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
 
         return CompanyHealthProfessionalResource::collection($companyCollection);
     }

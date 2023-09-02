@@ -66,16 +66,16 @@ class DoctorController extends Controller
                 return response()->json(HealthProfessionalNpiResource::make(['data' => $rs['data'], 'api' => $apiResponse, 'type' => 'public']), 200);
             } else {
                 if (Gate::check('is-admin')) {
-                    return response()->json(__('Forbidden, The health porfessional has already been associated with all the billing companies'), 403);
+                    return response()->json(__('Forbidden, The Healthcare Professional has already been associated with all the billing companies'), 403);
                 } else {
-                    return response()->json(__('Forbidden, The health porfessional has already been associated with the billing company'), 403);
+                    return response()->json(__('Forbidden, The Healthcare Professional has already been associated with the billing company'), 403);
                 }
             }
         } else {
             if ($apiResponse) {
                 return ('NPI-1' === $apiResponse->enumeration_type)
                     ? response()->json(HealthProfessionalNpiResource::make(['api' => $apiResponse, 'type' => 'api']), 200)
-                    : response()->json(__('Error, The entered NPI does not belong to a facility but to a health care professional, please verify it and enter a valid NPI.'), 404);
+                    : response()->json(__('Error, The entered NPI does not belong to a healthcare professional but organization.'), 404);
             }
 
             return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
