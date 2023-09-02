@@ -96,7 +96,7 @@ class DoctorRepository
 
             if (isset($data['profile']['social_medias'])) {
                 $socialMediaNames = array_column($data['profile']['social_medias'], 'name');
-            
+
                 // Delete socialMedia
                 $profile->socialMedias->each(function ($socialMedia) use ($socialMediaNames) {
                     $socialNetwork = $socialMedia->SocialNetwork;
@@ -104,7 +104,7 @@ class DoctorRepository
                         $socialMedia->delete();
                     }
                 });
-            
+
                 // Update or create new social medias
                 foreach ($data['profile']['social_medias'] as $socialMedia) {
                     $socialNetwork = SocialNetwork::whereName($socialMedia['name'])->first();
@@ -164,7 +164,7 @@ class DoctorRepository
                 if (isset($data['taxonomies'])) {
                     foreach ($data['taxonomies'] as $taxonomy) {
                         $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-    
+
                         $company->taxonomies()->attach($tax->id, [
                             'billing_company_id' => $billingCompany,
                             'primary' => $taxonomy['primary']
@@ -270,7 +270,7 @@ class DoctorRepository
             if (isset($data['taxonomies'])) {
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-                    
+
                     $healthP->taxonomies()->attach($tax->id, [
                         'billing_company_id' => $billingCompany,
                         'primary' => $taxonomy['primary'],
@@ -451,7 +451,7 @@ class DoctorRepository
                     if (isset($data['taxonomies'])) {
                         foreach ($data['taxonomies'] as $taxonomy) {
                             $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
-        
+
                             $company->taxonomies()->attach($tax->id, [
                                 'billing_company_id' => $billingCompany,
                                 'primary' => $taxonomy['primary']
@@ -595,7 +595,7 @@ class DoctorRepository
                     )
                 );
             }
-            
+
             \DB::commit();
 
             return new DoctorBodyResource($healthP);
@@ -821,7 +821,7 @@ class DoctorRepository
     {
         $healthP = HealthProfessional::query()
             ->whereNpi($npi)
-            // ->with(['taxonomies', 'publicNote'])
+            ->with(['taxonomies', 'publicNote'])
             ->first();
 
         if ($healthP) {
@@ -846,86 +846,10 @@ class DoctorRepository
                 ->toArray();
 
             if (empty($billingCompanies)) {
-                // return ['result' => false];
-                return !is_null($healthP) ? $healthP : null;
+                return ['result' => false];
             }
         }
-        // return !is_null($healthP) ? ['data' => $healthP, 'result' => true] : null;
-        return null;
-
-        $bC = auth()->user()->billing_company_id ?? null;
-        $query = HealthProfessional::whereNpi($npi);
-
-        if (!$query->exists()) {
-            return null;
-        }
-
-        if (!$bC) {
-            $healthP = $query->with([
-                'user' => function ($query) {
-                    $query->with([
-                        'profile' => function ($query) {
-                            $query->with(['socialMedias', 'addresses', 'contacts']);
-                        },
-                        'roles',
-                        'billingCompanies',
-                    ]);
-                },
-                'taxonomies',
-                'companies' => function ($query) {
-                    $query->with(['taxonomies', 'nicknames']);
-                },
-                'healthProfessionalType',
-                'company' => function ($query) {
-                    $query->with(['taxonomies', 'nicknames']);
-                },
-                'privateNotes',
-                'publicNote',
-            ])->first();
-            $healthP->user->profile->socialMedias->groupBy('billing_company_id');
-            $healthP->user->addresses->groupBy('billing_company_id');
-            $healthP->user->contacts->groupBy('billing_company_id');
-        } else {
-            $healthP = HealthProfessional::whereNpi($npi)->with([
-                'user' => function ($query) use ($bC) {
-                    $query->with([
-                        'profile' => function ($query) use ($bC) {
-                            $query->with([
-                                'socialMedias',
-                                'addresses' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                                'contacts' => function ($query) use ($bC) {
-                                    $query->where('billing_company_id', $bC);
-                                },
-                            ]);
-                        },
-                        'roles',
-                        'billingCompanies',
-                    ]);
-                },
-                'taxonomies',
-                'companies' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC)
-                        ->with(['taxonomies', 'nicknames']);
-                },
-                'healthProfessionalType',
-                'company' => function ($query) use ($bC) {
-                    $query->with([
-                            'taxonomies',
-                            'nicknames' => function ($q) use ($bC) {
-                                $q->where('billing_company_id', $bC);
-                            },
-                        ]);
-                },
-                'privateNotes' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'publicNote',
-            ])->first();
-        }
-
-        return $healthP;
+        return !is_null($healthP) ? ['data' => $healthP, 'result' => true] : null;
     }
 
     /**
