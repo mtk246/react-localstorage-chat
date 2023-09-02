@@ -40,6 +40,8 @@ final class FacilityFacilityType extends Pivot implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    public $incrementing = true;
+
     public function facilityType()
     {
         return $this->belongsTo(FacilityType::class);
