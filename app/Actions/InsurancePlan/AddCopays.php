@@ -30,10 +30,13 @@ final class AddCopays
                     $copay,
                     $insurance,
                     $copayData->getProceduresIds(),
-                    $copayData->getCompanyIds()
+                    $copayData->getCompaniesIds()
                 )
             ))
-            ->map(fn (Copay $copay) => $copay->load('procedures'));
+            ->map(fn (Copay $copay) => $copay->load([
+                'procedures',
+                'companies',
+            ]));
         });
     }
 
@@ -56,13 +59,14 @@ final class AddCopays
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingInsurancePlanId): void {
                 $query->where('billing_company_id', $billingInsurancePlanId);
             })
-            ->whereNotIn('copays.id', $services->map(
-                fn (CopayRequestCast $services) => $services->getId()
+            ->whereNotIn('copays.id', $services->map(// TODO: Preguntarle a henry si aca se deberia usar el where o el whereNotIn ya que no esta eliminando las copays que nos e envian
+                fn (CopayRequestCast $services) => $services->getId() ?? null
             )->toArray())
             ->get()
             ->each(function (Copay $copay) use ($insurance) {
                 $copay->procedures()->detach();
                 $copay->insurancePlans()->detach();
+                $copay->companies()->detach();
                 $insurance->copays()->detach($copay->id);
             });
     }
