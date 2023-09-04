@@ -35,7 +35,7 @@ final class AddCopays
             ))
             ->map(fn (Copay $copay) => $copay->load([
                 'procedures',
-                'companies'
+                'companies',
             ]));
         });
     }
