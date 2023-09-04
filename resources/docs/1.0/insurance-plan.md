@@ -34,8 +34,8 @@
 | 1  | POST   | `Create Insurance plan`         | `/insurance-plan/`                                         | yes            | Create insurance plan              |
 | 2  | PUT    | `Update Insurance plan`         | `/insurance-plan/{id}`                                     | yes            | Update insurance plan              |
 | 3  | PATCH  | `Change status insurance plan`  | `/insurance-plan/{id}/change-status`                       | yes            | Change status insurance plan       |
-| 4  | PATCH  | `Add copays to insurance`       | `/insurance-plan/add-copays-to-insurance-plan/{id}`        | yes            | Add copays to insurance plan       |
-| 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/add-contract-fees-to-insurance-plan/{id}` | yes            | Add contract fee to insurance plan |
+| 4  | PATCH  | `Add copays to insurance`       | `/insurance-plan/{id}/copays`        | yes            | Add copays to insurance plan       |
+| 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/{id}/contract-fees` | yes            | Add contract fee to insurance plan |
 | 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                           | yes            | Get all insurance plan from server |
 | 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                                     | yes            | Get one insurance plan             |
 | 12 |GET | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
@@ -314,9 +314,10 @@ insurance_plan_id required <integer>
 {
     "copays": [
         {
+            "id": 1, /** Opcional */
             "billing_company_id": 1, /** Only required by superuser */
             "procedure_ids": [1,2,3], /** required */
-            "company_id": 1, /** optional */
+            "companies_ids": 1, /** optional */
             "copay": 150.2, /** required */
             "private_note": "Note private by billing_company"  /** optional */
         }
@@ -391,6 +392,17 @@ insurance_plan_id required <integer>
                     "start_date": "2022-03-16", /** required */
                     "end_date": "2022-03-16", /** required */
                 }
+            ],
+            "have_contract_specifications": true,
+            "contract_specifications": [
+                {
+                    "billing_provider_id": "1",
+                    "billing_provider_tax_id": "1",
+                    "billing_provider_taxonomy_id": 1,
+                    "health_professional_id": "1",
+                    "health_professional_tax_id": "1",
+                    "health_professional_taxonomy_id": 1
+                }
             ]
         },
         {
@@ -415,7 +427,18 @@ insurance_plan_id required <integer>
                 {
                     "patient_id": 1, /** required */
                     "start_date": "2022-03-16", /** required */
-                    "end_date": "2022-03-16", /** required */
+                    "end_date": "2022-03-18", /** required */
+                }
+            ],
+            "have_contract_specifications": true,
+            "contract_specifications": [
+                {
+                    "billing_provider_id": "1",
+                    "billing_provider_tax_id": "1",
+                    "billing_provider_taxonomy_id": 1,
+                    "health_professional_id": "1",
+                    "health_professional_tax_id": "1",
+                    "health_professional_taxonomy_id": 1
                 }
             ]
         }
