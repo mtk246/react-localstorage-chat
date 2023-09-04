@@ -226,6 +226,38 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Tertiary',
                     ],
                     [
+                        'code' => 'A',
+                        'description' => 'Payer Responsibility Four',
+                    ],
+                    [
+                        'code' => 'B',
+                        'description' => 'Payer Responsibility Five',
+                    ],
+                    [
+                        'code' => 'C',
+                        'description' => 'Payer Responsibility Six',
+                    ],
+                    [
+                        'code' => 'D',
+                        'description' => 'Payer Responsibility Seven',
+                    ],
+                    [
+                        'code' => 'E',
+                        'description' => 'Payer Responsibility Eight',
+                    ],
+                    [
+                        'code' => 'F',
+                        'description' => 'Payer Responsibility Nine',
+                    ],
+                    [
+                        'code' => 'G',
+                        'description' => 'Payer Responsibility Ten',
+                    ],
+                    [
+                        'code' => 'H',
+                        'description' => 'Payer Responsibility Eleven',
+                    ],
+                    [
                         'code' => 'U',
                         'description' => 'Unknow',
                     ],
