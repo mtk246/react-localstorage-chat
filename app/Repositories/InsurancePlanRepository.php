@@ -869,4 +869,13 @@ class InsurancePlanRepository
 
         return $records;
     }
+
+    public function getListResponsibilityType()
+    {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Responsibility type']]);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 }

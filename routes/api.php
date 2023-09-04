@@ -274,6 +274,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|biller|billingmanager',
     ])->group(function () {
+        Route::get('/get-list-responsibility-type', [\App\Http\Controllers\InsurancePlanController::class, 'getListResponsibilityType']);
         Route::get('/get-all-server', [\App\Http\Controllers\InsurancePlanController::class, 'getServerAll']);
         Route::get('/get-list', [\App\Http\Controllers\InsurancePlanController::class, 'getList']);
         Route::get('/get-list-formats', [\App\Http\Controllers\InsurancePlanController::class, 'getListFormats']);
