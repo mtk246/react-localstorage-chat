@@ -13,7 +13,7 @@ return new class() extends Migration {
             $table->id();
             $table->string('cpid');
             $table->string('paper_cpid')->nullable();
-            $table->string('portal')->nullable();
+            $table->longText('portal')->nullable();
             $table->unsignedSmallInteger('type');
             $table->string('claim_insurance_type');
             $table->foreignId('clearing_house_id')

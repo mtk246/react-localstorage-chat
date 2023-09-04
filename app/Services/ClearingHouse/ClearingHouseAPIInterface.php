@@ -6,5 +6,5 @@ namespace App\Services\ClearingHouse;
 
 interface ClearingHouseAPIInterface
 {
-    public function getCPIDByPayerID(string $payerID, string $type): ?string;
+    public function getCPIDByPayerID(string $payerID, string $payerName, int $type, bool $fakeTransmission): ?string;
 }
