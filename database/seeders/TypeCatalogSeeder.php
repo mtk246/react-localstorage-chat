@@ -1635,6 +1635,47 @@ class TypeCatalogSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'description' => 'Medicare secondary policy',
+                'type_catalogs' => [
+                    [
+                        'code' => '12',
+                        'description' => 'Working Aged Beneficiary or Spouse with employer group health plan',
+                    ],
+                    [
+                        'code' => '13',
+                        'description' => 'End-Stage Renal Disease Beneficiary in the mandated coordination period with an employer\'s group health plan',
+                    ],
+                    [
+                        'code' => '14',
+                        'description' => 'No-fault insurance, including auto, is primary',
+                    ],
+                    [
+                        'code' => '15',
+                        'description' => 'Worker\'s Compensation',
+                    ],
+                    [
+                        'code' => '16',
+                        'description' => 'Public Health Service (PHS) or Other Federal Agency',
+                    ],
+                    [
+                        'code' => '41',
+                        'description' => 'Black Lung',
+                    ],
+                    [
+                        'code' => '42',
+                        'description' => 'Veteran\'s Administration',
+                    ],
+                    [
+                        'code' => '43',
+                        'description' => 'Disabled Beneficiary Under Age 65 with a large group health plan (LGHP)',
+                    ],
+                    [
+                        'code' => '47',
+                        'description' => 'Other liability insurance is primary',
+                    ],
+                ],
+            ],
         ];
 
         $appealRules = "5 things to know when filing an appeal
