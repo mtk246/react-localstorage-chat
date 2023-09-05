@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\Json;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -77,7 +75,7 @@ class InsurancePlanPrivate extends Model implements Auditable
      * @var array
      */
     protected $casts = [
-        'responsibilities' => Json::class,
+        'responsibilities' => 'json',
     ];
 
     /**
