@@ -23,7 +23,7 @@ class CreateDoctorRequest extends FormRequest
             'ein' => [
                 Rule::requiredIf(!isset($this->profile['ssn'])),
                 'string',
-                'regex:/^\d{2}-\d{7}$/',
+                'max:9',
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
@@ -58,6 +58,7 @@ class CreateDoctorRequest extends FormRequest
             'profile.ssn' => [
                 Rule::requiredIf(!isset($this->ein)),
                 'string',
+                'max:9',
             ],
             'profile.date_of_birth' => ['required', 'date'],
 

@@ -38,6 +38,8 @@ final class BillClassificationFacility extends Pivot implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    public $incrementing = true;
+
     public function billClassification()
     {
         return $this->belongsTo(BillClassification::class);

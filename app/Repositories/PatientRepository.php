@@ -758,6 +758,7 @@ class PatientRepository
                     $query->with('insuranceCompany');
                 },
             ])
+            ->select('patients.*')
             ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         } else {
             $data = Patient::query()
@@ -783,6 +784,7 @@ class PatientRepository
                         $query->with('insuranceCompany');
                     },
                 ])
+                ->select('patients.*')
                 ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
         }
 
@@ -1532,7 +1534,10 @@ class PatientRepository
     public function getListInsurancePolicyType()
     {
         try {
-            return getList(InsurancePolicyType::class);
+            return [
+                "general" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Insurance policy type']]),
+                "secondary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
+            ];
         } catch (\Exception $e) {
             return [];
         }

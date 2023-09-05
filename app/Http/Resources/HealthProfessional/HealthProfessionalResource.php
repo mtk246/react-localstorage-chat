@@ -38,9 +38,9 @@ final class HealthProfessionalResource extends JsonResource
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies,
-            'taxonomies' => $this->resource->taxonomies,
+            'taxonomies' => $this->resource->taxonomies->unique('name'),
             'companies' => $this->getCompanies(),
-            'health_professional_type' => $this->resource->healthProfessionalType,
+            'health_professional_type' => $this->resource->healthProfessionalType->unique('type'),
         ];
     }
 
