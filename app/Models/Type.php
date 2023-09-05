@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $typeCatalogs
  * @property int|null $type_catalogs_count
  *
+ * @method static \Database\Factories\TypeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Type newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Type newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Type query()
