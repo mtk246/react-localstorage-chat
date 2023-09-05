@@ -4,8 +4,7 @@ definitions:
   caches:
     vendor: vendor
     usr-bin: /usr/bin
-    php-ext-source: /usr/src/php/ext
-    php-ext: /usr/local/lib/php/extensions
+    php: /usr/src/php
   services:
     pgsql:
       image: postgres:14-alpine
@@ -20,8 +19,7 @@ definitions:
           - composer
           - vendor
           - usr-bin
-          - php-ext-source
-          - php-ext
+          - php
         script:
           - ln -f -s .env.example .env
           - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev postgresql-client && apt-get clean
@@ -36,8 +34,7 @@ definitions:
           - composer
           - vendor
           - usr-bin
-          - php-ext-source
-          - php-ext
+          - php
         script:
           - ln -f -s .env.testing .env
           - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
