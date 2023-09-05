@@ -3,6 +3,7 @@ image: php:8.2.9
 definitions:
   caches:
     vendor: vendor
+    usr-bin: /usr/bin
   services:
     pgsql:
       image: postgres:14-alpine
@@ -16,6 +17,7 @@ definitions:
         caches:
           - composer
           - vendor
+          - usr-bin
         script:
           - ln -f -s .env.example .env
           - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev postgresql-client && apt-get clean
@@ -29,6 +31,7 @@ definitions:
         caches:
           - composer
           - vendor
+          - usr-bin
         script:
           - ln -f -s .env.testing .env
           - XDEBUG_MODE=debug,coverage
