@@ -78,7 +78,7 @@ class DoctorController extends Controller
                     : response()->json(__('Error, The entered NPI does not belong to a healthcare professional but organization.'), 404);
             }
 
-            return response()->json(__('Error, The NPI doesn`t exist, verify that it`s a valid NPI by NPPES.'), 404);
+            return response()->json(__('The entered NPI does not belong to a healthcare professional but a organization'), 404);
         }
     }
 
