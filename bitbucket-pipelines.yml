@@ -20,7 +20,7 @@ definitions:
           - ln -f -s .env.example .env
           - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev
           - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-          - docker-php-ext-install pgsql gd curl zip bcmath intl
+          - docker-php-ext-install pgsql pdo_pgsql gd curl zip bcmath intl
           - apt-get update && apt-get install -y postgresql-client-14 && apt-get clean
           - composer install --no-interaction --prefer-dist
     - step: &testin-app
@@ -34,7 +34,6 @@ definitions:
           - php artisan key:generate
           - php artisan jwt:secret
           - php artisan serve &
-          - php artisan migrate --force
           - sleep 5
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
         services:
