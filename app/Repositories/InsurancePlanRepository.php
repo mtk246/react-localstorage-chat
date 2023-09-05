@@ -123,6 +123,7 @@ class InsurancePlanRepository
                 $data['address']['billing_company_id'] = $billingCompany;
                 $data['address']['addressable_id'] = $insurancePlan->id;
                 $data['address']['addressable_type'] = InsurancePlan::class;
+                $data['address']['address_type_id'] = 1;
                 Address::create($data['address']);
             }
             if (isset($data['contact']['email'])) {
@@ -249,6 +250,7 @@ class InsurancePlanRepository
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'addressable_id' => $insurancePlan->id,
                     'addressable_type' => InsurancePlan::class,
+                    'address_type_id' => 1
                 ],
                     $data['address']);
             }
