@@ -40,6 +40,7 @@ definitions:
           - php-ext
         script:
           - ln -f -s .env.testing .env
+          - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
           - XDEBUG_MODE=debug,coverage
           - php artisan key:generate
           - php artisan jwt:secret
