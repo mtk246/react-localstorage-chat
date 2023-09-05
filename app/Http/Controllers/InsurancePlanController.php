@@ -170,4 +170,11 @@ class InsurancePlanController extends Controller
 
         return $rs ? response()->json($rs) : response()->json(__('Error add contract fees to company'), 404);
     }
+
+    public function getListResponsibilityType(): JsonResponse
+    {
+        return response()->json(
+            $this->insurancePlanRepository->getListResponsibilityType()
+        );
+    }
 }

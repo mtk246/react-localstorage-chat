@@ -50,10 +50,10 @@ final class GetBilllingProviderAction
                     ];
                 }
 
-                if (!empty($healthProfessional->ssn)) {
+                if (!empty($healthProfessional->profile?->ssn)) {
                     $taxIdOptions[] = [
-                        'id' => str_replace('-', '', $healthProfessional->ssn ?? ''),
-                        'name' => 'SSN - '.str_replace('-', '', $healthProfessional->ssn ?? ''),
+                        'id' => str_replace('-', '', $healthProfessional->profile->ssn ?? ''),
+                        'name' => 'SSN - '.str_replace('-', '', $healthProfessional->profile->ssn ?? ''),
                     ];
                 }
 

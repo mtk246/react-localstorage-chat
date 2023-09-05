@@ -23,44 +23,40 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Ins type',
                 'type_catalogs' => [
                     [
-                        'code' => 'AETNA',
-                        'description' => 'Aetna',
-                    ],
-                    [
-                        'code' => 'AUTO',
-                        'description' => 'Automobile Insurance',
-                    ],
-                    [
-                        'code' => 'BCBS',
-                        'description' => 'Blue Cross an Blue Shield',
-                    ],
-                    [
-                        'code' => 'CA',
-                        'description' => 'Capitation',
-                    ],
-                    [
-                        'code' => 'CIGNA',
-                        'description' => 'Cigna',
-                    ],
-                    [
-                        'code' => 'COMMERCIAL',
+                        'code' => 'CI',
                         'description' => 'Commercial Insurance',
                     ],
                     [
-                        'code' => 'MEDICAID',
-                        'description' => 'Medicaid',
+                        'code' => 'BL',
+                        'description' => 'Blue Cross/Blue Shield',
                     ],
                     [
-                        'code' => 'MEDICARE',
+                        'code' => 'MED',
                         'description' => 'Medicare',
                     ],
                     [
-                        'code' => 'UHC',
-                        'description' => 'United Health Care',
+                        'code' => 'MCE',
+                        'description' => 'Medicaid',
                     ],
                     [
-                        'code' => 'WORKCOMP',
-                        'description' => 'Workers Compensation',
+                        'code' => 'TR',
+                        'description' => 'TRICARE',
+                    ],
+                    [
+                        'code' => 'CH',
+                        'description' => 'Champus',
+                    ],
+                    [
+                        'code' => 'GHP',
+                        'description' => 'GROUP HEALTH PLAN',
+                    ],
+                    [
+                        'code' => 'FBL',
+                        'description' => 'FEDERAL BLACK LUNG',
+                    ],
+                    [
+                        'code' => 'OT',
+                        'description' => 'Other',
                     ],
                 ],
             ],
@@ -80,12 +76,32 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Exclusive Provider Organization',
                     ],
                     [
+                        'code' => 'POS',
+                        'description' => 'Point of service',
+                    ],
+                    [
                         'code' => 'HDHP',
                         'description' => 'High Deductible Health Plan',
                     ],
                     [
                         'code' => 'HSA',
                         'description' => 'Health Savings Accounts',
+                    ],
+                    [
+                        'code' => 'HRA',
+                        'description' => 'Health Reimbursement Arrangement',
+                    ],
+                    [
+                        'code' => 'MEDICAID',
+                        'description' => 'Medical Managed Care Plans',
+                    ],
+                    [
+                        'code' => 'MEDICARE',
+                        'description' => 'Medicare Advantage Plans',
+                    ],
+                    [
+                        'code' => 'OT',
+                        'description' => 'Other',
                     ],
                 ],
             ],
@@ -102,16 +118,32 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Contract fee type',
                 'type_catalogs' => [
                     [
-                        'code' => 'AUT',
-                        'description' => 'AUT',
+                        'code' => '1',
+                        'description' => 'Diagnosis Related Group (DRG)',
                     ],
                     [
-                        'code' => 'CAP',
-                        'description' => 'CAP',
+                        'code' => '2',
+                        'description' => 'Per Diem',
                     ],
                     [
-                        'code' => 'RVU',
-                        'description' => 'RVU',
+                        'code' => '3',
+                        'description' => 'Variable Per Diem',
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'Flat',
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'Capitated',
+                    ],
+                    [
+                        'code' => '6',
+                        'description' => 'Percent',
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'Other',
                     ],
                 ],
             ],
@@ -224,6 +256,38 @@ class TypeCatalogSeeder extends Seeder
                     [
                         'code' => 'T',
                         'description' => 'Tertiary',
+                    ],
+                    [
+                        'code' => 'A',
+                        'description' => 'Payer Responsibility Four',
+                    ],
+                    [
+                        'code' => 'B',
+                        'description' => 'Payer Responsibility Five',
+                    ],
+                    [
+                        'code' => 'C',
+                        'description' => 'Payer Responsibility Six',
+                    ],
+                    [
+                        'code' => 'D',
+                        'description' => 'Payer Responsibility Seven',
+                    ],
+                    [
+                        'code' => 'E',
+                        'description' => 'Payer Responsibility Eight',
+                    ],
+                    [
+                        'code' => 'F',
+                        'description' => 'Payer Responsibility Nine',
+                    ],
+                    [
+                        'code' => 'G',
+                        'description' => 'Payer Responsibility Ten',
+                    ],
+                    [
+                        'code' => 'H',
+                        'description' => 'Payer Responsibility Eleven',
                     ],
                     [
                         'code' => 'U',
@@ -1632,6 +1696,47 @@ class TypeCatalogSeeder extends Seeder
                     [
                         'code' => 'O',
                         'description' => 'Other',
+                    ],
+                ],
+            ],
+            [
+                'description' => 'Medicare secondary policy',
+                'type_catalogs' => [
+                    [
+                        'code' => '12',
+                        'description' => 'Working Aged Beneficiary or Spouse with employer group health plan',
+                    ],
+                    [
+                        'code' => '13',
+                        'description' => 'End-Stage Renal Disease Beneficiary in the mandated coordination period with an employer\'s group health plan',
+                    ],
+                    [
+                        'code' => '14',
+                        'description' => 'No-fault insurance, including auto, is primary',
+                    ],
+                    [
+                        'code' => '15',
+                        'description' => 'Worker\'s Compensation',
+                    ],
+                    [
+                        'code' => '16',
+                        'description' => 'Public Health Service (PHS) or Other Federal Agency',
+                    ],
+                    [
+                        'code' => '41',
+                        'description' => 'Black Lung',
+                    ],
+                    [
+                        'code' => '42',
+                        'description' => 'Veteran\'s Administration',
+                    ],
+                    [
+                        'code' => '43',
+                        'description' => 'Disabled Beneficiary Under Age 65 with a large group health plan (LGHP)',
+                    ],
+                    [
+                        'code' => '47',
+                        'description' => 'Other liability insurance is primary',
                     ],
                 ],
             ],

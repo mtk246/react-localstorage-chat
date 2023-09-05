@@ -24,9 +24,9 @@ final class CopayRequestCast extends CastsRequest
             : $this->user->billing_company_id;
     }
 
-    public function getCompanyIds(): Collection
+    public function getCompaniesIds(): Collection
     {
-        return collect($this->inputs['company_ids'] ?? []);
+        return collect($this->inputs['companies_ids'] ?? []);
     }
 
     public function getProceduresIds(): Collection
@@ -34,10 +34,10 @@ final class CopayRequestCast extends CastsRequest
         return collect($this->inputs['procedure_ids'] ?? []);
     }
 
-    public function getCopay(): ?int
+    public function getCopay(): ?float
     {
         return array_key_exists('copay', $this->inputs)
-            ? (int) $this->inputs['copay']
+            ? $this->inputs['copay']
             : null;
     }
 
