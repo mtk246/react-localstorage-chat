@@ -175,13 +175,6 @@ final class InsurancePlanResource extends JsonResource
         return ContractFeeResource::collection($contractFees)->resource;
     }
 
-    private function getResponsibilities($responsibilities)
-    {
-        return isset($responsibilities)
-            ? PayerResponsibility::whereIn('id', $responsibilities)->get()
-            : null;
-    }
-
     private function getFormatData($private_insurance_plans)
     {
         return $private_insurance_plans->map(function($format) {
@@ -194,7 +187,7 @@ final class InsurancePlanResource extends JsonResource
                 'format_institutional' => isset($format->formatInstitutional) ? $format->formatInstitutional->code : '',
                 'format_ub_id' => $format->format_ub_id ?? '',
                 'format_ub' => isset($format->formatUB) ? $format->formatUB->code : '',
-                'responsibilities' => $this->getResponsibilities($format->responsibilities),
+                'responsibilities' => isset($format->responsibilities) ? PayerResponsibility::whereIn('id', $format->responsibilities)->get() : null
             ];
         });
     }
