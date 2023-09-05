@@ -22,6 +22,15 @@ definitions:
           - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
           - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
           - composer install --no-interaction --prefer-dist
+          - psql -c 'drop database if exists testdb;' -U postgres
+          - psql -c 'create database testdb;' -U postgres
+          - ln -f -s .env.testing .env
+          - XDEBUG_MODE=debug,coverage
+          - php artisan key:generate
+          - php artisan jwt:secret
+          - php artisan serve &
+          - sleep 5
+          - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
     - step: &testin-app
         name: Testing app
         caches:
