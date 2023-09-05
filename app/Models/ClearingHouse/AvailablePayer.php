@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClearingHouse\DataOfPayer> $dataOfPayers
- * @property int|null $data_of_payers_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClearingHouse\PayerInformation> $payerInformation
+ * @property int|null $payer_information_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|AvailablePayer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AvailablePayer newQuery()
@@ -40,10 +40,10 @@ final class AvailablePayer extends Model
     ];
 
     /**
-     * Get all of the dataOfPayers for the AvailablePayer.
+     * Get all of the payerInformation for the AvailablePayer.
      */
-    public function dataOfPayers(): HasMany
+    public function payerInformation(): HasMany
     {
-        return $this->hasMany(DataOfPayer::class);
+        return $this->hasMany(PayerInformation::class);
     }
 }

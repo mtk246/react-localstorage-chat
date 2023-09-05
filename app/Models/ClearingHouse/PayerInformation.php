@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\ClearingHouse\DataOfPayer.
+ * App\Models\ClearingHouse\PayerInformation.
  *
  * @property int $id
  * @property string $cpid
@@ -26,25 +26,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \App\Models\ClearingHouse\AvailablePayer $availablePayer
  * @property ClearingHouse|null $clearingHouse
  *
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer query()
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereAvailablePayerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereClaimInsuranceType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereClearingHouseId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereCpid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer wherePaperCpid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer wherePortal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DataOfPayer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereAvailablePayerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereClaimInsuranceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereClearingHouseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereCpid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation wherePaperCpid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation wherePortal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PayerInformation whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
-final class DataOfPayer extends Model
+final class PayerInformation extends Model
 {
     use HasFactory;
+
+    protected $table = 'payer_information';
 
     protected $fillable = [
         'cpid',

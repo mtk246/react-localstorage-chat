@@ -25,16 +25,17 @@ abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ]
             )
             ->first();
+
         if (!$availablePayer) {
             throw new \Exception('Payer not found');
         }
 
         return ($fakeTransmission)
-            ? $availablePayer->dataOfPayers
+            ? $availablePayer->payerInformation
                 ->where('type', $type)
                 ?->first()
                 ?->paper_cpid ?? ''
-            : $availablePayer->dataOfPayers
+            : $availablePayer->payerInformation
                 ->where('type', $type)
                 ?->first()
                 ?->cpid ?? '';

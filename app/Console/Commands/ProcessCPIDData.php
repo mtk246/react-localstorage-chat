@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use App\Enums\Claim\ClaimType;
 use App\Enums\ClearingHouse as ClearingHouseEnum;
 use App\Models\ClearingHouse\AvailablePayer;
-use App\Models\ClearingHouse\DataOfPayer;
+use App\Models\ClearingHouse\PayerInformation;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
@@ -69,7 +69,7 @@ final class ProcessCPIDData extends Command
                 ]
             );
 
-            DataOfPayer::updateOrCreate(
+            PayerInformation::updateOrCreate(
                 [
                     'clearing_house_id' => ($clearingHouseId > 0) ? $clearingHouseId : null,
                     'available_payer_id' => $availablePayer->id,

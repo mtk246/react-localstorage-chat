@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create('data_of_payers', function (Blueprint $table) {
+        Schema::create('payer_information', function (Blueprint $table) {
             $table->id();
             $table->string('cpid');
             $table->string('paper_cpid')->nullable();
@@ -31,6 +31,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('data_of_payers');
+        Schema::dropIfExists('payer_information');
     }
 };
