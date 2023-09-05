@@ -258,6 +258,38 @@ class TypeCatalogSeeder extends Seeder
                         'description' => 'Tertiary',
                     ],
                     [
+                        'code' => 'A',
+                        'description' => 'Payer Responsibility Four',
+                    ],
+                    [
+                        'code' => 'B',
+                        'description' => 'Payer Responsibility Five',
+                    ],
+                    [
+                        'code' => 'C',
+                        'description' => 'Payer Responsibility Six',
+                    ],
+                    [
+                        'code' => 'D',
+                        'description' => 'Payer Responsibility Seven',
+                    ],
+                    [
+                        'code' => 'E',
+                        'description' => 'Payer Responsibility Eight',
+                    ],
+                    [
+                        'code' => 'F',
+                        'description' => 'Payer Responsibility Nine',
+                    ],
+                    [
+                        'code' => 'G',
+                        'description' => 'Payer Responsibility Ten',
+                    ],
+                    [
+                        'code' => 'H',
+                        'description' => 'Payer Responsibility Eleven',
+                    ],
+                    [
                         'code' => 'U',
                         'description' => 'Unknow',
                     ],
@@ -1664,6 +1696,47 @@ class TypeCatalogSeeder extends Seeder
                     [
                         'code' => 'O',
                         'description' => 'Other',
+                    ],
+                ],
+            ],
+            [
+                'description' => 'Medicare secondary policy',
+                'type_catalogs' => [
+                    [
+                        'code' => '12',
+                        'description' => 'Working Aged Beneficiary or Spouse with employer group health plan',
+                    ],
+                    [
+                        'code' => '13',
+                        'description' => 'End-Stage Renal Disease Beneficiary in the mandated coordination period with an employer\'s group health plan',
+                    ],
+                    [
+                        'code' => '14',
+                        'description' => 'No-fault insurance, including auto, is primary',
+                    ],
+                    [
+                        'code' => '15',
+                        'description' => 'Worker\'s Compensation',
+                    ],
+                    [
+                        'code' => '16',
+                        'description' => 'Public Health Service (PHS) or Other Federal Agency',
+                    ],
+                    [
+                        'code' => '41',
+                        'description' => 'Black Lung',
+                    ],
+                    [
+                        'code' => '42',
+                        'description' => 'Veteran\'s Administration',
+                    ],
+                    [
+                        'code' => '43',
+                        'description' => 'Disabled Beneficiary Under Age 65 with a large group health plan (LGHP)',
+                    ],
+                    [
+                        'code' => '47',
+                        'description' => 'Other liability insurance is primary',
                     ],
                 ],
             ],
