@@ -29,11 +29,12 @@ definitions:
           - composer
           - vendor
         script:
-          - ln -f -s .env.example .env
+          - ln -f -s .env.testing .env
           - XDEBUG_MODE=debug,coverage
           - php artisan key:generate
           - php artisan jwt:secret
           - php artisan serve &
+          - php artisan migrate --force
           - sleep 5
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
         services:
