@@ -267,6 +267,25 @@ class DoctorRepository
                 );
             }
 
+            /** Associate billing companies to company */
+            if (is_null($company->billingCompanies()->find($billingCompany))) {
+                $company->billingCompanies()->attach(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                    ]
+                );
+            } else {
+                $company->billingCompanies()->updateExistingPivot(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                    ]
+                );
+            }
+
             if (isset($data['taxonomies'])) {
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
@@ -550,6 +569,27 @@ class DoctorRepository
                     ]
                 );
             }
+
+            /** Associate billing companies to company */
+            if (is_null($company->billingCompanies()->find($billingCompany))) {
+                $company->billingCompanies()->attach(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                    ]
+                );
+            } else {
+                $company->billingCompanies()->updateExistingPivot(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                    ]
+                );
+            }
+
+
 
             if (isset($data['taxonomies'])) {
 
