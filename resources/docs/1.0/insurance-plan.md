@@ -25,6 +25,7 @@
 - [Get list procedures](#get-list-procedures)
 - [Get list patients](#get-list-patients)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get list responsibility type](#get-list-responsibility-type)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -38,14 +39,15 @@
 | 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/{id}/contract-fees` | yes            | Add contract fee to insurance plan |
 | 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                           | yes            | Get all insurance plan from server |
 | 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                                     | yes            | Get one insurance plan             |
-| 12 |GET | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
+| 12 |GET     | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
 | 8  | GET    | `Get Insurance plan by name`    | `/insurance-plan/{name}/get-by-name`                       | yes            | Get all insurance plan by name     |
 | 9  | GET    | `Get list insurance plans`      | `/insurance-plan/get-list`                                 | yes            | Get list insurance plans           |
 | 10 | GET    | `Get list formats`              | `/insurance-plan/get-list-formats`                         | yes            | Get list formats                   |
 | 11 | GET    | `Get list ins types`            | `/insurance-plan/get-list-ins-types`                       | yes            | Get list ins types                 |
 | 12 | GET    | `Get list plan types`           | `/insurance-plan/get-list-plan-types`                      | yes            | Get list plan types                |
 | 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`                   | yes            | Get list charge usings             |
-| 14 |GET | `Get list billing companies`| `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 14 |GET     | `Get list billing companies`    | `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 15 |GET     | `Get list responsibility type`  | `/insurance-plan/get-list-responsibility-type`             | yes            | Get list responsibility type       |
 > {primary} when url params have this symbol "?" mean not required, so you must to send null....
 
 <a name="data-another-module"></a>
@@ -97,6 +99,7 @@
     "format_ub_id": 1, /** required */
     "file_method_id": 1, /** optional */
     "naic":"someNaic", /** optional */
+    "responsibilities": [1,2], /** required */
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
@@ -194,6 +197,7 @@
     "format_ub_id": 1, /** required */
     "file_method_id": 1, /** optional */
     "naic":"someNaic", /** optional */
+    "responsibilities": [1,2], /** required */
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
@@ -718,7 +722,16 @@ insurance_company_id <integer>
                         "updated_at": "2023-02-10T09:52:04.000000Z"
                     },
                     "from_id": 2
-                }
+                },
+                "responsibilities": [
+                    {
+                        "id": 5,
+                        "code": "E",
+                        "description": "Payer Responsibility Eight",
+                        "created_at": "2023-09-05T02:23:00.000000Z",
+                        "updated_at": "2023-09-05T02:23:00.000000Z"
+                    }
+                ]
             }
         }
     ]
@@ -1483,6 +1496,37 @@ billing_company_id <integer> optional
     {
         "id": 4,
         "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+<a name="get-list-responsibility-type"></a>
+## Get list responsibility type
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Responsibility type of patient found
+
+#
+
+```json
+[
+    {
+        "id": 47,
+        "name": "R1 - Responsibility type 1"
+    },
+    {
+        "id": 48,
+        "name": "R2 - Responsibility type 2"
     }
 ]
 ```

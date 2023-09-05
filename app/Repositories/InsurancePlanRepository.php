@@ -89,6 +89,7 @@ class InsurancePlanRepository
                 'file_method_id' => $data['file_method_id'] ?? null,
                 'insurance_plan_id' => $insurancePlan->id,
                 'billing_company_id' => $billingCompany,
+                'responsibilities' => $data['responsibilities']
             ]);
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
@@ -203,6 +204,7 @@ class InsurancePlanRepository
                 'file_method_id' => $data['file_method_id'] ?? null,
                 'insurance_plan_id' => $insurancePlan->id,
                 'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                'responsibilities' => $data['responsibilities']
             ]);
 
             /* Attach billing company */

@@ -53,6 +53,12 @@ class UpdateRequest extends FormRequest
             'format_ub_id' => ['required', 'integer'],
             'file_method_id' => ['nullable', 'integer'],
             'naic' => ['nullable', 'string'],
+            'responsibilities' => ['required', 'array'],
+            'responsibilities.*' => [
+                'required',
+                'integer',
+                'exists:\App\Models\PayerResponsibility,id',
+            ],
 
             'time_failed' => ['nullable', 'array'],
             'time_failed.days' => ['nullable', 'integer'],

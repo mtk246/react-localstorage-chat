@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -23,6 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $format_cms_id
  * @property int|null $format_institutional_id
  * @property int|null $format_ub_id
+ * @property mixed|null $responsibilities
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
@@ -46,6 +48,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereNaic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereResponsibilities($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -64,6 +67,7 @@ class InsurancePlanPrivate extends Model implements Auditable
         'file_method_id',
         'billing_company_id',
         'insurance_plan_id',
+        'responsibilities',
     ];
 
     /**
@@ -134,5 +138,16 @@ class InsurancePlanPrivate extends Model implements Auditable
     public function fileMethod()
     {
         return $this->belongsTo(TypeCatalog::class, 'file_method_id');
+    }
+
+    /**
+     * Interact with the responsibilities attribute.
+     */
+    protected function responsibilities(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => isset($value) ? json_decode($value) : null,
+            set: fn ($value) => isset($value) ? json_encode($value) : null,
+        );
     }
 }

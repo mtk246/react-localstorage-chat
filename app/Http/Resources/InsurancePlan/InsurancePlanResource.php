@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\InsurancePlan;
 
 use App\Facades\Pagination;
+use App\Models\PayerResponsibility;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -72,6 +73,7 @@ final class InsurancePlanResource extends JsonResource
                         'address' => $this->getAddress($bC->id, 1),
                         'contact' => $this->getContact($bC->id),
                         'insurance_plan_time_failed' => $this->getTimeFailed($bC->id),
+                        'responsibilities' => $this->getResponsibilities($private_insurance_plan->responsibilities),
                     ];
 
                     return $bC;
@@ -179,5 +181,12 @@ final class InsurancePlanResource extends JsonResource
             ->paginate(Pagination::itemsPerPage());
 
         return ContractFeeResource::collection($contractFees)->resource;
+    }
+
+    private function getResponsibilities($responsibilities)
+    {
+        return isset($responsibilities)
+            ? PayerResponsibility::whereIn('id', $responsibilities)->get()
+            : null;
     }
 }
