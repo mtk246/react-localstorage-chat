@@ -10,7 +10,6 @@ definitions:
         POSTGRES_DB: $DB_DATABASE
         POSTGRES_USER: $DB_USERNAME
         POSTGRES_PASSWORD: $DB_PASSWORD
-        DATABASE_URL: postgres://$DB_USERNAME@127.0.0.1:5432/$DB_DATABASE
   steps:
     - build: &build
         name: Build app
