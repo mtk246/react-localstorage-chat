@@ -177,7 +177,7 @@ final class InsurancePlanResource extends JsonResource
 
     private function getFormatData($private_insurance_plans)
     {
-        return $private_insurance_plans->map(function($format) {
+        return $private_insurance_plans->map(function ($format) {
             return [
                 'format_professional_id' => $format->format_professional_id ?? '',
                 'format_professional' => $format->formatProfessional ?? '',
@@ -187,10 +187,8 @@ final class InsurancePlanResource extends JsonResource
                 'format_institutional' => isset($format->formatInstitutional) ? $format->formatInstitutional->code : '',
                 'format_ub_id' => $format->format_ub_id ?? '',
                 'format_ub' => isset($format->formatUB) ? $format->formatUB->code : '',
-                'responsibilities' => isset($format->responsibilities) ? PayerResponsibility::whereIn('id', $format->responsibilities)->get() : null
+                'responsibilities' => isset($format->responsibilities) ? PayerResponsibility::whereIn('id', $format->responsibilities)->get() : null,
             ];
         });
     }
-
-
 }
