@@ -36,7 +36,7 @@ class AddCopaysRequest extends FormRequest
                 'nullable',
                 new IntegerOrArrayKeyExists(Procedure::class),
             ],
-            'copays.*.company_ids' => [
+            'copays.*.companies_ids' => [
                 'nullable',
                 new IntegerOrArrayKeyExists(Company::class),
             ],

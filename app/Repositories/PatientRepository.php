@@ -1534,7 +1534,10 @@ class PatientRepository
     public function getListInsurancePolicyType()
     {
         try {
-            return getList(InsurancePolicyType::class);
+            return [
+                "general" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Insurance policy type']]),
+                "secondary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
+            ];
         } catch (\Exception $e) {
             return [];
         }

@@ -44,9 +44,8 @@ final class InsurancePlanResource extends JsonResource
             'public_note' => isset($this->resource->publicNote) ? $this->resource->publicNote->note : '',
             'copays' => $this->getCopays(),
             'contract_fees' => $this->getContracFees(),
-            'billing_companies' => $this->resource->billingCompanies()
-                ->distinct('id')
-                ->get()
+            'billing_companies' => $this->resource->billingCompanies
+                ->unique('id')
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_insurance_plan'])
                 ->map(function ($bC) {
                     $private_insurance_plan = $this->getInsurancePlanPrivate($bC->id);
