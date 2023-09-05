@@ -29,6 +29,8 @@ definitions:
           - php artisan serve &
           - sleep 5
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
+        services:
+          - pgsql
     - step: &testin-app
         name: Testing app
         caches:
