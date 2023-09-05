@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Claim;
 
-use App\Enums\Claim\ClaimType;
+use App\Enums\Claim\RuleFormatType;
 use App\Http\Casts\Claim\UpdateRulesWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\Claim\RuleFormatRule;
@@ -21,20 +21,21 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
+            'insurance_plan_id' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [
                 'required',
-                new Enum(ClaimType::class),
+                new Enum(RuleFormatType::class),
             ],
+            'rules.file' => 'required|array',
             'rules.file.*' => [
                 'required',
-                'array',
-                new RuleFormatRule($this->format),
+                new RuleFormatRule($this->get('format', '')),
             ],
             'rules.digital.*' => [
                 'required',
                 'array',
-                new RuleFormatRule($this->format),
+                new RuleFormatRule($this->get('format', '')),
             ],
             'parameters' => 'nullable|array',
         ];
