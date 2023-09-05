@@ -19,7 +19,7 @@ definitions:
         script:
           - ln -f -s .env.example .env
           - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev postgresql-client && apt-get clean
-          - docker-php-ext-install pgsql pdo_pgsql gd curl zip bcmath intl
+          - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
           - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
           - composer install --no-interaction --prefer-dist
     - step: &testin-app
