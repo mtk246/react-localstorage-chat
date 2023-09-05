@@ -33,7 +33,7 @@ class UpdateDoctorRequest extends FormRequest
             'ein' => [
                 Rule::requiredIf(!isset($this->profile['ssn'])),
                 'string',
-                'regex:/^\d{2}-\d{7}$/',
+                'max:9',
             ],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
@@ -41,7 +41,7 @@ class UpdateDoctorRequest extends FormRequest
 
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'health_professional_type_id' => ['required', 'integer'],
-            'company_id' => ['required', 'integer', 'nullable'],
+            'company_id' => ['required_if:is_provider,false', 'integer', 'nullable'],
 
             'authorization' => ['required', 'array'],
             'authorization.*' => ['required', 'integer'],
@@ -69,6 +69,7 @@ class UpdateDoctorRequest extends FormRequest
             'profile.ssn' => [
                 Rule::requiredIf(!isset($this->ein)),
                 'string',
+                'max:9',
             ],
             'profile.date_of_birth' => ['required', 'date'],
 
