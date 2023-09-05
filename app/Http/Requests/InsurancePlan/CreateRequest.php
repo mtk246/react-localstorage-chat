@@ -47,14 +47,16 @@ class CreateRequest extends FormRequest
             'pqrs_eligible' => ['required', 'boolean'],
             'allow_attached_files' => ['required', 'boolean'],
 
-            'format_professional_id' => ['required', 'integer'],
-            'format_cms_id' => ['required', 'integer'],
-            'format_institutional_id' => ['required', 'integer'],
-            'format_ub_id' => ['required', 'integer'],
-            'file_method_id' => ['nullable', 'integer'],
             'naic' => ['nullable', 'string'],
-            'responsibilities' => ['required', 'array'],
-            'responsibilities.*' => [
+            'file_method_id' => ['nullable', 'integer'],
+
+            'format' => ['required', 'array'],
+            'format.*.format_professional_id' => ['required', 'integer'],
+            'format.*.format_cms_id' => ['required', 'integer'],
+            'format.*.format_institutional_id' => ['required', 'integer'],
+            'format.*.format_ub_id' => ['required', 'integer'],
+            'format.*.responsibilities' => ['required', 'array'],
+            'format.*.responsibilities.*' => [
                 'required',
                 'integer',
                 'exists:\App\Models\PayerResponsibility,id',

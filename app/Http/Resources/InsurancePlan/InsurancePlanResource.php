@@ -49,21 +49,14 @@ final class InsurancePlanResource extends JsonResource
                 ->unique('id')
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_insurance_plan'])
                 ->map(function ($bC) {
-                    $private_insurance_plan = $this->getInsurancePlanPrivate($bC->id);
+                    $private_insurance_plans = $this->getInsurancePlanPrivate($bC->id);
                     $nickname = $this->getNickname($bC->id);
 
                     $bC->private_insurance_plan = [
-                        'naic' => $private_insurance_plan->naic ?? '',
-                        'format_professional_id' => $private_insurance_plan->naic ?? '',
-                        'format_professional' => $private_insurance_plan->formatProfessional ?? '',
-                        'format_institutional_id' => $private_insurance_plan->format_institutional_id ?? '',
-                        'format_institutional' => isset($private_insurance_plan->formatInstitutional) ? $private_insurance_plan->formatInstitutional->code : '',
-                        'format_cms_id' => $private_insurance_plan->format_cms_id ?? '',
-                        'format_cms' => isset($private_insurance_plan->formatCMS) ? $private_insurance_plan->formatCMS->code : '',
-                        'format_ub_id' => $private_insurance_plan->format_ub_id ?? '',
-                        'format_ub' => isset($private_insurance_plan->formatUB) ? $private_insurance_plan->formatUB->code : '',
-                        'file_method_id' => $private_insurance_plan->file_method_id ?? '',
-                        'file_method' => isset($private_insurance_plan->fileMethod) ? ($private_insurance_plan->fileMethod->code.' - '.$private_insurance_plan->fileMethod->description) : '',
+                        'naic' => $private_insurance_plans[0]->naic ?? '',
+                        'file_method_id' => $private_insurance_plans[0]->file_method_id ?? '',
+                        'file_method' => isset($private_insurance_plans[0]->fileMethod) ? ($private_insurance_plans[0]->fileMethod->code.' - '.$private_insurance_plans[0]->fileMethod->description) : '',
+                        'format' => $this->getFormatData($private_insurance_plans),
                         'eff_date' => $this->resource->eff_date,
                         'status' => $bC->pivot->status ?? false,
                         'edit_name' => isset($nickname->nickname) ? true : false,
@@ -73,7 +66,6 @@ final class InsurancePlanResource extends JsonResource
                         'address' => $this->getAddress($bC->id, 1),
                         'contact' => $this->getContact($bC->id),
                         'insurance_plan_time_failed' => $this->getTimeFailed($bC->id),
-                        'responsibilities' => $this->getResponsibilities($private_insurance_plan->responsibilities),
                     ];
 
                     return $bC;
@@ -85,7 +77,7 @@ final class InsurancePlanResource extends JsonResource
     {
         return $this->resource->insurancePlanPrivate()->where([
             'billing_company_id' => $billingCompanyId,
-        ])->first();
+        ])->get();
     }
 
     private function getNickname(int $billingCompanyId)
@@ -189,4 +181,23 @@ final class InsurancePlanResource extends JsonResource
             ? PayerResponsibility::whereIn('id', $responsibilities)->get()
             : null;
     }
+
+    private function getFormatData($private_insurance_plans)
+    {
+        return $private_insurance_plans->map(function($format) {
+            return [
+                'format_professional_id' => $format->format_professional_id ?? '',
+                'format_professional' => $format->formatProfessional ?? '',
+                'format_cms_id' => $format->format_cms_id ?? '',
+                'format_cms' => isset($format->formatCMS) ? $format->formatCMS->code : '',
+                'format_institutional_id' => $format->format_institutional_id ?? '',
+                'format_institutional' => isset($format->formatInstitutional) ? $format->formatInstitutional->code : '',
+                'format_ub_id' => $format->format_ub_id ?? '',
+                'format_ub' => isset($format->formatUB) ? $format->formatUB->code : '',
+                'responsibilities' => $this->getResponsibilities($format->responsibilities),
+            ];
+        });
+    }
+
+
 }
