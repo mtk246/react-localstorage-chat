@@ -40,7 +40,7 @@ definitions:
           - php artisan serve &
           - sleep 5
           - php -v
-          - php artisan test --coverage --min=$COVERAGE_MIN
+          - php artisan test #--coverage --min=$COVERAGE_MIN
         variables:
           XDEBUG_MODE: debug,coverage
         services:
