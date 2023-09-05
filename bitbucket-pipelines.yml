@@ -26,6 +26,7 @@ definitions:
           - XDEBUG_MODE=debug,coverage
           - php artisan key:generate
           - php artisan jwt:secret
+          - php artisan migrate
           - php artisan serve &
           - sleep 5
           - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
