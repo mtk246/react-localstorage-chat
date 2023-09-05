@@ -3,8 +3,8 @@ image: php:8.2.9
 definitions:
   caches:
     vendor: vendor
-    usr-bin: /usr/bin
-    php: /usr/src/php
+    usr-bin: /usr/bin/*
+    php: /usr/src/php/
   services:
     pgsql:
       image: postgres:14-alpine
