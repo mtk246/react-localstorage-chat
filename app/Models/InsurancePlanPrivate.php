@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\Json;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -68,6 +69,15 @@ class InsurancePlanPrivate extends Model implements Auditable
         'billing_company_id',
         'insurance_plan_id',
         'responsibilities',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'responsibilities' => Json::class,
     ];
 
     /**
@@ -138,16 +148,5 @@ class InsurancePlanPrivate extends Model implements Auditable
     public function fileMethod()
     {
         return $this->belongsTo(TypeCatalog::class, 'file_method_id');
-    }
-
-    /**
-     * Interact with the responsibilities attribute.
-     */
-    protected function responsibilities(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => isset($value) ? json_decode($value) : null,
-            set: fn ($value) => isset($value) ? json_encode($value) : null,
-        );
     }
 }
