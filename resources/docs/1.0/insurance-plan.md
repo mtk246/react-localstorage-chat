@@ -25,6 +25,7 @@
 - [Get list procedures](#get-list-procedures)
 - [Get list patients](#get-list-patients)
 - [Get list billing companies](#get-list-billing-companies)
+- [Get list responsibility type](#get-list-responsibility-type)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -38,14 +39,15 @@
 | 5  | PATCH  | `Add contract fee to insurance` | `/insurance-plan/{id}/contract-fees` | yes            | Add contract fee to insurance plan |
 | 6  | GET    | `Get all Insurance plan`        | `/insurance-plan/get-all-server`                           | yes            | Get all insurance plan from server |
 | 7  | GET    | `Get one Insurance plan`        | `/insurance-plan/{id}`                                     | yes            | Get one insurance plan             |
-| 12 |GET | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
+| 12 |GET     | `Get one insurance plan by payer ID`| `/insurance-plan/get-by-payer-id/{payerID}`        |yes            |Get one insurance plan|
 | 8  | GET    | `Get Insurance plan by name`    | `/insurance-plan/{name}/get-by-name`                       | yes            | Get all insurance plan by name     |
 | 9  | GET    | `Get list insurance plans`      | `/insurance-plan/get-list`                                 | yes            | Get list insurance plans           |
 | 10 | GET    | `Get list formats`              | `/insurance-plan/get-list-formats`                         | yes            | Get list formats                   |
 | 11 | GET    | `Get list ins types`            | `/insurance-plan/get-list-ins-types`                       | yes            | Get list ins types                 |
 | 12 | GET    | `Get list plan types`           | `/insurance-plan/get-list-plan-types`                      | yes            | Get list plan types                |
 | 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`                   | yes            | Get list charge usings             |
-| 14 |GET | `Get list billing companies`| `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 14 |GET     | `Get list billing companies`    | `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
+| 15 |GET     | `Get list responsibility type`  | `/insurance-plan/get-list-responsibility-type`             | yes            | Get list responsibility type       |
 > {primary} when url params have this symbol "?" mean not required, so you must to send null....
 
 <a name="data-another-module"></a>
@@ -90,13 +92,27 @@
     "require_abn":true, /** required */
     "pqrs_eligible":true, /** required */
     "allow_attached_files":true, /** required */
-    
-    "format_professional_id": 1, /** required */
-    "format_cms_id": 1, /** required */
-    "format_institutional_id": 1, /** required */
-    "format_ub_id": 1, /** required */
-    "file_method_id": 1, /** optional */
+
     "naic":"someNaic", /** optional */
+    "file_method_id": 1, /** optional */
+    
+    "format": [
+        {
+            "format_professional_id": 1, /** required */
+            "format_cms_id": 1, /** required */
+            "format_institutional_id": 1, /** required */
+            "format_ub_id": 1, /** required */
+            "responsibilities": [1,2]
+        },
+        {
+            "format_professional_id": 1, /** required */
+            "format_cms_id": 1, /** required */
+            "format_institutional_id": 1, /** required */
+            "format_ub_id": 1, /** required */
+            "responsibilities": [3]
+        }
+    ],
+    
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
@@ -187,13 +203,27 @@
     "require_abn":true, /** required */
     "pqrs_eligible":true, /** required */
     "allow_attached_files":true, /** required */
-    
-    "format_professional_id": 1, /** required */
-    "format_cms_id": 1, /** required */
-    "format_institutional_id": 1, /** required */
-    "format_ub_id": 1, /** required */
-    "file_method_id": 1, /** optional */
+
     "naic":"someNaic", /** optional */
+    "file_method_id": 1, /** optional */
+    
+    "format": [
+        {
+            "format_professional_id": 1, /** required */
+            "format_cms_id": 1, /** required */
+            "format_institutional_id": 1, /** required */
+            "format_ub_id": 1, /** required */
+            "responsibilities": [1,2]
+        },
+        {
+            "format_professional_id": 1, /** required */
+            "format_cms_id": 1, /** required */
+            "format_institutional_id": 1, /** required */
+            "format_ub_id": 1, /** required */
+            "responsibilities": [3]
+        }
+    ],
+    
     "time_failed": {
         "days": 30, /** optional */
         "from_id": 2, /** optional */
@@ -623,9 +653,10 @@ insurance_company_id <integer>
 
 ```json
 {
-    "id": 19,
-    "code": "IP-00019-2023",
-    "name": "Name Insurance",
+    "id": 27,
+    "code": "IP-00025-2023",
+    "name": "Name Insurance8",
+    "payer_id": "Payer insurance",
     "accept_assign": true,
     "pre_authorization": true,
     "file_zero_changes": true,
@@ -634,19 +665,16 @@ insurance_company_id <integer>
     "require_abn": true,
     "pqrs_eligible": true,
     "allow_attached_files": true,
-    "eff_date": "2022-01-23",
     "ins_type_id": 1,
-    "ins_type": "AETNA - Aetna",
-    "plan_type_id": 2,
-    "plan_type": "AUTO - Automobile Insurance",
-    "charge_using_id": 3,
-    "charge_using": "BCBS - Blue Cross an Blue Shield",
+    "ins_type": "CI - Commercial Insurance",
+    "plan_type_id": 10,
+    "plan_type": "HMO - Health Maintenance Organization",
     "insurance_company_id": 1,
     "insurance_company": "Providence Administrative Services",
-    "created_at": "2023-02-23T20:00:08.000000Z",
-    "updated_at": "2023-02-23T20:00:08.000000Z",
+    "created_at": "2023-09-05T12:07:05.000000Z",
+    "updated_at": "2023-09-05T12:07:05.000000Z",
     "last_modified": {
-        "user": "Henry Paredes",
+        "user": "Ivan Sam",
         "roles": [
             {
                 "id": 1,
@@ -654,18 +682,80 @@ insurance_company_id <integer>
                 "slug": "superuser",
                 "description": "Allows you to administer and manage all the functions of the application",
                 "level": 1,
-                "created_at": "2023-02-10T09:47:23.000000Z",
-                "updated_at": "2023-02-10T09:47:23.000000Z",
+                "created_at": "2023-09-05T02:18:36.000000Z",
+                "updated_at": "2023-09-05T02:18:36.000000Z",
                 "pivot": {
-                    "user_id": 12,
+                    "user_id": 22,
                     "role_id": 1,
-                    "created_at": "2023-02-10T09:47:56.000000Z",
-                    "updated_at": "2023-02-10T09:47:56.000000Z"
+                    "created_at": "2023-09-05T02:27:09.000000Z",
+                    "updated_at": "2023-09-05T02:27:09.000000Z"
                 }
             }
         ]
     },
-    "public_note": "Note public",
+    "public_note": "Note Public",
+    "copays": {
+        "current_page": 1,
+        "data": [],
+        "first_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
+        "from": null,
+        "last_page": 1,
+        "last_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://localhost/api/v1/insurance-plan/27?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "next_page_url": null,
+        "path": "http://localhost/api/v1/insurance-plan/27",
+        "per_page": 10,
+        "prev_page_url": null,
+        "to": null,
+        "total": 0
+    },
+    "contract_fees": {
+        "current_page": 1,
+        "data": [],
+        "first_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
+        "from": null,
+        "last_page": 1,
+        "last_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://localhost/api/v1/insurance-plan/27?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "next_page_url": null,
+        "path": "http://localhost/api/v1/insurance-plan/27",
+        "per_page": 10,
+        "prev_page_url": null,
+        "to": null,
+        "total": 0
+    },
     "billing_companies": [
         {
             "id": 1,
@@ -674,48 +764,134 @@ insurance_company_id <integer>
             "abbreviation": "MCC",
             "private_insurance_plan": {
                 "naic": "someNaic",
-                "format_professional_id": 226,
-                "format_professional": "Standart",
-                "format_institutional_id": 226,
-                "format_institutional": "Standart",
-                "format_cms_id": 226,
-                "format_cms": "Standart",
-                "format_ub_id": 226,
-                "format_ub": "Standart",
-                "file_method_id": 5,
-                "file_method": "CIGNA - Cigna",
+                "file_method_id": 1,
+                "file_method": "CI - Commercial Insurance",
+                "format": [
+                    {
+                        "format_professional_id": 1,
+                        "format_professional": {
+                            "id": 1,
+                            "code": "CI",
+                            "description": "Commercial Insurance",
+                            "status": true,
+                            "type_id": 1,
+                            "created_at": "2023-09-05T02:22:40.000000Z",
+                            "updated_at": "2023-09-05T02:22:40.000000Z"
+                        },
+                        "format_cms_id": 1,
+                        "format_cms": "CI",
+                        "format_institutional_id": 1,
+                        "format_institutional": "CI",
+                        "format_ub_id": 1,
+                        "format_ub": "CI",
+                        "responsibilities": [
+                            {
+                                "id": 1,
+                                "code": "A",
+                                "description": "Payer Responsibility Four",
+                                "created_at": "2023-09-05T02:23:00.000000Z",
+                                "updated_at": "2023-09-05T02:23:00.000000Z"
+                            },
+                            {
+                                "id": 2,
+                                "code": "B",
+                                "description": "Payer Responsibility Five",
+                                "created_at": "2023-09-05T02:23:00.000000Z",
+                                "updated_at": "2023-09-05T02:23:00.000000Z"
+                            }
+                        ]
+                    },
+                    {
+                        "format_professional_id": 1,
+                        "format_professional": {
+                            "id": 1,
+                            "code": "CI",
+                            "description": "Commercial Insurance",
+                            "status": true,
+                            "type_id": 1,
+                            "created_at": "2023-09-05T02:22:40.000000Z",
+                            "updated_at": "2023-09-05T02:22:40.000000Z"
+                        },
+                        "format_cms_id": 1,
+                        "format_cms": "CI",
+                        "format_institutional_id": 1,
+                        "format_institutional": "CI",
+                        "format_ub_id": 1,
+                        "format_ub": "CI",
+                        "responsibilities": [
+                            {
+                                "id": 3,
+                                "code": "C",
+                                "description": "Payer Responsibility Six",
+                                "created_at": "2023-09-05T02:23:00.000000Z",
+                                "updated_at": "2023-09-05T02:23:00.000000Z"
+                            }
+                        ]
+                    }
+                ],
+                "eff_date": "2022-01-23",
                 "status": true,
                 "edit_name": true,
                 "nickname": "Alias Insurance Plan",
                 "abbreviation": "Abbreviation",
-                "private_note": "Note private",
+                "private_note": {
+                    "id": 28,
+                    "note": "Note Private",
+                    "billing_company_id": 1,
+                    "publishable_type": "App\\Models\\InsurancePlan",
+                    "publishable_id": 27,
+                    "created_at": "2023-09-05T12:07:05.000000Z",
+                    "updated_at": "2023-09-05T12:07:05.000000Z",
+                    "last_modified": {
+                        "user": "Ivan Sam",
+                        "roles": [
+                            {
+                                "id": 1,
+                                "name": "Super User",
+                                "slug": "superuser",
+                                "description": "Allows you to administer and manage all the functions of the application",
+                                "level": 1,
+                                "created_at": "2023-09-05T02:18:36.000000Z",
+                                "updated_at": "2023-09-05T02:18:36.000000Z",
+                                "pivot": {
+                                    "user_id": 22,
+                                    "role_id": 1,
+                                    "created_at": "2023-09-05T02:27:09.000000Z",
+                                    "updated_at": "2023-09-05T02:27:09.000000Z"
+                                }
+                            }
+                        ]
+                    }
+                },
                 "address": {
-                    "zip": "3234",
+                    "address": "Name Address",
                     "city": "Name City",
                     "state": "Name state",
-                    "address": "Name Address",
+                    "zip": "3234",
                     "country": "Name country",
-                    "address_type_id": null,
-                    "country_subdivision_code": "Code",
-                    "apt_suite": "Apt_suite"
+                    "apt_suite": "Apt Suite",
+                    "created_at": "2023-09-05T12:07:05.000000Z",
+                    "updated_at": "2023-09-05T12:07:05.000000Z"
                 },
                 "contact": {
+                    "phone": "55433",
                     "fax": "fsdfs",
                     "email": "dsfsd@gdrfg.com",
-                    "phone": "55433",
                     "mobile": "55433",
-                    "contact_name": "Some name"
+                    "contact_name": "Some name",
+                    "created_at": "2023-09-05T12:07:05.000000Z",
+                    "updated_at": "2023-09-05T12:07:05.000000Z"
                 },
                 "insurance_plan_time_failed": {
                     "days": 30,
                     "from": {
                         "id": 2,
-                        "code": "AUTO",
-                        "description": "Automobile Insurance",
+                        "code": "BL",
+                        "description": "Blue Cross/Blue Shield",
                         "status": true,
                         "type_id": 1,
-                        "created_at": "2023-02-10T09:52:04.000000Z",
-                        "updated_at": "2023-02-10T09:52:04.000000Z"
+                        "created_at": "2023-09-05T02:22:40.000000Z",
+                        "updated_at": "2023-09-05T02:22:40.000000Z"
                     },
                     "from_id": 2
                 }
@@ -1483,6 +1659,37 @@ billing_company_id <integer> optional
     {
         "id": 4,
         "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+<a name="get-list-responsibility-type"></a>
+## Get list responsibility type
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Responsibility type of patient found
+
+#
+
+```json
+[
+    {
+        "id": 47,
+        "name": "R1 - Responsibility type 1"
+    },
+    {
+        "id": 48,
+        "name": "R2 - Responsibility type 2"
     }
 ]
 ```
