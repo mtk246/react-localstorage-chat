@@ -12,6 +12,8 @@ final class UpdateClaimRuleAction
 {
     public function invoke(Rules $rules, UpdateRulesWrapper $rulesWrapper): RuleResource
     {
-        return new RuleResource($rules->query()->update($rulesWrapper->getRuleData()));
+        $rules->update($rulesWrapper->getRuleData());
+
+        return new RuleResource($rules->refresh());
     }
 }
