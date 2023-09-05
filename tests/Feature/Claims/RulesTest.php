@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Tests\Feature\Claims;
 
 use App\Http\Resources\Claim\RuleResource;
-use App\Models\BillingCompany;
 use App\Models\Claims\Rules;
 use App\Models\InsurancePlan;
-use App\Models\User;
-use App\Roles\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -21,11 +18,9 @@ class RulesTest extends TestCase
     public function itReturnsAJsonResponseContainingAllRulesForTheAuthenticatedUser()
     {
         // Arrange
-        $billingCompany = BillingCompany::factory()->create();
-        $role = Role::factory()->create(['name' => 'Super User', 'slug' => 'superuser', 'level' => 1]);
-        $user = User::factory()->whithRole($role)->withProfile()->withBillingCompany($billingCompany)->create();
-        $rules1 = Rules::factory()->create(['billing_company_id' => $billingCompany->id]);
-        $rules2 = Rules::factory()->create(['billing_company_id' => $billingCompany->id]);
+        $user = $this->createUser('superuser');
+        $rules1 = Rules::factory()->create(['billing_company_id' => $user->billing_company_id]);
+        $rules2 = Rules::factory()->create(['billing_company_id' => $user->billing_company_id]);
 
         // Act
         $response = $this->actingAs($user)->get(route('rules.index'));
@@ -53,10 +48,8 @@ class RulesTest extends TestCase
     public function itReturnsAJsonResponseContainingASingleRule()
     {
         // Arrange
-        $billingCompany = BillingCompany::factory()->create();
-        $role = Role::factory()->create(['name' => 'Super User', 'slug' => 'superuser', 'level' => 1]);
-        $user = User::factory()->whithRole($role)->withProfile()->withBillingCompany($billingCompany)->create();
-        $rules = Rules::factory()->create(['billing_company_id' => $billingCompany->id]);
+        $user = $this->createUser('superuser');
+        $rules = Rules::factory()->create(['billing_company_id' => $user->billing_company_id]);
         $ruleResource = new RuleResource($rules);
 
         // Act
@@ -71,14 +64,12 @@ class RulesTest extends TestCase
     public function itReturnsAJsonResponseContainingNewCreatedRule()
     {
         // Arrange
-        $billingCompany = BillingCompany::factory()->create();
-        $role = Role::factory()->create(['name' => 'Super User', 'slug' => 'superuser', 'level' => 1]);
-        $user = User::factory()->whithRole($role)->withProfile()->withBillingCompany($billingCompany)->create();
+        $user = $this->createUser('superuser');
         $insurancePlan = InsurancePlan::factory()->create();
         $rules = Rules::factory()->create([
             'name' => 'test test test',
             'format' => 'institutional',
-            'billing_company_id' => $billingCompany->id,
+            'billing_company_id' => $user->billing_company_id,
         ]);
         $createRulesRequest = [
             'name' => 'test test test',
@@ -106,14 +97,12 @@ class RulesTest extends TestCase
     public function itReturnsAJsonResponseContainingTheUpdatedRule()
     {
         // Arrange
-        $billingCompany = BillingCompany::factory()->create();
-        $role = Role::factory()->create(['name' => 'Super User', 'slug' => 'superuser', 'level' => 1]);
-        $user = User::factory()->whithRole($role)->withProfile()->withBillingCompany($billingCompany)->create();
+        $user = $this->createUser('superuser');
         $insurancePlan = InsurancePlan::factory()->create();
         $rules = Rules::factory()->create([
             'name' => 'test test test',
             'format' => 'institutional',
-            'billing_company_id' => $billingCompany->id,
+            'billing_company_id' => $user->billing_company_id,
         ]);
         $updateRulesRequest = [
             'name' => 'update test',
@@ -141,10 +130,8 @@ class RulesTest extends TestCase
     public function itReturnsAJsonResponseContainingTheDeletedRule()
     {
         // Arrange
-        $billingCompany = BillingCompany::factory()->create();
-        $role = Role::factory()->create(['name' => 'Super User', 'slug' => 'superuser', 'level' => 1]);
-        $user = User::factory()->whithRole($role)->withProfile()->withBillingCompany($billingCompany)->create();
-        $rules = Rules::factory()->create(['billing_company_id' => $billingCompany->id]);
+        $user = $this->createUser('superuser');
+        $rules = Rules::factory()->create(['billing_company_id' => $user->billing_company_id]);
 
         // Act
         $response = $this->actingAs($user)->delete(route('rules.destroy', $rules));
