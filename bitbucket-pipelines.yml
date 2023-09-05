@@ -3,8 +3,6 @@ image: php:8.2.9
 definitions:
   caches:
     vendor: vendor
-    usr-bin: /usr/bin/*
-    php: /usr/src/php/
   services:
     pgsql:
       image: postgres:14-alpine
@@ -18,12 +16,10 @@ definitions:
         caches:
           - composer
           - vendor
-          - usr-bin
-          - php
         script:
           - ln -f -s .env.example .env
-          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev postgresql-client && apt-get clean
-          - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
+          - apt-get update && apt-get install -y gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev && apt-get clean
+          - docker-php-ext-install gd curl zip bcmath intl
           - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
           - composer install --no-interaction --prefer-dist
         services:
@@ -33,11 +29,10 @@ definitions:
         caches:
           - composer
           - vendor
-          - usr-bin
-          - php
         script:
           - ln -f -s .env.testing .env
-          - docker-php-ext-install pgsql pdo_pgsql pdo_mysql gd curl zip bcmath intl
+          - apt-get update && apt-get install -y libpq-dev postgresql-client && apt-get clean
+          - docker-php-ext-install pgsql pdo_pgsql
           - XDEBUG_MODE=debug,coverage
           - php artisan key:generate
           - php artisan jwt:secret
