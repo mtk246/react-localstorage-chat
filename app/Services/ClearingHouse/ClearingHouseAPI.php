@@ -6,6 +6,7 @@ namespace App\Services\ClearingHouse;
 
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
+use App\Models\TypeCatalog;
 
 class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
@@ -55,8 +56,38 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
                 'id' => $payer->name,
                 'name' => $payer->name,
                 'public_note' => $payer->payerInformation?->first()?->portal ?? '',
-                'ins_type' => explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? '',
-                'plan_type' => explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? '',
+                'ins_type_id' => $this->getInsType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? ''),
+                'plan_type_id' => $this->getPlanType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? ''),
             ])->toArray();
+    }
+
+    protected function getInsType(string $insType)
+    {
+        if ('' == $insType) {
+            return '';
+        }
+
+        return TypeCatalog::query()
+            ->whereHas('type', function ($query) {
+                $query->where('description', 'Ins type');
+            })
+            ->whereRaw('LOWER(description) LIKE (?)', [strtolower("%$insType%")])
+            ->first()
+            ->id;
+    }
+
+    protected function getPlanType(string $planType)
+    {
+        if ('' == $planType) {
+            return '';
+        }
+
+        return TypeCatalog::query()
+            ->whereHas('type', function ($query) {
+                $query->where('description', 'Insurance plan type');
+            })
+            ->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$planType%")])
+            ->first()
+            ->id;
     }
 }
