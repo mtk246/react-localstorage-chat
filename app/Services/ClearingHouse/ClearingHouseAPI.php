@@ -7,11 +7,11 @@ namespace App\Services\ClearingHouse;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 
-abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
+class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
     public function __construct(
-        protected readonly ?InsurancePlan $insurance,
-        protected readonly ?string $type,
+        protected readonly ?InsurancePlan $insurance = null,
+        protected readonly ?string $type = null,
     ) {
     }
 
@@ -39,5 +39,24 @@ abstract class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ->where('type', $type)
                 ?->first()
                 ?->cpid ?? '';
+    }
+
+    public function getByPayerID(string $payerID)
+    {
+        return AvailablePayer::query()
+            ->with('payerInformation')
+            ->where(
+                [
+                    'payer_id' => $payerID,
+                ]
+            )
+            ->get()
+            ->map(fn ($payer) => [
+                'id' => $payer->name,
+                'name' => $payer->name,
+                'public_note' => $payer->payerInformation?->first()?->portal ?? '',
+                'ins_type' => explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? '',
+                'plan_type' => explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? '',
+            ])->toArray();
     }
 }
