@@ -13,6 +13,7 @@ use App\Models\BillingCompany\MembershipRole;
 use App\Models\Company;
 use App\Models\CompanyHealthProfessionalType;
 use App\Models\Contact;
+use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
@@ -130,7 +131,7 @@ class DoctorRepository
                     ],
                     [
                         'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
-                        'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
+                        'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'],
                         'npi' => $data['npi'],
                         'ein' => $data['ein'] ?? $data['profile']['ssn'],
                         'upin' => $data['upin'] ?? null,
@@ -171,6 +172,15 @@ class DoctorRepository
                             'primary' => $taxonomy['primary']
                         ]);
                     }
+                }
+
+                if (isset($data['abbreviation'])) {
+                    EntityAbbreviation::create([
+                        'abbreviation' => $data['abbreviation'],
+                        'abbreviable_id' => $company->id,
+                        'abbreviable_type' => Company::class,
+                        'billing_company_id' => $billingCompany,
+                    ]);
                 }
             }
 
@@ -420,63 +430,73 @@ class DoctorRepository
                     $company = Company::query()->find($data['company_id']);
                 }
                 else {
-                    $company = Company::query()->updateOrCreate(
-                        ['npi' => $data['npi']],
-                        [
-                            'code' => generateNewCode(getPrefix($data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi']), 5, date('Y'), Company::class, 'code'),
-                            'name' => $data['profile']['first_name'].' '.$data['profile']['last_name'].' '.$data['npi'],
+                    $company = Company::where('npi', $data['npi'])->first();
+
+                    if(is_null($company)) {
+                        $company = Company::query()->create([
+                            'code' => generateNewCode(getPrefix($data['profile']['first_name'] . ' ' . $data['profile']['last_name'] . ' ' . $data['npi']), 5, date('Y'), Company::class, 'code'),
+                            'name' => $data['profile']['first_name'] . ' ' . $data['profile']['last_name'],
                             'npi' => $data['npi'],
                             'ein' => $data['ein'] ?? $data['profile']['ssn'],
                             'upin' => $data['upin'] ?? null,
-                        ],
-                    );
-
-                    if (isset($data['nickname'])) {
-                        EntityNickname::updateOrCreate([
-                            'nicknamable_id' => $company->id,
-                            'nicknamable_type' => Company::class,
-                            'billing_company_id' => $billingCompany,
-                        ], [
-                            'nickname' => $data['nickname'],
                         ]);
-                    }
 
-                    if (isset($data['contact'])) {
-                        $data['contact']['contactable_id'] = $company->id;
-                        $data['contact']['contactable_type'] = Company::class;
-                        $data['contact']['billing_company_id'] = $billingCompany;
-                        Contact::updateOrCreate(
-                            [
-                                'contactable_id' => $company->id,
-                                'contactable_type' => Company::class,
-                                'billing_company_id' => $billingCompany
-                            ],
-                            $data['contact']
-                        );
-                    }
-
-                    if (isset($data['address'])) {
-                        $data['address']['addressable_id'] = $company->id;
-                        $data['address']['addressable_type'] = Company::class;
-                        $data['address']['billing_company_id'] = $billingCompany;
-                        Address::updateOrCreate(
-                            [
-                                'addressable_id' => $company->id,
-                                'addressable_type' => Company::class,
+                        if (isset($data['nickname'])) {
+                            EntityNickname::updateOrCreate([
+                                'nicknamable_id' => $company->id,
+                                'nicknamable_type' => Company::class,
                                 'billing_company_id' => $billingCompany,
-                                'address_type_id' => 1
-                            ],
-                            $data['address']
-                        );
-                    }
+                            ], [
+                                'nickname' => $data['nickname'],
+                            ]);
+                        }
 
-                    if (isset($data['taxonomies'])) {
-                        foreach ($data['taxonomies'] as $taxonomy) {
-                            $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
+                        if (isset($data['contact'])) {
+                            $data['contact']['contactable_id'] = $company->id;
+                            $data['contact']['contactable_type'] = Company::class;
+                            $data['contact']['billing_company_id'] = $billingCompany;
+                            Contact::updateOrCreate(
+                                [
+                                    'contactable_id' => $company->id,
+                                    'contactable_type' => Company::class,
+                                    'billing_company_id' => $billingCompany
+                                ],
+                                $data['contact']
+                            );
+                        }
 
-                            $company->taxonomies()->attach($tax->id, [
+                        if (isset($data['address'])) {
+                            $data['address']['addressable_id'] = $company->id;
+                            $data['address']['addressable_type'] = Company::class;
+                            $data['address']['billing_company_id'] = $billingCompany;
+                            Address::updateOrCreate(
+                                [
+                                    'addressable_id' => $company->id,
+                                    'addressable_type' => Company::class,
+                                    'billing_company_id' => $billingCompany,
+                                    'address_type_id' => 1
+                                ],
+                                $data['address']
+                            );
+                        }
+
+                        if (isset($data['taxonomies'])) {
+                            foreach ($data['taxonomies'] as $taxonomy) {
+                                $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
+
+                                $company->taxonomies()->attach($tax->id, [
+                                    'billing_company_id' => $billingCompany,
+                                    'primary' => $taxonomy['primary']
+                                ]);
+                            }
+                        }
+
+                        if (isset($data['abbreviation'])) {
+                            EntityAbbreviation::create([
+                                'abbreviation' => $data['abbreviation'],
+                                'abbreviable_id' => $company->id,
+                                'abbreviable_type' => Company::class,
                                 'billing_company_id' => $billingCompany,
-                                'primary' => $taxonomy['primary']
                             ]);
                         }
                     }
