@@ -23,6 +23,7 @@ use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\Taxonomy;
 use App\Models\TypeCatalog;
+use App\Models\TypeForm;
 use App\Models\User;
 use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
@@ -263,6 +264,27 @@ class DoctorRepository
                         'company_id' => $company->id ?? $data['company_id'],
                         'health_professional_type_id' => $type?->id,
                         'miscellaneous' => $data['miscellaneous'] ?? null,
+                    ]
+                );
+            }
+
+            $claim_format = TypeForm::where('form', 'CMS-1500 / 837P')->first();
+
+            /** Associate billing companies to company */
+            if (is_null($company->billingCompanies()->find($billingCompany))) {
+                $company->billingCompanies()->attach(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $claim_format->id,
+                    ]
+                );
+            } else {
+                $company->billingCompanies()->updateExistingPivot(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $claim_format->id,
                     ]
                 );
             }
@@ -550,6 +572,29 @@ class DoctorRepository
                     ]
                 );
             }
+
+            $claim_format = TypeForm::where('form', 'CMS-1500 / 837P')->first();
+
+            /** Associate billing companies to company */
+            if (is_null($company->billingCompanies()->find($billingCompany))) {
+                $company->billingCompanies()->attach(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $claim_format->id,
+                    ]
+                );
+            } else {
+                $company->billingCompanies()->updateExistingPivot(
+                    $billingCompany,
+                    [
+                        'miscellaneous' => $data['miscellaneous'] ?? null,
+                        'claim_format_ids' => $claim_format->id,
+                    ]
+                );
+            }
+
+
 
             if (isset($data['taxonomies'])) {
 

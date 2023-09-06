@@ -18,9 +18,9 @@ final class StoreRulesWrapper extends CastsRequest
             'format' => $this->get('format'),
             'description' => $this->get('description') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
-            'insurance_company_id' => $this->getInsuranceCompany(),
+            'insurance_plan_id' => $this->getInsurancePlan(),
             'rules' => $this->getRules()->toArray(),
-            'parameters' => $this->getParameters()->toArray(),
+            'parameters' => $this->getParameters()->toJson(),
         ];
     }
 
@@ -31,25 +31,20 @@ final class StoreRulesWrapper extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
-    public function getInsuranceCompany(): Collection
+    public function getInsurancePlan(): int
     {
-        return $this->getCollect('insurance_company_id');
+        return $this->get('insurance_plan_id');
     }
 
     private function getRules(): Collection
     {
-        return collect(config('claim.formats.institutional'))
-            ->map(fn ($format) => collect($format)
-                ->map(fn (array $rule) => collect($rule)
-                    ->only(['type', 'value'])
-                )
-            );
+        return $this->getCollect('rules');
     }
 
     private function getParameters(): Collection
     {
         return $this->getRules()
-            ->filter(fn (string $value, string $key) => !is_null(RequiredFillRuleType::tryFrom($key)))
+            ->filter(fn (array $value, string $key) => !is_null(RequiredFillRuleType::tryFrom($key)))
             ->mapWithKeys(fn (array $rule) => [$rule['name'] => $rule['value']]);
     }
 }

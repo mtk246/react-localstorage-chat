@@ -5,7 +5,7 @@ definitions:
     vendor: vendor
   services:
     pgsql:
-      image: postgres:13-alpine
+      image: postgres:14-alpine
       environment:
         POSTGRES_DB: $DB_DATABASE
         POSTGRES_USER: $DB_USERNAME
@@ -18,23 +18,31 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - apt-get update && apt-get install -y libpq-dev gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev
+          - apt-get update && apt-get install -y gnupg gosu curl zip unzip supervisor libcap2-bin libpng-dev dnsutils libcurl4-openssl-dev libmcrypt-dev libzip-dev libicu-dev && apt-get clean
+          - docker-php-ext-install gd curl zip bcmath intl
           - curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
-          - docker-php-ext-install pgsql gd curl zip bcmath intl
           - composer install --no-interaction --prefer-dist
+        services:
+          - pgsql
     - step: &testin-app
         name: Testing app
         caches:
           - composer
           - vendor
         script:
-          - ln -f -s .env.example .env
+          - ln -f -s .env.testing .env
+          - apt-get update && apt-get install -y libpq-dev postgresql-client && apt-get clean
+          - docker-php-ext-install pgsql pdo_pgsql
           - XDEBUG_MODE=debug,coverage
           - php artisan key:generate
           - php artisan jwt:secret
+          - php artisan migrate
           - php artisan serve &
           - sleep 5
-          - ./vendor/bin/phpunit --log-junit ./test-reports/phpunit.junit.xml --coverage-clover ./test-reports/phpunit.coverage.xml
+          - php -v
+          - php artisan test #--coverage --min=$COVERAGE_MIN
+        variables:
+          XDEBUG_MODE: debug,coverage
         services:
           - pgsql
     - step: &syntax-test

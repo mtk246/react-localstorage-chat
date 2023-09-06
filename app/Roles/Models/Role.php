@@ -7,6 +7,7 @@ namespace App\Roles\Models;
 use App\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 use App\Roles\Traits\RoleHasRelations;
 use App\Roles\Traits\Slugable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -48,6 +49,7 @@ class Role extends Model implements RoleHasRelationsContract, Auditable
     use Slugable;
     use RoleHasRelations;
     use AuditableTrait;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
