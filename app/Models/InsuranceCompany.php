@@ -56,6 +56,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $procedures_count
  * @property \App\Models\PublicNote $publicNote
  *
+ * @method static \Database\Factories\InsuranceCompanyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsuranceCompany query()

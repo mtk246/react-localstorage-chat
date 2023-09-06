@@ -26,6 +26,7 @@
 - [Get list patients](#get-list-patients)
 - [Get list billing companies](#get-list-billing-companies)
 - [Get list responsibility type](#get-list-responsibility-type)
+- [Get list by payer](#get-list-by payer)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -48,6 +49,8 @@
 | 13 | GET    | `Get list charge usings`        | `/insurance-plan/get-list-charge-usings`                   | yes            | Get list charge usings             |
 | 14 |GET     | `Get list billing companies`    | `/insurance-plan/get-list-billing-companies?insurance_plan_id={InsuranceID?}&edit={edit?}`        |yes            |Get list billing companies|
 | 15 |GET     | `Get list responsibility type`  | `/insurance-plan/get-list-responsibility-type`             | yes            | Get list responsibility type       |
+| 16 |GET     | `Get list by payer`  | `/insurance-plan/get-list-by-payer/{payer}`             | yes            | Get list by payer       |
+
 > {primary} when url params have this symbol "?" mean not required, so you must to send null....
 
 <a name="data-another-module"></a>
@@ -694,68 +697,8 @@ insurance_company_id <integer>
         ]
     },
     "public_note": "Note Public",
-    "copays": {
-        "current_page": 1,
-        "data": [],
-        "first_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
-        "from": null,
-        "last_page": 1,
-        "last_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
-        "links": [
-            {
-                "url": null,
-                "label": "&laquo; Previous",
-                "active": false
-            },
-            {
-                "url": "http://localhost/api/v1/insurance-plan/27?page=1",
-                "label": "1",
-                "active": true
-            },
-            {
-                "url": null,
-                "label": "Next &raquo;",
-                "active": false
-            }
-        ],
-        "next_page_url": null,
-        "path": "http://localhost/api/v1/insurance-plan/27",
-        "per_page": 10,
-        "prev_page_url": null,
-        "to": null,
-        "total": 0
-    },
-    "contract_fees": {
-        "current_page": 1,
-        "data": [],
-        "first_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
-        "from": null,
-        "last_page": 1,
-        "last_page_url": "http://localhost/api/v1/insurance-plan/27?page=1",
-        "links": [
-            {
-                "url": null,
-                "label": "&laquo; Previous",
-                "active": false
-            },
-            {
-                "url": "http://localhost/api/v1/insurance-plan/27?page=1",
-                "label": "1",
-                "active": true
-            },
-            {
-                "url": null,
-                "label": "Next &raquo;",
-                "active": false
-            }
-        ],
-        "next_page_url": null,
-        "path": "http://localhost/api/v1/insurance-plan/27",
-        "per_page": 10,
-        "prev_page_url": null,
-        "to": null,
-        "total": 0
-    },
+    "copays": [],
+    "contract_fees": [],
     "billing_companies": [
         {
             "id": 1,
@@ -763,138 +706,7 @@ insurance_company_id <integer>
             "code": "BC-00001-2023",
             "abbreviation": "MCC",
             "private_insurance_plan": {
-                "naic": "someNaic",
-                "file_method_id": 1,
-                "file_method": "CI - Commercial Insurance",
-                "format": [
-                    {
-                        "format_professional_id": 1,
-                        "format_professional": {
-                            "id": 1,
-                            "code": "CI",
-                            "description": "Commercial Insurance",
-                            "status": true,
-                            "type_id": 1,
-                            "created_at": "2023-09-05T02:22:40.000000Z",
-                            "updated_at": "2023-09-05T02:22:40.000000Z"
-                        },
-                        "format_cms_id": 1,
-                        "format_cms": "CI",
-                        "format_institutional_id": 1,
-                        "format_institutional": "CI",
-                        "format_ub_id": 1,
-                        "format_ub": "CI",
-                        "responsibilities": [
-                            {
-                                "id": 1,
-                                "code": "A",
-                                "description": "Payer Responsibility Four",
-                                "created_at": "2023-09-05T02:23:00.000000Z",
-                                "updated_at": "2023-09-05T02:23:00.000000Z"
-                            },
-                            {
-                                "id": 2,
-                                "code": "B",
-                                "description": "Payer Responsibility Five",
-                                "created_at": "2023-09-05T02:23:00.000000Z",
-                                "updated_at": "2023-09-05T02:23:00.000000Z"
-                            }
-                        ]
-                    },
-                    {
-                        "format_professional_id": 1,
-                        "format_professional": {
-                            "id": 1,
-                            "code": "CI",
-                            "description": "Commercial Insurance",
-                            "status": true,
-                            "type_id": 1,
-                            "created_at": "2023-09-05T02:22:40.000000Z",
-                            "updated_at": "2023-09-05T02:22:40.000000Z"
-                        },
-                        "format_cms_id": 1,
-                        "format_cms": "CI",
-                        "format_institutional_id": 1,
-                        "format_institutional": "CI",
-                        "format_ub_id": 1,
-                        "format_ub": "CI",
-                        "responsibilities": [
-                            {
-                                "id": 3,
-                                "code": "C",
-                                "description": "Payer Responsibility Six",
-                                "created_at": "2023-09-05T02:23:00.000000Z",
-                                "updated_at": "2023-09-05T02:23:00.000000Z"
-                            }
-                        ]
-                    }
-                ],
-                "eff_date": "2022-01-23",
-                "status": true,
-                "edit_name": true,
-                "nickname": "Alias Insurance Plan",
-                "abbreviation": "Abbreviation",
-                "private_note": {
-                    "id": 28,
-                    "note": "Note Private",
-                    "billing_company_id": 1,
-                    "publishable_type": "App\\Models\\InsurancePlan",
-                    "publishable_id": 27,
-                    "created_at": "2023-09-05T12:07:05.000000Z",
-                    "updated_at": "2023-09-05T12:07:05.000000Z",
-                    "last_modified": {
-                        "user": "Ivan Sam",
-                        "roles": [
-                            {
-                                "id": 1,
-                                "name": "Super User",
-                                "slug": "superuser",
-                                "description": "Allows you to administer and manage all the functions of the application",
-                                "level": 1,
-                                "created_at": "2023-09-05T02:18:36.000000Z",
-                                "updated_at": "2023-09-05T02:18:36.000000Z",
-                                "pivot": {
-                                    "user_id": 22,
-                                    "role_id": 1,
-                                    "created_at": "2023-09-05T02:27:09.000000Z",
-                                    "updated_at": "2023-09-05T02:27:09.000000Z"
-                                }
-                            }
-                        ]
-                    }
-                },
-                "address": {
-                    "address": "Name Address",
-                    "city": "Name City",
-                    "state": "Name state",
-                    "zip": "3234",
-                    "country": "Name country",
-                    "apt_suite": "Apt Suite",
-                    "created_at": "2023-09-05T12:07:05.000000Z",
-                    "updated_at": "2023-09-05T12:07:05.000000Z"
-                },
-                "contact": {
-                    "phone": "55433",
-                    "fax": "fsdfs",
-                    "email": "dsfsd@gdrfg.com",
-                    "mobile": "55433",
-                    "contact_name": "Some name",
-                    "created_at": "2023-09-05T12:07:05.000000Z",
-                    "updated_at": "2023-09-05T12:07:05.000000Z"
-                },
-                "insurance_plan_time_failed": {
-                    "days": 30,
-                    "from": {
-                        "id": 2,
-                        "code": "BL",
-                        "description": "Blue Cross/Blue Shield",
-                        "status": true,
-                        "type_id": 1,
-                        "created_at": "2023-09-05T02:22:40.000000Z",
-                        "updated_at": "2023-09-05T02:22:40.000000Z"
-                    },
-                    "from_id": 2
-                }
+                ...
             }
         }
     ]
@@ -1691,5 +1503,42 @@ billing_company_id <integer> optional
         "id": 48,
         "name": "R2 - Responsibility type 2"
     }
+]
+```
+
+<a name="get-list-by-payer"></a>
+## Get list by payer
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Payer name of payerId found
+
+#
+
+```json
+[
+  {
+    "id": "SEAVIEW IPA",
+    "name": "SEAVIEW IPA",
+    "public_note": "",
+    "ins_type": "Commercial",
+    "plan_type": "HMO"
+  },
+  {
+    "id": "OJAI VALLEY COMMUNITY MEDICAL GROUP",
+    "name": "OJAI VALLEY COMMUNITY MEDICAL GROUP",
+    "public_note": "",
+    "ins_type": "Commercial",
+    "plan_type": "HMO"
+  }
 ]
 ```
