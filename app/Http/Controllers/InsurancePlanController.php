@@ -136,12 +136,13 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getByPayer(string $payer): JsonResponse
+    public function getByPayer(string $payer, ClearingHouseService $service): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
+                $rs['data']['names'] = $service->list($rs['data']['payer_id'], request()->user());
                 return response()->json($rs['data']);
             } else {
                 if (Gate::check('is-admin')) {

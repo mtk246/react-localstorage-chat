@@ -25,6 +25,7 @@ class CreateDoctorRequest extends FormRequest
                 'string',
                 'max:9',
             ],
+            'abbreviation' => ['nullable', 'string'],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
 
             'is_provider' => ['required', 'boolean'],
