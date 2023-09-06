@@ -6,7 +6,8 @@ namespace App\Models\Claims;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
-use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\Claims\Rules.
  *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property RuleFormatType $format
  * @property string $description
@@ -23,10 +24,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property array|null $parameters
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $insurance_company_id
+ * @property int|null $insurance_plan_id
  * @property BillingCompany|null $billingCompany
- * @property InsuranceCompany $insuranceCompany
+ * @property InsurancePlan|null $insurancePlan
  *
+ * @method static \Database\Factories\Claims\RulesFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules query()
@@ -35,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereFormat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rules whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereParameters($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereRules($value)
@@ -46,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 final class Rules extends Model
 {
     use HasFactory;
+    use HasUlids;
 
     protected $table = 'claim_rules';
 
@@ -54,7 +57,7 @@ final class Rules extends Model
         'format',
         'description',
         'billing_company_id',
-        'insurance_company_id',
+        'insurance_plan_id',
         'rules',
         'parameters',
     ];
@@ -70,8 +73,8 @@ final class Rules extends Model
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function insuranceCompany(): BelongsTo
+    public function insurancePlan(): BelongsTo
     {
-        return $this->belongsTo(InsuranceCompany::class);
+        return $this->belongsTo(InsurancePlan::class);
     }
 }

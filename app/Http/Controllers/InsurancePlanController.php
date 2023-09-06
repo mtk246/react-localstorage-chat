@@ -17,6 +17,7 @@ use App\Actions\InsurancePlan\AddCopays;
 use App\Models\InsurancePlan;
 
 use App\Actions\InsurancePlan\AddContractFees;
+use App\Services\ClearingHouseService;
 
 class InsurancePlanController extends Controller
 {
@@ -51,6 +52,13 @@ class InsurancePlanController extends Controller
     public function getByName(string $name): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByName($name);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+    }
+
+    public function getListByPayer(string $payer, ClearingHouseService $service): JsonResponse
+    {
+        $rs = $service->list($payer, request()->user());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
     }
@@ -128,12 +136,13 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getByPayer(string $payer): JsonResponse
+    public function getByPayer(string $payer, ClearingHouseService $service): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
+                $rs['data']['names'] = $service->list($rs['data']['payer_id'], request()->user());
                 return response()->json($rs['data']);
             } else {
                 if (Gate::check('is-admin')) {

@@ -253,7 +253,7 @@ class CompanyRepository
     public function getListContractFeeTypes()
     {
         try {
-            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Contract fee type']], null);
+            return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Contract fee type']], null, ['code']);
         } catch (\Exception $e) {
             return [];
         }

@@ -1536,7 +1536,7 @@ class PatientRepository
         try {
             return [
                 "general" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Insurance policy type']]),
-                "secondary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
+                "secundary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
             ];
         } catch (\Exception $e) {
             return [];
