@@ -59,7 +59,7 @@ class CreateRequest extends FormRequest
             'format.*.responsibilities.*' => [
                 'required',
                 'integer',
-                'exists:\App\Models\PayerResponsibility,id',
+                'exists:\App\Models\TypeCatalog,id',
             ],
 
             'time_failed' => ['nullable', 'array'],
