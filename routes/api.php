@@ -496,6 +496,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'storeCheckEligibility']);
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
+        Route::resource('/rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
         Route::get('/{claim}', [\App\Http\Controllers\ClaimController::class, 'getOneClaim']);
         Route::get('/{status?}/{substatus?}', [\App\Http\Controllers\ClaimController::class, 'getAllClaims']);
@@ -508,7 +509,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
         Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
         Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
-        Route::resource('rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
     Route::prefix('claim-sub-status')->middleware([

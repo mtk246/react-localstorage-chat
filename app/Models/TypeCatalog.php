@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \App\Models\Type $type
  *
+ * @method static \Database\Factories\TypeCatalogFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TypeCatalog query()
