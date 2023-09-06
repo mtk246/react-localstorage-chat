@@ -13,6 +13,7 @@ use App\Models\BillingCompany\MembershipRole;
 use App\Models\Company;
 use App\Models\CompanyHealthProfessionalType;
 use App\Models\Contact;
+use App\Models\EntityAbbreviation;
 use App\Models\EntityNickname;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
@@ -171,6 +172,15 @@ class DoctorRepository
                             'primary' => $taxonomy['primary']
                         ]);
                     }
+                }
+
+                if (isset($data['abbreviation'])) {
+                    EntityAbbreviation::create([
+                        'abbreviation' => $data['abbreviation'],
+                        'abbreviable_id' => $company->id,
+                        'abbreviable_type' => Company::class,
+                        'billing_company_id' => $billingCompany,
+                    ]);
                 }
             }
 
@@ -479,6 +489,15 @@ class DoctorRepository
                                 'primary' => $taxonomy['primary']
                             ]);
                         }
+                    }
+
+                    if (isset($data['abbreviation'])) {
+                        EntityAbbreviation::create([
+                            'abbreviation' => $data['abbreviation'],
+                            'abbreviable_id' => $company->id,
+                            'abbreviable_type' => Company::class,
+                            'billing_company_id' => $billingCompany,
+                        ]);
                     }
                 }
             }
