@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimBatch;
 use App\Models\Company;
 use App\Models\InsuranceCompany;
 use App\Services\Claim\DictionaryInterface;
@@ -15,12 +16,12 @@ use App\Services\Claim\X12Dictionary;
 
 final class ClaimService
 {
-    public function create(FormatType $formatType, Claim $claim, ?Company $company, ?InsuranceCompany $insuranceCompany): DictionaryInterface
+    public function create(FormatType $formatType, Claim $claim, ?Company $company, ?InsuranceCompany $insuranceCompany, ?ClaimBatch $batch): DictionaryInterface
     {
         return match ($formatType) {
             FormatType::FILE => new FileDictionary($claim, $company, $insuranceCompany),
             FormatType::X12 => new X12Dictionary($claim, $company, $insuranceCompany),
-            FormatType::JSON => new JSONDictionary($claim, $company, $insuranceCompany),
+            FormatType::JSON => new JSONDictionary($claim, $company, $insuranceCompany, $batch),
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
     }

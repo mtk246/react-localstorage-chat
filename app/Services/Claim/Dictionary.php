@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\RuleType;
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimBatch;
 use App\Models\Claims\Rules;
 use App\Models\Company;
 use App\Models\InsuranceCompany;
@@ -22,6 +23,7 @@ abstract class Dictionary implements DictionaryInterface
         protected readonly Claim $claim,
         protected readonly ?Company $company,
         protected readonly ?InsuranceCompany $insuranceCompany,
+        protected readonly ?ClaimBatch $batch = null,
     ) {
         $this->setConfigFor();
     }

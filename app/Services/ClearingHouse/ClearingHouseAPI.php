@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\ClearingHouse;
 
+use App\Enums\Claim\ClaimType;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
@@ -35,11 +36,11 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
 
         return ($fakeTransmission)
             ? $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->paper_cpid ?? ''
             : $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->cpid ?? '';
     }

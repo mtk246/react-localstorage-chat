@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FormatType;
+use App\Services\ClearingHouse\ClearingHouseAPI;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -13,6 +14,18 @@ use Illuminate\Support\Str;
 final class JSONDictionary extends Dictionary
 {
     protected string $format = FormatType::JSON->value;
+
+    protected function getCPID(): string
+    {
+        $api = new ClearingHouseAPI();
+
+        return $api->getCPIDByPayerID(
+            $this->claim->higherInsurancePlan()?->payer_id,
+            $this->claim->higherInsurancePlan()?->name,
+            $this->claim->type->value,
+            $this->batch?->fake_transmission ?? false,
+        );
+    }
 
     protected function getSingleArrayFormat(string $value): array
     {
@@ -23,7 +36,7 @@ final class JSONDictionary extends Dictionary
     {
         return match ($key) {
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
-            'tradingPartnerServiceId' => $this->claim->higherInsurancePlan()?->payer_id,
+            'tradingPartnerServiceId' => $this->getCPID(),
             'tradingPartnerName' => $this->claim->higherInsurancePlan()?->name,
             'usageIndicator' => 'T',  /* Caso de prueba */
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
