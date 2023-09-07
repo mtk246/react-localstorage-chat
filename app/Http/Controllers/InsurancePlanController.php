@@ -9,6 +9,7 @@ use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
 use App\Http\Requests\InsurancePlan\AddCopaysRequest;
 use App\Http\Requests\InsurancePlan\CreateRequest;
 use App\Http\Requests\InsurancePlan\UpdateRequest;
+use App\Http\Resources\InsurancePlan\InsurancePlanByPayerResource;
 use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use App\Actions\InsurancePlan\AddCopays;
 use App\Models\InsurancePlan;
 
 use App\Actions\InsurancePlan\AddContractFees;
+use App\Models\ClearingHouse\AvailablePayer;
 use App\Services\ClearingHouseService;
 
 class InsurancePlanController extends Controller
@@ -134,19 +136,30 @@ class InsurancePlanController extends Controller
 
     public function getListPlanTypes()
     {
-        return response()->json(
-            $this->insurancePlanRepository->getListPlanTypes()
-        );
+        return response()->json($this->insurancePlanRepository->getListPlanTypes());
     }
 
     public function getByPayer(string $payer): JsonResponse
     {
+        $servicePayer = AvailablePayer::wherePayerId($payer)->first();
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
-        if ($rs) {
-            if (isset($rs['result']) && $rs['result']) {
-                return response()->json($rs['data']);
+        if ($servicePayer) {
+            if ($rs) {
+                return response()->json(
+                    InsurancePlanByPayerResource::make(
+                        ['data' => $rs, 'type' => 'local'],
+                    ),
+                    200,
+                );
             }
+
+            return response()->json(
+                InsurancePlanByPayerResource::make(
+                    ['data' => $servicePayer, 'type' => 'service'],
+                ),
+                200,
+            );
         } else {
             return response()->json(__("Error, The Payer ID doesn't exist, please check it in our plan list or contact our support team"), 404);
         }

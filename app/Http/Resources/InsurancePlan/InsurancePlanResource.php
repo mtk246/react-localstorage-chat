@@ -180,7 +180,7 @@ final class InsurancePlanResource extends JsonResource
         return $private_insurance_plans->map(function ($format) {
             return [
                 'format_professional_id' => $format->format_professional_id ?? '',
-                'format_professional' => $format->formatProfessional ?? '',
+                'format_professional' => $format->formatProfessional->description ?? '',
                 'format_cms_id' => $format->format_cms_id ?? '',
                 'format_cms' => isset($format->formatCMS) ? $format->formatCMS->code : '',
                 'format_institutional_id' => $format->format_institutional_id ?? '',
