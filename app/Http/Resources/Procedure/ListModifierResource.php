@@ -15,6 +15,7 @@ final class ListModifierResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'code' => $this->resource->modifier,
             'color' => $this->resource->classification->getColor(),
             'name' => $this->resource->modifier,
             'description' => $this->resource->description,
