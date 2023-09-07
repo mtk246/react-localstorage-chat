@@ -25,9 +25,9 @@ final class ContractFeesRequestCast extends CastsRequest
             : 0;
     }
 
-    public function getCompanyIds(): Collection
+    public function getCompanyId(): Collection
     {
-        return collect($this->inputs['company_ids'] ?? []);
+        return collect($this->inputs['company_id'] ?? null);
     }
 
     public function getTypeId(): ?int

@@ -692,12 +692,12 @@ class InsurancePlanRepository
                 'updated_at' => $insurance->updated_at,
                 'last_modified' => $insurance->last_modified,
                 'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
-                'copays' => [],
-                'contract_fees' => [],
+                'copays' => $insurance->copays,
+                'contract_fees' => $insurance->contractFees,
             ];
         }
 
-        return !is_null($insurance) ? ['data' => $record, 'result' => true] : null;
+        return !is_null($insurance) ? $record: null;
     }
 
     public function getByCompany(string $nameCompany)

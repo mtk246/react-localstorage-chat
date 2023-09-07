@@ -9,6 +9,7 @@ use App\Http\Requests\InsurancePlan\AddContractFeesRequest;
 use App\Http\Requests\InsurancePlan\AddCopaysRequest;
 use App\Http\Requests\InsurancePlan\CreateRequest;
 use App\Http\Requests\InsurancePlan\UpdateRequest;
+use App\Http\Resources\InsurancePlan\InsurancePlanByPayerResource;
 use App\Repositories\InsurancePlanRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -131,28 +132,32 @@ class InsurancePlanController extends Controller
 
     public function getListPlanTypes()
     {
-        return response()->json(
-            $this->insurancePlanRepository->getListPlanTypes()
-        );
+        return response()->json($this->insurancePlanRepository->getListPlanTypes());
     }
 
     public function getByPayer(string $payer, ClearingHouseService $service): JsonResponse
     {
+        $servicePayer = $this->getListByPayer($payer, $service);
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
-        if ($rs) {
-            if (isset($rs['result']) && $rs['result']) {
-                $rs['data']['names'] = $service->list($rs['data']['payer_id'], request()->user());
-                return response()->json($rs['data']);
-            } else {
-                if (Gate::check('is-admin')) {
-                    return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
-                } else {
-                    return response()->json(__('Forbidden, The insurance plan has already been associated with the billing company of your insurance company'), 403);
-                }
+        if ('Error, insurance plan not found' !== $servicePayer->original) {
+            if ($rs) {
+                return response()->json(
+                    InsurancePlanByPayerResource::make(
+                        ['data' => $rs, 'service' => $servicePayer, 'type' => 'local'],
+                    ),
+                    200,
+                );
             }
-        } else {
-            return response()->json(__('Error, insurance plan not found'), 404);
+
+            if ($servicePayer->original) {
+                return response()->json(
+                    InsurancePlanByPayerResource::make(
+                        ['data' => $servicePayer->original, 'type' => 'service'],
+                    ),
+                    200,
+                );
+            }
         }
     }
 
