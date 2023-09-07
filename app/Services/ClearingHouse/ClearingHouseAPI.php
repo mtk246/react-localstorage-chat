@@ -7,6 +7,8 @@ namespace App\Services\ClearingHouse;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
@@ -42,7 +44,7 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ?->cpid ?? '';
     }
 
-    public function getByPayerID(string $payerID)
+    public function getByPayerID(string $payerID, array $request, User $user): array
     {
         return AvailablePayer::query()
             ->with('payerInformation')
@@ -52,6 +54,40 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ]
             )
             ->get()
+            ->filter(function ($payer) use ($payerID, $user, $request) {
+                $insurance = InsurancePlan::query()
+                    ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payerID")])
+                    ->where('name', $payer->name)
+                    ->first();
+
+                if (is_null($insurance)) {
+                    return true;
+                }
+
+                $billingCompaniesException = $insurance->billingCompanies()
+                    ->get()
+                    ->pluck('id')
+                    ->toArray();
+
+                $billingCompanies = $insurance->insuranceCompany
+                    ->billingCompanies()
+                    ->when(Gate::denies('is-admin'), function ($query) use ($user) {
+                        $billingCompaniesUser = [$user->billing_company_id];
+
+                        return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                    })
+                    ->when(Gate::check('is-admin'), function ($query) use ($request) {
+                        $billingCompaniesUser = [$request['billing_company_id'] ?? null];
+
+                        return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                    })
+                    ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                    ->get()
+                    ->pluck('id')
+                    ->toArray();
+
+                return !empty($billingCompanies);
+            })
             ->map(fn ($payer) => [
                 'id' => $payer->name,
                 'name' => $payer->name,
