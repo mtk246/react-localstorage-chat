@@ -56,11 +56,14 @@ class InsurancePlanController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
     }
 
-    public function getListByPayer(string $payer, ClearingHouseService $service): JsonResponse
+    public function getListByPayer(Request $request, string $payer, ClearingHouseService $service): JsonResponse
     {
-        $rs = $service->list($payer, request()->user());
+        $rs = $service->list($payer, $request->input(), $request->user());
+        if (array_empty($rs)) {
+            return response()->json(__('Forbidden, All plans associated with this Payer ID are already registered'), 403);
+        };
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, The Payer ID doesn't exist, please check it in our plan list or contact our support team"), 404);
     }
 
     public function getAllInsurancePlans(): JsonResponse
@@ -136,23 +139,16 @@ class InsurancePlanController extends Controller
         );
     }
 
-    public function getByPayer(string $payer, ClearingHouseService $service): JsonResponse
+    public function getByPayer(string $payer): JsonResponse
     {
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
         if ($rs) {
             if (isset($rs['result']) && $rs['result']) {
-                $rs['data']['names'] = $service->list($rs['data']['payer_id'], request()->user());
                 return response()->json($rs['data']);
-            } else {
-                if (Gate::check('is-admin')) {
-                    return response()->json(__('Forbidden, The insurance plan has already been associated with all the billing companies of your insurance company'), 403);
-                } else {
-                    return response()->json(__('Forbidden, The insurance plan has already been associated with the billing company of your insurance company'), 403);
-                }
             }
         } else {
-            return response()->json(__('Error, insurance plan not found'), 404);
+            return response()->json(__("Error, The Payer ID doesn't exist, please check it in our plan list or contact our support team"), 404);
         }
     }
 
