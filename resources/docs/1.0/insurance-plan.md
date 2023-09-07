@@ -1509,6 +1509,12 @@ billing_company_id <integer> optional
 <a name="get-list-by-payer"></a>
 ## Get list by payer
 
+## Example path
+
+>{primary} /get-list-by-payer/SIPVA?billing_company_id=2
+
+>{primary} /get-list-by-payer/SIPVA
+
 
 ### Param in header
 
