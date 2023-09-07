@@ -17,10 +17,10 @@ final class ClearingHouseService
         return new ClearingHouseAPI($insurancePlan, $type);
     }
 
-    public function list(string $payer, array $request, User $user): array
+    public function list(string $payer, array $request, User $user): ?array
     {
         $api = new ClearingHouseAPI();
 
-        $payers = $api->getByPayerID($payer, $request, $user);
+        return $api->getByPayerID($payer, $request, $user);
     }
 }
