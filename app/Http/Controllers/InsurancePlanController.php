@@ -18,6 +18,7 @@ use App\Actions\InsurancePlan\AddCopays;
 use App\Models\InsurancePlan;
 
 use App\Actions\InsurancePlan\AddContractFees;
+use App\Models\ClearingHouse\AvailablePayer;
 use App\Services\ClearingHouseService;
 
 class InsurancePlanController extends Controller
@@ -57,11 +58,14 @@ class InsurancePlanController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
     }
 
-    public function getListByPayer(string $payer, ClearingHouseService $service): JsonResponse
+    public function getListByPayer(Request $request, string $payer, ClearingHouseService $service): JsonResponse
     {
-        $rs = $service->list($payer, request()->user());
+        $rs = $service->list($payer, $request->input(), $request->user());
+        if (array_empty($rs)) {
+            return response()->json(__('Forbidden, All plans associated with this Payer ID are already registered'), 403);
+        };
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, insurance plan not found'), 404);
+        return $rs ? response()->json($rs) : response()->json(__("Error, The Payer ID doesn't exist, please check it in our plan list or contact our support team"), 404);
     }
 
     public function getAllInsurancePlans(): JsonResponse
@@ -135,29 +139,29 @@ class InsurancePlanController extends Controller
         return response()->json($this->insurancePlanRepository->getListPlanTypes());
     }
 
-    public function getByPayer(string $payer, ClearingHouseService $service): JsonResponse
+    public function getByPayer(string $payer): JsonResponse
     {
-        $servicePayer = $this->getListByPayer($payer, $service);
+        $servicePayer = AvailablePayer::wherePayerId($payer)->first();
         $rs = $this->insurancePlanRepository->getByPayer($payer);
 
-        if ('Error, insurance plan not found' !== $servicePayer->original) {
+        if ($servicePayer) {
             if ($rs) {
                 return response()->json(
                     InsurancePlanByPayerResource::make(
-                        ['data' => $rs, 'service' => $servicePayer, 'type' => 'local'],
+                        ['data' => $rs, 'type' => 'local'],
                     ),
                     200,
                 );
             }
 
-            if ($servicePayer->original) {
-                return response()->json(
-                    InsurancePlanByPayerResource::make(
-                        ['data' => $servicePayer->original, 'type' => 'service'],
-                    ),
-                    200,
-                );
-            }
+            return response()->json(
+                InsurancePlanByPayerResource::make(
+                    ['data' => $servicePayer, 'type' => 'service'],
+                ),
+                200,
+            );
+        } else {
+            return response()->json(__("Error, The Payer ID doesn't exist, please check it in our plan list or contact our support team"), 404);
         }
     }
 
