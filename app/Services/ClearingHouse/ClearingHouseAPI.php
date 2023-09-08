@@ -100,8 +100,8 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
             return !empty($billingCompanies);
         })
             ->map(fn ($payer) => [
-            'id' => $payer->name,
-            'name' => $payer->name,
+            'id' => upperCaseWords($payer->name),
+            'name' => upperCaseWords($payer->name),
             'public_note' => $payer->payerInformation?->first()?->portal ?? '',
             'ins_type_id' => $this->getInsType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? ''),
             'plan_type_id' => $this->getPlanType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? ''),
