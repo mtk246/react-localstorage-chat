@@ -280,6 +280,19 @@ final class JSONDictionary extends Dictionary
             foreach ($service->diagnostic_pointers as $point) {
                 array_push($valuesPoint, $pointers[$point]);
             }
+            $procedureIdentifier = match ($service->procedure?->type?->getName()) {
+                'HCPCS' => 'HC',
+                'HIPPS' => 'HP',
+                'HIEC' => 'IV',
+                'ABC' => 'WK',
+                '' => 'ER',
+                default => ''
+            };
+            $procedureDescription = match ($service->procedure?->type?->getName()) {
+                'HCPCS' => '',
+                'HIPPS' => '',
+                default => $service->procedure?->description,
+            };
             $serviceLine = match ($this->claim->type) {
                 ClaimType::PROFESSIONAL => [
                     'serviceDate' => str_replace('-', '', $service->from_service),
@@ -383,7 +396,9 @@ final class JSONDictionary extends Dictionary
                         'adjustedRepricedClaimRefNumber' => '',
                     ],
                     'institutionalService' => [
-                        'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
+                        'procedureModifiers' => (!empty($service->procedure?->code) && !empty($procedureIdentifier))
+                            ? array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? [])
+                            : [],
                         'measurementUnit' => match (isset($service->procedure?->companyServices
                         ->firstWhere('company_id', $this->claim
                             ?->demographicInformation
@@ -393,20 +408,9 @@ final class JSONDictionary extends Dictionary
                             default => 'UN', /* DA = Days UN = Unit */
                         },
                         'serviceLineRevenueCode' => $service->revenueCode->code,
-                        'procedureIdentifier' => match ($service->procedure?->type?->getName()) {
-                            'HCPCS' => 'HC',
-                            'HIPPS' => 'HP',
-                            'HIEC' => 'IV',
-                            'ABC' => 'WK',
-                            '' => 'ER',
-                            default => ''
-                        },
-                        'procedureCode' => $service->procedure->code,
-                        'description' => match ($service->procedure?->type?->getName()) {
-                            'HCPCS' => '',
-                            'HIPPS' => '',
-                            default => $service->procedure?->description,
-                        },
+                        'procedureIdentifier' => (!empty($service->procedure?->code)) ? $procedureIdentifier : '',
+                        'procedureCode' => (!empty($procedureIdentifier)) ? $service->procedure?->code : '',
+                        'description' => (!empty($service->procedure?->code) && !empty($procedureIdentifier)) ? $procedureDescription : '',
                         'lineItemChargeAmount' => str_replace(',', '', $service->price),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
