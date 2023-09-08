@@ -92,7 +92,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
-                'memberId' => $subscriber->member_id ?? $subscriber->id,
+                'memberId' => str_pad((string) $subscriber->member_id ?? $subscriber->id, 12, '0', STR_PAD_LEFT),
                 'ssn' => $subscriber->ssn,
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',
@@ -125,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => $subscriber->member_id ?? $subscriber->id,
+                'memberId' => str_pad((string) $subscriber->member_id ?? $subscriber->id, 12, '0', STR_PAD_LEFT),
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
@@ -2125,6 +2125,45 @@ final class JSONDictionary extends Dictionary
                 'faxNumber' => '5551234567',
                 'email' => 'email@email.com',
                 'phoneExtension' => '1234',
+            ],
+        ];
+    }
+
+    protected function getAttending(): ?array
+    {
+        $attending = $this->claim->attending();
+        $attendingAddress = $attending?->profile?->addresses()
+            ?->first() ?? null;
+        $attendingContact = $attending?->profile->contacts()
+            ?->first() ?? null;
+
+        return [
+            'providerType' => 'AttendingProvider',
+            'npi' => str_replace('-', '', $attending->npi ?? '') ?? null,
+            // 'secondaryIdentificationQualifierCode' => '0B',
+            // 'secondaryIdentifier' => 'string',
+            'employerId' => str_replace('-', '', $attending->ein ?? '') ?? null,
+            // 'taxonomyCode' => 'string',
+            'firstName' => $attending->profile->first_name,
+            'lastName' => $attending->profile->last_name,
+            'middleName' => $attending->profile->middle_name,
+            'suffix' => $attending->profile?->nameSuffix?->code,
+            // 'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
+            'address' => [
+                'address1' => $attendingAddress?->address,
+                'address2' => null,
+                'city' => $attendingAddress?->city,
+                'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? null,
+                'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? null,
+                'countryCode' => $attendingAddress?->country,
+                'countrySubDivisionCode' => $attendingAddress?->country_subdivision_code,
+            ],
+            'contactInformation' => [
+                'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
+                'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? null,
+                'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? null,
+                'email' => $attendingContact?->email,
+                'validContact' => true,
             ],
         ];
     }

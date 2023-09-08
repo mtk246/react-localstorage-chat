@@ -76,9 +76,9 @@ return [
     /*'rendering' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'value' => 'claim:rendering',
-    ],
+    ],*/
     'attending' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'value' => 'claim:attending',
-    ],*/
+    ],
 ];
