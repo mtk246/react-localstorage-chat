@@ -1859,8 +1859,8 @@ final class JSONDictionary extends Dictionary
                 'city' => $billingProviderPaymentAddress?->city,
                 'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? null,
-                'countryCode' => $billingProviderPaymentAddress?->country,
-                'countrySubDivisionCode' => $billingProviderPaymentAddress?->country_subdivision_code,
+                'countryCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country : '',
+                'countrySubDivisionCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country_subdivision_code : '',
             ]
             : null;
     }
@@ -2155,16 +2155,22 @@ final class JSONDictionary extends Dictionary
                 'city' => $attendingAddress?->city,
                 'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? null,
-                'countryCode' => $attendingAddress?->country,
-                'countrySubDivisionCode' => $attendingAddress?->country_subdivision_code,
+                'countryCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country : '',
+                'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
             ],
-            'contactInformation' => [
-                'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
-                'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? null,
-                'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? null,
-                'email' => $attendingContact?->email,
-                'validContact' => true,
-            ],
+            'contactInformation' => (
+                !empty($attendingContact?->phone) ||
+                !empty($attendingContact?->email) ||
+                !empty($attendingContact?->fax)
+            )
+                ? [
+                    'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
+                    'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? null,
+                    'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? null,
+                    'email' => $attendingContact?->email,
+                    'validContact' => true,
+                ]
+                : null,
         ];
     }
 
