@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\ClearingHouse;
 
+use App\Enums\Claim\ClaimType;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
@@ -18,28 +20,33 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
     ) {
     }
 
-    public function getCPIDByPayerID(string $payerID, string $payerName, int $type, bool $fakeTransmission = false): ?string
-    {
+    public function getDataByPayerID(
+        string $payerID,
+        string $payerName,
+        int $type,
+        bool $fakeTransmission = false,
+        string $key = 'cpid'
+    ): ?string {
         $availablePayer = AvailablePayer::query()
-            ->where(
-                [
-                    'payer_id' => $payerID,
-                    'name' => $payerName,
-                ]
-            )
+            ->whereRaw('UPPER(payer_id) = ?', [Str::upper($payerID)])
+            ->whereRaw('UPPER(name) = ?', [Str::upper($payerName)])
             ->first();
 
         if (!$availablePayer) {
             throw new \Exception('Payer not found');
         }
 
+        if ('cpid' !== $key) {
+            return $availablePayer->{$key};
+        }
+
         return ($fakeTransmission)
             ? $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->paper_cpid ?? ''
             : $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->cpid ?? '';
     }
@@ -98,7 +105,9 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
             'public_note' => $payer->payerInformation?->first()?->portal ?? '',
             'ins_type_id' => $this->getInsType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? ''),
             'plan_type_id' => $this->getPlanType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? ''),
-        ])->toArray();
+        ])
+        ->values()
+        ->toArray();
     }
 
     protected function getInsType(string $insType)
