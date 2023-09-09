@@ -23,7 +23,7 @@ final class TaxonomiesResource extends RequestWrapedResource
         return [
             'tax_id' => $this->resource->tax_id,
             'name' => $this->resource->name,
-            'primary' => $this->resource->primary,
+            'primary' => $this->resource->pivot->primary ?? false,
             'created_at' => $this->resource->pivot->created_at,
             'updated_at' => $this->resource->pivot->updated_at,
         ];

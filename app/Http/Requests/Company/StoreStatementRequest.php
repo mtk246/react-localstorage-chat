@@ -44,7 +44,22 @@ final class StoreStatementRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
-            'store.*.start_date' => ['nullable', 'date', 'before:store.*.end_date'],
+            'store.*.start_date' => [
+                'nullable',
+                'date',
+                'required_with:store.*.end_date',
+                function ($attribute, $value, $fail) {
+                    $index = str_replace(['store.', '.start_date'], '', $attribute);
+
+                    if (!empty($this->input("store.$index.end_date"))) {
+                        $endDate = $this->input("store.$index.end_date");
+
+                        if (strtotime($value) > strtotime($endDate)) {
+                            $fail("$attribute debe ser anterior o igual a end_date.");
+                        }
+                    }
+                },
+            ],
             'store.*.end_date' => ['nullable', 'date'],
         ];
     }

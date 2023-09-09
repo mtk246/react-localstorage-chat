@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Casts\Claim;
 
+use App\Enums\Claim\RequiredFillRuleType;
 use App\Http\Casts\CastsRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
@@ -13,14 +14,13 @@ final class UpdateRulesWrapper extends CastsRequest
     public function getRuleData(): array
     {
         return [
-            'id' => $this->get('id'),
             'name' => $this->get('name'),
             'format' => $this->get('format'),
             'description' => $this->get('description') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
-            'insurance_company_id' => $this->get('insurance_company_id'),
+            'insurance_plan_id' => $this->getInsurancePlan(),
             'rules' => $this->getRules()->toArray(),
-            'parameters' => $this->getParameters()->toArray(),
+            'parameters' => $this->getParameters()->toJson(),
         ];
     }
 
@@ -31,6 +31,11 @@ final class UpdateRulesWrapper extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
+    public function getInsurancePlan(): int
+    {
+        return $this->get('insurance_plan_id');
+    }
+
     private function getRules(): Collection
     {
         return $this->getCollect('rules');
@@ -38,6 +43,8 @@ final class UpdateRulesWrapper extends CastsRequest
 
     private function getParameters(): Collection
     {
-        return $this->getCollect('parameters');
+        return $this->getRules()
+            ->filter(fn (array $value, string $key) => !is_null(RequiredFillRuleType::tryFrom($key)))
+            ->mapWithKeys(fn (array $rule) => [$rule['name'] => $rule['value']]);
     }
 }

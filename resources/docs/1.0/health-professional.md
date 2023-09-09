@@ -743,31 +743,19 @@
     "email":"user1edit@gmail.com",
     "npi":"123456719",
     "npi_company":"123456719", /** Optional, only required if the is provider field is true and type health professional is doctor */
-    "name_company": "", /** Optional */
     "nickname":"alias company",
     "is_provider": true, /** Optional, only required if the type health professional is doctor */
     "health_professional_type_id": 1,
     "authorization": [1,2,3],  /** Optional, only required if the is provider field is true and type health professional is doctor */
     "private_note": "Note Private",
     "public_note": "Note Public",
+    "company_id": 1, /** Required*/
     "taxonomies": [
         {
             "tax_id": "TAX01213",
             "name": "NameTaxonomy Company",
             "primary": true
         },{
-            "tax_id": "TAX01222",
-            "name": "NameTaxonomy 2 Company",
-            "primary": false
-        }
-    ],
-    "taxonomies_company": [
-        {
-            "tax_id": "TAX01213",
-            "name": "NameTaxonomy Company",
-            "primary": true
-        },
-        {
             "tax_id": "TAX01222",
             "name": "NameTaxonomy 2 Company",
             "primary": false

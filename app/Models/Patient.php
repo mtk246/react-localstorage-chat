@@ -335,16 +335,16 @@ class Patient extends Model implements Auditable
     public function scopeSearch($query, $search)
     {
         if ('' != $search) {
-            return $query->whereHas('user', function ($q) use ($search): void {
-                $q->whereHas('profile', function ($qq) use ($search) {
-                    $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
-                        ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
-                        ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
-                })->orWhereHas('billingCompanies', function ($qq) use ($search) {
-                    $qq->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-                })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
+            return $query->whereHas('profile', function ($qq) use ($search) {
+                $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
+                    ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
+            })->whereHas('user', function ($q) use ($search): void {
+                $q->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereHas('companies', function ($qq) use ($search) {
                 $qq->whereRaw('LOWER(med_num) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('billingCompanies', function ($qq) use ($search) {
+                $qq->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
             })->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
         }
 

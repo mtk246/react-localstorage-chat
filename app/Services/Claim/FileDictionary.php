@@ -26,6 +26,7 @@ final class FileDictionary extends Dictionary
                 : (!empty($this->company->ssn)
                     ? 'SSN'
                     : ''),
+            'ein' => str_replace('-', '', $this->company->ein ?? ''),
             default => (string) $this->company->getAttribute($key),
         };
     }
@@ -47,12 +48,13 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->addresses
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
             ->where('address_type_id', $this->claim
                 ->demographicInformation
                 ->company
                 ->addresses
                 ->where('address_type_id', (int) $entry)
-                ->count() > 1
+                ->count() >= 1
                     ? (int) $entry
                     : 1
             )
@@ -63,8 +65,8 @@ final class FileDictionary extends Dictionary
             'city' => substr($value?->{$key} ?? '', 0, 30),
             'state' => substr($value?->{$key} ?? '', 0, 2),
             'zip' => str_replace('-', '', substr($value?->{$key} ?? '', 0, 12)),
-            'other_country' => 'us' != $value?->country
-                ? $value?->country.' '
+            'other_country' => $value?->country && 'US' != $value?->country
+                ? $value?->country
                 : '',
             default => $value?->{$key} ?? '',
         };
@@ -76,12 +78,13 @@ final class FileDictionary extends Dictionary
             ->demographicInformation
             ->company
             ->contacts
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
             ->get((int) $entry);
 
         return match ($key) {
             'code_area' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
-            'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
-            'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 3, 10)),
+            'phone' => str_replace('-', '', substr($value?->phone ?? '', 0, 10)),
+            'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 0, 10)),
             default => (string) $value?->{$key} ?? '',
         };
     }
@@ -124,7 +127,7 @@ final class FileDictionary extends Dictionary
     protected function getPatientProfileAttribute(string $key): string
     {
         return match ($key) {
-            'first_name' => ', '.$this->claim->patientProfile()?->{$key} ?? '',
+            'first_name' => ', '.$this->claim->patientProfile()?->first_name ?? '',
             'name_suffix' => !empty($this->claim->patientProfile()?->{$key}?->code)
                 ? ' '.$this->claim->patientProfile()?->{$key}?->code
                 : '',
@@ -254,7 +257,7 @@ final class FileDictionary extends Dictionary
     {
         return $this->claim->insurancePolicies->map(fn (InsurancePolicy $policy) => match ($key) {
             'release_info' => (bool) $policy->release_info ? 'Y' : 'N',
-            'assign_benefits' => (bool) $policy->assign_benefits ? 'Y' : 'N',
+            'assign_benefits' => (bool) $this->claim->demographicInformation->accept_assignment ? 'Y' : 'N',
             'plan_name' => substr($policy->insurancePlan->name ?? '', 0, 21),
             default => $policy->{$key} ?? '',
         })
@@ -264,7 +267,7 @@ final class FileDictionary extends Dictionary
     protected function getInsurancePoliciesSubscriberAttribute(string $key): Collection
     {
         return $this->claim->insurancePolicies()->orderByPivot('order')->get()->map(fn (InsurancePolicy $policy) => match ($key) {
-            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? null,
+            'relationship_code' => $policy->subscribers->first()?->relationship->code ?? '18',
             default => $policy->subscribers->first()?->{$key} ?? null,
         } ?? str_replace(', ', '', $this->getPatientProfileAttribute($key)))
         ->pad(3, '');
@@ -316,13 +319,13 @@ final class FileDictionary extends Dictionary
                     'procedure_description' => substr($claimService->procedure->description, 0, 30),
                     'procedure_short_description' => $claimService->procedure->short_description,
                     'procedure_code' => $claimService->procedure->code,
-                    'procedure_start_date' => Carbon::createFromFormat('Y-m-d', $claimService->procedure->start_date)
+                    'start_date' => Carbon::createFromFormat('Y-m-d', $claimService->from_service)
                         ->format('mdY'),
                     'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
-                        ? Money::parse($claimService->claimService->non_covered_charges)->formatByDecimal()
+                        ? Money::parse($claimService->claimService->non_covered_charges, null, true)->formatByDecimal()
                         : '',
                     'related_group' => $claimService->claimService->diagnosisRelatedGroup?->code ?? '',
-                    'total_charge' => Money::parse($claimService->total_charge)->formatByDecimal(),
+                    'total_charge' => Money::parse($claimService->total_charge, null, true)->formatByDecimal(),
                     default => $claimService->{$key},
                 };
             });
@@ -334,10 +337,10 @@ final class FileDictionary extends Dictionary
         $diagnosisDx = $this->claim->service->diagnoses()->wherePivot('item', 'A')->first();
 
         return match ($key) {
-            'type' => $diagnosisDx?->type->getCode(),
+            'type' => $diagnosisDx?->type?->getCode() ?? '',
             'code_poa' => $diagnosisDx?->code
                 .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
-                    ? ($diagnosisDx->pivot->poa)
+                    ? ' '.($diagnosisDx->pivot->poa)
                     : ''),
             'cond_code' => 'inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
                     ? $diagnosisDx?->code
@@ -352,7 +355,7 @@ final class FileDictionary extends Dictionary
             ->map(fn (Diagnosis $diagnosis) => match ($key) {
                 'code_poa' => $diagnosis?->code
                     .('inpatient' == $this->claim->demographicInformation->type_of_medical_assistance
-                        ? ($diagnosis->pivot->poa)
+                        ? ' '.($diagnosis->pivot->poa)
                         : ''),
                 default => $diagnosis?->{$key} ?? '',
             })
@@ -373,7 +376,9 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimServicesTotalAttribute(): string
     {
-        return Money::parse($this->claim->service->services->sum('price'))->formatByDecimal();
+        return $this->claim->service->services->reduce(function (Money $carry, Services $ammount) {
+            return $carry->add(Money::parse($ammount->total_charge, null, true));
+        }, Money::parse('0', null, true))->formatByDecimal();
     }
 
     protected function getClaimServicesTotalKeyAttribute(string $key): Collection
@@ -417,6 +422,14 @@ final class FileDictionary extends Dictionary
                 ?->first() ?? null;
 
             /* 24A */
+            $medication = $item->procedure?->companyServices
+                ->firstWhere('company_id', $this->claim
+                    ?->demographicInformation
+                    ?->company_id)?->medication;
+
+            $resultServices['medication_A'.($index + 1)] = isset($medication)
+                ? ('N4'.$medication->drug_code.' '.$medication->measurement_unit_id->getCode().(string) $medication->units).((true === $medication->repackaged_NDC ?? false) ? (' ORIGN4'.$medication->code_NDC) : '')
+                : '';
             $resultServices['from_year_A'.($index + 1)] = substr($fromService[0] ?? '', 2, 2);
             $resultServices['from_month_A'.($index + 1)] = $fromService[1] ?? '';
             $resultServices['from_day_A'.($index + 1)] = $fromService[2] ?? '';

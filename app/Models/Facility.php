@@ -108,7 +108,7 @@ class Facility extends Model implements Auditable
      */
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class)->withPivot('billing_company_id')->withTimestamps();
+        return $this->belongsToMany(Company::class)->using(CompanyFacility::class)->withPivot('billing_company_id')->withTimestamps();
     }
 
     /**
@@ -124,7 +124,7 @@ class Facility extends Model implements Auditable
      */
     public function placeOfServices(): BelongsToMany
     {
-        return $this->belongsToMany(PlaceOfService::class)->withTimestamps()->withPivot('billing_company_id');
+        return $this->belongsToMany(PlaceOfService::class)->using(FacilityPlaceOfService::class)->withTimestamps()->withPivot('billing_company_id');
     }
 
     /**
@@ -132,7 +132,7 @@ class Facility extends Model implements Auditable
      */
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class)->withTimestamps();
+        return $this->belongsToMany(Taxonomy::class)->using(FacilityTaxonomy::class)->withTimestamps();
     }
 
     /**
@@ -196,7 +196,7 @@ class Facility extends Model implements Auditable
      */
     public function facilityTypes(): BelongsToMany
     {
-        return $this->belongsToMany(FacilityType::class)->withPivot('bill_classifications');
+        return $this->belongsToMany(FacilityType::class)->using(FacilityFacilityType::class)->withPivot('bill_classifications');
     }
 
     /**
@@ -265,8 +265,15 @@ class Facility extends Model implements Auditable
     {
         if ('' != $search) {
             return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
+            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereHas('companies', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('facilityTypes', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(type) LIKE (?)', [strtolower("%$search%")]);
+            })->orWhereHas('billingCompanies', function ($q) use ($search): void {
+                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
+            });
         }
 
         return $query;

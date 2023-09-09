@@ -80,16 +80,21 @@ class InsurancePlanRepository
             /* Attach billing company */
             $insurancePlan->billingCompanies()->attach($billingCompany);
 
-            InsurancePlanPrivate::create([
-                'naic' => $data['naic'] ?? null,
-                'format_professional_id' => $data['format_professional_id'] ?? null,
-                'format_cms_id' => $data['format_cms_id'] ?? null,
-                'format_institutional_id' => $data['format_institutional_id'] ?? null,
-                'format_ub_id' => $data['format_ub_id'] ?? null,
-                'file_method_id' => $data['file_method_id'] ?? null,
-                'insurance_plan_id' => $insurancePlan->id,
-                'billing_company_id' => $billingCompany,
-            ]);
+            if($data['format']) {
+                foreach ($data['format'] as $format) {
+                    InsurancePlanPrivate::create([
+                        'naic' => $data['naic'] ?? null,
+                        'file_method_id' => $data['file_method_id'] ?? null,
+                        'format_professional_id' => $format['format_professional_id'] ?? null,
+                        'format_cms_id' => $format['format_cms_id'] ?? null,
+                        'format_institutional_id' => $format['format_institutional_id'] ?? null,
+                        'format_ub_id' => $format['format_ub_id'] ?? null,
+                        'insurance_plan_id' => $insurancePlan->id,
+                        'billing_company_id' => $billingCompany,
+                        'responsibilities' => $format['responsibilities']
+                    ]);
+                }
+            }
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 EntityTimeFailed::create([
@@ -123,6 +128,7 @@ class InsurancePlanRepository
                 $data['address']['billing_company_id'] = $billingCompany;
                 $data['address']['addressable_id'] = $insurancePlan->id;
                 $data['address']['addressable_type'] = InsurancePlan::class;
+                $data['address']['address_type_id'] = 1;
                 Address::create($data['address']);
             }
             if (isset($data['contact']['email'])) {
@@ -190,19 +196,23 @@ class InsurancePlanRepository
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
-            InsurancePlanPrivate::updateOrCreate([
-                'insurance_plan_id' => $insurancePlan->id,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            ], [
-                'naic' => $data['naic'] ?? null,
-                'format_professional_id' => $data['format_professional_id'] ?? null,
-                'format_cms_id' => $data['format_cms_id'] ?? null,
-                'format_institutional_id' => $data['format_institutional_id'] ?? null,
-                'format_ub_id' => $data['format_ub_id'] ?? null,
-                'file_method_id' => $data['file_method_id'] ?? null,
-                'insurance_plan_id' => $insurancePlan->id,
-                'billing_company_id' => $billingCompany->id ?? $billingCompany,
-            ]);
+            if($data['format']) {
+                $insurancePlan->insurancePlanPrivate()->where('billing_company_id', $billingCompany)->delete();
+
+                foreach ($data['format'] as $format) {
+                    InsurancePlanPrivate::create([
+                        'naic' => $data['naic'] ?? null,
+                        'file_method_id' => $data['file_method_id'] ?? null,
+                        'format_professional_id' => $format['format_professional_id'] ?? null,
+                        'format_cms_id' => $format['format_cms_id'] ?? null,
+                        'format_institutional_id' => $format['format_institutional_id'] ?? null,
+                        'format_ub_id' => $format['format_ub_id'] ?? null,
+                        'insurance_plan_id' => $insurancePlan->id,
+                        'billing_company_id' => $billingCompany,
+                        'responsibilities' => $format['responsibilities']
+                    ]);
+                }
+            }
 
             /* Attach billing company */
             if (is_null($insurancePlan->billingCompanies()->find($billingCompany->id ?? $billingCompany))) {
@@ -249,6 +259,7 @@ class InsurancePlanRepository
                     'billing_company_id' => $billingCompany->id ?? $billingCompany,
                     'addressable_id' => $insurancePlan->id,
                     'addressable_type' => InsurancePlan::class,
+                    'address_type_id' => 1
                 ],
                     $data['address']);
             }
@@ -681,12 +692,12 @@ class InsurancePlanRepository
                 'updated_at' => $insurance->updated_at,
                 'last_modified' => $insurance->last_modified,
                 'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : '',
-                'copays' => [],
-                'contract_fees' => [],
+                'copays' => $insurance->copays,
+                'contract_fees' => $insurance->contractFees,
             ];
         }
 
-        return !is_null($insurance) ? ['data' => $record, 'result' => true] : null;
+        return !is_null($insurance) ? $record: null;
     }
 
     public function getByCompany(string $nameCompany)
@@ -866,5 +877,14 @@ class InsurancePlanRepository
         }
 
         return $records;
+    }
+
+    public function getListResponsibilityType()
+    {
+        try {
+            return getList(TypeCatalog::class, ['code', '-', 'description'], ['relationship' => 'type', 'where' => ['description' => 'Responsibility type']]);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

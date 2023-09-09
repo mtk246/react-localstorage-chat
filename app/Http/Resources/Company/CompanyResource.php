@@ -30,7 +30,7 @@ final class CompanyResource extends JsonResource
             'public_note' => $this->resource->publicNote?->note ?? '',
             'last_modified' => $this->resource->last_modified,
 
-            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies()->distinct('taxonomy_id')->get()),
             'facilities' => $this->getFacilities(),
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
@@ -38,7 +38,20 @@ final class CompanyResource extends JsonResource
             'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
             'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
+            'abbreviations' => $this->resource->abbreviations()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('abbreviation')
+                ->get()
+                ->map(fn ($option) => $option->abbreviation)
+                ->toArray(),
             'billing_companies' => $this->resource->billingCompanies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
                 ->distinct('id')
                 ->get()
                 ->setVisible(['id', 'name', 'code', 'abbreviation', 'private_company'])
@@ -58,11 +71,9 @@ final class CompanyResource extends JsonResource
                             ->where('billing_company_id', $bC->id)
                             ->first()->abbreviation ?? '',
                         'private_note' => $this->getPrivateNote($bC->id)?->note ?? '',
-                        'taxonomy' => $this->resource->taxonomies()
-                            ->where('taxonomies.primary', true)
-                            ->first()
-                            ?->setHidden(['created_at', 'updated_at', 'pivot'])
-                            ->toArray(),
+                        'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
+                            ->where('company_taxonomy.billing_company_id', $bC->id)
+                            ->get()),
                         'address' => $this->getAddress($bC->id, 1),
                         'payment_address' => $this->getAddress($bC->id, 3),
                         'contact' => $this->getContact($bC->id),

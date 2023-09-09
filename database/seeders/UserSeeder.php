@@ -335,6 +335,19 @@ class UserSeeder extends Seeder
                     'date_of_birth' => '1990-04-01',
                 ],
             ],
+            [
+                'email' => 'zr@ciph3r.co',
+                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
+                'role' => 'superuser',
+                'profile' => [
+                    'ssn' => randomNumber(9),
+                    'first_name' => 'Zaial',
+                    'middle_name' => 'Delit',
+                    'last_name' => 'Rodriguez',
+                    'sex' => 'F',
+                    'date_of_birth' => '1990-04-01',
+                ],
+            ],
         ];
 
         foreach ($users as $user) {
@@ -369,8 +382,10 @@ class UserSeeder extends Seeder
 
             if ('billingmanager' == $role->slug || 'biller' == $role->slug) {
                 $bCompany = BillingCompany::whereAbbreviation($user['billingCompany'])->first();
-                $usr->billingCompany()->disassociate($bCompany->id);
-                $usr->billingCompanies()->sync($bCompany->id);
+                if (isset($bCompany)) {
+                    $usr->billingCompany()->disassociate($bCompany->id);
+                    $usr->billingCompanies()->sync($bCompany->id);
+                }
             }
         }
     }

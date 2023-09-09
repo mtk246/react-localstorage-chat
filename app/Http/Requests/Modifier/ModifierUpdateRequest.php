@@ -15,14 +15,15 @@ class ModifierUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => ['required', 'date'],
-            'end_date' => ['nullable', 'date'],
-            'special_coding_instructions' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'type' => ['required', new Enum(ModifierType::class)],
+            'classification' => ['required', new Enum(ClassificationType::class)],
+            'start_date' => ['required', 'date', 'exclude_if:end_date,false|before:end_date'],
+            'end_date' => ['sometimes', 'nullable', 'date', 'after:start_date'],
             'modifier_invalid_combinations' => ['nullable', 'array'],
             'modifier_invalid_combinations.*' => ['nullable', 'string', 'max:2'],
-            'classification' => ['required', new Enum(ClassificationType::class)],
-            'type' => ['required', new Enum(ModifierType::class)],
-            'description' => ['required', 'string'],
+            'special_coding_instructions' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
         ];
     }
 }

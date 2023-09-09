@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $code
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $bill_classifications
- * @property int|null $bill_classifications_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillClassification> $billClasifications
+ * @property int|null $bill_clasifications_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Facility> $facilities
  * @property int|null $facilities_count
  *
@@ -49,7 +49,7 @@ class FacilityType extends Model
         return $this->hasMany(Facility::class);
     }
 
-    public function bill_classifications(): BelongsToMany
+    public function billClasifications(): BelongsToMany
     {
         return $this->belongsToMany(BillClassification::class);
     }

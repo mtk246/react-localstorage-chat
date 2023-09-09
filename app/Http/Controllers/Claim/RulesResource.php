@@ -24,21 +24,21 @@ final class RulesResource extends Controller
 
     public function store(StoreRulesRequest $request, StoreClaimRuleAction $storeRule): JsonResponse
     {
-        return response()->json($storeRule->invoke($request->getRulesWrapper()));
+        return response()->json($storeRule->invoke($request->casted()));
     }
 
-    public function show(Rules $rules): JsonResponse
+    public function show(Rules $rule): JsonResponse
     {
-        return response()->json(new RuleResource($rules));
+        return response()->json(new RuleResource($rule));
     }
 
-    public function update(UpdateRulesRequest $request, Rules $rules, UpdateClaimRuleAction $updateRule): JsonResponse
+    public function update(UpdateRulesRequest $request, Rules $rule, UpdateClaimRuleAction $updateRule): JsonResponse
     {
-        return response()->json($updateRule->invoke($rules, $request->getRulesWrapper()));
+        return response()->json($updateRule->invoke($rule, $request->casted()));
     }
 
-    public function destroy(Rules $rules): JsonResponse
+    public function destroy(Rules $rule): JsonResponse
     {
-        return response()->json($rules->delete());
+        return response()->json($rule->delete());
     }
 }
