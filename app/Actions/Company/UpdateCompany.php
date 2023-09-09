@@ -51,9 +51,27 @@ final class UpdateCompany
             }
 
             if ($request->getTaxonomies()) {
-                $taxIds = $request->getTaxonomies()->pluck('tax_id')->toArray();
-                $company->taxonomies()->upsert($request->getTaxonomies()->toArray(), ['tax_id']);
-                $company->taxonomies()->sync(Taxonomy::whereIn('tax_id', $taxIds)->get('id'));
+                foreach ($request->getTaxonomies()->toArray() as $taxonomy) {
+                    $tax = Taxonomy::updateOrCreate([
+                        'tax_id' => $taxonomy['tax_id'],
+                    ], $taxonomy);
+                    $check = $company->taxonomies()
+                        ->wherePivot('billing_company_id', $request->getBillingCompanyId())
+                        ->find($tax->id);
+
+                    if ($check) {
+                        $company->taxonomies()
+                        ->wherePivot('billing_company_id', $request->getBillingCompanyId())
+                        ->updateExistingPivot($tax->id, [
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    } else {
+                        $company->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $request->getBillingCompanyId(),
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    }
+                }
             }
 
             return new CompanyDataResource($company, $request);

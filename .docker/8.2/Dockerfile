@@ -25,7 +25,7 @@ RUN apt-get update \
     php8.2-intl php8.2-readline \
     php8.2-ldap \
     php8.2-msgpack php8.2-igbinary php8.2-redis php8.2-swoole \
-    php8.2-memcached php8.2-pcov php8.2-xdebug \
+    php8.2-memcached php8.2-pcov \
     && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
     && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/keyrings/pgdg.gpg >/dev/null \
     && echo "deb [signed-by=/etc/apt/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
@@ -37,6 +37,22 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.2
+
+ARG XDEBUG
+ARG XDEBUG_PORT
+RUN if [ "${XDEBUG}" = 'true' ] ; then \
+    apt-get update \
+    && apt-get install -y php8.2-xdebug \
+    && echo "[XDebug]" > /etc/php/8.2/cli/php.ini \
+    && echo "zend_extension="$(find /usr/lib/php/20200930/ -name xdebug.so)" > /etc/php/8.2/cli/php.ini" \
+    && echo "xdebug.mode = debug,coverage" >> /etc/php/8.2/cli/php.ini \
+    && echo "xdebug.discover_client_host = true" >> /etc/php/8.2/cli/php.ini \
+    && echo "xdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php.ini \
+    && echo "xdebug.client_port = ${XDEBUG_PORT}" >> /etc/php/8.2/cli/php.ini \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ;\
+    fi;
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail

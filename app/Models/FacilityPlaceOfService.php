@@ -40,6 +40,8 @@ final class FacilityPlaceOfService extends Pivot implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    public $incrementing = true;
+
     public function placeOfServices()
     {
         return $this->belongsTo(PlaceOfService::class);
