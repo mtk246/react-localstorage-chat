@@ -92,7 +92,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
-                'memberId' => str_pad((string) $subscriber->member_id ?? $subscriber->id, 12, '0', STR_PAD_LEFT),
+                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
                 'ssn' => $subscriber->ssn,
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',
@@ -125,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => str_pad((string) $subscriber->member_id ?? $subscriber->id, 12, '0', STR_PAD_LEFT),
+                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
