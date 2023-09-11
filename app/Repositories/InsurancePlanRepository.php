@@ -33,7 +33,6 @@ class InsurancePlanRepository
         try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
-                'insurance_company_id' => $data['insurance_company_id'],
                 'name' => $data['name'],
                 'payer_id' => $data['payer_id'],
             ])->first();

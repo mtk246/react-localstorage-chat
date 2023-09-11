@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\InsurancePlan;
 
 use App\Facades\Pagination;
-use App\Models\PayerResponsibility;
+use App\Models\TypeCatalog;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
@@ -187,7 +187,7 @@ final class InsurancePlanResource extends JsonResource
                 'format_institutional' => isset($format->formatInstitutional) ? $format->formatInstitutional->code : '',
                 'format_ub_id' => $format->format_ub_id ?? '',
                 'format_ub' => isset($format->formatUB) ? $format->formatUB->code : '',
-                'responsibilities' => isset($format->responsibilities) ? PayerResponsibility::whereIn('id', $format->responsibilities)->get() : null,
+                'responsibilities' => isset($format->responsibilities) ? TypeCatalog::whereIn('id', $format->responsibilities)->get() : null,
             ];
         });
     }
