@@ -61,7 +61,7 @@ class InsurancePlanController extends Controller
     public function getListByPayer(Request $request, string $payer, ClearingHouseService $service): JsonResponse
     {
         $rs = $service->list($payer, $request->input(), $request->user());
-        if (array_empty($rs)) {
+        if (is_array($rs) && array_empty($rs)) {
             return response()->json(__('Forbidden, All plans associated with this Payer ID are already registered'), 403);
         };
 

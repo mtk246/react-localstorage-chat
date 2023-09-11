@@ -6,9 +6,10 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\RuleType;
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimBatch;
 use App\Models\Claims\Rules;
 use App\Models\Company;
-use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -21,7 +22,8 @@ abstract class Dictionary implements DictionaryInterface
     public function __construct(
         protected readonly Claim $claim,
         protected readonly ?Company $company,
-        protected readonly ?InsuranceCompany $insuranceCompany,
+        protected readonly ?InsurancePlan $insurancePlan,
+        protected readonly ?ClaimBatch $batch = null,
     ) {
         $this->setConfigFor();
     }
@@ -163,12 +165,12 @@ abstract class Dictionary implements DictionaryInterface
             }, $this->claim);
     }
 
-    protected function setConfigFor(?InsuranceCompany $insuranceCompany = null): void
+    protected function setConfigFor(?InsurancePlan $insurancePlan = null): void
     {
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
-            ->where('insurance_company_id', $insuranceCompany?->id ?? $this->insuranceCompany->id)
+            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan->id)
             ->where('billing_company_id', $this->claim->billing_company_id)
             ->where('format', $this->claim->format)
             ->first()

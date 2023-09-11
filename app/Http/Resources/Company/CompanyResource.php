@@ -38,6 +38,15 @@ final class CompanyResource extends JsonResource
             'exception_insurance_companies' => $this->getExceptionInsuranceCompanies(),
             'patients' => $this->getPatients(),
             'statements' => $this->getStatements(),
+            'abbreviations' => $this->resource->abbreviations()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('abbreviation')
+                ->get()
+                ->map(fn ($option) => $option->abbreviation)
+                ->toArray(),
             'billing_companies' => $this->resource->billingCompanies()
                 ->when(
                     Gate::denies('is-admin'),

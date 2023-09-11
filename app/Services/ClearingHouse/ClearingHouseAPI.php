@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\ClearingHouse;
 
+use App\Enums\Claim\ClaimType;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ClearingHouseAPI implements ClearingHouseAPIInterface
 {
@@ -18,83 +20,94 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
     ) {
     }
 
-    public function getCPIDByPayerID(string $payerID, string $payerName, int $type, bool $fakeTransmission = false): ?string
-    {
+    public function getDataByPayerID(
+        string $payerID,
+        string $payerName,
+        int $type,
+        bool $fakeTransmission = false,
+        string $key = 'cpid'
+    ): ?string {
         $availablePayer = AvailablePayer::query()
-            ->where(
-                [
-                    'payer_id' => $payerID,
-                    'name' => $payerName,
-                ]
-            )
+            ->whereRaw('UPPER(payer_id) = ?', [Str::upper($payerID)])
+            ->whereRaw('UPPER(name) = ?', [Str::upper($payerName)])
             ->first();
 
         if (!$availablePayer) {
             throw new \Exception('Payer not found');
         }
 
+        if ('cpid' !== $key) {
+            return $availablePayer->{$key};
+        }
+
         return ($fakeTransmission)
             ? $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->paper_cpid ?? ''
             : $availablePayer->payerInformation
-                ->where('type', $type)
+                ->where('type', ClaimType::tryFrom($type))
                 ?->first()
                 ?->cpid ?? '';
     }
 
-    public function getByPayerID(string $payerID, array $request, User $user): array
+    public function getByPayerID(string $payerID, array $request, User $user): ?array
     {
-        return AvailablePayer::query()
+        $payers = AvailablePayer::query()
             ->with('payerInformation')
             ->where(
                 [
                     'payer_id' => $payerID,
                 ]
             )
-            ->get()
-            ->filter(function ($payer) use ($payerID, $user, $request) {
-                $insurance = InsurancePlan::query()
-                    ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payerID")])
-                    ->where('name', $payer->name)
-                    ->first();
+            ->get();
+        if (0 === count($payers)) {
+            return null;
+        }
 
-                if (is_null($insurance)) {
-                    return true;
-                }
+        return $payers->filter(function ($payer) use ($payerID, $user, $request) {
+            $insurance = InsurancePlan::query()
+                ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payerID")])
+                ->where('name', $payer->name)
+                ->first();
 
-                $billingCompaniesException = $insurance->billingCompanies()
-                    ->get()
-                    ->pluck('id')
-                    ->toArray();
+            if (is_null($insurance)) {
+                return true;
+            }
 
-                $billingCompanies = $insurance->insuranceCompany
-                    ->billingCompanies()
-                    ->when(Gate::denies('is-admin'), function ($query) use ($user) {
-                        $billingCompaniesUser = [$user->billing_company_id];
+            $billingCompaniesException = $insurance->billingCompanies()
+                ->get()
+                ->pluck('id')
+                ->toArray();
 
-                        return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
-                    })
-                    ->when(Gate::check('is-admin'), function ($query) use ($request) {
-                        $billingCompaniesUser = [$request['billing_company_id'] ?? null];
+            $billingCompanies = $insurance->insuranceCompany
+                ->billingCompanies()
+                ->when(Gate::denies('is-admin'), function ($query) use ($user) {
+                    $billingCompaniesUser = [$user->billing_company_id];
 
-                        return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
-                    })
-                    ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
-                    ->get()
-                    ->pluck('id')
-                    ->toArray();
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
+                ->when(Gate::check('is-admin'), function ($query) use ($request) {
+                    $billingCompaniesUser = [$request['billing_company_id'] ?? null];
 
-                return !empty($billingCompanies);
-            })
+                    return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
+                })
+                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            return !empty($billingCompanies);
+        })
             ->map(fn ($payer) => [
-                'id' => $payer->name,
-                'name' => $payer->name,
-                'public_note' => $payer->payerInformation?->first()?->portal ?? '',
-                'ins_type_id' => $this->getInsType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? ''),
-                'plan_type_id' => $this->getPlanType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? ''),
-            ])->toArray();
+            'id' => upperCaseWords($payer->name),
+            'name' => upperCaseWords($payer->name),
+            'public_note' => $payer->payerInformation?->first()?->portal ?? '',
+            'ins_type_id' => $this->getInsType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[0] ?? ''),
+            'plan_type_id' => $this->getPlanType(explode('/', $payer->payerInformation?->first()?->claim_insurance_type ?? '')[1] ?? ''),
+        ])
+        ->values()
+        ->toArray();
     }
 
     protected function getInsType(string $insType)
@@ -109,7 +122,7 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
             })
             ->whereRaw('LOWER(description) LIKE (?)', [strtolower("%$insType%")])
             ->first()
-            ->id;
+            ?->id;
     }
 
     protected function getPlanType(string $planType)
@@ -124,6 +137,6 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
             })
             ->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$planType%")])
             ->first()
-            ->id;
+            ?->id;
     }
 }

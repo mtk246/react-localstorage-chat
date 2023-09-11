@@ -211,6 +211,7 @@ class AuditController extends Controller
                 ->orWhere('url', 'like', '%/'.$entity.'/verify-register/'.$id)
                 ->orWhere('url', 'like', '%/'.$entity.'/draft-check-eligibility')
                 ->where('created_at', $record->created_at)
+                ->orWhere('url', 'like', '%/'.$entity.'/change-status/'.$id)
                 ->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get([
                     'id',
                     'event',
