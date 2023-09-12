@@ -30,10 +30,10 @@ class InsurancePlanRepository
      */
     public function createInsurancePlan(array $data)
     {
-        try {
+        //try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
-                'name' => $data['name'],
+                'name' => ucwords(strtolower($data['name'])),
                 'payer_id' => $data['payer_id'],
             ])->first();
             if (isset($insurancePlan)) {
@@ -76,22 +76,30 @@ class InsurancePlanRepository
                 $billingCompany = auth()->user()->billing_company_id;
             }
 
-            /* Attach billing company */
-            $insurancePlan->billingCompanies()->attach($billingCompany);
+            if (is_null($insurancePlan->billingCompanies()->find($billingCompany))) {
+                $insurancePlan->billingCompanies()->attach($billingCompany);
+            }
 
             if($data['format']) {
                 foreach ($data['format'] as $format) {
-                    InsurancePlanPrivate::create([
-                        'naic' => $data['naic'] ?? null,
-                        'file_method_id' => $data['file_method_id'] ?? null,
-                        'format_professional_id' => $format['format_professional_id'] ?? null,
-                        'format_cms_id' => $format['format_cms_id'] ?? null,
-                        'format_institutional_id' => $format['format_institutional_id'] ?? null,
-                        'format_ub_id' => $format['format_ub_id'] ?? null,
-                        'insurance_plan_id' => $insurancePlan->id,
-                        'billing_company_id' => $billingCompany,
-                        'responsibilities' => $format['responsibilities']
-                    ]);
+                    InsurancePlanPrivate::updateOrCreate(
+                        [
+                            'insurance_plan_id' => $insurancePlan->id,
+                            'billing_company_id' => $billingCompany,
+                        ],
+                        [
+                            'naic' => $data['naic'] ?? null,
+                            'file_method_id' => $data['file_method_id'] ?? null,
+                            'format_professional_id' => $format['format_professional_id'] ?? null,
+                            'format_cms_id' => $format['format_cms_id'] ?? null,
+                            'format_institutional_id' => $format['format_institutional_id'] ?? null,
+                            'format_ub_id' => $format['format_ub_id'] ?? null,
+                            'insurance_plan_id' => $insurancePlan->id,
+                            'billing_company_id' => $billingCompany,
+                            'responsibilities' => $format['responsibilities'],
+                            'eff_date' => $data['eff_date']
+                        ]
+                    );
                 }
             }
 
@@ -156,11 +164,11 @@ class InsurancePlanRepository
             DB::commit();
 
             return $insurancePlan;
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             DB::rollBack();
 
             return null;
-        }
+        }*/
     }
 
     /**
@@ -199,17 +207,24 @@ class InsurancePlanRepository
                 $insurancePlan->insurancePlanPrivate()->where('billing_company_id', $billingCompany)->delete();
 
                 foreach ($data['format'] as $format) {
-                    InsurancePlanPrivate::create([
-                        'naic' => $data['naic'] ?? null,
-                        'file_method_id' => $data['file_method_id'] ?? null,
-                        'format_professional_id' => $format['format_professional_id'] ?? null,
-                        'format_cms_id' => $format['format_cms_id'] ?? null,
-                        'format_institutional_id' => $format['format_institutional_id'] ?? null,
-                        'format_ub_id' => $format['format_ub_id'] ?? null,
-                        'insurance_plan_id' => $insurancePlan->id,
-                        'billing_company_id' => $billingCompany,
-                        'responsibilities' => $format['responsibilities']
-                    ]);
+                    InsurancePlanPrivate::updateOrCreate(
+                        [
+                            'insurance_plan_id' => $insurancePlan->id,
+                            'billing_company_id' => $billingCompany,
+                        ],
+                        [
+                            'naic' => $data['naic'] ?? null,
+                            'file_method_id' => $data['file_method_id'] ?? null,
+                            'format_professional_id' => $format['format_professional_id'] ?? null,
+                            'format_cms_id' => $format['format_cms_id'] ?? null,
+                            'format_institutional_id' => $format['format_institutional_id'] ?? null,
+                            'format_ub_id' => $format['format_ub_id'] ?? null,
+                            'insurance_plan_id' => $insurancePlan->id,
+                            'billing_company_id' => $billingCompany,
+                            'responsibilities' => $format['responsibilities'],
+                            'eff_date' => $data['eff_date']
+                        ]
+                    );
                 }
             }
 

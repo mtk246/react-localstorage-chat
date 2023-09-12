@@ -105,16 +105,13 @@ final class AddContractFees
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingCompanyId): void {
                 $query->where('billing_company_id', $billingCompanyId);
             })
-            ->whereNotIn('contract_fees.id', $contractFees->map(
-                fn (ContractFeesRequestCast $services) => $services->getId()
-            )->toArray())
             ->get()
             ->each(function (ContractFee $contractFee) use ($insurance) {
                 $contractFee->companies()->detach();
                 $contractFee->procedures()->detach();
                 $contractFee->modifiers()->detach();
                 $contractFee->patients()->detach();
-                $insurance->contractFees()->detach($contractFee->id);
+                $insurance->contractFees()->detach();
             });
     }
 }

@@ -26,7 +26,7 @@ final class ContractFeeResource extends RequestWrapedResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->id,
+            'ivan' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
             'type_id' => $this->resource->contract_fee_type_id,
             'procedure_ids' => $this->resource->procedures
@@ -88,6 +88,8 @@ final class ContractFeeResource extends RequestWrapedResource
             'price' => (float) $this->resource->price,
             'price_percentage' => (float) $this->resource->price_percentage,
             'private_note' => $this->resource->private_note,
+            'start_date' => $this->resource->start_date,
+            'end_date' => $this->resource->end_date,
         ];
     }
 }
