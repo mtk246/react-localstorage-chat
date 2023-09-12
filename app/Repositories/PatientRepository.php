@@ -234,15 +234,13 @@ class PatientRepository
             }
 
             /* Create Employment */
-            if (isset($data['employments']) && !empty(filter_array_empty($data['employments']))) {
-                foreach ($data['employments'] as $employment) {
-                    $employment['patient_id'] = $patient->id;
-                    Employment::firstOrCreate([
-                        'patient_id' => $patient->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ], $employment);
-                }
-            }
+            collect($data['employments'])->filter()->each(function($employment) use($patient, $billingCompany) {
+                $employment['patient_id'] = $patient->id;
+                Employment::firstOrCreate([
+                    'patient_id' => $patient->id,
+                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                ], $employment);
+            });
 
             /* Emergency Contacts */
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
@@ -990,15 +988,17 @@ class PatientRepository
             }
 
             /* Create Employment */
-            if (isset($data['employments']) && !empty(filter_array_empty($data['employments']))) {
-                $patient->employments()
-                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
-                foreach ($data['employments'] as $employment) {
+            $patient->employments()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->delete();
+
+            collect($data['employments'])
+                ->filter(fn($employment) => !empty($employment) && !empty($employment['employer_name']))
+                ->each(function($employment) use($patient, $billingCompany) {
                     $employment['patient_id'] = $patient->id;
                     $employment['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                     Employment::create($employment);
-                }
-            }
+                });
 
             /* Emergency Contacts */
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
