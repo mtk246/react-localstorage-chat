@@ -98,10 +98,26 @@ class CreateRequest extends FormRequest
             'emergency_contacts.*.relationship_id' => ['nullable', 'integer'],
 
             'employments' => ['nullable', 'array'],
-            'employments.*.employer_name' => ['nullable', 'string'],
-            'employments.*.position' => ['nullable', 'string'],
-            'employments.*.employer_address' => ['nullable', 'string'],
-            'employments.*.employer_phone' => ['nullable', 'string'],
+            'employments.*.employer_name' => [
+                'required_with:employments.*.position,employments.*.employer_address,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.position' => [
+                'required_with:employments.*.employer_name,employments.*.employer_address,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.employer_address' => [
+                'required_with:employments.*.position,employments.*.employer_name,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.employer_phone' => [
+                'required_with:employments.*.position,employments.*.employer_address,employments.*.employer_name',
+                'nullable',
+                'string',
+            ],
 
             'profile.social_medias' => ['nullable', 'array'],
             'profile.social_medias.*.name' => ['nullable', 'string'],
