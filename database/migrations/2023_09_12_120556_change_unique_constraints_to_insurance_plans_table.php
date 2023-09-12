@@ -10,22 +10,16 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('insurance_plans', function (Blueprint $table) {
-            $table->dropColumn(['eff_date']);
-        });
-
-        Schema::table('insurance_plan_privates', function (Blueprint $table) {
-            $table->date('eff_date')->nullable();
+            $table->dropUnique(['name']);
+            $table->unique(['payer_id', 'name']);
         });
     }
 
     public function down(): void
     {
         Schema::table('insurance_plans', function (Blueprint $table) {
-            $table->date('eff_date')->nullable();
-        });
-
-        Schema::table('insurance_plan_privates', function (Blueprint $table) {
-            $table->dropColumn(['eff_date']);
+            $table->dropUnique(['payer_id', 'name']);
+            $table->unique(['name']);
         });
     }
 };

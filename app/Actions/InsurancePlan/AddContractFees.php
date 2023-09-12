@@ -106,12 +106,19 @@ final class AddContractFees
                 $query->where('billing_company_id', $billingCompanyId);
             })
             ->get()
-            ->each(function (ContractFee $contractFee) use ($insurance) {
+            ->each(function (ContractFee $contractFee) use ($insurance, $contractFees) {
                 $contractFee->companies()->detach();
                 $contractFee->procedures()->detach();
                 $contractFee->modifiers()->detach();
                 $contractFee->patients()->detach();
-                $insurance->contractFees()->detach();
+
+                $requestContractIds = $contractFees->map(
+                    fn (ContractFeesRequestCast $services) => $services->getId()
+                )->toArray();
+
+                !in_array($contractFee->id, $requestContractIds)
+                    ? $insurance->contractFees()->detach($contractFee->id)
+                    : true;
             });
     }
 }

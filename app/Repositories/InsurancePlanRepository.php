@@ -30,10 +30,10 @@ class InsurancePlanRepository
      */
     public function createInsurancePlan(array $data)
     {
-        //try {
+        try {
             DB::beginTransaction();
             $insurancePlan = InsurancePlan::where([
-                'name' => ucwords(strtolower($data['name'])),
+                'name' => upperCaseWords($data['name']),
                 'payer_id' => $data['payer_id'],
             ])->first();
             if (isset($insurancePlan)) {
@@ -164,11 +164,11 @@ class InsurancePlanRepository
             DB::commit();
 
             return $insurancePlan;
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return null;
-        }*/
+        }
     }
 
     /**

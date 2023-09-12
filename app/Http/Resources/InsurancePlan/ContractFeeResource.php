@@ -26,7 +26,7 @@ final class ContractFeeResource extends RequestWrapedResource
     public function toArray($request)
     {
         return [
-            'ivan' => $this->resource->id,
+            'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
             'type_id' => $this->resource->contract_fee_type_id,
             'procedure_ids' => $this->resource->procedures
