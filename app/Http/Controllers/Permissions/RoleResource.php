@@ -12,7 +12,7 @@ use App\Http\Requests\Permissions\UpdateMembershipRequest;
 use App\Models\BillingCompany\MembershipRole;
 use Illuminate\Http\JsonResponse;
 
-final class MembershipResource extends Controller
+final class RoleResource extends Controller
 {
     public function index(): JsonResponse
     {
