@@ -236,10 +236,8 @@ class PatientRepository
             /* Create Employment */
             collect($data['employments'])->filter()->each(function($employment) use($patient, $billingCompany) {
                 $employment['patient_id'] = $patient->id;
-                Employment::firstOrCreate([
-                    'patient_id' => $patient->id,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ], $employment);
+                $employment['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                Employment::firstOrCreate($employment);
             });
 
             /* Emergency Contacts */
