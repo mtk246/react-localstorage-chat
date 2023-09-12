@@ -1615,7 +1615,7 @@ class PatientRepository
             })->toArray();
 
 
-            $billingCompanies = dd(BillingCompany::query()
+            $billingCompanies = BillingCompany::query()
                 ->where('status', true)
                 ->when(Gate::denies('is-admin'), function ($query) {
                     $billingCompaniesUser = auth()->user()->billingCompanies
@@ -1631,7 +1631,7 @@ class PatientRepository
                 )
                 ->get()
                 ->pluck('id')
-                ->toArray());
+                ->toArray();
 
             return [
                 'id' => $user?->id,
