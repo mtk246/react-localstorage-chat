@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -59,5 +60,10 @@ final class MembershipRole extends Model implements Auditable
     public function memberships(): BelongsToMany
     {
         return $this->belongsToMany(Membership::class, 'membership_role_id', 'membership_id');
+    }
+
+    public function permissions(): HasOne
+    {
+        return $this->hasOne(Permission::class);
     }
 }
