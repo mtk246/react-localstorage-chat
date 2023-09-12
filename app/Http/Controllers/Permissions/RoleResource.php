@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Permissions;
 
+use App\Actions\Permissions\GetRoleAction;
 use App\Actions\Permissions\StoreMembershipAction;
 use App\Actions\Permissions\UpdateMembershipAction;
 use App\Http\Controllers\Controller;
@@ -14,9 +15,9 @@ use Illuminate\Http\JsonResponse;
 
 final class RoleResource extends Controller
 {
-    public function index(): JsonResponse
+    public function index(GetRoleAction $get): JsonResponse
     {
-        return response()->json();
+        return response()->json($get->getAll());
     }
 
     public function store(StoreMembershipRequest $request, StoreMembershipAction $store): JsonResponse
