@@ -73,7 +73,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('permission')->middleware('auth:api')->group(function () {
-        Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
+        /*Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
         Route::get('roles-permissions', [\App\Http\Controllers\RolePermissionController::class, 'getRolesWithPermissions']);
         Route::get('permissions', [\App\Http\Controllers\RolePermissionController::class, 'getPermissions']);
         Route::get('permissions-by-role/{role}', [\App\Http\Controllers\RolePermissionController::class, 'getPermissionsByRole']);
@@ -94,7 +94,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('assign-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'assignPermissionsUser']);
 
         Route::patch('remove-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsUser']);
-        Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);
+        Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);*/
+
+        Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
     Route::prefix('setting')->middleware('auth:api')->group(function () {
