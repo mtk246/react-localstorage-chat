@@ -793,7 +793,7 @@ class PatientRepository
                 case 'name':
                     $data = $data->orderBy('profiles.first_name', Pagination::sortDesc());
                     break;
-                case 'bod':
+                case 'dob':
                     $data = $data->orderBy('profiles.date_of_birth', Pagination::sortDesc());
                     break;
                 case 'code':
