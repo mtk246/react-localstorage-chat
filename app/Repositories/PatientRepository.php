@@ -234,15 +234,11 @@ class PatientRepository
             }
 
             /* Create Employment */
-            if (isset($data['employments']) && !empty(filter_array_empty($data['employments']))) {
-                foreach ($data['employments'] as $employment) {
-                    $employment['patient_id'] = $patient->id;
-                    Employment::firstOrCreate([
-                        'patient_id' => $patient->id,
-                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                    ], $employment);
-                }
-            }
+            collect($data['employments'])->filter()->each(function($employment) use($patient, $billingCompany) {
+                $employment['patient_id'] = $patient->id;
+                $employment['billing_company_id'] = $billingCompany->id ?? $billingCompany;
+                Employment::firstOrCreate($employment);
+            });
 
             /* Emergency Contacts */
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
@@ -990,15 +986,17 @@ class PatientRepository
             }
 
             /* Create Employment */
-            if (isset($data['employments']) && !empty(filter_array_empty($data['employments']))) {
-                $patient->employments()
-                    ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->delete();
-                foreach ($data['employments'] as $employment) {
+            $patient->employments()
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->delete();
+
+            collect($data['employments'])
+                ->filter(fn($employment) => !empty($employment) && !empty($employment['employer_name']))
+                ->each(function($employment) use($patient, $billingCompany) {
                     $employment['patient_id'] = $patient->id;
                     $employment['billing_company_id'] = $billingCompany->id ?? $billingCompany;
                     Employment::create($employment);
-                }
-            }
+                });
 
             /* Emergency Contacts */
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
@@ -1536,7 +1534,7 @@ class PatientRepository
         try {
             return [
                 "general" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Insurance policy type']]),
-                "secundary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
+                "secondary" => getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Medicare secondary policy']]),
             ];
         } catch (\Exception $e) {
             return [];
@@ -1588,8 +1586,9 @@ class PatientRepository
         $first_name = upperCaseWords($request->first_name ?? '');
         $last_name = upperCaseWords($request->last_name ?? '');
         $ssn = $request->ssn ?? '';
-        $query = User::query()
-            ->with('profile')
+
+        $query = Patient::query()
+            ->with(['profile', 'profile.user', 'billingCompanies'])
             ->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name, $ssn) {
                 $query->whereDateOfBirth($date_of_birth)
                     ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
@@ -1604,19 +1603,17 @@ class PatientRepository
                         });
                     });
             });
-        $users = $query->get()->map(function ($user) {
-            $billingCompaniesRole = $user->billingCompanies->map(function ($billingCompany) use ($user) {
+
+        $users = $query->get()->map(function (Patient $patien) {
+            $user = $patien->profile->user;
+            $billingCompaniesRole = $user?->billingCompanies->map(function ($billingCompany) {
                 return [
                     'id' => $billingCompany->id,
                     'name' => $billingCompany->name,
-                    'roles' => $user->roles->pluck('name')->toArray(),
+                    'roles' => $billingCompany->membership->roles,
                 ];
             })->toArray();
 
-            $billingCompaniesException = Patient::whereUserId($user->id)->first()?->billingCompanies()
-                ->get()
-                ->pluck('id')
-                ->toArray();
 
             $billingCompanies = BillingCompany::query()
                 ->where('status', true)
@@ -1628,34 +1625,37 @@ class PatientRepository
 
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
-                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->whereNotIn(
+                    'billing_companies.id',
+                    $patien->billingCompanies->pluck('id')->toArray() ?? []
+                )
                 ->get()
                 ->pluck('id')
                 ->toArray();
 
             return [
-                'id' => $user->id,
-                'email' => $user->email,
-                'profile_id' => $user->profile_id,
-                'patient_id' => Patient::whereUserId($user->id)->first()?->id,
+                'id' => $user?->id,
+                'email' => $user?->email,
+                'profile_id' => $patien->profile_id,
+                'patient_id' => $patien->id,
                 'forbidden' => empty($billingCompanies)
                     ? ((Gate::check('is-admin'))
                         ? 'The patient has already been associated with all the billing companies registered'
                         : 'The patient has already been associated with all the billing company')
                     : null,
                 'profile' => [
-                    'ssn' => $user->profile->ssn,
-                    'first_name' => $user->profile->first_name,
-                    'middle_name' => $user->profile->middle_name,
-                    'last_name' => $user->profile->last_name,
-                    'sex' => $user->profile->sex,
-                    'date_of_birth' => $user->profile->date_of_birth,
-                    'avatar' => $user->profile->avatar,
-                    'credit_score' => $user->profile->credit_score,
-                    'name_suffix_id' => $user->profile->name_suffix_id,
-                    'name_suffix' => $user->profile->nameSuffix,
+                    'ssn' => $patien->profile->ssn,
+                    'first_name' => $patien->profile->first_name,
+                    'middle_name' => $patien->profile->middle_name,
+                    'last_name' => $patien->profile->last_name,
+                    'sex' => $patien->profile->sex,
+                    'date_of_birth' => $patien->profile->date_of_birth,
+                    'avatar' => $patien->profile->avatar,
+                    'credit_score' => $patien->profile->credit_score,
+                    'name_suffix_id' => $patien->profile->name_suffix_id,
+                    'name_suffix' => $patien->profile->nameSuffix,
                 ],
-                'language' => $user->language,
+                'language' => $user?->language,
                 'billing_companies' => $billingCompaniesRole,
             ];
         })->toArray();
