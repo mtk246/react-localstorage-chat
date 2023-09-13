@@ -57,7 +57,6 @@ final class InsurancePlanResource extends JsonResource
                         'file_method_id' => $private_insurance_plans[0]->file_method_id ?? '',
                         'file_method' => isset($private_insurance_plans[0]->fileMethod) ? ($private_insurance_plans[0]->fileMethod->code.' - '.$private_insurance_plans[0]->fileMethod->description) : '',
                         'format' => $this->getFormatData($private_insurance_plans),
-                        'eff_date' => $this->resource->eff_date,
                         'status' => $bC->pivot->status ?? false,
                         'edit_name' => isset($nickname->nickname) ? true : false,
                         'nickname' => $nickname->nickname ?? '',
@@ -66,6 +65,7 @@ final class InsurancePlanResource extends JsonResource
                         'address' => $this->getAddress($bC->id, 1),
                         'contact' => $this->getContact($bC->id),
                         'insurance_plan_time_failed' => $this->getTimeFailed($bC->id),
+                        'eff_date' => $private_insurance_plans[0]->eff_date,
                     ];
 
                     return $bC;
