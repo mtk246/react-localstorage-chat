@@ -69,6 +69,7 @@ final class AddContractFees
 
         $contractFee->insurancePlans()->sync($contractFeesRequest->getInsurancePlanIds());
 
+        $contractFee->patients()->detach();
         $contractFeesRequest->getPatients()->each(
             fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
                 'start_date' => $patient->getStartDate(),
