@@ -199,6 +199,10 @@ class AuditController extends Controller
 
         if (isset($record)) {
             $auditables = Audit::query()
+                ->when(
+                    !empty($request->query('query')) && '{}' !== $request->query('query'),
+                    fn ($query) => $query->search($request->query('query')),
+                )
                 ->where('url', 'like', '%/'.$entity.'/'.$id.'%')
                 ->orWhere('url', 'like', '%/'.$entity.'/create')
                 ->where('created_at', $record->created_at)
