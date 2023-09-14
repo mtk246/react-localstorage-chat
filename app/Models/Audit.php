@@ -73,6 +73,21 @@ class Audit extends BaseAudit
         return $query;
     }
 
+    public function scopeSearch($query, $search)
+    {
+        if ('' != $search) {
+            return $query->whereHas('user', function ($q) use ($search) {
+                $q->whereHas('profile', function ($qq) use ($search) {
+                    $qq->whereRaw('LOWER(first_name) LIKE (?) ', [strtolower("%$search%")])
+                        ->orWhereRaw('LOWER(last_name) LIKE (?) ', [strtolower("%$search%")]);
+                });
+            })->orWhereRaw('LOWER(event) LIKE (?) ', [strtolower("%$search%")])
+            ->orWhere('created_at', 'LIKE', "%$search%");
+        }
+
+        return $query;
+    }
+
     /**
      * Query scope sortAudit.
      *
