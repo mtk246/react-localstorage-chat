@@ -79,26 +79,31 @@ final class AddContractFees
             ])
         );
 
-        $contractFeesRequest->getContractSpecifications()->each(
-            function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
-                $billingProvider = explode(':', $contractSpecification->getBillingProviderId());
-                $healthProfessional = explode(':', $contractSpecification->getHealthProfessionalId());
+        if ($contractFeesRequest->getHaveContractSpecifications()) {
+            $contractFeesRequest->getContractSpecifications()->each(
+                function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
+                    $billingProvider = explode(':', $contractSpecification->getBillingProviderId());
+                    $healthProfessional = explode(':', $contractSpecification->getHealthProfessionalId());
 
-                ContractFeeSpecification::updateOrCreate([
-                    'id' => $contractSpecification->getId(),
-                ], [
-                    'code' => $contractFee->id.$contractFeeIndex,
-                    'contract_fee_id' => $contractFee->id,
-                    'billing_provider_type' => ('healthProfessional' === $billingProvider[0]) ? HealthProfessional::class : Company::class,
-                    'billing_provider_id' => $billingProvider[1],
-                    'billing_provider_tax_id' => $contractSpecification->getBillingProviderTaxId(),
-                    'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),
-                    'health_professional_id' => $healthProfessional[1] ?? null,
-                    'health_professional_tax_id' => $contractSpecification->getHealthProfessionalTaxId(),
-                    'health_professional_taxonomy_id' => $contractSpecification->getHealthProfessionalTaxonomyId(),
-                ]);
-            }
-        );
+                    ContractFeeSpecification::updateOrCreate([
+                        'id' => $contractSpecification->getId(),
+                    ], [
+                        'code' => $contractFee->id.$contractFeeIndex,
+                        'contract_fee_id' => $contractFee->id,
+                        'billing_provider_type' => ('healthProfessional' === $billingProvider[0]) ? HealthProfessional::class : Company::class,
+                        'billing_provider_id' => $billingProvider[1],
+                        'billing_provider_tax_id' => $contractSpecification->getBillingProviderTaxId(),
+                        'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),
+                        'health_professional_id' => $healthProfessional[1] ?? null,
+                        'health_professional_tax_id' => $contractSpecification->getHealthProfessionalTaxId(),
+                        'health_professional_taxonomy_id' => $contractSpecification->getHealthProfessionalTaxonomyId(),
+                    ]);
+                }
+            );
+        }
+        else {
+            $contractFee->contractFeeSpecifications()->delete();
+        }
     }
 
     private function syncContractFee(InsurancePlan $insurance, collection $contractFees, ?int $billingCompanyId): void
