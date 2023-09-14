@@ -100,8 +100,7 @@ final class AddContractFees
                     ]);
                 }
             );
-        }
-        else {
+        } else {
             $contractFee->contractFeeSpecifications()->delete();
         }
     }
