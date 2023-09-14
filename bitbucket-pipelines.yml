@@ -95,6 +95,16 @@ pipelines:
       - step:
           <<: *deploy-forge
           deployment: V100
+    v101:
+      - stage:
+          name: Test app
+          steps:
+              - step: *build
+              - step: *testin-app
+              - step: *syntax-test
+      - step:
+          <<: *deploy-forge
+          deployment: V101
     staging:
       - stage:
           name: Test app
