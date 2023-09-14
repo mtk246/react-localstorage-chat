@@ -57,7 +57,7 @@ class CompanyRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             if (isset($data['taxonomies'])) {
@@ -168,7 +168,7 @@ class CompanyRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $id;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
             if (isset($request->patient_id)) {
                 return getList(
@@ -638,7 +638,7 @@ class CompanyRepository
                 },
             ]);
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()->billing_company_id;
             $company->load(['companyStatements', 'exceptionInsuranceCompanies']);
         }
 
@@ -900,7 +900,7 @@ class CompanyRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -927,7 +927,7 @@ class CompanyRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -947,7 +947,7 @@ class CompanyRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
 
         if (!auth()->user()->hasRole('superuser')) {
             if (is_null($billingCompany)) {
@@ -993,7 +993,7 @@ class CompanyRepository
                 return null;
             }
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()->billing_company_id;
             if (!auth()->user()->hasRole('superuser')) {
                 if (is_null($billingCompany)) {
                     return null;

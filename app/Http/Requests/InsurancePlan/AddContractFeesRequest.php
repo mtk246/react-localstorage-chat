@@ -85,6 +85,11 @@ class AddContractFeesRequest extends FormRequest
             ],
             'contract_fees.*.have_contract_specifications' => ['nullable', 'boolean'],
             'contract_fees.*.contract_specifications' => ['nullable', 'array'],
+            'contract_fees.*.contract_specifications.*.id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\ContractFeeSpecification,id',
+            ],
             'contract_fees.*.contract_specifications.*.billing_provider_id' => ['nullable', 'string'],
             'contract_fees.*.contract_specifications.*.billing_provider_tax_id' => ['nullable', 'string'],
             'contract_fees.*.contract_specifications.*.billing_provider_taxonomy_id' => ['nullable', 'integer'],
