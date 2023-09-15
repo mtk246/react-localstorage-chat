@@ -360,7 +360,7 @@ class DoctorRepository
                 'last_name' => $data['profile']['last_name'],
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 'middle_name' => $data['profile']['middle_name'],
-                'ssn' => $data['profile']['ssn'],
+                'ssn' => $data['profile']['ssn'] ?? null,
                 'date_of_birth' => $data['profile']['date_of_birth'],
             ]);
 
@@ -762,16 +762,22 @@ class DoctorRepository
                         },
                     ]);
                 },
-                'billingCompanies',
+                'billingCompanies' => function($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 'user' => function ($query) use ($bC) {
                     $query->with(['roles']);
                 },
-                'taxonomies',
+                'taxonomies' => function($query) use($bC) {
+                     $query->where('billing_company_id', $bC);
+                },
                 'companies' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC)
                         ->with(['taxonomies', 'nicknames']);
                 },
-                'healthProfessionalType',
+                'healthProfessionalType' => function($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 'company',
             ]);
         }
