@@ -83,7 +83,7 @@ class Audit extends BaseAudit
                 });
             })->orWhereRaw('LOWER(event) LIKE (?) ', [strtolower("%$search%")])
             ->orWhereRaw('LOWER(auditable_type) LIKE (?) ', [strtolower("%$search%")])
-            ->orWhere('created_at', 'LIKE', "%$search%");
+            ->orWhere('audits.created_at', 'LIKE', "%$search%");
         }
 
         return $query;
