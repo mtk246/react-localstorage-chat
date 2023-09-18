@@ -1298,7 +1298,16 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 4),
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').
+                        substr(str_replace(
+                            ':',
+                            '',
+                            (('' != ($this->claim->patientInformation->admission_date ?? ''))
+                                ? ($this->claim->patientInformation->admission_time ?? '0000')
+                                : '')),
+                            0,
+                            4
+                        ),
                     'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
                     'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
                     'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
