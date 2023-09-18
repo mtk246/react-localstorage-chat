@@ -67,7 +67,7 @@ final class JSONDictionary extends Dictionary
                     'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
                     'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
                     'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
-                    'email' => $this->claim->billingCompany->contact?->email ?? '',
+                    // 'email' => $this->claim->billingCompany->contact?->email ?? '',
                     'validContact' => true,
                 ],
             ],
