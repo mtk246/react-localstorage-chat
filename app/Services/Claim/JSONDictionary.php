@@ -67,7 +67,7 @@ final class JSONDictionary extends Dictionary
                     'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
                     'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
                     'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
-                    'email' => $this->claim->billingCompany->contact?->email ?? '',
+                    // 'email' => $this->claim->billingCompany->contact?->email ?? '',
                     'validContact' => true,
                 ],
             ],
@@ -125,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
@@ -1298,7 +1298,16 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 4),
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').
+                        substr(str_replace(
+                            ':',
+                            '',
+                            ('' != ($this->claim->patientInformation->admission_date ?? ''))
+                                ? ($this->claim->patientInformation->admission_time ?? '0000')
+                                : ''),
+                            0,
+                            4
+                        ),
                     'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
                     'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
                     'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
