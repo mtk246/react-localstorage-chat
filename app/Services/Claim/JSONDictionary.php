@@ -1302,9 +1302,9 @@ final class JSONDictionary extends Dictionary
                         substr(str_replace(
                             ':',
                             '',
-                            (('' != ($this->claim->patientInformation->admission_date ?? ''))
+                            ('' != ($this->claim->patientInformation->admission_date ?? ''))
                                 ? ($this->claim->patientInformation->admission_time ?? '0000')
-                                : '')),
+                                : ''),
                             0,
                             4
                         ),
