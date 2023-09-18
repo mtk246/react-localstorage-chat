@@ -67,7 +67,7 @@ final class JSONDictionary extends Dictionary
                     'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
                     'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
                     'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
-                    // 'email' => $this->claim->billingCompany->contact?->email ?? '',
+                    'email' => $this->claim->billingCompany->contact?->email ?? '',
                     'validContact' => true,
                 ],
             ],
@@ -1967,10 +1967,16 @@ final class JSONDictionary extends Dictionary
                     : '',
             ],
             'contactInformation' => [
-                'name' => $billingProviderContact->contact_name ?? $billingProvider->name,
-                'phoneNumber' => str_replace('-', '', $billingProviderContact->phone ?? '') ?? null,
+                'name' => ('' === $billingProviderContact->phone ?? '')
+                    ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
+                    : $billingProviderContact->contact_name ?? $billingProvider->name,
+                'phoneNumber' => str_replace(
+                    '-',
+                    '',
+                    $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+                ) ?? null,
                 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
-                'email' => $billingProviderContact->email,
+                // 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
         ];
