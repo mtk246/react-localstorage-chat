@@ -125,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
