@@ -791,17 +791,17 @@ class PatientRepository
         if ($request->sortBy) {
             switch($request->sortBy) {
                 case 'name':
-                    $data = $data->orderBy('profiles.first_name');
+                    $data = $data->orderBy('profiles.first_name', Pagination::sortDesc());
                     break;
-                case 'bod':
-                    $data = $data->orderBy('profiles.date_of_birth');
+                case 'dob':
+                    $data = $data->orderBy('profiles.date_of_birth', Pagination::sortDesc());
                     break;
                 case 'code':
-                    $data->orderBy('patients.code');
+                    $data->orderBy('patients.code', Pagination::sortDesc());
                     break;
             }
         } else {
-            $data = $data->orderBy('patients.created_at', 'desc')->orderBy('patients.id', 'asc');
+            $data = $data->orderBy('patients.id', Pagination::sortDesc());
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);

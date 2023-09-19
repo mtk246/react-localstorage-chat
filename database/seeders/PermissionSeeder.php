@@ -918,6 +918,7 @@ class PermissionSeeder extends Seeder
                 'user.history',
                 'setting.profile.show',
                 'setting.profile.edit',
+                'billingcompany.view',
                 'billingcompany.show',
                 'billingcompany.edit',
                 'billingcompany.history',
