@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-final class StoreMembershipRequest extends FormRequest
+final class StoreRoleRequest extends FormRequest
 {
     use HasCastedClass;
 
