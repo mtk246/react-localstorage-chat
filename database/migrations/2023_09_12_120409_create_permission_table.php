@@ -10,7 +10,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::create('permission', function (Blueprint $table) {
-            $table->ulid();
+            $table->id();
             $table->string('module');
             $table->foreignId('role_id')
                 ->nullable()
