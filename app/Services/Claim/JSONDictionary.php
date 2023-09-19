@@ -125,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
@@ -1298,7 +1298,16 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 4),
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').
+                        substr(str_replace(
+                            ':',
+                            '',
+                            ('' != ($this->claim->patientInformation->admission_date ?? ''))
+                                ? ($this->claim->patientInformation->admission_time ?? '0000')
+                                : ''),
+                            0,
+                            4
+                        ),
                     'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
                     'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
                     'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
@@ -1958,10 +1967,16 @@ final class JSONDictionary extends Dictionary
                     : '',
             ],
             'contactInformation' => [
-                'name' => $billingProviderContact->contact_name ?? $billingProvider->name,
-                'phoneNumber' => str_replace('-', '', $billingProviderContact->phone ?? '') ?? null,
+                'name' => ('' === $billingProviderContact->phone ?? '')
+                    ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
+                    : $billingProviderContact->contact_name ?? $billingProvider->name,
+                'phoneNumber' => str_replace(
+                    '-',
+                    '',
+                    $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+                ) ?? null,
                 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
-                'email' => $billingProviderContact->email,
+                // 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
         ];

@@ -56,11 +56,13 @@ final class StoreRequestWrapper extends CastsRequest
         return $this->cast('demographic_information', DemographicInformationWrapper::class);
     }
 
-    public function getPrivateNote(): ?string
+    public function getPrivateNote(string $preNote = 'Claim created successfully'): ?string
     {
         return $this->getDraft()
             ? $this->get('private_note')
-            : ((false === ($this->get('demographic_information')['validate'] ?? false)) ? 'Manual verification' : 'API verification');
+            : ((false === ($this->get('demographic_information')['validate'] ?? false))
+                ? ($preNote.', system verification')
+                : ($preNote.', automated verification'));
     }
 
     public function getClaimServices(): ClaimServicesWrapper

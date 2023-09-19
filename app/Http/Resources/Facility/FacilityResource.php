@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 final class FacilityResource extends JsonResource
 {
-    // ** @return array<key, string> */
+    /** @return array <key, string> */
     public function toArray($request): array
     {
         $address = array_first($this->resource['api']->addresses, function ($address) {

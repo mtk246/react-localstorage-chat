@@ -201,23 +201,34 @@ class AuditController extends Controller
             $auditables = Audit::query()
                 ->where('url', 'like', '%/'.$entity.'/'.$id.'%')
                 ->orWhere('url', 'like', '%/'.$entity.'/create')
-                ->where('created_at', $record->created_at)
+                ->where('audits.created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity)
-                ->where('created_at', $record->created_at)
+                ->where('audits.created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity.'/draft/'.$id)
                 ->orWhere('url', 'like', '%/'.$entity.'/draft')
-                ->where('created_at', $record->created_at)
+                ->where('audits.created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity.'/check-eligibility/'.$id)
                 ->orWhere('url', 'like', '%/'.$entity.'/draft-check-eligibility')
-                ->where('created_at', $record->created_at)
+                ->where('audits.created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity.'/verify-register/'.$id)
                 ->orWhere('url', 'like', '%/'.$entity.'/draft-check-eligibility')
-                ->where('created_at', $record->created_at)
+                ->where('audits.created_at', $record->created_at)
                 ->orWhere('url', 'like', '%/'.$entity.'/change-status/'.$id)
                 ->with(['user' => function ($query) {
                     $query->with('profile');
                 }])
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->when(
+                    !empty($request->query('query')) && '{}' !== $request->query('query'),
+                    fn ($query) => $query->search($request->query('query')),
+                )
+                ->when('user' === Pagination::sortBy(), function ($query) {
+                    $query->select('audits.*')
+                        ->join('users', 'audits.user_id', '=', 'users.id')
+                        ->leftJoin('profiles', 'users.profile_id', '=', 'profiles.id')
+                        ->orderBy('profiles.first_name', Pagination::sortDesc());
+                }, function ($query) {
+                    $query->orderBy(Pagination::sortBy(), Pagination::sortDesc());
+                })
                 ->paginate(Pagination::itemsPerPage());
         }
 
