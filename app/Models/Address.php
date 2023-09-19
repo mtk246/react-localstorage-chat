@@ -142,4 +142,15 @@ class Address extends Model implements Auditable
     {
         return explode(' - ', $this->state ?? '')[0] ?? '';
     }
+
+    /**
+     * Interact with the apt suite attribute.
+     */
+    protected function aptSuite(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
 }
