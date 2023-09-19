@@ -72,7 +72,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{ssn}/get-by-ssn', [\App\Http\Controllers\UserController::class, 'searchBySsn']);
     });
 
-    Route::prefix('permission')->middleware('auth:api')->group(function () {
+    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'update', 'destroy']);
+    Route::resource('user.role', \App\Http\Controllers\Permissions\UserRoleResource::class)->only(['index', 'update']);
+    Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
+
+    /*Route::prefix('permission')->middleware('auth:api')->group(function () {
         /*Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
         Route::get('roles-permissions', [\App\Http\Controllers\RolePermissionController::class, 'getRolesWithPermissions']);
         Route::get('permissions', [\App\Http\Controllers\RolePermissionController::class, 'getPermissions']);
@@ -94,10 +99,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('assign-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'assignPermissionsUser']);
 
         Route::patch('remove-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsUser']);
-        Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);*/
-
-        Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-    });
+        Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);
+    });*/
 
     Route::prefix('setting')->middleware('auth:api')->group(function () {
         Route::prefix('ip-restriction')->group(function () {
