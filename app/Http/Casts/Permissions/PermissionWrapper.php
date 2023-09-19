@@ -8,12 +8,13 @@ use App\Http\Casts\CastsRequest;
 
 final class PermissionWrapper extends CastsRequest
 {
-    public function getData(int $roleId, ?int $billingCompanyId): array
+    public function getData(int $permissionedId, string $permissionedType, ?int $billingCompanyId): array
     {
         return [
             'module' => $this->get('module'),
-            'permission' => $this->getCollect('permission'),
-            'role_id' => $roleId,
+            'permission' => $this->getArray('permission'),
+            'permissioned_type' => $permissionedType,
+            'permissioned_id' => $permissionedId,
             'billing_company_id' => $billingCompanyId,
         ];
     }
