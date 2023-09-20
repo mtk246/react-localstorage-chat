@@ -73,8 +73,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'update', 'destroy']);
-    Route::resource('user.role', \App\Http\Controllers\Permissions\UserRoleResource::class)->only(['index', 'update']);
+    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'store', 'destroy']);
     Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {
