@@ -29,6 +29,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Model|\Eloquent $role
  * @property Model|\Eloquent $user
  *
+ * @method static \Database\Factories\Permissions\PermissionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
