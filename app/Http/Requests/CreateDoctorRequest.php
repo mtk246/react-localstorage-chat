@@ -61,7 +61,7 @@ class CreateDoctorRequest extends FormRequest
                 'string',
                 'max:9',
             ],
-            'profile.date_of_birth' => ['required', 'date'],
+            'profile.date_of_birth' => ['nullable', 'date'],
 
             'profile.social_medias' => ['nullable', 'array'],
             'profile.social_medias.*.name' => ['nullable', 'string'],
