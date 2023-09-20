@@ -71,7 +71,7 @@ final class GetDoctorAction
                 $query->where('billing_company_id', $bc);
             },
             'publicNote',
-            'billingCompanies' => function ($query) use ($bc) {
+            'billingCompanies' => function (Builder $query) use ($bc): void {
                 $query->where('billing_company_id', $bc);
             },
             'profile' => function ($query) use ($bc) {

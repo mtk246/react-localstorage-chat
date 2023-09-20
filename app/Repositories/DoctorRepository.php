@@ -227,10 +227,21 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
 
-            $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
-                'authorization' => $data['authorization'],
-                'billing_company_id' => $billingCompany,
-            ]);
+            if(is_null($healthP->companies()->where(['company_id' => $company->id, 'billing_company_id' => $billingCompany])->first())) {
+                $healthP->companies()->attach(
+                    $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                        'billing_company_id' => $billingCompany
+                    ]);
+            }
+            else {
+                $healthP->companies()->updateExistingPivot($company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                    ]
+                );
+            }
 
             if (isset($data['private_note'])) {
                 PrivateNote::create([
@@ -543,7 +554,7 @@ class DoctorRepository
                 'npi_company' => $data['npi_company'] ?? '',
                 'ein' => $data['ein'] ?? null,
                 'upin' => $data['upin'] ?? null,
-                'company_id' => $data['company_id']
+                'company_id' => $data['company_id'] ?? $company->id
             ]);
 
             $type = HealthProfessionalType::query()->updateOrCreate([
@@ -553,10 +564,21 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
 
-            $healthP->companies()->syncWithPivotValues($data['company_id'], [
-                'authorization' => $data['authorization'],
-                'billing_company_id' => $billingCompany,
-            ]);
+            if(is_null($healthP->companies()->where(['company_id' => $data['company_id'] ?? $company->id, 'billing_company_id' => $billingCompany])->first())) {
+                $healthP->companies()->attach(
+                    $data['company_id'] ?? $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                        'billing_company_id' => $billingCompany
+                    ]);
+            }
+            else {
+                $healthP->companies()->updateExistingPivot($data['company_id'] ?? $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                    ]
+                );
+            }
 
             if (isset($data['private_note'])) {
                 PrivateNote::updateOrCreate([
