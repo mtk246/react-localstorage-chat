@@ -29,10 +29,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany\Membership> $memberships
  * @property int|null $memberships_count
- * @property Permission|null $permissions
+ * @property int|null $permits_count
  *
+ * @method static \Database\Factories\BillingCompany\MembershipRoleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole query()
