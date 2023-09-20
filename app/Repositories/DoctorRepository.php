@@ -311,13 +311,27 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
+
+                $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $healthP->taxonomies()->attach($tax->id, [
-                        'billing_company_id' => $billingCompany,
-                        'primary' => $taxonomy['primary'],
-                    ]);
+                    if(is_null($healthP->taxonomies()->where(['taxonomy_id' => $tax->id, 'billing_company_id' => $billingCompany])->first())) {
+
+                        $healthP->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    }
+                    else {
+                        $healthP->taxonomies()->where('billing_company_id', $billingCompany)
+                            ->updateExistingPivot($tax->id,
+                                [
+                                    'primary' => $taxonomy['primary'],
+                                ]
+                            );
+                    }
                 }
             }
 
@@ -643,22 +657,20 @@ class DoctorRepository
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $check = $healthP->taxonomies()
-                        ->wherePivot('billing_company_id', $billingCompany)
-                        ->find($tax->id);
+                    if(is_null($healthP->taxonomies()->where(['taxonomy_id' => $tax->id, 'billing_company_id' => $billingCompany])->first())) {
 
-                    if($check) {
-                        $healthP->taxonomies()
-                        ->wherePivot('billing_company_id', $billingCompany)
-                        ->updateExistingPivot($tax->id, [
-                            'primary' => $taxonomy['primary']
+                        $healthP->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary'],
                         ]);
                     }
                     else {
-                        $healthP->taxonomies()->attach($tax->id, [
-                            'billing_company_id' => $billingCompany,
-                            'primary' => $taxonomy['primary']
-                        ]);
+                        $healthP->taxonomies()->where('billing_company_id', $billingCompany)
+                            ->updateExistingPivot($tax->id,
+                                [
+                                    'primary' => $taxonomy['primary'],
+                                ]
+                            );
                     }
                 }
             }
