@@ -42,7 +42,7 @@ return [
         ],
         '1' => [
             'options' => [
-                'Medicare' => [
+                'MED' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -53,7 +53,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Medicaid' => [
+                'MCE' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -64,7 +64,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Tricare' => [
+                'TR' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -75,7 +75,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Champva' => [
+                'CH' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -86,7 +86,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Group' => [
+                'GHP' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -97,7 +97,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Feca' => [
+                'FBL' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -108,7 +108,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Other' => [
+                'OT' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
