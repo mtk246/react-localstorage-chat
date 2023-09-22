@@ -80,8 +80,10 @@ class CreateDoctorRequest extends FormRequest
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => [
-                Rule::requiredIf($this->create_user),
-                Rule::unique('users', 'email'),
+                Rule::when($this->get('create_user'), fn () => [
+                    'required',
+                    Rule::unique('users', 'email'),
+                ]),
                 'email:rfc',
             ],
 
