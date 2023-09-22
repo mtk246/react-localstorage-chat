@@ -151,7 +151,7 @@ class HealthProfessional extends Model implements Auditable
      */
     public function taxonomies()
     {
-        return $this->belongsToMany(Taxonomy::class)->withTimestamps();
+        return $this->belongsToMany(Taxonomy::class)->withTimestamps()->withPivot('billing_company_id');
     }
 
     /**
