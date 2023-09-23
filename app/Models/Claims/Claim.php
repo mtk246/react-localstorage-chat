@@ -402,7 +402,7 @@ class Claim extends Model implements Auditable
         if (ClaimStatus::class == $currentType) {
             $defaultNote = 'Status change successful, from '.$statusCurrent->claimStatus->status.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->status) : '');
         } elseif (ClaimSubStatus::class == $currentType) {
-            $defaultNote = 'Substatus change successful, from '.$statusCurrent->claimStatus->status.' - '.$subStatusCurrent->claimStatus->status.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->status) : '');
+            $defaultNote = 'Substatus change successful, from '.$statusCurrent->claimStatus->status.' - '.$subStatusCurrent->claimStatus->name.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->name) : '');
         }
         if ($status !== $statusCurrent?->claim_status_id) {
             $claimStatus = ClaimStatusClaim::create([
