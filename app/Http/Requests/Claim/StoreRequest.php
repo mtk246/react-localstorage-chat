@@ -98,7 +98,7 @@ final class StoreRequest extends FormRequest
             'demographic_information.health_professional_qualifier' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'array',
-                new ArrayCountRule(1),
+                // new ArrayCountRule(1),
             ],
             'demographic_information.health_professional_qualifier.*.field_id' => ['nullable', 'integer'],
             'demographic_information.health_professional_qualifier.*.health_professional_id' => ['nullable', 'integer'],
