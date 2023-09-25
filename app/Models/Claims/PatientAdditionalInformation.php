@@ -19,18 +19,18 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $admission_time
  * @property string|null $discharge_date
  * @property string|null $discharge_time
- * @property array $condition_code_ids
- * @property string $admission_type_id
- * @property string $admission_source_id
- * @property string $patient_status_id
- * @property string $bill_classification_id
+ * @property array|null $condition_code_ids
+ * @property string|null $admission_type_id
+ * @property string|null $admission_source_id
+ * @property string|null $patient_status_id
+ * @property string|null $bill_classification_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property TypeCatalog|null $admissionSource
  * @property TypeCatalog|null $admissionType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property TypeCatalog $billClassification
+ * @property TypeCatalog|null $billClassification
  * @property \App\Models\Claims\Claim $claim
  * @property mixed $condition_codes
  * @property TypeCatalog|null $patientStatus
