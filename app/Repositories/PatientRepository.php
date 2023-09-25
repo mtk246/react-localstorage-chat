@@ -1565,7 +1565,7 @@ class PatientRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($patientId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['code', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = Patient::find($patientId)->billingCompanies;
@@ -1573,9 +1573,9 @@ class PatientRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'patients', 'whereHas' => ['relationship' => 'patients', 'where' => ['patient_id' => $patientId]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'exists' => 'patients', 'whereHas' => ['relationship' => 'patients', 'where' => ['patient_id' => $patientId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'patients', 'orWhereHas' => ['relationship' => 'patients', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'patients', 'orWhereHas' => ['relationship' => 'patients', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }
@@ -1641,7 +1641,7 @@ class PatientRepository
                 'forbidden' => empty($billingCompanies)
                     ? ((Gate::check('is-admin'))
                         ? 'The patient has already been associated with all the billing companies registered'
-                        : 'The patient has already been associated with all the billing company')
+                        : 'The Patient is already created')
                     : null,
                 'profile' => [
                     'ssn' => $patien->profile->ssn,
