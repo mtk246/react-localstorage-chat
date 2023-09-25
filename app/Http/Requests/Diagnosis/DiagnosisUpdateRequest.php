@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Diagnosis;
 
 use App\Enums\Diagnoses\DiagnosesType;
+use App\Models\Diagnosis;
 use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
