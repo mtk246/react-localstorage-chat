@@ -32,7 +32,7 @@ class DiagnosisRepository
                 'age_end' => $data['age_end'] ?? null,
                 'gender_id' => $data['gender_id'] ?? null,
                 'injury_date_required' => $data['injury_date_required'] ?? false,
-                //'discriminatory_id' => $data['discriminatory_id'] ?? null
+                'discriminatory_id' => $data['discriminatory_id'] ?? null
             ]);
 
             if (isset($data['note'])) {
