@@ -25,7 +25,7 @@ final class CreateCheckEligibilityAction
                     'insurancePolicies' => function ($query) {
                         $query->with('typeResponsibility');
                     },
-                    'user.profile',
+                    'profile',
                 ]
             )
             ->find($data['demographic_information']['patient_id']);

@@ -491,7 +491,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
         Route::get('/get-list-qualifier-by-field', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
-        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
+        Route::get('/get-check-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
         Route::get('/bill-classifications/{facility_id}', [\App\Http\Controllers\ClaimController::class, 'getBillClassifications']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
