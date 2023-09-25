@@ -20,7 +20,7 @@ class UpdateDoctorRequest extends FormRequest
     public function rules()
     {
         $doctorTypeId = HealthProfessionalType::MEDICAL_DOCTOR->value;
-        $doctor = HealthProfessional::find($this->id);
+        $doctor = HealthProfessional::query()->find($this->id);
         $user = $doctor->user;
 
         return [
@@ -91,7 +91,10 @@ class UpdateDoctorRequest extends FormRequest
             'contact.mobile' => ['nullable', 'string'],
             'contact.fax' => ['nullable', 'string'],
             'contact.email' => [
-                Rule::requiredIf($this->create_user),
+                Rule::when($this->get('create_user'), fn () => [
+                    'required',
+                    Rule::unique('users', 'email')->ignore($user?->id ?? 0),
+                ]),
                 'email:rfc',
             ],
 

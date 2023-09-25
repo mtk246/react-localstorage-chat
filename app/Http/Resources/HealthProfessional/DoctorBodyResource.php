@@ -22,6 +22,8 @@ final class DoctorBodyResource extends JsonResource
      */
     public function toArray($request)
     {
+        $billingCompany = $request->user()->billing_company_id ?? $request->get('billing_company_id', 0);
+
         return [
             'id' => $this->resource->id,
             'npi' => $this->resource->npi,
@@ -36,7 +38,11 @@ final class DoctorBodyResource extends JsonResource
             'last_modified' => $this->resource->last_modified,
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
-            'taxonomies' => $this->resource->taxonomies->unique('name'),
+            'taxonomies' => $this->resource
+                ->taxonomies
+                ->filter(fn ($taxonomy) => $billingCompany == $taxonomy->pivot->billing_company_id)
+                ->unique('name')
+                ->values(),
             'public_note' => $this->resource->publicNote,
             'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies()
