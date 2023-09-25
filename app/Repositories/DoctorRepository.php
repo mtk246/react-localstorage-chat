@@ -651,7 +651,6 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
-
                 $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['taxonomies'] as $taxonomy) {
