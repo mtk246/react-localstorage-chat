@@ -134,6 +134,7 @@ class DiagnosisRepository
             $diagnosis = Diagnosis::find($id);
 
             $diagnosis->update([
+                'code' => $data['code'],
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
@@ -144,6 +145,7 @@ class DiagnosisRepository
                 'age_end' => $data['age_end'] ?? null,
                 'gender_id' => $data['gender_id'] ?? null,
                 'discriminatory_id' => $data['discriminatory_id'] ?? null,
+                'injury_date_required' => $data['injury_date_required'] ?? false,
             ]);
 
             if (isset($data['note'])) {
