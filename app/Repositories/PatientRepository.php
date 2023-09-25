@@ -1641,7 +1641,7 @@ class PatientRepository
                 'forbidden' => empty($billingCompanies)
                     ? ((Gate::check('is-admin'))
                         ? 'The patient has already been associated with all the billing companies registered'
-                        : 'The patient has already been associated with all the billing company')
+                        : 'The Patient is already created')
                     : null,
                 'profile' => [
                     'ssn' => $patien->profile->ssn,
