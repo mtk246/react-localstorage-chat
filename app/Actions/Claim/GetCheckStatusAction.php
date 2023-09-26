@@ -72,7 +72,7 @@ final class GetCheckStatusAction
             ];
 
             $response = Http::withToken($token)->acceptJson()->post(
-                config("claim.connections.url_status"),
+                config('claim.connections.url_status'),
                 $body
             );
             $responseData = json_decode($response->body(), true);
