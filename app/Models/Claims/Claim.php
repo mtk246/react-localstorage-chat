@@ -379,6 +379,15 @@ class Claim extends Model implements Auditable
 
     public function setStates(int $status, ?int $subStatus, ?string $note): void
     {
+        $defaultNote = '';
+        $statusNew = ClaimStatus::find($status);
+        $subStatusNew = ClaimSubStatus::find($subStatus);
+        $currentType = $this->claimStatusClaims()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ?->first()
+            ?->claim_status_type ?? null;
+
         $statusCurrent = $this->claimStatusClaims()
             ->where('claim_status_type', ClaimStatus::class)
             ->orderBy('created_at', 'desc')
@@ -390,6 +399,11 @@ class Claim extends Model implements Auditable
             ->orderBy('id', 'desc')
             ->first() ?? null;
 
+        if (ClaimStatus::class == $currentType) {
+            $defaultNote = 'Status change successful, from '.$statusCurrent->claimStatus->status.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->status) : '');
+        } elseif (ClaimSubStatus::class == $currentType) {
+            $defaultNote = 'Substatus change successful, from '.$statusCurrent->claimStatus->status.' - '.$subStatusCurrent->claimStatus->name.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->name) : '');
+        }
         if ($status !== $statusCurrent?->claim_status_id) {
             $claimStatus = ClaimStatusClaim::create([
                 'claim_id' => $this->id,
@@ -397,29 +411,25 @@ class Claim extends Model implements Auditable
                 'claim_status_id' => $status,
             ]);
         }
-        if ((null === $subStatus) && !empty($note)) {
+        if (null === $subStatus) {
             PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
                 'publishable_id' => $claimStatus?->id ?? $statusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
-                'note' => $note,
+                'note' => $note ?? $defaultNote,
             ]);
         } else {
-            if ($subStatus !== $subStatusCurrent?->claim_status_id) {
-                $claimSubStatus = ClaimStatusClaim::create([
-                    'claim_id' => $this->id,
-                    'claim_status_type' => ClaimSubStatus::class,
-                    'claim_status_id' => $subStatus,
-                ]);
-            }
-            if (!empty($note)) {
-                PrivateNote::create([
-                    'publishable_type' => ClaimStatusClaim::class,
-                    'publishable_id' => $claimSubStatus?->id ?? $subStatusCurrent->id,
-                    'billing_company_id' => $this->billing_company_id,
-                    'note' => $note,
-                ]);
-            }
+            $claimSubStatus = ClaimStatusClaim::create([
+                'claim_id' => $this->id,
+                'claim_status_type' => ClaimSubStatus::class,
+                'claim_status_id' => $subStatus,
+            ]);
+            PrivateNote::create([
+                'publishable_type' => ClaimStatusClaim::class,
+                'publishable_id' => $claimSubStatus?->id ?? $subStatusCurrent->id,
+                'billing_company_id' => $this->billing_company_id,
+                'note' => $note ?? $defaultNote,
+            ]);
         }
     }
 

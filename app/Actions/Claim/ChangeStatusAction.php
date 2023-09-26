@@ -13,7 +13,11 @@ final class ChangeStatusAction
     public function invoke(Claim $claim, ChangeStatusRequestWrapper $claimData): Claim
     {
         return DB::transaction(function () use (&$claim, $claimData) {
-            $claim->setStates($claimData->getStatus(), $claimData->getSubStatus(), $claimData->getPrivateNote());
+            $claim->setStates(
+                $claimData->getStatus(),
+                $claimData->getSubStatus(),
+                $claimData->getPrivateNote()
+            );
 
             return $claim->load(['demographicInformation', 'service', 'insurancePolicies']);
         });
