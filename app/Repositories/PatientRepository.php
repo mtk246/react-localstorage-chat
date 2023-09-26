@@ -1582,24 +1582,42 @@ class PatientRepository
 
     public function search(Request $request)
     {
-        $date_of_birth = $request->date_of_birth ?? '';
-        $first_name = upperCaseWords($request->first_name ?? '');
-        $last_name = upperCaseWords($request->last_name ?? '');
-        $ssn = $request->ssn ?? '';
 
         $query = Patient::query()
-            ->with(['profile', 'profile.user', 'billingCompanies'])
-            ->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name, $ssn) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->when(!empty($ssn), function ($query) use ($ssn) {
+            ->with(['profile', 'profile.user', 'profile.contacts', 'billingCompanies'])
+            ->whereHas('profile', function ($query) use ($request) {
+                $date_of_birth = $request->date_of_birth;
+                $first_name = $request->first_name;
+                $last_name = $request->last_name;
+                $ssn = $request->ssn ?? '';
+                $email = $request->email ?? '';
+
+                return $query
+                    ->when($date_of_birth, function ($query) use ($date_of_birth) {
+                        return $query->whereDateOfBirth($date_of_birth);
+                    })
+                    ->when($first_name, function ($query) use ($first_name) {
+                        return $query->whereRaw('LOWER(first_name) LIKE (?)', [
+                            strtolower("%$first_name%")
+                        ]);
+                    })
+                    ->when($last_name, function ($query) use ($last_name) {
+                        return $query->whereRaw('LOWER(last_name) LIKE (?)', [
+                            strtolower("%$last_name%")
+                        ]);
+                    })
+                    ->when($ssn, function ($query) use ($ssn) {
                         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
 
                         return $query->where(function ($query) use ($ssn, $ssnFormated) {
                             $query
                                 ->whereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssn%")])
                                 ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssnFormated")]);
+                        });
+                    })
+                    ->when($email, function ($query) use ($email) {
+                        return $query->whereHas('contacts', function ($query) use ($email) {
+                            return $query->where('email', $email);
                         });
                     });
             });
@@ -1610,7 +1628,6 @@ class PatientRepository
                 return [
                     'id' => $billingCompany->id,
                     'name' => $billingCompany->name,
-                    'roles' => $billingCompany->membership->roles,
                 ];
             })->toArray();
 
@@ -1630,7 +1647,6 @@ class PatientRepository
                     $patien->billingCompanies->pluck('id')->toArray() ?? []
                 )
                 ->get()
-                ->pluck('id')
                 ->toArray();
 
             return [
@@ -1654,6 +1670,7 @@ class PatientRepository
                     'credit_score' => $patien->profile->credit_score,
                     'name_suffix_id' => $patien->profile->name_suffix_id,
                     'name_suffix' => $patien->profile->nameSuffix,
+                    'emails' => $patien->profile->contacts->pluck(['email'])->unique(),
                 ],
                 'language' => $user?->language,
                 'billing_companies' => $billingCompaniesRole,
