@@ -31,6 +31,7 @@ final class GetInsurancePlanAction
                 ->get()
                 ->map(fn ($model) => [
                     'id' => $model->id,
+                    'code' => $model->code,
                     'name' => $model->name,
                     'group_values' => $model->insurancePlans()
                         ->whereNotIn('id', $request['exclude'] ?? [])
