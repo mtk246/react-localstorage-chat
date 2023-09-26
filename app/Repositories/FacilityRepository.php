@@ -574,8 +574,10 @@ class FacilityRepository
     {
         try {
             DB::beginTransaction();
-            $facility = Facility::find($id);
-
+            $facility = Facility::query()->find($id);
+            
+            $facility->touch();
+            
             $facility->update([
                 'name' => $data['name'],
                 'npi' => $data['npi'],
