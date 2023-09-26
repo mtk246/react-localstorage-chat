@@ -342,6 +342,7 @@ class PatientRepository
                 ->get();
             $dataClaim = $patient->claims()
                 ->with([
+                    'billingCompany',
                     'demographicInformation.company' => function ($query) use ($billingCompany) {
                         $query->with([
                             'nicknames' => function ($q) use ($billingCompany) {
