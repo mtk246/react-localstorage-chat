@@ -16,7 +16,6 @@ final class StoreReportAction
         return DB::transaction(function () use ($report): ReportResource {
             $report = tap(Report::create([
                     'name' => $report->getName(),
-                    'use' => $report->getUse(),
                     'description' => $report->getDescription(),
                     'type' => $report->getType(),
                     'range' => $report->getRange(),
