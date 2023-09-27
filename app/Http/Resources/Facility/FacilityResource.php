@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Facility;
 
-use App\Http\Resources\API\TaxonomiesResource as ApiTaxonomiesResource;
-use App\Http\Resources\Company\TaxonomiesResource as PublicTaxonomiesResource;
+use App\Http\Resources\API\TaxonomiesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class FacilityResource extends JsonResource
@@ -41,7 +40,7 @@ final class FacilityResource extends JsonResource
             'last_modified' => $this->resource['data']->last_modified,
             'verified_on_nppes' => $this->resource['data']->verified_on_nppes,
 
-            'taxonomies' => PublicTaxonomiesResource::collection($this->resource['data']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource['api']->taxonomies),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];
@@ -58,7 +57,7 @@ final class FacilityResource extends JsonResource
             'clia' => '',
             'other_name' => $this->getOtherName(),
 
-            'taxonomies' => ApiTaxonomiesResource::collection($this->resource['api']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource['api']->taxonomies),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];

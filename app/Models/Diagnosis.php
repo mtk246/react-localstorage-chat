@@ -39,6 +39,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \App\Models\Discriminatory|null $discriminatory
  * @property \App\Models\Gender|null $gender
+ * @property mixed $created_by
  * @property mixed $last_modified
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @property int|null $procedures_count
