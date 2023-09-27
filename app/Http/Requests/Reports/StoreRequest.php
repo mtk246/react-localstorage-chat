@@ -29,7 +29,6 @@ final class StoreRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'name' => 'required|string',
-            'use' => 'required|string',
             'description' => 'nullable|string',
             'clasification' => ['required', 'integer', new Enum(ClassificationType::class)],
             'type' => ['required', 'integer', new Enum(ReportType::class)],
