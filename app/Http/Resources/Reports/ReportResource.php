@@ -22,7 +22,6 @@ final class ReportResource extends JsonResource
                 ? $this->resource->id
                 : null,
             'name' => $this->resource->name,
-            'use' => $this->resource->use,
             'description' => $this->resource->description,
             'type' => $this->resource->type->value,
             'url' => $this->resource->clasification->getUrl(),
