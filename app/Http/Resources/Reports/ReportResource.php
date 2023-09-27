@@ -34,7 +34,6 @@ final class ReportResource extends JsonResource
             'range' => $this->resource->range,
             'begin_date' => now()->subDay($this->resource->range),
             'end_date' => now(),
-            'tags' => $this->resource->tags,
             'configuration' => $this->resource->configuration,
             'favorite' => $this->resource->favorite,
         ];
