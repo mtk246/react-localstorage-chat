@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property string $id
  * @property string $name
- * @property string $use
  * @property string $description
  * @property ReportType $type
  * @property array $configuration
@@ -43,7 +42,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereRange($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Report whereUse($value)
  *
  * @mixin \Eloquent
  */
@@ -55,7 +53,6 @@ final class Report extends Model
     /** @var string[] */
     protected $fillable = [
         'name',
-        'use',
         'description',
         'type',
         'range',
