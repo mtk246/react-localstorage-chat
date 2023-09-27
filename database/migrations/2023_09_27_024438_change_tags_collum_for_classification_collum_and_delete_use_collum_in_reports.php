@@ -11,7 +11,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('reports', function (Blueprint $table) {
-            $table->dropColumn('tags');
+            $table->dropColumn(['tags', 'use']);
             $table->string('clasification')->after('type')->default(ClassificationType::LIVE_INSIGHTS->value);
         });
     }
@@ -20,6 +20,7 @@ return new class() extends Migration {
     {
         Schema::table('reports', function (Blueprint $table) {
             $table->dropColumn('clasification');
+            $table->text('use')->default('')->after('name');
             $table->json('tags')->after('type')->default('[]');
         });
     }
