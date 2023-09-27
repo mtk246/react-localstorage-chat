@@ -23,6 +23,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $format_cms_id
  * @property int|null $format_institutional_id
  * @property int|null $format_ub_id
+ * @property array|null $responsibilities
+ * @property string|null $eff_date
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
@@ -38,6 +40,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate query()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereEffDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFileMethodId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatCmsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlanPrivate whereFormatInstitutionalId($value)
@@ -66,6 +69,7 @@ class InsurancePlanPrivate extends Model implements Auditable
         'billing_company_id',
         'insurance_plan_id',
         'responsibilities',
+        'eff_date',
     ];
 
     /**

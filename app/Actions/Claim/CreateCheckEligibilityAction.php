@@ -25,7 +25,7 @@ final class CreateCheckEligibilityAction
                     'insurancePolicies' => function ($query) {
                         $query->with('typeResponsibility');
                     },
-                    'user.profile',
+                    'profile',
                 ]
             )
             ->find($data['demographic_information']['patient_id']);
@@ -50,10 +50,12 @@ final class CreateCheckEligibilityAction
 
                 foreach ($data['claim_services']['services'] ?? [] as $service) {
                     $typeOfService = TypeOfService::query()
-                        ->find($service['type_of_service_id']);
+                        ->find($service['type_of_service_id'] ?? null);
                     $encounter['beginningDateOfService'] = str_replace('-', '', $service['from_service']);
                     $encounter['endDateOfService'] = str_replace('-', '', $service['to_service']);
-                    array_push($serviceCodes, $typeOfService->code);
+                    if ($typeOfService) {
+                        array_push($serviceCodes, $typeOfService->code);
+                    }
                 }
                 $encounter['serviceTypeCodes'] = $serviceCodes;
 

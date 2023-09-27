@@ -17,9 +17,22 @@ final class GetAPIAction
             ]);
 
             $response = $client->request('GET', '?number='.$npi.'&version=2.1');
-            $data = json_decode($response->getBody()->getContents());
+            $data = json_decode($response->getBody()->getContents())
+                ?->results[0] ?? null;
 
-            return $data?->results[0] ?? null;
+            if ($data) {
+                $data->addresses = array_map(function ($address) {
+                    foreach ($address as $key => $value) {
+                        if (in_array($key, ['address_1', 'city'])) {
+                            $address->{$key} = upperCaseWords($value);
+                        }
+                    }
+
+                    return $address;
+                }, $data->addresses);
+            }
+
+            return $data;
         });
     }
 }

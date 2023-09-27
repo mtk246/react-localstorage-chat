@@ -3,7 +3,7 @@
 ---
 
 - [Basic data](#basic-data)
-- [get tags](#get-tags)
+- [get classifications](#get-classifications)
 - [get types](#get-types)
 - [get all reports](#get-reports)
 - [get report](#get-report)
@@ -14,13 +14,13 @@
 
 | # | METHOD | Name              | URL             | Token required | Description     |
 | : |        |                   |                 |                |                 |  
-| 1 | GET |`get all tags`|`/reports/tags`| yes | get all reports tags |
+| 1 | GET |`get all classifications`|`/reports/classifications`| yes | get all classifications |
 | 2 | GET |`get all types`|`/reports/types`| yes | get all reports types |
 | 3 | GET |`get all reports`|`reports`| yes | get all reports |
 | 4 | GET |`get single report`|`reports/{report}`| yes | get reports |
 
-<a name="get-tags"></a>
-## get all tags
+<a name="get-classifications"></a>
+## get all classifications
 
 ## Param in header
 
@@ -38,12 +38,19 @@
 
 ```json
 [
+[
   {
     "id": 1,
-    "name": "tag one"
+    "url": "https://prod-useast-a.online.tableau.com/t/begento/views/ClaimsReportsPDFGenerator/General2",
+    "name": "Live insights",
+    "color": {
+      "background": "#FFFAE6",
+      "text": "#B04D12"
+    },
+    "icon": "ico-live-insights"
   },
   ...
-]
+],
 ```
 
 <a name="get-types"></a>
@@ -67,10 +74,12 @@
 [
   {
     "id": 1,
-    "url": "https://prod-useast-a.online.tableau.com/t/begento/views/ClaimsReportsPDFGenerator/General2",
-    "name": "General Report"
+    "name": "General"
   },
-  ...
+  {
+    "id": 2,
+    "name": "Custom"
+  }
 ]
 ```
 
@@ -87,7 +96,7 @@
 ## Param in path
 
 `billing_company_id <int> ` // only for admin
-`tags[] <int[]>`
+`clasifications[] <int[]>`
 `favorite <boolean>`
 
 ## Example path
@@ -105,19 +114,21 @@
   {
     "id": "01gxwzg9r8qnwh6df7s3at4x09", // if null the report is a system report and dont have id
     "name": "General Report",
-    "use": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean et justo in orci malesuada convallis.",
     "description": "Nullam tortor velit, varius laoreet molestie sed, feugiat vel massa. Phasellus varius accumsan enim. Cras congue ut lacus eget malesuada. Suspendisse lobortis mauris in dui pretium fringilla. Mauris a gravida nulla. Quisque imperdiet libero sem",
     "type": 1,
     "url": "https://prod-useast-a.online.tableau.com/t/begento/views/ClaimsReportsPDFGenerator/General2",
+    "clasification": 1,
+    "color": {
+      "background": "#FFFAE6",
+      "text": "#B04D12"
+    },
+    "icon": "ico-live-insights",
     "range": "30",
-    "begin_date": "2023-03-14T11:11:30.918209Z",
-    "end_date": "2023-04-13T11:11:30.918269Z",
-    "tags": [
-      1,
-      2
-    ],
-    "configuration": [],
-    "default": [],
+    "begin_date": "2023-08-28T09:18:40.705934Z",
+    "end_date": "2023-09-27T09:18:40.705993Z",
+    "configuration": {
+      "colums": []
+    },
     "favorite": false
   },
   ...
@@ -143,22 +154,23 @@
 
 ```json
 {
-  "id": "01gxwzg9r8qnwh6df7s3at4x09",
-  "name": "test",
-  "use": "test",
-  "description": "test",
+  "id": "01gxwzg9r8qnwh6df7s3at4x09", // if null the report is a system report and dont have id
+  "name": "General Report",
+  "description": "Nullam tortor velit, varius laoreet molestie sed, feugiat vel massa. Phasellus varius accumsan enim. Cras congue ut lacus eget malesuada. Suspendisse lobortis mauris in dui pretium fringilla. Mauris a gravida nulla. Quisque imperdiet libero sem",
   "type": 1,
   "url": "https://prod-useast-a.online.tableau.com/t/begento/views/ClaimsReportsPDFGenerator/General2",
+  "clasification": 1,
+  "color": {
+    "background": "#FFFAE6",
+    "text": "#B04D12"
+  },
+  "icon": "ico-live-insights",
   "range": "30",
-  "begin_date": "2023-03-14T11:33:51.786656Z",
-  "end_date": "2023-04-13T11:33:51.786714Z",
-  "tags": [
-    1
-  ],
+  "begin_date": "2023-08-28T09:18:40.705934Z",
+  "end_date": "2023-09-27T09:18:40.705993Z",
   "configuration": {
     "colums": []
   },
-  "default": [],
-  "favorite": true
+  "favorite": false
 }
 ```

@@ -16,7 +16,11 @@ final class UpdateClaimAction
             $claim->setDemographicInformation($claimData->getDemographicInformation());
             $claim->setServices($claimData->getClaimServices(), $claimData->getAdditionalInformation());
             $claim->setInsurancePolicies($claimData->getPoliciesInsurances());
-            $claim->setStates($claimData->getStatus(), $claimData->getSubStatus(), $claimData->getPrivateNote());
+            $claim->setStates(
+                $claimData->getStatus(),
+                $claimData->getSubStatus(),
+                $claimData->getPrivateNote('Claim updated successfully')
+            );
             $claim->setAdditionalInformation($claimData->getAdditionalInformation());
 
             return $claim->load(['demographicInformation', 'service', 'insurancePolicies']);

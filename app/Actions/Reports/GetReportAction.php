@@ -24,8 +24,8 @@ final class GetReportAction
                         ->where('billing_company_id', null)
                         ->orWhere('billing_company_id', $filters->getBillingCompanyId());
                 })
-                ->when($filters->getTags()->isNotEmpty(), function (Builder $query) use ($filters): void {
-                    $filters->getTags()->each(function (int $value) use (&$query): void {
+                ->when($filters->getClasifications()->isNotEmpty(), function (Builder $query) use ($filters): void {
+                    $filters->getClasifications()->each(function (int $value) use (&$query): void {
                         $query->orWhere('tags', 'like', "%{$value}%");
                     });
                 })

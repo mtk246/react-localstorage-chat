@@ -9,6 +9,7 @@ use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
 use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetCheckStatusAction;
 use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
@@ -418,14 +419,18 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, check status claim'), 400);
     }
 
-    public function getCheckStatus(int $id): JsonResponse
-    {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+    public function getCheckStatus(
+        Claim $claim,
+        GetSecurityAuthorizationAction $getAccessToken,
+        GetCheckStatusAction $getCheckStatus,
+    ) {
+        $token = $getAccessToken->invoke();
 
-        if (!isset($token)) {
+        if (empty($token)) {
             return response()->json(__('Error get security authorization access token'), 400);
         }
 
+        $rs = $getCheckStatus->single($token ?? '', $claim);
         $rs = $this->claimRepository->getCheckStatus($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, get check status'), 400);

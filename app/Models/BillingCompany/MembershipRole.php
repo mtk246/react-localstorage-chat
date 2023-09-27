@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Models\BillingCompany;
 
 use App\Models\BillingCompany;
+use App\Models\Permissions\Permission;
 use App\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -26,9 +29,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany\Membership> $memberships
  * @property int|null $memberships_count
+ * @property int|null $permits_count
  *
+ * @method static \Database\Factories\BillingCompany\MembershipRoleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MembershipRole query()
@@ -51,6 +57,9 @@ final class MembershipRole extends Model implements Auditable
     /** @var array */
     protected $fillable = ['name', 'slug', 'description', 'billing_company_id'];
 
+    /** @var array */
+    protected $appends = ['permits'];
+
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
@@ -59,5 +68,15 @@ final class MembershipRole extends Model implements Auditable
     public function memberships(): BelongsToMany
     {
         return $this->belongsToMany(Membership::class, 'membership_role_id', 'membership_id');
+    }
+
+    public function getPermitsAttribute(): Collection
+    {
+        return $this->permits()->get();
+    }
+
+    public function permits(): MorphMany
+    {
+        return $this->morphMany(Permission::class, 'permissioned');
     }
 }

@@ -72,8 +72,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{ssn}/get-by-ssn', [\App\Http\Controllers\UserController::class, 'searchBySsn']);
     });
 
-    Route::prefix('permission')->middleware('auth:api')->group(function () {
-        Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
+    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'store', 'destroy']);
+    Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
+
+    /*Route::prefix('permission')->middleware('auth:api')->group(function () {
+        /*Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
         Route::get('roles-permissions', [\App\Http\Controllers\RolePermissionController::class, 'getRolesWithPermissions']);
         Route::get('permissions', [\App\Http\Controllers\RolePermissionController::class, 'getPermissions']);
         Route::get('permissions-by-role/{role}', [\App\Http\Controllers\RolePermissionController::class, 'getPermissionsByRole']);
@@ -95,7 +99,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::patch('remove-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsUser']);
         Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);
-    });
+    });*/
 
     Route::prefix('setting')->middleware('auth:api')->group(function () {
         Route::prefix('ip-restriction')->group(function () {
@@ -487,7 +491,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
         Route::get('/get-list-qualifier-by-field', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
-        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
+        Route::get('/get-check-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
         Route::get('/bill-classifications/{facility_id}', [\App\Http\Controllers\ClaimController::class, 'getBillClassifications']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
@@ -548,8 +552,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|billingmanager',
     ])->group(function () {
-        Route::get('/reports/types', [ReportReSource::class, 'getReportTypes']);
-        Route::get('/reports/tags', [ReportReSource::class, 'getReportTags']);
+        Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
+        Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 

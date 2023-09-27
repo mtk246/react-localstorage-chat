@@ -6,6 +6,7 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FormatType;
+use App\Services\ClearingHouse\ClearingHouseAPI;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -13,6 +14,19 @@ use Illuminate\Support\Str;
 final class JSONDictionary extends Dictionary
 {
     protected string $format = FormatType::JSON->value;
+
+    protected function getByApi(string $key): string
+    {
+        $api = new ClearingHouseAPI();
+
+        return $api->getDataByPayerID(
+            $this->claim->higherInsurancePlan()?->payer_id,
+            $this->claim->higherInsurancePlan()?->name,
+            $this->claim->type->value,
+            $this->batch?->fake_transmission ?? false,
+            $key
+        );
+    }
 
     protected function getSingleArrayFormat(string $value): array
     {
@@ -23,8 +37,8 @@ final class JSONDictionary extends Dictionary
     {
         return match ($key) {
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
-            'tradingPartnerServiceId' => $this->claim->higherInsurancePlan()?->payer_id,
-            'tradingPartnerName' => $this->claim->higherInsurancePlan()?->name,
+            'tradingPartnerServiceId' => $this->getByApi('cpid'),
+            'tradingPartnerName' => $this->getByApi('name'),
             'usageIndicator' => 'T',  /* Caso de prueba */
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
@@ -78,7 +92,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
-                'memberId' => $subscriber->member_id ?? $subscriber->id,
+                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
                 'ssn' => $subscriber->ssn,
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',
@@ -111,7 +125,7 @@ final class JSONDictionary extends Dictionary
                 ],
             ],
             ClaimType::INSTITUTIONAL => [
-                'memberId' => $subscriber->member_id ?? $subscriber->id,
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
                 'ssn' => $subscriber->ssn,
                 'firstName' => $subscriber->first_name,
@@ -266,6 +280,19 @@ final class JSONDictionary extends Dictionary
             foreach ($service->diagnostic_pointers as $point) {
                 array_push($valuesPoint, $pointers[$point]);
             }
+            $procedureIdentifier = match ($service->procedure?->type?->getName()) {
+                'HCPCS' => 'HC',
+                'HIPPS' => 'HP',
+                'HIEC' => 'IV',
+                'ABC' => 'WK',
+                '' => 'ER',
+                default => ''
+            };
+            $procedureDescription = match ($service->procedure?->type?->getName()) {
+                'HCPCS' => '',
+                'HIPPS' => '',
+                default => $service->procedure?->description,
+            };
             $serviceLine = match ($this->claim->type) {
                 ClaimType::PROFESSIONAL => [
                     'serviceDate' => str_replace('-', '', $service->from_service),
@@ -369,7 +396,9 @@ final class JSONDictionary extends Dictionary
                         'adjustedRepricedClaimRefNumber' => '',
                     ],
                     'institutionalService' => [
-                        'procedureModifiers' => array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? []),
+                        'procedureModifiers' => (!empty($service->procedure?->code) && !empty($procedureIdentifier))
+                            ? array_map(fn ($mod) => $mod->modifier, $service->modifiers ?? [])
+                            : [],
                         'measurementUnit' => match (isset($service->procedure?->companyServices
                         ->firstWhere('company_id', $this->claim
                             ?->demographicInformation
@@ -379,20 +408,9 @@ final class JSONDictionary extends Dictionary
                             default => 'UN', /* DA = Days UN = Unit */
                         },
                         'serviceLineRevenueCode' => $service->revenueCode->code,
-                        'procedureIdentifier' => match ($service->procedure?->type?->getName()) {
-                            'HCPCS' => 'HC',
-                            'HIPPS' => 'HP',
-                            'HIEC' => 'IV',
-                            'ABC' => 'WK',
-                            '' => 'ER',
-                            default => ''
-                        },
-                        'procedureCode' => $service->procedure->code,
-                        'description' => match ($service->procedure?->type?->getName()) {
-                            'HCPCS' => '',
-                            'HIPPS' => '',
-                            default => $service->procedure?->description,
-                        },
+                        'procedureIdentifier' => (!empty($service->procedure?->code)) ? $procedureIdentifier : '',
+                        'procedureCode' => (!empty($procedureIdentifier)) ? $service->procedure?->code : '',
+                        'description' => (!empty($service->procedure?->code) && !empty($procedureIdentifier)) ? $procedureDescription : '',
                         'lineItemChargeAmount' => str_replace(',', '', $service->price),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
@@ -1280,7 +1298,16 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').substr(str_replace(':', '', $this->claim->patientInformation->admission_time ?? ''), 0, 4),
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').
+                        substr(str_replace(
+                            ':',
+                            '',
+                            ('' != ($this->claim->patientInformation->admission_date ?? ''))
+                                ? ($this->claim->patientInformation->admission_time ?? '0000')
+                                : ''),
+                            0,
+                            4
+                        ),
                     'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
                     'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
                     'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
@@ -1845,8 +1872,8 @@ final class JSONDictionary extends Dictionary
                 'city' => $billingProviderPaymentAddress?->city,
                 'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? null,
                 'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? null,
-                'countryCode' => $billingProviderPaymentAddress?->country,
-                'countrySubDivisionCode' => $billingProviderPaymentAddress?->country_subdivision_code,
+                'countryCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country : '',
+                'countrySubDivisionCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country_subdivision_code : '',
             ]
             : null;
     }
@@ -1940,10 +1967,16 @@ final class JSONDictionary extends Dictionary
                     : '',
             ],
             'contactInformation' => [
-                'name' => $billingProviderContact->contact_name ?? $billingProvider->name,
-                'phoneNumber' => str_replace('-', '', $billingProviderContact->phone ?? '') ?? null,
+                'name' => ('' === $billingProviderContact->phone ?? '')
+                    ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
+                    : $billingProviderContact->contact_name ?? $billingProvider->name,
+                'phoneNumber' => str_replace(
+                    '-',
+                    '',
+                    $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+                ) ?? null,
                 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
-                'email' => $billingProviderContact->email,
+                // 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
         ];
@@ -2112,6 +2145,51 @@ final class JSONDictionary extends Dictionary
                 'email' => 'email@email.com',
                 'phoneExtension' => '1234',
             ],
+        ];
+    }
+
+    protected function getAttending(): ?array
+    {
+        $attending = $this->claim->attending();
+        $attendingAddress = $attending?->profile?->addresses()
+            ?->first() ?? null;
+        $attendingContact = $attending?->profile->contacts()
+            ?->first() ?? null;
+
+        return [
+            'providerType' => 'AttendingProvider',
+            'npi' => str_replace('-', '', $attending->npi ?? '') ?? null,
+            // 'secondaryIdentificationQualifierCode' => '0B',
+            // 'secondaryIdentifier' => 'string',
+            'employerId' => str_replace('-', '', $attending->ein ?? '') ?? null,
+            // 'taxonomyCode' => 'string',
+            'firstName' => $attending->profile->first_name,
+            'lastName' => $attending->profile->last_name,
+            'middleName' => $attending->profile->middle_name,
+            'suffix' => $attending->profile?->nameSuffix?->code,
+            // 'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
+            'address' => [
+                'address1' => $attendingAddress?->address,
+                'address2' => null,
+                'city' => $attendingAddress?->city,
+                'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? null,
+                'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? null,
+                'countryCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country : '',
+                'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
+            ],
+            'contactInformation' => (
+                !empty($attendingContact?->phone) ||
+                !empty($attendingContact?->email) ||
+                !empty($attendingContact?->fax)
+            )
+                ? [
+                    'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
+                    'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? null,
+                    'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? null,
+                    'email' => $attendingContact?->email,
+                    'validContact' => true,
+                ]
+                : null,
         ];
     }
 

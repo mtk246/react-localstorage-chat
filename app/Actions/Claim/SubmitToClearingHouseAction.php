@@ -54,8 +54,7 @@ final class SubmitToClearingHouseAction
                     $claim->insurancePolicies()
                         ->wherePivot('order', 1)
                         ?->first()
-                        ?->insurancePlan
-                        ?->insuranceCompany ?? null,
+                        ?->insurancePlan ?? null,
                 )->toArray(),
                 function ($innerValue) {
                     return !empty($innerValue);

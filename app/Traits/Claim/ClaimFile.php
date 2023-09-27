@@ -180,4 +180,12 @@ trait ClaimFile
             ?->wherePivot('field_id', 5)
             ?->first() ?? null;
     }
+
+    public function attending(): ?HealthProfessional
+    {
+        return $this->demographicInformation
+            ?->healthProfessionals()
+            ?->wherePivot('field_id', 76)
+            ?->first() ?? null;
+    }
 }

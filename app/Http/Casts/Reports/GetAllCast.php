@@ -17,9 +17,9 @@ final class GetAllCast extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
-    public function getTags(): Collection
+    public function getClasifications(): Collection
     {
-        return $this->getCollect('tags');
+        return $this->getCollect('clasifications');
     }
 
     public function getFavorite(): bool

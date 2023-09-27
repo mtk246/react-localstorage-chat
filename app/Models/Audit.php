@@ -29,6 +29,7 @@ use OwenIt\Auditing\Models\Audit as BaseAudit;
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Audit search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit searchAudit($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit sortAudit($orderBy, $desc)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit whereAuditableId($value)
@@ -68,6 +69,22 @@ class Audit extends BaseAudit
             })->orWhereRaw('LOWER(volume) LIKE (?) ', [strtolower("%$search%")])
                             ->orWhereRaw('LOWER(title) LIKE (?) ', [strtolower("%$search%")])
                             ->orWhere('year', 'like', "%$search%");
+        }
+
+        return $query;
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if ('' != $search) {
+            return $query->whereHas('user', function ($q) use ($search) {
+                $q->whereHas('profile', function ($qq) use ($search) {
+                    $qq->whereRaw('LOWER(first_name) LIKE (?) ', [strtolower("%$search%")])
+                        ->orWhereRaw('LOWER(last_name) LIKE (?) ', [strtolower("%$search%")]);
+                });
+            })->orWhereRaw('LOWER(event) LIKE (?) ', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(auditable_type) LIKE (?) ', [strtolower("%$search%")])
+            ->orWhere('audits.created_at', 'LIKE', "%$search%");
         }
 
         return $query;

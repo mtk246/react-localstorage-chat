@@ -6,7 +6,6 @@ namespace App\Http\Requests\InsurancePlan;
 
 use App\Http\Casts\InsurancePlan\ContractFeesRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
-use App\Models\Company;
 use App\Models\Modifier;
 use App\Models\Procedure;
 use App\Rules\IntegerOrArrayKeyExists;
@@ -38,9 +37,10 @@ class AddContractFeesRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\ContractFee,id',
             ],
-            'contract_fees.*.company_ids' => [
+            'contract_fees.*.company_id' => [
                 'nullable',
-                new IntegerOrArrayKeyExists(Company::class),
+                'integer',
+                'exists:\App\Models\Company,id',
             ],
             'contract_fees.*.procedure_ids' => [
                 'nullable',
@@ -85,6 +85,11 @@ class AddContractFeesRequest extends FormRequest
             ],
             'contract_fees.*.have_contract_specifications' => ['nullable', 'boolean'],
             'contract_fees.*.contract_specifications' => ['nullable', 'array'],
+            'contract_fees.*.contract_specifications.*.id' => [
+                'nullable',
+                'integer',
+                'exists:\App\Models\ContractFeeSpecification,id',
+            ],
             'contract_fees.*.contract_specifications.*.billing_provider_id' => ['nullable', 'string'],
             'contract_fees.*.contract_specifications.*.billing_provider_tax_id' => ['nullable', 'string'],
             'contract_fees.*.contract_specifications.*.billing_provider_taxonomy_id' => ['nullable', 'integer'],

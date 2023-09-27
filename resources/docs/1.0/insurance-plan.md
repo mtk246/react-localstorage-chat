@@ -325,7 +325,7 @@
 #
 
 <a name="add-copay"></a>
-## Add copays to insurance
+## Add Copay
 
 ## Param in header
 
@@ -381,7 +381,7 @@ insurance_plan_id required <integer>
 
 
 <a name="add-contracts-fee"></a>
-## Add contracts fee to insurance
+## Add Contracts Fee
 
 ## Param in header
 
@@ -489,7 +489,6 @@ insurance_plan_id required <integer>
     {
         "id": 1,
         "price": 13,
-        "company_id": 1,
         "insurance_plan_id": 1,
         "insurance_company_id": 1,
         "private_note": "Note private by billing_company",
@@ -513,7 +512,17 @@ insurance_plan_id required <integer>
             {
                 "patient_id": 1,
                 "start_date": "2022-03-16",
-                "end_date": "2022-03-16",
+                "end_date": "2022-03-16"
+            }
+        ],
+        "companies": [
+            {
+                "id": 1,
+                "code": "CO-00001-2023",
+                "name": "Nexus Medical Centers, Llc",
+                "npi": "1750811915",
+                "created_at": "2023-08-14T11:49:24.000000Z",
+                "updated_at": "2023-08-14T11:49:24.000000Z"
             }
         ]
   },
@@ -1508,6 +1517,12 @@ billing_company_id <integer> optional
 
 <a name="get-list-by-payer"></a>
 ## Get list by payer
+
+## Example path
+
+>{primary} /get-list-by-payer/SIPVA?billing_company_id=2
+
+>{primary} /get-list-by-payer/SIPVA
 
 
 ### Param in header
