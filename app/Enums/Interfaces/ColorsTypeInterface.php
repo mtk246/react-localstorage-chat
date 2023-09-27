@@ -6,9 +6,9 @@ namespace App\Enums\Interfaces;
 
 interface ColorsTypeInterface extends PublicInterface
 {
-    public function getBackgroundCollor(): string;
+    public function getBackgroundColor(): string;
 
-    public function getTextCollor(): string;
+    public function getTextColor(): string;
 
     public function getName(): string;
 }
