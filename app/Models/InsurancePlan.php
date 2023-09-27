@@ -73,6 +73,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityTimeFailed> $timeFaileds
  * @property int|null $time_faileds_count
  *
+ * @method static \Database\Factories\InsurancePlanFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePlan query()
