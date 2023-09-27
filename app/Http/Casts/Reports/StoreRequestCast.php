@@ -21,11 +21,6 @@ final class StoreRequestCast extends CastsRequest
         return $this->get('name');
     }
 
-    public function getUse(): string
-    {
-        return $this->get('use');
-    }
-
     public function getDescription(): ?string
     {
         return $this->get('description');
