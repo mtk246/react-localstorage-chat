@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Reports;
 
-use App\Enums\Reports\TagType;
+use App\Enums\Reports\ClassificationType;
 use App\Http\Casts\Reports\GetAllCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,8 +27,8 @@ final class GetAllRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
-            'tags' => 'nullable|array',
-            'tags.*' => ['required', 'integer', new Enum(TagType::class)],
+            'clasifications' => 'nullable|array',
+            'clasifications.*' => ['required', 'integer', new Enum(ClassificationType::class)],
             'favorite' => 'nullable|boolean',
         ];
     }
