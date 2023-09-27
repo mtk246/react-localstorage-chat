@@ -23,7 +23,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $format_cms_id
  * @property int|null $format_institutional_id
  * @property int|null $format_ub_id
- * @property array|null $responsibilities
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
