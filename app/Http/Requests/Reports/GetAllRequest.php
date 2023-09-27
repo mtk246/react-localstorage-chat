@@ -8,8 +8,6 @@ use App\Enums\Reports\ClassificationType;
 use App\Http\Casts\Reports\GetAllCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 final class GetAllRequest extends FormRequest
@@ -23,7 +21,7 @@ final class GetAllRequest extends FormRequest
     {
         return [
             'billing_company_id' => [
-                Rule::requiredIf(Gate::check('is-admin')),
+                'nullable',
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
