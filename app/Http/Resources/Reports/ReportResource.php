@@ -25,13 +25,18 @@ final class ReportResource extends JsonResource
             'use' => $this->resource->use,
             'description' => $this->resource->description,
             'type' => $this->resource->type->value,
-            'url' => $this->resource->type->getUrl(),
+            'url' => $this->resource->clasification->getUrl(),
+            'clasification' => $this->resource->clasification->value,
+            'color' => [
+                'background' => $this->resource->clasification->getBackgroundColor(),
+                'text' => $this->resource->clasification->getTextColor(),
+            ],
+            'icon' => $this->resource->clasification->getIcon(),
             'range' => $this->resource->range,
             'begin_date' => now()->subDay($this->resource->range),
             'end_date' => now(),
             'tags' => $this->resource->tags,
             'configuration' => $this->resource->configuration,
-            'default' => [],
             'favorite' => $this->resource->favorite,
         ];
     }
