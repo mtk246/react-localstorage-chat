@@ -16,11 +16,10 @@ final class UpdateReportAction
         return DB::transaction(function () use ($reportUpdate, $report): ReportResource {
             $report->update([
                 'name' => $reportUpdate->getName(),
-                'use' => $reportUpdate->getUse(),
                 'description' => $reportUpdate->getDescription(),
                 'type' => $reportUpdate->getType(),
                 'range' => $reportUpdate->getRange(),
-                'tags' => $reportUpdate->getTags(),
+                'clasification' => $reportUpdate->getClasification(),
                 'configuration' => $reportUpdate->getConfiguration()->toArray(),
                 'favorite' => $reportUpdate->getFavorite(),
             ]);

@@ -552,8 +552,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         'role:superuser|billingmanager',
     ])->group(function () {
-        Route::get('/reports/types', [ReportReSource::class, 'getReportTypes']);
-        Route::get('/reports/tags', [ReportReSource::class, 'getReportTags']);
+        Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
+        Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 

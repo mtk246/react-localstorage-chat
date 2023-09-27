@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Reports;
 
-use App\Enums\Reports\ReportType;
+use App\Enums\Reports\ClassificationType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @property ReportType $resource */
-final class ReportTypeResource extends JsonResource
+/** @property ClassificationType $resource */
+final class ClassificationTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,6 +23,11 @@ final class ReportTypeResource extends JsonResource
             'id' => $this->resource->value,
             'url' => $this->resource->getUrl(),
             'name' => $this->resource->getDescription(),
+            'color' => [
+                'background' => $this->resource->getBackgroundColor(),
+                'text' => $this->resource->getTextColor(),
+            ],
+            'icon' => $this->resource->getIcon(),
         ];
     }
 }
