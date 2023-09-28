@@ -158,6 +158,7 @@ final class CreateCheckEligibilityAction
         });
 
         array_push($insurancePolicies, [
+            'id' => 0,
             'own' => true,
             'status' => true,
             'eff_date' => null,
