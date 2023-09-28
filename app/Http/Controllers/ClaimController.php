@@ -431,7 +431,6 @@ class ClaimController extends Controller
         }
 
         $rs = $getCheckStatus->single($token ?? '', $claim);
-        $rs = $this->claimRepository->getCheckStatus($token->access_token ?? '', $id);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, get check status'), 400);
     }
