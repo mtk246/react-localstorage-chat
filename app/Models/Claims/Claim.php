@@ -280,9 +280,13 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-            return $carry + ((float) $service['price'] ?? 0);
-        }, 0);
+        $billed = ($this->type == ClaimType::PROFESSIONAL)
+            ? array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+                    return $carry + ((float) $service['price'] ?? 0);
+                }, 0)
+            : array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+                return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
+            }, 0);
 
         return number_format($billed, 2);
     }
