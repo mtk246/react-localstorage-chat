@@ -68,7 +68,7 @@ class ClaimBatchRepository
      */
     public function getServerAllClaims(Request $request)
     {
-        $status = ClaimStatus::where('status', 'Verified - Not submitted')->first();
+        $status = ClaimStatus::where('status', 'Not submitted')->first();
         $claimsQuery = Claim::query()
             ->whereHas('claimStatusClaims', function ($query) use ($status) {
                 $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)

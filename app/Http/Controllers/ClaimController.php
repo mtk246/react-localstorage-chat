@@ -312,7 +312,7 @@ class ClaimController extends Controller
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
         $claim = Claim::find($id);
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        $statusVerify = ClaimStatus::whereStatus('Not submitted')->first();
         if (($request->validate ?? false) == true) {
             if (isset($request->insurance_policies)) {
                 $claim->insurancePolicies()->sync($request->insurance_policies);
@@ -344,7 +344,7 @@ class ClaimController extends Controller
             return response()->json(__('Error save claim'), 400);
         }
 
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        $statusVerify = ClaimStatus::whereStatus('Not submitted')->first();
         if (($request->validate ?? false) == true) {
             $rs = $this->claimValidation($claim->id);
             $this->claimRepository->changeStatus([
