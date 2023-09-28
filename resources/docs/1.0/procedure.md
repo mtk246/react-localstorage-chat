@@ -584,6 +584,7 @@
 `state <string>`
 `fsa <string>`
 `counties <string>`
+`insurance_label_fee_id <integer>`
 
 ## Example path
 
