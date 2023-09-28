@@ -42,7 +42,7 @@ enum ClassificationType: int implements TypeInterface
     #[PublicAttribute(true)]
     case FINANCIAL = 2;
 
-    #[UrlAttribute('ClaimsReportsPDFGenerator/Payments2')]
+    #[UrlAttribute('ReportsBeOS_16947907094600/Dashboard1')]
     #[NameAttribute('Productivity')]
     #[DescriptionAttribute('Productivity')]
     #[BackgroundColorAttribute('#E3F8FF')]
