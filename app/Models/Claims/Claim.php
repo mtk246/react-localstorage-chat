@@ -194,8 +194,8 @@ class Claim extends Model implements Auditable
 
     protected function searchByUserProfile($query, $search)
     {
-        $query->with(['demographicInformation.patient.user.profile'])
-            ->whereHas('demographicInformation.patient.user.profile', function ($q) use ($search) {
+        $query->with(['demographicInformation.patient.profile'])
+            ->whereHas('demographicInformation.patient.profile', function ($q) use ($search) {
                 $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
                     ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
                     ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
@@ -233,7 +233,7 @@ class Claim extends Model implements Auditable
             $q->whereHas('services', function ($subQuery) use ($search) {
                 $subQuery->selectRaw('SUM(CAST(price AS DECIMAL(10,2))) as total_price')
                     ->groupBy('services.id')
-                    ->havingRaw('SUM(CAST(price AS DECIMAL(10,2))) = ?', [(float) $search]);
+                    ->havingRaw('SUM(CAST(price AS DECIMAL(10,2))) = ?', [number_format((float) $search, 2)]);
             });
         });
     }
