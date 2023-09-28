@@ -34,13 +34,13 @@ class ClaimDataSeeder extends Seeder
         }
 
         $claimStatus = [
-            ['status' => 'Draft',                    'background_color' => '#F2F2F2', 'font_color' => '#707070'],
-            ['status' => 'Verified - Not submitted', 'background_color' => '#FBECDD', 'font_color' => '#B04D12'],
-            ['status' => 'Submitted',                'background_color' => '#FFFAEC', 'font_color' => '#B04D12'],
-            ['status' => 'Approved',                 'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
-            ['status' => 'Rejected',                 'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
-            ['status' => 'Denied',                   'background_color' => '#FFDEDC', 'font_color' => '#A72821'],
-            ['status' => 'Complete',                 'background_color' => '#D1FFE5', 'font_color' => '#1B6D49'],
+            ['status' => 'Draft',         'background_color' => '#F2F2F2', 'font_color' => '#707070'],
+            ['status' => 'Not submitted', 'background_color' => '#FBECDD', 'font_color' => '#B04D12'],
+            ['status' => 'Submitted',     'background_color' => '#FFFAEC', 'font_color' => '#B04D12'],
+            ['status' => 'Approved',      'background_color' => '#E9FDF2', 'font_color' => '#1B6D49'],
+            ['status' => 'Rejected',      'background_color' => '#FFF1F1', 'font_color' => '#A72821'],
+            ['status' => 'Denied',        'background_color' => '#FFDEDC', 'font_color' => '#A72821'],
+            ['status' => 'Complete',      'background_color' => '#D1FFE5', 'font_color' => '#1B6D49'],
             // ['status' => 'Appel',                    'background_color' => '#E3F8FF', 'font_color' => '#018ECC']
         ];
 

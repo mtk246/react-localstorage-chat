@@ -55,6 +55,11 @@ final class ClaimTransmissionResponse extends Model implements Auditable
         return $this->belongsTo(Claim::class);
     }
 
+    public function claimBatch(): BelongsTo
+    {
+        return $this->belongsTo(ClaimBatch::class);
+    }
+
     public function claimTransmissionStatus(): BelongsTo
     {
         return $this->belongsTo(ClaimTransmissionStatus::class);

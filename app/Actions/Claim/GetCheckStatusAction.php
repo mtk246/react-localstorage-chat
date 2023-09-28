@@ -7,12 +7,26 @@ namespace App\Actions\Claim;
 use App\Models\Claims\Claim;
 use App\Models\Company;
 use App\Models\Patient;
+use App\Services\ClearingHouse\ClearingHouseAPI;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 final class GetCheckStatusAction
 {
-    public function single(string $token, Claim $claim): Claim
+    private function getByApi(string $key, Claim $claim): string
+    {
+        $api = new ClearingHouseAPI();
+
+        return $api->getDataByPayerID(
+            $claim->higherInsurancePlan()?->payer_id,
+            $claim->higherInsurancePlan()?->name,
+            $claim->type->value,
+            $claim->claimTransmissionResponses->orderBy('created_at', 'desc')->first()?->claimBatch?->fake_transmission ?? false,
+            $key
+        );
+    }
+
+    public function single(string $token, Claim $claim)
     {
         return DB::transaction(function () use ($token, $claim) {
             $patient = Patient::query()
@@ -32,9 +46,9 @@ final class GetCheckStatusAction
             $encounter = [];
             $serviceCodes = [];
 
+            $encounter['beginningDateOfService'] = str_replace('-', '', $claim->service->from);
+            $encounter['endDateOfService'] = str_replace('-', '', $claim->service->to);
             foreach ($claim->service->services ?? [] as $service) {
-                $encounter['beginningDateOfService'] = str_replace('-', '', $service->from_service);
-                $encounter['endDateOfService'] = str_replace('-', '', $service->to_service);
                 if ($service->typeOfService) {
                     array_push($serviceCodes, $service->typeOfService->code);
                 }
@@ -42,18 +56,25 @@ final class GetCheckStatusAction
             $encounter['serviceTypeCodes'] = $serviceCodes;
 
             $body = [
-                'controlNumber' => $claim->control_number ?? '',
+                'controlNumber' => str_pad((string) $claim->id, 9, '0', STR_PAD_LEFT),
                 'tradingPartnerServiceId' => $insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? null,
                 'tradingPartnerName' => $insurancePolicy->insurancePlan->insuranceCompany->name ?? null,
-                'provider' => [
-                    'organizationName' => $company->name ?? null,
-                    'npi' => $company->npi ?? null,
-                    'serviceProviderNumber' => $company?->sevices_number ?? null,
-                    'providerCode' => 'AD',
-                    'referenceIdentification' => $company?->reference_identification ?? null,
+                'tradingPartnerServiceId' => $this->getByApi('cpid', $claim),
+                'tradingPartnerName' => $this->getByApi('name', $claim),
+                'providers' => [
+                    [
+                        'organizationName' => $claim->billingCompany?->name,
+                        'taxId' => $claim->billingCompany?->tax_id,
+                        'providerType' => 'BillingProvider',
+                    ],
+                    [
+                        'organizationName' => $company?->name,
+                        'npi' => str_replace('-', '', $company?->npi ?? '') ?? null,
+                        'providerType' => 'ServiceProvider',
+                    ],
                 ],
                 'subscriber' => [
-                    'memberId' => $insurancePolicy->subscriber->member_id ?? null,
+                    'memberId' => $claim->higherOrderPolicy()?->policy_number,
                     'firstName' => $insurancePolicy->subscriber->first_name ?? $patient->profile->first_name,
                     'lastName' => $insurancePolicy->subscriber->last_name ?? $patient->profile->last_name,
                     'gender' => $insurancePolicy->subscriber ? null : strtoupper($patient->profile->sex),
@@ -72,6 +93,8 @@ final class GetCheckStatusAction
                 ],
                 'encounter' => $encounter,
             ];
+
+            $body = array_filter_recursive($body);
 
             $response = Http::withToken($token)->acceptJson()->post(
                 config('claim.connections.url_status'),

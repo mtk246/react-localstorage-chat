@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\Diagnoses\DiagnosesResource;
 use App\Models\Diagnosis;
 use App\Models\PublicNote;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\Diagnoses\DiagnosesResource;
 
 class DiagnosisRepository
 {
@@ -26,13 +26,13 @@ class DiagnosisRepository
                 'end_date' => $data['end_date'] ?? null,
                 'description' => $data['description'],
                 'type' => $data['type'],
-                'clasifications' => collect($data['clasifications']?? [])->filter()->toArray(),
+                'clasifications' => collect($data['clasifications'] ?? [])->filter()->toArray(),
                 'description_long' => $data['description_long'] ?? null,
                 'age' => $data['age'] ?? null,
                 'age_end' => $data['age_end'] ?? null,
                 'gender_id' => $data['gender_id'] ?? null,
                 'injury_date_required' => $data['injury_date_required'] ?? false,
-                'discriminatory_id' => $data['discriminatory_id'] ?? null
+                'discriminatory_id' => $data['discriminatory_id'] ?? null,
             ]);
 
             if (isset($data['note'])) {
@@ -78,7 +78,7 @@ class DiagnosisRepository
     {
         $data = Diagnosis::with([
             'publicNote',
-            'discriminatory'
+            'discriminatory',
         ]);
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
             $data = $data->search($request->query('query'));
@@ -87,7 +87,7 @@ class DiagnosisRepository
         if ($request->sortBy) {
             $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
         } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
+            $data = $data->orderBy('active', 'desc')->orderBy('created_at', 'desc')->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
@@ -163,7 +163,7 @@ class DiagnosisRepository
             return Diagnosis::whereId($id)->with([
                 'publicNote',
                 'gender',
-                'discriminatory'
+                'discriminatory',
             ])->first();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -200,14 +200,14 @@ class DiagnosisRepository
         }
 
         return [
-            'active' => $diagnosis->active
+            'active' => $diagnosis->active,
         ];
     }
 
     public function deleteDiagnosis(int $id)
     {
         $diagnosis = Diagnosis::find($id);
+
         return $diagnosis->update(['status' => false]);
     }
-
 }
