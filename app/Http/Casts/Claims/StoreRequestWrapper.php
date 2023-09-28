@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Casts\Claims;
 
 use App\Http\Casts\CastsRequest;
+use App\Models\BillingCompany;
 use App\Models\Claims\ClaimStatus;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
@@ -21,12 +22,14 @@ final class StoreRequestWrapper extends CastsRequest
 
     public function getData(): array
     {
+        $submitter = BillingCompany::query()->find($this->getBillingCompanyId());
+
         return [
             'code' => Str::ulid(),
             'type' => $this->get('type'),
-            'submitter_name' => $this->get('submitter_name'),
-            'submitter_contact' => $this->get('submitter_contact'),
-            'submitter_phone' => $this->get('submitter_phone'),
+            'submitter_name' => $this->get('submitter_name') ?? $submitter?->name ?? '',
+            'submitter_contact' => $this->get('submitter_contact') ?? str_replace('-', '', $submitter?->contact?->contact_name ?? $submitter?->name ?? ''),
+            'submitter_phone' => $this->get('submitter_phone') ?? str_replace('-', '', $submitter?->contact?->phone ?? ''),
             'billing_company_id' => $this->getBillingCompanyId(),
             'aditional_information' => $this->getAdditionalInformation()->getExtraInformation()->toJson(),
         ];
