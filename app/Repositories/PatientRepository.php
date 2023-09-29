@@ -323,6 +323,9 @@ class PatientRepository
             $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
+                    'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation' => function ($query) {
                         $query->with([
                             'company' => function ($query) {
@@ -343,6 +346,8 @@ class PatientRepository
             $dataClaim = $patient->claims()
                 ->with([
                     'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation.company' => function ($query) use ($billingCompany) {
                         $query->with([
                             'nicknames' => function ($q) use ($billingCompany) {
@@ -1625,7 +1630,7 @@ class PatientRepository
 
         $users = $query->get()->map(function (Patient $patien) {
             $user = $patien->profile->user;
-            $billingCompaniesRole = $user?->billingCompanies->map(function ($billingCompany) {
+            $billingCompaniesRole = $user?->billingCompanies->map(function (BillingCompany $billingCompany) {
                 return [
                     'id' => $billingCompany->id,
                     'name' => $billingCompany->name,
@@ -1671,7 +1676,15 @@ class PatientRepository
                     'credit_score' => $patien->profile->credit_score,
                     'name_suffix_id' => $patien->profile->name_suffix_id,
                     'name_suffix' => $patien->profile->nameSuffix,
-                    'emails' => $patien->profile->contacts->pluck(['email'])->unique(),
+                    'contacs' => $patien->profile->contacts->map(function (Contact $query) {
+                        $return['email'] = $query->email;
+                        
+                        if (Gate::allows('is-admin')) {
+                            $return['billing_company'] = $query->billingCompany;
+                        }
+
+                        return $return;
+                    }),
                 ],
                 'language' => $user?->language,
                 'billing_companies' => $billingCompaniesRole,
