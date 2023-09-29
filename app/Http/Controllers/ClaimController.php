@@ -9,6 +9,7 @@ use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
 use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
+use App\Actions\Claim\GetCheckStatusAction;
 use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetConditionCodeAction;
 use App\Actions\Claim\GetDiagnosisRelatedGroupAction;
@@ -311,7 +312,7 @@ class ClaimController extends Controller
     public function verifyAndRegister(ClaimVerifyRequest $request, int $id)
     {
         $claim = Claim::find($id);
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        $statusVerify = ClaimStatus::whereStatus('Not submitted')->first();
         if (($request->validate ?? false) == true) {
             if (isset($request->insurance_policies)) {
                 $claim->insurancePolicies()->sync($request->insurance_policies);
@@ -343,7 +344,7 @@ class ClaimController extends Controller
             return response()->json(__('Error save claim'), 400);
         }
 
-        $statusVerify = ClaimStatus::whereStatus('Verified - Not submitted')->first();
+        $statusVerify = ClaimStatus::whereStatus('Not submitted')->first();
         if (($request->validate ?? false) == true) {
             $rs = $this->claimValidation($claim->id);
             $this->claimRepository->changeStatus([
@@ -418,15 +419,18 @@ class ClaimController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error, check status claim'), 400);
     }
 
-    public function getCheckStatus(int $id): JsonResponse
-    {
-        $token = $this->claimRepository->getSecurityAuthorizationAccessToken();
+    public function getCheckStatus(
+        Claim $claim,
+        GetSecurityAuthorizationAction $getAccessToken,
+        GetCheckStatusAction $getCheckStatus,
+    ) {
+        $token = $getAccessToken->invoke();
 
-        if (!isset($token)) {
+        if (empty($token)) {
             return response()->json(__('Error get security authorization access token'), 400);
         }
 
-        $rs = $this->claimRepository->getCheckStatus($token->access_token ?? '', $id);
+        $rs = $getCheckStatus->single($token ?? '', $claim);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, get check status'), 400);
     }

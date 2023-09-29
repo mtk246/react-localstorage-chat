@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
-use App\Http\Resources\API\TaxonomiesResource as ApiTaxonomiesResource;
-use App\Http\Resources\Company\TaxonomiesResource as PublicTaxonomiesResource;
+use App\Http\Resources\API\TaxonomiesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class HealthProfessionalNpiResource extends JsonResource
 {
-    // ** @return array<key, string> */
+    /** @return array<key, string> */
     public function toArray($request): array
     {
-        $address = array_first($this->resource['api']->addresses, function ($address) {
+        $address = array_first($this->resource['api']?->addresses ?? [], function ($address) {
             return 'MAILING' == $address->address_purpose;
         });
 
@@ -51,7 +50,7 @@ final class HealthProfessionalNpiResource extends JsonResource
             'public_note' => $this->resource['data']->publicNote,
             'profile' => $this->resource['data']->profile,
 
-            'taxonomies' => PublicTaxonomiesResource::collection($this->resource['data']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource['api']?->taxonomies ?? []),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];
@@ -82,7 +81,7 @@ final class HealthProfessionalNpiResource extends JsonResource
             'public_note' => $this->resource['api']->publicNote ?? null,
             'profile' => $this->getProfileData(),
 
-            'taxonomies' => ApiTaxonomiesResource::collection($this->resource['api']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource['api']->taxonomies),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];

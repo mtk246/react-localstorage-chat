@@ -31,17 +31,15 @@
 ### Body request example
 ```json
 {
-  "billing_company_id": 1, // only for admin
-  "name": "test",
-  "use": "test",
-  "description": "test",
-  "tags": [1],
+  "billing_company_id": 1, // onmly for admin
+  "name": "test name",
+  "description": "test description",
+  "clasification": 1,
   "type": 1,
-  "range": "30", // days
+  "range": "30", // days 
   "configuration": {
     "columns":[]
-  },
-  "favorite": true
+  }
 }
 ```
 
@@ -54,23 +52,25 @@
 
 ```json
 {
-  "id": "01gxwzg9r8qnwh6df7s3at4x09",
-  "name": "test",
-  "use": "test",
-  "description": "sdaw",
+  "id": "01hbaee88wm6a6n90dtcxhggfz",
+  "name": "test name",
+  "description": "test description",
   "type": 1,
-  "url": "ClaimsReportsPDFGenerator/General2",
+  "url": "https://prod-useast-a.online.tableau.com/t/begento/views/ClaimsReportsPDFGenerator/General2",
+  "clasification": 1,
+  "color": {
+    "background": "#FFFAE6",
+    "text": "#B04D12"
+  },
+  "icon": "ico-live-insights",
   "range": "30",
-  "begin_date": "2023-03-14T10:04:50.715311Z",
-  "end_date": "2023-04-13T10:04:50.715383Z",
-  "tags": [
-    1
-  ],
+  "begin_date": "2023-08-28T06:06:33.879049Z",
+  "end_date": "2023-09-27T06:06:33.879108Z",
+  "tags": null,
   "configuration": {
     "colums": []
   },
-  "default": [],
-  "favorite": true
+  "favorite": false
 }
 ```
 

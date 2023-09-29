@@ -7,6 +7,7 @@ use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\Claims\ClaimEligibilityStatus;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\EmergencyContact;
@@ -323,6 +324,9 @@ class PatientRepository
             $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
+                    'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation' => function ($query) {
                         $query->with([
                             'company' => function ($query) {
@@ -342,6 +346,9 @@ class PatientRepository
                 ->get();
             $dataClaim = $patient->claims()
                 ->with([
+                    'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation.company' => function ($query) use ($billingCompany) {
                         $query->with([
                             'nicknames' => function ($q) use ($billingCompany) {
@@ -376,7 +383,7 @@ class PatientRepository
             'count' => $dataClaim->total(),
         ];
 
-        $dataPolicies->getCollection()->transform(function ($patient_policy) {
+        $dataPolicies->getCollection()->transform(function (InsurancePolicy $patient_policy) {
             return [
                 'id' => $patient_policy->id,
                 'billing_company_id' => $patient_policy->billing_company_id,
@@ -391,7 +398,9 @@ class PatientRepository
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                 'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
+                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                    ->where('status', 'Unknow')
+                    ->first(),
                 'status' => $patient_policy->status ?? false,
                 'eff_date' => $patient_policy->eff_date ?? '',
                 'end_date' => $patient_policy->end_date ?? '',
@@ -623,7 +632,9 @@ class PatientRepository
                         'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                         'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                         'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? null,
+                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                            ->where('status', 'Unknow')
+                            ->first(),
                         'status' => $patient_policy->status ?? false,
                         'eff_date' => $patient_policy->eff_date ?? '',
                         'end_date' => $patient_policy->end_date ?? '',
@@ -1456,7 +1467,9 @@ class PatientRepository
             'type_responsibility' => $policy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $policy->insurance_policy_type_id ?? '',
             'insurance_policy_type' => $policy->insurancePolicyType->description ?? '',
-            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? null,
+            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                ->where('status', 'Unknow')
+                ->first(),
             'status' => $policy->status ?? false,
             'eff_date' => $policy->eff_date ?? '',
             'end_date' => $policy->end_date ?? '',
@@ -1565,7 +1578,7 @@ class PatientRepository
         $edit = $request->edit ?? 'false';
 
         if (is_null($patientId)) {
-            return getList(BillingCompany::class, 'name', ['status' => true]);
+            return getList(BillingCompany::class, ['code', '-', 'name'], ['status' => true]);
         } else {
             $ids = [];
             $billingCompanies = Patient::find($patientId)->billingCompanies;
@@ -1573,27 +1586,40 @@ class PatientRepository
                 array_push($ids, $field->id);
             }
             if ('true' == $edit) {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'exists' => 'patients', 'whereHas' => ['relationship' => 'patients', 'where' => ['patient_id' => $patientId]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'exists' => 'patients', 'whereHas' => ['relationship' => 'patients', 'where' => ['patient_id' => $patientId]]]);
             } else {
-                return getList(BillingCompany::class, 'name', ['where' => ['status' => true], 'not_exists' => 'patients', 'orWhereHas' => ['relationship' => 'patients', 'where' => ['billing_company_id', $ids]]]);
+                return getList(BillingCompany::class, ['code', '-', 'name'], ['where' => ['status' => true], 'not_exists' => 'patients', 'orWhereHas' => ['relationship' => 'patients', 'where' => ['billing_company_id', $ids]]]);
             }
         }
     }
 
     public function search(Request $request)
     {
-        $date_of_birth = $request->date_of_birth ?? '';
-        $first_name = upperCaseWords($request->first_name ?? '');
-        $last_name = upperCaseWords($request->last_name ?? '');
-        $ssn = $request->ssn ?? '';
 
         $query = Patient::query()
-            ->with(['profile', 'profile.user', 'billingCompanies'])
-            ->whereHas('profile', function ($query) use ($date_of_birth, $first_name, $last_name, $ssn) {
-                $query->whereDateOfBirth($date_of_birth)
-                    ->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$first_name%")])
-                    ->whereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$last_name%")])
-                    ->when(!empty($ssn), function ($query) use ($ssn) {
+            ->with(['profile', 'profile.user', 'profile.contacts', 'billingCompanies'])
+            ->whereHas('profile', function ($query) use ($request) {
+                $date_of_birth = $request->date_of_birth;
+                $first_name = $request->first_name;
+                $last_name = $request->last_name;
+                $ssn = $request->ssn ?? '';
+                $email = $request->email ?? '';
+
+                return $query
+                    ->when($date_of_birth, function ($query) use ($date_of_birth) {
+                        return $query->whereDateOfBirth($date_of_birth);
+                    })
+                    ->when($first_name, function ($query) use ($first_name) {
+                        return $query->whereRaw('LOWER(first_name) LIKE (?)', [
+                            strtolower("%$first_name%")
+                        ]);
+                    })
+                    ->when($last_name, function ($query) use ($last_name) {
+                        return $query->whereRaw('LOWER(last_name) LIKE (?)', [
+                            strtolower("%$last_name%")
+                        ]);
+                    })
+                    ->when($ssn, function ($query) use ($ssn) {
                         $ssnFormated = substr($ssn, 0, 1).'-'.substr($ssn, 1, strlen($ssn));
 
                         return $query->where(function ($query) use ($ssn, $ssnFormated) {
@@ -1601,16 +1627,20 @@ class PatientRepository
                                 ->whereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssn%")])
                                 ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$ssnFormated")]);
                         });
+                    })
+                    ->when($email, function ($query) use ($email) {
+                        return $query->whereHas('contacts', function ($query) use ($email) {
+                            return $query->where('email', $email);
+                        });
                     });
             });
 
         $users = $query->get()->map(function (Patient $patien) {
             $user = $patien->profile->user;
-            $billingCompaniesRole = $user?->billingCompanies->map(function ($billingCompany) {
+            $billingCompaniesRole = $user?->billingCompanies->map(function (BillingCompany $billingCompany) {
                 return [
                     'id' => $billingCompany->id,
                     'name' => $billingCompany->name,
-                    'roles' => $billingCompany->membership->roles,
                 ];
             })->toArray();
 
@@ -1630,7 +1660,6 @@ class PatientRepository
                     $patien->billingCompanies->pluck('id')->toArray() ?? []
                 )
                 ->get()
-                ->pluck('id')
                 ->toArray();
 
             return [
@@ -1641,7 +1670,7 @@ class PatientRepository
                 'forbidden' => empty($billingCompanies)
                     ? ((Gate::check('is-admin'))
                         ? 'The patient has already been associated with all the billing companies registered'
-                        : 'The patient has already been associated with all the billing company')
+                        : 'The Patient is already created')
                     : null,
                 'profile' => [
                     'ssn' => $patien->profile->ssn,
@@ -1654,6 +1683,15 @@ class PatientRepository
                     'credit_score' => $patien->profile->credit_score,
                     'name_suffix_id' => $patien->profile->name_suffix_id,
                     'name_suffix' => $patien->profile->nameSuffix,
+                    'contacs' => $patien->profile->contacts->map(function (Contact $query) {
+                        $return['email'] = $query->email;
+                        
+                        if (Gate::allows('is-admin')) {
+                            $return['billing_company'] = $query->billingCompany;
+                        }
+
+                        return $return;
+                    }),
                 ],
                 'language' => $user?->language,
                 'billing_companies' => $billingCompaniesRole,

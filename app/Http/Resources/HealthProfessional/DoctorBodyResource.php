@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\HealthProfessional;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Http\Resources\Company\TaxonomiesResource;
 use App\Models\Company;
 use App\Models\HealthProfessional;
 use App\Models\HealthProfessionalType;
@@ -36,7 +37,14 @@ final class DoctorBodyResource extends JsonResource
             'last_modified' => $this->resource->last_modified,
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
-            'taxonomies' => $this->resource->taxonomies->unique('name'),
+            'taxonomies' => TaxonomiesResource::collection(
+                $this->resource->taxonomies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('taxonomy_id')->get()
+            ),
             'public_note' => $this->resource->publicNote,
             'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies()
@@ -48,6 +56,9 @@ final class DoctorBodyResource extends JsonResource
                 ->map(function ($model) {
                     $type = $this->getHealthProfessionalType($model->id);
                     $model->private_health_professional = [
+                        'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
+                            ->wherePivot('billing_company_id', $model->id)
+                            ->get()),
                         'socialMedias' => $this->getSocialMedias($model->id),
                         'address' => $this->getAddress($model->id),
                         'contact' => $this->getContact($model->id),

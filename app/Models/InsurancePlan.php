@@ -28,13 +28,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property bool $require_abn
  * @property bool $pqrs_eligible
  * @property bool $allow_attached_files
+ * @property string $eff_date
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $ins_type_id
  * @property int|null $plan_type_id
  * @property string|null $payer_id
- * @property string|null $eff_date
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\EntityAbbreviation> $abbreviations
  * @property int|null $abbreviations_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses

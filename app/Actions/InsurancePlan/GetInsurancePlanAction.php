@@ -14,27 +14,36 @@ final class GetInsurancePlanAction
 {
     public function list(array $request, User $user): Collection
     {
+        $billingCompanyId = Gate::allows('is-admin')
+            ? \Request::get('billing_company_id', $user->billing_company_id)
+            : $user->billing_company_id;
+
         if (isset($request['groupBy']) && $request['groupBy']) {
             $query = InsuranceCompany::query()
                 ->when(
                     Gate::denies('is-admin'),
-                    fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
+                    fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
                         $query
-                            ->where('billing_companies.id', $user->billing_company_id)
+                            ->where('billing_companies.id', $billingCompanyId)
                             ->where('billing_companies.status', true);
                     })
                 )
                 ->get()
-                ->map(fn ($model) => [
+                ->map(fn (InsuranceCompany $model) => [
                     'id' => $model->id,
+                    'code' => $model->code,
+                    'nicknames' => $model->nicknames->when(
+                        Gate::denies('is-admin'),
+                        fn ($query) => $query->where('billing_company_id', $billingCompanyId),
+                    )->pluck('name')->toArray(),
                     'name' => $model->name,
                     'group_values' => $model->insurancePlans()
                         ->whereNotIn('id', $request['exclude'] ?? [])
                         ->when(
                             Gate::denies('is-admin'),
-                            fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
+                            fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
                                 $query
-                                    ->where('billing_companies.id', $user->billing_company_id)
+                                    ->where('billing_companies.id', $billingCompanyId)
                                     ->where('billing_companies.status', true);
                             })
                         )
@@ -46,9 +55,9 @@ final class GetInsurancePlanAction
                 ->whereNotIn('id', $request['exclude'] ?? [])
                 ->when(
                     Gate::denies('is-admin'),
-                    fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($user) {
+                    fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
                         $query
-                            ->where('billing_companies.id', $user->billing_company_id)
+                            ->where('billing_companies.id', $billingCompanyId)
                             ->where('billing_companies.status', true);
                     })
                 )

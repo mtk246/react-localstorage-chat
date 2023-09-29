@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Company;
 
+use App\Http\Resources\API\TaxonomiesResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class CompanyPublicResource extends JsonResource
@@ -28,7 +29,7 @@ final class CompanyPublicResource extends JsonResource
             'public_note' => $this->resource['data']->publicNote?->note ?? '',
             'last_modified' => $this->resource['data']->last_modified,
 
-            'taxonomies' => TaxonomiesResource::collection($this->resource['data']->taxonomies),
+            'taxonomies' => TaxonomiesResource::collection($this->resource['api']->taxonomies),
             'contact' => $this->getContact($address),
             'address' => $this->getAddress($address),
         ];

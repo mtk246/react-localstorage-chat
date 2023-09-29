@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reports;
 use App\Actions\Reports\GetReportAction;
 use App\Actions\Reports\StoreReportAction;
 use App\Actions\Reports\UpdateReportAction;
+use App\Enums\Reports\ClassificationType;
 use App\Enums\Reports\ReportType;
 use App\Enums\Reports\TagType;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use App\Http\Requests\Reports\StoreRequest;
 use App\Http\Requests\Reports\UpdateRequest;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
+use App\Http\Resources\Reports\ClassificationTypeResource;
 use App\Http\Resources\Reports\ReportTypeResource;
 use App\Models\Reports\Report;
 use Illuminate\Http\JsonResponse;
@@ -63,17 +65,17 @@ final class ReportReSource extends Controller
         return response(status: 200)->json(['message' => 'Report deleted successfully.']);
     }
 
-    public function getReportTypes(): JsonResponse
+    public function classifications(): JsonResponse
     {
         return response()->json(
-            new EnumResource(collect(ReportType::cases()), ReportTypeResource::class),
+            new EnumResource(collect(ClassificationType::cases()), ClassificationTypeResource::class),
         );
     }
 
-    public function getReportTags(): JsonResponse
+    public function types(): JsonResponse
     {
         return response()->json(
-            new EnumResource(collect(TagType::cases()), TypeResource::class),
+            new EnumResource(collect(ReportType::cases()), TypeResource::class),
         );
     }
 }

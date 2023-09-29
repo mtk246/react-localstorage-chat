@@ -132,7 +132,7 @@ class Facility extends Model implements Auditable
      */
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class)->using(FacilityTaxonomy::class)->withTimestamps();
+        return $this->belongsToMany(Taxonomy::class)->using(FacilityTaxonomy::class)->withPivot(['billing_company_id', 'primary'])->withTimestamps();
     }
 
     /**

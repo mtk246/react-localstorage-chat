@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Reports;
 
+use App\Enums\Reports\ClassificationType;
 use App\Enums\Reports\ReportType;
-use App\Enums\Reports\TagType;
 use App\Http\Casts\Reports\UpdateRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,10 +29,8 @@ final class UpdateRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'name' => 'required|string',
-            'use' => 'required|string',
             'description' => 'nullable|string',
-            'tags' => 'nullable|array',
-            'tags.*' => ['required', 'integer', new Enum(TagType::class)],
+            'clasification' => ['required', 'integer', new Enum(ClassificationType::class)],
             'type' => ['required', 'integer', new Enum(ReportType::class)],
             'range' => ['required', 'string'],
             'configuration' => 'required|array',

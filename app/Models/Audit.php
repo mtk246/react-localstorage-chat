@@ -29,6 +29,7 @@ use OwenIt\Auditing\Models\Audit as BaseAudit;
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Audit query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Audit search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit searchAudit($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit sortAudit($orderBy, $desc)
  * @method static \Illuminate\Database\Eloquent\Builder|Audit whereAuditableId($value)
