@@ -29,8 +29,14 @@ final class CompanyResource extends JsonResource
             'updated_at' => $this->resource->updated_at,
             'public_note' => $this->resource->publicNote?->note ?? '',
             'last_modified' => $this->resource->last_modified,
-
-            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies()->distinct('taxonomy_id')->get()),
+            'taxonomies' => TaxonomiesResource::collection(
+                $this->resource->taxonomies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('taxonomy_id')->get()
+            ),
             'facilities' => $this->getFacilities(),
             'services' => $this->getServices(),
             'copays' => $this->getCopays(),
@@ -72,7 +78,8 @@ final class CompanyResource extends JsonResource
                             ->first()->abbreviation ?? '',
                         'private_note' => $this->getPrivateNote($bC->id)?->note ?? '',
                         'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
-                            ->where('company_taxonomy.billing_company_id', $bC->id)
+                            ->wherePivot('billing_company_id', $bC->id)
+                            ->wherePivot('primary', true)
                             ->get()),
                         'address' => $this->getAddress($bC->id, 1),
                         'payment_address' => $this->getAddress($bC->id, 3),
