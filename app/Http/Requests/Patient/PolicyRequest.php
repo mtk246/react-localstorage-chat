@@ -47,13 +47,13 @@ class PolicyRequest extends FormRequest
 
             'subscriber' => ['nullable', 'required_if:own_insurance,false', 'array'],
             'subscriber.id' => ['nullable', 'integer'],
-            'subscriber.relationship_id' => ['required', 'integer'],
+            'subscriber.relationship_id' => ['required_if:own_insurance,false', 'nullable', 'integer'],
             'subscriber.ssn' => ['nullable', 'string'],
-            'subscriber.date_of_birth' => ['required', 'date'],
+            'subscriber.date_of_birth' => ['required_if:own_insurance,false',  'nullable', 'date'],
             'subscriber.name_suffix_id' => ['nullable', 'integer'],
-            'subscriber.sex' => ['sometimes', 'required_if:own_insurance,false', 'string', 'max:1'],
-            'subscriber.first_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
-            'subscriber.last_name' => ['sometimes', 'required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.sex' => ['required_if:own_insurance,false', 'string', 'max:1'],
+            'subscriber.first_name' => ['required_if:own_insurance,false', 'nullable', 'string'],
+            'subscriber.last_name' => ['required_if:own_insurance,false', 'nullable', 'string'],
 
             'subscriber.address' => ['nullable', 'array'],
             'subscriber.address.address' => ['nullable', 'string'],
