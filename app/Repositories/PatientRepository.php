@@ -7,6 +7,7 @@ use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\Claims\ClaimEligibilityStatus;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\EmergencyContact;
@@ -382,7 +383,7 @@ class PatientRepository
             'count' => $dataClaim->total(),
         ];
 
-        $dataPolicies->getCollection()->transform(function ($patient_policy) {
+        $dataPolicies->getCollection()->transform(function (InsurancePolicy $patient_policy) {
             return [
                 'id' => $patient_policy->id,
                 'billing_company_id' => $patient_policy->billing_company_id,
@@ -397,7 +398,9 @@ class PatientRepository
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                 'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                    ->where('status', 'Unknow')
+                    ->first(),
                 'status' => $patient_policy->status ?? false,
                 'eff_date' => $patient_policy->eff_date ?? '',
                 'end_date' => $patient_policy->end_date ?? '',
@@ -629,7 +632,9 @@ class PatientRepository
                         'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                         'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                         'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                            ->where('status', 'Unknow')
+                            ->first(),
                         'status' => $patient_policy->status ?? false,
                         'eff_date' => $patient_policy->eff_date ?? '',
                         'end_date' => $patient_policy->end_date ?? '',
@@ -1462,7 +1467,9 @@ class PatientRepository
             'type_responsibility' => $policy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $policy->insurance_policy_type_id ?? '',
             'insurance_policy_type' => $policy->insurancePolicyType->description ?? '',
-            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                ->where('status', 'Unknow')
+                ->first(),
             'status' => $policy->status ?? false,
             'eff_date' => $policy->eff_date ?? '',
             'end_date' => $policy->end_date ?? '',
