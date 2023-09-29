@@ -37,7 +37,14 @@ final class DoctorBodyResource extends JsonResource
             'last_modified' => $this->resource->last_modified,
             'verified_on_nppes' => $this->resource->verified_on_nppes,
             'user' => $this->resource->user,
-            'taxonomies' => TaxonomiesResource::collection($this->resource->taxonomies()->distinct('taxonomy_id')->get()),
+            'taxonomies' => TaxonomiesResource::collection(
+                $this->resource->taxonomies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('taxonomy_id')->get()
+            ),
             'public_note' => $this->resource->publicNote,
             'profile' => $this->resource->profile,
             'billing_companies' => $this->resource->billingCompanies()
@@ -50,7 +57,8 @@ final class DoctorBodyResource extends JsonResource
                     $type = $this->getHealthProfessionalType($model->id);
                     $model->private_health_professional = [
                         'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
-                            ->where('health_professional_taxonomy.billing_company_id', $model->id)
+                            ->wherePivot('billing_company_id', $model->id)
+                            ->wherePivot('primary', true)
                             ->get()),
                         'socialMedias' => $this->getSocialMedias($model->id),
                         'address' => $this->getAddress($model->id),
