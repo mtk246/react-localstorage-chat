@@ -1010,6 +1010,8 @@ class PatientRepository
                 });
 
             /* Emergency Contacts */
+            $patient->emergencyContacts()->delete();
+
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
                 $emergencyContacts = $patient->emergencyContacts()
                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
