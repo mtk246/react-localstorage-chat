@@ -99,7 +99,7 @@ class UpdateRequest extends FormRequest
             'emergency_contacts.*.relationship_id' => [
                 'required_with:emergency_contacts.*.name,emergency_contacts.*.cellphone',
                 'nullable',
-                'string',
+                'integer',
             ],
 
             'employments' => ['nullable', 'array'],
