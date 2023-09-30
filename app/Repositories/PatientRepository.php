@@ -394,6 +394,8 @@ class PatientRepository
                 'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                 'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                 'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
