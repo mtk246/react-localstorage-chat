@@ -83,7 +83,7 @@ pipelines:
       - step:
           name: Test success deployment
           script:
-            - echo "todo: test success deployment"
+            - echo "todo test success deployment"
     v100:
       - stage:
           name: Test app
