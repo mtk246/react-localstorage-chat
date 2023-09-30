@@ -39,15 +39,15 @@ final class ContractFeeResource extends RequestWrapedResource
                         'description' => $procedure->description,
                     ];
                 })->toArray(),
-            'companies_ids' => $this->resource->companies
-                ->map(fn (Company $company) => $company->id)->toArray(),
-            'companies' => $this->resource->companies
+            'company_id' => $this->resource->companies
+                ->map(fn (Company $company) => $company->id)->first(),
+            'company' => $this->resource->companies
                 ->map(function (Company $company) {
                     return [
                         'id' => $company->id,
                         'name' => $company->name,
                     ];
-                })->toArray(),
+                })->first(),
             'modifier_ids' => $this->resource->modifiers
                 ->map(fn (Modifier $modifier) => $modifier->id)->toArray(),
             'modifiers' => $this->resource->modifiers
@@ -88,6 +88,8 @@ final class ContractFeeResource extends RequestWrapedResource
             'price' => (float) $this->resource->price,
             'price_percentage' => (float) $this->resource->price_percentage,
             'private_note' => $this->resource->private_note,
+            'start_date' => $this->resource->start_date,
+            'end_date' => $this->resource->end_date,
         ];
     }
 }

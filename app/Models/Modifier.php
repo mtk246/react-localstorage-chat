@@ -193,4 +193,15 @@ class Modifier extends Model implements Auditable
             set: fn (string $value) => strtoupper($value),
         );
     }
+
+    /**
+     * Interact with the Modifier description attribute.
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => upperCaseWords($value),
+            set: fn ($value) => upperCaseWords($value),
+        );
+    }
 }

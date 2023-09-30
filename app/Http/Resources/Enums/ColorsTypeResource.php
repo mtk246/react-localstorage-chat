@@ -22,8 +22,8 @@ final class ColorsTypeResource extends JsonResource
         return [
             'id' => $this->resource->value,
             'colors' => [
-                'background' => $this->resource->getBackgroundCollor(),
-                'text' => $this->resource->getTextCollor(),
+                'background' => $this->resource->getBackgroundColor(),
+                'text' => $this->resource->getTextColor(),
             ],
             'name' => $this->resource->getName(),
         ];

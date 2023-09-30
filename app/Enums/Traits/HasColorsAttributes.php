@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace App\Enums\Traits;
 
-use App\Enums\Attributes\BackgroundCollorAttribute;
+use App\Enums\Attributes\BackgroundColorAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
-use App\Enums\Attributes\TextCollorAttribute;
+use App\Enums\Attributes\TextColorAttribute;
 
 trait HasColorsAttributes
 {
     use HasAttributes;
 
-    public function getBackgroundCollor(): string
+    public function getBackgroundColor(): string
     {
-        return $this->getAttribute(BackgroundCollorAttribute::class);
+        return $this->getAttribute(BackgroundColorAttribute::class);
     }
 
-    public function getTextCollor(): string
+    public function getTextColor(): string
     {
-        return $this->getAttribute(TextCollorAttribute::class);
+        return $this->getAttribute(TextColorAttribute::class);
     }
 
     public function getName(): string

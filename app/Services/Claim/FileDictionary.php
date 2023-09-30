@@ -110,13 +110,13 @@ final class FileDictionary extends Dictionary
 
     protected function getInsTypeAttribute(string $key): string
     {
-        $options = ['Medicare', 'Medicaid', 'Tricare', 'Champva', 'Group', 'Feca'];
+        $options = ['MED', 'MCE', 'TR', 'CH', 'GHP', 'FBL'];
         $search = $this->claim->insType()?->{$key} ?? '';
-        $index = array_search(strtolower($search), array_map('strtolower', $options));
+        $index = array_search(strtoupper($search), array_map('strtoupper', $options));
 
         return false != $index
             ? $options[$index]
-            : 'Other';
+            : 'OT';
     }
 
     protected function getHigherOrderPolicyAttribute(string $key): string
@@ -134,11 +134,7 @@ final class FileDictionary extends Dictionary
             'middle_name' => !empty($this->claim->patientProfile()?->{$key})
                 ? ', '.substr($this->claim->patientProfile()?->{$key}, 0, 1)
                 : '',
-            'year_of_birth' => substr(
-                explode('-', $this->claim->patientProfile()?->date_of_birth ?? '')[0] ?? '',
-                2,
-                2,
-            ),
+            'year_of_birth' => explode('-', $this->claim->patientProfile()?->date_of_birth ?? '')[0] ?? '',
             'month_of_birth' => explode('-', $this->claim->patientProfile()?->date_of_birth ?? '')[1] ?? '',
             'day_of_birth' => explode('-', $this->claim->patientProfile()?->date_of_birth ?? '')[2] ?? '',
             default => $this->claim->patientProfile()?->{$key} ?? '',
@@ -156,11 +152,7 @@ final class FileDictionary extends Dictionary
                 ? ', '.substr($this->claim->subscriber()?->{$key}, 0, 1)
                 : '',
             'relationship' => $this->claim->subscriber()?->relationship->description ?? '',
-            'year_of_birth' => substr(
-                explode('-', $this->claim->subscriber()?->date_of_birth ?? '')[0] ?? '',
-                2,
-                2,
-            ),
+            'year_of_birth' => explode('-', $this->claim->subscriber()?->date_of_birth ?? '')[0] ?? '',
             'month_of_birth' => explode('-', $this->claim->subscriber()?->date_of_birth ?? '')[1] ?? '',
             'day_of_birth' => explode('-', $this->claim->subscriber()?->date_of_birth ?? '')[2] ?? '',
             default => $this->claim->subscriber()?->{$key} ?? '',
@@ -540,18 +532,10 @@ final class FileDictionary extends Dictionary
             ?->first(fn ($dateInformation) => $dateInformation->field_id == $field);
 
         return match ($key) {
-            'year_of_from_date' => substr(
-                explode('-', $model?->from_date ?? '')[0] ?? '',
-                2,
-                2,
-            ),
+            'year_of_from_date' => explode('-', $model?->from_date ?? '')[0] ?? '',
             'month_of_from_date' => explode('-', $model?->from_date ?? '')[1] ?? '',
             'day_of_from_date' => explode('-', $model?->from_date ?? '')[2] ?? '',
-            'year_of_to_date' => substr(
-                explode('-', $model?->to_date ?? '')[0] ?? '',
-                2,
-                2,
-            ),
+            'year_of_to_date' => explode('-', $model?->to_date ?? '')[0] ?? '',
             'month_of_to_date' => explode('-', $model?->to_date ?? '')[1] ?? '',
             'day_of_to_date' => explode('-', $model?->to_date ?? '')[2] ?? '',
             'from_date' => !empty($model?->from_date)

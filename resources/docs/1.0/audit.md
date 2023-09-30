@@ -609,7 +609,11 @@
 ```json
 {
     "entity": <string>,
-    "id":     <integer>
+    "id":     <integer>,
+    "itemsPerPage": <integer>,
+    "page": <integer>,
+    "sortBy": <string>,
+    "sortDesc": <boolean>
 }
 ```
 
@@ -628,90 +632,94 @@
 
 
 ```json
-[
-    {
-        "id": 111,
-        "event": "created",
-        "date": "2022-04-20 21:53:26",
-        "ip_address": "127.0.0.1",
-        "module": "App\\Models\\Profile",
-        "module_id": 16,
-        "user_id": 2,
-        "user_type": "App\\Models\\User",
-        "url": "http://127.0.0.1:8000/api/v1/patient",
-        "user_agent": "PostmanRuntime/7.29.0",
-        "user": {
-            "id": 2,
-            "email": "billingmanager@billing.com",
-            "email_verified_at": null,
-            "created_at": "2022-04-20T21:52:52.000000Z",
-            "updated_at": "2022-04-21T10:23:53.000000Z",
-            "token": null,
-            "isLogged": false,
-            "isBlocked": false,
-            "usercode": "US-00002-2022",
-            "userkey": null,
-            "status": false,
-            "last_login": "2022-04-21 10:16:21",
-            "profile_id": 2,
-            "billing_company_id": null,
-            "profile": {
+{
+    "data": [
+        {
+            "id": 111,
+            "event": "created",
+            "date": "2022-04-20 21:53:26",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Models\\Profile",
+            "module_id": 16,
+            "user_id": 2,
+            "user_type": "App\\Models\\User",
+            "url": "http://127.0.0.1:8000/api/v1/patient",
+            "user_agent": "PostmanRuntime/7.29.0",
+            "user": {
                 "id": 2,
-                "ssn": "913604848",
-                "first_name": "Eladio",
-                "middle_name": "Lambert",
-                "last_name": "Ike",
-                "sex": "M",
-                "date_of_birth": "1990-04-01",
-                "avatar": null,
-                "credit_score": false,
+                "email": "billingmanager@billing.com",
+                "email_verified_at": null,
                 "created_at": "2022-04-20T21:52:52.000000Z",
-                "updated_at": "2022-04-20T21:52:52.000000Z"
+                "updated_at": "2022-04-21T10:23:53.000000Z",
+                "token": null,
+                "isLogged": false,
+                "isBlocked": false,
+                "usercode": "US-00002-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": "2022-04-21 10:16:21",
+                "profile_id": 2,
+                "billing_company_id": null,
+                "profile": {
+                    "id": 2,
+                    "ssn": "913604848",
+                    "first_name": "Eladio",
+                    "middle_name": "Lambert",
+                    "last_name": "Ike",
+                    "sex": "M",
+                    "date_of_birth": "1990-04-01",
+                    "avatar": null,
+                    "credit_score": false,
+                    "created_at": "2022-04-20T21:52:52.000000Z",
+                    "updated_at": "2022-04-20T21:52:52.000000Z"
+                }
+            }
+        },
+        {
+            "id": 112,
+            "event": "created",
+            "date": "2022-04-20 21:53:26",
+            "ip_address": "127.0.0.1",
+            "module": "App\\Models\\SocialMedia",
+            "module_id": 1,
+            "user_id": 2,
+            "user_type": "App\\Models\\User",
+            "url": "http://127.0.0.1:8000/api/v1/patient",
+            "user_agent": "PostmanRuntime/7.29.0",
+            "user": {
+                "id": 2,
+                "email": "billingmanager@billing.com",
+                "email_verified_at": null,
+                "created_at": "2022-04-20T21:52:52.000000Z",
+                "updated_at": "2022-04-21T10:23:53.000000Z",
+                "token": null,
+                "isLogged": false,
+                "isBlocked": false,
+                "usercode": "US-00002-2022",
+                "userkey": null,
+                "status": false,
+                "last_login": "2022-04-21 10:16:21",
+                "profile_id": 2,
+                "billing_company_id": null,
+                "profile": {
+                    "id": 2,
+                    "ssn": "913604848",
+                    "first_name": "Eladio",
+                    "middle_name": "Lambert",
+                    "last_name": "Ike",
+                    "sex": "M",
+                    "date_of_birth": "1990-04-01",
+                    "avatar": null,
+                    "credit_score": false,
+                    "created_at": "2022-04-20T21:52:52.000000Z",
+                    "updated_at": "2022-04-20T21:52:52.000000Z"
+                }
             }
         }
-    },
-    {
-        "id": 112,
-        "event": "created",
-        "date": "2022-04-20 21:53:26",
-        "ip_address": "127.0.0.1",
-        "module": "App\\Models\\SocialMedia",
-        "module_id": 1,
-        "user_id": 2,
-        "user_type": "App\\Models\\User",
-        "url": "http://127.0.0.1:8000/api/v1/patient",
-        "user_agent": "PostmanRuntime/7.29.0",
-        "user": {
-            "id": 2,
-            "email": "billingmanager@billing.com",
-            "email_verified_at": null,
-            "created_at": "2022-04-20T21:52:52.000000Z",
-            "updated_at": "2022-04-21T10:23:53.000000Z",
-            "token": null,
-            "isLogged": false,
-            "isBlocked": false,
-            "usercode": "US-00002-2022",
-            "userkey": null,
-            "status": false,
-            "last_login": "2022-04-21 10:16:21",
-            "profile_id": 2,
-            "billing_company_id": null,
-            "profile": {
-                "id": 2,
-                "ssn": "913604848",
-                "first_name": "Eladio",
-                "middle_name": "Lambert",
-                "last_name": "Ike",
-                "sex": "M",
-                "date_of_birth": "1990-04-01",
-                "avatar": null,
-                "credit_score": false,
-                "created_at": "2022-04-20T21:52:52.000000Z",
-                "updated_at": "2022-04-20T21:52:52.000000Z"
-            }
-        }
-    }
-]
+    ],
+    "numberOfPages": 1,
+    "count": 11
+}
 ```
 
 

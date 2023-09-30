@@ -39,6 +39,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \App\Models\Discriminatory|null $discriminatory
  * @property \App\Models\Gender|null $gender
+ * @property mixed $created_by
  * @property mixed $last_modified
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
  * @property int|null $procedures_count
@@ -100,7 +101,7 @@ class Diagnosis extends Model implements Auditable
      *
      * @var array
      */
-    protected $appends = ['last_modified'];
+    protected $appends = ['last_modified', 'created_by'];
 
     protected $casts = [
         'type' => DiagnosesType::class,
@@ -177,6 +178,19 @@ class Diagnosis extends Model implements Auditable
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
                 'roles' => $user->roles,
             ];
+        }
+    }
+
+    public function getCreatedByAttribute()
+    {
+        $createdBy = $this->audits()->first();
+        if (!isset($createdBy->user_id)) {
+            return 'Console';
+        } else {
+            $user = User::query()
+                ->find($createdBy->user_id);
+
+            return $user->profile->first_name.' '.$user->profile->last_name;
         }
     }
 

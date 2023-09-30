@@ -68,7 +68,7 @@ class DoctorController extends Controller
                 if (Gate::check('is-admin')) {
                     return response()->json(__('Forbidden, The Healthcare Professional has already been associated with all the billing companies'), 403);
                 } else {
-                    return response()->json(__('Forbidden, The Healthcare Professional has already been associated with the billing company'), 403);
+                    return response()->json(__('Error, The Healthcare Professional is already created'), 403);
                 }
             }
         } else {

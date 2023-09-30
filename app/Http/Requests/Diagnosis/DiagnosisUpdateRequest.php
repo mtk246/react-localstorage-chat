@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests\Diagnosis;
 
 use App\Enums\Diagnoses\DiagnosesType;
+use App\Models\Diagnosis;
+use App\Rules\IUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -27,7 +29,10 @@ class DiagnosisUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $diagnosisId = $this->route('id');
+
         return [
+            'code' => ['required', 'string', 'max:50', new IUnique(Diagnosis::class, 'code', $diagnosisId)],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date'],
             'description' => ['required', 'string', 'max:255'],
