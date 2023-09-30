@@ -394,6 +394,8 @@ class PatientRepository
                 'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                 'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                 'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
@@ -628,6 +630,8 @@ class PatientRepository
                         'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                         'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                         'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                        'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                        'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                         'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                         'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                         'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
@@ -1010,6 +1014,8 @@ class PatientRepository
                 });
 
             /* Emergency Contacts */
+            $patient->emergencyContacts()->delete();
+
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
                 $emergencyContacts = $patient->emergencyContacts()
                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
@@ -1405,6 +1411,8 @@ class PatientRepository
             'insurance_company' => ($insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$insurancePolicy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $insurancePolicy->insurance_plan_id ?? '',
             'insurance_plan' => $insurancePolicy->insurancePlan->name ?? '',
+            'insurance_plan_code' => $insurancePolicy->insurancePlan->code ?? '',
+            'insurance_plan_nickname' => $insurancePolicy->insurancePlan->nicknames()?->where('billing_company_id', $insurancePolicy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $insurancePolicy->type_responsibility_id ?? '',
             'type_responsibility' => $insurancePolicy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $insurancePolicy->insurance_policy_type_id ?? '',
@@ -1463,6 +1471,8 @@ class PatientRepository
             'insurance_company' => ($policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $policy->insurance_plan_id ?? '',
             'insurance_plan' => $policy->insurancePlan->name ?? '',
+            'insurance_plan_code' => $policy->insurancePlan->code ?? '',
+            'insurance_plan_nickname' => $policy->insurancePlan->nicknames()?->where('billing_company_id', $policy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $policy->type_responsibility_id ?? '',
             'type_responsibility' => $policy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $policy->insurance_policy_type_id ?? '',
