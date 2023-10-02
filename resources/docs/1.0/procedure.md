@@ -25,6 +25,7 @@
 - [Get to company](#get-procedures-to-company)
 - [Get procedure type](#get-type)
 - [Get classification type](#get-classification)
+- [Get list insurance companies](#get-list-insutance-companies)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -54,6 +55,7 @@
 | 20 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
 | 21 |GET |`Get procedure types`|`/procedure/type`|yes|Get procedure types|
 | 22 |GET | `Get classification types`| `/procedure/type/{type}/classification`|yes|Get classification types based on select|
+| 23 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies`|yes|Get list insurance companies based on select|
 
 
 <a name="create-procedure"></a>
@@ -1423,7 +1425,7 @@
 
 
 <a name="get-type"></a>
-## Get procedure type
+## Get type
 
 ## Param in header
 
@@ -1459,11 +1461,11 @@
 
 #
 
->{warning} 404 Error, get procedures to company not found
+>{warning} 404 Error, get type not found
 
 
 <a name="get-classification"></a>
-## Get procedures classification types
+## Get classification
 
 ## Param in header
 
@@ -1535,4 +1537,41 @@
 
 #
 
->{warning} 404 Error, get procedures to company not found
+>{warning} 404 Error, get classifications not found
+
+<a name="get-list-insutance-companies"></a>
+## Get list insutance companies
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 201 Procedure created
+
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "IC-00001-2023 - Providence Administrative Services"
+    },
+    {
+        "id": 2,
+        "name": "IC-00002-2023 - Kg Administrative Services"
+    },
+    {
+        "id": 3,
+        "name": "IC-00003-2023 - Humana Long Term Care"
+    }
+]
+```
+
+#
