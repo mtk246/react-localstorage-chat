@@ -14,13 +14,16 @@ final class StoreReportAction
     public function invoke(StoreRequestCast $report): ReportResource
     {
         return DB::transaction(function () use ($report): ReportResource {
+            $baseReport = $report->getBaseReport();
+
             $report = tap(Report::create([
-                    'name' => $report->getName(),
-                    'description' => $report->getDescription(),
-                    'type' => $report->getType(),
-                    'range' => $report->getRange(),
-                    'clasification' => $report->getClasification(),
+                    'name' => $baseReport?->name ?? $report->getName(),
+                    'description' => $baseReport?->description ?? $report->getDescription(),
+                    'type' => $baseReport?->type->value ?? $report->getType(),
+                    'range' => $baseReport?->range ?? $report->getRange(),
+                    'clasification' => $baseReport?->clasification->value ?? $report->getClasification(),
                     'configuration' => $report->getConfiguration()->toArray(),
+                    'url' => $baseReport?->url ?? null,
                     'favorite' => false,
                 ]), function (Report $reportModel) use ($report): void {
                     // @todo log action
