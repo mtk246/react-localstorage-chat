@@ -29,9 +29,13 @@ final class GetInsurancePlanAction
                     })
                 )
                 ->get()
-                ->map(fn ($model) => [
+                ->map(fn (InsuranceCompany $model) => [
                     'id' => $model->id,
                     'code' => $model->code,
+                    'nicknames' => $model->nicknames->when(
+                        Gate::denies('is-admin'),
+                        fn ($query) => $query->where('billing_company_id', $billingCompanyId),
+                    )->pluck('name')->toArray(),
                     'name' => $model->name,
                     'group_values' => $model->insurancePlans()
                         ->whereNotIn('id', $request['exclude'] ?? [])

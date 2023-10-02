@@ -21,7 +21,7 @@ final class GetCheckStatusAction
             $claim->higherInsurancePlan()?->payer_id,
             $claim->higherInsurancePlan()?->name,
             $claim->type->value,
-            $claim->claimTransmissionResponses->orderBy('created_at', 'desc')->first()?->claimBatch?->fake_transmission ?? false,
+            $claim->claimTransmissionResponses()?->orderBy('created_at', 'desc')->first()?->claimBatch?->fake_transmission ?? false,
             $key
         );
     }

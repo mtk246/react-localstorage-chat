@@ -58,7 +58,6 @@ final class DoctorBodyResource extends JsonResource
                     $model->private_health_professional = [
                         'taxonomy' => TaxonomiesResource::collection($this->resource->taxonomies()
                             ->wherePivot('billing_company_id', $model->id)
-                            ->wherePivot('primary', true)
                             ->get()),
                         'socialMedias' => $this->getSocialMedias($model->id),
                         'address' => $this->getAddress($model->id),
