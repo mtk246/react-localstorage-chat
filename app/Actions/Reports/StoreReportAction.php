@@ -21,6 +21,7 @@ final class StoreReportAction
                     'range' => $report->getRange(),
                     'clasification' => $report->getClasification(),
                     'configuration' => $report->getConfiguration()->toArray(),
+                    'url' => $report->getBaseReport()?->url ?? null,
                     'favorite' => false,
                 ]), function (Report $reportModel) use ($report): void {
                     // @todo log action
