@@ -69,8 +69,8 @@ class ClaimSubStatusRepository
                 $current = ClaimStatus::whereId($data['current_id'])->first();
                 if (isset($current) && 'Draft' == $current->status) {
                     $nextStatuses = ClaimStatus::where('status', 'Draft');
-                } elseif (isset($current) && 'Verified - Not submitted' == $current->status) {
-                    $nextStatuses = ClaimStatus::where('status', 'Verified - Not submitted');
+                } elseif (isset($current) && 'Not submitted' == $current->status) {
+                    $nextStatuses = ClaimStatus::where('status', 'Not submitted');
                 } elseif (isset($current) && 'Submitted' == $current->status) {
                     $nextStatuses = ClaimStatus::where('status', 'Approved')
                         ->orWhere('status', 'Rejected')

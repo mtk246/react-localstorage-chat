@@ -599,7 +599,7 @@ class ProcedureRepository
     {
         $records = Modifier::query()
             ->when($modifier, function ($query) use ($modifier) {
-                $query->where('modifier', 'like', "%{$modifier}%");
+                $query->whereRaw('LOWER(modifier) LIKE ?', [strtolower("%$modifier%")]);
             })
             ->get();
 

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\Company\TaxonomiesResource;
 use App\Http\Resources\Facility\CompanyResource;
 use App\Models\Address;
 use App\Models\BillClassification;
@@ -454,7 +455,14 @@ class FacilityRepository
         }
 
         if (!is_null($facility)) {
-            $taxonomies = $facility->taxonomies()->distinct('taxonomy_id')->get();
+            $taxonomies = TaxonomiesResource::collection(
+                $facility->taxonomies()
+                ->when(
+                    Gate::denies('is-admin'),
+                    fn ($query) => $query->where('billing_company_id', request()->user()->billing_company_id)
+                )
+                ->distinct('taxonomy_id')->get()
+            );
 
             $record = [
                 'id' => $facility->id,
@@ -517,10 +525,12 @@ class FacilityRepository
                 $privateNote = $facility->privateNotes()
                     ->where('billing_company_id', $billingCompanyId)->get();
 
-                $private_taxonomy = $facility->taxonomies()
-                    ->wherePivot('billing_company_id', $billingCompanyId)
-                    ->wherePivot('primary', true)
-                    ->get();
+                $private_taxonomy = TaxonomiesResource::collection(
+                    $facility->taxonomies()
+                        ->wherePivot('billing_company_id', $billingCompanyId)
+                        ->wherePivot('primary', true)
+                        ->get()
+                );
 
                 if (isset($address)) {
                     $facility_address = [

@@ -7,6 +7,7 @@ use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\Claims\ClaimEligibilityStatus;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\EmergencyContact;
@@ -323,6 +324,9 @@ class PatientRepository
             $dataCompany = $patient->companies;
             $dataClaim = $patient->claims()->with(
                 [
+                    'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation' => function ($query) {
                         $query->with([
                             'company' => function ($query) {
@@ -343,6 +347,8 @@ class PatientRepository
             $dataClaim = $patient->claims()
                 ->with([
                     'billingCompany',
+                    'claimStatusClaims',
+                    'status',
                     'demographicInformation.company' => function ($query) use ($billingCompany) {
                         $query->with([
                             'nicknames' => function ($q) use ($billingCompany) {
@@ -377,7 +383,7 @@ class PatientRepository
             'count' => $dataClaim->total(),
         ];
 
-        $dataPolicies->getCollection()->transform(function ($patient_policy) {
+        $dataPolicies->getCollection()->transform(function (InsurancePolicy $patient_policy) {
             return [
                 'id' => $patient_policy->id,
                 'billing_company_id' => $patient_policy->billing_company_id,
@@ -388,11 +394,15 @@ class PatientRepository
                 'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                 'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                 'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                 'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+                'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                    ->where('status', 'Unknow')
+                    ->first(),
                 'status' => $patient_policy->status ?? false,
                 'eff_date' => $patient_policy->eff_date ?? '',
                 'end_date' => $patient_policy->end_date ?? '',
@@ -620,11 +630,15 @@ class PatientRepository
                         'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                         'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                         'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                        'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                        'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                         'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                         'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                         'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
                         'insurance_policy_type' => $patient_policy->insurancePolicyType->description ?? '',
-                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+                        'eligibility' => $patient_policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                            ->where('status', 'Unknow')
+                            ->first(),
                         'status' => $patient_policy->status ?? false,
                         'eff_date' => $patient_policy->eff_date ?? '',
                         'end_date' => $patient_policy->end_date ?? '',
@@ -1000,6 +1014,8 @@ class PatientRepository
                 });
 
             /* Emergency Contacts */
+            $patient->emergencyContacts()->delete();
+
             if (isset($data['emergency_contacts']) && !empty(filter_array_empty($data['emergency_contacts']))) {
                 $emergencyContacts = $patient->emergencyContacts()
                     ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
@@ -1395,6 +1411,8 @@ class PatientRepository
             'insurance_company' => ($insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$insurancePolicy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $insurancePolicy->insurance_plan_id ?? '',
             'insurance_plan' => $insurancePolicy->insurancePlan->name ?? '',
+            'insurance_plan_code' => $insurancePolicy->insurancePlan->code ?? '',
+            'insurance_plan_nickname' => $insurancePolicy->insurancePlan->nicknames()?->where('billing_company_id', $insurancePolicy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $insurancePolicy->type_responsibility_id ?? '',
             'type_responsibility' => $insurancePolicy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $insurancePolicy->insurance_policy_type_id ?? '',
@@ -1453,11 +1471,15 @@ class PatientRepository
             'insurance_company' => ($policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $policy->insurance_plan_id ?? '',
             'insurance_plan' => $policy->insurancePlan->name ?? '',
+            'insurance_plan_code' => $policy->insurancePlan->code ?? '',
+            'insurance_plan_nickname' => $policy->insurancePlan->nicknames()?->where('billing_company_id', $policy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $policy->type_responsibility_id ?? '',
             'type_responsibility' => $policy->typeResponsibility->code ?? '',
             'insurance_policy_type_id' => $policy->insurance_policy_type_id ?? '',
             'insurance_policy_type' => $policy->insurancePolicyType->description ?? '',
-            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? 'ukown',
+            'eligibility' => $policy->claimLastEligibility->claimEligibilityStatus ?? ClaimEligibilityStatus::query()
+                ->where('status', 'Unknow')
+                ->first(),
             'status' => $policy->status ?? false,
             'eff_date' => $policy->eff_date ?? '',
             'end_date' => $policy->end_date ?? '',
@@ -1625,7 +1647,7 @@ class PatientRepository
 
         $users = $query->get()->map(function (Patient $patien) {
             $user = $patien->profile->user;
-            $billingCompaniesRole = $user?->billingCompanies->map(function ($billingCompany) {
+            $billingCompaniesRole = $user?->billingCompanies->map(function (BillingCompany $billingCompany) {
                 return [
                     'id' => $billingCompany->id,
                     'name' => $billingCompany->name,
@@ -1671,7 +1693,15 @@ class PatientRepository
                     'credit_score' => $patien->profile->credit_score,
                     'name_suffix_id' => $patien->profile->name_suffix_id,
                     'name_suffix' => $patien->profile->nameSuffix,
-                    'emails' => $patien->profile->contacts->pluck(['email'])->unique(),
+                    'contacs' => $patien->profile->contacts->map(function (Contact $query) {
+                        $return['email'] = $query->email;
+                        
+                        if (Gate::allows('is-admin')) {
+                            $return['billing_company'] = $query->billingCompany;
+                        }
+
+                        return $return;
+                    }),
                 ],
                 'language' => $user?->language,
                 'billing_companies' => $billingCompaniesRole,

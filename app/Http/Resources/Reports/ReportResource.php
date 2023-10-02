@@ -18,9 +18,7 @@ final class ReportResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->billing_company_id
-                ? $this->resource->id
-                : null,
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'description' => $this->resource->description,
             'type' => $this->resource->type->value,

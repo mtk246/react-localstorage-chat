@@ -34,6 +34,10 @@ final class CreateCheckEligibilityAction
             ->find($data['demographic_information']['company_id']);
 
         foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
+            if (false == $insurancePolicy->status) {
+                continue;
+            }
+
             $newCode = 1;
             $targetModel = ClaimEligibility::query()
                 ->select('id', 'control_number')
@@ -140,6 +144,7 @@ final class CreateCheckEligibilityAction
                     'claim_eligibility_status_id' => $claimEligibilityCurrent->claim_eligibility_status_id ?? null,
                 ]
                 : null;
+            $insurancePolicy['note'] = '';
 
             array_push($insurancePolicies, $insurancePolicy);
         }
@@ -151,6 +156,30 @@ final class CreateCheckEligibilityAction
 
             return $a_index - $b_index;
         });
+
+        array_push($insurancePolicies, [
+            'id' => 0,
+            'own' => true,
+            'status' => true,
+            'eff_date' => null,
+            'end_date' => null,
+            'release_info' => false,
+            'assign_benefits' => false,
+            'policy_number' => 'Self Pay',
+            'group_number' => 'Self Pay',
+            'insurance_plan_id' => null,
+            'insurance_policy_type_id' => null,
+            'type_responsibility_id' => null,
+            'type_responsibility' => [
+                'code' => 'SP',
+            ],
+            'payer_responsibility_id' => null,
+            'payment_responsibility_level_code' => null,
+            'patient_id' => $patient->id,
+            'billing_company_id' => $data['billing_company_id'] ?? null,
+            'claim_elegibility' => null,
+            'note' => ' The patient will pay for the service',
+        ]);
 
         DB::commit();
 
