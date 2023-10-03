@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\User\UserType;
 use App\Models\BillingCompany\Membership;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -118,6 +119,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         'isBlocked',
         'profile_id',
         'billing_company_id',
+        'type',
     ];
 
     /**
@@ -138,6 +140,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'isLogged' => 'boolean',
+        'type' => UserType::class,
     ];
 
     /**
@@ -266,6 +269,26 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    public function permits(): MorphMany
+    {
+        return $this->morphMany(Permission::class, 'permissioned');
+    }
+
+    public function hasRole($role, $all = false)
+    {
+        return match ($this->type->value) {
+            UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
+            UserType::USER->value => $this->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ->membership
+                ->roles()
+                ->where('slug', $role)
+                ->exists(),
+            default => false,
+        };
     }
 
     /**
