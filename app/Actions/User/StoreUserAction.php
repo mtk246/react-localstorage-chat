@@ -11,7 +11,6 @@ use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\User;
-use App\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -35,17 +34,6 @@ final class StoreUserAction
                     ?->membership
                     ->roles()
                     ->sync($userWrapper->getMembershipRoles());
-
-                $roles = $userWrapper->getRoles()
-                    ->map(function (Role $role) use ($user) {
-                        $role->permissions->each(function ($permission) use ($user) {
-                            $user->attachPermission($permission);
-                        });
-
-                        return $role->id;
-                    })
-                    ->toArray();
-                $user->syncRoles($roles);
 
                 $token = encrypt($user->id.'@#@#$'.$user->email);
                 $user->token = $token;
