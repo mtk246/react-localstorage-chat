@@ -10,7 +10,7 @@ return new class() extends Migration {
     {
         DB::statement("
             CREATE OR REPLACE VIEW view_change_by_module AS
-            SELECT
+            SELECT DISTINCT
                 audits.id as id_change,
                 audits.user_id,
                 CASE
@@ -46,7 +46,9 @@ return new class() extends Migration {
                     ELSE audits.event
                 END AS event,
                 audits.created_at AS date_of_event,
-                login.created_at AS date_of_login
+                login.created_at AS date_of_login,
+                audits.new_values,
+                audits.old_values
             FROM
                 audits
             LEFT JOIN users ON audits.user_id = users.id
