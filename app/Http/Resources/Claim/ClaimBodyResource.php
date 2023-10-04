@@ -17,6 +17,7 @@ final class ClaimBodyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
+            'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
