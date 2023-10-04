@@ -48,7 +48,6 @@ class CreateInsuranceRequest extends FormRequest
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
 
-
             'contact' => ['nullable', 'array'],
             'contact.phone' => ['required', 'string'],
             'contact.mobile' => ['nullable', 'string'],
