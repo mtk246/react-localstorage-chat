@@ -31,9 +31,9 @@ class CreateInsuranceRequest extends FormRequest
             'insurance' => ['required', 'array'],
             'insurance.payer_id' => ['required', 'string', 'max:20'],
             'insurance.name' => ['required', 'string'],
-            'insurance.abbreviation' => ['required', 'string', 'max:20'],
+            'insurance.abbreviation' => ['nullable', 'string', 'max:20'],
             'insurance.naic' => ['nullable', 'string'],
-            'insurance.file_method_id' => ['required', 'integer'],
+            'insurance.file_method_id' => ['nullable', 'integer'],
             'insurance.nickname' => ['nullable', 'string', 'max:100'],
 
             'time_failed' => ['nullable', 'array'],
@@ -42,11 +42,12 @@ class CreateInsuranceRequest extends FormRequest
 
             'address' => ['required', 'array'],
             'address.address' => ['required', 'string'],
+            'address.apt_suite' => ['nullable', 'string'],
+            'address.country' => ['required', 'string'],
+            'address.zip' => ['required', 'string'],
             'address.city' => ['required', 'string'],
             'address.state' => ['required', 'string'],
-            'address.zip' => ['required', 'string'],
-            'address.country' => ['required', 'string'],
-            'address.apt_suite' => ['nullable', 'string'],
+
 
             'contact' => ['nullable', 'array'],
             'contact.phone' => ['required', 'string'],
