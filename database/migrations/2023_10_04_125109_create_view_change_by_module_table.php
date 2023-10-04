@@ -46,12 +46,23 @@ return new class() extends Migration {
                     ELSE audits.event
                 END AS event,
                 audits.created_at AS date_of_event,
-                login.created_at AS date_of_login
+                (
+                    SELECT created_at
+                    FROM audits AS login
+                    WHERE
+                        login.auditable_type = 'App\Models\User'
+                        AND login.url LIKE '%auth/login'
+                        AND (login.old_values)::jsonb::text LIKE '%\"isLogged\": false%'
+                        AND (login.new_values)::jsonb::text LIKE '%\"isLogged\": true%'
+                        AND login.user_id = audits.user_id
+                    LIMIT 1
+                ) AS date_of_login,
+                audits.old_values,
+                audits.new_values
             FROM
                 audits
             LEFT JOIN users ON audits.user_id = users.id
             LEFT JOIN profiles ON users.profile_id = profiles.id
-            LEFT JOIN audits AS login ON audits.user_id = login.user_id
             LEFT JOIN role_user ON users.id = role_user.user_id
             LEFT JOIN roles ON role_user.role_id = roles.id
             WHERE
