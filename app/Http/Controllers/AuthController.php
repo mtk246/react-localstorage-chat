@@ -267,7 +267,7 @@ class AuthController extends Controller
         $perms_v2 = [];
         $menu_app = [
             'Claims Process' => [
-                'Claims Management', 'Payments Management', 'Patient Management',
+                'Claims Management', 'Claim Rules Management', 'Payments Management', 'Patient Management',
             ],
             'Administration' => [
                 'Health Care Professional Management', 'Insurance Management', 'Company Management',
