@@ -49,6 +49,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('user')->group(function () {
         Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
+        Route::get('types', [\App\Http\Controllers\UserController::class, 'getTypes'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
