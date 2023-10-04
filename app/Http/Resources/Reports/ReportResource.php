@@ -22,7 +22,7 @@ final class ReportResource extends JsonResource
             'name' => $this->resource->name,
             'description' => $this->resource->description,
             'type' => $this->resource->type->value,
-            'url' => $this->resource->clasification->getUrl(),
+            'url' => $this->resource->url ?? $this->resource->clasification->getUrl(),
             'clasification' => $this->resource->clasification->value,
             'color' => [
                 'background' => $this->resource->clasification->getBackgroundColor(),
