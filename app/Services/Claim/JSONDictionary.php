@@ -1402,7 +1402,7 @@ final class JSONDictionary extends Dictionary
                         ],
                     ],
                 ],
-                'valueInformationList' => ($this->claim->demographicInformation?->type_of_medical_assistance == 'inpatient') ? [
+                'valueInformationList' => ('inpatient' == $this->claim->demographicInformation?->type_of_medical_assistance) ? [
                     [
                         [
                             'valueCode' => '80',
