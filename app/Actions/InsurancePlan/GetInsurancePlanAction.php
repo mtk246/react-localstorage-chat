@@ -21,7 +21,7 @@ final class GetInsurancePlanAction
         if (isset($request['groupBy']) && $request['groupBy']) {
             $query = InsuranceCompany::query()
                 ->when(
-                    Gate::denies('is-admin'),
+                    !is_null($billingCompanyId),
                     fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
                         $query
                             ->where('billing_companies.id', $billingCompanyId)
