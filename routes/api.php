@@ -49,6 +49,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('user')->group(function () {
         Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
+        Route::get('types', [\App\Http\Controllers\UserController::class, 'getTypes'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
@@ -441,15 +442,12 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/type', [\App\Http\Controllers\ProcedureController::class, 'getType']);
         Route::get('/type/{type}/classification', [\App\Http\Controllers\ProcedureController::class, 'getClassifications']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
-        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
-        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
+        Route::get('/get-list-insurance-companies', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceCompany']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
         Route::put('/{procedure}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
         Route::put('/{procedure}/considerations', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureConsiderations']);
         Route::put('/{procedure}/note', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureNote']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
-        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
-        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
     });
 
     Route::prefix('injury')->middleware([
