@@ -192,16 +192,9 @@ class ProcedureController extends Controller
         );
     }
 
-    public function addToCompany(AddProcedureRequest $request, int $id): JsonResponse
+    public function getListInsuranceCompany(): JsonResponse
     {
-        $rs = $this->procedureRepository->addToCompany($request->validated(), $id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error add procedure to company'), 404);
-    }
-
-    public function getToCompany(int $id): JsonResponse
-    {
-        return response()->json($this->procedureRepository->getToCompany($id));
+        return response()->json($this->procedureRepository->getListInsuranceCompany());
     }
 
     public function getType(): JsonResponse
