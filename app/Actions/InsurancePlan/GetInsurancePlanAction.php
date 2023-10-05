@@ -20,6 +20,21 @@ final class GetInsurancePlanAction
 
         if (isset($request['groupBy']) && $request['groupBy']) {
             $query = InsuranceCompany::query()
+                ->with(['insurancePlans' => function ($query) use ($request, $billingCompanyId) {
+                    $query
+                        ->with(['abbreviations' => function ($query) use ($billingCompanyId) {
+                            $query->where('billing_company_id', $billingCompanyId);
+                        }])
+                        ->whereNotIn('id', $request['exclude'] ?? [])
+                        ->when(
+                            Gate::denies('is-admin'),
+                            fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
+                                $query
+                                    ->where('billing_companies.id', $billingCompanyId)
+                                    ->where('billing_companies.status', true);
+                            })
+                        );
+                }])
                 ->when(
                     !is_null($billingCompanyId),
                     fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
@@ -42,18 +57,14 @@ final class GetInsurancePlanAction
                         ?->where('billing_company_id', $billingCompanyId)
                         ->first()
                         ?->abbreviation,
-                    'group_values' => $model->insurancePlans()
-                        ->whereNotIn('id', $request['exclude'] ?? [])
-                        ->when(
-                            Gate::denies('is-admin'),
-                            fn ($query) => $query->whereHas('billingCompanies', function ($query) use ($billingCompanyId) {
-                                $query
-                                    ->where('billing_companies.id', $billingCompanyId)
-                                    ->where('billing_companies.status', true);
-                            })
-                        )
-                        ->get(['id', 'name'])
-                        ->setHidden(['status', 'last_modified']),
+                    'group_values' => $model->insurancePlans->map(fn (InsurancePlan $model) => [
+                        'id' => $model->id,
+                        'name' => $model->name,
+                        'abbreviation' => $model
+                            ->abbreviations
+                            ->first()
+                            ?->abbreviation,
+                    ]),
                 ]);
         } else {
             $query = InsurancePlan::query()
