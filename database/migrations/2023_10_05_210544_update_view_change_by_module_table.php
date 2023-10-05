@@ -84,9 +84,16 @@ return new class() extends Migration {
                 )
             AND NOT (
                 audits.auditable_type = 'App\Models\User'
-                AND audits.url LIKE '%auth/login'
-                AND (audits.old_values)::jsonb::text LIKE '%\"isLogged\": false%'
-                AND (audits.new_values)::jsonb::text LIKE '%\"isLogged\": true%'
+                AND audits.url LIKE '%auth/login%'
+                AND (
+                    (audits.old_values)::jsonb::text LIKE '%\"isLogged\": false%' AND (audits.new_values)::jsonb::text LIKE '%\"isLogged\": true%'
+                    OR
+                    (audits.old_values)::jsonb::text LIKE '%\"isLogged\": true%' AND (audits.new_values)::jsonb::text LIKE '%\"isLogged\": false%'
+                    OR
+                    (audits.old_values)::jsonb::text LIKE '%\"last_login\"%'
+                    OR
+                    (audits.new_values)::jsonb::text LIKE '%\"last_login\"%'
+                )
             )
         ");
     }
