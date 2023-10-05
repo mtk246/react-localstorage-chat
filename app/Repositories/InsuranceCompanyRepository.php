@@ -49,8 +49,15 @@ class InsuranceCompanyRepository
                 $billingCompany = auth()->user()->billing_company_id;
             }
 
-            /* Attach billing company */
-            $insurance->billingCompanies()->attach($billingCompany);
+            /* Attach or ubdate pivot status on relation with billing company */
+            if (is_null($insurance->billingCompanies()->find($billingCompany))) {
+                $insurance->billingCompanies()->attach($billingCompany);
+            }
+            else {
+                $insurance->billingCompanies()->updateExistingPivot($billingCompany, [
+                    'status' => true,
+                ]);
+            }
 
             if (isset($data['billing_incomplete_reasons'])) {
                 foreach ($data['billing_incomplete_reasons'] as $bir) {
@@ -87,50 +94,74 @@ class InsuranceCompanyRepository
             }
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
-                InsuranceCompanyTimeFailed::create([
-                    'days' => $data['time_failed']['days'],
-                    'from_id' => $data['time_failed']['from_id'],
-                    'billing_company_id' => $billingCompany,
-                    'insurance_company_id' => $insurance->id,
-                ]);
+                InsuranceCompanyTimeFailed::updateOrCreate(
+                    [
+                        'billing_company_id' => $billingCompany,
+                    ],
+                    [
+                        'days' => $data['time_failed']['days'],
+                        'from_id' => $data['time_failed']['from_id'],
+                        'insurance_company_id' => $insurance->id,
+                    ]
+                );
             }
 
             if (isset($data['insurance']['nickname'])) {
-                EntityNickname::create([
-                    'nickname' => $data['insurance']['nickname'],
-                    'nicknamable_id' => $insurance->id,
-                    'nicknamable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany,
-                ]);
+                EntityNickname::updateOrCreate(
+                    [
+                        'nicknamable_id' => $insurance->id,
+                        'nicknamable_type' => InsuranceCompany::class,
+                        'billing_company_id' => $billingCompany,
+                    ],
+                    [
+                        'nickname' => $data['insurance']['nickname'],
+                    ]
+                );
             }
 
             if (isset($data['insurance']['abbreviation'])) {
-                EntityAbbreviation::create([
-                    'abbreviation' => $data['insurance']['abbreviation'],
-                    'abbreviable_id' => $insurance->id,
-                    'abbreviable_type' => InsuranceCompany::class,
-                    'billing_company_id' => $billingCompany->id ?? $billingCompany,
-                ]);
+                EntityAbbreviation::updateOrCreate(
+                    [
+                        'abbreviable_id' => $insurance->id,
+                        'abbreviable_type' => InsuranceCompany::class,
+                        'billing_company_id' => $billingCompany,
+                    ],
+                    [
+                        'abbreviation' => $data['insurance']['abbreviation'],
+                    ]
+                );
             }
 
             if (isset($data['address']['address'])) {
                 $data['address']['billing_company_id'] = $billingCompany;
                 $data['address']['addressable_id'] = $insurance->id;
                 $data['address']['addressable_type'] = InsuranceCompany::class;
-                Address::create($data['address']);
+
+                Address::updateOrCreate([
+                    'addressable_id' => $insurance->id,
+                    'addressable_type' => InsuranceCompany::class,
+                    'billing_company_id' => $billingCompany,
+                ], $data['address']);
             }
+
             if (isset($data['contact']['phone'])) {
                 $data['contact']['billing_company_id'] = $billingCompany;
                 $data['contact']['contactable_id'] = $insurance->id;
                 $data['contact']['contactable_type'] = InsuranceCompany::class;
-                Contact::create($data['contact']);
+
+                Contact::updateOrCreate([
+                    'contactable_id' => $insurance->id,
+                    'contactable_type' => InsuranceCompany::class,
+                    'billing_company_id' => $billingCompany,
+                ], $data['contact']);
             }
 
             if (isset($data['private_note'])) {
-                PrivateNote::create([
+                PrivateNote::updateOrCreate([
                     'publishable_type' => InsuranceCompany::class,
                     'publishable_id' => $insurance->id,
                     'billing_company_id' => $billingCompany,
+                ], [
                     'note' => $data['private_note'],
                 ]);
             }
@@ -417,6 +448,7 @@ class InsuranceCompanyRepository
             ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payer")])
             ->with('publicNote')
             ->first();
+
         if ($insurance) {
             $billingCompaniesException = $insurance->billingCompanies()
                 ->get()
@@ -559,7 +591,7 @@ class InsuranceCompanyRepository
         try {
             DB::beginTransaction();
             $insurance = InsuranceCompany::find($id);
-                    
+
             $insurance->update([
                 'name' => $data['insurance']['name'],
                 'naic' => $data['insurance']['naic'],
