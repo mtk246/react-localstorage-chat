@@ -1491,6 +1491,7 @@ class PatientRepository
             'insurance_plan' => ($policy
                 ->insurancePlan
                 ->abbreviations
+                ?->where('billing_company_id', $policy->billing_company_id)
                 ->first()
                 ?->abbreviation ?? ''
             ).' - '.$policy->insurancePlan->name ?? '',
