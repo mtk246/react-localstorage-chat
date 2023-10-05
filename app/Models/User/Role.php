@@ -37,6 +37,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $memberships_count
  * @property int|null $permits_count
  *
+ * @method static \Database\Factories\User\RoleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role query()
