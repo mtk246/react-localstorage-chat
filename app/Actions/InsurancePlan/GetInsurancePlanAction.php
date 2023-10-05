@@ -37,6 +37,11 @@ final class GetInsurancePlanAction
                         fn ($query) => $query->where('billing_company_id', $billingCompanyId),
                     )->pluck('name')->toArray(),
                     'name' => $model->name,
+                    'abbreviation' => $model
+                        ->abbreviations
+                        ?->where('billing_company_id', $billingCompanyId)
+                        ->first()
+                        ?->abbreviation,
                     'group_values' => $model->insurancePlans()
                         ->whereNotIn('id', $request['exclude'] ?? [])
                         ->when(
