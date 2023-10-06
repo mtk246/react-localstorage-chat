@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Facades\Pagination;
+use App\Http\Resources\Claim\BatchClaimBodyResource;
+use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\AddressType;
@@ -28,6 +30,7 @@ use App\Models\Subscriber;
 use App\Models\TypeCatalog;
 use App\Models\User;
 use App\Roles\Models\Role;
+use Illuminate\Bus\Batch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -377,11 +380,7 @@ class PatientRepository
             ]);
         }
 
-        $claimRecords = [
-            'data' => $dataClaim->items(),
-            'numberOfPages' => $dataClaim->lastPage(),
-            'count' => $dataClaim->total(),
-        ];
+        $claimRecords = ClaimBodyResource::collection($dataClaim)->resource;
 
         $dataPolicies->getCollection()->transform(function (InsurancePolicy $patient_policy) {
             return [
@@ -391,11 +390,21 @@ class PatientRepository
                 'policy_number' => $patient_policy->policy_number,
                 'group_number' => $patient_policy->group_number,
                 'insurance_company_id' => $patient_policy->insurancePlan->insurance_company_id ?? '',
-                'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
+                'insurance_company' => ($patient_policy
+                    ->insurancePlan
+                    ->insuranceCompany
+                    ->nicknames()
+                    ?->where('billing_company_id', $patient_policy->billing_company_id)
+                    ?->nickname ?? ''
+                ).' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                 'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
-                'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
+                'insurance_plan' => ($patient_policy
+                    ->insurancePlan
+                    ->nicknames()
+                    ?->where('billing_company_id', $patient_policy->billing_company_id)
+                    ?->nickname ?? ''
+                ).' - '.$patient_policy->insurancePlan->name ?? '',
                 'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
-                'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
@@ -1468,9 +1477,20 @@ class PatientRepository
             'policy_number' => $policy->policy_number,
             'group_number' => $policy->group_number,
             'insurance_company_id' => $policy->insurancePlan->insurance_company_id ?? '',
-            'insurance_company' => ($policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
+            'insurance_company' => ($policy
+                ->insurancePlan
+                ->insuranceCompany
+                ->nicknames()
+                ?->where('billing_company_id', $policy->billing_company_id)
+                ?->nickname ?? ''
+            ).' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $policy->insurance_plan_id ?? '',
-            'insurance_plan' => $policy->insurancePlan->name ?? '',
+            'insurance_plan' => ($policy
+                ->insurancePlan
+                ->nicknames()
+                ?->where('billing_company_id', $policy->billing_company_id)
+                ?->nickname ?? ''
+            ).' - '.$policy->insurancePlan->name ?? '',
             'insurance_plan_code' => $policy->insurancePlan->code ?? '',
             'insurance_plan_nickname' => $policy->insurancePlan->nicknames()?->where('billing_company_id', $policy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $policy->type_responsibility_id ?? '',
