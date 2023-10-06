@@ -393,16 +393,18 @@ class PatientRepository
                 'insurance_company' => ($patient_policy
                     ->insurancePlan
                     ->insuranceCompany
-                    ->nicknames()
+                    ->abbreviations
                     ?->where('billing_company_id', $patient_policy->billing_company_id)
-                    ?->nickname ?? ''
+                    ->first()
+                    ?->abbreviation ?? ''
                 ).' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                 'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
                 'insurance_plan' => ($patient_policy
                     ->insurancePlan
-                    ->nicknames()
+                    ->abbreviations
                     ?->where('billing_company_id', $patient_policy->billing_company_id)
-                    ?->nickname ?? ''
+                    ->first()
+                    ?->abbreviation ?? ''
                 ).' - '.$patient_policy->insurancePlan->name ?? '',
                 'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
@@ -1480,16 +1482,18 @@ class PatientRepository
             'insurance_company' => ($policy
                 ->insurancePlan
                 ->insuranceCompany
-                ->nicknames()
+                ->abbreviations
                 ?->where('billing_company_id', $policy->billing_company_id)
-                ?->nickname ?? ''
+                ->first()
+                ?->abbreviation ?? ''
             ).' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => $policy->insurance_plan_id ?? '',
             'insurance_plan' => ($policy
                 ->insurancePlan
-                ->nicknames()
+                ->abbreviations
                 ?->where('billing_company_id', $policy->billing_company_id)
-                ?->nickname ?? ''
+                ->first()
+                ?->abbreviation ?? ''
             ).' - '.$policy->insurancePlan->name ?? '',
             'insurance_plan_code' => $policy->insurancePlan->code ?? '',
             'insurance_plan_nickname' => $policy->insurancePlan->nicknames()?->where('billing_company_id', $policy->billing_company_id)?->nickname ?? '',
