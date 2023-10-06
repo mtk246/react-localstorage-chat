@@ -28,7 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property bool $require_abn
  * @property bool $pqrs_eligible
  * @property bool $allow_attached_files
- * @property string $eff_date
+ * @property string|null $eff_date
  * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
