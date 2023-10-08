@@ -21,10 +21,9 @@
 - [Get list procedure](#get-list)
 - [Get list insurance label fees](#get-list-insurance-label-fees)
 - [Get list insurance companies](#get-list-insurance-companies)
-- [Add to company](#add-to-company)
-- [Get to company](#get-procedures-to-company)
 - [Get procedure type](#get-type)
 - [Get classification type](#get-classification)
+- [Get list insurance companies](#get-list-insutance-companies)
 
 <a name="basic-data"></a>
 ## Basic data to make request
@@ -50,10 +49,9 @@
 | 16 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}` | yes            | Get list procedure|
 | 17 |GET     | `Get list insurance label fees` | `/procedure/get-list-insurance-label-fees` | yes            | Get list insurance label fees|
 | 18 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies/{procedure_id?}`        |yes            |Get list insurance companies|
-| 19 |PATCH | `Add to company`          | `/procedure/add-to-company/{company_id}`|yes|Add procedure/services to company|
-| 20 |GET | `Get to company`          | `/procedure/get-to-company/{company_id}`|yes|Get procedure/services to company|
-| 21 |GET |`Get procedure types`|`/procedure/type`|yes|Get procedure types|
-| 22 |GET | `Get classification types`| `/procedure/type/{type}/classification`|yes|Get classification types based on select|
+| 19 |GET |`Get procedure types`|`/procedure/type`|yes|Get procedure types|
+| 20 |GET | `Get classification types`| `/procedure/type/{type}/classification`|yes|Get classification types based on select|
+| 21 |GET | `Get list insurance companies`| `/procedure/get-list-insurance-companies`|yes|Get list insurance companies based on select|
 
 
 <a name="create-procedure"></a>
@@ -584,6 +582,7 @@
 `state <string>`
 `fsa <string>`
 `counties <string>`
+`insurance_label_fee_id <integer>`
 
 ## Example path
 
@@ -1287,142 +1286,8 @@
 ]
 ```
 
-<a name="add-to-company"></a>
-## Add to company
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`company_id required <integer>`
-
-
-### Body request example
-
-```json
-{
-  "mac_localities": [
-    {
-        "procedure_id": 26,
-        "mac": "02102",
-        "modifier_id": null,
-        "locality_number":"01",
-        "state": "ALASKA",
-        "fsa": "STATEWIDE",
-        "counties": "ALL COUNTIES",
-        "procedure_fees": {
-            "non_facility_price": "190.2",
-            "facility_price": "136.5",
-            "non_facility_limiting_charge": "60.5",
-            "facility_limiting_charge": "55.9",
-            "facility_rate": "60.5",
-            "non_facility_rate": "60.5"
-        },
-        "company_procedure": {
-            "price": 133.14,
-            "price_percentage": "70"
-        },
-        "insurance_plan_procedure": {
-            "price": 171.18,
-            "price_percentage": "90",
-            "insurance_plan_id": 1
-        },
-        "selectedPrice": "Non Facility Rate",
-        "selectedPriceContractFee": ""
-    }
-  ]
-}
-```
-
-## Response
-
-> {success} 200 Added procedure/service to company
-
-```json
-{
-    "id": 1,
-    "code": "CO-00001-2022",
-    "name": "Company First",
-    "npi": "2222222222",
-    "created_at": "2022-05-02T14:45:27.000000Z",
-    "updated_at": "2022-08-28T23:16:16.000000Z",
-    "status": false,
-    "billing_companies": []
-}
-```
-
-#
-
->{warning} 404 error add procedure/service to company
-
-
-<a name="get-procedures-to-company"></a>
-## Get procedures to company
-
-## Param in header
-
-```json
-{
-    "Authorization": bearer <token>
-}
-```
-
-## Param in path
-
-`company_id required <integer>`
-
-
-## Response
-
-> {success} 200 Procedure/Service to company found
-
-```json
-[
-    {
-        "procedure_id": 26,
-        "modifier_id": 1,
-        "mac": "02102",
-        "state": "ALASKA",
-        "fsa": "STATEWIDE",
-        "counties": "ALL COUNTIES",
-        "locality_number": "01",
-        "procedure_fees": {
-            "non_facility_price": "190.2",
-            "facility_price": "136.5",
-            "non_facility_limiting_charge": "60.5",
-            "facility_limiting_charge": "60.5",
-            "facility_rate": "",
-            "non_facility_rate": ""
-        },
-        "company_procedure": {
-            "price": "133.14",
-            "price_percentage": "70"
-        },
-        "insurance_plan_procedure": {
-            "price": "171.18",
-            "price_percentage": "90",
-            "insurance_company_id": 1,
-            "insurance_plan_id": 1
-        },
-        "selectedPrice": "Facility Price",
-        "selectedPriceContractFee": "Non Facility Rate"
-    }
-]
-```
-
-#
-
->{warning} 404 Error, get procedures to company not found
-
-
 <a name="get-type"></a>
-## Get procedure type
+## Get type
 
 ## Param in header
 
@@ -1458,11 +1323,11 @@
 
 #
 
->{warning} 404 Error, get procedures to company not found
+>{warning} 404 Error, get type not found
 
 
 <a name="get-classification"></a>
-## Get procedures classification types
+## Get classification
 
 ## Param in header
 
@@ -1534,4 +1399,41 @@
 
 #
 
->{warning} 404 Error, get procedures to company not found
+>{warning} 404 Error, get classifications not found
+
+<a name="get-list-insutance-companies"></a>
+## Get list insutance companies
+
+## Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 201 Procedure created
+
+
+#
+
+```json
+[
+    {
+        "id": 1,
+        "name": "IC-00001-2023 - Providence Administrative Services"
+    },
+    {
+        "id": 2,
+        "name": "IC-00002-2023 - Kg Administrative Services"
+    },
+    {
+        "id": 3,
+        "name": "IC-00003-2023 - Humana Long Term Care"
+    }
+]
+```
+
+#

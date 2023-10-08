@@ -7341,7 +7341,6 @@ return [
     'formats' => [
         ClaimType::INSTITUTIONAL->value => [
             FormatType::FILE->value => include('Claims/Institutionals/file.php'),
-            FormatType::X12->value => include('Claims/Institutionals/x12.php'),
             FormatType::JSON->value => include('Claims/Institutionals/json.php'),
         ],
         ClaimType::PROFESSIONAL->value => [

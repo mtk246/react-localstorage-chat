@@ -2,18 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Roles\Models;
+namespace App\Models\User;
 
-use App\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
-use App\Roles\Traits\RoleHasRelations;
+use App\Models\BillingCompany;
+use App\Models\BillingCompany\Membership;
+use App\Models\Permissions\Permission;
 use App\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Roles\Models\Role.
+ * App\Models\User\Role.
  *
  * @property int $id
  * @property string $name
@@ -26,14 +31,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property bool $public
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
- * @property int|null $ip_restrictions_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property int|null $permissions_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
- * @property int|null $users_count
+ * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
+ * @property \Illuminate\Database\Eloquent\Collection<int, Membership> $memberships
+ * @property int|null $memberships_count
+ * @property int|null $permits_count
  *
- * @method static \Database\Factories\Roles\Models\RoleFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\User\RoleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role query()
@@ -49,44 +53,35 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @mixin \Eloquent
  */
-class Role extends Model implements RoleHasRelationsContract, Auditable
+final class Role extends Model implements Auditable
 {
-    use Slugable;
-    use RoleHasRelations;
-    use AuditableTrait;
     use HasFactory;
+    use Slugable;
+    use AuditableTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'slug', 'description', 'level'];
+    /** @var array */
+    protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
 
-    /**
-     * Create a new model instance.
-     */
-    public function __construct(array $attributes = [])
+    /** @var array */
+    protected $appends = ['permits'];
+
+    public function billingCompany(): BelongsTo
     {
-        parent::__construct($attributes);
-
-        if ($connection = config('roles.connection')) {
-            $this->connection = $connection;
-        }
+        return $this->belongsTo(BillingCompany::class);
     }
 
-    public function users()
+    public function memberships(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class)->withTimestamps();
+        return $this->belongsToMany(Membership::class, 'membership_role_id', 'membership_id');
     }
 
-    /**
-     * Role has many IpRestrictions.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function ipRestrictions()
+    public function getPermitsAttribute(): Collection
     {
-        return $this->hasMany(\App\Models\IpRestriction::class);
+        return $this->permits()->get();
+    }
+
+    public function permits(): MorphMany
+    {
+        return $this->morphMany(Permission::class, 'permissioned');
     }
 }
