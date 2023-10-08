@@ -19,9 +19,7 @@ final class GetClaimRuleAction
             ? $request->user()->billing_company_id
             : $request->get('billing_company_id');
 
-        $search = $request->get('query');
-
-        $rules = ($search ? Rules::search($search) : Rules::query())
+        $rules = Rules::search($request->get('query'))
             ->when($billingCompanyId, fn ($query) => $query->where('billing_company_id', $billingCompanyId))
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
