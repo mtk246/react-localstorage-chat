@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Actions\User;
 
+use App\Enums\User\UserType;
 use App\Http\Casts\User\StoreUserWrapper;
 use App\Http\Resources\User\UserResource;
 use App\Mail\GenerateNewPassword;
+use App\Models\BillingCompany\Membership;
 use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
@@ -25,16 +27,25 @@ final class StoreUserAction
             $userData = $userWrapper->getData()->merge(['profile_id' => $profile->id]);
 
             return new UserResource(tap(User::query()->create($userData->toArray()), function (User $user) use ($profile, $userWrapper) {
-                $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
+                $userRoles = $user->roles();
+                $rollableType = User::class;
 
-                $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
-                $user->billingCompanies()
-                    ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
-                    ->first()
-                    ?->membership
-                    ->roles()
-                    ->sync($userWrapper->getMembershipRoles());
+                if (UserType::USER === $userWrapper->getType()) {
+                    $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
+                    $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
 
+                    /** @var MorphToMany $userRoles */
+                    $userRoles = $user
+                        ->billingCompanies()
+                        ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
+                        ->first()
+                        ->membership
+                        ->roles();
+
+                    $rollableType = Membership::class;
+                }
+
+                $userRoles->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType], false);
                 $token = encrypt($user->id.'@#@#$'.$user->email);
                 $user->token = $token;
                 $user->save();
@@ -47,7 +58,7 @@ final class StoreUserAction
                         env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                     )
                 );
-            }));
+            })->refresh());
         });
     }
 
