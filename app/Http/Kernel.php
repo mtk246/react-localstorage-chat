@@ -74,9 +74,9 @@ class Kernel extends HttpKernel
         /*
          * App Roles and Permissions
          */
-        'role' => \App\Roles\Middleware\VerifyRole::class,
+        /*'role' => \App\Roles\Middleware\VerifyRole::class,
         'permission' => \App\Roles\Middleware\VerifyPermission::class,
-        'level' => \App\Roles\Middleware\VerifyLevel::class,
+        'level' => \App\Roles\Middleware\VerifyLevel::class,*/
 
         'audit' => AuditoryMiddleware::class,
         'checkAvailable' => CheckAvailableUser::class,

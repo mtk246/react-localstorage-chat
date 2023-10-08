@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Enums\User\UserType;
 use App\Http\Casts\User\UpdateUserWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\OnlyRoleIf;
 use App\Rules\ValidRoleRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class EditUserRequest extends FormRequest
 {
@@ -42,6 +44,7 @@ class EditUserRequest extends FormRequest
             'language' => ['nullable', 'string'],
             'roles' => ['required', 'array', new OnlyRoleIf()],
             'roles.*' => ['required', 'integer', new ValidRoleRule()],
+            'user_type' => ['required', 'integer', new Enum(UserType::class)],
 
             'billing_company_id' => ['nullable', 'integer'],
             'memberships' => [
