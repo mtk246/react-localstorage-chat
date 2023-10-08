@@ -7,6 +7,7 @@ namespace App\Models\User;
 use App\Models\BillingCompany;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
+use App\Models\User;
 use App\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, Membership> $memberships
  * @property int|null $memberships_count
  * @property int|null $permits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property int|null $users_count
  *
  * @method static \Database\Factories\User\RoleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
@@ -72,7 +75,12 @@ final class Role extends Model implements Auditable
 
     public function memberships(): BelongsToMany
     {
-        return $this->belongsToMany(Membership::class, 'membership_role_id', 'membership_id');
+        return $this->morphToMany(Membership::class, 'rollable');
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->morphToMany(User::class, 'rollable');
     }
 
     public function getPermitsAttribute(): Collection
