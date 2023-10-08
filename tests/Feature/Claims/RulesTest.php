@@ -27,7 +27,7 @@ class RulesTest extends TestCase
 
         // Assert
         $response->assertOk();
-        $response->assertJsonCount(2);
+        $response->assertJsonCount(2, 'data');
         $response->assertJsonFragment([
             'id' => $rules1->id,
             'name' => $rules1->name,

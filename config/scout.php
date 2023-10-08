@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\SearchFilterType;
 use App\Models\BillingCompany;
 use App\Models\Claim;
+use App\Models\Claims\Rules;
 use App\Models\ClearingHouse;
 use App\Models\Company;
 use App\Models\Diagnosis;
@@ -21,6 +22,7 @@ return [
     'index' => [
         SearchFilterType::BILLING_COMPANY->value => BillingCompany::class,
         SearchFilterType::CLAIM->value => Claim::class,
+        SearchFilterType::CLAIM_RULE->value => Rules::class,
         SearchFilterType::COMPANY->value => Company::class,
         SearchFilterType::FACILITY->value => Facility::class,
         SearchFilterType::HEALTH_PROFESSIONAL->value => HealthProfessional::class,
@@ -179,6 +181,25 @@ return [
                     'company.clia',
                 ],
                 'sortableAttributes' => ['created_at'],
+            ],
+            Rules::class => [
+                'filterableAttributes' => [
+                    'id',
+                    'name',
+                    'description',
+                    'billing_company_id',
+                    'billing_company',
+                    'insurance_plans',
+                ],
+                'sortableAttributes' => [
+                    'id',
+                    'created_at',
+                    'name',
+                    'description',
+                    'billing_company_id',
+                    'billing_company',
+                    'insurance_plans',
+                ],
             ],
             Company::class => [
                 'filterableAttributes' => [
