@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 
 /**
  * App\Models\Claims\Rules.
@@ -49,6 +50,7 @@ final class Rules extends Model
 {
     use HasFactory;
     use HasUlids;
+    use Searchable;
 
     protected $table = 'claim_rules';
 
@@ -76,5 +78,16 @@ final class Rules extends Model
     public function insurancePlan(): BelongsTo
     {
         return $this->belongsTo(InsurancePlan::class);
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'billing_companies' => $this->billingCompany->only(['code', 'name', 'abbreviation']),
+            'insurance_plans' => $this->insurancePlan->only(['code', 'name', 'eff_date']),
+        ];
     }
 }
