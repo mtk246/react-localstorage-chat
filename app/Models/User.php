@@ -6,10 +6,13 @@ namespace App\Models;
 
 use App\Enums\User\UserType;
 use App\Models\BillingCompany\Membership;
+use App\Models\Permissions\Permission;
+use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -38,6 +41,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $profile_id
  * @property string|null $last_activity
  * @property int|null $billing_company_id
+ * @property UserType $type
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -60,7 +64,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Patient|null $patient
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
  * @property int|null $permissions_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Role> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
+ * @property int|null $permits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property int|null $tokens_count
@@ -86,6 +92,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
@@ -276,9 +283,14 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphMany(Permission::class, 'permissioned');
     }
 
+    public function roles(): MorphToMany
+    {
+        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
+    }
+
     public function hasRole($role, $all = false)
     {
-        return match ($this->type->value) {
+        return match ($this->type?->value ?? 0) {
             UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
             UserType::USER->value => $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
