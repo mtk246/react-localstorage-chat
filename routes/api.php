@@ -500,6 +500,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
         Route::get('rules/list', [RulesResource::class, 'getList']);
+        Route::get('rules/types', [RulesResource::class, 'getTypes']);
         Route::resource('/rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
         Route::get('/{claim}', [\App\Http\Controllers\ClaimController::class, 'getOneClaim']);
