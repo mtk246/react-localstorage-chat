@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Claim;
 use App\Actions\Claim\GetClaimRuleAction;
 use App\Actions\Claim\StoreClaimRuleAction;
 use App\Actions\Claim\UpdateClaimRuleAction;
+use App\Enums\Claim\ClaimType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Claim\StoreRulesRequest;
 use App\Http\Requests\Claim\UpdateRulesRequest;
@@ -17,6 +18,13 @@ use Illuminate\Http\Request;
 
 final class RulesResource extends Controller
 {
+    public function getList(): JsonResponse
+    {
+        return response()->json(collect(config('claim.formats'))->mapWithKeys(function ($item, $key) {
+            return [ClaimType::tryFrom($key)->getName() => $item];
+        }));
+    }
+
     public function index(Request $request, GetClaimRuleAction $getRule): JsonResponse
     {
         return response()->json($getRule->getAll($request->user()->billing_company_id));
