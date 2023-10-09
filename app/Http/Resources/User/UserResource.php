@@ -32,6 +32,7 @@ final class UserResource extends JsonResource
             'profile' => new ProfileResource($this->resource->profile),
             'language' => $this->resource->language,
             'last_modified' => $this->resource->last_modified,
+            'type' => $this->resource->type->value,
             'roles' => RoleResource::collection(UserType::ADMIN === $this->resource->type
                 ? $this->resource->roles
                 : $this->resource
