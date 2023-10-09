@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Casts\User;
 
+use App\Enums\User\UserType;
 use App\Http\Casts\CastsRequest;
 use App\Models\User;
-use App\Roles\Models\Role;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
@@ -34,18 +34,18 @@ final class StoreUserWrapper extends CastsRequest
             'language' => $this->get('language') ?? 'en',
             'status' => true,
             'userkey' => encrypt(uniqid('', true)),
+            'type' => $this->get('user_type'),
         ]);
+    }
+
+    public function getType(): UserType
+    {
+        return UserType::tryFrom($this->get('user_type'));
     }
 
     public function getRoles(): Collection
     {
-        return $this->getCollect('roles')
-            ->map(fn (string $id) => Role::query()
-                ->whereId($id)
-                ->whereNotIn('name', ['Patient', 'Health Professional'])
-                ->first()
-            )
-            ->filter(fn (?Role $role) => !is_null($role));
+        return $this->getCollect('roles');
     }
 
     public function getEmail(): string
