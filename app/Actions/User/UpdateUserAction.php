@@ -7,6 +7,7 @@ namespace App\Actions\User;
 use App\Enums\User\UserType;
 use App\Http\Casts\User\UpdateUserWrapper;
 use App\Http\Resources\User\UserResource;
+use App\Models\BillingCompany\Membership;
 use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
