@@ -67,7 +67,7 @@ final class Role extends Model implements Auditable
     protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
 
     /** @var array */
-    protected $appends = ['permits'];
+    protected $appends = ['permissions'];
 
     public function billingCompany(): BelongsTo
     {
@@ -84,9 +84,9 @@ final class Role extends Model implements Auditable
         return $this->morphToMany(User::class, 'rollable');
     }
 
-    public function getPermitsAttribute(): Collection
+    public function getPermissionsAttribute(): Collection
     {
-        return $this->permits()->get();
+        return $this->permissions()->get();
     }
 
     public function permissions(): MorphToMany
