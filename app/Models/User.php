@@ -279,10 +279,14 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function permissions(): Collection
+    public function permissions(): ?Collection
     {
-        /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany $roles */
-        $roles = $this->type?->value === UserType::ADMIN->value
+        if (is_null($this->type)) {
+            return null;
+        }
+
+        /* @var \Illuminate\Database\Eloquent\Relations\MorphToMany $roles */
+        $roles = $this->type->value === UserType::ADMIN->value
             ? $this->roles()
             : $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
@@ -297,7 +301,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         }, $this->permits()->get())->unique();
     }
 
-    public function getPermissionsAttribute(): Collection
+    public function getPermissionsAttribute(): ?Collection
     {
         return $this->permissions();
     }
