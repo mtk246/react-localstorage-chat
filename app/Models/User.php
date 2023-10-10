@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -155,7 +156,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['profile', 'language', 'last_modified'];
+    protected $appends = ['profile', 'language', 'last_modified', 'permissions'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -278,9 +279,36 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function permits(): MorphMany
+    public function permissions(): ?Collection
     {
-        return $this->morphMany(Permission::class, 'permissioned');
+        if (is_null($this->type)) {
+            return null;
+        }
+
+        /* @var \Illuminate\Database\Eloquent\Relations\MorphToMany $roles */
+        $roles = $this->type->value === UserType::ADMIN->value
+            ? $this->roles()
+            : $this->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ->membership
+                ->roles();
+
+        return $roles->get()->reduce(function (Collection $v, Role $role) {
+            $v = $v->merge($role->permissions()->get());
+
+            return $v;
+        }, $this->permits()->get())->unique();
+    }
+
+    public function getPermissionsAttribute(): ?Collection
+    {
+        return $this->permissions();
+    }
+
+    public function permits(): MorphToMany
+    {
+        return $this->morphToMany(Permission::class, 'authorizable')->withTimestamps();
     }
 
     public function roles(): MorphToMany
