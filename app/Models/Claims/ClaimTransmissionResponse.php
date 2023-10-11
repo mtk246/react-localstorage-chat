@@ -23,6 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Claims\Claim|null $claim
+ * @property \App\Models\Claims\ClaimBatch|null $claimBatch
  * @property \App\Models\Claims\ClaimTransmissionStatus|null $claimTransmissionStatus
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionResponse newModelQuery()

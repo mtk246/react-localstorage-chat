@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Casts\Reports;
 
 use App\Http\Casts\CastsRequest;
+use App\Models\Reports\Report;
 use Illuminate\Support\Facades\Gate;
 
 final class StoreRequestCast extends CastsRequest
@@ -29,6 +30,13 @@ final class StoreRequestCast extends CastsRequest
     public function getClasification(): int
     {
         return $this->get('clasification');
+    }
+
+    public function getBaseReport(): ?Report
+    {
+        return $this->get('base_report_id')
+            ? Report::findOrFail($this->get('base_report_id'))
+            : null;
     }
 
     public function getType(): int

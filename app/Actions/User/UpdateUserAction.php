@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Actions\User;
 
+use App\Enums\User\UserType;
 use App\Http\Casts\User\UpdateUserWrapper;
 use App\Http\Resources\User\UserResource;
+use App\Models\BillingCompany\Membership;
 use App\Models\Profile;
 use App\Models\SocialMedia;
 use App\Models\SocialNetwork;
 use App\Models\User;
-use App\Roles\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 final class UpdateUserAction
@@ -19,29 +20,29 @@ final class UpdateUserAction
     {
         return DB::transaction(function () use ($userWrapper, $user) {
             $this->getProfile($userWrapper, $user);
-
             $user->update($userWrapper->getData()->toArray());
 
-            $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
+            $userRoles = $user->roles();
+            $rollableType = User::class;
 
-            $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
-            $user->billingCompanies()
-                ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
-                ->first()
-                ?->membership
-                ->roles()
-                ->sync($userWrapper->getMembershipRoles());
+            if (UserType::USER === $userWrapper->getType()) {
+                $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
+                $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
 
-            $roles = $userWrapper->getRoles()
-                ->map(function (Role $role) use ($user) {
-                    $role->permissions->each(function ($permission) use ($user) {
-                        $user->attachPermission($permission);
-                    });
+                /** @var MorphToMany $userRoles */
+                $userRoles = $user
+                    ->billingCompanies()
+                    ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
+                    ->first()
+                    ->membership
+                    ->roles();
 
-                    return $role->id;
-                })
-                ->toArray();
-            $user->syncRoles($roles);
+                $rollableType = Membership::class;
+            }
+
+            $userRoles->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType]);
+
+            $user->touch();
 
             return new UserResource($user);
         });

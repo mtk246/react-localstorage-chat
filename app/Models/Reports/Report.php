@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property ClassificationType $clasification
+ * @property string|null $url
  * @property BillingCompany|null $billingCompany
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereRange($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereUrl($value)
  *
  * @mixin \Eloquent
  */
@@ -59,6 +61,7 @@ final class Report extends Model
         'clasification',
         'configuration',
         'favorite',
+        'url',
         'billing_company_id',
     ];
 
