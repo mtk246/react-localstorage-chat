@@ -301,7 +301,7 @@ final class JSONDictionary extends Dictionary
                         : null,
                     'professionalService' => [
                         'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
-                        'lineItemChargeAmount' => str_replace(',', '', $service->price),
+                        'lineItemChargeAmount' => str_replace(',', '', number_format((float) $service->price * (int) ($service->days_or_units ?? 1), 2)),
                         'procedureCode' => $service->procedure->code,
                         'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                         'serviceUnitCount' => $service->days_or_units ?? '1',
