@@ -60,6 +60,9 @@
     - [Professional](/{{route}}/{{version}}/claim/professional/claim)
     - [Institutional](/{{route}}/{{version}}/claim/institutional/claim)
     - [Address](/{{route}}/{{version}}/address)
+- ## Claim Rules
+    - [Getters](/{{route}}/{{version}}/claim/rules/getters)
+    - [Setters](/{{route}}/{{version}}/claim/rules/setters)
 
 - ## Claim Batch
     - [Claim Batch](/{{route}}/{{version}}/claim/claim-batch)
