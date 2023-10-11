@@ -387,7 +387,7 @@ return [
     '11' => [
         'type' => RuleType::SINGLE->value,
         'length' => 27,
-        'description' => null,
+        'description' => 'Patient sex',
         'value' => 'patientProfile:sex',
         'values' => [
             'common' => [
@@ -398,7 +398,7 @@ return [
     '12' => [
         'type' => RuleType::DATE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Admission Date',
         'value' => 'patientInformation.admission_date|mdY',
         'values' => [
             'common' => [
@@ -409,7 +409,7 @@ return [
     '13' => [
         'type' => RuleType::DATE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Admission Time',
         'value' => 'patientInformation.admission_time|H|H:m:s',
         'values' => [
             'common' => [
@@ -420,7 +420,7 @@ return [
     '14' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Admission Type',
         'value' => 'patientInformation.admissionType.code',
         'values' => [
             'common' => [
@@ -431,7 +431,7 @@ return [
     '15' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Admission Source',
         'value' => 'patientInformation.admissionSource.code',
         'values' => [
             'common' => [
@@ -442,7 +442,7 @@ return [
     '16' => [
         'type' => RuleType::DATE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Discharge Time',
         'value' => 'patientInformation.discharge_time|H|H:m:s',
         'values' => [
             'common' => [
@@ -453,7 +453,7 @@ return [
     '17' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Status',
         'value' => 'patientInformation.patientStatus.code',
         'values' => [
             'common' => [
@@ -464,7 +464,7 @@ return [
     '18' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:0',
         'values' => [
             'common' => [
@@ -475,7 +475,7 @@ return [
     '19' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:1',
         'values' => [
             'common' => [
@@ -486,7 +486,7 @@ return [
     '20' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:2',
         'values' => [
             'common' => [
@@ -497,7 +497,7 @@ return [
     '21' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:3',
         'values' => [
             'common' => [
@@ -508,7 +508,7 @@ return [
     '22' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:4',
         'values' => [
             'common' => [
@@ -519,7 +519,7 @@ return [
     '23' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:5',
         'values' => [
             'common' => [
@@ -530,7 +530,7 @@ return [
     '24' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:6',
         'values' => [
             'common' => [
@@ -541,7 +541,7 @@ return [
     '25' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:7',
         'values' => [
             'common' => [
@@ -552,7 +552,7 @@ return [
     '26' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:8',
         'values' => [
             'common' => [
@@ -563,7 +563,7 @@ return [
     '27' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:9',
         'values' => [
             'common' => [
@@ -574,7 +574,7 @@ return [
     '28' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
-        'description' => null,
+        'description' => 'Patient Condition Codes',
         'value' => 'patientConditionCodes:10',
         'values' => [
             'common' => [
@@ -863,7 +863,7 @@ return [
     ],
     '38a' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
+        'description' => 'name',
         'value' => 'HigherInsuranceCompany:name',
         'values' => [
             'common' => [
@@ -877,7 +877,7 @@ return [
     ],
     '38b' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
+        'description' => 'Address 1',
         'value' => 'HigherInsuranceCompany:address',
         'values' => [
             'common' => [
@@ -891,7 +891,7 @@ return [
     ],
     '38c' => [
         'type' => RuleType::MULTIPLE->value,
-        'description' => null,
+        'description' => 'Address 2',
         'value' => [
             'HigherInsuranceCompany:city',
             '|, ',
