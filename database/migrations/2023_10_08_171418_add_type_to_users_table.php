@@ -5,8 +5,6 @@ declare(strict_types=1);
 use App\Enums\User\UserType;
 use App\Models\BillingCompany\Membership;
 use App\Models\User;
-use App\Models\User\Role;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,40 +18,49 @@ return new class() extends Migration {
 
         DB::table('rollables')->delete();
 
-        Role::all()->each(function (Role $role) {
+        DB::table('roles')->get()->each(function ($role) {
             $superUsersList = DB::table('role_user')->where('role_id', $role->id)->get('user_id')->pluck('user_id')->toArray();
 
-            User::query()->whereIn('id', $superUsersList)->get()->each(function (User $user) use ($role) {
-                $userRoles = $user->roles();
+            DB::table('users')->whereIn('id', $superUsersList)->get()->each(function ($user) use ($role) {
+                $rollableId = $user->id;
                 $rollableType = User::class;
                 $userType = UserType::ADMIN;
 
                 if (!is_null($role->billing_company_id)) {
-                    if (0 === $user
-                        ->billingCompanies()
-                        ->wherePivot('billing_company_id', $role->billing_company_id)
-                        ->get()
-                        ->count()
+                    if (!DB::table('billing_company_user')
+                        ->where('billing_company_id', $role->billing_company_id)
+                        ->where('user_id', $user->id)
+                        ->exists()
                     ) {
-                        $user->billingCompany()->associate($role->billing_company_id);
-                        $user->billingCompanies()->syncWithoutDetaching($role->billing_company_id);
+                        DB::table('users')->where('id', $user->id)->update(['billing_company_id' => $role->billing_company_id]);
+                        DB::table('billing_company_user')->insert([
+                            'billing_company_id' => $role->billing_company_id,
+                            'user_id' => $user->id,
+                            'status' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
                     }
 
-                    /** @var MorphToMany $userRoles */
-                    $userRoles = $user
-                        ->billingCompanies()
-                        ->wherePivot('billing_company_id', $role->billing_company_id)
+                    /** @var int $rollableId */
+                    $rollableId = DB::table('billing_company_user')
+                        ->where('billing_company_id', $role->billing_company_id)
+                        ->where('user_id', $user->id)
                         ->first()
-                        ->membership
-                        ->roles();
+                        ->id;
 
                     $rollableType = Membership::class;
                     $userType = UserType::USER;
                 }
 
-                $user->type = $userType->value;
-                $userRoles->syncWithPivotValues($role->id, ['rollable_type' => $rollableType], false);
-                $user->save();
+                DB::table('users')->where('id', $user->id)->update(['type' => $userType->value]);
+                DB::table('rollables')->insert([
+                    'rollable_id' => $rollableId,
+                    'rollable_type' => $rollableType,
+                    'role_id' => $role->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             });
         });
     }

@@ -109,7 +109,6 @@ class RoleSeeder extends Seeder
                 }
 
                 $billingCompanies->each(function (BillingCompany $billingCompany) use ($role) {
-                    dump($role['slug'], $billingCompany->id);
                     Role::updateOrCreate(
                         ['billing_company_id' => $billingCompany->id, 'slug' => $role['slug']],
                         [
