@@ -42,7 +42,7 @@ return [
         ],
         '1' => [
             'options' => [
-                'Medicare' => [
+                'MED' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -53,7 +53,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Medicaid' => [
+                'MCE' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -64,7 +64,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Tricare' => [
+                'TR' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -75,7 +75,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Champva' => [
+                'CH' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -86,7 +86,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Group' => [
+                'GHP' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -97,7 +97,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Feca' => [
+                'FBL' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -108,7 +108,7 @@ return [
                         'y' => 40,
                     ],
                 ],
-                'Other' => [
+                'OT' => [
                     'properties' => [
                         'fontFamily' => 'helvetica',
                         'fontSize' => '10px',
@@ -1167,7 +1167,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 186,
+                    'y' => 187,
                 ],
             ],
             'from_year_A1' => [
@@ -1421,7 +1421,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 194.3,
+                    'y' => 195.3,
                 ],
             ],
             'from_year_A2' => [
@@ -1674,7 +1674,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 202.6,
+                    'y' => 203.6,
                 ],
             ],
             'from_year_A3' => [
@@ -1927,7 +1927,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 210.9,
+                    'y' => 211.9,
                 ],
             ],
             'from_year_A4' => [
@@ -2180,7 +2180,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 219.2,
+                    'y' => 220.2,
                 ],
             ],
             'from_year_A5' => [
@@ -2433,7 +2433,7 @@ return [
                     'w' => 170,
                     'h' => 10,
                     'x' => 9,
-                    'y' => 227.5,
+                    'y' => 228.5,
                 ],
             ],
             'from_year_A6' => [
@@ -7341,7 +7341,6 @@ return [
     'formats' => [
         ClaimType::INSTITUTIONAL->value => [
             FormatType::FILE->value => include('Claims/Institutionals/file.php'),
-            FormatType::X12->value => include('Claims/Institutionals/x12.php'),
             FormatType::JSON->value => include('Claims/Institutionals/json.php'),
         ],
         ClaimType::PROFESSIONAL->value => [
@@ -7361,6 +7360,7 @@ return [
         ],
         'url_eligibility' => env('URL_ELIGIBILITY', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/eligibility/v3'),
         'url_token' => env('URL_TOKEN', 'https://sandbox.apigw.changehealthcare.com/apip/auth/v2/token'),
+        'url_status' => env('URL_STATUS', 'https://sandbox.apigw.changehealthcare.com/medicalnetwork/claimstatus/v2/'),
         'client_id' => env('CLIENT_ID', '7ULJqHZb91y2zP3lgD4xQ3A3jACdmPTF'),
         'client_secret' => env('CLIENT_SECRET', 'EBPadsDKoOuEoOWv'),
     ],

@@ -49,6 +49,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('user')->group(function () {
         Route::resource('shortcuts', UserKeyboardShortcutController::class)->only(['index', 'show', 'store'])->middleware(['auth:api']);
+        Route::get('types', [\App\Http\Controllers\UserController::class, 'getTypes'])->middleware(['auth:api']);
         Route::get('/get-all-server', [\App\Http\Controllers\UserController::class, 'getServerAllUsers'])->middleware(['auth:api']);
         Route::get('/get-list', [\App\Http\Controllers\UserController::class, 'getList'])->middleware(['auth:api']);
         Route::get('/get-list-gender', [\App\Http\Controllers\UserController::class, 'getListGender'])->middleware(['auth:api']);
@@ -75,7 +76,11 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
-    Route::prefix('permission')->middleware('auth:api')->group(function () {
+    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'store', 'destroy']);
+    Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
+
+    /*Route::prefix('permission')->middleware('auth:api')->group(function () {
         Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
         Route::get('roles-permissions', [\App\Http\Controllers\RolePermissionController::class, 'getRolesWithPermissions']);
         Route::get('permissions', [\App\Http\Controllers\RolePermissionController::class, 'getPermissions']);
@@ -98,7 +103,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::patch('remove-permissions-user/{user_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsUser']);
         Route::patch('remove-permissions-role/{role_id}', [\App\Http\Controllers\RolePermissionController::class, 'revokePermissionsRole']);
-    });
+    });*/
 
     Route::prefix('setting')->middleware('auth:api')->group(function () {
         Route::prefix('ip-restriction')->group(function () {
@@ -253,7 +258,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('insurance-company')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::post('/search', [\App\Http\Controllers\InsuranceCompanyController::class, 'search']);
         Route::get('/get-all-server', [\App\Http\Controllers\InsuranceCompanyController::class, 'getServerAll']);
@@ -275,7 +280,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('insurance-plan')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-list-responsibility-type', [\App\Http\Controllers\InsurancePlanController::class, 'getListResponsibilityType']);
         Route::get('/get-all-server', [\App\Http\Controllers\InsurancePlanController::class, 'getServerAll']);
@@ -301,7 +306,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('health-professional')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::post('/', [\App\Http\Controllers\DoctorController::class, 'createDoctor']);
         Route::resource('{doctor}/company', HPCompanyResource::class)->only(['index', 'store']);
@@ -320,7 +325,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('patient')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\PatientController::class, 'getServerAll']);
         Route::get('/search/{date_of_birth?}/{first_name?}/{last_name?}/{ssn?}', [\App\Http\Controllers\PatientController::class, 'search']);
@@ -348,7 +353,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('taxonomy')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::post('/', [\App\Http\Controllers\TaxonomyController::class, 'createTaxonomy']);
         Route::put('/{id}', [\App\Http\Controllers\TaxonomyController::class, 'updateTaxonomy']);
@@ -360,7 +365,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('service')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::post('/', [\App\Http\Controllers\ServiceController::class, 'create']);
         Route::put('/{id}', [\App\Http\Controllers\ServiceController::class, 'update']);
@@ -386,7 +391,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('diagnosis')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\DiagnosisController::class, 'getServerAll']);
         Route::post('/', [\App\Http\Controllers\DiagnosisController::class, 'createDiagnosis']);
@@ -405,7 +410,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('modifier')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\ModifierController::class, 'getServerAll']);
         Route::get('/get-list', [\App\Http\Controllers\ModifierController::class, 'getList']);
@@ -422,7 +427,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('procedure')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
         Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
@@ -440,31 +445,28 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/type', [\App\Http\Controllers\ProcedureController::class, 'getType']);
         Route::get('/type/{type}/classification', [\App\Http\Controllers\ProcedureController::class, 'getClassifications']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
-        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
-        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
+        Route::get('/get-list-insurance-companies', [\App\Http\Controllers\ProcedureController::class, 'getListInsuranceCompany']);
         Route::get('/{id}', [\App\Http\Controllers\ProcedureController::class, 'getOneProcedure']);
         Route::put('/{procedure}', [\App\Http\Controllers\ProcedureController::class, 'updateProcedure']);
         Route::put('/{procedure}/considerations', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureConsiderations']);
         Route::put('/{procedure}/note', [\App\Http\Controllers\ProcedureController::class, 'updateProcedureNote']);
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ProcedureController::class, 'changeStatus']);
-        Route::patch('/add-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'addToCompany']);
-        Route::get('/get-to-company/{company_id}', [\App\Http\Controllers\ProcedureController::class, 'getToCompany']);
     });
 
     Route::prefix('injury')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-list-type-diags', [\App\Http\Controllers\ClaimController::class, 'getListTypeDiags']);
     });
 
     Route::prefix('claim')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::prefix('/batch')->middleware([
             'auth:api',
-            'role:superuser|biller|billingmanager',
+            // 'role:superuser|biller|billingmanager',
         ])->group(function () {
             Route::get('/get-all-server', [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get('/get-all-server-claims', [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
@@ -490,7 +492,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-list-claim-field-informations', [\App\Http\Controllers\ClaimController::class, 'getListClaimFieldInformations']);
         Route::get('/get-list-qualifier-by-field', [\App\Http\Controllers\ClaimController::class, 'getListFieldQualifiers']);
         Route::get('/get-list-status', [\App\Http\Controllers\ClaimController::class, 'getListStatus']);
-        Route::get('/get-check-status/{id}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
+        Route::get('/get-check-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'getCheckStatus']);
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimController::class, 'getServerAll']);
         Route::get('/bill-classifications/{facility_id}', [\App\Http\Controllers\ClaimController::class, 'getBillClassifications']);
         Route::post('/show-claim-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'Show']);
@@ -500,6 +502,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('/check-eligibility', [\App\Http\Controllers\ClaimController::class, 'storeCheckEligibility']);
         Route::get('/validation/{id}', [\App\Http\Controllers\ClaimController::class, 'claimValidation']);
 
+        Route::get('rules/list', [RulesResource::class, 'getList']);
+        Route::get('rules/types', [RulesResource::class, 'getTypes']);
         Route::resource('/rules', RulesResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
         Route::post('/', [\App\Http\Controllers\ClaimController::class, 'createClaim']);
         Route::get('/{claim}', [\App\Http\Controllers\ClaimController::class, 'getOneClaim']);
@@ -517,7 +521,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('claim-sub-status')->middleware([
         'auth:api',
-        'role:superuser|biller|billingmanager',
+        // 'role:superuser|biller|billingmanager',
     ])->group(function () {
         Route::get('/get-all-server', [\App\Http\Controllers\ClaimSubStatusController::class, 'getServerAll'])->middleware(['auth:api']);
         Route::get('/get-list-by-billing-company/{status_id}/{billing_company_id?}', [\App\Http\Controllers\ClaimSubStatusController::class, 'getListByBilling']);
@@ -542,17 +546,17 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('tableau')->middleware([
         'auth:api',
-        'role:superuser|billingmanager',
+        // 'role:superuser|billingmanager',
     ])->group(function () {
         Route::get('/auth/embed-token', [AuthController::class, 'getEmbedToken']);
     });
 
     Route::middleware([
         'auth:api',
-        'role:superuser|billingmanager',
+        // 'role:superuser|billingmanager',
     ])->group(function () {
-        Route::get('/reports/types', [ReportReSource::class, 'getReportTypes']);
-        Route::get('/reports/tags', [ReportReSource::class, 'getReportTags']);
+        Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
+        Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 

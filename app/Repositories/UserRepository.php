@@ -638,7 +638,7 @@ class UserRepository
             $token = auth()->login($user);
 
             return response()->json([
-                'user' => $user->load('permissions')->load('roles'),
+                'user' => $user->load(['roles', 'billingCompanies', 'permits'])->load('roles'),
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60,

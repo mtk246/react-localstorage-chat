@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\User\Recovery;
 use App\Actions\User\StoreUserAction;
 use App\Actions\User\UpdateUserAction;
+use App\Enums\User\UserType;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\EditUserRequest;
@@ -16,6 +17,8 @@ use App\Http\Requests\UnlockUserRequest;
 use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\ValidateSearchRequest;
+use App\Http\Resources\Enums\EnumResource;
+use App\Http\Resources\Enums\TypeResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
@@ -401,7 +404,13 @@ class UserController extends Controller
         return response()->json($rs);
     }
 
-    //Update password from module profile view
+    public function getTypes()
+    {
+        return response()->json(
+            new EnumResource(collect(UserType::cases()), TypeResource::class),
+        );
+    }
+
     public function updatePassword(UpdatePasswordRequest $request)
     {
         $rs = $this->userRepository->updatePassword($request->validated());

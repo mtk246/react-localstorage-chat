@@ -16,6 +16,7 @@ use App\Models\PrivateNote;
 use App\Models\PublicNote;
 use App\Models\Taxonomy;
 use App\Models\TypeCatalog;
+use App\Models\TypeForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -57,7 +58,7 @@ class CompanyRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             if (isset($data['taxonomies'])) {
@@ -168,7 +169,7 @@ class CompanyRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $id;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
             if (isset($request->patient_id)) {
                 return getList(
@@ -200,14 +201,23 @@ class CompanyRepository
                     $except_ids = ((is_array($request->except_ids)) ? $request->except_ids : json_decode($request->except_ids)) ?? null;
                 }
 
-                return getList(
+                $companies = getList(
                     Company::class,
                     ['name'],
                     ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
                     $except_ids ?? null,
                     [],
-                    ['abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]]
+                    [
+                        'abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
+                        'claim_format_ids' => ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]
+                    ]
                 );
+                return array_map(function ($item) {
+                    $item['claim_formats'] = is_array($item['claim_format_ids'])
+                        ? TypeForm::query()->whereIn('id', $item['claim_format_ids'])->select('id', 'form as name')->get()->toArray()
+                        : null;
+                    return $item;
+                }, $companies);
             }
         } catch (\Exception $e) {
             return [];
@@ -638,7 +648,7 @@ class CompanyRepository
                 },
             ]);
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()->billing_company_id;
             $company->load(['companyStatements', 'exceptionInsuranceCompanies']);
         }
 
@@ -900,7 +910,7 @@ class CompanyRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -927,7 +937,7 @@ class CompanyRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -947,7 +957,7 @@ class CompanyRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
 
         if (!auth()->user()->hasRole('superuser')) {
             if (is_null($billingCompany)) {
@@ -993,7 +1003,7 @@ class CompanyRepository
                 return null;
             }
 
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()->billing_company_id;
             if (!auth()->user()->hasRole('superuser')) {
                 if (is_null($billingCompany)) {
                     return null;

@@ -88,6 +88,8 @@ final class ContractFeeResource extends RequestWrapedResource
             'price' => (float) $this->resource->price,
             'price_percentage' => (float) $this->resource->price_percentage,
             'private_note' => $this->resource->private_note,
+            'start_date' => $this->resource->start_date,
+            'end_date' => $this->resource->end_date,
         ];
     }
 }

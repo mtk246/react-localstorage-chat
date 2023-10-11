@@ -16,12 +16,12 @@ final class StoreReportAction
         return DB::transaction(function () use ($report): ReportResource {
             $report = tap(Report::create([
                     'name' => $report->getName(),
-                    'use' => $report->getUse(),
                     'description' => $report->getDescription(),
                     'type' => $report->getType(),
                     'range' => $report->getRange(),
-                    'tags' => $report->getTags(),
+                    'clasification' => $report->getClasification(),
                     'configuration' => $report->getConfiguration()->toArray(),
+                    'url' => $report->getBaseReport()?->url ?? null,
                     'favorite' => false,
                 ]), function (Report $reportModel) use ($report): void {
                     // @todo log action

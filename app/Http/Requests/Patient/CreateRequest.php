@@ -93,19 +93,55 @@ class CreateRequest extends FormRequest
             'guarantor.phone' => ['nullable', 'string'],
 
             'emergency_contacts' => ['nullable', 'array'],
-            'emergency_contacts.*.name' => ['nullable', 'string'],
-            'emergency_contacts.*.cellphone' => ['nullable', 'string'],
-            'emergency_contacts.*.relationship_id' => ['nullable', 'integer'],
+            'emergency_contacts.*.name' => [
+                'required_with:emergency_contacts.*.cellphone,emergency_contacts.*.relationship_id',
+                'nullable',
+                'string',
+            ],
+            'emergency_contacts.*.cellphone' => [
+                'required_with:emergency_contacts.*.name,emergency_contacts.*.relationship_id',
+                'nullable',
+                'string',
+            ],
+            'emergency_contacts.*.relationship_id' => [
+                'required_with:emergency_contacts.*.name,emergency_contacts.*.cellphone',
+                'nullable',
+                'integer',
+            ],
 
             'employments' => ['nullable', 'array'],
-            'employments.*.employer_name' => ['nullable', 'string'],
-            'employments.*.position' => ['nullable', 'string'],
-            'employments.*.employer_address' => ['nullable', 'string'],
-            'employments.*.employer_phone' => ['nullable', 'string'],
+            'employments.*.employer_name' => [
+                'required_with:employments.*.position,employments.*.employer_address,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.position' => [
+                'required_with:employments.*.employer_name,employments.*.employer_address,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.employer_address' => [
+                'required_with:employments.*.position,employments.*.employer_name,employments.*.employer_phone',
+                'nullable',
+                'string',
+            ],
+            'employments.*.employer_phone' => [
+                'required_with:employments.*.position,employments.*.employer_address,employments.*.employer_name',
+                'nullable',
+                'string',
+            ],
 
             'profile.social_medias' => ['nullable', 'array'],
-            'profile.social_medias.*.name' => ['nullable', 'string'],
-            'profile.social_medias.*.link' => ['nullable', 'string'],
+            'profile.social_medias.*.name' => [
+                'required_with:profile.social_medias.*.link',
+                'nullable',
+                'string',
+            ],
+            'profile.social_medias.*.link' => [
+                'required_with:profile.social_medias.*.name',
+                'nullable',
+                'string',
+            ],
 
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],

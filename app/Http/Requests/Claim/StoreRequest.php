@@ -61,20 +61,23 @@ final class StoreRequest extends FormRequest
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'string',
             ],
-            'demographic_information.bill_classification' => ['required', 'integer'],
+            'demographic_information.bill_classification' => ['nullable', 'integer'],
             'demographic_information.validate' => ['nullable', 'boolean'],
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'demographic_information.patient_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'demographic_information.prior_authorization_number' => ['nullable', 'string'],
             'demographic_information.accept_assignment' => ['nullable', 'boolean'],
@@ -95,7 +98,7 @@ final class StoreRequest extends FormRequest
             'demographic_information.health_professional_qualifier' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'array',
-                new ArrayCountRule(1),
+                // new ArrayCountRule(1),
             ],
             'demographic_information.health_professional_qualifier.*.field_id' => ['nullable', 'integer'],
             'demographic_information.health_professional_qualifier.*.health_professional_id' => ['nullable', 'integer'],
@@ -119,8 +122,16 @@ final class StoreRequest extends FormRequest
             'claim_services.diagnoses.*.poa' => ['string', 'max:1', 'nullable'],
 
             'additional_information' => ['nullable', 'array'],
-            'additional_information.from' => ['required', 'date'],
-            'additional_information.to' => ['required', 'date'],
+            'additional_information.from' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
+            'additional_information.to' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'date',
+                'nullable',
+            ],
             'additional_information.diagnosis_related_group_id' => ['nullable', 'integer'],
             'additional_information.non_covered_charges' => ['nullable', 'numeric'],
             'additional_information.patient_information.admission_date' => [
@@ -137,6 +148,7 @@ final class StoreRequest extends FormRequest
             'additional_information.patient_information.admission_type_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'additional_information.patient_information.admission_source_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
@@ -205,13 +217,16 @@ final class StoreRequest extends FormRequest
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'integer',
+                'nullable',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'nullable',
                 'integer',
             ],
             'demographic_information.patient_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'nullable',
                 'integer',
             ],
             'demographic_information.prior_authorization_number' => ['nullable', 'string'],
