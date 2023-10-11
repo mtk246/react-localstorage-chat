@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -33,10 +33,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
+ * @property Collection $permits
  * @property \Illuminate\Database\Eloquent\Collection<int, Membership> $memberships
  * @property int|null $memberships_count
- * @property int|null $permits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
+ * @property int|null $permissions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, User> $users
  * @property int|null $users_count
  *
@@ -66,7 +67,7 @@ final class Role extends Model implements Auditable
     protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
 
     /** @var array */
-    protected $appends = ['permits'];
+    protected $appends = ['permissions'];
 
     public function billingCompany(): BelongsTo
     {
@@ -83,13 +84,13 @@ final class Role extends Model implements Auditable
         return $this->morphToMany(User::class, 'rollable');
     }
 
-    public function getPermitsAttribute(): Collection
+    public function getPermissionsAttribute(): Collection
     {
-        return $this->permits()->get();
+        return $this->permissions()->get();
     }
 
-    public function permits(): MorphMany
+    public function permissions(): MorphToMany
     {
-        return $this->morphMany(Permission::class, 'permissioned');
+        return $this->morphToMany(Permission::class, 'authorizable')->withTimestamps();
     }
 }

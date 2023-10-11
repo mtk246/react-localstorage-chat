@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\BillingCompany;
-use App\Models\User\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,17 +23,16 @@ return new class() extends Migration {
         $billingCompanies = BillingCompany::all(['id']);
         $firstBillingCompany = $billingCompanies->first();
 
-        $roles = Role::query()->whereNotIn('slug', [
+        $roles = DB::table('roles')->whereNotIn('slug', [
             'superuser',
             'patient',
             'superauditor',
             'developmentsupport',
             'healthprofessional',
-        ])->get()->map(function (Role $role) use ($firstBillingCompany) {
-            $role->billing_company_id = $firstBillingCompany->id;
-            $role->save();
+        ])->get()->map(function ($role) use ($firstBillingCompany) {
+            DB::table('roles')->where('id', $role->id)->update(['billing_company_id' => $firstBillingCompany->id]);
 
-            return $role->toArray();
+            return (array) $role;
         });
 
         $billingCompanies
@@ -42,7 +40,8 @@ return new class() extends Migration {
             ->each(function (BillingCompany $billingCompany) use ($roles) {
                 $roles->each(function ($role) use ($billingCompany) {
                     $role['billing_company_id'] = $billingCompany->id;
-                    Role::query()->create($role);
+                    unset($role['id']);
+                    DB::table('roles')->insert([$role]);
                 });
             });
     }

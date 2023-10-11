@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\BillingCompany\MembershipRole;
-use App\Roles\Models\Role;
+use App\Models\BillingCompany;
+use App\Models\User\Role;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -23,7 +23,31 @@ class RoleSeeder extends Seeder
                     'name' => 'Super User',
                     'slug' => 'superuser',
                     'description' => 'Allows you to administer and manage all the functions of the application',
-                    'level' => 1,
+                    'admin' => true,
+                ],
+                [
+                    'name' => 'Health Professional',
+                    'slug' => 'healthprofessional',
+                    'description' => 'Allows access to system functions for health professional management',
+                    'admin' => true,
+                ],
+                [
+                    'name' => 'Patient',
+                    'slug' => 'patient',
+                    'description' => 'Allows access to system functions for patient management',
+                    'admin' => true,
+                ],
+                [
+                    'name' => 'Super Auditor',
+                    'slug' => 'superauditor',
+                    'description' => 'Allows access to system functions for audit management',
+                    'admin' => true,
+                ],
+                [
+                    'name' => 'Development Support',
+                    'slug' => 'developmentsupport',
+                    'description' => 'Allows access to system functions for development support management',
+                    'admin' => true,
                 ],
                 [
                     'name' => 'Billing Manager',
@@ -32,22 +56,10 @@ class RoleSeeder extends Seeder
                     'level' => 2,
                 ],
                 [
-                    'name' => 'Billing Worker',
-                    'slug' => 'billingworker',
+                    'name' => 'Biller',
+                    'slug' => 'biller',
                     'description' => 'worker of a billing company',
                     'level' => 3,
-                ],
-                [
-                    'name' => 'Health Professional',
-                    'slug' => 'healthprofessional',
-                    'description' => 'Allows access to system functions for health professional management',
-                    'level' => 4,
-                ],
-                [
-                    'name' => 'Patient',
-                    'slug' => 'patient',
-                    'description' => 'Allows access to system functions for patient management',
-                    'level' => 4,
                 ],
                 [
                     'name' => 'Client',
@@ -56,42 +68,56 @@ class RoleSeeder extends Seeder
                     'level' => 4,
                 ],
                 [
-                    'name' => 'Development Support',
-                    'slug' => 'developmentsupport',
+                    'name' => 'Payment Processor',
+                    'slug' => 'paymentprocessor',
                     'description' => 'Allows access to system functions for development support management',
                     'level' => 5,
                 ],
                 [
-                    'name' => 'Super Auditor',
-                    'slug' => 'superauditor',
-                    'description' => 'Allows access to system functions for audit management',
-                    'level' => 6,
+                    'name' => 'Collector',
+                    'slug' => 'collector',
+                    'description' => 'Allows access to system functions for audit management by billing company',
+                    'level' => 7,
                 ],
                 [
-                    'name' => 'Billing Company Auditor',
-                    'slug' => 'billingcompanyauditor',
+                    'name' => 'Account Manager',
+                    'slug' => 'collector',
+                    'description' => 'Allows access to system functions for audit management by billing company',
+                    'level' => 7,
+                ],
+                [
+                    'name' => 'Billing Auditor',
+                    'slug' => 'billingauditor',
                     'description' => 'Allows access to system functions for audit management by billing company',
                     'level' => 7,
                 ],
             ];
 
-            foreach ($roles as $role) {
-                Role::updateOrCreate(
-                    ['slug' => $role['slug']],
-                    [
-                        'name' => $role['name'],
-                        'description' => $role['description'],
-                        'level' => $role['level'],
-                    ]
-                );
-            }
+            $billingCompanies = BillingCompany::all();
 
-            collect(json_decode(\File::get('database/data/MembershipRoles.json')))
-                ->map(function ($role, $key) {
-                    return (array) $role;
-                })
-                ->chunk(1000)
-                ->each(fn ($chunk) => MembershipRole::upsert($chunk->toArray(), ['id']));
+            foreach ($roles as $role) {
+                if ($role['admin'] ?? false) {
+                    Role::updateOrCreate(
+                        ['billing_company_id' => null, 'slug' => $role['slug']],
+                        [
+                            'name' => $role['name'],
+                            'description' => $role['description'],
+                        ]
+                    );
+
+                    continue;
+                }
+
+                $billingCompanies->each(function (BillingCompany $billingCompany) use ($role) {
+                    Role::updateOrCreate(
+                        ['billing_company_id' => $billingCompany->id, 'slug' => $role['slug']],
+                        [
+                            'name' => $role['name'],
+                            'description' => $role['description'],
+                        ]
+                    );
+                });
+            }
         });
     }
 }
