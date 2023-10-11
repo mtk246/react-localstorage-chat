@@ -17402,6 +17402,17 @@
      *
      */ 
         class Str {
+                    /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::register()
+         * @param string $str
+         * @static 
+         */ 
+        public static function onlyNumbers($str)
+        {
+                        return \Illuminate\Support\Str::onlyNumbers($str);
+        }
          
     }
             /**
