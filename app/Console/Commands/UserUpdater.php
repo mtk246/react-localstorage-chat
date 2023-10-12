@@ -30,7 +30,7 @@ final class UserUpdater extends Command
         $user = User::all()
             ->load(['billingCompanies'])
             ->each(function (User $user) {
-                if (UserType::ADMIN !== $user->type->value && is_null($user->billing_company_id)) {
+                if (UserType::ADMIN->value !== $user->type->value && is_null($user->billing_company_id)) {
                     $billingCompanyId = $user->billingCompanies?->first()?->id;
 
                     if (is_null($billingCompanyId)) {
