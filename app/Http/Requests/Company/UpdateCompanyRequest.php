@@ -38,6 +38,7 @@ final class UpdateCompanyRequest extends FormRequest
             'other_name' => ['nullable', 'string', 'max:255'],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
             'claim_format_ids' => ['required', 'array'],
+            'split_company_claim' => ['nullable', 'boolean'],
 
             'taxonomies' => ['nullable', 'array'],
             'taxonomies.*.tax_id' => ['sometimes', 'string', 'distinct'],
