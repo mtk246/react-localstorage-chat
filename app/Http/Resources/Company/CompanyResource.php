@@ -63,6 +63,7 @@ final class CompanyResource extends JsonResource
                     $bC->private_company = [
                         'status' => $bC->pivot->status ?? false,
                         'miscellaneous' => $bC->pivot->miscellaneous ?? '',
+                        'split_company_claim' => $bC->pivot->split_company_claim ?? false,
                         'claim_format_ids' => $bC->pivot->claim_format_ids ?? [],
                         'claim_formats' => getList(TypeForm::class, 'form'),
                         'edit_name' => !empty($nickname),

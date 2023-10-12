@@ -88,6 +88,7 @@ class CompanyRepository
                 [
                     'miscellaneous' => $data['miscellaneous'] ?? null,
                     'claim_format_ids' => $data['claim_format_ids'] ?? null,
+                    'split_company_claim' => $data['split_company_claim'] ?? false,
                 ]
             );
 

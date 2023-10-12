@@ -93,7 +93,6 @@ final class UpdateCompanyRequestCast extends CastsRequest
     public function getCompanyValues(): array
     {
         return ($this->getEin() ? ['ein' => $this->getEin()] : [])
-            + ($this->getSplitCompanyClaim() ? ['split_company_claim' => $this->getSplitCompanyClaim()] : [])
             + ($this->getOtherName() ? ['other_name' => $this->getOtherName()] : [])
             + ($this->getClia() ? ['clia' => $this->getClia()] : []);
     }

@@ -33,6 +33,7 @@ final class UpdateCompany
                 [
                     'miscellaneous' => $request->getMiscellaneous(),
                     'claim_format_ids' => $request->getClaimFormats(),
+                    'split_company_claim' => $request->getSplitCompanyClaim(),
                 ]
             );
 
