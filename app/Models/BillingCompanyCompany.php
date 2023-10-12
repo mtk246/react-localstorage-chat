@@ -49,6 +49,7 @@ final class BillingCompanyCompany extends Pivot
         'status',
         'miscellaneous',
         'claim_format_ids',
+        'split_company_claim',
     ];
 
     /**

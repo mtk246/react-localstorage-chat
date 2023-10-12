@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Resource_;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository
 {
@@ -761,6 +762,26 @@ class UserRepository
             return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Gender']], null, ['code']);
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    public function updatePassword($data)
+    {
+        try {
+            $user = User::whereId(auth()->id())->first();
+
+            if ($user && Hash::check($data['current_password'], $user->password)) {
+                $user->update([
+                    'password' => bcrypt($data['password']),
+                ]);
+            } else {
+                throw new \Exception('Password incorrect');
+            }
+
+            return $user;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

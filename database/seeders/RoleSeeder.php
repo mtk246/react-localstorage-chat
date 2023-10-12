@@ -81,7 +81,7 @@ class RoleSeeder extends Seeder
                 ],
                 [
                     'name' => 'Account Manager',
-                    'slug' => 'collector',
+                    'slug' => 'accountmanager',
                     'description' => 'Allows access to system functions for audit management by billing company',
                     'level' => 7,
                 ],

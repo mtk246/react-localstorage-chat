@@ -71,6 +71,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('social-medias/{id}', [\App\Http\Controllers\UserController::class, 'updateSocialMediaProfile'])->middleware(['auth:api']);
         Route::patch('update-password', [\App\Http\Controllers\UserController::class, 'changePasswordForm'])->middleware(['auth:api']);
         Route::get('/{ssn}/get-by-ssn', [\App\Http\Controllers\UserController::class, 'searchBySsn']);
+
+        // update password from profile view
+        Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
     Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);

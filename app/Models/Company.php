@@ -129,7 +129,7 @@ final class Company extends Model implements Auditable
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(BillingCompanyCompany::class)
-            ->withPivot(['status', 'miscellaneous', 'claim_format_ids'])
+            ->withPivot(['status', 'miscellaneous', 'claim_format_ids', 'split_company_claim'])
             ->withTimestamps();
     }
 

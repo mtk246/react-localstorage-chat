@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Claim;
 
 use App\Actions\Claim\GetClaimRuleAction;
+use App\Actions\Claim\GetRulesListAction;
 use App\Actions\Claim\StoreClaimRuleAction;
 use App\Actions\Claim\UpdateClaimRuleAction;
 use App\Enums\Claim\ClaimType;
@@ -16,14 +17,13 @@ use App\Http\Resources\Enums\TypeResource;
 use App\Models\Claims\Rules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 final class RulesResource extends Controller
 {
-    public function getList(): JsonResponse
+    public function getList(GetRulesListAction $rules): JsonResponse
     {
-        return response()->json(collect(config('claim.formats'))->mapWithKeys(function ($item, $key) {
-            return [ClaimType::tryFrom($key)->getName() => $item];
-        }));
+        return response()->json($rules->invoke());
     }
 
     public function getTypes(): JsonResponse

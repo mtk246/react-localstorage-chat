@@ -232,6 +232,9 @@ class InsuranceCompanyRepository
                 'abbreviations',
                 'fileMethod',
                 'billingCompanies',
+                'insurancePlans' => function($query) {
+                    $query->with(['planType', 'billingCompanies']);
+                },
             ]);
         } else {
             $data = InsuranceCompany::whereHas('billingCompanies', function ($query) use ($bC) {
@@ -253,6 +256,14 @@ class InsuranceCompanyRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'fileMethod',
+                'insurancePlans' => function($query) {
+                    $query->with([
+                        'planType',
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
             ]);
         }
 
@@ -298,6 +309,9 @@ class InsuranceCompanyRepository
                 'fileMethod',
                 'publicNote',
                 'privateNotes',
+                'insurancePlans' => function($query) {
+                    $query->with(['planType', 'billingCompanies']);
+                },
             ])->first();
         } else {
             $insurance = InsuranceCompany::whereId($id)->with([
@@ -327,6 +341,14 @@ class InsuranceCompanyRepository
                 'privateNotes' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
+                'insurancePlans' => function($query) {
+                    $query->with([
+                        'planType',
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ]);
+                },
             ])->first();
         }
 
@@ -343,6 +365,7 @@ class InsuranceCompanyRepository
             'last_modified' => $insurance->last_modified,
             'abbreviations' => $insurance->abbreviations->setVisible(['id', 'abbreviation'])->toArray(),
             'public_note' => isset($insurance->publicNote) ? $insurance->publicNote->note : null,
+            'insurance_plans' => $insurance->insurancePlans,
         ];
         $record['billing_companies'] = [];
 
