@@ -19,7 +19,7 @@ class LastActivity
     {
         if (isset($request->email)) {
             if (str_contains($request->route()->uri, 'api/v1/auth/login')) {
-                $user = User::whereEmail($request->email)->first();
+                $user = User::whereEmail(strtolower($request->email))->first();
                 if (isset($user)) {
                     if (false == $user->status) {
                         return response()->json(['error' => __('Your user is inactive, for more information contact the administrator.')], 401);

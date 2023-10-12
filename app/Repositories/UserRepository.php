@@ -623,7 +623,7 @@ class UserRepository
 
     public function unlockUser(Request $request)
     {
-        $user = User::whereEmail($request->email)->first();
+        $user = User::whereEmail(strtolower($request->email))->first();
 
         if (is_null($user)) {
             return null;
@@ -686,7 +686,7 @@ class UserRepository
 
     public function search(Request $request)
     {
-        $email = $request->get('email');
+        $email = strtolower($request->get('email'));
 
         $bC = auth()->user()->billing_company_id ?? null;
 
