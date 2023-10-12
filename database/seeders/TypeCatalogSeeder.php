@@ -251,7 +251,7 @@ class TypeCatalogSeeder extends Seeder
                     ],
                     [
                         'code' => 'S',
-                        'description' => 'Secundary',
+                        'description' => 'Secondary',
                     ],
                     [
                         'code' => 'T',

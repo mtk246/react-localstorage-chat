@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\User\UserType;
 use App\Models\BillingCompany\Membership;
+use App\Models\Permissions\Permission;
+use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -37,6 +42,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $profile_id
  * @property string|null $last_activity
  * @property int|null $billing_company_id
+ * @property UserType $type
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -59,7 +65,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Patient|null $patient
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
  * @property int|null $permissions_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Role> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
+ * @property int|null $permits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property int|null $tokens_count
@@ -85,6 +93,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
@@ -118,6 +127,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         'isBlocked',
         'profile_id',
         'billing_company_id',
+        'type',
     ];
 
     /**
@@ -138,6 +148,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'isLogged' => 'boolean',
+        'type' => UserType::class,
     ];
 
     /**
@@ -145,7 +156,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['profile', 'language', 'last_modified'];
+    protected $appends = ['profile', 'language', 'last_modified', 'permissions'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -266,6 +277,58 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    public function permissions(): ?Collection
+    {
+        if (is_null($this->type)) {
+            return null;
+        }
+
+        /* @var \Illuminate\Database\Eloquent\Relations\MorphToMany $roles */
+        $roles = $this->type->value === UserType::ADMIN->value
+            ? $this->roles()
+            : $this->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ->membership
+                ->roles();
+
+        return $roles->get()->reduce(function (Collection $v, Role $role) {
+            $v = $v->merge($role->permissions()->get());
+
+            return $v;
+        }, $this->permits()->get())->unique();
+    }
+
+    public function getPermissionsAttribute(): ?Collection
+    {
+        return $this->permissions();
+    }
+
+    public function permits(): MorphToMany
+    {
+        return $this->morphToMany(Permission::class, 'authorizable')->withTimestamps();
+    }
+
+    public function roles(): MorphToMany
+    {
+        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
+    }
+
+    public function hasRole($role, $all = false)
+    {
+        return match ($this->type?->value ?? 0) {
+            UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
+            UserType::USER->value => $this->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ->membership
+                ->roles()
+                ->where('slug', $role)
+                ->exists(),
+            default => false,
+        };
     }
 
     /**

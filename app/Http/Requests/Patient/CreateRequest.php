@@ -93,9 +93,21 @@ class CreateRequest extends FormRequest
             'guarantor.phone' => ['nullable', 'string'],
 
             'emergency_contacts' => ['nullable', 'array'],
-            'emergency_contacts.*.name' => ['nullable', 'string'],
-            'emergency_contacts.*.cellphone' => ['nullable', 'string'],
-            'emergency_contacts.*.relationship_id' => ['nullable', 'integer'],
+            'emergency_contacts.*.name' => [
+                'required_with:emergency_contacts.*.cellphone,emergency_contacts.*.relationship_id',
+                'nullable',
+                'string',
+            ],
+            'emergency_contacts.*.cellphone' => [
+                'required_with:emergency_contacts.*.name,emergency_contacts.*.relationship_id',
+                'nullable',
+                'string',
+            ],
+            'emergency_contacts.*.relationship_id' => [
+                'required_with:emergency_contacts.*.name,emergency_contacts.*.cellphone',
+                'nullable',
+                'integer',
+            ],
 
             'employments' => ['nullable', 'array'],
             'employments.*.employer_name' => [
@@ -120,8 +132,16 @@ class CreateRequest extends FormRequest
             ],
 
             'profile.social_medias' => ['nullable', 'array'],
-            'profile.social_medias.*.name' => ['nullable', 'string'],
-            'profile.social_medias.*.link' => ['nullable', 'string'],
+            'profile.social_medias.*.name' => [
+                'required_with:profile.social_medias.*.link',
+                'nullable',
+                'string',
+            ],
+            'profile.social_medias.*.link' => [
+                'required_with:profile.social_medias.*.name',
+                'nullable',
+                'string',
+            ],
 
             'public_note' => ['nullable', 'string'],
             'private_note' => ['nullable', 'string'],

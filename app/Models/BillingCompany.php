@@ -255,6 +255,7 @@ class BillingCompany extends Model implements Auditable
             'tax_id' => $this->tax_id,
             'name' => $this->name,
             'code' => $this->code,
+            'icon' => $this->logo,
             'abbreviation' => $this->abbreviation,
             'contact.email' => $this->contact?->email ?? null,
         ];

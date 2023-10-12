@@ -82,9 +82,8 @@ pipelines:
           deployment: Production
       - step:
           name: Test success deployment
-          deployment: staging
           script:
-            - echo "todo: test success deployment"
+            - echo "todo test success deployment"
     v100:
       - stage:
           name: Test app

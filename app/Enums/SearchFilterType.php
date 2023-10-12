@@ -12,6 +12,7 @@ enum SearchFilterType: string
 
     case BILLING_COMPANY = 'billing_company';
     case CLAIM = 'claim';
+    case CLAIM_RULE = 'claim_rule';
     case COMPANY = 'company';
     case FACILITY = 'facility';
     case HEALTH_PROFESSIONAL = 'health_professional';

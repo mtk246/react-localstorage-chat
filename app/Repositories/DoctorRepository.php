@@ -227,10 +227,21 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
 
-            $healthP->companies()->syncWithPivotValues($company->id ?? $data['company_id'], [
-                'authorization' => $data['authorization'],
-                'billing_company_id' => $billingCompany,
-            ]);
+            if(is_null($healthP->companies()->where(['company_id' => $company->id, 'billing_company_id' => $billingCompany])->first())) {
+                $healthP->companies()->attach(
+                    $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                        'billing_company_id' => $billingCompany
+                    ]);
+            }
+            else {
+                $healthP->companies()->updateExistingPivot($company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                    ]
+                );
+            }
 
             if (isset($data['private_note'])) {
                 PrivateNote::create([
@@ -300,13 +311,27 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
+
+                $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $healthP->taxonomies()->attach($tax->id, [
-                        'billing_company_id' => $billingCompany,
-                        'primary' => $taxonomy['primary'],
-                    ]);
+                    if(is_null($healthP->taxonomies()->where(['taxonomy_id' => $tax->id, 'billing_company_id' => $billingCompany])->first())) {
+
+                        $healthP->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary'],
+                        ]);
+                    }
+                    else {
+                        $healthP->taxonomies()->where('billing_company_id', $billingCompany)
+                            ->updateExistingPivot($tax->id,
+                                [
+                                    'primary' => $taxonomy['primary'],
+                                ]
+                            );
+                    }
                 }
             }
 
@@ -360,7 +385,7 @@ class DoctorRepository
                 'last_name' => $data['profile']['last_name'],
                 'name_suffix_id' => $data['profile']['name_suffix_id'] ?? null,
                 'middle_name' => $data['profile']['middle_name'],
-                'ssn' => $data['profile']['ssn'],
+                'ssn' => $data['profile']['ssn'] ?? null,
                 'date_of_birth' => $data['profile']['date_of_birth'],
             ]);
 
@@ -529,7 +554,7 @@ class DoctorRepository
                 'npi_company' => $data['npi_company'] ?? '',
                 'ein' => $data['ein'] ?? null,
                 'upin' => $data['upin'] ?? null,
-                'company_id' => $data['company_id']
+                'company_id' => $data['company_id'] ?? $company->id
             ]);
 
             $type = HealthProfessionalType::query()->updateOrCreate([
@@ -539,10 +564,21 @@ class DoctorRepository
                 'type' => (string) $data['health_professional_type_id'],
             ]);
 
-            $healthP->companies()->syncWithPivotValues($data['company_id'], [
-                'authorization' => $data['authorization'],
-                'billing_company_id' => $billingCompany,
-            ]);
+            if(is_null($healthP->companies()->where(['company_id' => $data['company_id'] ?? $company->id, 'billing_company_id' => $billingCompany])->first())) {
+                $healthP->companies()->attach(
+                    $data['company_id'] ?? $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                        'billing_company_id' => $billingCompany
+                    ]);
+            }
+            else {
+                $healthP->companies()->updateExistingPivot($data['company_id'] ?? $company->id,
+                    [
+                        'authorization' => $data['authorization'],
+                    ]
+                );
+            }
 
             if (isset($data['private_note'])) {
                 PrivateNote::updateOrCreate([
@@ -615,28 +651,25 @@ class DoctorRepository
             }
 
             if (isset($data['taxonomies'])) {
-
                 $healthP->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
 
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
-                    $check = $healthP->taxonomies()
-                        ->wherePivot('billing_company_id', $billingCompany)
-                        ->find($tax->id);
+                    if(is_null($healthP->taxonomies()->where(['taxonomy_id' => $tax->id, 'billing_company_id' => $billingCompany])->first())) {
 
-                    if($check) {
-                        $healthP->taxonomies()
-                        ->wherePivot('billing_company_id', $billingCompany)
-                        ->updateExistingPivot($tax->id, [
-                            'primary' => $taxonomy['primary']
+                        $healthP->taxonomies()->attach($tax->id, [
+                            'billing_company_id' => $billingCompany,
+                            'primary' => $taxonomy['primary'],
                         ]);
                     }
                     else {
-                        $healthP->taxonomies()->attach($tax->id, [
-                            'billing_company_id' => $billingCompany,
-                            'primary' => $taxonomy['primary']
-                        ]);
+                        $healthP->taxonomies()->where('billing_company_id', $billingCompany)
+                            ->updateExistingPivot($tax->id,
+                                [
+                                    'primary' => $taxonomy['primary'],
+                                ]
+                            );
                     }
                 }
             }
@@ -762,16 +795,22 @@ class DoctorRepository
                         },
                     ]);
                 },
-                'billingCompanies',
+                'billingCompanies' => function($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 'user' => function ($query) use ($bC) {
                     $query->with(['roles']);
                 },
-                'taxonomies',
+                'taxonomies' => function($query) use($bC) {
+                     $query->where('billing_company_id', $bC);
+                },
                 'companies' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC)
                         ->with(['taxonomies', 'nicknames']);
                 },
-                'healthProfessionalType',
+                'healthProfessionalType' => function($query) use ($bC) {
+                    $query->where('billing_company_id', $bC);
+                },
                 'company',
             ]);
         }

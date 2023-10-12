@@ -8,6 +8,7 @@ return [
     '0a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'higher insurance company name',
         'value' => [
             'higherInsuranceCompany:name',
         ],
@@ -22,6 +23,7 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
+        'description' => 'higher insurance company address',
         'value' => [
             'higherInsuranceCompany:address',
             'higherInsuranceCompany:apt_suite',
@@ -38,6 +40,7 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
+        'description' => 'higher insurance company address',
         'value' => [
             'higherInsuranceCompany:city',
             'higherInsuranceCompany:state',
@@ -46,15 +49,18 @@ return [
     ],
     '1' => [
         'type' => RuleType::SINGLE->value,
+        'description' => 'type of insurance',
         'value' => 'insType:code',
     ],
     '1a' => [
         'type' => RuleType::SINGLE->value,
+        'description' => 'higher insurance plan name',
         'value' => 'higherOrderPolicy:policy_number',
     ],
     '2' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'patient name',
         'value' => [
             'patientProfile:last_name',
             'patientProfile:name_suffix',
@@ -65,6 +71,7 @@ return [
     '3a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
+        'description' => 'patient year of birth',
         'value' => [
             'patientProfile:year_of_birth',
         ],
@@ -80,6 +87,7 @@ return [
     '3b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
+        'description' => 'patient month of birth',
         'value' => [
             'patientProfile:month_of_birth',
         ],
@@ -95,6 +103,7 @@ return [
     '3c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
+        'description' => 'patient day of birth',
         'value' => [
             'patientProfile:day_of_birth',
         ],
@@ -110,6 +119,7 @@ return [
     '3d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 1,
+        'description' => 'patient sex',
         'value' => [
             'patientProfile:sex',
         ],
@@ -125,6 +135,7 @@ return [
     '4' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'subscriber name',
         'value' => [
             'subscriber:last_name',
             'subscriber:name_suffix',
@@ -136,6 +147,7 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
+        'description' => 'patient address',
         'value' => [
             'patientAddress:address',
             'patientAddress:apt_suite',
@@ -155,6 +167,7 @@ return [
     '5b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'patient address',
         'value' => [
             'patientAddress:city',
         ],
@@ -172,6 +185,7 @@ return [
     '5c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
+        'description' => 'patient address',
         'value' => [
             'patientAddress:state',
         ],
@@ -189,6 +203,7 @@ return [
     '5d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
+        'description' => 'patient address',
         'value' => [
             'patientAddress:zip',
         ],
@@ -206,6 +221,7 @@ return [
     '5e' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 3,
+        'description' => 'patient contact',
         'value' => [
             'patientContact:code',
         ],
@@ -223,6 +239,7 @@ return [
     '5f' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 11,
+        'description' => 'patient contact',
         'value' => [
             'patientContact:number',
         ],
@@ -240,12 +257,14 @@ return [
     '6' => [
         'type' => RuleType::SINGLE->value,
         'length' => 6,
+        'description' => 'subscriber',
         'value' => 'subscriberRelationship:description',
     ],
     '7a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
+        'description' => 'subscriber address',
         'value' => [
             'subscriberAddress:address',
             'subscriberAddress:apt_suite',
@@ -265,6 +284,7 @@ return [
     '7b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'subscriber address',
         'value' => [
             'subscriberAddress:city',
         ],
@@ -282,6 +302,7 @@ return [
     '7c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
+        'description' => 'subscriber address',
         'value' => [
             'subscriberAddress:state',
         ],
@@ -299,6 +320,7 @@ return [
     '7d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
+        'description' => 'subscriber address',
         'value' => [
             'subscriberAddress:zip',
         ],
@@ -316,6 +338,7 @@ return [
     '7e' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 3,
+        'description' => 'subscriber contact',
         'value' => [
             'subscriberContact:code',
         ],
@@ -333,6 +356,7 @@ return [
     '7f' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
+        'description' => 'subscriber contact',
         'value' => [
             'subscriberContact:number',
         ],
@@ -350,6 +374,7 @@ return [
     '9' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
+        'description' => 'lower subscriber',
         'value' => [
             'lowerSubscriber:last_name',
             'lowerSubscriber:name_suffix',
@@ -360,23 +385,28 @@ return [
     '9a' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
+        'description' => 'lower order policy number',
         'value' => 'lowerOrderPolicy:policy_number',
     ],
     '9d' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
+        'description' => 'lower insurance plan name',
         'value' => 'lowerInsurancePlan:name',
     ],
     '10a' => [
         'type' => RuleType::BOOLEAN->value,
+        'description' => null,
         'value' => 'claimDemographicInformation:employment_related_condition',
     ],
     '10ba' => [
         'type' => RuleType::BOOLEAN->value,
+        'description' => null,
         'value' => 'claimDemographicInformation:auto_accident_related_condition',
     ],
     '10bb' => [
         'type' => RuleType::MULTIPLE->value,
+        'description' => null,
         'length' => 10,
         'value' => [
             'claimDemographicInformation:auto_accident_place_state',
@@ -390,10 +420,12 @@ return [
     ],
     '10c' => [
         'type' => RuleType::BOOLEAN->value,
+        'description' => null,
         'value' => 'claimDemographicInformation:other_accident_related_condition',
     ],
     '10d' => [
         'type' => RuleType::SINGLE->value,
+        'description' => null,
         'value' => '| ',
     ],
     '11' => [

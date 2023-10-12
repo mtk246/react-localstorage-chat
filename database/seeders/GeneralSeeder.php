@@ -70,7 +70,7 @@ class GeneralSeeder extends Seeder
         $genders = [
             ['description' => 'Female'],
             ['description' => 'Male'],
-            ['description' => 'Both'],
+            ['description' => 'All'],
         ];
 
         foreach ($genders as $gender) {

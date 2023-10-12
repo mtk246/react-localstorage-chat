@@ -17,6 +17,7 @@ final class ClaimBodyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
+            'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
@@ -204,7 +205,7 @@ final class ClaimBodyResource extends JsonResource
                     'created_at' => $subNote['created_at'],
                     'last_modified' => $subNote['last_modified'],
                     'check_status' => null,
-                    'status' => $subNote['status'],
+                    'status' => $status->claimStatus->status.' - '.$subNote['status'],
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
                 ]
