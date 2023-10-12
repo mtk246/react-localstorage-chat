@@ -28,6 +28,7 @@ final class CreateCompanyRequest extends FormRequest
             'abbreviation' => ['nullable', 'string', 'max:20'],
             'miscellaneous' => ['nullable', 'string', 'max:255'],
             'claim_format_ids' => ['required', 'array'],
+            'split_company_claim' => ['nullable', 'boolean'],
 
             'taxonomies' => ['nullable', 'array'],
             'taxonomies.*.tax_id' => ['sometimes', 'string'],

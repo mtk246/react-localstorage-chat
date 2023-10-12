@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace App\Actions\Claim;
 
+use App\Facades\Pagination;
 use App\Http\Resources\Claim\RuleResource;
 use App\Models\Claims\Rules;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 final class GetClaimRuleAction
 {
-    public function getAll(?int $billingCompanyId): AnonymousResourceCollection
+    public function getAll(Request $request): LengthAwarePaginator
     {
-        $rules = Rules::query()
-            ->when(Gate::denies('is-admin'), fn ($query) => $query->where('billing_company_id', $billingCompanyId))
-            ->paginate();
+        $billingCompanyId = Gate::denies('is-admin')
+            ? $request->user()->billing_company_id
+            : $request->get('billing_company_id');
 
-        return RuleResource::collection($rules);
+        $rules = Rules::search($request->get('query'))
+            ->when($billingCompanyId, fn ($query) => $query->where('billing_company_id', $billingCompanyId))
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->paginate(Pagination::itemsPerPage());
+
+        return RuleResource::collection($rules)->resource;
     }
 }

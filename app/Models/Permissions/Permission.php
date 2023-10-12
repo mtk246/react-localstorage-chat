@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\Permissions;
 
-use App\Models\BillingCompany;
-use App\Models\BillingCompany\MembershipRole;
+use App\Models\User;
+use App\Models\User\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -16,30 +16,31 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\Permissions\Permission.
  *
  * @property int $id
- * @property string $module
- * @property int|null $billing_company_id
- * @property array $permission
+ * @property string $name
+ * @property string $slug
+ * @property string|null $description
+ * @property string|null $module
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string $permissioned_type
- * @property int $permissioned_id
+ * @property string|null $constraint
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
- * @property BillingCompany|null $billingCompany
- * @property Model|\Eloquent $role
- * @property Model|\Eloquent $user
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $role
+ * @property int|null $role_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, User> $user
+ * @property int|null $user_count
  *
  * @method static \Database\Factories\Permissions\PermissionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereConstraint($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereModule($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission wherePermission($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission wherePermissionedId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission wherePermissionedType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -49,32 +50,15 @@ final class Permission extends Model implements Auditable
     use HasFactory;
     use AuditableTrait;
 
-    protected $table = 'permission';
+    protected $fillable = ['name', 'slug', 'description', 'module', 'constraint'];
 
-    protected $fillable = [
-        'module',
-        'permission',
-        'permissioned_type',
-        'permissioned_id',
-        'billing_company_id',
-    ];
-
-    protected $casts = [
-        'permission' => 'array',
-    ];
-
-    public function role(): MorphTo
+    public function role(): MorphToMany
     {
-        return $this->morphTo(MembershipRole::class, 'permissioned');
+        return $this->morphToMany(Role::class, 'authorizable');
     }
 
-    public function user(): MorphTo
+    public function user(): MorphToMany
     {
-        return $this->morphTo(User::class, 'permissioned');
-    }
-
-    public function billingCompany()
-    {
-        return $this->belongsTo(BillingCompany::class);
+        return $this->morphToMany(User::class, 'authorizable');
     }
 }

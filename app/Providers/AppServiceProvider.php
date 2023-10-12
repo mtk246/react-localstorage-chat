@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use Elibyy\TCPDF\TCPDF as PDF;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(PDF::class, function ($app) {
             return new PDF(config('app.name'));
+        });
+
+        Str::macro('onlyNumbers', function (string $str) {
+            return preg_replace('/[^0-9]/', '', $str);
         });
     }
 

@@ -6,15 +6,16 @@ namespace App\Models\BillingCompany;
 
 use App\Models\BillingCompany;
 use App\Models\User;
+use App\Models\User\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * App\Models\BillingCompany\Membership.
  *
  * @property BillingCompany $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany\MembershipRole> $roles
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property int|null $roles_count
  * @property User|null $user
  *
@@ -54,14 +55,9 @@ final class Membership extends Pivot
         return $this->belongsTo(User::class);
     }
 
-    public function roles(): ?BelongsToMany
+    public function roles(): ?MorphToMany
     {
-        return $this->belongsToMany(
-            related: MembershipRole::class,
-            table: 'membership_role_user',
-            foreignPivotKey: 'billing_company_user_id',
-            relatedPivotKey: 'membership_role_id',
-        );
+        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
     }
 
     public function getRolesAttribute()

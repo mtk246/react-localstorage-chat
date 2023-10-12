@@ -240,8 +240,9 @@ class AuthController extends Controller
         $bC = $user->billing_company_id;
         if (!$bC) {
             $user = Auth::user()->load([
+                'billingCompanies',
+                'permits',
                 'roles',
-                'permissions',
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
@@ -249,7 +250,8 @@ class AuthController extends Controller
         } else {
             $user = $user->load([
                 'roles',
-                'permissions',
+                'billingCompanies',
+                'permits',
                 'profile' => function ($query) use ($bC)  {
                     $query->with([
                         'socialMedias',
@@ -489,7 +491,7 @@ class AuthController extends Controller
         //        }
 
         return response()->json([
-            'user' => $user->load('permissions')->load('roles'),
+            'user' => $user->load(['roles', 'billingCompanies', 'permits'])->load('roles'),
             'access_token' => $token,
             'token_type' => 'bearer',
             'inactivity_time' => $this->webDowntime,
