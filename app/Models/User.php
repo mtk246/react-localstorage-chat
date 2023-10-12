@@ -291,10 +291,10 @@ final class User extends Authenticatable implements JWTSubject, Auditable
             : $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
-                ->membership
+                ?->membership
                 ->roles();
 
-        return $roles->get()->reduce(function (Collection $v, Role $role) {
+        return $roles?->get()->reduce(function (Collection $v, Role $role) {
             $v = $v->merge($role->permissions()->get());
 
             return $v;
