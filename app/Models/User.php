@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -329,6 +330,30 @@ final class User extends Authenticatable implements JWTSubject, Auditable
                 ->exists(),
             default => false,
         };
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()->contains(function (Permission $value) use ($permission) {
+            return Str::is($permission, $value->slug);
+        }) ?? false;
+    }
+
+    public function hasAllPermissions(string $permissions): bool
+    {
+        foreach ($this->getArrayFrom($permissions) as $permission) {
+            if (!$this->hasPermission($permission)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** @return string[] */
+    private function getArrayFrom(string $argument): array
+    {
+        return (!is_array($argument)) ? preg_split('/ ?[,|] ?/', $argument) : $argument;
     }
 
     /**
