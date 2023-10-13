@@ -427,6 +427,7 @@ class AuthController extends Controller
         /** @var IpRestriction|null */
         $ipRestrictions = IpRestriction::query()
             ->where('billing_company_id', $user->billing_company_id)
+            ->whereNull('deleted_at')
             ->with('ipRestrictionMults')
             ->get();
 
