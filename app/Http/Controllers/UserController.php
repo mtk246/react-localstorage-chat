@@ -152,7 +152,7 @@ class UserController extends Controller
     public function sendEmailRescuePass(SendRescuePassRequest $request): JsonResponse
     {
         try {
-            $rs = $this->userRepository->sendEmailToRescuePassword($request->input('email'));
+            $rs = $this->userRepository->sendEmailToRescuePassword(strtolower($request->input('email')));
 
             if (is_null($rs)) {
                 return response()->json(__('Error, user not found'), 403);

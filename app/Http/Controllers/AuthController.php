@@ -109,9 +109,10 @@ class AuthController extends Controller
     {
         $dataValidated = $request->validated();
         $dataValidated = $request->safe()->only(['email', 'password']);
+        $dataValidated['email'] = strtolower($dataValidated['email']);
 
         /** @var User */
-        $user = User::where('email', $dataValidated['email'])->first();
+        $user = User::where('email', strtolower($dataValidated['email']))->first();
 
         if (!isset($user)) {
             return response()->json(['error' => __('Bad Credentials')], 401);
@@ -197,7 +198,7 @@ class AuthController extends Controller
 
     public function checkIsLogged(LoginRequest $request, MobileDetect $deviceDetect): bool
     {
-        $user = User::whereEmail($request->input('email'))->first();
+        $user = User::whereEmail(strtolower($request->input('email')))->first();
         $device = Device::where([
             'user_id' => $user->id,
             'type' => $deviceDetect->isMobile()
@@ -568,7 +569,7 @@ class AuthController extends Controller
 
     protected function incrementLoginAttempts(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', strtolower($request->email))->first();
         FailedLoginAttempt::create([
             'user_id' => $user->id,
         ]);
@@ -576,13 +577,13 @@ class AuthController extends Controller
 
     protected function clearLoginAttempts(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', strtolower($request->email))->first();
         $user->failedLoginAttempts()->where(['status' => true])->update(['status' => false]);
     }
 
     protected function fireLockoutEvent(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', strtolower($request->email))->first();
         $user->isBlocked = true;
         $user->save();
     }
@@ -595,7 +596,7 @@ class AuthController extends Controller
     public function sendEmailCode(Request $request, MobileDetect $deviceDetect): JsonResponse
     {
         try {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', strtolower($request->email))->first();
             if ($this->checkNewDevice($user->id, $request->ip(), $request->userAgent(), $deviceDetect)) {
                 $code = Str::random(6);
                 Device::updateOrCreate([

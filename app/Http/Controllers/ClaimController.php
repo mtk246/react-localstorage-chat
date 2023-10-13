@@ -18,6 +18,7 @@ use App\Actions\Claim\GetFieldQualifierAction;
 use App\Actions\Claim\GetPatientStatusesAction;
 use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\UpdateClaimAction;
+use App\Enums\Claim\CodeValueFields;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -26,7 +27,8 @@ use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\CreateNoteRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
-use App\Http\Resources\Claim\PreviewResource;
+use App\Http\Resources\Claim\Fields\CodeValueResource;
+use App\Http\Resources\Enums\EnumResource;
 use App\Models\BillClassification;
 use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
@@ -34,8 +36,6 @@ use App\Models\Facility;
 use App\Models\FacilityType;
 use App\Repositories\ClaimRepository;
 use App\Repositories\ProcedureRepository;
-use App\Repositories\ReportRepository;
-use App\Services\Claim\ClaimPreviewService;
 use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -433,5 +433,12 @@ class ClaimController extends Controller
         $rs = $getCheckStatus->single($token ?? '', $claim);
 
         return $rs ? response()->json($rs) : response()->json(__('Error, get check status'), 400);
+    }
+
+    public function getListCodeValues(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(CodeValueFields::cases()), CodeValueResource::class),
+        );
     }
 }
