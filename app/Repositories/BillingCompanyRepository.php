@@ -10,7 +10,7 @@ use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-final class BillingCompanyRepository
+class BillingCompanyRepository
 {
     public function createBillingCompany(array $data)
     {
@@ -20,10 +20,10 @@ final class BillingCompanyRepository
             }
 
             $file = $data['logo'];
-            $fullNameFile = strtotime('now').'.'.$file->getClientOriginalExtension();
+            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('/img-billing-company/'), $fullNameFile);
 
-            $pathNameFile = asset('/img-billing-company/'.$fullNameFile);
+            $pathNameFile = asset('/img-billing-company/' . $fullNameFile);
         }
 
         $company = BillingCompany::create([
@@ -188,9 +188,9 @@ final class BillingCompanyRepository
     public function getByName($name)
     {
         return BillingCompany::whereRaw('LOWER(name) LIKE (?)', [strtolower("%$name%")])->with([
-                'addresses',
-                'contacts',
-            ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
+            'addresses',
+            'contacts',
+        ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
     }
 
     public function getList()
@@ -229,10 +229,10 @@ final class BillingCompanyRepository
 
         $file = $request->file('logo');
         if (isset($file)) {
-            $fullNameFile = strtotime('now').'.'.$file->getClientOriginalExtension();
+            $fullNameFile = strtotime('now') . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('/img-billing-company/'), $fullNameFile);
 
-            $pathNameFile = asset('/img-billing-company/'.$fullNameFile);
+            $pathNameFile = asset('/img-billing-company/' . $fullNameFile);
 
             $billingCompany->logo = $pathNameFile;
             $billingCompany->save();
