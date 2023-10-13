@@ -57,6 +57,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $failed_login_attempts_count
  * @property string $language
  * @property mixed $last_modified
+ * @property \Illuminate\Support\Collection|null $permissions
  * @property \App\Models\Profile|null $profile
  * @property \App\Models\HealthProfessional|null $healthProfessional
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
@@ -64,8 +65,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property int|null $notifications_count
  * @property \App\Models\Patient|null $patient
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property int|null $permissions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property int|null $permits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles

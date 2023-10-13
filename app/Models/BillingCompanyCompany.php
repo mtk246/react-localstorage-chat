@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $miscellaneous
  * @property array|null $claim_format_ids
+ * @property bool $split_company_claim
  * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\Company $company
  *
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereMiscellaneous($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereSplitCompanyClaim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyCompany whereUpdatedAt($value)
  *
