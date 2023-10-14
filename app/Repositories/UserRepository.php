@@ -775,7 +775,7 @@ class UserRepository
                     'password' => bcrypt($data['password']),
                 ]);
             } else {
-                throw new \Exception('Password incorrect');
+                return null;
             }
 
             return $user;
