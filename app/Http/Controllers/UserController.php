@@ -415,6 +415,6 @@ class UserController extends Controller
     {
         $rs = $this->userRepository->updatePassword($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error updating password'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error current password incorrect'), 400);
     }
 }
