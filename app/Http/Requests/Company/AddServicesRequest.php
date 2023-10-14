@@ -27,7 +27,7 @@ final class AddServicesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'services' => ['required', 'array'],
+            'services' => ['nullable', 'array'],
             'services.*.id' => ['nullable', 'integer'],
             'services.*.billing_company_id' => ['nullable', 'integer'],
             'services.*.procedure_ids' => ['required', 'array'],
