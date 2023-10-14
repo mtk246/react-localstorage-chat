@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')/* ->middleware('audit') */
-->middleware(['restrictIpAddress', 'lastActivity'])->group(function () {
+->middleware(['lastActivity'])->group(function () {
     Route::get('/', function () {
         return response()->json(['message' => 'Api Running']);
     });
