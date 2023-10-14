@@ -7,7 +7,6 @@ namespace App\Http\Requests\Company;
 use App\Http\Casts\Company\ServiceRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 final class AddServicesRequest extends FormRequest
 {
@@ -46,35 +45,30 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication' => ['nullable', 'array'],
             'services.*.medication.id' => ['nullable', 'integer'],
             'services.*.medication.drug_code' => [
-                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'string',
                 'max:11',
+                'required_if:services.*.medication_application,true',
             ],
             'services.*.medication.measurement_unit_id' => [
-                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
                 'integer',
+                'required_if:services.*.medication_application,true',
             ],
             'services.*.medication.units' => [
-                Rule::requiredIf(fn () => true === $this->input('medication_application', false)),
                 'nullable',
-                'numeric',
+                'regex:/^\d{1,8}(\.\d{1,3})?$/',
+                'required_if:services.*.medication_application,true',
             ],
-            'services.*.medication.units_limit' => ['nullable', 'numeric'],
-            'services.*.medication.link_sequence_number' => ['nullable', 'numeric'],
-            'services.*.medication.pharmacy_prescription_number' => ['nullable', 'numeric'],
+            'services.*.medication.units_limit' => ['nullable', 'integer', 'gt:services.*.medication.units'],
+            'services.*.medication.link_sequence_number' => ['nullable', 'regex:/^\d{1,50}$/'],
+            'services.*.medication.pharmacy_prescription_number' => ['nullable', 'regex:/^\d{1,50}$/'],
             'services.*.medication.repackaged_NDC' => ['nullable', 'boolean'],
             'services.*.medication.code_NDC' => [
-                Rule::requiredIf(
-                    fn () => (
-                        true === $this->input('medication_application', false) &&
-                        true === $this->input('repackaged_NDC', false)
-                    )
-                ),
                 'nullable',
                 'string',
                 'max:11',
+                'required_if:services.*.medication.repackaged_NDC,true',
             ],
             'services.*.medication.claim_note_required' => ['nullable', 'boolean'],
             'services.*.medication.note' => ['nullable', 'string'],
