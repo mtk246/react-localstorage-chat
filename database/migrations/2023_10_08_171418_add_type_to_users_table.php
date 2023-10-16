@@ -13,7 +13,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('type')->default(UserType::USER->value);
+            $table->string('type')->default(UserType::BILLING->value);
         });
 
         DB::table('rollables')->delete();
@@ -50,7 +50,7 @@ return new class() extends Migration {
                         ->id;
 
                     $rollableType = Membership::class;
-                    $userType = UserType::USER;
+                    $userType = UserType::BILLING;
                 }
 
                 DB::table('users')->where('id', $user->id)->update(['type' => $userType->value]);

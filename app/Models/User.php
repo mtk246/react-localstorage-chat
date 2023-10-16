@@ -321,7 +321,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     {
         return match ($this->type?->value ?? 0) {
             UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
-            UserType::USER->value => $this->billingCompanies()
+            UserType::BILLING->value => $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
                 ->membership
