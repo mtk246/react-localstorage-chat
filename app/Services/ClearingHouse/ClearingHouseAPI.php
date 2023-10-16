@@ -97,7 +97,7 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ->pluck('id')
                 ->toArray();
 
-            return !empty($billingCompanies);
+            return !empty($billingCompanies) && ($insurance->insurance_company_id == ($request['insurance_company_id'] ?? null));
         })
             ->map(fn ($payer) => [
             'id' => upperCaseWords($payer->name),
