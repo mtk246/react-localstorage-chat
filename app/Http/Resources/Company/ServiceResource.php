@@ -8,6 +8,7 @@ use App\Http\Resources\RequestWrapedResource;
 use App\Models\CompanyProcedure;
 use App\Models\Modifier;
 use App\Models\Procedure;
+use Cknow\Money\Money;
 
 /**
  * @property CompanyProcedure $resource
@@ -52,8 +53,8 @@ final class ServiceResource extends RequestWrapedResource
             'fsa' => $this->resource->macLocality?->fsa,
             'counties' => $this->resource->macLocality?->counties,
             'insurance_label_fee_id' => $this->resource->insurance_label_fee_id,
-            'price' => (float) $this->resource->price,
-            'price_percentage' => (float) $this->resource->price_percentage,
+            'price' => Money::parse($this->resource->price, null, true)->formatByDecimal(),
+            'price_percentage' => Money::parse($this->resource->price_percentage, null, true)->formatByDecimal(),
             'clia' => $this->resource->clia,
             'medication_application' => !empty($this->resource->medication),
             'medication' => !empty($this->resource->medication)
