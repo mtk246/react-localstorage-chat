@@ -67,8 +67,8 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
 
         return $payers->filter(function ($payer) use ($payerID, $user, $request) {
             $insurance = InsurancePlan::query()
-                ->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("$payerID")])
-                ->where('name', $payer->name)
+                ->whereRaw('UPPER(payer_id) = ?', [Str::upper($payerID)])
+                ->whereRaw('UPPER(name) = ?', [Str::upper($payer->name)])
                 ->first();
 
             if (is_null($insurance)) {
