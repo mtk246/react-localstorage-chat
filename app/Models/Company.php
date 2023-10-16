@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -318,15 +319,37 @@ final class Company extends Model implements Auditable
      */
     public function scopeSearch($query, $search): mixed
     {
-        if ('' != $search) {
-            return $query->whereHas('contacts', function ($q) use ($search): void {
-                $q->whereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
-        }
-
-        return $query;
+        return $query->when($search, function ($query) use ($search) {
+            return $query
+                ->where(function ($query) use ($search) {
+                    $this->searchByCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByAbbreviation($query, $search);
+                });
+        });
     }
+
+    protected function searchByCompany($query, $search)
+    {
+        $formatedSearch = str_replace('-', '', $search);
+        $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")])
+            ->orWhereRaw('REPLACE(LOWER(ein), \'-\', \'\') LIKE (?)', [strtolower("%$formatedSearch%")]);
+    }
+
+    protected function searchByAbbreviation($query, $search)
+    {
+        $query->whereHas('abbreviations', function ($q) use ($search) {
+            $q->when(Gate::denies('is-admin'), function ($query) {
+                $user = auth()->user();
+
+                return $query->where('billing_company_id', $user?->billing_company_id);
+            })
+            ->whereRaw('LOWER(abbreviation) LIKE (?)', [strtolower("%$search%")]);
+        });
+    }
+
     // @codingStandardsIgnoreEnd
 
     public function toSearchableArray()
