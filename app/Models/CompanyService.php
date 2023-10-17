@@ -62,6 +62,7 @@ final class CompanyService extends Model
         'mac_locality_id',
         'price',
         'price_percentage',
+        'revenue_code_id',
         'insurance_label_fee_id',
         'clia',
     ];
@@ -103,5 +104,10 @@ final class CompanyService extends Model
     public function modifiers(): BelongsToMany
     {
         return $this->belongsToMany(Modifier::class);
+    }
+
+    public function revenueCode()
+    {
+        return $this->belongsTo(Procedure::class, 'revenue_code_id');
     }
 }
