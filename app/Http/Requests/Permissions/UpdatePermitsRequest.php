@@ -8,7 +8,7 @@ use App\Http\Casts\Permissions\PermissionWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
 
-final class StorePermitsRequest extends FormRequest
+final class UpdatePermitsRequest extends FormRequest
 {
     use HasCastedClass;
 
