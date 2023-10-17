@@ -7,14 +7,14 @@ namespace App\Actions\Permissions;
 use App\Http\Resources\Permissions\RoleResource;
 use App\Models\User\Role;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Collection;
 
 final class UpdateRolePermitAction
 {
-    public function invoke(Collection $wrapper, Role $role): AnonymousResourceCollection
+    /** @param int[] $permission */
+    public function invoke(array $permission, Role $role): AnonymousResourceCollection
     {
         $role->permissions()->detach();
-        $role->permissions()->sync($wrapper->getPermissions());
+        $role->permissions()->sync($permission);
 
         return RoleResource::collection($role->refresh());
     }
