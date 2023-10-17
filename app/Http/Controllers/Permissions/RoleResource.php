@@ -48,6 +48,6 @@ final class RoleResource extends Controller
         UpdatePermitsRequest $request,
         Role $role,
     ): JsonResponse {
-        return response()->json($update->invoke($request->castedCollect('permits'), $role));
+        return response()->json($update->invoke($request->get('permissions'), $role));
     }
 }
