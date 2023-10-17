@@ -6,11 +6,14 @@ namespace App\Http\Controllers\Permissions;
 
 use App\Actions\Permissions\GetRoleAction;
 use App\Actions\Permissions\StoreRoleAction;
+use App\Actions\Permissions\UpdateRolePermitAction;
 use App\Actions\Permissions\UpdateRoleAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Permissions\StoreRoleRequest;
 use App\Http\Requests\Permissions\UpdateRoleRequest;
-use App\Models\BillingCompany\MembershipRole;
+use App\Http\Requests\Permissions\UpdatePermitsRequest;
+use App\Http\Resources\Permissions\RoleResource as RoleResponseResource;
+use App\Models\User\Role;
 use Illuminate\Http\JsonResponse;
 
 final class RoleResource extends Controller
@@ -25,18 +28,26 @@ final class RoleResource extends Controller
         return response()->json($store->invoke($request->casted()));
     }
 
-    public function show(MembershipRole $role): JsonResponse
+    public function show(Role $role): JsonResponse
     {
-        return response()->json($role);
+        return response()->json(new RoleResponseResource($role));
     }
 
-    public function update(UpdateRoleRequest $request, MembershipRole $role, UpdateRoleAction $upate): JsonResponse
+    public function update(UpdateRoleRequest $request, Role $role, UpdateRoleAction $upate): JsonResponse
     {
         return response()->json($upate->invoke($request->casted(), $role));
     }
 
-    public function destroy(MembershipRole $role): JsonResponse
+    public function destroy(Role $role): JsonResponse
     {
         return response()->json($role->delete());
+    }
+
+    public function updatePermissions(
+        UpdateRolePermitAction $update,
+        UpdatePermitsRequest $request,
+        Role $role,
+    ): JsonResponse {
+        return response()->json($update->invoke($request->castedCollect('permits'), $role));
     }
 }
