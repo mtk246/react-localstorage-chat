@@ -9,6 +9,7 @@ use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -361,6 +362,14 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function customKeyboardShortcuts(): MorphMany
     {
         return $this->morphMany(CustomKeyboardShortcuts::class, 'shortcutable');
+    }
+
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => strtolower($value),
+            set: fn ($value) => strtolower($value),
+        );
     }
 
     /*

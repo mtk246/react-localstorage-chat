@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')/* ->middleware('audit') */
-->middleware(['restrictIpAddress', 'lastActivity'])->group(function () {
+->middleware(['lastActivity'])->group(function () {
     Route::get('/', function () {
         return response()->json(['message' => 'Api Running']);
     });
@@ -477,6 +477,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
         });
 
+        Route::get('/get-list-code-values', [\App\Http\Controllers\ClaimController::class, 'getListCodeValues']);
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);

@@ -20,7 +20,7 @@ class RestrictIpAddress
     public function handle(Request $request, \Closure $next)
     {
         if (isset($request->email)) {
-            $user = User::whereEmail($request->email)->first();
+            $user = User::whereEmail(strtolower($request->email))->first();
         } else {
             $user = auth()->user();
         }

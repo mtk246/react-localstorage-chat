@@ -301,7 +301,7 @@ final class JSONDictionary extends Dictionary
                         : null,
                     'professionalService' => [
                         'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
-                        'lineItemChargeAmount' => str_replace(',', '', $service->price),
+                        'lineItemChargeAmount' => str_replace(',', '', number_format((float) $service->price * (int) ($service->days_or_units ?? 1), 2)),
                         'procedureCode' => $service->procedure->code,
                         'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                         'serviceUnitCount' => $service->days_or_units ?? '1',
@@ -403,15 +403,15 @@ final class JSONDictionary extends Dictionary
                         ->firstWhere('company_id', $this->claim
                             ?->demographicInformation
                             ?->company_id)?->medication)) {
-                            true => 'DA',
-                            false => 'UN',
-                            default => 'UN', /* DA = Days UN = Unit */
+                            false => 'DA',  /* DA = Days */
+                            true => 'UN',   /* UN = Unit */
+                            default => 'UN',
                         },
                         'serviceLineRevenueCode' => $service->revenueCode->code,
                         'procedureIdentifier' => (!empty($service->procedure?->code)) ? $procedureIdentifier : '',
                         'procedureCode' => (!empty($procedureIdentifier)) ? $service->procedure?->code : '',
                         'description' => (!empty($service->procedure?->code) && !empty($procedureIdentifier)) ? $procedureDescription : '',
-                        'lineItemChargeAmount' => str_replace(',', '', $service->price),
+                        'lineItemChargeAmount' => str_replace(',', '', number_format((float) $service->price * (int) ($service->days_or_units ?? 1), 2)),
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
                     ],

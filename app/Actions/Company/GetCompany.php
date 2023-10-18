@@ -69,10 +69,6 @@ final class GetCompany
                     !empty($request->query('query')) && '{}' !== $request->query('query'),
                     fn (Builder $query) => $query->search($request->query('query')),
                 )
-                ->when(
-                    !empty($request->query('query')) && '{}' !== $request->query('query'),
-                    fn (Builder $query) => $query->search($request->query('query')),
-                )
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
 
