@@ -26,9 +26,9 @@ class SocialMediaProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'social_medias' => ['required', 'array'],
-            'social_medias.*.name' => ['required', 'string'],
-            'social_medias.*.link' => ['required', 'string'],
+            'social_medias' => ['nullable', 'array'],
+            'social_medias.*.name' => ['nullable', 'string'],
+            'social_medias.*.link' => ['nullable', 'string'],
         ];
     }
 }
