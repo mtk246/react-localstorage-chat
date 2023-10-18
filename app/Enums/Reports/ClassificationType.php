@@ -52,8 +52,8 @@ enum ClassificationType: int implements TypeInterface
     case PRODUCTIVITY = 3;
 
     #[UrlAttribute('ClaimsReportsPDFGenerator/Productivity')]
-    #[NameAttribute('Auditoring')]
-    #[DescriptionAttribute('Auditoring')]
+    #[NameAttribute('Audit')]
+    #[DescriptionAttribute('Audit')]
     #[BackgroundColorAttribute('#FFF1F1')]
     #[TextColorAttribute('#A72821')]
     #[IconAttribute('ico-auditoring')]
