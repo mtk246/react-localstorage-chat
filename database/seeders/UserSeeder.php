@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\User\UserType;
 use App\Models\BillingCompany;
 use App\Models\Profile;
 use App\Models\User;
-use App\Roles\Models\Role;
-use Faker;
+use App\Models\User\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 class UserSeeder extends Seeder
 {
@@ -20,373 +21,147 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $users = [
-            [
-                'email' => 'begentohealthcare@gmail.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'billingmanager@billing.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'billingmanager',
-                'billingCompany' => 'MCC',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'salcantara3@gmail.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'billingmanager',
-                'billingCompany' => 'MCC',
-                'profile' => [
-                    'ssn' => '176423970',
-                    'first_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'healthprofessional@billing.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'healthprofessional',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'patient@billing.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'patient',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'kp@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Kevin',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Perez',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'rs@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Rosana',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Sanchez',
-                    'sex' => 'F',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'aq@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Alfredo',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Quintero',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'anp@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Andrea',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Perez',
-                    'sex' => 'F',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'ec@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Edgar',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Carrizalez',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'vh@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Valentin',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Herrera',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'mb@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Maikel',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Bello',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'js@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Juan',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Schloter',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'mp@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Moises',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Perez',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'hp@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Henry',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Paredes',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'mr@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Miguel',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Renault',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'sa@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Sara',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Alcántara',
-                    'sex' => 'F',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'jg@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Jose',
-                    'middle_name' => 'Gabriel',
-                    'last_name' => 'Guillen',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'bq@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Brenlys',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Quintero',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'admin@sam.com',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Sr.',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Sam',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'mt@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Min',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Sam',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'ic@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Ivan',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Sam',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'jsierra@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'José',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Sierra',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'jsantana@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Jhon',
-                    'middle_name' => Faker\Provider\en_US\Person::firstNameMale(),
-                    'last_name' => 'Santana',
-                    'sex' => 'M',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-            [
-                'email' => 'zr@ciph3r.co',
-                'password' => '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q',
-                'role' => 'superuser',
-                'profile' => [
-                    'ssn' => randomNumber(9),
-                    'first_name' => 'Zaial',
-                    'middle_name' => 'Delit',
-                    'last_name' => 'Rodriguez',
-                    'sex' => 'F',
-                    'date_of_birth' => '1990-04-01',
-                ],
-            ],
-        ];
+        /*
+                foreach ($users as $user) {
+                    $profile = Profile::updateOrCreate(['ssn' => $user['profile']['ssn']], $user['profile']);
 
-        foreach ($users as $user) {
-            $profile = Profile::updateOrCreate(['ssn' => $user['profile']['ssn']], $user['profile']);
+                    $usr = User::query()->updateOrCreate(
+                        ['email' => $user['email']],
+                        [
+                            'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+                            'email' => $user['email'],
+                            'password' => $user['password'],
+                            'profile_id' => $profile->id,
+                        ]
+                    );
+                    $usr->password = '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
+                    $usr->save();
 
-            $usr = User::query()->updateOrCreate(
-                ['email' => $user['email']],
-                [
-                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                    'email' => $user['email'],
-                    'password' => $user['password'],
-                    'profile_id' => $profile->id,
-                ]
+                    $usr->detachAllPermissions();
+                    $usr->detachAllRoles();
+
+                    // $usr->detachAllPermissions();
+                    // $usr->detachAllRoles();
+
+                    $role = Role::where('slug', $user['role'])->first();
+                    if (isset($role)) {
+                        $usr->attachRole($role);
+                        $permissions = $role->permissions;
+                        foreach ($permissions as $perm) {
+                            $usr->attachPermission($perm);
+                        }
+                    }
+
+                    if ('billingmanager' == $role->slug || 'biller' == $role->slug) {
+                        $bCompany = BillingCompany::whereAbbreviation($user['billingCompany'])->first();
+                        if (isset($bCompany)) {
+                            $usr->billingCompany()->disassociate($bCompany->id);
+                            $usr->billingCompanies()->sync($bCompany->id);
+                        }
+                    }
+                }*/
+
+        collect(json_decode(\File::get('database/data/users.json')))
+            ->map(function (object $user) {
+                $user->type = UserType::from($user->type ?? 1)->value;
+                $user->profile = (array) ($user->profile ?? []);
+                $user->billingCompanies = (array) ($user->billingCompanies ?? []);
+
+                return (array) $user;
+            })
+            ->chunk(1000)
+        ->each(function (Collection $chunk) {
+            Profile::upsert($chunk->pluck('profile')->toArray(), ['ssn']);
+
+            $profiles = Profile::query()->whereIn('ssn', $chunk->pluck('profile.ssn')->toArray())->get(['id', 'ssn']);
+
+            $users = $chunk->map(function (array $userData) use ($profiles) {
+                return [
+                    'email' => $userData['email'],
+                    'password' => $userData['password'],
+                    'type' => $userData['type'],
+                    'profile_id' => $profiles->where('ssn', $userData['profile']['ssn'])->first()->id,
+                    'billing_company_id' => BillingCompany::query()->where('abbreviation', $userData['billingCompany'] ?? null)->first()->id ?? null,
+                ];
+            });
+
+            User::upsert($users->toArray(), ['email']);
+
+            User::query()->whereIn('email', $users->pluck('email')->toArray())->get(['id', 'email', 'billing_company_id', 'type'])->each(function (User $user) use ($chunk) {
+                $chunk->where('email', $user->email)->each(function (array $userData) use ($user) {
+                    if ($user->billing_company_id) {
+                        $user->billingCompanies()->syncWithoutDetaching($user->billing_company_id);
+                    }
+
+                    $role = Role::query()
+                        ->where('slug', $userData['role'])
+                        ->where('billing_company_id', $user->billing_company_id)
+                        ->firstOrFail();
+
+                    match ($user->type->value) {
+                        UserType::BILLING->value => $this->setBillingRole($user, $role),
+                        UserType::ADMIN->value => $this->setAdminRole($user, $role),
+                        UserType::DOCTOR->value => $this->setDoctorRole($user, $role),
+                        UserType::PATIENT->value => $this->setPatientRole($user, $role),
+                    };
+                });
+            });
+        });
+    }
+
+    private function setBillingRole(User $user, ?Role $role = null): void
+    {
+        $user
+            ->billingCompanies()
+            ->wherePivot('billing_company_id', $user->billing_company_id)
+            ->first()
+            ?->membership
+            ->roles()
+            ->syncWithPivotValues(
+                $role->id ?? Role::factory()->create()->id,
+                ['rollable_type' => Membership::class],
+                false
             );
-            $usr->password = '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
-            $usr->save();
+    }
 
-            $usr->detachAllPermissions();
-            $usr->detachAllRoles();
+    private function setAdminRole(User $user, ?Role $role = null): void
+    {
+        $user->roles()->syncWithPivotValues(
+            $role->id ?? Role::factory()->create()->id,
+            ['rollable_type' => User::class],
+            false
+        );
+    }
 
-            // $usr->detachAllPermissions();
-            // $usr->detachAllRoles();
+    private function setDoctorRole(User $user, ?Role $role = null): void
+    {
+        $user
+            ->healthProfessional()
+            ->billingCompanies()
+            ->wherePivot('billing_company_id', $user->billing_company_id)
+            ->first()
+            ?->membership
+            ->roles()
+            ->syncWithPivotValues(
+                $role->id ?? Role::factory()->create()->id,
+                ['rollable_type' => BillingCompanyHealthProfessional::class],
+                false
+            );
+    }
 
-            $role = Role::where('slug', $user['role'])->first();
-            if (isset($role)) {
-                $usr->attachRole($role);
-                $permissions = $role->permissions;
-                foreach ($permissions as $perm) {
-                    $usr->attachPermission($perm);
-                }
-            }
-
-            if ('billingmanager' == $role->slug || 'biller' == $role->slug) {
-                $bCompany = BillingCompany::whereAbbreviation($user['billingCompany'])->first();
-                if (isset($bCompany)) {
-                    $usr->billingCompany()->disassociate($bCompany->id);
-                    $usr->billingCompanies()->sync($bCompany->id);
-                }
-            }
-        }
+    private function setPatientRole(User $user, ?Role $role = null): void
+    {
+        $user
+            ->patient()
+            ->billingCompanies()
+            ->wherePivot('billing_company_id', $user->billing_company_id)
+            ->first()
+            ?->membership
+            ->roles()
+            ->syncWithPivotValues(
+                $role->id ?? Role::factory()->create()->id,
+                ['rollable_type' => PatientMembership::class],
+                false
+            );
     }
 }
