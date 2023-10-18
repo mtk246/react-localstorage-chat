@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Meilisearch\Endpoints\Indexes;
 
 class ProcedureRepository
 {
@@ -635,9 +636,32 @@ class ProcedureRepository
         try {
             if (null == $company_id) {
                 if ('' == $search) {
-                    return getList(Procedure::class, 'code', [], null, ['description']);
+                    return Procedure::query()
+                        ->select('id', 'code as name', 'description')
+                        ->toBase()
+                        ->get()
+                        ->toArray();
                 } else {
-                    return getList(Procedure::class, 'code', ['whereRaw' => ['search' => $search]], null, ['description']);
+                    return Procedure::query()
+                        ->select('id', 'code as name', 'description')
+                        ->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
+                        ->toBase()
+                        ->get()
+                        ->toArray();
+                    /**return Procedure::search($search,
+                        function (Indexes $searchEngine, string $query, array $options) {
+                                $options['attributesToSearchOn'] = ['code'];
+                                return $searchEngine->search($query, $options);
+                            }
+                        )
+                        ->get()
+                        ->map(function ($procedure) {
+                            return [
+                                'id' => $procedure->id,
+                                'name' => $procedure->code,
+                                'description' => $procedure->description,
+                            ];
+                        });*/
                 }
             } else {
                 return Procedure::query()
