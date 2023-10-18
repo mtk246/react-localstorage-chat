@@ -37,12 +37,13 @@ final class AddServices
                     'mac_locality_id' => $service->getMacLocality()?->id,
                     'price' => $service->getPrice(),
                     'price_percentage' => $service->getPricePercentage(),
+                    'procedure_id' => $service->getProcedureId(),
+                    'modifier_id' => $service->getModifierId(),
+                    'revenue_code_id' => $service->getRevenueCodeId(),
                     'insurance_label_fee_id' => $service->getInsuranceLabelFeeId(),
                     'clia' => $service->getClia(),
                 ]),
                 function (CompanyService $cService) use ($service): void {
-                    $cService->procedures()->sync($service->getProcedureIds());
-                    $cService->modifiers()->sync($service->getModifierIds());
                     if ($service->getMedicationApplication()) {
                         $this->setMedication(
                             $cService,
@@ -74,13 +75,6 @@ final class AddServices
             })
             ->whereNotIn('id', $services->map(fn (ServiceRequestCast $services) => $services->getId())
                 ->toArray());
-
-        $companyServices
-            ->get()
-            ->each(function (CompanyService $companyService) {
-                $companyService->procedures()->detach();
-                $companyService->modifiers()->detach();
-            });
 
         $companyServices->delete();
     }
