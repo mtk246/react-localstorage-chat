@@ -44,6 +44,7 @@ return new class() extends Migration {
                 WHERE audits.id IN (
                     SELECT MIN(id)
                     FROM audits
+                    WHERE audits.auditable_type = 'App\Models\Claims\Claim'
                     GROUP BY auditable_id
                 )
             ) AS first_audits ON claims.id = first_audits.auditable_id

@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Cknow\Money\Casts\MoneyStringCast;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -24,14 +22,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $clia
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $procedure_id
+ * @property int|null $modifier_id
+ * @property int|null $revenue_code_id
  * @property \App\Models\BillingCompany $billingCompany
  * @property \App\Models\Company $company
  * @property \App\Models\MacLocality|null $macLocality
  * @property \App\Models\Medication|null $medication
- * @property Collection<int, \App\Models\Modifier> $modifiers
- * @property int|null $modifiers_count
- * @property Collection<int, \App\Models\Procedure> $procedures
- * @property int|null $procedures_count
+ * @property \App\Models\Modifier|null $modifier
+ * @property \App\Models\Procedure|null $procedure
+ * @property \App\Models\Procedure|null $revenueCode
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService newQuery()
@@ -43,8 +43,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereInsuranceLabelFeeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereMacLocalityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereModifierId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService wherePricePercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereProcedureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereRevenueCodeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyService whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -62,6 +65,9 @@ final class CompanyService extends Model
         'mac_locality_id',
         'price',
         'price_percentage',
+        'revenue_code_id',
+        'procedure_id',
+        'modifier_id',
         'insurance_label_fee_id',
         'clia',
     ];
@@ -95,13 +101,18 @@ final class CompanyService extends Model
         return $this->belongsTo(MacLocality::class);
     }
 
-    public function procedures(): BelongsToMany
+    public function procedure(): BelongsTo
     {
-        return $this->belongsToMany(Procedure::class);
+        return $this->belongsTo(Procedure::class);
     }
 
-    public function modifiers(): BelongsToMany
+    public function modifier(): BelongsTo
     {
-        return $this->belongsToMany(Modifier::class);
+        return $this->belongsTo(Modifier::class);
+    }
+
+    public function revenueCode()
+    {
+        return $this->belongsTo(Procedure::class, 'revenue_code_id');
     }
 }

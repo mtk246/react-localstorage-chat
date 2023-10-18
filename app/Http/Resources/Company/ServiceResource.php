@@ -6,8 +6,6 @@ namespace App\Http\Resources\Company;
 
 use App\Http\Resources\RequestWrapedResource;
 use App\Models\CompanyProcedure;
-use App\Models\Modifier;
-use App\Models\Procedure;
 use Cknow\Money\Money;
 
 /**
@@ -27,26 +25,30 @@ final class ServiceResource extends RequestWrapedResource
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
-            'procedure_ids' => $this->resource->procedures
-                ->map(fn (Procedure $procedure) => $procedure->id)->toArray(),
-            'procedures' => $this->resource->procedures
-                ->map(function (Procedure $procedure) {
-                    return [
-                        'id' => $procedure->id,
-                        'name' => $procedure->code,
-                        'description' => $procedure->description,
-                    ];
-                })->toArray(),
-            'modifier_ids' => $this->resource->modifiers
-                ->map(fn (Modifier $modifier) => $modifier->id)->toArray(),
-            'modifiers' => $this->resource->modifiers
-                ->map(function (Modifier $modifier) {
-                    return [
-                        'id' => $modifier->id,
-                        'modifier' => $modifier->modifier,
-                        'color' => $modifier->classification->getColor(),
-                    ];
-                })->toArray(),
+            'procedure_id' => $this->resource->procedure_id,
+            'procedure' => (isset($this->resource->procedure))
+                ? [
+                    'id' => $this->resource->procedure->id,
+                    'name' => $this->resource->procedure->code,
+                    'description' => $this->resource->procedure->description,
+                ]
+                : null,
+            'revenue_code_id' => $this->resource->revenue_code_id,
+            'revenue_code' => (isset($this->resource->revenueCode))
+                ? [
+                    'id' => $this->resource->revenueCode->id,
+                    'name' => $this->resource->revenueCode->code,
+                    'description' => $this->resource->revenueCode->description,
+                ]
+                : null,
+            'modifier_id' => $this->resource->modifier_id,
+            'modifier' => (isset($this->resource->modifier))
+                    ? [
+                        'id' => $this->resource->modifier->id,
+                        'modifier' => $this->resource->modifier->modifier,
+                        'color' => $this->resource->modifier->classification->getColor(),
+                    ]
+                    : null,
             'mac' => $this->resource->macLocality?->mac,
             'locality_number' => $this->resource->macLocality?->locality_number,
             'state' => $this->resource->macLocality?->state,
