@@ -118,8 +118,8 @@ class Patient extends Model implements Auditable
     public function billingCompanies(): BelongsToMany
     {
         return $this->belongsToMany(BillingCompany::class)
-            ->uses(Membership::class)
-            ->withPivot(['status', 'save_as_draft'])
+            ->using(Membership::class)
+            ->withPivot(['id', 'status', 'save_as_draft'])
             ->withTimestamps()
             ->as('membership');
     }
