@@ -24,6 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $billing_company_id
  * @property bool $public
+ * @property string $type
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
@@ -45,6 +46,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role wherePublic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -61,7 +63,7 @@ class Role extends Model implements RoleHasRelationsContract, Auditable
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description', 'level'];
+    protected $fillable = ['name', 'slug', 'description', 'level', 'type'];
 
     /**
      * Create a new model instance.
