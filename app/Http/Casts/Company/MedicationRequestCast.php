@@ -74,8 +74,6 @@ final class MedicationRequestCast extends CastsRequest
 
     public function getNote(): ?string
     {
-        return $this->getClaimNoteRequired()
-            ? $this->get('note')
-            : '';
+        return $this->get('note');
     }
 }
