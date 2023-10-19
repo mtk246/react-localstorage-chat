@@ -29,7 +29,7 @@ prepare: ## Prepare client containers and enviroment
 		-u "$(CURRENT_UID):$(CURRENT_GID)" \
 		-v $(ROOT_DIR):/var/www/html \
 		-w /var/www/html \
-		laravelsail/php80-composer:latest \
+		laravelsail/php82-composer:latest \
 		composer install --ignore-platform-reqs \
 		&& cp ./.env.example .env
 build: ## Build client containers and enviroment
