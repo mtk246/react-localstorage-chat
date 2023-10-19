@@ -13,9 +13,9 @@ cache: ## warm laravel cache
 	./vendor/bin/sail artisan route:cache
 	./vendor/bin/sail artisan view:cache
 pint_test: ## Run laravel pint in test mode
-	./vendor/bin/sail php ./vendor/bin/pint --test
+	./vendor/bin/sail pint --test
 pint: ## Run laravel pint in test mode
-	./vendor/bin/sail php ./vendor/bin/pint
+	./vendor/bin/sail pint
 phpcs: ## Run phpcs
 	./vendor/bin/sail php ./vendor/bin/phpcs
 phpcbf: ## Run auto-fixing phpcs errors
@@ -59,4 +59,4 @@ upgrade: ## Upgrade client containers and enviroment
 	./vendor/bin/sail artisan scout:sync-index-settings
 	./vendor/bin/sail artisan scout:import-all -m
 
-aio: prepare build up install migrate seed scout ## Build, install and migrate client containers and enviroment
+aio: prepare build up install migrate seed scout pint ## Build, install and migrate client containers and enviroment
