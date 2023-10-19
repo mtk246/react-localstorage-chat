@@ -48,7 +48,7 @@ final class AddServicesRequest extends FormRequest
             'services.*.medication.drug_code' => [
                 'nullable',
                 'string',
-                'max:11',
+                'regex:/^\d{11}$/',
                 'required_if:services.*.medication_application,true',
             ],
             'services.*.medication.measurement_unit_id' => [
