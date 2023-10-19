@@ -775,37 +775,36 @@ class ClaimRepository
     public function getListRev(?string $company_id = null, $search = '')
     {
         try {
-            return Procedure::query()
-                ->when(null != $company_id, function (Builder $query) use($company_id) {
-                    $query->whereHas('companyServices', function ($query) use ($company_id) {
-                        $query->where('company_id', $company_id);
-                    });
+            return DB::table('procedures')
+                ->leftJoin('company_services', function ($join) use ($company_id) {
+                    $join->on('procedures.id', '=', 'company_services.procedure_id')
+                        ->where('company_services.company_id', $company_id);
+                })
+                ->when(null != $company_id, function ($query) {
+                    $query->whereNotNull('company_services.id');
                 })
                 ->when('' !== $search, function ($query) use ($search) {
                     $query->where(function ($query) use ($search) {
-                        $query->where('code', 'like', "%$search%");
+                        $query->where('procedures.code', 'like', "%$search%");
                     })
                     ->orWhere(function ($query) use ($search) {
                         $search = str_replace(['f', 'F'], '', $search);
-                        $query->whereJsonContains('clasifications->general', 2)
-                            ->where('code', 'like', "%$search%F");
+                        $query->whereJsonContains('procedures.clasifications->general', 2)
+                            ->where('procedures.code', 'like', "%$search%F");
                     });
                 })
-                ->where('type', '4')
-                ->with(['companyServices' => function ($query) use ($company_id) {
-                    $query->where('company_id', $company_id);
-                }])
+                ->where('procedures.type', '4')
+                ->select('procedures.id', 'procedures.code', 'procedures.description', 'company_services.price')
+                ->orderByDesc('company_services.price')
                 ->get()
-                ->map(function ($procedure) use ($company_id) {
+                ->map(function ($procedure) {
                     return [
                         'id' => $procedure->id,
                         'name' => $procedure->code,
                         'description' => $procedure->description,
-                        'price' => (float) $procedure->companyServices
-                            ->firstWhere('company_id', $company_id)?->price ?? 0,
+                        'price' => (float) $procedure->price ?? 0,
                     ];
                 })
-                ->sortByDesc('price')
                 ->values()
                 ->toArray();
         } catch (\Exception $e) {
