@@ -19,7 +19,7 @@ final class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'ssn' => $this->faker->numberBetween(1, 9),
+            'ssn' => $this->faker->numberBetween(1, 99999999),
             'first_name' => $this->faker->name(),
             'middle_name' => $this->faker->lastName(),
             'last_name' => $this->faker->lastName(),
