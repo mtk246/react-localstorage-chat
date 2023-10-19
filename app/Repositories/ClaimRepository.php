@@ -794,7 +794,7 @@ class ClaimRepository
                     });
                 })
                 ->where('procedures.type', '4')
-                ->select('procedures.id', 'procedures.code', 'procedures.description', 'company_services.price', 'procedures.type')
+                ->select('procedures.id', 'procedures.code', 'procedures.description', 'company_services.price')
                 ->orderByDesc('company_services.price')
                 ->get()
                 ->map(function ($procedure) {
