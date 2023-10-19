@@ -1856,6 +1856,8 @@ class DataTestSeeder extends Seeder
                 }
             }
 
+            $billingCompany = BillingCompany::whereAbbreviation($dataHP['billing_company'])->first();
+
             /** Create User */
             $user = User::query()->firstOrCreate([
                 'email' => $dataHP['email'],
@@ -1863,11 +1865,9 @@ class DataTestSeeder extends Seeder
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
-                'billing_company_id' => null,
+                'billing_company_id' => $billingCompany->id,
                 'type' => UserType::DOCTOR->value,
             ]);
-
-            $billingCompany = BillingCompany::whereAbbreviation($dataHP['billing_company'])->first();
 
             /* Attach billing company */
             $user->billingCompanies()->syncWithoutDetaching($billingCompany->id ?? $billingCompany);
@@ -3164,6 +3164,7 @@ class DataTestSeeder extends Seeder
                 'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
                 'userkey' => encrypt(uniqid('', true)),
                 'profile_id' => $profile->id,
+                'billing_company_id' => $billingCompany->id ?? $billingCompany,
                 'type' => UserType::PATIENT->value,
             ]);
 
