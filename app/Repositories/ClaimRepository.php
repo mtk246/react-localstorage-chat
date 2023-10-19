@@ -785,12 +785,12 @@ class ClaimRepository
                 })
                 ->when('' !== $search, function ($query) use ($search) {
                     $query->where(function ($query) use ($search) {
-                        $query->where('procedures.code', 'like', "%$search%");
-                    })
-                    ->orWhere(function ($query) use ($search) {
-                        $search = str_replace(['f', 'F'], '', $search);
-                        $query->whereJsonContains('procedures.clasifications->general', 2)
-                            ->where('procedures.code', 'like', "%$search%F");
+                        $query->where('procedures.code', 'like', "%$search%")
+                            ->orWhere(function ($query) use ($search) {
+                                $search = str_replace(['f', 'F'], '', $search);
+                                $query->whereJsonContains('procedures.clasifications->general', 2)
+                                    ->where('procedures.code', 'like', "%$search%F");
+                            });
                     });
                 })
                 ->where('procedures.type', '4')
