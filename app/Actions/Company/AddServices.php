@@ -104,6 +104,7 @@ final class AddServices
                 'pharmacy_prescription_number' => $medication->getPharmacyPrescriptionNumber(),
                 'repackaged_NDC' => $medication->getRepackagedNDC(),
                 'code_NDC' => $medication->getCodeNDC(),
+                'claim_note_required' => $medication->getClaimNoteRequired(),
                 'note' => $medication->getNote(),
             ],
         );

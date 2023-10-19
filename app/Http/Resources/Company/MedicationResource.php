@@ -35,7 +35,7 @@ final class MedicationResource extends RequestWrapedResource
             'pharmacy_prescription_number' => $this->resource->pharmacy_prescription_number ?? '',
             'repackaged_NDC' => $this->resource->repackaged_NDC ?? false,
             'code_NDC' => $this->resource->code_NDC ?? '',
-            'claim_note_required' => !empty($this->resource->note) ? true : false,
+            'claim_note_required' => (bool) $this->resource->claim_note_required ?? false,
             'note' => $this->resource->note ?? '',
         ];
     }
