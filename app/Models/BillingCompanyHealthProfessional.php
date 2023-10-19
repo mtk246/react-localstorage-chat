@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\User\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -22,7 +24,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int|null $health_professional_type_id
  * @property string|null $miscellaneous
  * @property \App\Models\BillingCompany $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property \App\Models\HealthProfessional $healthProfessional
+ * @property int|null $roles_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingCompanyHealthProfessional newQuery()
@@ -65,6 +69,10 @@ final class BillingCompanyHealthProfessional extends Pivot
         'miscellaneous',
     ];
 
+    protected $appends = [
+        'roles',
+    ];
+
     public function healthProfessional()
     {
         return $this->belongsTo(HealthProfessional::class);
@@ -73,5 +81,15 @@ final class BillingCompanyHealthProfessional extends Pivot
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class, 'billing_company_id');
+    }
+
+    public function roles(): ?MorphToMany
+    {
+        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
+    }
+
+    public function getRolesAttribute()
+    {
+        return $this->roles()->get();
     }
 }

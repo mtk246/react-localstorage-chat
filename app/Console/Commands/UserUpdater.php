@@ -39,6 +39,8 @@ final class UserUpdater extends Command
 
                     $user->billing_company_id = $billingCompanyId;
 
+                    $user->billingCompanies()->wherePivotNotIn('billing_company_id', $billingCompanyId)->detach();
+
                     $user->save();
                 }
             });

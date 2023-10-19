@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Casts\Permissions;
 
 use App\Http\Casts\CastsRequest;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
@@ -21,9 +20,10 @@ final class StoreMembershipWrapper extends CastsRequest
         ];
     }
 
-    public function getPermissions(): Collection
+    /** @return int[] */
+    public function getPermissions(): array
     {
-        return $this->castMany('permissions', PermissionWrapper::class);
+        return $this->getArray('permissions');
     }
 
     public function getBillingCompanyId(): ?int

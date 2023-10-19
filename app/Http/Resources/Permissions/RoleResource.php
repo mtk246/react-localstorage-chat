@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Permissions;
 
-use App\Models\BillingCompany\MembershipRole;
+use App\Models\User\Role;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**  @property MembershipRole $resource */
+/**  @property Role $resource */
 final class RoleResource extends JsonResource
 {
     /**
@@ -25,7 +25,9 @@ final class RoleResource extends JsonResource
             'note' => $this->resource->description,
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_company' => $this->resource->billingCompany,
-            'permissions' => PermitResource::collection($this->resource->permits),
+            'permissions' => PermitResource::collection($this->resource->permissions),
+            'create_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

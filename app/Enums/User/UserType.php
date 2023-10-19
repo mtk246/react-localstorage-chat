@@ -19,7 +19,15 @@ enum UserType: int implements TypeInterface
     #[PublicAttribute(true)]
     case ADMIN = 1;
 
-    #[NameAttribute('User')]
+    #[NameAttribute('Billing User')]
     #[PublicAttribute(true)]
-    case USER = 2;
+    case BILLING = 2;
+
+    #[NameAttribute('Patient')]
+    #[PublicAttribute(false)]
+    case PATIENT = 3;
+
+    #[NameAttribute('Health professional')]
+    #[PublicAttribute(false)]
+    case DOCTOR = 4;
 }

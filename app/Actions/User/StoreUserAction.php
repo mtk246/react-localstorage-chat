@@ -30,7 +30,7 @@ final class StoreUserAction
                 $userRoles = $user->roles();
                 $rollableType = User::class;
 
-                if (UserType::USER === $userWrapper->getType()) {
+                if (UserType::BILLING === $userWrapper->getType()) {
                     $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
                     $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
 

@@ -22,7 +22,7 @@ final class HasPermits
         $user = $request->user();
 
         if (!$user->hasAllPermissions($permission)) {
-            throw new \Exception('No tiene permisos para realizar esta acción');
+            abort(403, __('auth.unauthorized'));
         }
 
         return $next($request);

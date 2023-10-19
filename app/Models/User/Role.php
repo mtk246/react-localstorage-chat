@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\User;
 
+use App\Enums\User\RoleType;
 use App\Models\BillingCompany;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
@@ -30,6 +31,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $billing_company_id
  * @property bool $public
+ * @property RoleType $type
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
@@ -52,6 +54,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role wherePublic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -67,6 +70,11 @@ final class Role extends Model implements Auditable
 
     /** @var array */
     protected $appends = ['permissions'];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'type' => RoleType::class,
+    ];
 
     public function billingCompany(): BelongsTo
     {

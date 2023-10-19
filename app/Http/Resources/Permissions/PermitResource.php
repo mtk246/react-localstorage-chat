@@ -20,8 +20,11 @@ final class PermitResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'name' => $this->resource->name,
+            'slug' => $this->resource->slug,
+            'description' => $this->resource->description,
             'module' => $this->resource->module,
-            'permission' => $this->resource->permission,
+            'constraint' => $this->resource->constraint,
         ];
     }
 }

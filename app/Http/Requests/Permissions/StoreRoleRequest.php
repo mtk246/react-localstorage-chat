@@ -26,9 +26,9 @@ final class StoreRoleRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\BillingCompany,id',
             ],
-            'name' => ['required', 'string'],
-            'note' => ['nullable', 'string'],
-            'permissions' => ['required', 'array'],
+            'name' => 'required|string',
+            'note' => 'nullable|string',
+            'permissions' => 'required|array|exists:permissions,id',
         ];
     }
 }

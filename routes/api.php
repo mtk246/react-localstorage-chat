@@ -76,9 +76,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
-    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'store', 'destroy']);
-    Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
+    Route::put('roles/{role}/permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'updatePermissions'])->middleware('auth:api');
+    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('auth:api');
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {
         Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
