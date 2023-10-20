@@ -10,7 +10,7 @@ use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class BillingCompanyRepository
+final class BillingCompanyRepository
 {
     public function createBillingCompany(array $data)
     {
