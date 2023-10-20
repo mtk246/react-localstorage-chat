@@ -52,6 +52,13 @@ final class UpdateCompanyRequestCast extends CastsRequest
             : null;
     }
 
+    public function getSplitCompanyClaim(): ?bool
+    {
+        return array_key_exists('split_company_claim', $this->inputs)
+            ? $this->inputs['split_company_claim']
+            : false;
+    }
+
     public function getNickname(): ?string
     {
         return array_key_exists('nickname', $this->inputs)

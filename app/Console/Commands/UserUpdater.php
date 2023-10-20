@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\Address;
-use App\Models\Contact;
+use App\Enums\User\UserType;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -29,22 +28,21 @@ final class UserUpdater extends Command
     public function handle(): int
     {
         $user = User::all()
-            ->each(function ($user) {
-                Address::query()
-                    ->where('addressable_id', $user->id)
-                    ->where('addressable_type', 'App\Models\User')
-                    ->update([
-                        'addressable_id' => $user->profile->id,
-                        'addressable_type' => 'App\Models\Profile',
-                    ]);
+            ->load(['billingCompanies'])
+            ->each(function (User $user) {
+                if (UserType::ADMIN->value !== $user->type->value && is_null($user->billing_company_id)) {
+                    $billingCompanyId = $user->billingCompanies?->first()?->id;
 
-                Contact::query()
-                    ->where('contactable_id', $user->id)
-                    ->where('contactable_type', 'App\Models\User')
-                    ->update([
-                        'contactable_id' => $user->profile->id,
-                        'contactable_type' => 'App\Models\Profile',
-                    ]);
+                    if (is_null($billingCompanyId)) {
+                        $user->type = UserType::ADMIN;
+                    }
+
+                    $user->billing_company_id = $billingCompanyId;
+
+                    $user->billingCompanies()->wherePivotNotIn('billing_company_id', $billingCompanyId)->detach();
+
+                    $user->save();
+                }
             });
 
         dump($user->count());

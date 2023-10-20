@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Resource_;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository
 {
@@ -623,7 +624,7 @@ class UserRepository
 
     public function unlockUser(Request $request)
     {
-        $user = User::whereEmail($request->email)->first();
+        $user = User::whereEmail(strtolower($request->email))->first();
 
         if (is_null($user)) {
             return null;
@@ -686,7 +687,7 @@ class UserRepository
 
     public function search(Request $request)
     {
-        $email = $request->get('email');
+        $email = strtolower($request->get('email'));
 
         $bC = auth()->user()->billing_company_id ?? null;
 
@@ -761,6 +762,26 @@ class UserRepository
             return getList(TypeCatalog::class, ['description'], ['relationship' => 'type', 'where' => ['description' => 'Gender']], null, ['code']);
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    public function updatePassword($data)
+    {
+        try {
+            $user = User::whereId(auth()->id())->first();
+
+            if ($user && Hash::check($data['current_password'], $user->password)) {
+                $user->update([
+                    'password' => bcrypt($data['password']),
+                ]);
+            } else {
+                return null;
+            }
+
+            return $user;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

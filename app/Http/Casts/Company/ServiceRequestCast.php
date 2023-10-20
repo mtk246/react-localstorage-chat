@@ -24,14 +24,19 @@ final class ServiceRequestCast extends CastsRequest
             : null;
     }
 
-    public function getProcedureIds(): ?array
+    public function getProcedureId(): ?int
     {
-        return $this->get('procedure_ids');
+        return $this->get('procedure_id');
     }
 
-    public function getModifierIds(): ?array
+    public function getModifierId(): ?int
     {
-        return $this->get('modifier_ids');
+        return $this->get('modifier_id');
+    }
+
+    public function getRevenueCodeId(): ?int
+    {
+        return $this->get('revenue_code_id');
     }
 
     public function getPrice(): ?float

@@ -30,24 +30,24 @@ final class MedicationRequestCast extends CastsRequest
         return (float) $this->inputs['units'];
     }
 
-    public function getUnitsLimit(): ?float
+    public function getUnitsLimit(): ?int
     {
         return array_key_exists('units_limit', $this->inputs)
-            ? (float) $this->inputs['units_limit']
+            ? (int) $this->inputs['units_limit']
             : null;
     }
 
-    public function getLinkSequenceNumber(): ?float
+    public function getLinkSequenceNumber(): ?string
     {
         return array_key_exists('link_sequence_number', $this->inputs)
-            ? (float) $this->inputs['link_sequence_number']
+            ? $this->inputs['link_sequence_number']
             : null;
     }
 
-    public function getPharmacyPrescriptionNumber(): ?float
+    public function getPharmacyPrescriptionNumber(): ?string
     {
         return array_key_exists('pharmacy_prescription_number', $this->inputs)
-            ? (float) $this->inputs['pharmacy_prescription_number']
+            ? $this->inputs['pharmacy_prescription_number']
             : null;
     }
 
@@ -74,8 +74,6 @@ final class MedicationRequestCast extends CastsRequest
 
     public function getNote(): ?string
     {
-        return $this->getClaimNoteRequired()
-            ? $this->get('note')
-            : '';
+        return $this->get('note');
     }
 }

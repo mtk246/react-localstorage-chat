@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')/* ->middleware('audit') */
-->middleware(['restrictIpAddress', 'lastActivity'])->group(function () {
+->middleware(['lastActivity'])->group(function () {
     Route::get('/', function () {
         return response()->json(['message' => 'Api Running']);
     });
@@ -71,11 +71,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('social-medias/{id}', [\App\Http\Controllers\UserController::class, 'updateSocialMediaProfile'])->middleware(['auth:api']);
         Route::patch('update-password', [\App\Http\Controllers\UserController::class, 'changePasswordForm'])->middleware(['auth:api']);
         Route::get('/{ssn}/get-by-ssn', [\App\Http\Controllers\UserController::class, 'searchBySsn']);
+
+        // update password from profile view
+        Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
-    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-    Route::resource('roles.permission', \App\Http\Controllers\Permissions\PermissionResource::class)->only(['index', 'store', 'destroy']);
-    Route::resource('user.role.permission', \App\Http\Controllers\Permissions\UserPermissionResource::class)->only(['index', 'update', 'destroy']);
+    Route::put('roles/{role}/permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'updatePermissions'])->middleware('auth:api');
+    Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('auth:api');
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {
         Route::get('roles', [\App\Http\Controllers\RolePermissionController::class, 'getRoles']);
@@ -475,6 +477,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
         });
 
+        Route::get('/get-list-code-values', [\App\Http\Controllers\ClaimController::class, 'getListCodeValues']);
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);

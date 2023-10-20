@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Claims\Claim;
+use App\Models\Patient\Membership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -116,7 +117,11 @@ class Patient extends Model implements Auditable
      */
     public function billingCompanies(): BelongsToMany
     {
-        return $this->belongsToMany(BillingCompany::class)->withPivot(['status', 'save_as_draft'])->withTimestamps();
+        return $this->belongsToMany(BillingCompany::class)
+            ->using(Membership::class)
+            ->withPivot(['id', 'status', 'save_as_draft'])
+            ->withTimestamps()
+            ->as('membership');
     }
 
     public function mainAddress(): BelongsTo

@@ -21,8 +21,8 @@ final class HasPermit
         /** @var User $user */
         $user = $request->user();
 
-        if (!$user->hasPermission($permission)) {
-            throw new \Exception('No tiene permisos para realizar esta acción');
+        if ($user->hasPermission($permission)) {
+            abort(403, __('auth.unauthorized'));
         }
 
         return $next($request);

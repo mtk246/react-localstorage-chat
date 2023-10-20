@@ -163,7 +163,7 @@ class HealthProfessional extends Model implements Auditable
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(BillingCompanyHealthProfessional::class)
-            ->withPivot(['status', 'npi_company', 'is_provider', 'company_id', 'health_professional_type_id', 'miscellaneous'])
+            ->withPivot(['id', 'status', 'npi_company', 'is_provider', 'company_id', 'health_professional_type_id', 'miscellaneous'])
             ->withTimestamps();
     }
 

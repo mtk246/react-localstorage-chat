@@ -9,6 +9,7 @@ use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -56,6 +58,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int|null $failed_login_attempts_count
  * @property string $language
  * @property mixed $last_modified
+ * @property \Illuminate\Support\Collection|null $permissions
  * @property \App\Models\Profile|null $profile
  * @property \App\Models\HealthProfessional|null $healthProfessional
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
@@ -63,8 +66,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property int|null $notifications_count
  * @property \App\Models\Patient|null $patient
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $permissions
- * @property int|null $permissions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property int|null $permits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
@@ -291,10 +292,10 @@ final class User extends Authenticatable implements JWTSubject, Auditable
             : $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
-                ->membership
+                ?->membership
                 ->roles();
 
-        return $roles->get()->reduce(function (Collection $v, Role $role) {
+        return $roles?->get()->reduce(function (Collection $v, Role $role) {
             $v = $v->merge($role->permissions()->get());
 
             return $v;
@@ -320,7 +321,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     {
         return match ($this->type?->value ?? 0) {
             UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
-            UserType::USER->value => $this->billingCompanies()
+            UserType::BILLING->value => $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
                 ->membership
@@ -331,12 +332,44 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         };
     }
 
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()->contains(function (Permission $value) use ($permission) {
+            return Str::is($permission, $value->slug);
+        }) ?? false;
+    }
+
+    public function hasAllPermissions(string $permissions): bool
+    {
+        foreach ($this->getArrayFrom($permissions) as $permission) {
+            if (!$this->hasPermission($permission)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** @return string[] */
+    private function getArrayFrom(string $argument): array
+    {
+        return (!is_array($argument)) ? preg_split('/ ?[,|] ?/', $argument) : $argument;
+    }
+
     /**
      * The keyboard shortcuts that belong to the BillingCompany.
      */
     public function customKeyboardShortcuts(): MorphMany
     {
         return $this->morphMany(CustomKeyboardShortcuts::class, 'shortcutable');
+    }
+
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => strtolower($value),
+            set: fn ($value) => strtolower($value),
+        );
     }
 
     /*

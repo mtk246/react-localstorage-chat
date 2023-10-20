@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $callGroup = [
+            BillingCompanySeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
             FacilityTypeSeeder::class,

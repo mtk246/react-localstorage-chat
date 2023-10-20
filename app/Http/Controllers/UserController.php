@@ -14,6 +14,7 @@ use App\Http\Requests\RecoveryUserRequest;
 use App\Http\Requests\SendRescuePassRequest;
 use App\Http\Requests\SocialMediaProfileRequest;
 use App\Http\Requests\UnlockUserRequest;
+use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Resources\Enums\EnumResource;
@@ -151,7 +152,7 @@ class UserController extends Controller
     public function sendEmailRescuePass(SendRescuePassRequest $request): JsonResponse
     {
         try {
-            $rs = $this->userRepository->sendEmailToRescuePassword($request->input('email'));
+            $rs = $this->userRepository->sendEmailToRescuePassword(strtolower($request->input('email')));
 
             if (is_null($rs)) {
                 return response()->json(__('Error, user not found'), 403);
@@ -408,5 +409,12 @@ class UserController extends Controller
         return response()->json(
             new EnumResource(collect(UserType::cases()), TypeResource::class),
         );
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $rs = $this->userRepository->updatePassword($request->validated());
+
+        return $rs ? response()->json($rs) : response()->json(__('Error current password incorrect'), 400);
     }
 }

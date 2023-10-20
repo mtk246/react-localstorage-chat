@@ -48,7 +48,7 @@ class InsurancePlanRepository
                     'require_abn' => $data['require_abn'],
                     'pqrs_eligible' => $data['pqrs_eligible'],
                     'allow_attached_files' => $data['allow_attached_files'],
-                    'eff_date' => $data['eff_date']
+                    'eff_date' => $data['eff_date'] ?? null,
                 ]);
             } else {
                 $insurancePlan = InsurancePlan::create([
@@ -65,7 +65,7 @@ class InsurancePlanRepository
                     'require_abn' => $data['require_abn'],
                     'pqrs_eligible' => $data['pqrs_eligible'],
                     'allow_attached_files' => $data['allow_attached_files'],
-                    'eff_date' => $data['eff_date'],
+                    'eff_date' => $data['eff_date'] ?? null,
                     'insurance_company_id' => $data['insurance_company_id'],
                 ]);
             }
@@ -97,7 +97,7 @@ class InsurancePlanRepository
                             'insurance_plan_id' => $insurancePlan->id,
                             'billing_company_id' => $billingCompany,
                             'responsibilities' => $format['responsibilities'],
-                            'eff_date' => $data['eff_date']
+                            'eff_date' => $data['eff_date'] ?? null
                         ]
                     );
                 }
@@ -193,7 +193,7 @@ class InsurancePlanRepository
                 'require_abn' => $data['require_abn'],
                 'pqrs_eligible' => $data['pqrs_eligible'],
                 'allow_attached_files' => $data['allow_attached_files'],
-                'eff_date' => $data['eff_date'],
+                'eff_date' => $data['eff_date'] ?? null,
                 'insurance_company_id' => $data['insurance_company_id'],
             ]);
 
@@ -222,7 +222,7 @@ class InsurancePlanRepository
                             'insurance_plan_id' => $insurancePlan->id,
                             'billing_company_id' => $billingCompany,
                             'responsibilities' => $format['responsibilities'],
-                            'eff_date' => $data['eff_date']
+                            'eff_date' => $data['eff_date'] ?? null
                         ]
                     );
                 }
