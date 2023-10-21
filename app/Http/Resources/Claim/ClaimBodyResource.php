@@ -47,7 +47,8 @@ final class ClaimBodyResource extends JsonResource
             'last_modified' => $this->last_modified,
             'private_note' => $this->private_note,
             'status' => $this->getStatus(),
-            'status_history' => $this->getStatusMap(),
+            'status_map' => $this->getStatusMap(),
+            'status_history' => $this->getStatusHistory(),
             'notes_history' => $this->getNotesHistory(),
             'billed_amount' => $this->billed_amount,
             'amount_paid' => $this->amount_paid ?? '0.00',
@@ -116,6 +117,39 @@ final class ClaimBodyResource extends JsonResource
             }, []);
 
         $records = [];
+        $active = true;
+        $history = $this->claimStatusClaims()
+                        ->where('claim_status_type', ClaimStatus::class)
+                        ->orderBy('created_at', 'desc')
+                        ->orderBy('id', 'desc')
+                        ->get() ?? [];
+        foreach ($history as $status) {
+            array_push($records, [
+                'status' => $status->claimStatus->status ?? '',
+                'active' => $active,
+                'status_background_color' => $status->claimStatus->background_color ?? '',
+            ]);
+            if ($active) {
+                $active = false;
+            }
+        }
+        if (count($statusDefaultOrder) > 0) {
+            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+                $status = ClaimStatus::whereStatus($value)->first();
+                array_push($newStatuses, [
+                    'status' => $status->status ?? '',
+                    'active' => false,
+                    'status_background_color' => $status->background_color ?? '',
+                ]);
+            }
+        }
+
+        return array_merge($newStatuses, $records);
+    }
+
+    private function getStatusHistory(): array
+    {
+        $records = [];
         $recordSubstatus = [];
         $history = $this->claimStatusClaims()
                         ->orderBy('created_at', 'desc')
@@ -126,22 +160,8 @@ final class ClaimBodyResource extends JsonResource
                 ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
             };
         }
-        if (count($statusDefaultOrder) > 0) {
-            foreach (array_reverse($statusDefaultOrder, true) as $value) {
-                $status = ClaimStatus::whereStatus($value)->first();
-                array_push($newStatuses, [
-                    'notes_history' => [],
-                    'status' => $status->status ?? '',
-                    'status_background_color' => $status->background_color ?? '',
-                    'status_font_color' => $status->font_color ?? '',
-                    'status_date' => '',
-                    'sub_status_history' => [],
-                    'last_modified' => '',
-                ]);
-            }
-        }
 
-        return array_merge($newStatuses, $records);
+        return $records;
     }
 
     private function setSubStatus($status, &$recordSubstatus): void
