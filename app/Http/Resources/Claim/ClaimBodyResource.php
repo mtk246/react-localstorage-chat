@@ -159,7 +159,7 @@ final class ClaimBodyResource extends JsonResource
                 array_push($newStatuses, [
                     'status' => $status->status ?? '',
                     'active' => false,
-                    'status_background_color' => $status->background_color ?? '',
+                    'status_background_color' => $statusColors[$status->status] ?? '',
                     'status_font_color' => $status->font_color ?? '',
                 ]);
             }
