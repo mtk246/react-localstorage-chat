@@ -129,11 +129,11 @@ class Procedure extends Model implements Auditable
     /**
      * The companies that belong to the Procedure.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companyServices()
     {
-        return $this->belongsToMany(CompanyService::class)->withTimestamps();
+        return $this->hasMany(CompanyService::class);
     }
 
     /**
