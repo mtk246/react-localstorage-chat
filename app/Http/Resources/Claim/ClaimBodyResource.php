@@ -47,7 +47,7 @@ final class ClaimBodyResource extends JsonResource
             'last_modified' => $this->last_modified,
             'private_note' => $this->private_note,
             'status' => $this->getStatus(),
-        'status_history' => $this->getStatusMap(),
+            'status_history' => $this->getStatusMap(),
             'notes_history' => $this->getNotesHistory(),
             'billed_amount' => $this->billed_amount,
             'amount_paid' => $this->amount_paid ?? '0.00',
@@ -98,6 +98,9 @@ final class ClaimBodyResource extends JsonResource
             ->orderBy('id', 'asc')
             ->get()
             ->reduce(function ($carry, $claimStatusClaim) use (&$statusDefaultOrder) {
+                if (0 === count($statusDefaultOrder)) {
+                    return;
+                }
                 $statusName = $claimStatusClaim?->claimStatus?->status ?? '';
                 if (!empty($statusName)) {
                     if ($statusName !== $statusDefaultOrder[0] &&
