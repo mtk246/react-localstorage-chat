@@ -7,6 +7,7 @@ namespace App\Http\Resources\Claim;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ClaimBodyResource extends JsonResource
@@ -21,6 +22,8 @@ final class ClaimBodyResource extends JsonResource
             'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
+            'claim_type' => upperCaseWords($this->resource->type->getName()),
+            'claim_format' => TypeForm::find($this->resource->type->value)?->form ?? '',
             'submitter_name' => $this->resource->submitter_name,
             'submitter_contact' => $this->resource->submitter_contact,
             'submitter_phone' => $this->resource->submitter_phone,
@@ -44,7 +47,7 @@ final class ClaimBodyResource extends JsonResource
             'last_modified' => $this->last_modified,
             'private_note' => $this->private_note,
             'status' => $this->getStatus(),
-            'status_history' => $this->getStatusHistory(),
+            'status_history' => $this->getStatusMap(),
             'notes_history' => $this->getNotesHistory(),
             'billed_amount' => $this->billed_amount,
             'amount_paid' => $this->amount_paid ?? '0.00',
@@ -85,8 +88,33 @@ final class ClaimBodyResource extends JsonResource
             ?->setHidden(['pivot']);
     }
 
-    private function getStatusHistory(): array
+    private function getStatusMap(): array
     {
+        $newStatuses = [];
+        $statusDefaultOrder = ['Draft', 'Not submitted', 'Submitted', 'Approved', 'Complete'];
+
+        $this->claimStatusClaims()
+            ->where('claim_status_type', ClaimStatus::class)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->reduce(function ($carry, $claimStatusClaim) use (&$statusDefaultOrder) {
+                if (0 === count($statusDefaultOrder)) {
+                    return;
+                }
+                $statusName = $claimStatusClaim?->claimStatus?->status ?? '';
+                if (!empty($statusName)) {
+                    if ($statusName !== $statusDefaultOrder[0] &&
+                        'Draft' === $statusDefaultOrder[0]) {
+                        array_shift($statusDefaultOrder);
+                    }
+                    if ($statusName === $statusDefaultOrder[0]) {
+                        array_shift($statusDefaultOrder);
+                    } else {
+                        $statusDefaultOrder = [];
+                    }
+                }
+            }, []);
+
         $records = [];
         $recordSubstatus = [];
         $history = $this->claimStatusClaims()
@@ -98,8 +126,22 @@ final class ClaimBodyResource extends JsonResource
                 ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
             };
         }
+        if (count($statusDefaultOrder) > 0) {
+            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+                $status = ClaimStatus::whereStatus($value)->first();
+                array_push($newStatuses, [
+                    'notes_history' => [],
+                    'status' => $status->status ?? '',
+                    'status_background_color' => $status->background_color ?? '',
+                    'status_font_color' => $status->font_color ?? '',
+                    'status_date' => '',
+                    'sub_status_history' => [],
+                    'last_modified' => '',
+                ]);
+            }
+        }
 
-        return $records;
+        return array_merge($newStatuses, $records);
     }
 
     private function setSubStatus($status, &$recordSubstatus): void

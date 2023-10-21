@@ -25,12 +25,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $code_NDC
  * @property string|null $note
  * @property int|null $company_service_id
+ * @property bool $claim_note_required
  * @property \App\Models\CompanyService|null $companyService
  * @property string $code
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Medication query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Medication whereClaimNoteRequired($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCodeNDC($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCompanyServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Medication whereCreatedAt($value)
