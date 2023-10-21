@@ -118,19 +118,30 @@ final class ClaimBodyResource extends JsonResource
 
         $records = [];
         $active = true;
+        $substatus = '';
         $history = $this->claimStatusClaims()
-                        ->where('claim_status_type', ClaimStatus::class)
                         ->orderBy('created_at', 'desc')
                         ->orderBy('id', 'desc')
                         ->get() ?? [];
         foreach ($history as $status) {
-            array_push($records, [
-                'status' => $status->claimStatus->status ?? '',
-                'active' => $active,
-                'status_background_color' => $status->claimStatus->background_color ?? '',
-            ]);
-            if ($active) {
-                $active = false;
+            if (ClaimSubStatus::class == $status->claim_status_type && '' === $substatus) {
+                $substatus = $status->claimStatus->name ?? '';
+            } elseif (ClaimStatus::class == $status->claim_status_type) {
+                $name = (empty($substatus))
+                    ? $status->claimStatus->status
+                    : $status->claimStatus->status.' - '.$substatus;
+                array_push($records, [
+                    'status' => $name,
+                    'active' => $active,
+                    'status_background_color' => $status->claimStatus->background_color ?? '',
+                    'status_font_color' => $status->claimStatus->font_color ?? '',
+                ]);
+
+                $substatus = '';
+
+                if ($active) {
+                    $active = false;
+                }
             }
         }
         if (count($statusDefaultOrder) > 0) {
@@ -140,6 +151,7 @@ final class ClaimBodyResource extends JsonResource
                     'status' => $status->status ?? '',
                     'active' => false,
                     'status_background_color' => $status->background_color ?? '',
+                    'status_font_color' => $status->font_color ?? '',
                 ]);
             }
         }
