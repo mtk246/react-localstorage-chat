@@ -335,19 +335,10 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
     }
 
+    /** @deprecated use hasPermission instead */
     public function hasRole($role, $all = false)
     {
-        return match ($this->type?->value ?? 0) {
-            UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
-            UserType::BILLING->value => $this->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ->membership
-                ->roles()
-                ->where('slug', $role)
-                ->exists(),
-            default => false,
-        };
+        return $this->roles()->where('slug', $role)->exists();
     }
 
     public function hasPermission(string $permission): bool
