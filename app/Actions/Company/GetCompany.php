@@ -69,7 +69,29 @@ final class GetCompany
                     !empty($request->query('query')) && '{}' !== $request->query('query'),
                     fn (Builder $query) => $query->search($request->query('query')),
                 )
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->when(
+                    isset($request->sortBy),
+                    function (Builder $query) use ($request) {
+
+                        switch($request->sortBy) {
+                            case 'name':
+                                $query->orderBy('companies.name', Pagination::sortDesc());
+                                break;
+                            case 'code':
+                                $query->orderBy('code', Pagination::sortDesc());
+                                break;
+                            case 'npi':
+                                $query->orderBy('npi', Pagination::sortDesc());
+                                break;
+                            case 'ein':
+                                $query->orderBy('ein', Pagination::sortDesc());
+                                break;
+                            default:
+                                $query->orderBy('id', Pagination::sortDesc());
+                                break;
+                        }
+                    },
+                )
                 ->paginate(Pagination::itemsPerPage());
 
             return [
