@@ -239,12 +239,25 @@ return [
             Patient::class => [
                 'filterableAttributes' => [
                     'code',
-                    'driver_license',
-                    'marital_status',
+                    'name',
+                    'profile.first_name',
+                    'profile.middle_name',
+                    'profile.last_name',
+                    'profiles.date_of_birth',
+                    'companies',
+                    'billing_companies',
                     'user.code',
                     'user.mail',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'code',
+                    'profile.first_name',
+                    'profile.middle_name',
+                    'profile.last_name',
+                    'profiles.date_of_birth',
+                    'created_at',
+                ],
             ],
             InsuranceCompany::class => [
                 'filterableAttributes' => [
