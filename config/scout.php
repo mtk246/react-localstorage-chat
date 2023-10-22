@@ -222,11 +222,14 @@ return [
             ],
             HealthProfessional::class => [
                 'filterableAttributes' => [
+                    'id',
                     'code',
                     'npi',
-                    'user.full_name',
-                    'user.first_name',
-                    'user.last_name',
+                    'name',
+                    'profile.first_name',
+                    'profile.middle_name',
+                    'profile.last_name',
+                    'profiles.date_of_birth',
                     'user.email',
                     'user.ssn',
                     'user.phone',
@@ -234,7 +237,7 @@ return [
                     'company.npi',
                     'company.code',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => ['id', 'created_at'],
             ],
             Patient::class => [
                 'filterableAttributes' => [
