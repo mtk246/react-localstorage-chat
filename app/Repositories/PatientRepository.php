@@ -171,6 +171,7 @@ class PatientRepository
 
             if (is_null($patient->billingCompanies()->find($billingCompany))) {
                 $patient->billingCompanies()->attach($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
                     'save_as_draft' => $data['save_as_draft'] ?? false,
                 ]);
             } else {
@@ -202,6 +203,10 @@ class PatientRepository
 
             /* Create User */
             if (((bool) $data['create_user']) && !isset($user)) {
+                if(isset($profile->user)) {
+                    throw new \Exception('Cannot create user because it already exists for another billing company');
+                }
+
                 $user = User::firstOrCreate([
                     'email' => $data['contact']['email'],
                 ],[
