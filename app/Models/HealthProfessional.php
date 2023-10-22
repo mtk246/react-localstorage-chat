@@ -259,6 +259,8 @@ class HealthProfessional extends Model implements Auditable
             'company.name' => $this->company?->name,
             'company.npi' => $this->company?->npi,
             'company.code' => $this->company?->code,
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
         ];
     }
 }

@@ -354,8 +354,9 @@ class Patient extends Model implements Auditable
             'profile.middle_name' => $this->profile?->middle_name,
             'profile.last_name' => $this->profile?->last_name,
             'profiles.date_of_birth' => $this->profile?->date_of_birth,
-            'companies' => $this->companies->pluck('med_num')->toArray(),
-            'billing_companies' => $this->billingCompanies->pluck('name')->toArray(),
+            'companies' => $this->companies->pluck('med_num'),
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
             'user.code' => $this->user?->usercode,
             'user.mail' => $this->user?->email,
         ];

@@ -368,6 +368,8 @@ final class Company extends Model implements Auditable
             'contacts.fax' => $contacts?->fax,
             'contacts.email' => $contacts?->email,
             'contacts.mobile' => $contacts?->mobile,
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
         ];
     }
 }
