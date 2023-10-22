@@ -203,18 +203,20 @@ return [
             ],
             Company::class => [
                 'filterableAttributes' => [
+                    'id',
                     'code',
                     'name',
                     'npi',
                     'ein',
                     'upin',
                     'clia',
+                    'abbreviations',
                     'contacts.phone',
                     'contacts.fax',
                     'contacts.email',
                     'contacts.mobile',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => ['id', 'created_at'],
             ],
             Facility::class => [
                 'filterableAttributes' => ['code', 'name', 'npi'],
