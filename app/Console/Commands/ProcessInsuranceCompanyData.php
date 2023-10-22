@@ -51,18 +51,18 @@ final class ProcessInsuranceCompanyData extends Command
 
         foreach ($csvData as $row) {
             if ('' != $row[$payerIdIndex]) {
-                $billingCompany = BillingCompany::where('abbreviation', explode(' ', $row[$billingCompanyIndex])[0])->first() ?? null;
-                $payerId = $row[$payerIdIndex] ?? '';
-                $name = $row[$nameIndex] ?? '';
-                $abbreviation = $row[$abbreviationIndex] ?? '';
+                $billingCompany = BillingCompany::where('name', $row[$billingCompanyIndex])->first() ?? null;
+                $payerId = trim($row[$payerIdIndex] ?? '');
+                $name = trim($row[$nameIndex] ?? '');
+                $abbreviation = trim($row[$abbreviationIndex] ?? '');
                 $fileMethodId = TypeCatalog::where('code', explode(' - ', $row[$fileMethodIndex])[0])->first()?->id ?? null;
-                $address = $row[$addressIndex] ?? '';
-                $aptSuite = $row[$aptSuiteIndex] ?? '';
-                $country = $row[$countryIndex] ?? '';
-                $zip = $row[$zipIndex] ?? '';
-                $city = $row[$cityIndex] ?? '';
-                $state = $row[$stateIndex] ?? '';
-                $phone = $row[$phoneIndex] ?? '';
+                $address = trim($row[$addressIndex] ?? '');
+                $aptSuite = trim($row[$aptSuiteIndex] ?? '');
+                $country = trim($row[$countryIndex] ?? '');
+                $zip = trim($row[$zipIndex] ?? '');
+                $city = trim($row[$cityIndex] ?? '');
+                $state = trim($row[$stateIndex] ?? '');
+                $phone = trim($row[$phoneIndex] ?? '');
 
                 $insurance = InsuranceCompany::where('payer_id', $payerId)->first();
                 if (isset($insurance)) {
@@ -81,7 +81,9 @@ final class ProcessInsuranceCompanyData extends Command
                 }
 
                 /* Attach billing company */
-                $insurance->billingCompanies()->attach($billingCompany?->id);
+                if (is_null($insurance->billingCompanies()->find($billingCompany?->id))) {
+                    $insurance->billingCompanies()->attach($billingCompany?->id);
+                }
 
                 if (!empty($abbreviation)) {
                     EntityAbbreviation::firstOrCreate([
