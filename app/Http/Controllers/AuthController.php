@@ -241,9 +241,8 @@ class AuthController extends Controller
         $bC = $user->billing_company_id;
         if (!$bC) {
             $user = Auth::user()->load([
-                'billingCompanies',
-                'permits',
                 'roles',
+                'billingCompanies',
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
@@ -252,7 +251,6 @@ class AuthController extends Controller
             $user = $user->load([
                 'roles',
                 'billingCompanies',
-                'permits',
                 'profile' => function ($query) use ($bC)  {
                     $query->with([
                         'socialMedias',
