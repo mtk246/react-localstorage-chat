@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class DoctorRepository
 {
@@ -763,57 +764,60 @@ class DoctorRepository
 
     public function getServerAllDoctors(Request $request)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
+        $data = HealthProfessional::search($request->query('query'))->when(
+            Gate::denies('is-admin'),
+            function (ScoutBuilder $query) {
+                $bC = auth()->user()->billing_company_id ?? null;
 
-        $data = HealthProfessional::search($request->query('query'))
-            ->query(fn (Builder $query) => $query->when(Gate::denies('is-admin'), function(Builder $query) use ($bC) {
-                $query->with([
-                    'profile' => function ($query) use ($bC) {
-                        $query->with([
-                            'socialMedias',
-                            'addresses' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                            'contacts' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                        ]);
-                    },
-                    'billingCompanies' => function($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'user' => function ($query) use ($bC) {
-                        $query->with(['roles']);
-                    },
-                    'taxonomies' => function($query) use($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'companies' => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC)
-                            ->with(['taxonomies', 'nicknames']);
-                    },
-                    'healthProfessionalType' => function($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'company',
-                ]);
-            }, function (Builder $query) {
-                $query->with([
-                    'profile',
-                    'profile.socialMedias',
-                    'profile.addresses',
-                    'profile.contacts',
-                    'billingCompanies',
-                    'user',
-                    'user.roles',
-                    'taxonomies',
-                    'companies',
-                    'companies.taxonomies',
-                    'companies.nicknames',
-                    'healthProfessionalType',
-                    'company',
-                ]);
-            }));
+                $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
+                    ->with([
+                        'profile' => function ($query) use ($bC) {
+                            $query->with([
+                                'socialMedias',
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                            ]);
+                        },
+                        'billingCompanies' => function($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'user' => function ($query) use ($bC) {
+                            $query->with(['roles']);
+                        },
+                        'taxonomies' => function($query) use($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'companies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC)
+                                ->with(['taxonomies', 'nicknames']);
+                        },
+                        'healthProfessionalType' => function($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'company',
+                    ])
+                );
+            },
+            fn(ScoutBuilder $query) => $query->query(fn (Builder $query) => $query->with([
+                'profile',
+                'profile.socialMedias',
+                'profile.addresses',
+                'profile.contacts',
+                'billingCompanies',
+                'user',
+                'user.roles',
+                'taxonomies',
+                'companies',
+                'companies.taxonomies',
+                'companies.nicknames',
+                'healthProfessionalType',
+                'company',
+            ]))
+        );
 
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'billingcompany')) {

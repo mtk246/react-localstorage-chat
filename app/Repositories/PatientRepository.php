@@ -40,6 +40,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class PatientRepository
 {
@@ -767,11 +768,38 @@ class PatientRepository
 
     public function getServerAllPatient(Request $request)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-
         /** @var Builder|Patient $data */
-        $data = Patient::search($request->query('query'))
-            ->query(fn (Builder $query) => $query
+        $data = Patient::search($request->query('query'))->when(
+            Gate::denies('is-admin'),
+            function (ScoutBuilder $query) {
+                $bC = auth()->user()->billing_company_id ?? null;
+
+                $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
+                    ->with([
+                        'user',
+                        'user.roles',
+                        'user.billingCompanies',
+                        'profile',
+                        'profile.socialMedias',
+                        'profile.addresses',
+                        'profile.contacts',
+                        'employments',
+                        'companies',
+                        'emergencyContacts',
+                        'publicNote',
+                        'privateNotes',
+                        'insurancePolicies',
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'insurancePlans',
+                        'insurancePlans.insuranceCompany',
+                    ])
+                    ->select('patients.*')
+                    ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
+                );
+            },
+            fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
                 ->with([
                     'user',
                     'user.roles',
@@ -786,17 +814,14 @@ class PatientRepository
                     'publicNote',
                     'privateNotes',
                     'insurancePolicies',
-                    'billingCompanies' => function ($query) use ($bC) {
-                        $query->when(Gate::denies('is-admin'), function ($query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        });
-                    },
+                    'billingCompanies',
                     'insurancePlans',
                     'insurancePlans.insuranceCompany',
                 ])
                 ->select('patients.*')
                 ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
-            );
+            ),
+        );
 
         if ($request->sortBy) {
             switch($request->sortBy) {
