@@ -30,11 +30,11 @@ final class GetCompany
         });
     }
 
-    public function all(Company $company, Request $request)
+    public function all(Request $request)
     {
-        return DB::transaction(function () use ($company, $request) {
-            $companiesQuery = $company->query()
-                ->when(
+        return DB::transaction(function () use ($request) {
+            $companiesQuery = Company::search($request->query('query'))
+                ->query(fn (Builder $query) => $query->when(
                     Gate::denies('is-admin'),
                     function (Builder $query) use ($request) {
                         $bC = $request->user()->billing_company_id;
@@ -64,11 +64,7 @@ final class GetCompany
                             'billingCompanies',
                         ]);
                     }
-                )
-                ->when(
-                    !empty($request->query('query')) && '{}' !== $request->query('query'),
-                    fn (Builder $query) => $query->search($request->query('query')),
-                )
+                ))
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
 
