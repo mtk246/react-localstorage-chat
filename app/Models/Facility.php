@@ -261,30 +261,17 @@ class Facility extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $search)
-    {
-        if ('' != $search) {
-            return $query->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")])
-            ->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")])
-            ->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")])
-            ->orWhereHas('companies', function ($q) use ($search): void {
-                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereHas('facilityTypes', function ($q) use ($search): void {
-                $q->whereRaw('LOWER(type) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereHas('billingCompanies', function ($q) use ($search): void {
-                $q->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-            });
-        }
-
-        return $query;
-    }
-
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
             'npi' => $this->npi,
+            'companies' => $this->companies->pluck('name'),
+            'facilityTypes' => $this->facilityTypes->pluck('type'),
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
         ];
     }
 }

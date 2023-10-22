@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 /** @todo finish the refactoring, only a partial refactoring was done */
 final class GetCompany
@@ -30,44 +31,37 @@ final class GetCompany
         });
     }
 
-    public function all(Company $company, Request $request)
+    public function all(Request $request)
     {
-        return DB::transaction(function () use ($company, $request) {
-            $companiesQuery = $company->query()
+        return DB::transaction(function () use ($request) {
+            $companiesQuery = Company::search($request->query('query'))
                 ->when(
                     Gate::denies('is-admin'),
-                    function (Builder $query) use ($request) {
+                    function (ScoutBuilder $query) use ($request) {
                         $bC = $request->user()->billing_company_id;
-                        $query->whereHas('billingCompanies', function (Builder $query) use ($bC) {
-                            $query->where('billing_company_id', $bC);
-                        })
-                        ->with([
-                            'addresses' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                            'contacts' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                            'nicknames' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                            'billingCompanies' => function ($query) use ($bC) {
-                                $query->where('billing_company_id', $bC);
-                            },
-                        ]);
+                        $query
+                            ->where('billingCompanies.id', $bC)
+                            ->query(fn (Builder $query) => $query->with([
+                                'addresses' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'contacts' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'nicknames' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                                'billingCompanies' => function ($query) use ($bC) {
+                                    $query->where('billing_company_id', $bC);
+                                },
+                            ]));
                     },
-                    function (Builder $query) {
-                        $query->with([
+                    fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query->with([
                             'addresses',
                             'contacts',
                             'nicknames',
                             'billingCompanies',
-                        ]);
-                    }
-                )
-                ->when(
-                    !empty($request->query('query')) && '{}' !== $request->query('query'),
-                    fn (Builder $query) => $query->search($request->query('query')),
+                    ]))
                 )
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());

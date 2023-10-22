@@ -37,8 +37,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class PatientRepository
 {
@@ -305,7 +307,7 @@ class PatientRepository
                         new GenerateNewPassword(
                             $profile->first_name.' '.$profile->last_name,
                             $user->email,
-                            \Crypt::decrypt($user->userkey),
+                            Crypt::decrypt($user->userkey),
                             env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                         )
                     );
@@ -766,59 +768,60 @@ class PatientRepository
 
     public function getServerAllPatient(Request $request)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $data = Patient::query()->with([
-                'user' => function ($query) {
-                    $query->with(['roles', 'billingCompanies']);
-                },
-                'profile' => function ($q) {
-                    $q->with(['socialMedias', 'addresses', 'contacts']);
-                },
-                'employments',
-                'companies',
-                'emergencyContacts',
-                'publicNote',
-                'privateNotes',
-                'insurancePolicies',
-                'billingCompanies',
-                'insurancePlans' => function ($query) {
-                    $query->with('insuranceCompany');
-                },
-            ])
-            ->select('patients.*')
-            ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
-        } else {
-            $data = Patient::query()
-                ->whereHas('billingCompanies', function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                })->with([
-                    'user' => function ($query) {
-                        $query->with(['roles', 'billingCompanies']);
-                    },
-                    'profile' => function ($q) {
-                        $q->with(['socialMedias', 'addresses', 'contacts']);
-                    },
+        /** @var Builder|Patient $data */
+        $data = Patient::search($request->query('query'))->when(
+            Gate::denies('is-admin'),
+            function (ScoutBuilder $query) {
+                $bC = auth()->user()->billing_company_id ?? null;
+
+                $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
+                    ->with([
+                        'user',
+                        'user.roles',
+                        'user.billingCompanies',
+                        'profile',
+                        'profile.socialMedias',
+                        'profile.addresses',
+                        'profile.contacts',
+                        'employments',
+                        'companies',
+                        'emergencyContacts',
+                        'publicNote',
+                        'privateNotes',
+                        'insurancePolicies',
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'insurancePlans',
+                        'insurancePlans.insuranceCompany',
+                    ])
+                    ->select('patients.*')
+                    ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
+                );
+            },
+            fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
+                ->with([
+                    'user',
+                    'user.roles',
+                    'user.billingCompanies',
+                    'profile',
+                    'profile.socialMedias',
+                    'profile.addresses',
+                    'profile.contacts',
                     'employments',
                     'companies',
                     'emergencyContacts',
                     'publicNote',
                     'privateNotes',
                     'insurancePolicies',
-                    'billingCompanies' => function ($query) use ($bC) {
-                        $query->where('billing_company_id', $bC);
-                    },
-                    'insurancePlans' => function ($query) {
-                        $query->with('insuranceCompany');
-                    },
+                    'billingCompanies',
+                    'insurancePlans',
+                    'insurancePlans.insuranceCompany',
                 ])
                 ->select('patients.*')
-                ->join('profiles', 'patients.profile_id', '=', 'profiles.id');
-        }
-
-        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
-        }
+                ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
+            ),
+        );
 
         if ($request->sortBy) {
             switch($request->sortBy) {
@@ -833,7 +836,7 @@ class PatientRepository
                     break;
             }
         } else {
-            $data = $data->orderBy('patients.id', Pagination::sortDesc());
+            $data = $data->orderBy('id', Pagination::sortDesc());
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
