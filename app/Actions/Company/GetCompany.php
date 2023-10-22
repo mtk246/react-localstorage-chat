@@ -72,8 +72,7 @@ final class GetCompany
                 ->when(
                     isset($request->sortBy),
                     function (Builder $query) use ($request) {
-
-                        switch($request->sortBy) {
+                        switch ($request->sortBy) {
                             case 'name':
                                 $query->orderBy('name', Pagination::sortDesc());
                                 break;
