@@ -75,7 +75,7 @@ final class GetCompany
 
                         switch($request->sortBy) {
                             case 'name':
-                                $query->orderBy('companies.name', Pagination::sortDesc());
+                                $query->orderBy('name', Pagination::sortDesc());
                                 break;
                             case 'code':
                                 $query->orderBy('code', Pagination::sortDesc());
@@ -91,6 +91,7 @@ final class GetCompany
                                 break;
                         }
                     },
+                    fn (Builder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
                 )
                 ->paginate(Pagination::itemsPerPage());
 

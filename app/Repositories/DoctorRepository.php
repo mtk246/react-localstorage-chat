@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Facades\Pagination;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\HealthProfessional\DoctorBodyResource;
@@ -779,7 +780,9 @@ class DoctorRepository
                 },
                 'healthProfessionalType',
                 'company',
-            ]);
+            ])
+            ->select('health_professionals.*')
+            ->join('profiles', 'health_professionals.profile_id', '=', 'profiles.id');
         } else {
             $data = HealthProfessional::whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
@@ -812,7 +815,9 @@ class DoctorRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'company',
-            ]);
+            ])
+            ->select('health_professionals.*')
+            ->join('profiles', 'health_professionals.profile_id', '=', 'profiles.id');
         }
 
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
@@ -820,17 +825,19 @@ class DoctorRepository
         }
 
         if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'health_professionals.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } /**elseif (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy(
-                    Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } */ else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
+            switch($request->sortBy) {
+                case 'name':
+                    $data->orderBy('profiles.first_name', Pagination::sortDesc());
+                    break;
+                case 'npi':
+                    $data->orderBy('health_professionals.npi', Pagination::sortDesc());
+                    break;
+                default:
+                    $data->orderBy('health_professionals.created_at', Pagination::sortDesc());
+                    break;
             }
         } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
+            $data = $data->orderBy('health_professionals.created_at', Pagination::sortDesc())->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
