@@ -766,23 +766,7 @@ class DoctorRepository
         $bC = auth()->user()->billing_company_id ?? null;
 
         $data = HealthProfessional::search($request->query('query'))
-            ->query(fn (Builder $query) => $query->when(Gate::denies('is-admin'), function (Builder $query) {
-                $query->with([
-                    'profile' => function ($query) {
-                        $query->with(['socialMedias', 'addresses', 'contacts']);
-                    },
-                    'billingCompanies',
-                    'user' => function ($query) {
-                        $query->with(['roles']);
-                    },
-                    'taxonomies',
-                    'companies' => function ($query) {
-                        $query->with(['taxonomies', 'nicknames']);
-                    },
-                    'healthProfessionalType',
-                    'company',
-                ]);
-            }, function(Builder $query) use ($bC) {
+            ->query(fn (Builder $query) => $query->when(Gate::denies('is-admin'), function(Builder $query) use ($bC) {
                 $query->with([
                     'profile' => function ($query) use ($bC) {
                         $query->with([
@@ -811,6 +795,22 @@ class DoctorRepository
                     'healthProfessionalType' => function($query) use ($bC) {
                         $query->where('billing_company_id', $bC);
                     },
+                    'company',
+                ]);
+            }, function (Builder $query) {
+                $query->with([
+                    'profile',
+                    'profile.socialMedias',
+                    'profile.addresses',
+                    'profile.contacts',
+                    'billingCompanies',
+                    'user',
+                    'user.roles',
+                    'taxonomies',
+                    'companies',
+                    'companies.taxonomies',
+                    'companies.nicknames',
+                    'healthProfessionalType',
                     'company',
                 ]);
             }));
