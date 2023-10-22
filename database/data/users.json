@@ -328,5 +328,19 @@
             "date_of_birth": "1990-04-01"
         },
         "type": 1
+    },
+    {
+        "email": "rd@ciph3r.co",
+        "password": "$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q",
+        "role": "superuser",
+        "profile": {
+            "ssn": "125855486",
+            "first_name": "Rafael",
+            "middle_name": "",
+            "last_name": "Duque",
+            "sex": "M",
+            "date_of_birth": "1990-04-01"
+        },
+        "type": 1
     }
 ]
