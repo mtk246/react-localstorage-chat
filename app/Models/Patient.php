@@ -69,7 +69,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
- * @method static \Illuminate\Database\Eloquent\Builder|Patient search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Patient whereDriverLicense($value)
@@ -337,25 +336,6 @@ class Patient extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $search)
-    {
-        if ('' != $search) {
-            return $query->whereHas('profile', function ($qq) use ($search) {
-                $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
-            })->whereHas('user', function ($q) use ($search): void {
-                $q->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereHas('companies', function ($qq) use ($search) {
-                $qq->whereRaw('LOWER(med_num) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereHas('billingCompanies', function ($qq) use ($search) {
-                $qq->whereRaw('LOWER(name) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereRaw('LOWER(code) LIKE (?)', [strtolower("%$search%")]);
-        }
-
-        return $query;
-    }
-
     public function contractFees(): BelongsToMany
     {
         return $this->belongsToMany(ContractFee::class)
@@ -367,9 +347,16 @@ class Patient extends Model implements Auditable
     public function toSearchableArray(): array
     {
         return [
+            'id' => $this->id,
             'code' => $this->code,
-            'driver_license' => $this->driver_license,
-            'marital_status' => $this->maritalStatus?->name,
+            'name' => $this->profile?->fullName(),
+            'profile.first_name' => $this->profile?->first_name,
+            'profile.middle_name' => $this->profile?->middle_name,
+            'profile.last_name' => $this->profile?->last_name,
+            'profiles.date_of_birth' => $this->profile?->date_of_birth,
+            'companies' => $this->companies->pluck('med_num'),
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
             'user.code' => $this->user?->usercode,
             'user.mail' => $this->user?->email,
         ];

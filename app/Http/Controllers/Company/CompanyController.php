@@ -129,10 +129,10 @@ final class CompanyController extends Controller
         );
     }
 
-    public function getServerAll(Request $request, GetCompany $getCompany, Company $company): JsonResponse
+    public function getServerAll(Request $request, GetCompany $getCompany): JsonResponse
     {
         return response()->json(
-            $getCompany->all($company, $request),
+            $getCompany->all($request),
             200
         );
     }
