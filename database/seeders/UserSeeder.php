@@ -6,6 +6,9 @@ namespace Database\Seeders;
 
 use App\Enums\User\UserType;
 use App\Models\BillingCompany;
+use App\Models\BillingCompany\Membership as BillingMembership;
+use App\Models\BillingCompanyHealthProfessional;
+use App\Models\Patient\Membership as PatienMembership;
 use App\Models\Profile;
 use App\Models\User;
 use App\Models\User\Role;
@@ -21,46 +24,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        /*
-                foreach ($users as $user) {
-                    $profile = Profile::updateOrCreate(['ssn' => $user['profile']['ssn']], $user['profile']);
-
-                    $usr = User::query()->updateOrCreate(
-                        ['email' => $user['email']],
-                        [
-                            'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                            'email' => $user['email'],
-                            'password' => $user['password'],
-                            'profile_id' => $profile->id,
-                        ]
-                    );
-                    $usr->password = '$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q';
-                    $usr->save();
-
-                    $usr->detachAllPermissions();
-                    $usr->detachAllRoles();
-
-                    // $usr->detachAllPermissions();
-                    // $usr->detachAllRoles();
-
-                    $role = Role::where('slug', $user['role'])->first();
-                    if (isset($role)) {
-                        $usr->attachRole($role);
-                        $permissions = $role->permissions;
-                        foreach ($permissions as $perm) {
-                            $usr->attachPermission($perm);
-                        }
-                    }
-
-                    if ('billingmanager' == $role->slug || 'biller' == $role->slug) {
-                        $bCompany = BillingCompany::whereAbbreviation($user['billingCompany'])->first();
-                        if (isset($bCompany)) {
-                            $usr->billingCompany()->disassociate($bCompany->id);
-                            $usr->billingCompanies()->sync($bCompany->id);
-                        }
-                    }
-                }*/
-
         collect(json_decode(\File::get('database/data/users.json')))
             ->map(function (object $user) {
                 $user->type = UserType::from($user->type ?? 1)->value;
@@ -119,7 +82,7 @@ class UserSeeder extends Seeder
             ->roles()
             ->syncWithPivotValues(
                 $role->id ?? Role::factory()->create()->id,
-                ['rollable_type' => Membership::class],
+                ['rollable_type' => BillingMembership::class],
                 false
             );
     }
@@ -160,7 +123,7 @@ class UserSeeder extends Seeder
             ->roles()
             ->syncWithPivotValues(
                 $role->id ?? Role::factory()->create()->id,
-                ['rollable_type' => PatientMembership::class],
+                ['rollable_type' => PatienMembership::class],
                 false
             );
     }

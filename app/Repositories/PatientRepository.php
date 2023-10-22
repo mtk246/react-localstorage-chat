@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Enums\User\RoleType;
+use App\Enums\User\UserType;
 use App\Facades\Pagination;
-use App\Http\Resources\Claim\BatchClaimBodyResource;
 use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Mail\GenerateNewPassword;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
-use App\Models\BillingCompany\MembershipRole;
 use App\Models\Claims\ClaimEligibilityStatus;
 use App\Models\Company;
 use App\Models\Contact;
@@ -18,10 +18,10 @@ use App\Models\Employment;
 use App\Models\Guarantor;
 use App\Models\InsurancePlan;
 use App\Models\InsurancePolicy;
-use App\Models\InsurancePolicyType;
 use App\Models\Marital;
 use App\Models\MaritalStatus;
 use App\Models\Patient;
+use App\Models\Patient\Membership;
 use App\Models\PrivateNote;
 use App\Models\Profile;
 use App\Models\PublicNote;
@@ -32,7 +32,6 @@ use App\Models\TypeCatalog;
 use App\Models\User;
 use App\Roles\Models\Role;
 use Auth;
-use Illuminate\Bus\Batch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -127,27 +126,6 @@ class PatientRepository
                 }
             }
 
-            /* Create User */
-            if (((bool) $data['create_user']) && !isset($user)) {
-                $user = User::create([
-                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
-                    'email' => $data['contact']['email'],
-                    'userkey' => encrypt(uniqid('', true)),
-                    'profile_id' => $profile->id,
-                ]);
-            }
-
-            /* Attach billing company and add role to user */
-            if (isset($user)) {
-                $user->billingCompanies()->syncWithoutDetaching($billingCompany);
-                $user->billingCompanies()
-                    ->wherePivot('billing_company_id', $billingCompany)
-                    ->first()
-                    ->membership
-                    ->roles()
-                    ->syncWithoutDetaching(MembershipRole::whereSlug('patient')->whereBillingCompanyId(null)->first()->id);
-            }
-
             /* Create Contact */
             if (isset($data['contact'])) {
                 $data['contact']['contactable_id'] = $profile->id;
@@ -193,6 +171,7 @@ class PatientRepository
 
             if (is_null($patient->billingCompanies()->find($billingCompany))) {
                 $patient->billingCompanies()->attach($billingCompany->id ?? $billingCompany, [
+                    'status' => true,
                     'save_as_draft' => $data['save_as_draft'] ?? false,
                 ]);
             } else {
@@ -203,6 +182,45 @@ class PatientRepository
                         'save_as_draft' => $data['save_as_draft'] ?? false,
                     ]
                 );
+            }
+
+            $role = Role::whereBillingCompanyId($billingCompany->id ?? $billingCompany)
+                ->whereType(RoleType::PATIENT->value)
+                ->exists()
+                    ? Role::whereBillingCompanyId($billingCompany->id ?? $billingCompany)
+                        ->whereType(RoleType::PATIENT->value)
+                        ->first()
+                    : Role::whereBillingCompanyId(null)
+                        ->whereType(RoleType::PATIENT->value)
+                        ->first();
+
+            $patient->billingCompanies()
+                ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)
+                ->first()
+                ->membership
+                ->roles()
+                ->syncWithPivotValues($role->id, ['rollable_type' => Membership::class]);
+
+            /* Create User */
+            if (((bool) $data['create_user']) && !isset($user)) {
+                if(isset($profile->user)) {
+                    throw new \Exception('Cannot create user because it already exists for another billing company');
+                }
+
+                $user = User::firstOrCreate([
+                    'email' => $data['contact']['email'],
+                ],[
+                    'usercode' => generateNewCode('US', 5, date('Y'), User::class, 'usercode'),
+                    'userkey' => encrypt(uniqid('', true)),
+                    'profile_id' => $profile->id,
+                    'type' => UserType::PATIENT,
+                    'billing_comapny_id' => $billingCompany,
+                ]);
+            }
+
+            /* Attach billing company to user */
+            if (isset($user)) {
+                $user->billingCompanies()->syncWithoutDetaching($billingCompany);;
             }
 
             if (isset($data['public_note'])) {
