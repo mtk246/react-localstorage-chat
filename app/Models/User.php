@@ -295,14 +295,12 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      * @todo ennambe other user types returns that are stuct
      */
     public function roles(): MorphToMany
-    {/*
+    {
         if (is_null($this->type)) {
             \Log::error("User type for user {$this->id} is null");
 
             return $this->$this->userRoles();
-        }*/
-
-        // dump($this->type?->value);
+        }
 
         return match ($this->type->value) {
             UserType::ADMIN->value => $this->userRoles(),
