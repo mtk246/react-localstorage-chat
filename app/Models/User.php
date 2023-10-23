@@ -282,20 +282,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
 
     public function permissions(): ?Collection
     {
-        if (is_null($this->type)) {
-            return null;
-        }
-
-        /* @var \Illuminate\Database\Eloquent\Relations\MorphToMany $roles */
-        $roles = $this->type->value === UserType::ADMIN->value
-            ? $this->roles()
-            : $this->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles();
-
-        return $roles?->get()->reduce(function (Collection $v, Role $role) {
+        return $this->roles()?->get()->reduce(function (Collection $v, Role $role) {
             $v = $v->merge($role->permissions()->get());
 
             return $v;
@@ -314,22 +301,44 @@ final class User extends Authenticatable implements JWTSubject, Auditable
 
     public function roles(): MorphToMany
     {
-        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
-    }
+        if (is_null($this->type)) {
+            \Log::error("User type for user {$this->id} is null");
 
-    public function hasRole($role, $all = false)
-    {
-        return match ($this->type?->value ?? 0) {
-            UserType::ADMIN->value => $this->roles()->where('slug', $role)->exists(),
+            return $this->userRoles();
+        }
+
+        return match ($this->type->value) {
+            UserType::ADMIN->value => $this->userRoles(),
             UserType::BILLING->value => $this->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
-                ->membership
-                ->roles()
-                ->where('slug', $role)
-                ->exists(),
-            default => false,
+                ?->membership
+                ->roles(),
+            UserType::DOCTOR->value => $this->healthProfessional
+                ->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ?->membership
+                ->roles(),
+            UserType::PATIENT->value => $this->patient
+                ->billingCompanies()
+                ->wherePivot('billing_company_id', $this->billing_company_id)
+                ->first()
+                ?->membership
+                ->roles(),
+            default => $this->userRoles(),
         };
+    }
+
+    public function userRoles(): MorphToMany
+    {
+        return $this->morphToMany(Role::class, 'rollable')->withTimestamps();
+    }
+
+    /** @deprecated use hasPermission instead */
+    public function hasRole($role, $all = false)
+    {
+        return $this->roles()->where('slug', $role)->exists();
     }
 
     public function hasPermission(string $permission): bool

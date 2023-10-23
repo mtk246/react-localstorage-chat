@@ -135,6 +135,15 @@ final class Profile extends Model implements Auditable
         return $this->morphMany(Address::class, 'addressable');
     }
 
+    public function fullName(): string
+    {
+        return collect([
+            $this->first_name,
+            $this->middle_name,
+            $this->last_name,
+        ])->filter()->implode(' ');
+    }
+
     /**
      * Interact with the profile's first_name.
      */

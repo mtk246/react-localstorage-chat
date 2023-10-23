@@ -93,6 +93,15 @@ final class ClaimBodyResource extends JsonResource
     {
         $newStatuses = [];
         $statusDefaultOrder = ['Draft', 'Not submitted', 'Submitted', 'Approved', 'Complete'];
+        $statusColors = [
+            'Draft' => '#808080',
+            'Not submitted' => '#FEA54C',
+            'Submitted' => '#FFE18D',
+            'Approved' => '#87F8BA',
+            'Complete' => '#87F8BA',
+            'Rejected' => '#FC8989',
+            'Denied' => '#FC8989',
+        ];
 
         $this->claimStatusClaims()
             ->where('claim_status_type', ClaimStatus::class)
@@ -133,7 +142,7 @@ final class ClaimBodyResource extends JsonResource
                 array_push($records, [
                     'status' => $name,
                     'active' => $active,
-                    'status_background_color' => $status->claimStatus->background_color ?? '',
+                    'status_background_color' => $statusColors[$status->claimStatus->status] ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
                 ]);
 
@@ -150,7 +159,7 @@ final class ClaimBodyResource extends JsonResource
                 array_push($newStatuses, [
                     'status' => $status->status ?? '',
                     'active' => false,
-                    'status_background_color' => $status->background_color ?? '',
+                    'status_background_color' => $statusColors[$status->status] ?? '',
                     'status_font_color' => $status->font_color ?? '',
                 ]);
             }
