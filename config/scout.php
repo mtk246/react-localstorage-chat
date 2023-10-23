@@ -230,7 +230,13 @@ return [
                     'billingCompanies.id',
                     'billingCompanies.name',
                 ],
-                'sortableAttributes' => ['id', 'created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'name',
+                    'code',
+                    'npi',
+                    'created_at'
+                ],
             ],
             HealthProfessional::class => [
                 'filterableAttributes' => [
