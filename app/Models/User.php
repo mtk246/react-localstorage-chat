@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
@@ -302,29 +303,36 @@ final class User extends Authenticatable implements JWTSubject, Auditable
             return $this->$this->userRoles();
         }
 
-        return match ($this->type->value) {
-            UserType::ADMIN->value => $this->userRoles(),
-            UserType::BILLING->value => $this->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles(),
-            UserType::DOCTOR->value => $this->healthProfessional()
-                ->first()
-                ?->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->pivot
-                ->roles(),
-            UserType::PATIENT->value => $this->patient()
-                ->first()
-                ?->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles(),
-            default => $this->userRoles(),
-        };
+        try {
+            return match ($this->type->value) {
+                UserType::ADMIN->value => $this->userRoles(),
+                UserType::BILLING->value => $this->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->membership
+                    ->roles(),
+                UserType::DOCTOR->value => $this->healthProfessional()
+                    ->first()
+                    ?->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->pivot
+                    ->roles(),
+                UserType::PATIENT->value => $this->patient()
+                    ->first()
+                    ?->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->membership
+                    ->roles(),
+                default => $this->userRoles(),
+            };
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            Log::error("User type for user {$this->id} is null");
+
+            return $this->$this->userRoles();
+        }
     }
 
     public function getRolesAttribute(): ?Collection
