@@ -64,6 +64,10 @@ class TypeCatalogSeeder extends Seeder
                 'description' => 'Insurance plan type',
                 'type_catalogs' => [
                     [
+                        'code' => 'CHIP',
+                        'description' => "Children's Health Insurance Program",
+                    ],
+                    [
                         'code' => 'HMO',
                         'description' => 'Health Maintenance Organization',
                     ],
