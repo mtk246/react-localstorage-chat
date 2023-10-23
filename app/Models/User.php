@@ -158,7 +158,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['roles', 'language', 'last_modified', 'permissions'];
+    protected $appends = ['language', 'last_modified', 'permissions'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -290,7 +290,10 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphToMany(Permission::class, 'authorizable')->withTimestamps();
     }
 
-    /** @todo find a better way to load this, maybe whit hasTrougth */
+    /**
+     * @todo find a better way to load this, maybe whit hasTrougth
+     * @todo ennambe other user types returns that are stuct
+     */
     public function roles(): MorphToMany
     {
         if (is_null($this->type)) {
@@ -306,14 +309,16 @@ final class User extends Authenticatable implements JWTSubject, Auditable
                 ->first()
                 ?->membership
                 ->roles(),
-            UserType::DOCTOR->value => $this->healthProfessional
-                ->billingCompanies()
+            UserType::DOCTOR->value => $this->healthProfessional()
+                ->first()
+                ?->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
                 ?->pivot
                 ->roles(),
-            UserType::PATIENT->value => $this->patient
-                ->billingCompanies()
+            UserType::PATIENT->value => $this->patient()
+                ->first()
+                ?->billingCompanies()
                 ->wherePivot('billing_company_id', $this->billing_company_id)
                 ->first()
                 ?->membership
@@ -392,11 +397,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         ];
         $lastModified = $this->audits()->latest()->first();
 
+        return [
+            'user' => 'Console',
+            'roles' => [],
+        ]; /*
         if (!isset($lastModified->user_id)) {
-            return [
-                'user' => 'Console',
-                'roles' => [],
-            ];
         } elseif ($lastModified->user_id !== $this->id) {
             $user = User::find($lastModified->user_id);
 
@@ -411,7 +416,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
                 'user' => $profile->first_name.' '.$profile->last_name,
                 'roles' => $this->roles()?->get()->pluck('name'),
             ];
-        }
+        }*/
     }
 
     public function scopeSearch($query, $search)
