@@ -17,7 +17,7 @@
         "email": "billingmanager@billing.com",
         "password": "$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q",
         "role": "billingmanager",
-        "billingCompany": "BEOS",
+        "billingCompany": "MCC",
         "profile": {
             "ssn": "915259115",
             "first_name": "Nils",
@@ -27,7 +27,7 @@
             "date_of_birth": "1990-04-01"
         },
         "billingcompanies": [
-            "BEOS"
+            "MCC"
         ],
         "type": 2
     },
@@ -35,7 +35,7 @@
         "email": "salcantara3@gmail.com",
         "password": "$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q",
         "role": "billingmanager",
-        "billingCompany": "BEOS",
+        "billingCompany": "MCC",
         "profile": {
             "ssn": "176423970",
             "first_name": "Joseph",
@@ -45,7 +45,7 @@
             "date_of_birth": "1990-04-01"
         },
         "billingcompanies": [
-            "BEOS"
+            "MCC"
         ],
         "type": 2
     },
