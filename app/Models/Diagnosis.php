@@ -176,7 +176,7 @@ class Diagnosis extends Model implements Auditable
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }

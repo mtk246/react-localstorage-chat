@@ -329,7 +329,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
             };
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            Log::error("User type for user {$this->id} is null");
+            Log::error("User type for user {$this->id} is null {$this->type?->value}");
 
             return $this->$this->userRoles();
         }
@@ -405,26 +405,22 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         ];
         $lastModified = $this->audits()->latest()->first();
 
-        return [
-            'user' => 'Console',
-            'roles' => [],
-        ]; /*
         if (!isset($lastModified->user_id)) {
         } elseif ($lastModified->user_id !== $this->id) {
             $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles()?->get()->pluck('name'),
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         } elseif ($lastModified->user_id === $this->id) {
             $profile = $this->profile;
 
             return [
                 'user' => $profile->first_name.' '.$profile->last_name,
-                'roles' => $this->roles()?->get()->pluck('name'),
+                'roles' => $this->roles()?->get(['name'])->pluck('name'),
             ];
-        }*/
+        }
     }
 
     public function scopeSearch($query, $search)
