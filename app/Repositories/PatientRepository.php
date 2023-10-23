@@ -704,7 +704,7 @@ class PatientRepository
                     'emergency_contacts' => isset($patient_emergency_contacts) ? $patient_emergency_contacts : [],
                     'employments' => isset($patient_employments) ? $patient_employments : [],
                     'social_medias' => isset($patient_social_medias) ? $patient_social_medias : [],
-                    'status' => $billingCompany->pivot->status ?? false,
+                    'status' => $billingCompany->membership->status ?? false,
                     'private_note' => $private_note->note ?? '',
                     'addresses' => isset($patient_addresses) ? $patient_addresses : null,
                     'contact' => isset($patient_contact) ? $patient_contact : null,
@@ -732,7 +732,7 @@ class PatientRepository
                 $query->with(['profile' => function ($q) use ($ssn) {
                     $q->where('ssn', $ssn)
                       ->with(['socialMedias', 'addresses', 'contacts']);
-                }, 'roles', 'billingCompanies']);
+                }, 'billingCompanies']);
             },
             'maritalStatus',
             'marital',
@@ -766,7 +766,7 @@ class PatientRepository
             'user' => function ($query) {
                 $query->with(['profile' => function ($q) {
                     $q->with(['socialMedias', 'addresses', 'contacts']);
-                }, 'roles', 'billingCompanies']);
+                }, 'billingCompanies']);
             },
             'maritalStatus',
             // "marital",
@@ -795,7 +795,6 @@ class PatientRepository
                 $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
                     ->with([
                         'user',
-                        'user.roles',
                         'user.billingCompanies',
                         'profile',
                         'profile.socialMedias',
@@ -820,7 +819,6 @@ class PatientRepository
             fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
                 ->with([
                     'user',
-                    'user.roles',
                     'user.billingCompanies',
                     'profile',
                     'profile.socialMedias',

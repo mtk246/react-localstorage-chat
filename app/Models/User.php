@@ -12,11 +12,13 @@ use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
@@ -157,7 +159,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      *
      * @var array
      */
-    protected $appends = ['profile', 'language', 'last_modified', 'permissions'];
+    protected $appends = ['language', 'last_modified', 'permissions'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -192,16 +194,6 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->belongsTo(Profile::class);
     }
 
-    /**
-     * User belongs to Profile.
-     */
-    public function getProfileAttribute(): ?Profile
-    {
-        return $this->profile_id
-            ? $this->profile()->sole()
-            : null;
-    }
-
     public function getLanguageAttribute(): string
     {
         return $this->profile?->language ?? 'en';
@@ -210,17 +202,17 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User has one HealthProfessional.
      */
-    public function healthProfessional(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function healthProfessional(): HasOneThrough
     {
-        return $this->hasOne(healthProfessional::class);
+        return $this->hasOneThrough(HealthProfessional::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
     /**
      * User has one HealthProfessional.
      */
-    public function patient(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function patient(): HasOneThrough
     {
-        return $this->hasOne(Patient::class);
+        return $this->hasOneThrough(Patient::class, Profile::class, 'id', 'profile_id', 'profile_id', 'id');
     }
 
     /**
@@ -299,35 +291,53 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->morphToMany(Permission::class, 'authorizable')->withTimestamps();
     }
 
+    /**
+     * @todo find a better way to load this, maybe whit hasTrougth
+     * @todo ennambe other user types returns that are stuct
+     */
     public function roles(): MorphToMany
     {
         if (is_null($this->type)) {
             \Log::error("User type for user {$this->id} is null");
 
-            return $this->userRoles();
+            return $this->$this->userRoles();
         }
 
-        return match ($this->type->value) {
-            UserType::ADMIN->value => $this->userRoles(),
-            UserType::BILLING->value => $this->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles(),
-            UserType::DOCTOR->value => $this->healthProfessional
-                ->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles(),
-            UserType::PATIENT->value => $this->patient
-                ->billingCompanies()
-                ->wherePivot('billing_company_id', $this->billing_company_id)
-                ->first()
-                ?->membership
-                ->roles(),
-            default => $this->userRoles(),
-        };
+        try {
+            return match ($this->type->value) {
+                UserType::ADMIN->value => $this->userRoles(),
+                UserType::BILLING->value => $this->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->membership
+                    ->roles(),
+                UserType::DOCTOR->value => $this->healthProfessional()
+                    ->first()
+                    ?->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->pivot
+                    ->roles(),
+                UserType::PATIENT->value => $this->patient()
+                    ->first()
+                    ?->billingCompanies()
+                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->membership
+                    ->roles(),
+                default => $this->userRoles(),
+            };
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            Log::error("User type for user {$this->id} is null {$this->type?->value}");
+
+            return $this->$this->userRoles();
+        }
+    }
+
+    public function getRolesAttribute(): ?Collection
+    {
+        return $this->roles()->get();
     }
 
     public function userRoles(): MorphToMany
@@ -338,7 +348,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /** @deprecated use hasPermission instead */
     public function hasRole($role, $all = false)
     {
-        return $this->roles()->where('slug', $role)->exists();
+        return $this->roles()?->where('slug', $role)->exists() ?? false;
     }
 
     public function hasPermission(string $permission): bool
@@ -396,23 +406,19 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         $lastModified = $this->audits()->latest()->first();
 
         if (!isset($lastModified->user_id)) {
-            return [
-                'user' => 'Console',
-                'roles' => [],
-            ];
         } elseif ($lastModified->user_id !== $this->id) {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         } elseif ($lastModified->user_id === $this->id) {
             $profile = $this->profile;
 
             return [
                 'user' => $profile->first_name.' '.$profile->last_name,
-                'roles' => $this->getRoles(),
+                'roles' => $this->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }

@@ -60,7 +60,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Facility query()
- * @method static \Illuminate\Database\Eloquent\Builder|Facility search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Facility whereId($value)
@@ -252,11 +251,11 @@ class Facility extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }

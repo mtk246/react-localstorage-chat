@@ -35,6 +35,7 @@ final class StoreUserWrapper extends CastsRequest
             'status' => true,
             'userkey' => encrypt(uniqid('', true)),
             'type' => $this->get('user_type'),
+            'billing_company_id' => $this->getBillingCompanyId(),
         ]);
     }
 
