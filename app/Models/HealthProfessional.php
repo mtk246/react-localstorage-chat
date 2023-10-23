@@ -53,7 +53,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional query()
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCreatedAt($value)
@@ -221,7 +220,7 @@ class HealthProfessional extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
