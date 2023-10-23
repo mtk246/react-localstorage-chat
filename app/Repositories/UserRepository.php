@@ -685,7 +685,7 @@ class UserRepository
 
         $bC = auth()->user()->billing_company_id ?? null;
 
-        if (User::query()->where('email', $email)->whereType(UserType::ADMIN)->exists()) {
+        if (User::query()->where('email', $email)->whereNot('type', UserType::BILLING)->exists()) {
             return null;
         }
 
