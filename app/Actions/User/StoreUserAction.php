@@ -27,25 +27,16 @@ final class StoreUserAction
             $userData = $userWrapper->getData()->merge(['profile_id' => $profile->id]);
 
             return new UserResource(tap(User::query()->create($userData->toArray()), function (User $user) use ($profile, $userWrapper) {
-                $userRoles = $user->roles();
                 $rollableType = User::class;
 
                 if (UserType::BILLING === $userWrapper->getType()) {
                     $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
                     $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
 
-                    /** @var MorphToMany $userRoles */
-                    $userRoles = $user
-                        ->billingCompanies()
-                        ->wherePivot('billing_company_id', $userWrapper->getBillingCompanyId())
-                        ->first()
-                        ->membership
-                        ->roles();
-
                     $rollableType = Membership::class;
                 }
 
-                $userRoles->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType], false);
+                $user->roles()->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType], false);
                 $token = encrypt($user->id.'@#@#$'.$user->email);
                 $user->token = $token;
                 $user->save();

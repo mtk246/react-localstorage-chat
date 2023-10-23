@@ -732,7 +732,7 @@ class PatientRepository
                 $query->with(['profile' => function ($q) use ($ssn) {
                     $q->where('ssn', $ssn)
                       ->with(['socialMedias', 'addresses', 'contacts']);
-                }, 'roles', 'billingCompanies']);
+                }, 'billingCompanies']);
             },
             'maritalStatus',
             'marital',
@@ -766,7 +766,7 @@ class PatientRepository
             'user' => function ($query) {
                 $query->with(['profile' => function ($q) {
                     $q->with(['socialMedias', 'addresses', 'contacts']);
-                }, 'roles', 'billingCompanies']);
+                }, 'billingCompanies']);
             },
             'maritalStatus',
             // "marital",
