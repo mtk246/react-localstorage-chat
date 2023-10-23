@@ -256,7 +256,7 @@ class InsuranceCompanyRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'fileMethod',
-                'insurancePlans' => function($query) {
+                'insurancePlans' => function($query) use ($bC) {
                     $query->with([
                         'planType',
                         'billingCompanies' => function ($query) use ($bC) {
@@ -341,7 +341,7 @@ class InsuranceCompanyRepository
                 'privateNotes' => function ($query) use ($bC) {
                     $query->where('billing_company_id', $bC);
                 },
-                'insurancePlans' => function($query) {
+                'insurancePlans' => function($query) use ($bC) {
                     $query->with([
                         'planType',
                         'billingCompanies' => function ($query) use ($bC) {

@@ -294,7 +294,7 @@ class Claim extends Model implements Auditable
     public function getAmountPaidAttribute()
     {
         $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-            return $carry + ((float) $service['price'] ?? 0);
+            return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
         return number_format($billed, 2);
