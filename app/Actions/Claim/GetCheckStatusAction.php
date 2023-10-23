@@ -46,8 +46,8 @@ final class GetCheckStatusAction
             $encounter = [];
             $serviceCodes = [];
 
-            $encounter['beginningDateOfService'] = str_replace('-', '', $claim->service->from);
-            $encounter['endDateOfService'] = str_replace('-', '', $claim->service->to);
+            $encounter['beginningDateOfService'] = str_replace('-', '', $claim->service?->from ?? '');
+            $encounter['endDateOfService'] = str_replace('-', '', $claim->service?->to ?? '');
             foreach ($claim->service->services ?? [] as $service) {
                 if ($service->typeOfService) {
                     array_push($serviceCodes, $service->typeOfService->code);
