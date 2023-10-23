@@ -795,7 +795,6 @@ class PatientRepository
                 $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
                     ->with([
                         'user',
-                        'user.roles',
                         'user.billingCompanies',
                         'profile',
                         'profile.socialMedias',
@@ -820,7 +819,6 @@ class PatientRepository
             fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
                 ->with([
                     'user',
-                    'user.roles',
                     'user.billingCompanies',
                     'profile',
                     'profile.socialMedias',
