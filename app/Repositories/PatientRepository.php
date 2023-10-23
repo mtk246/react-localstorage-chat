@@ -813,8 +813,6 @@ class PatientRepository
                         'insurancePlans',
                         'insurancePlans.insuranceCompany',
                     ])
-                    ->select('patients.*')
-                    ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
                 );
             },
             fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
@@ -836,25 +834,26 @@ class PatientRepository
                     'insurancePlans',
                     'insurancePlans.insuranceCompany',
                 ])
-                ->select('patients.*')
-                ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
             ),
         );
 
         if ($request->sortBy) {
             switch($request->sortBy) {
                 case 'name':
-                    $data = $data->orderBy('profiles.first_name', Pagination::sortDesc());
+                    $data = $data->orderBy('profile.first_name', Pagination::sortDesc());
                     break;
                 case 'dob':
-                    $data = $data->orderBy('profiles.date_of_birth', Pagination::sortDesc());
+                    $data = $data->orderBy('profile.date_of_birth', Pagination::sortDesc());
                     break;
                 case 'code':
-                    $data->orderBy('patients.code', Pagination::sortDesc());
+                    $data->orderBy('code', Pagination::sortDesc());
+                    break;
+                default:
+                    $data->orderBy('created_at', Pagination::sortDesc());
                     break;
             }
         } else {
-            $data = $data->orderBy('id', Pagination::sortDesc());
+            $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
         }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
@@ -1005,7 +1004,7 @@ class PatientRepository
                             'addressable_id' => $profile->id,
                             'addressable_type' => Profile::class,
                         ], $address)->id;
-                    
+
                         if ($address['main_address'] ?? false) {
                             $patient->update([
                                 'main_address_id' => $addressId,
@@ -1746,7 +1745,7 @@ class PatientRepository
                     'name_suffix' => $patien->profile->nameSuffix,
                     'contacs' => $patien->profile->contacts->map(function (Contact $query) {
                         $return['email'] = $query->email;
-                        
+
                         if (Gate::allows('is-admin')) {
                             $return['billing_company'] = $query->billingCompany;
                         }

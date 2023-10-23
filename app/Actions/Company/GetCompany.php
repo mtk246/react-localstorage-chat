@@ -65,7 +65,7 @@ final class GetCompany
                 )
                 ->when(
                     isset($request->sortBy),
-                    function (Builder $query) use ($request) {
+                    function (ScoutBuilder $query) use ($request) {
                         switch ($request->sortBy) {
                             case 'name':
                                 $query->orderBy('name', Pagination::sortDesc());
@@ -84,7 +84,7 @@ final class GetCompany
                                 break;
                         }
                     },
-                    fn (Builder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
+                    fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
                 )
                 ->paginate(Pagination::itemsPerPage());
 

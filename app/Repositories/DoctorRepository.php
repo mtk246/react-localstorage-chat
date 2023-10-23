@@ -823,10 +823,10 @@ class DoctorRepository
             ]))
         );
 
-        /*if ($request->sortBy) {
+        if ($request->sortBy) {
             switch($request->sortBy) {
                 case 'name':
-                    $data->orderBy('first_name', Pagination::sortDesc());
+                    $data->orderBy('profile.first_name', Pagination::sortDesc());
                     break;
                 case 'npi':
                     $data->orderBy('npi', Pagination::sortDesc());
@@ -836,8 +836,8 @@ class DoctorRepository
                     break;
             }
         } else {
-            $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
-        }*/
+            $data = $data->orderBy('created_at', Pagination::sortDesc());
+        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
