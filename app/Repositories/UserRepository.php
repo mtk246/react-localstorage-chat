@@ -182,14 +182,12 @@ class UserRepository
         if (!$bC) {
             $users = User::with([
                 'profile',
-                'roles',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         } else {
             $users = User::whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             })->with([
                 'profile',
-                'roles',
             ])->orderBy('created_at', 'desc')->orderBy('id', 'asc')->get();
         }
 
@@ -202,14 +200,12 @@ class UserRepository
         if (!$bC) {
             $data = User::query()->with([
                 'profile',
-                'roles',
             ]);
         } else {
             $data = User::query()->whereHas('billingCompanies', function ($query) use ($bC) {
                 $query->where('billing_company_id', $bC);
             })->with([
                 'profile',
-                'roles',
             ]);
         }
         if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
@@ -444,7 +440,6 @@ class UserRepository
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
-                'roles',
                 'billingCompanies',
             ]);
         } else {
@@ -460,7 +455,6 @@ class UserRepository
                         },
                     ]);
                 },
-                'roles',
                 'billingCompanies',
             ]);
         }
@@ -638,7 +632,7 @@ class UserRepository
             $token = auth()->login($user);
 
             return response()->json([
-                'user' => $user->load(['roles', 'billingCompanies', 'permits'])->load('roles'),
+                'user' => $user->load(['billingCompanies', 'permits']),
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60,
@@ -671,7 +665,6 @@ class UserRepository
                     },
                 ]);
             },
-            'roles',
             'billingCompanies',
         ])->whereHas('profile', function ($query) use ($ssn) {
             $query->where('ssn', $ssn)

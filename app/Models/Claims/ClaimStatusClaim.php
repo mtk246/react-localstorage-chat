@@ -110,7 +110,7 @@ final class ClaimStatusClaim extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = \App\Models\User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = \App\Models\User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
