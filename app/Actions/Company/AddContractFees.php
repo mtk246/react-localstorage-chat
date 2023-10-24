@@ -50,6 +50,7 @@ final class AddContractFees
                 'modifiers',
                 'macLocality',
                 'insurancePlans',
+                'contractFeeSpecifications',
             ]));
         });
     }
