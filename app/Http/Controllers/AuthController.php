@@ -262,6 +262,9 @@ class AuthController extends Controller
                 },
             ]);
         }
+
+        $user->roles = $user->roles()->get();
+
         $perms = [];
         $perms_v2 = [];
         $menu_app = [

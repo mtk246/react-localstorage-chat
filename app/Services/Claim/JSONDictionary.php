@@ -92,7 +92,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
-                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'ssn' => $subscriber->ssn,
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',
@@ -302,7 +302,7 @@ final class JSONDictionary extends Dictionary
                     'professionalService' => [
                         'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
                         'lineItemChargeAmount' => str_replace(',', '', number_format((float) $service->price * (int) ($service->days_or_units ?? 1), 2)),
-                        'procedureCode' => $service->procedure->code,
+                        'procedureCode' => $service->procedure?->code,
                         'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'compositeDiagnosisCodePointers' => [
@@ -407,7 +407,7 @@ final class JSONDictionary extends Dictionary
                             true => 'UN',   /* UN = Unit */
                             default => 'UN',
                         },
-                        'serviceLineRevenueCode' => $service->revenueCode->code,
+                        'serviceLineRevenueCode' => $service->revenueCode?->code,
                         'procedureIdentifier' => (!empty($service->procedure?->code)) ? $procedureIdentifier : '',
                         'procedureCode' => (!empty($procedureIdentifier)) ? $service->procedure?->code : '',
                         'description' => (!empty($service->procedure?->code) && !empty($procedureIdentifier)) ? $procedureDescription : '',

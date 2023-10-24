@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\User\UserType;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\UserCreateRequest;
@@ -684,9 +685,7 @@ class UserRepository
 
         $bC = auth()->user()->billing_company_id ?? null;
 
-        if (User::query()->where('email', $email)->whereHas('roles', function(Builder $query) {
-                        $query->whereNot('level', 4);
-        })->exists()) {
+        if (User::query()->where('email', $email)->whereNot('type', UserType::BILLING)->exists()) {
             return null;
         }
 

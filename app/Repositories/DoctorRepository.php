@@ -813,7 +813,6 @@ class DoctorRepository
                 'profile.contacts',
                 'billingCompanies',
                 'user',
-                'user.roles',
                 'taxonomies',
                 'companies',
                 'companies.taxonomies',

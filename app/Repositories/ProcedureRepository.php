@@ -586,11 +586,15 @@ class ProcedureRepository
     public function getListDiagnoses($code = '', $except_ids = null)
     {
         try {
-            if ('' == $code) {
-                return getList(Diagnosis::class, 'code', [], null, ['description']);
-            } else {
-                return getList(Diagnosis::class, 'code', ['whereRaw' => ['search' => $code]], $except_ids, ['description']);
-            }
+            return Diagnosis::query()
+                ->whereNotIn('id', $except_ids ?? [])
+                ->when('' != $code, function ($query) use ($code) {
+                    $query->whereRaw('LOWER(code) LIKE (?)', [strtolower("%$code%")]);
+                })
+                ->select('id', 'code as name', 'description')
+                ->toBase()
+                ->get()
+                ->toArray();
         } catch (\Exception $e) {
             return [];
         }

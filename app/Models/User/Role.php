@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Collection;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -68,9 +67,6 @@ final class Role extends Model implements Auditable
     /** @var array */
     protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
 
-    /** @var array */
-    protected $appends = ['permissions'];
-
     /** @var array<string, string> */
     protected $casts = [
         'type' => RoleType::class,
@@ -89,11 +85,6 @@ final class Role extends Model implements Auditable
     public function users(): BelongsToMany
     {
         return $this->morphToMany(User::class, 'rollable');
-    }
-
-    public function getPermissionsAttribute(): Collection
-    {
-        return $this->permissions()->get();
     }
 
     public function permissions(): MorphToMany
