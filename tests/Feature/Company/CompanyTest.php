@@ -6,7 +6,6 @@ namespace Tests\Feature\Company;
 
 use App\Actions\Company\GetMeasurementUnitAction;
 use App\Http\Controllers\Company\CompanyController;
-use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
