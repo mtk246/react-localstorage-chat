@@ -27,9 +27,7 @@ final class GetDoctorAction
     private function loadAdminModel(Builder &$query): void
     {
         $query->with([
-            'user' => function (Builder $query) {
-                $query->with(['roles']);
-            },
+            'user',
             'taxonomies',
             'companies' => function ($query) {
                 $query->with(['taxonomies', 'nicknames']);
@@ -50,9 +48,7 @@ final class GetDoctorAction
     private function loadModel(Builder &$query, int $bc): void
     {
         $query->with([
-            'user' => function ($query) {
-                $query->with(['roles']);
-            },
+            'user',
             'taxonomies',
             'companies' => function ($query) use ($bc) {
                 $query->where('billing_company_id', $bc)

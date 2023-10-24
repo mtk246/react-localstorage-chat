@@ -270,11 +270,11 @@ final class Company extends Model implements Auditable
         $lastModified = $this->audits()->latest()->first();
 
         if (isset($lastModified->user_id)) {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
 
@@ -357,15 +357,19 @@ final class Company extends Model implements Auditable
         $contacts = $this->contacts->first();
 
         return [
+            'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
             'npi' => $this->npi,
             'ein' => $this->ein,
             'clia' => $this->clia,
+            'abbreviations' => $this->abbreviations,
             'contacts.phone' => $contacts?->phone,
             'contacts.fax' => $contacts?->fax,
             'contacts.email' => $contacts?->email,
             'contacts.mobile' => $contacts?->mobile,
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
         ];
     }
 }

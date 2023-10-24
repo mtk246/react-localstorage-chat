@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\User;
 
-use App\Enums\User\UserType;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -33,15 +32,7 @@ final class UserResource extends JsonResource
             'language' => $this->resource->language,
             'last_modified' => $this->resource->last_modified,
             'type' => $this->resource->type->value,
-            'roles' => RoleResource::collection(UserType::ADMIN === $this->resource->type
-                ? $this->resource->roles
-                : $this->resource
-                    ->billingCompanies()
-                    ->wherePivot('billing_company_id', $this->resource->billing_company_id)
-                    ->first()
-                    ->membership
-                    ->roles
-            ),
+            'roles' => RoleResource::collection($this->resource->roles),
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {

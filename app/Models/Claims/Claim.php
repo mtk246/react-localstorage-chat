@@ -251,11 +251,11 @@ class Claim extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }
@@ -294,7 +294,7 @@ class Claim extends Model implements Auditable
     public function getAmountPaidAttribute()
     {
         $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-            return $carry + ((float) $service['price'] ?? 0);
+            return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
         return number_format($billed, 2);
@@ -331,7 +331,7 @@ class Claim extends Model implements Auditable
         if (!isset($lastModified->user_id)) {
             return 'Console';
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return $user->profile->first_name.' '.$user->profile->last_name;
         }

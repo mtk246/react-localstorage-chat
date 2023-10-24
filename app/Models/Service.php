@@ -14,7 +14,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property int $claim_service_id
- * @property int $procedure_id
+ * @property int|null $procedure_id
  * @property mixed|null $modifier_ids
  * @property mixed|null $diagnostic_pointers
  * @property string $from_service

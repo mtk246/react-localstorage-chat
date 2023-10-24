@@ -30,6 +30,7 @@ use App\Models\TypeCatalog;
 use App\Models\TypeDiag;
 use App\Models\TypeForm;
 use App\Models\TypeOfService;
+use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -772,12 +773,12 @@ class ClaimRepository
         );
     }
 
-    public function getListRev(?string $company_id = null, $search = '')
+    public function getListRev(?int $company_id = null, $search = '')
     {
         try {
             return DB::table('procedures')
                 ->leftJoin('company_services', function ($join) use ($company_id) {
-                    $join->on('procedures.id', '=', 'company_services.procedure_id')
+                    $join->on('procedures.id', '=', 'company_services.revenue_code_id')
                         ->where('company_services.company_id', $company_id);
                 })
                 ->when(null != $company_id, function ($query) {
@@ -802,7 +803,7 @@ class ClaimRepository
                         'id' => $procedure->id,
                         'name' => $procedure->code,
                         'description' => $procedure->description,
-                        'price' => (float) $procedure->price ?? 0,
+                        'price' => Money::parse($procedure->price ?? 0, null, true)->formatByDecimal(),
                     ];
                 })
                 ->values()

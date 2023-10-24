@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class FacilityRepository
 {
@@ -348,9 +349,34 @@ class FacilityRepository
 
     public function getServerAllFacilities(Request $request)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $data = Facility::with([
+        $data = Facility::search($request->query('query'))->when(
+            Gate::denies('is-admin'),
+            function (ScoutBuilder $query) {
+                $bC = auth()->user()->billing_company_id ?? null;
+
+                $query->where('billingCompanies.id', $bC)->query(fn (Builder $query) => $query
+                    ->with([
+                        'addresses' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'contacts' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'nicknames' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'abbreviations' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                        'companies',
+                        'facilityTypes',
+                        'billingCompanies' => function ($query) use ($bC) {
+                            $query->where('billing_company_id', $bC);
+                        },
+                    ])
+                );
+            },
+            fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query->with([
                 'addresses',
                 'contacts',
                 'nicknames',
@@ -358,34 +384,8 @@ class FacilityRepository
                 'companies',
                 'facilityTypes',
                 'billingCompanies',
-            ]);
-        } else {
-            $data = Facility::whereHas('billingCompanies', function ($query) use ($bC) {
-                $query->where('billing_company_id', $bC);
-            })->with([
-                'addresses' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'contacts' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'nicknames' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'abbreviations' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-                'companies',
-                'facilityTypes',
-                'billingCompanies' => function ($query) use ($bC) {
-                    $query->where('billing_company_id', $bC);
-                },
-            ]);
-        }
-
-        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
-        }
+            ]))
+        );
 
         if ($request->sortBy) {
             if (str_contains($request->sortBy, 'billingcompany')) {

@@ -92,7 +92,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
-                'memberId' => str_pad((string) ($subscriber->member_id ?? $subscriber->id), 10, '0', STR_PAD_LEFT),
+                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'ssn' => $subscriber->ssn,
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',

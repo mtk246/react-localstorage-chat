@@ -53,7 +53,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional query()
- * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional whereCreatedAt($value)
@@ -221,11 +220,11 @@ class HealthProfessional extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }
@@ -243,35 +242,24 @@ class HealthProfessional extends Model implements Auditable
             });
     }
 
-    public function scopeSearch($query, $search)
-    {
-        if ('' != $search) {
-            return $query->whereHas('user', function ($q) use ($search) {
-                $q->whereHas('profile', function ($qq) use ($search) {
-                    $qq->whereRaw('LOWER(first_name) LIKE (?)', [strtolower("%$search%")])
-                      ->orWhereRaw('LOWER(last_name) LIKE (?)', [strtolower("%$search%")])
-                      ->orWhereRaw('LOWER(ssn) LIKE (?)', [strtolower("%$search%")]);
-                })->orWhereRaw('LOWER(email) LIKE (?)', [strtolower("%$search%")]);
-            })->orWhereRaw('LOWER(npi) LIKE (?)', [strtolower("%$search%")]);
-        }
-
-        return $query;
-    }
-
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'code' => $this->code,
             'npi' => $this->npi,
-            'user.full_name' => $this->profile->first_name.' '.$this->profile->last_name,
-            'user.first_name' => $this->profile->first_name,
-            'user.last_name' => $this->profile->last_name,
+            'name' => $this->profile?->fullName(),
+            'profile.first_name' => $this->profile?->first_name,
+            'profile.middle_name' => $this->profile?->middle_name,
+            'profile.last_name' => $this->profile?->last_name,
+            'profiles.date_of_birth' => $this->profile?->date_of_birth,
             'user.email' => $this->user->email ?? null,
             'user.ssn' => $this->profile->ssn,
-            'user.phone' => $this->profile->phone,
             'company.name' => $this->company?->name,
             'company.npi' => $this->company?->npi,
             'company.code' => $this->company?->code,
+            'billingCompanies.id' => $this->billingCompanies->pluck('id'),
+            'billingCompanies.name' => $this->billingCompanies->pluck('name'),
         ];
     }
 }
