@@ -307,10 +307,10 @@ final class FileDictionary extends Dictionary
         return $this->claim->service->services
             ->map(function (Services $claimService) use ($key) {
                 return match ($key) {
-                    'revenue_code' => $claimService->revenueCode->code,
-                    'procedure_description' => substr($claimService->procedure->description, 0, 30),
-                    'procedure_short_description' => $claimService->procedure->short_description,
-                    'procedure_code' => $claimService->procedure->code,
+                    'revenue_code' => $claimService->revenueCode?->code ?? '',
+                    'procedure_description' => substr($claimService->procedure?->description ?? '', 0, 30),
+                    'procedure_short_description' => $claimService->procedure?->short_description ?? '',
+                    'procedure_code' => $claimService->procedure?->code ?? '',
                     'start_date' => Carbon::createFromFormat('Y-m-d', $claimService->from_service)
                         ->format('mdY'),
                     'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
