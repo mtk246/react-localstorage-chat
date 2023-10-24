@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Company;
 
-use App\Repositories\CompanyRepository;
-use App\Http\Controllers\Company\CompanyController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Actions\Company\GetMeasurementUnitAction;
+use App\Http\Controllers\Company\CompanyController;
+use App\Models\Company;
+use App\Repositories\CompanyRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
@@ -15,7 +16,7 @@ class CompanyTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_returns_a_json_response_for_company_list()
+    public function testItReturnsAJsonResponseForCompanyList()
     {
         $user = $this->createUser('superuser');
         $this->actingAs($user);
@@ -26,7 +27,7 @@ class CompanyTest extends TestCase
         $response->assertHeader('Content-Type', 'application/json');
     }
 
-    public function test_it_returns_a_json_response_for_measurement_units_list()
+    public function testItReturnsAJsonResponseForMeasurementUnitsList()
     {
         $measurementUnitAction = new GetMeasurementUnitAction();
 
@@ -39,7 +40,7 @@ class CompanyTest extends TestCase
         $this->assertSame(200, $response->status());
     }
 
-    public function test_it_returns_a_json_response_for_list_statement_rules()
+    public function testItReturnsAJsonResponseForListStatementRules()
     {
         $user = $this->createUser('superuser');
         $this->actingAs($user);
@@ -50,18 +51,20 @@ class CompanyTest extends TestCase
         $response->assertHeader('Content-Type', 'application/json');
     }
 
-    public function test_it_returns_a_json_response_for_list_statement_when()
+    public function testItReturnsAJsonResponseForListStatementWhen()
     {
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
+        $companyRepository = new CompanyRepository();
 
-        $response = $this->json('GET', '/api/v1/company/get-list-statement-when');
+        $controller = new CompanyController($companyRepository);
 
-        $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'application/json');
+        $response = $controller->getListStatementWhen();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $this->assertSame(200, $response->status());
     }
 
-    public function test_it_returns_a_json_response_for_statement_apply_to_list()
+    public function testItReturnsAJsonResponseForStatementApplyToList()
     {
         $companyRepository = new CompanyRepository();
 
@@ -72,5 +75,66 @@ class CompanyTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
 
         $this->assertSame(200, $response->status());
+    }
+
+    public function testItReturnsJsonResponseForNameSuffixLists()
+    {
+        $companyRepository = new CompanyRepository();
+
+        $controller = new CompanyController($companyRepository);
+
+        $response = $controller->getListNameSuffix();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $this->assertSame(200, $response->status());
+    }
+
+    public function testItReturnsJsonResponseForContractFeeTypesLists()
+    {
+        $companyRepository = new CompanyRepository();
+
+        $controller = new CompanyController($companyRepository);
+
+        $response = $controller->getListContractFeeTypes();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $this->assertSame(200, $response->status());
+    }
+
+    public function testItReturnsJsonResponseForBillingCompaniesLists()
+    {
+        $user = $this->createUser('superuser');
+        $this->actingAs($user);
+
+        $response = $this->json('GET', '/api/v1/company/get-list-billing-companies');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/json');
+    }
+
+    public function testItReturnsJsonResponseForAllCompany()
+    {
+        $companyRepository = new CompanyRepository();
+
+        $controller = new CompanyController($companyRepository);
+
+        $response = $controller->getAllCompany();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+
+        $this->assertSame(200, $response->status());
+    }
+
+    public function testItReturnsJsonResponseForAllServer()
+    {
+        $user = $this->createUser('superuser');
+        $this->actingAs($user);
+
+        $response = $this->json('GET', '/api/v1/company/get-all-server');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/json');
     }
 }

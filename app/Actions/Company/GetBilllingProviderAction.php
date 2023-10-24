@@ -46,25 +46,25 @@ final class GetBilllingProviderAction
                 if (!empty($healthProfessional->ein)) {
                     $taxIdOptions[] = [
                         'id' => str_replace('-', '', $healthProfessional->ein ?? ''),
-                        'name' => 'EIN - ' . str_replace('-', '', $healthProfessional->ein ?? ''),
+                        'name' => 'EIN - '.str_replace('-', '', $healthProfessional->ein ?? ''),
                     ];
                 }
 
                 if (!empty($healthProfessional->profile?->ssn)) {
                     $taxIdOptions[] = [
                         'id' => str_replace('-', '', $healthProfessional->profile->ssn ?? ''),
-                        'name' => 'SSN - ' . str_replace('-', '', $healthProfessional->profile->ssn ?? ''),
+                        'name' => 'SSN - '.str_replace('-', '', $healthProfessional->profile->ssn ?? ''),
                     ];
                 }
 
                 return [
-                    'id' => 'healthProfessional:' . $healthProfessional->id,
-                    'name' => $healthProfessional?->profile->first_name . ' ' . $healthProfessional?->profile->last_name,
+                    'id' => 'healthProfessional:'.$healthProfessional->id,
+                    'name' => $healthProfessional?->profile->first_name.' '.$healthProfessional?->profile->last_name,
                     'npi' => $healthProfessional->npi,
                     'tax_id_options' => $taxIdOptions,
                     'taxonomy_options' => $healthProfessional->taxonomies->map(fn ($model) => [
                         'id' => $model->id,
-                        'name' => $model->tax_id . ' - ' . $model->name,
+                        'name' => $model->tax_id.' - '.$model->name,
                         'primary' => $model->primary,
                     ]),
                 ];
@@ -81,7 +81,7 @@ final class GetBilllingProviderAction
         if (!empty($company->ein)) {
             $taxIdOptions[] = [
                 'id' => str_replace('-', '', $company->ein ?? ''),
-                'name' => 'EIN - ' . str_replace('-', '', $company->ein ?? ''),
+                'name' => 'EIN - '.str_replace('-', '', $company->ein ?? ''),
             ];
         }
 
@@ -89,13 +89,13 @@ final class GetBilllingProviderAction
             ? array_merge(
                 [
                     [
-                        'id' => 'company:' . $company->id,
+                        'id' => 'company:'.$company->id,
                         'name' => $company->name,
                         'npi' => str_replace('-', '', $company->npi ?? ''),
                         'tax_id_options' => $taxIdOptions,
                         'taxonomy_options' => $company->taxonomies->map(fn ($model) => [
                             'id' => $model->id,
-                            'name' => $model->tax_id . ' - ' . $model->name,
+                            'name' => $model->tax_id.' - '.$model->name,
                             'primary' => $model->primary,
                         ]),
                     ],

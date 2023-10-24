@@ -18,7 +18,7 @@ final class GetMeasurementUnitAction
             ->map(function ($item) {
                 return [
                     'id' => $item->value,
-                    'name' => $item->getCode() . ' - ' . $item->getDescription(),
+                    'name' => $item->getCode().' - '.$item->getDescription(),
                 ];
             });
     }
