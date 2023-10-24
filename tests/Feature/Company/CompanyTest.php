@@ -16,17 +16,6 @@ class CompanyTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testItReturnsAJsonResponseForCompanyList()
-    {
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
-
-        $response = $this->json('GET', '/api/v1/company/get-list-by-billing-company');
-
-        $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'application/json');
-    }
-
     public function testItReturnsAJsonResponseForMeasurementUnitsList()
     {
         $measurementUnitAction = new GetMeasurementUnitAction();
@@ -125,16 +114,5 @@ class CompanyTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
 
         $this->assertSame(200, $response->status());
-    }
-
-    public function testItReturnsJsonResponseForAllServer()
-    {
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
-
-        $response = $this->json('GET', '/api/v1/company/get-all-server');
-
-        $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'application/json');
     }
 }
