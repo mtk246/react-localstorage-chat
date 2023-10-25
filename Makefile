@@ -57,5 +57,6 @@ upgrade: ## Upgrade client containers and enviroment
 	./vendor/bin/sail artisan db:seed
 	./vendor/bin/sail artisan scout:sync-index-settings
 	./vendor/bin/sail artisan scout:import-all -m
+	./vendor/bin/sail pint
 
 aio: prepare build up install migrate seed scout pint ## Build, install and migrate client containers and enviroment
