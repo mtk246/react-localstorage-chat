@@ -80,15 +80,13 @@ final class PreviewResource extends JsonResource
             }
         }
 
-        $subscriber =
-            $higherOrderPolicy->own ?? true
-                ? $patient?->user ?? null
-                : $higherOrderPolicy?->subscribers->first();
+        $subscriber = $higherOrderPolicy->own ?? true
+            ? $patient?->user ?? null
+            : $higherOrderPolicy?->subscribers->first();
 
-        $subscriberOther =
-            $lowerOrderPolicy->own ?? true
-                ? $patient?->user ?? null
-                : $lowerOrderPolicy?->subscribers->first();
+        $subscriberOther = $lowerOrderPolicy->own ?? true
+            ? $patient?->user ?? null
+            : $lowerOrderPolicy?->subscribers->first();
 
         $patientOrInsuredInfo = $this->resource->claimFormattable?->patientOrInsuredInformation ?? $request->patient_or_insured_information ?? null;
         $physicianOrSupplierInfo = $this->resource->claimFormattable?->physicianOrSupplierInformation ?? $request->physician_or_supplier_information ?? null;
@@ -137,12 +135,12 @@ final class PreviewResource extends JsonResource
                         ? ''
                         : ((isset($service['qualifier']) || !empty($service['qualifier_id']))
                             ? '   '
-                            : '')).
-                        ((isset($service->qualifier) ? $service->qualifier?->code : TypeCatalog::find($service['qualifier_id'] ?? null)?->code).(empty($service['description']) ? '' : ' '.$service['description']).
-                        ((!empty($service['from_date_or_current']) || !empty($service['to_date'])) ? ' ' : '').
-                        $from_date.
-                        ((!empty($service['from_date_or_current']) && !empty($service['to_date'])) ? ' - ' : '').
-                        $to_date));
+                            : ''))
+                        .((isset($service->qualifier) ? $service->qualifier?->code : TypeCatalog::find($service['qualifier_id'] ?? null)?->code).(empty($service['description']) ? '' : ' '.$service['description'])
+                        .((!empty($service['from_date_or_current']) || !empty($service['to_date'])) ? ' ' : '')
+                        .$from_date
+                        .((!empty($service['from_date_or_current']) && !empty($service['to_date'])) ? ' - ' : '')
+                        .$to_date));
                 }
             }
 
@@ -259,8 +257,8 @@ final class PreviewResource extends JsonResource
             $resultServices['modifier3_D'.($index + 1)] = isset($item['modifiers'][2]) ? $item['modifiers'][2]['name'] : Modifier::find($item['modifier_ids'][2] ?? null)?->modifier ?? '';
             $resultServices['modifier4_D'.($index + 1)] = isset($item['modifiers'][3]) ? $item['modifiers'][3]['name'] : Modifier::find($item['modifier_ids'][3] ?? null)?->modifier ?? '';
             /* 24E */
-            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
-            ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
+            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '')
+            .($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
             /* 24F */
             $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
             $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '';
@@ -296,11 +294,11 @@ final class PreviewResource extends JsonResource
             '1' => (false !== $key) ? $options[$key] : 'Other',
             '1a' => $higherOrderPolicy->policy_number ?? '',
             '2' => $patient
-                ? ($patient?->user->profile->last_name.
-                ($patient?->user?->profile?->nameSuffix?->description ? ' '.
-                $patient?->user->profile->nameSuffix->description : '').', '.
-                $patient?->user->profile->first_name.
-                ($patient?->user->profile->middle_name
+                ? ($patient?->user->profile->last_name
+                .($patient?->user?->profile?->nameSuffix?->description ? ' '
+                .$patient?->user->profile->nameSuffix->description : '').', '
+                .$patient?->user->profile->first_name
+                .($patient?->user->profile->middle_name
                     ? ', '.substr($patient?->user->profile->middle_name, 0, 1)
                     : ''))
                 : '',
@@ -311,9 +309,9 @@ final class PreviewResource extends JsonResource
                 'sex' => strtoupper($patient?->user->profile->sex ?? ''),
             ],
             '4' => isset($subscriber)
-                ? (($subscriber->last_name ?? $subscriber->profile->last_name).
-                ', '.($subscriber->first_name ?? $subscriber->profile->first_name).
-                ($subscriber->middle_name ?? $subscriber->profile->middle_name ?? null
+                ? (($subscriber->last_name ?? $subscriber->profile->last_name)
+                .', '.($subscriber->first_name ?? $subscriber->profile->first_name)
+                .($subscriber->middle_name ?? $subscriber->profile->middle_name ?? null
                     ? ', '.substr($subscriber->middle_name ?? ($subscriber->profile->middle_name ?? ''), 0, 1)
                     : ''))
                 : '',
@@ -342,9 +340,9 @@ final class PreviewResource extends JsonResource
             ],
             '8' => '',
             '9' => isset($subscriberOther)
-                ? (($subscriberOther->last_name ?? $subscriberOther->profile->last_name).
-                ', '.($subscriberOther->first_name ?? $subscriberOther->profile->first_name).
-                ($subscriberOther->middle_name ?? $subscriberOther->profile->middle_name ?? null
+                ? (($subscriberOther->last_name ?? $subscriberOther->profile->last_name)
+                .', '.($subscriberOther->first_name ?? $subscriberOther->profile->first_name)
+                .($subscriberOther->middle_name ?? $subscriberOther->profile->middle_name ?? null
                     ? ', '.substr($subscriberOther->middle_name ?? ($subscriberOther->profile->middle_name ?? ''), 0, 1)
                     : ''))
                 : '',
@@ -354,8 +352,8 @@ final class PreviewResource extends JsonResource
             '9d' => isset($lowerOrderPolicy->insurancePlan)
                 ? ((empty($lowerOrderPolicy->insurancePlan->payer_id ?? '')
                     ? ''
-                    : ''/**$lowerOrderPolicy->insurancePlan->payer_id.' - '*/).
-                    ($lowerOrderPolicy->insurancePlan->name ?? ''))
+                    : ''/**$lowerOrderPolicy->insurancePlan->payer_id.' - '*/)
+                    .($lowerOrderPolicy->insurancePlan->name ?? ''))
                 : '',
             '10' => '',
             '10a' => $patientOrInsuredInfo['employment_related_condition'] ?? false,
@@ -376,8 +374,8 @@ final class PreviewResource extends JsonResource
             '11c' => isset($higherOrderPolicy->insurancePlan)
                 ? ((empty($higherOrderPolicy->insurancePlan->payer_id ?? '')
                     ? ''
-                    : ''/**$higherOrderPolicy->insurancePlan->payer_id.' - '*/).
-                    ($higherOrderPolicy->insurancePlan->name ?? ''))
+                    : ''/**$higherOrderPolicy->insurancePlan->payer_id.' - '*/)
+                    .($higherOrderPolicy->insurancePlan->name ?? ''))
                 : '',
             '11d' => isset($lowerOrderPolicy) ? true : false,
             '12' => [
@@ -408,12 +406,12 @@ final class PreviewResource extends JsonResource
             '17' => [
                 'code' => $providerCode ?? '',
                 'name' => isset($providerProfile)
-                ? ($providerProfile->first_name.
-                (!empty($providerProfile->middle_name)
+                ? ($providerProfile->first_name
+                .(!empty($providerProfile->middle_name)
                     ? ' '.substr($providerProfile->middle_name, 0, 1)
-                    : '').
-                ' '.$providerProfile->last_name.
-                (isset($providerProfile->nameSuffix)
+                    : '')
+                .' '.$providerProfile->last_name
+                .(isset($providerProfile->nameSuffix)
                     ? ' '.$providerProfile->nameSuffix->description
                     : ''))
                 : '',
@@ -488,12 +486,12 @@ final class PreviewResource extends JsonResource
             '30' => '',
             '31' => [
                 'name' => isset($billingProviderProfile)
-                    ? ($billingProviderProfile->first_name.
-                    (!empty($billingProviderProfile->middle_name)
+                    ? ($billingProviderProfile->first_name
+                    .(!empty($billingProviderProfile->middle_name)
                         ? ' '.substr($billingProviderProfile->middle_name, 0, 1)
-                        : '').
-                    ' '.$billingProviderProfile->last_name.
-                    (isset($billingProviderProfile->nameSuffix)
+                        : '')
+                    .' '.$billingProviderProfile->last_name
+                    .(isset($billingProviderProfile->nameSuffix)
                         ? ' '.$billingProviderProfile->nameSuffix->description
                         : ''))
                     : '',
@@ -631,9 +629,9 @@ final class PreviewResource extends JsonResource
             '7' => '',
             '8a' => $patient?->code ?? '',
             '8b' => $patient
-                ? ($patient?->user->profile->last_name.', '.
-                $patient?->user->profile->first_name.
-                ($patient?->user->profile->middle_name
+                ? ($patient?->user->profile->last_name.', '
+                .$patient?->user->profile->first_name
+                .($patient?->user->profile->middle_name
                     ? ', '.substr($patient?->user->profile->middle_name, 0, 1)
                     : ''))
                 : '',

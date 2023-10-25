@@ -19,7 +19,6 @@ final class IntegerOrArrayKeyExists implements Rule
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      *
      * @param string $attribute
-     * @param mixed $value
      */
     public function passes($attribute, $value): bool
     {

@@ -217,12 +217,12 @@ class Facility extends Model implements Auditable
         );
     }
 
-     /*
-     * Get the insuranceCompany's status.
-     *
-     * @param  string  $value
-     * @return string
-     */
+    /*
+    * Get the insuranceCompany's status.
+    *
+    * @param  string  $value
+    * @return string
+    */
     public function getStatusAttribute()
     {
         $billingCompany = auth()->user()->billingCompanies->first();

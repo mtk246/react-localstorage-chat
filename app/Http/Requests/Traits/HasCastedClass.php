@@ -14,7 +14,7 @@ trait HasCastedClass
             ->map(fn (mixed $item) => new $this->castedClass($item, $this->query(), $this->user()));
     }
 
-    public function casted(?string $input = null): mixed
+    public function casted(string $input = null): mixed
     {
         return new $this->castedClass(
             $input

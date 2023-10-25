@@ -219,7 +219,6 @@ final class ClaimPreviewService implements ReportInterface
      * Sets the footer for the PDF document.
      *
      * @param bool $pages whether to include page numbers or not
-     * @param string $footerText the text to be included in the footer
      */
     public function setFooter($pages = true): void
     {
@@ -240,8 +239,7 @@ final class ClaimPreviewService implements ReportInterface
                 'C',
                 false,
                 0,
-                7,
-                -12,
+                7, -12,
                 true,
                 1,
                 true,

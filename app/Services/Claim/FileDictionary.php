@@ -439,8 +439,8 @@ final class FileDictionary extends Dictionary
             $resultServices['modifier3_D'.($index + 1)] = $item['modifiers'][2]['name'] ?? '';
             $resultServices['modifier4_D'.($index + 1)] = $item['modifiers'][3]['name'] ?? '';
             /* 24E */
-            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
-            ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
+            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '')
+            .($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
             /* 24F */
             $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
             $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '00';
