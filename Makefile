@@ -33,7 +33,7 @@ prepare: ## Prepare client containers and enviroment
 		composer install --ignore-platform-reqs \
 		&& cp ./.env.example .env
 build: ## Build client containers and enviroment
-	./vendor/bin/sail build
+	./vendor/bin/sail build --no-cache
 up: ## Start client containers
 	./vendor/bin/sail up -d
 install: ## Install dependencies
@@ -50,7 +50,6 @@ scout: ## Sync scout models
 
 upgrade: ## Upgrade client containers and enviroment
 	./vendor/bin/sail down
-	./vendor/bin/sail build --no-cache
 	./vendor/bin/sail up -d
 	./vendor/bin/sail composer update
 	./vendor/bin/sail composer upgrade
