@@ -31,7 +31,13 @@ finally use [sail](https://laravel.com/docs/8.x/sail) commands to operate the pr
 
 After cloning the repository, create the wrapper for Laravel sail by opening a console in the root directory of the project and run
 ```bash
-
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php82-composer:latest \
+    composer install --ignore-platform-reqs \
+    && cp ./.env.example .env
 ```
 next configure a shell alias for sail runing this command
 ```bash
