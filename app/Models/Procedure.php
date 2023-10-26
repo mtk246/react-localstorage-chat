@@ -26,8 +26,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
- * @property mixed|null $type
- * @property mixed|null $clasifications
+ * @property |null $type
+ * @property |null $clasifications
  * @property string|null $short_description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
