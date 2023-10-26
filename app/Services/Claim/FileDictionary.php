@@ -307,10 +307,10 @@ final class FileDictionary extends Dictionary
         return $this->claim->service->services
             ->map(function (Services $claimService) use ($key) {
                 return match ($key) {
-                    'revenue_code' => $claimService->revenueCode->code,
-                    'procedure_description' => substr($claimService->procedure->description, 0, 30),
-                    'procedure_short_description' => $claimService->procedure->short_description,
-                    'procedure_code' => $claimService->procedure->code,
+                    'revenue_code' => $claimService->revenueCode?->code ?? '',
+                    'procedure_description' => substr($claimService->procedure?->description ?? '', 0, 30),
+                    'procedure_short_description' => $claimService->procedure?->short_description ?? '',
+                    'procedure_code' => $claimService->procedure?->code ?? '',
                     'start_date' => Carbon::createFromFormat('Y-m-d', $claimService->from_service)
                         ->format('mdY'),
                     'non_covered_charges' => 0 != (int) $claimService->claimService->non_covered_charges
@@ -439,8 +439,8 @@ final class FileDictionary extends Dictionary
             $resultServices['modifier3_D'.($index + 1)] = $item['modifiers'][2]['name'] ?? '';
             $resultServices['modifier4_D'.($index + 1)] = $item['modifiers'][3]['name'] ?? '';
             /* 24E */
-            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '').
-            ($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
+            $resultServices['pointer_E'.($index + 1)] = ($item['diagnostic_pointers'][0] ?? '')
+            .($item['diagnostic_pointers'][1] ?? '').($item['diagnostic_pointers'][2] ?? '').($item['diagnostic_pointers'][3] ?? '');
             /* 24F */
             $resultServices['charges_F'.($index + 1)] = str_replace(',', '', $arrayPrice[0] ?? '');
             $resultServices['charges_decimal_F'.($index + 1)] = $arrayPrice[1] ?? '00';

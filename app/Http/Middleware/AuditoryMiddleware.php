@@ -19,9 +19,9 @@ class AuditoryMiddleware
         $data = json_decode($data, true);
 
         if (
-            !(array_key_exists('mac_machine', $data) && !empty($data['mac_machine'])) &&
-            !(array_key_exists('location', $data) && !empty($data['location'])) &&
-            !(array_key_exists('machine_used', $data) && !empty($data['machine_used']))
+            !(array_key_exists('mac_machine', $data) && !empty($data['mac_machine']))
+            && !(array_key_exists('location', $data) && !empty($data['location']))
+            && !(array_key_exists('machine_used', $data) && !empty($data['machine_used']))
         ) {
             return response()->json('missing data of auditory', 401);
         }

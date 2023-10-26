@@ -283,13 +283,13 @@ final class ClaimResource extends JsonResource
                 ? ($this->patient->user->profile->first_name.' '.$this->patient->user->profile->last_name)
                 : '',
             'billing_provider_id' => $this->billing_provider_id,
-            'billing_provider' => isset($this->billingProvider->user) ?
-                ($this->billingProvider->user->profile->first_name.' '.$this->billingProvider->user->profile->last_name)
+            'billing_provider' => isset($this->billingProvider->user)
+                ? ($this->billingProvider->user->profile->first_name.' '.$this->billingProvider->user->profile->last_name)
                 : '',
             'service_provider_id' => $this->service_provider_id,
             'service_provider' => isset($this->serviceProvider->user)
-                ? ($this->serviceProvider->user->profile->first_name.' '.
-                  $this->serviceProvider->user->profile->last_name)
+                ? ($this->serviceProvider->user->profile->first_name.' '
+                  .$this->serviceProvider->user->profile->last_name)
                 : '',
             'referred_id' => $this->referred_id,
             'referred' => isset($this->referred->user)

@@ -113,8 +113,8 @@ final class ClaimBodyResource extends JsonResource
                 }
                 $statusName = $claimStatusClaim?->claimStatus?->status ?? '';
                 if (!empty($statusName)) {
-                    if ($statusName !== $statusDefaultOrder[0] &&
-                        'Draft' === $statusDefaultOrder[0]) {
+                    if ($statusName !== $statusDefaultOrder[0]
+                        && 'Draft' === $statusDefaultOrder[0]) {
                         array_shift($statusDefaultOrder);
                     }
                     if ($statusName === $statusDefaultOrder[0]) {
