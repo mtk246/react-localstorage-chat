@@ -302,7 +302,7 @@ final class JSONDictionary extends Dictionary
                     'professionalService' => [
                         'procedureIdentifier' => 'HC' /* No esta, Loop2400 SV101-01 * */,
                         'lineItemChargeAmount' => str_replace(',', '', number_format((float) $service->price * (int) ($service->days_or_units ?? 1), 2)),
-                        'procedureCode' => $service->procedure->code,
+                        'procedureCode' => $service->procedure?->code,
                         'measurementUnit' => 'UN', /**Si es el mismo dias se expresa en min 'MJ' */
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'compositeDiagnosisCodePointers' => [
@@ -407,7 +407,7 @@ final class JSONDictionary extends Dictionary
                             true => 'UN',   /* UN = Unit */
                             default => 'UN',
                         },
-                        'serviceLineRevenueCode' => $service->revenueCode->code,
+                        'serviceLineRevenueCode' => $service->revenueCode?->code,
                         'procedureIdentifier' => (!empty($service->procedure?->code)) ? $procedureIdentifier : '',
                         'procedureCode' => (!empty($procedureIdentifier)) ? $service->procedure?->code : '',
                         'description' => (!empty($service->procedure?->code) && !empty($procedureIdentifier)) ? $procedureDescription : '',
@@ -1298,8 +1298,8 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],*/
                 'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '').
-                        substr(str_replace(
+                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '')
+                        .substr(str_replace(
                             ':',
                             '',
                             ('' != ($this->claim->patientInformation->admission_date ?? ''))
@@ -1881,6 +1881,7 @@ final class JSONDictionary extends Dictionary
     protected function getPayToPlan(): ?array
     {
         return null;
+
         /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
          * Esta es la data del insurance al que hay que hacerle el pago
          * Actualmente no esta considerado en el sistema
@@ -1907,6 +1908,7 @@ final class JSONDictionary extends Dictionary
     protected function getPayerAddress(): ?array
     {
         return null;
+
         /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
          * Esta es la data del insurance al que hay que hacerle el pago
          * Actualmente no esta considerado en el sistema
@@ -2178,9 +2180,9 @@ final class JSONDictionary extends Dictionary
                 'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
             ],
             'contactInformation' => (
-                !empty($attendingContact?->phone) ||
-                !empty($attendingContact?->email) ||
-                !empty($attendingContact?->fax)
+                !empty($attendingContact?->phone)
+                || !empty($attendingContact?->email)
+                || !empty($attendingContact?->fax)
             )
                 ? [
                     'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,

@@ -135,7 +135,7 @@ abstract class Dictionary implements DictionaryInterface
             : (bool) $this->getClaimData($key, $default);
     }
 
-    protected function getClaimData(string $key, ?string $default = null): mixed
+    protected function getClaimData(string $key, string $default = null): mixed
     {
         if (!is_null($default)) {
             return $default;
@@ -165,7 +165,7 @@ abstract class Dictionary implements DictionaryInterface
             }, $this->claim);
     }
 
-    protected function setConfigFor(?InsurancePlan $insurancePlan = null): void
+    protected function setConfigFor(InsurancePlan $insurancePlan = null): void
     {
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 

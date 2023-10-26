@@ -14,8 +14,6 @@ final class ClasificationsCast implements CastsAttributes
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
      * @param string|null $value
-     *
-     * @return mixed
      */
     public function get($model, string $key, $value, array $attributes)
     {
@@ -52,9 +50,6 @@ final class ClasificationsCast implements CastsAttributes
 
     /**
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @param mixed $value
-     *
-     * @return mixed
      */
     public function set($model, string $key, $value, array $attributes)
     {

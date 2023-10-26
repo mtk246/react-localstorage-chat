@@ -45,10 +45,9 @@ trait ClaimFile
         $higherOrderPolicy = $this->insurancePolicies()
             ->wherePivot('order', 1)->first();
 
-        $subscriber =
-            $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->profile ?? null
-                : $higherOrderPolicy?->subscribers->first();
+        $subscriber = $higherOrderPolicy->own ?? true
+            ? $this->demographicInformation?->patient?->profile ?? null
+            : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber ?? null;
     }
@@ -82,10 +81,9 @@ trait ClaimFile
             ->wherePivot('order', 1)
             ->first();
 
-        $subscriber =
-            $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->profile ?? null
-                : $higherOrderPolicy?->subscribers->first();
+        $subscriber = $higherOrderPolicy->own ?? true
+            ? $this->demographicInformation?->patient?->profile ?? null
+            : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber?->relationship ?? null;
     }
@@ -95,10 +93,9 @@ trait ClaimFile
         $higherOrderPolicy = $this->insurancePolicies()
             ->wherePivot('order', 1)->first();
 
-        $subscriber =
-            $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->profile ?? null
-                : $higherOrderPolicy?->subscribers->first();
+        $subscriber = $higherOrderPolicy->own ?? true
+            ? $this->demographicInformation?->patient?->profile ?? null
+            : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber
             ?->addresses()
@@ -111,10 +108,9 @@ trait ClaimFile
         $higherOrderPolicy = $this->insurancePolicies()
             ->wherePivot('order', 1)->first();
 
-        $subscriber =
-            $higherOrderPolicy->own ?? true
-                ? $this->demographicInformation?->patient?->profile ?? null
-                : $higherOrderPolicy?->subscribers->first();
+        $subscriber = $higherOrderPolicy->own ?? true
+            ? $this->demographicInformation?->patient?->profile ?? null
+            : $higherOrderPolicy?->subscribers->first();
 
         return $subscriber
             ?->contacts()
@@ -128,10 +124,9 @@ trait ClaimFile
                 ->wherePivot('order', 2)->first();
 
         if ($lowerOrderPolicy) {
-            $subscriber =
-                $lowerOrderPolicy->own ?? true
-                    ? $this->demographicInformation?->patient?->profile ?? null
-                    : $lowerOrderPolicy?->subscribers->first();
+            $subscriber = $lowerOrderPolicy->own ?? true
+                ? $this->demographicInformation?->patient?->profile ?? null
+                : $lowerOrderPolicy?->subscribers->first();
         }
 
         return $subscriber ?? null;

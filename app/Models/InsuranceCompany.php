@@ -224,8 +224,6 @@ class InsuranceCompany extends Model implements Auditable
     /**
      * Get the insuranceCompany's status.
      *
-     * @param string $value
-     *
      * @return string
      */
     public function getStatusAttribute()

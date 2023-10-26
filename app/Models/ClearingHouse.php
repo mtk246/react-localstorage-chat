@@ -141,8 +141,6 @@ class ClearingHouse extends Model implements Auditable
     /**
      * Get the clearingHouse's status.
      *
-     * @param string $value
-     *
      * @return string
      */
     public function getStatusAttribute()

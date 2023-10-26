@@ -21,7 +21,6 @@ final class ArrayCountRule implements Rule
 
     /**
      * @param string $attribute
-     * @param mixed $value
      *
      * @return bool
      */

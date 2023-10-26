@@ -17,7 +17,7 @@ abstract class RenderableException extends \Exception
         protected readonly ?array $body = null,
         protected readonly ?array $headers = null,
         protected readonly ?int $options = null,
-        ?string $message = null,
+        string $message = null,
         int $code = 0,
         \Throwable $previous = null
     ) {

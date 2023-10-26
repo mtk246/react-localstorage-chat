@@ -5,6 +5,9 @@
         "fully_qualified_strict_types": true,
         "phpdoc_align": {
             "align": "left"
+        },
+        "operator_linebreak": {
+            "position": "beginning"
         }
     },
     "exclude": [
