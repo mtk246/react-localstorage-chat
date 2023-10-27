@@ -79,6 +79,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::get('permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'getPermissions'])->middleware('auth:api');
     Route::put('roles/{role}/permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'updatePermissions'])->middleware('auth:api');
+    Route::get('roles/types', [\App\Http\Controllers\Permissions\RoleResource::class, 'getTypes'])->middleware('auth:api');
     Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('auth:api');
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {
