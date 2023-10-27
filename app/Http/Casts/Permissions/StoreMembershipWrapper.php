@@ -17,6 +17,7 @@ final class StoreMembershipWrapper extends CastsRequest
             'slug' => Str::slug($this->get('name')),
             'description' => $this->get('note') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
+            'type' => $this->get('type'),
         ];
     }
 
