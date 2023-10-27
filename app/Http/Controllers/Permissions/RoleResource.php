@@ -13,6 +13,7 @@ use App\Http\Requests\Permissions\StoreRoleRequest;
 use App\Http\Requests\Permissions\UpdateRoleRequest;
 use App\Http\Requests\Permissions\UpdatePermitsRequest;
 use App\Http\Resources\Permissions\RoleResource as RoleResponseResource;
+use App\Models\Permissions\Permission;
 use App\Models\User\Role;
 use Illuminate\Http\JsonResponse;
 
@@ -49,5 +50,10 @@ final class RoleResource extends Controller
         Role $role,
     ): JsonResponse {
         return response()->json($update->invoke($request->get('permissions'), $role));
+    }
+
+    public function getPermissions(): JsonResponse
+    {
+        return response()->json(Permission::all()->groupBy('module'));
     }
 }
