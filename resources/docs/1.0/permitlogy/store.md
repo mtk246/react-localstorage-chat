@@ -38,6 +38,7 @@
   "billing_company_id": 1, // only for admin
   "name": "test role",
   "note": "this is a test role",
+  "type": 2, // 1: is for system use and only valid for admins
   "permissions": [
     1,
     20,
@@ -181,7 +182,8 @@
 {
   "billing_company_id": 2, // only for admin
   "name": "test",
-  "note": "this is a test role"
+  "note": "this is a test role",
+  "type": 2 // 1: is for system use and only valid for admins
 }
 ```
 
