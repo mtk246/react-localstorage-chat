@@ -5,6 +5,7 @@
 - [Get single role](#get-single-role)
 - [Get list permission](#get-all-permissions)
 - [Get user permission](#get-user-permissions)
+- [Get roles types](#get-roles-types)
 
 
 <a name="basic-data"></a>
@@ -17,6 +18,7 @@
 |2|GET|`Get single role`|`/roles/{role_id}`|yes|Get all permission for current role|
 |3|GET|`Get list permission`|`/roles/permissions`|yes|Get all permission for current role|
 |4|GET|`Get user permission`|`/user/{user_id}/permissions`|yes|Get all permission for user|
+|5|GET|`Get roles types`|`/roles/types`|yes|Get roles types|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -292,5 +294,43 @@
     "constraint": "setting.profile.show"
   },
   ... rest of permissions
+]
+```
+
+
+<a name="get-roles-types"></a>
+## Get roles types
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 data retorned
+
+#
+```json
+[
+  {
+    "id": 1,  // value only returned for admin
+    "name": "SYSTEM" // value only returned for admin
+  },
+  {
+    "id": 2,
+    "name": "BILLING COMPANY"
+  },
+  {
+    "id": 3,
+    "name": "Patient"
+  },
+  {
+    "id": 4,
+    "name": "Health Professional"
+  }
 ]
 ```
