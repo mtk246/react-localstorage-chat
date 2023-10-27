@@ -214,7 +214,7 @@ class PatientRepository
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                     'type' => UserType::PATIENT,
-                    'billing_comapny_id' => $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ]);
             }
 

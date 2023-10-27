@@ -34,7 +34,7 @@ class UserFactory extends Factory
         ];
     }
 
-    public function withProfile(?Profile $profile = null): self
+    public function withProfile(Profile $profile = null): self
     {
         return $this->state(function (array $attributes) use ($profile) {
             return [
@@ -56,7 +56,7 @@ class UserFactory extends Factory
         });
     }
 
-    public function hasBillingCompany(?BillingCompany $billingCompany = null): self
+    public function hasBillingCompany(BillingCompany $billingCompany = null): self
     {
         return $this->state(function (array $attributes) use ($billingCompany) {
             return [
@@ -67,7 +67,7 @@ class UserFactory extends Factory
         });
     }
 
-    public function whithRole(?Role $role = null): self
+    public function whithRole(Role $role = null): self
     {
         return $this->afterCreating(function (User $user) use ($role) {
             match ($user->type->value) {
@@ -79,7 +79,7 @@ class UserFactory extends Factory
         });
     }
 
-    private function setBillingRole(User $user, ?Role $role = null): void
+    private function setBillingRole(User $user, Role $role = null): void
     {
         $user
             ->billingCompanies()
@@ -94,7 +94,7 @@ class UserFactory extends Factory
             );
     }
 
-    private function setAdminRole(User $user, ?Role $role = null): void
+    private function setAdminRole(User $user, Role $role = null): void
     {
         $user->roles()->syncWithPivotValues(
             $role->id ?? Role::factory()->create()->id,
@@ -103,7 +103,7 @@ class UserFactory extends Factory
         );
     }
 
-    private function setDoctorRole(User $user, ?Role $role = null): void
+    private function setDoctorRole(User $user, Role $role = null): void
     {
         $user
             ->healthProfessional()
@@ -119,7 +119,7 @@ class UserFactory extends Factory
             );
     }
 
-    private function setPatientRole(User $user, ?Role $role = null): void
+    private function setPatientRole(User $user, Role $role = null): void
     {
         $user
             ->patient()

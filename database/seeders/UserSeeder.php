@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
         });
     }
 
-    private function setBillingRole(User $user, ?Role $role = null): void
+    private function setBillingRole(User $user, Role $role = null): void
     {
         $user
             ->billingCompanies()
@@ -81,22 +81,22 @@ class UserSeeder extends Seeder
             ?->membership
             ->roles()
             ->syncWithPivotValues(
-                $role->id ?? Role::factory()->create()->id,
+                $role?->id ?? Role::factory()->create()->id,
                 ['rollable_type' => BillingMembership::class],
                 false
             );
     }
 
-    private function setAdminRole(User $user, ?Role $role = null): void
+    private function setAdminRole(User $user, Role $role = null): void
     {
         $user->roles()->syncWithPivotValues(
-            $role->id ?? Role::factory()->create()->id,
+            $role?->id ?? Role::factory()->create()->id,
             ['rollable_type' => User::class],
             false
         );
     }
 
-    private function setDoctorRole(User $user, ?Role $role = null): void
+    private function setDoctorRole(User $user, Role $role = null): void
     {
         $user
             ->healthProfessional()
@@ -106,13 +106,13 @@ class UserSeeder extends Seeder
             ?->membership
             ->roles()
             ->syncWithPivotValues(
-                $role->id ?? Role::factory()->create()->id,
+                $role?->id ?? Role::factory()->create()->id,
                 ['rollable_type' => BillingCompanyHealthProfessional::class],
                 false
             );
     }
 
-    private function setPatientRole(User $user, ?Role $role = null): void
+    private function setPatientRole(User $user, Role $role = null): void
     {
         $user
             ->patient()
@@ -122,7 +122,7 @@ class UserSeeder extends Seeder
             ?->membership
             ->roles()
             ->syncWithPivotValues(
-                $role->id ?? Role::factory()->create()->id,
+                $role?->id ?? Role::factory()->create()->id,
                 ['rollable_type' => PatienMembership::class],
                 false
             );

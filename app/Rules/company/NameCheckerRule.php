@@ -20,7 +20,6 @@ final class NameCheckerRule implements Rule
 
     /**
      * @param string $attribute
-     * @param mixed $value
      *
      * @return bool
      */
