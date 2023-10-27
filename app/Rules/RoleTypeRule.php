@@ -6,6 +6,7 @@ namespace App\Rules;
 
 use App\Enums\User\RoleType;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 final class RoleTypeRule implements Rule
 {
@@ -17,11 +18,10 @@ final class RoleTypeRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $rulesTypes = collect(RoleType::cases());
-
-        if (\Gate::check('is-admin')) {
-            $rulesTypes = $rulesTypes->filter(fn ($rule) => RoleType::SYSTEM->value !== $rule->value);
-        }
+        $rulesTypes = collect(RoleType::cases())->when(
+            Gate::denies('is-admin'),
+            fn ($rules) => $rules->filter(fn ($rule) => RoleType::SYSTEM->value !== $rule->value),
+        );
 
         return $rulesTypes->contains(fn ($rule) => $rule->value === (int) $value);
     }
