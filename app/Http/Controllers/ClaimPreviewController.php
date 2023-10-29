@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
 use App\Models\Claims\Claim;
-use App\Models\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
 use Illuminate\Http\Request;
 
@@ -18,13 +17,11 @@ final class ClaimPreviewController extends Controller
         $claim = Claim::query()->with(['insurancePolicies'])->find($id);
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
-            'print' => $request->print ?? false,
+            'print' => (bool) ($request->print ?? false),
             'typeFormat' => $claim->type->value ?? $request->format ?? null,
             'data' => $claimPreview->single($request->input(), $request->user()),
         ]);
         $preview->setHeader();
-
-        // dd($claimPreview->single($request->input(), $request->user()));
 
         /* @todo Consulta para poder devolver el pdf en como una cadena que sera renderizada por el frontEnd */
         return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
@@ -32,23 +29,24 @@ final class ClaimPreviewController extends Controller
         ]))[1];
 
         /* @todo Consulta para poder visualizar el pdf desde postman */
-        //return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');
+        // return $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'I');
     }
 
     public function showBatch(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview, int $id)
     {
-        $batch = ClaimBatch::with([
-            'claims' => function ($query) {
-                $query->with('insurancePolicies');
-            },
-        ])->find($id);
-        $claims = $batch->claims;
+        $claims = Claim::query()
+            ->select('id', 'type')
+            ->whereHas('claimBatchs', function ($query) use ($id) {
+                $query->where('claim_batch_id', $id);
+            })
+            ->get();
+
         $total = count($claims);
         foreach ($claims as $key => $claim) {
             $preview->setConfig([
                 'urlVerify' => 'www.nucc.org',
                 'print' => (bool) ($request->print ?? false),
-                'typeFormat' => $claim->format ?? null,
+                'typeFormat' => $claim->type->value ?? null,
                 'data' => $claimPreview->single(['id' => $claim->id], $request->user()),
             ]);
             $preview->setHeader();
