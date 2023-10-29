@@ -164,6 +164,11 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claim');
     }
 
+    public function claimBatchs()
+    {
+        return $this->belongsToMany(ClaimBatch::class)->withTimestamps();
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query, $search) {
@@ -280,13 +285,9 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = (ClaimType::PROFESSIONAL == $this->type)
-            ? array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + ((float) $service['price'] ?? 0);
-            }, 0)
-            : array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
-            }, 0);
+        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+            return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
+        }, 0);
 
         return number_format($billed, 2);
     }
