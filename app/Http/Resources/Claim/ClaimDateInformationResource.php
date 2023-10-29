@@ -22,20 +22,6 @@ final class ClaimDateInformationResource extends JsonResource
         $commonFields = [
             'id' => $this->resource->id,
             'field_id' => $this->resource->field_id,
-            'field' => match ($this->resource->field_id) {
-                FieldInformationInstitutional::FIELD_31->value => FieldInformationInstitutional::FIELD_31->getName(),
-                FieldInformationInstitutional::FIELD_32->value => FieldInformationInstitutional::FIELD_32->getName(),
-                FieldInformationInstitutional::FIELD_33->value => FieldInformationInstitutional::FIELD_33->getName(),
-                FieldInformationInstitutional::FIELD_34->value => FieldInformationInstitutional::FIELD_34->getName(),
-                FieldInformationInstitutional::FIELD_35->value => FieldInformationInstitutional::FIELD_35->getName(),
-                FieldInformationInstitutional::FIELD_36->value => FieldInformationInstitutional::FIELD_36->getName(),
-                FieldInformationProfessional::FIELD_14->value => FieldInformationProfessional::FIELD_14->getName(),
-                FieldInformationProfessional::FIELD_15->value => FieldInformationProfessional::FIELD_15->getName(),
-                FieldInformationProfessional::FIELD_16->value => FieldInformationProfessional::FIELD_16->getName(),
-                FieldInformationProfessional::FIELD_18->value => FieldInformationProfessional::FIELD_18->getName(),
-                FieldInformationProfessional::FIELD_19->value => FieldInformationProfessional::FIELD_19->getName(),
-                default => '',
-            },
             'qualifier_id' => $this->resource->qualifier_id,
             'qualifier' => $this->resource->qualifier?->code,
             'from_date' => $this->resource->from_date,
@@ -46,8 +32,15 @@ final class ClaimDateInformationResource extends JsonResource
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
                 'amount' => $this->resource->amount,
+                'field' => ($this->resource->field_id > 0)
+                    ? FieldInformationInstitutional::tryFrom((int) $this->resource->field_id)->getName()
+                    : '',
             ],
-            ClaimType::PROFESSIONAL->value => [],
+            ClaimType::PROFESSIONAL->value => [
+                'field' => ($this->resource->field_id > 0)
+                    ? FieldInformationProfessional::tryFrom((int) $this->resource->field_id)->getName()
+                    : '',
+            ],
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
 
