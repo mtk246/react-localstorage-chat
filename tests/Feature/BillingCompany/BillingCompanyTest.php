@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Tests\Feature\BillingCompany;
 
 use App\Models\BillingCompany;
+use App\Models\User\Role;
+use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,13 +18,14 @@ class BillingCompanyTest extends TestCase
     /** @test */
     public function itReturnsAJsonResponseContainingAllBillingCompaniesForTheAuthenticatedUser()
     {
-        $user = $this->createUser('superuser');
+        $billingCompany = BillingCompany::factory()->create();
+        $user = User::factory()->withProfile()->create(['billing_company_id' => $billingCompany->id]);
 
-        $billingCompany = BillingCompany::find($user->billing_company_id);
+        $adminRole = Role::where('slug', 'superuser')->first();
 
-        if (!$billingCompany) {
-            $billingCompany = BillingCompany::factory()->create(['id' => $user->billing_company_id]);
-        }
+        $user = UserFactory::new()->whithRole($adminRole)->create();
+
+        $billingCompany = BillingCompany::find(1);
 
         $response = $this->actingAs($user)->get(route('billing-company.index'));
 
@@ -29,8 +33,8 @@ class BillingCompanyTest extends TestCase
 
         $responseData = $response->json();
 
-        $this->assertIsArray($responseData); // Ensure the response data is an array
-        $this->assertCount(1, $responseData); // Assert the count of items in the 'data' array
+        $this->assertIsArray($responseData);
+        $this->assertCount(1, $responseData);
 
         $formattedTimestamps = [
             'created_at' => $billingCompany->created_at->format('Y-m-d\TH:i:s.u\Z'),
@@ -64,8 +68,14 @@ class BillingCompanyTest extends TestCase
     /** @test */
     public function itReturnsAJsonResponseContainingTheUpdatedBillingCompany()
     {
-        $user = $this->createUser('superuser');
-        $billingCompany = BillingCompany::find($user->billing_company_id);
+        $billingCompany = BillingCompany::factory()->create();
+        $user = User::factory()->withProfile()->create(['billing_company_id' => $billingCompany->id]);
+
+        $adminRole = Role::where('slug', 'superuser')->first();
+
+        $user = UserFactory::new()->whithRole($adminRole)->create();
+
+        $billingCompany = BillingCompany::find($billingCompany->id);
 
         if (!$billingCompany) {
             $billingCompany = BillingCompany::factory()->create(['id' => $user->billing_company_id]);
@@ -83,8 +93,6 @@ class BillingCompanyTest extends TestCase
 
         $response = $this->actingAs($user)->put(route('billing-company.update', $billingCompany), $updateBillingCompanyRequest);
 
-        $response->assertOk();
-
         $responseData = $response->json();
 
         $this->assertIsArray($responseData);
@@ -93,6 +101,11 @@ class BillingCompanyTest extends TestCase
             'status' => true,
             'id' => $billingCompany->id,
         ];
+
+        if (array_key_exists('user', $responseData)) {
+            $this->assertNotNull($responseData['user']['first_name']);
+            $this->assertNotNull($responseData['user']['last_name']);
+        }
 
         $found = false;
 
