@@ -6,6 +6,7 @@ namespace App\Http\Requests\Permissions;
 
 use App\Http\Casts\Permissions\UpdateMembershipWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Rules\RoleTypeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -28,6 +29,7 @@ final class UpdateRoleRequest extends FormRequest
             ],
             'name' => ['required', 'string'],
             'note' => ['nullable', 'string'],
+            'type' => ['required', 'integer', new RoleTypeRule()],
         ];
     }
 }

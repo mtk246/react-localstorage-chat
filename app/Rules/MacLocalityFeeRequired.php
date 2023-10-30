@@ -26,7 +26,6 @@ class MacLocalityFeeRequired implements Rule
      * Determine if the validation rule passes.
      *
      * @param string $attribute
-     * @param mixed $value
      *
      * @return bool
      */
@@ -41,12 +40,12 @@ class MacLocalityFeeRequired implements Rule
                 'counties' => $macL['counties'],
             ])->first();
             if (!isset($macLocality)) {
-                if (isset($macL['procedure_fees']['non_facility_price']) ||
-                    isset($macL['procedure_fees']['facility_price']) ||
-                    isset($macL['procedure_fees']['non_facility_limiting_charge']) ||
-                    isset($macL['procedure_fees']['facility_limiting_charge']) ||
-                    isset($macL['procedure_fees']['facility_rate']) ||
-                    isset($macL['procedure_fees']['non_facility_rate'])) {
+                if (isset($macL['procedure_fees']['non_facility_price'])
+                    || isset($macL['procedure_fees']['facility_price'])
+                    || isset($macL['procedure_fees']['non_facility_limiting_charge'])
+                    || isset($macL['procedure_fees']['facility_limiting_charge'])
+                    || isset($macL['procedure_fees']['facility_rate'])
+                    || isset($macL['procedure_fees']['non_facility_rate'])) {
                     $this->message = 'Error, cannot register a price without assigning a mac locality';
 
                     return false;

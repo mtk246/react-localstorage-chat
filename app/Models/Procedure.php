@@ -26,8 +26,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $start_date
  * @property string|null $end_date
- * @property mixed|null $type
- * @property mixed|null $clasifications
+ * @property |null $type
+ * @property |null $clasifications
  * @property string|null $short_description
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
@@ -129,11 +129,11 @@ class Procedure extends Model implements Auditable
     /**
      * The companies that belong to the Procedure.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companyServices()
     {
-        return $this->belongsToMany(CompanyService::class)->withTimestamps();
+        return $this->hasMany(CompanyService::class);
     }
 
     /**
@@ -220,11 +220,11 @@ class Procedure extends Model implements Auditable
                 'roles' => [],
             ];
         } else {
-            $user = User::with(['profile', 'roles'])->find($lastModified->user_id);
+            $user = User::find($lastModified->user_id);
 
             return [
                 'user' => $user->profile->first_name.' '.$user->profile->last_name,
-                'roles' => $user->roles,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
     }

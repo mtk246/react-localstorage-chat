@@ -57,6 +57,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/search', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
+        Route::resource('{user}/permissions', \App\Http\Controllers\User\PermissionResource::class)->only(['index', 'update', 'destroy'])->middleware(['auth:api']);
         Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
         Route::post('send-email-rescue-pass', [\App\Http\Controllers\UserController::class, 'sendEmailRescuePass']);
         Route::post('recovery-user', [\App\Http\Controllers\UserController::class, 'recoveryUser']);
@@ -76,7 +77,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
+    Route::get('permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'getPermissions'])->middleware('auth:api');
     Route::put('roles/{role}/permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'updatePermissions'])->middleware('auth:api');
+    Route::get('roles/types', [\App\Http\Controllers\Permissions\RoleResource::class, 'getTypes'])->middleware('auth:api');
     Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('auth:api');
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {

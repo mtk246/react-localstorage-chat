@@ -7,6 +7,7 @@ namespace App\Http\Resources\Claim;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ClaimBodyResource extends JsonResource
@@ -21,6 +22,8 @@ final class ClaimBodyResource extends JsonResource
             'billing_provider' => $this->getBillingProvider(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
+            'claim_type' => upperCaseWords($this->resource->type->getName()),
+            'claim_format' => TypeForm::find($this->resource->type->value)?->form ?? '',
             'submitter_name' => $this->resource->submitter_name,
             'submitter_contact' => $this->resource->submitter_contact,
             'submitter_phone' => $this->resource->submitter_phone,
@@ -44,6 +47,7 @@ final class ClaimBodyResource extends JsonResource
             'last_modified' => $this->last_modified,
             'private_note' => $this->private_note,
             'status' => $this->getStatus(),
+            'status_map' => $this->getStatusMap(),
             'status_history' => $this->getStatusHistory(),
             'notes_history' => $this->getNotesHistory(),
             'billed_amount' => $this->billed_amount,
@@ -83,6 +87,85 @@ final class ClaimBodyResource extends JsonResource
             ->orderBy('claim_status_claim.id', 'desc')
             ->first()
             ?->setHidden(['pivot']);
+    }
+
+    private function getStatusMap(): array
+    {
+        $newStatuses = [];
+        $statusDefaultOrder = ['Draft', 'Not submitted', 'Submitted', 'Approved', 'Complete'];
+        $statusColors = [
+            'Draft' => '#808080',
+            'Not submitted' => '#FEA54C',
+            'Submitted' => '#FFE18D',
+            'Approved' => '#87F8BA',
+            'Complete' => '#87F8BA',
+            'Rejected' => '#FC8989',
+            'Denied' => '#FC8989',
+        ];
+
+        $this->claimStatusClaims()
+            ->where('claim_status_type', ClaimStatus::class)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->reduce(function ($carry, $claimStatusClaim) use (&$statusDefaultOrder) {
+                if (0 === count($statusDefaultOrder)) {
+                    return;
+                }
+                $statusName = $claimStatusClaim?->claimStatus?->status ?? '';
+                if (!empty($statusName)) {
+                    if ($statusName !== $statusDefaultOrder[0]
+                        && 'Draft' === $statusDefaultOrder[0]) {
+                        array_shift($statusDefaultOrder);
+                    }
+                    if ($statusName === $statusDefaultOrder[0]) {
+                        array_shift($statusDefaultOrder);
+                    } else {
+                        $statusDefaultOrder = [];
+                    }
+                }
+            }, []);
+
+        $records = [];
+        $active = true;
+        $substatus = '';
+        $history = $this->claimStatusClaims()
+                        ->orderBy('created_at', 'desc')
+                        ->orderBy('id', 'desc')
+                        ->get() ?? [];
+        foreach ($history as $status) {
+            if (ClaimSubStatus::class == $status->claim_status_type && '' === $substatus) {
+                $substatus = $status->claimStatus->name ?? '';
+            } elseif (ClaimStatus::class == $status->claim_status_type) {
+                $name = (empty($substatus))
+                    ? $status->claimStatus->status
+                    : $status->claimStatus->status.' - '.$substatus;
+                array_push($records, [
+                    'status' => $name,
+                    'active' => $active,
+                    'status_background_color' => $statusColors[$status->claimStatus->status] ?? '',
+                    'status_font_color' => $status->claimStatus->font_color ?? '',
+                ]);
+
+                $substatus = '';
+
+                if ($active) {
+                    $active = false;
+                }
+            }
+        }
+        if (count($statusDefaultOrder) > 0) {
+            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+                $status = ClaimStatus::whereStatus($value)->first();
+                array_push($newStatuses, [
+                    'status' => $status->status ?? '',
+                    'active' => false,
+                    'status_background_color' => $statusColors[$status->status] ?? '',
+                    'status_font_color' => $status->font_color ?? '',
+                ]);
+            }
+        }
+
+        return array_merge($newStatuses, $records);
     }
 
     private function getStatusHistory(): array

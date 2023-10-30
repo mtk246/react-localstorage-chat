@@ -4,6 +4,10 @@
 - ## Authentication
     - [Authentication](/{{route}}/{{version}}/auth)
 
+- ## Permitlogy
+    - [Getters](/{{route}}/{{version}}/permitlogy/get)
+    - [Setters](/{{route}}/{{version}}/permitlogy/store)
+
 - ## IP Restriction
     - [IP-Restriction](/{{route}}/{{version}}/ip-restriction)
 

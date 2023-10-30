@@ -38,8 +38,6 @@ class VerifyLevel
      * @param Request $request
      * @param string $level
      *
-     * @return mixed
-     *
      * @throws \App\Roles\Exceptions\LevelDeniedException
      */
     public function handle($request, \Closure $next, $level)

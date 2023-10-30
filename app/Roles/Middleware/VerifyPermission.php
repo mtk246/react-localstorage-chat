@@ -38,8 +38,6 @@ class VerifyPermission
      * @param Request $request
      * @param string $permission
      *
-     * @return mixed
-     *
      * @throws \App\Roles\Exceptions\PermissionDeniedException
      */
     public function handle($request, \Closure $next, $permission)

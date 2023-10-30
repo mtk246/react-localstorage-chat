@@ -16,7 +16,7 @@ final class ClaimServicesWrapper extends CastsRequest
                 $model = [
                     'from_service' => $service['from_service'],
                     'to_service' => $service['to_service'],
-                    'procedure_id' => $service['procedure_id'],
+                    'procedure_id' => $service['procedure_id'] ?? null,
                     'revenue_code_id' => $service['revenue_code_id'] ?? null,
                     'price' => $service['price'],
                     'days_or_units' => $service['days_or_units'],

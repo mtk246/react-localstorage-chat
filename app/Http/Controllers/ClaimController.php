@@ -113,10 +113,11 @@ class ClaimController extends Controller
         return response()->json($rs);
     }
 
-    public function getListRevenueCodes(Request $request, int $company_id = null): JsonResponse
+    public function getListRevenueCodes(Request $request): JsonResponse
     {
         /**@todo Consultar clasificacion de procedures by revenue codes */
         $search = $request->search ?? '';
+        $company_id = $request->company_id ?? null;
 
         return response()->json(
             $this->claimRepository->getListRev($company_id, $search)

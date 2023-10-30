@@ -242,17 +242,13 @@ class AuthController extends Controller
         if (!$bC) {
             $user = Auth::user()->load([
                 'billingCompanies',
-                'permits',
-                'roles',
                 'profile' => function ($query) {
                     $query->with(['socialMedias', 'addresses', 'contacts']);
                 },
             ]);
         } else {
             $user = $user->load([
-                'roles',
                 'billingCompanies',
-                'permits',
                 'profile' => function ($query) use ($bC)  {
                     $query->with([
                         'socialMedias',
@@ -266,6 +262,9 @@ class AuthController extends Controller
                 },
             ]);
         }
+
+        $user->roles = $user->roles()->get();
+
         $perms = [];
         $perms_v2 = [];
         $menu_app = [
@@ -499,7 +498,7 @@ class AuthController extends Controller
         //        }
 
         return response()->json([
-            'user' => $user->load(['roles', 'billingCompanies', 'permits'])->load('roles'),
+            'user' => $user->load(['billingCompanies', 'permits']),
             'access_token' => $token,
             'token_type' => 'bearer',
             'inactivity_time' => $this->webDowntime,

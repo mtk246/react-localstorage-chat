@@ -28,7 +28,7 @@ final class PermissionFactory extends Factory
         ];
     }
 
-    public function forRole(?MembershipRole $role = null): self
+    public function forRole(MembershipRole $role = null): self
     {
         return $this->state(function (array $attributes) use ($role) {
             return [
@@ -40,7 +40,7 @@ final class PermissionFactory extends Factory
         });
     }
 
-    public function forUser(?User $user = null): self
+    public function forUser(User $user = null): self
     {
         return $this->state(function (array $attributes) use ($user) {
             return [
