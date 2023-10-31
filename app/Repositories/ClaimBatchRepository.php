@@ -154,6 +154,8 @@ class ClaimBatchRepository
                 'id' => $claimBatch->id,
                 'code' => $claimBatch->code,
                 'name' => $claimBatch->name,
+                'type' => $claimBatch->claims->first()?->type->value,
+                'claim_type' => upperCaseWords($claimBatch->claims->first()?->type->getName()),
                 'claim_batch_status' => $claimBatch->claimBatchStatus,
                 'claim_batch_status_id' => $claimBatch->claim_batch_status_id,
                 'shipping_date' => $claimBatch->shipping_date,
