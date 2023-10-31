@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Facades\Pagination;
+use App\Http\Resources\Claim\Batch\ClaimBatchBodyResource;
 use App\Http\Resources\Claim\BatchClaimBodyResource;
 use App\Http\Resources\Claim\ClaimBodyResource;
-use App\Http\Resources\Company\CompanyDataResource;
 use App\Models\Billingcompany;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
@@ -250,7 +249,7 @@ class ClaimBatchRepository
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data' => $data->items(),
+            'data' => ClaimBatchBodyResource::collection($data->items()),
             'numberOfPages' => $data->lastPage(),
             'count' => $data->total(),
         ], 200);
