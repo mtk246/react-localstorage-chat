@@ -10,20 +10,16 @@ final class ContractFeePatiensCast extends CastsRequest
 {
     public function getId(): int
     {
-        return $this->get('patient_id');
+        return $this->getInt('patient_id');
     }
 
     public function getStartDate(): ?string
     {
-        return array_key_exists('start_date', $this->inputs)
-            ? $this->inputs['start_date']
-            : null;
+        return $this->get('start_date');
     }
 
     public function getEndDate(): ?string
     {
-        return array_key_exists('end_date', $this->inputs)
-            ? $this->inputs['end_date']
-            : null;
+        return $this->get('end_date');
     }
 }
