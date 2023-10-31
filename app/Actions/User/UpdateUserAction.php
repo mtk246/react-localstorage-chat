@@ -25,6 +25,8 @@ final class UpdateUserAction
             $userRoles = $user->roles();
             $rollableType = User::class;
 
+            $user->billingCompany()->disassociate();
+
             if (UserType::BILLING === $userWrapper->getType()) {
                 $user->billingCompany()->associate($userWrapper->getBillingCompanyId());
                 $user->billingCompanies()->syncWithoutDetaching($userWrapper->getBillingCompanyId());
@@ -40,7 +42,7 @@ final class UpdateUserAction
                 $rollableType = Membership::class;
             }
 
-            $userRoles->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType]);
+            $userRoles?->syncWithPivotValues($userWrapper->getRoles(), ['rollable_type' => $rollableType]);
 
             $user->touch();
 
