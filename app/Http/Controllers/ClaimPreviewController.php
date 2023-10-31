@@ -64,6 +64,35 @@ final class ClaimPreviewController extends Controller
         }
     }
 
+    public function showBatchReport(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview, int $id)
+    {
+        $claims = Claim::query()
+            ->select('id', 'type')
+            ->whereHas('claimBatchs', function ($query) use ($id) {
+                $query->where('claim_batch_id', $id);
+            })
+            ->get();
+
+        $total = count($claims);
+        foreach ($claims as $key => $claim) {
+            $preview->setConfig([
+                'urlVerify' => 'www.nucc.org',
+                'print' => (bool) ($request->print ?? false),
+                'typeFormat' => $claim->type->value ?? null,
+                'data' => $claimPreview->single(['id' => $claim->id], $request->user()),
+            ]);
+            $preview->setHeader();
+
+            if (($total - 1) == $key) {
+                return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
+                    'pdf' => $preview,
+                ], 'E', true))[1];
+            } else {
+                $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'E', false);
+            }
+        }
+    }
+
     public function showResponses(Request $request)
     {
         $data = [];

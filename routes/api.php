@@ -473,6 +473,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('/get-all-server', [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get('/get-all-server-claims', [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
             Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatch']);
+            Route::get('show-batch-report/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatchReport']);
             Route::get('show-response-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'showResponses']);
             Route::get('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'getOneClaimBatch']);
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
