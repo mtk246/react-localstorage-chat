@@ -337,7 +337,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
 
     public function getRolesAttribute(): ?Collection
     {
-        return $this->roles()->get();
+        return $this->roles()?->get();
     }
 
     public function userRoles(): MorphToMany
