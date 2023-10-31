@@ -295,7 +295,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
      * @todo find a better way to load this, maybe whit hasTrougth
      * @todo ennambe other user types returns that are stuct
      */
-    public function roles(): MorphToMany
+    public function roles(): ?MorphToMany
     {
         if (is_null($this->type)) {
             \Log::error("User type for user {$this->id} is null");
@@ -307,21 +307,21 @@ final class User extends Authenticatable implements JWTSubject, Auditable
             return match ($this->type->value) {
                 UserType::ADMIN->value => $this->userRoles(),
                 UserType::BILLING->value => $this->billingCompanies()
-                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ?->wherePivot('billing_company_id', $this->billing_company_id)
                     ->first()
                     ?->membership
                     ->roles(),
                 UserType::DOCTOR->value => $this->healthProfessional()
                     ->first()
                     ?->billingCompanies()
-                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ?->wherePivot('billing_company_id', $this->billing_company_id)
                     ->first()
                     ?->pivot
                     ->roles(),
                 UserType::PATIENT->value => $this->patient()
                     ->first()
                     ?->billingCompanies()
-                    ->wherePivot('billing_company_id', $this->billing_company_id)
+                    ?->wherePivot('billing_company_id', $this->billing_company_id)
                     ->first()
                     ?->membership
                     ->roles(),
@@ -337,7 +337,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
 
     public function getRolesAttribute(): ?Collection
     {
-        return $this->roles()->get();
+        return $this->roles()?->get();
     }
 
     public function userRoles(): MorphToMany

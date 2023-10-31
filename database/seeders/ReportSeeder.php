@@ -19,7 +19,7 @@ final class ReportSeeder extends Seeder
     {
         collect(json_decode(\File::get('database/data/BaseReports.json')))
             ->map(function (object $report) {
-                $report->id = Str::ulid();
+                $report->id = $report->id ?? Str::ulid();
                 $report->configuration = json_encode($report->configuration);
 
                 return (array) $report;

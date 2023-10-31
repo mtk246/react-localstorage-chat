@@ -214,7 +214,7 @@ class PatientRepository
                     'userkey' => encrypt(uniqid('', true)),
                     'profile_id' => $profile->id,
                     'type' => UserType::PATIENT,
-                    'billing_comapny_id' => $billingCompany,
+                    'billing_company_id' => $billingCompany,
                 ]);
             }
 
@@ -1003,7 +1003,7 @@ class PatientRepository
                             'addressable_id' => $profile->id,
                             'addressable_type' => Profile::class,
                         ], $address)->id;
-                    
+
                         if ($address['main_address'] ?? false) {
                             $patient->update([
                                 'main_address_id' => $addressId,
@@ -1744,7 +1744,7 @@ class PatientRepository
                     'name_suffix' => $patien->profile->nameSuffix,
                     'contacs' => $patien->profile->contacts->map(function (Contact $query) {
                         $return['email'] = $query->email;
-                        
+
                         if (Gate::allows('is-admin')) {
                             $return['billing_company'] = $query->billingCompany;
                         }

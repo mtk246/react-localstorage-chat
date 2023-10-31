@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('helloworld'),
             'status' => 1,
+            'type' => UserType::BILLING->value,
         ];
     }
 
@@ -95,11 +96,9 @@ class UserFactory extends Factory
 
     private function setAdminRole(User $user, Role $role = null): void
     {
-        $user->roles()->syncWithPivotValues(
-            $role->id ?? Role::factory()->create()->id,
-            ['rollable_type' => User::class],
-            false
-        );
+        $role = $role ?: Role::factory()->create();
+
+        $user->roles()->sync([$role->id => ['rollable_type' => User::class]], false);
     }
 
     private function setDoctorRole(User $user, Role $role = null): void
