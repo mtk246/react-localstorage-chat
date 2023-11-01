@@ -16,7 +16,7 @@ return new class() extends Migration {
                     WHEN CONCAT_WS(' ', COALESCE(profiles.first_name, ''), COALESCE(profiles.last_name, '')) = ' '
                         THEN 'Console'
                     ELSE CONCAT_WS(' ', COALESCE(profiles.first_name, ''), COALESCE(profiles.last_name, ''))
-                END AS user_complete_name,
+                END AS user_compleate_name,
                 (
                     CASE
                         WHEN users.profile_id IS NOT NULL THEN
@@ -41,15 +41,7 @@ return new class() extends Migration {
                             NULL
                     END
                 ) as ssn,
-                (
-                    CASE
-                        WHEN users.type = '2' THEN 'Billing User'
-                        WHEN users.type = '3' THEN 'Patient'
-                        WHEN users.type = '4' THEN 'Health professional'
-                        ELSE
-                            NULL
-                    END
-                ) AS user_type,
+                users.type as user_type,
                 (
                     CASE
                         WHEN users.type = '1' THEN
@@ -96,10 +88,9 @@ return new class() extends Migration {
                     END
                 ) AS user_role,
                 users.email as email,
-                billing_companies.name as billing_company
+                users.billing_company_id as billing_company
             FROM users
             LEFT JOIN profiles ON users.profile_id = profiles.id
-            LEFT JOIN billing_companies ON users.billing_company_id = billing_companies.id
             WHERE users.billing_company_id IS NOT NULL
         ");
     }
