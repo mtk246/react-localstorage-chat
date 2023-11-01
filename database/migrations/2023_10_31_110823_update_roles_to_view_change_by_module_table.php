@@ -90,7 +90,7 @@ return new class() extends Migration {
                 END AS event,
                 audits.created_at AS date_of_event,
                 (
-                    SELECT created_at
+                    SELECT MAX(login.created_at)
                     FROM audits AS login
                     WHERE
                         login.auditable_type = 'App\Models\User'
@@ -98,7 +98,7 @@ return new class() extends Migration {
                         AND (login.old_values)::jsonb::text LIKE '%\"isLogged\": false%'
                         AND (login.new_values)::jsonb::text LIKE '%\"isLogged\": true%'
                         AND login.user_id = audits.user_id
-                    LIMIT 1
+                        AND login.created_at <= audits.created_at
                 ) AS date_of_login,
                 audits.old_values,
                 audits.new_values
