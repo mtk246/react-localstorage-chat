@@ -16,7 +16,7 @@ return new class() extends Migration {
                     WHEN CONCAT_WS(' ', COALESCE(profiles.first_name, ''), COALESCE(profiles.last_name, '')) = ' '
                         THEN 'Console'
                     ELSE CONCAT_WS(' ', COALESCE(profiles.first_name, ''), COALESCE(profiles.last_name, ''))
-                END AS user_compleate_name,
+                END AS user_complete_name,
                 (
                     CASE
                         WHEN users.profile_id IS NOT NULL THEN
