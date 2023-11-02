@@ -43,7 +43,6 @@ return new class() extends Migration {
                 ) as ssn,
                 (
                     CASE
-                        WHEN users.type = '1' THEN 'Super User'
                         WHEN users.type = '2' THEN 'Billing User'
                         WHEN users.type = '3' THEN 'Patient'
                         WHEN users.type = '4' THEN 'Health professional'
