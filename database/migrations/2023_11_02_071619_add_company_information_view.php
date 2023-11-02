@@ -17,6 +17,7 @@ return new class() extends Migration {
                 companies.ein as ein,
                 companies.clia as clia,
                 facilities.name as facility_name,
+<<<<<<< HEAD
                 facility_types.type as facility_type,
                 procedures.code as service_code,
                 revenue.code as revenue_code,
@@ -26,6 +27,12 @@ return new class() extends Migration {
                         ELSE company_services.price
                     END
                 ) as price,
+=======
+                facility_types as facility_type,
+                procedures.code as service_code,
+                revenue.code as revenue_code,
+                company_services.price as price,
+>>>>>>> fa30fe2f (MCC-1809 add view for company information)
                 billing_companies.name as billing_company
             FROM companies
             JOIN billing_company_company ON companies.id = billing_company_company.company_id
