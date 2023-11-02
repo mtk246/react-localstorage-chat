@@ -97,9 +97,10 @@ return new class() extends Migration {
                     END
                 ) AS user_role,
                 users.email as email,
-                users.billing_company_id as billing_company
+                billing_companies.name as billing_company
             FROM users
             LEFT JOIN profiles ON users.profile_id = profiles.id
+            LEFT JOIN billing_companies ON users.billing_company_id = billing_companies.id
             WHERE users.billing_company_id IS NOT NULL
         ");
     }
