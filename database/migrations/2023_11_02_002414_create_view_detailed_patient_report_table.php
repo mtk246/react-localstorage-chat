@@ -11,6 +11,7 @@ return new class extends Migration
         DB::statement("
             CREATE OR REPLACE VIEW view_detailed_patient_report AS
             select
+                billing_companies_ids,
                 billing_companies,
                 companies,
                 medical_no,
@@ -43,6 +44,8 @@ return new class extends Migration
                 (select patient_id , count(cd.id) as claims_processed from claim_demographic cd GROUP BY patient_id) cp on p.id = cp.patient_id
                 left join 
                 (select patient_id , json_agg(concat(c.code,' - ',c.name)) as companies  from company_patient cp inner join companies c on cp.company_id = c.id GROUP BY patient_id) cow on p.id = cow.patient_id
+                left join 
+                (select patient_id , json_agg(bc.id) as billing_companies_ids from company_patient cp inner join billing_companies bc on cp.billing_company_id  = bc.id GROUP BY patient_id) comp3 on p.id = comp3.patient_id
                 left join 
                 (select patient_id , json_agg(concat(bc.abbreviation,' - ',bc.name)) as billing_companies  from company_patient cp inner join billing_companies bc on cp.billing_company_id  = bc.id GROUP BY patient_id) cow3 on p.id = cow3.patient_id
                 left join 
