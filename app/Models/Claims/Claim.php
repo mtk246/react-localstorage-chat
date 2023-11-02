@@ -442,10 +442,24 @@ class Claim extends Model implements Auditable
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
+        $arrayIds = array_column(array_filter($aditionalInformation->getDateInformation(), function ($objeto) {
+            return isset($objeto['id']);
+        }), 'id');
+
+        $this->dateInformations()
+            ->whereNotIn('claim_date_informations.id', $arrayIds)
+            ->get()
+            ->each(function (ClaimDateInformation $dateInfo) {
+                $dateInfo->delete();
+            });
+
         foreach ($aditionalInformation->getDateInformation() as $data) {
             $this->dateInformations()
             ->updateOrCreate(
-                ['claim_id' => $this->id],
+                [
+                    'id' => $data['id'] ?? null,
+                    'claim_id' => $this->id,
+                ],
                 $data
             );
         }
