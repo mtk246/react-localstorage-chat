@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Casts\Claim\FieldCast;
 use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,6 +61,10 @@ final class ClaimDateInformation extends Model implements Auditable
         'qualifier_id',
         'amount',
         'claim_id',
+    ];
+
+    protected $casts = [
+        'field_id' => FieldCast::class,
     ];
 
     protected $with = ['qualifier'];

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Enums\Claim\FieldInformationInstitutional;
-use App\Enums\Claim\FieldInformationProfessional;
 use App\Models\Claims\ClaimDateInformation;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +21,8 @@ final class ClaimDateInformationResource extends JsonResource
     {
         $commonFields = [
             'id' => $this->resource->id,
-            'field_id' => $this->resource->field_id,
+            'field_id' => $this->resource->field_id?->id ?? '',
+            'field' => $this->resource->field_id?->value ?? '',
             'qualifier_id' => $this->resource->qualifier_id,
             'qualifier' => $this->resource->qualifier?->code,
             'from_date' => $this->resource->from_date,
@@ -34,15 +33,8 @@ final class ClaimDateInformationResource extends JsonResource
         $specificFields = match ($this->type) {
             ClaimType::INSTITUTIONAL->value => [
                 'amount' => $this->resource->amount,
-                'field' => ($this->resource->field_id > 0)
-                    ? FieldInformationInstitutional::tryFrom((int) $this->resource->field_id)->getName()
-                    : '',
             ],
-            ClaimType::PROFESSIONAL->value => [
-                'field' => ($this->resource->field_id > 0)
-                    ? FieldInformationProfessional::tryFrom((int) $this->resource->field_id)->getName()
-                    : '',
-            ],
+            ClaimType::PROFESSIONAL->value => [],
             default => throw new \InvalidArgumentException('Invalid format type'),
         };
 
