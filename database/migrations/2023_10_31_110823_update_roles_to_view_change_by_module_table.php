@@ -81,16 +81,25 @@ return new class() extends Migration {
                     ELSE audits.auditable_type
                 END AS module,
                 CASE
-                    WHEN audits.event = 'created' THEN 'Created'
-                    WHEN audits.event = 'updated' THEN 'Updated'
                     WHEN audits.event = 'deleted' THEN 'Deleted'
                     WHEN audits.event = 'restored' THEN 'Restored'
-                    WHEN audits.event = 'roll-back' THEN 'Roll Back'
+                    WHEN audits.event = 'updated' AND EXISTS (
+                        SELECT 1
+                        FROM audits AS prev
+                        WHERE prev.user_id = audits.user_id
+                        AND prev.auditable_type = audits.auditable_type
+                        AND prev.event = 'updated'
+                        AND prev.created_at < audits.created_at
+                        AND (prev.old_values)::jsonb::text = (audits.new_values)::jsonb::text
+                        AND (prev.new_values)::jsonb::text = (audits.old_values)::jsonb::text
+                    ) THEN 'Roll Back'
+                    WHEN audits.event = 'created' THEN 'Created'
+                    WHEN audits.event = 'updated' THEN 'Updated'
                     ELSE audits.event
                 END AS event,
                 audits.created_at AS date_of_event,
                 (
-                    SELECT created_at
+                    SELECT MAX(login.created_at)
                     FROM audits AS login
                     WHERE
                         login.auditable_type = 'App\Models\User'
@@ -98,7 +107,7 @@ return new class() extends Migration {
                         AND (login.old_values)::jsonb::text LIKE '%\"isLogged\": false%'
                         AND (login.new_values)::jsonb::text LIKE '%\"isLogged\": true%'
                         AND login.user_id = audits.user_id
-                    LIMIT 1
+                        AND login.created_at <= audits.created_at
                 ) AS date_of_login,
                 audits.old_values,
                 audits.new_values
