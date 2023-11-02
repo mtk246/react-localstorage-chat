@@ -287,8 +287,8 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-            return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
+        $billed = $this->service->services->reduce(function ($carry, $service) {
+            return $carry + ($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0);
         }, 0);
 
         return number_format($billed, 2);
@@ -296,11 +296,11 @@ class Claim extends Model implements Auditable
 
     public function getAmountPaidAttribute()
     {
-        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+        $paid = $this->service->services->reduce(function ($carry, $service) {
             return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
-        return number_format($billed, 2);
+        return number_format($paid, 2);
     }
 
     public function getPastDueDateAttribute()
