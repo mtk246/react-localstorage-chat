@@ -110,7 +110,7 @@ final class RocketChatService
             'name' => $user->profile->first_name.' '.$user->profile->middle_name,
             'password' => $password,
             'username' => Str::snake($user->usercode, '.'),
-            'joinDefaultChannels' => false,
+            'joinDefaultChannels' => true,
             'verified' => true,
         ]);
     }
