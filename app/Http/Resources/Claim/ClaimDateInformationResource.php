@@ -7,8 +7,10 @@ namespace App\Http\Resources\Claim;
 use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FieldInformationInstitutional;
 use App\Enums\Claim\FieldInformationProfessional;
+use App\Models\Claims\ClaimDateInformation;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @property ClaimDateInformation $resource */
 final class ClaimDateInformationResource extends JsonResource
 {
     public function __construct($resource, protected int $type)
