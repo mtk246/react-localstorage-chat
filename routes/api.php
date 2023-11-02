@@ -563,6 +563,10 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
+    Route::prefix('reports/be-os')->middleware(['auth:api'])->group(function () {
+        Route::get('/detailed-patient-super-user', [\App\Http\Controllers\Reports\PatientReportController::class, 'detailedPatientSuperUser']);
+    });
+
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
     Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
