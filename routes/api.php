@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
@@ -545,6 +546,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/change-status/{id}', [\App\Http\Controllers\ClaimSubStatusController::class, 'changeStatus'])->middleware([
             'auth:api',
         ]);
+    });
+
+    Route::prefix('denial')->middleware([
+        'auth:api',
+        // 'role:superuser|biller|billingmanager',
+    ])->group(function () {
+        Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
+        Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
     });
 
     Route::prefix('tableau')->middleware([
