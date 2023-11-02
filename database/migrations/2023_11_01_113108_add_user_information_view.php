@@ -41,7 +41,16 @@ return new class() extends Migration {
                             NULL
                     END
                 ) as ssn,
-                users.type as user_type,
+                (
+                    CASE
+                        WHEN users.type = '1' THEN 'Super User'
+                        WHEN users.type = '2' THEN 'Billing User'
+                        WHEN users.type = '3' THEN 'Patient'
+                        WHEN users.type = '4' THEN 'Health professional'
+                        ELSE
+                            NULL
+                    END
+                ) AS user_type,
                 (
                     CASE
                         WHEN users.type = '1' THEN
