@@ -66,7 +66,7 @@ final class GetCompany
                 ->when(
                     isset($request->sortBy),
                     function (ScoutBuilder $query) use ($request) {
-                        match($request->sortBy) {
+                        match ($request->sortBy) {
                             'name' => $query->orderBy('name', Pagination::sortDesc()),
                             'code' => $query->orderBy('code', Pagination::sortDesc()),
                             'npi' => $query->orderBy('npi', Pagination::sortDesc()),
