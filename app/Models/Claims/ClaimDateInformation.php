@@ -19,7 +19,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $from_date
  * @property string|null $to_date
  * @property string|null $description
- * @property int|null $field_id
+ * @property \App\Enums\Interfaces\RelatedEnumsInterface|null $field_id
  * @property int|null $qualifier_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

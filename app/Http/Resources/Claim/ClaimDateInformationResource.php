@@ -21,8 +21,8 @@ final class ClaimDateInformationResource extends JsonResource
     {
         $commonFields = [
             'id' => $this->resource->id,
-            'field_id' => $this->resource->field_id?->id ?? '',
-            'field' => $this->resource->field_id?->value ?? '',
+            'field_id' => $this->resource->field_id?->value ?? '',
+            'field' => $this->resource->field_id?->getName() ?? '',
             'qualifier_id' => $this->resource->qualifier_id,
             'qualifier' => $this->resource->qualifier?->code,
             'from_date' => $this->resource->from_date,

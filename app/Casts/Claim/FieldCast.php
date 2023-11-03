@@ -15,6 +15,8 @@ final class FieldCast implements CastsAttributes
      * Cast the given value.
      *
      * @param \Illuminate\Database\Eloquent\Model $model
+     *
+     * @return \App\Enums\Interfaces\RelatedEnumsInterface
      */
     public function get($model, string $key, $value, array $attributes)
     {
@@ -22,16 +24,11 @@ final class FieldCast implements CastsAttributes
             return null;
         }
 
-        $name = match ($model->claim->type) {
-            ClaimType::INSTITUTIONAL => FieldInformationInstitutional::tryFrom((int) $value)->getName(),
-            ClaimType::PROFESSIONAL => FieldInformationProfessional::tryFrom((int) $value)->getName(),
+        return match ($model->claim->type) {
+            ClaimType::INSTITUTIONAL => FieldInformationInstitutional::tryFrom((int) $value),
+            ClaimType::PROFESSIONAL => FieldInformationProfessional::tryFrom((int) $value),
             default => null,
         };
-
-        return (object) [
-            'id' => $value,
-            'value' => $name,
-        ];
     }
 
     /**
