@@ -65,7 +65,14 @@ final class Role extends Model implements Auditable
     use AuditableTrait;
 
     /** @var array */
-    protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'billing_company_id',
+        'level',
+        'type',
+    ];
 
     /** @var array<string, string> */
     protected $casts = [
