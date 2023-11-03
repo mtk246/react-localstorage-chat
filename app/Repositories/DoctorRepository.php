@@ -823,17 +823,11 @@ class DoctorRepository
         );
 
         if ($request->sortBy) {
-            switch($request->sortBy) {
-                case 'name':
-                    $data->orderBy('profile.first_name', Pagination::sortDesc());
-                    break;
-                case 'npi':
-                    $data->orderBy('npi', Pagination::sortDesc());
-                    break;
-                default:
-                    $data->orderBy('created_at', Pagination::sortDesc());
-                    break;
-            }
+            match($request->sortBy) {
+                'name' => $data->orderBy('profile.first_name', Pagination::sortDesc()),
+                'npi' => $data->orderBy('npi', Pagination::sortDesc()),
+                default => $data->orderBy('created_at', Pagination::sortDesc()),
+            };
         } else {
             $data = $data->orderBy('created_at', Pagination::sortDesc());
         }

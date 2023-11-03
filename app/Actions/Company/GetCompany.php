@@ -66,23 +66,13 @@ final class GetCompany
                 ->when(
                     isset($request->sortBy),
                     function (ScoutBuilder $query) use ($request) {
-                        switch ($request->sortBy) {
-                            case 'name':
-                                $query->orderBy('name', Pagination::sortDesc());
-                                break;
-                            case 'code':
-                                $query->orderBy('code', Pagination::sortDesc());
-                                break;
-                            case 'npi':
-                                $query->orderBy('npi', Pagination::sortDesc());
-                                break;
-                            case 'ein':
-                                $query->orderBy('ein', Pagination::sortDesc());
-                                break;
-                            default:
-                                $query->orderBy('id', Pagination::sortDesc());
-                                break;
-                        }
+                        match($request->sortBy) {
+                            'name' => $query->orderBy('name', Pagination::sortDesc()),
+                            'code' => $query->orderBy('code', Pagination::sortDesc()),
+                            'npi' => $query->orderBy('npi', Pagination::sortDesc()),
+                            'ein' => $query->orderBy('ein', Pagination::sortDesc()),
+                            default => $query->orderBy('id', Pagination::sortDesc()),
+                        };
                     },
                     fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
                 )

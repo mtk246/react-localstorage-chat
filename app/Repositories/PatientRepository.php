@@ -836,20 +836,12 @@ class PatientRepository
         );
 
         if ($request->sortBy) {
-            switch($request->sortBy) {
-                case 'name':
-                    $data = $data->orderBy('profile.first_name', Pagination::sortDesc());
-                    break;
-                case 'dob':
-                    $data = $data->orderBy('profile.date_of_birth', Pagination::sortDesc());
-                    break;
-                case 'code':
-                    $data->orderBy('code', Pagination::sortDesc());
-                    break;
-                default:
-                    $data->orderBy('created_at', Pagination::sortDesc());
-                    break;
-            }
+            match($request->sortBy) {
+                'name' => $data->orderBy('profile.first_name', Pagination::sortDesc()),
+                'dob' => $data->orderBy('profile.date_of_birth', Pagination::sortDesc()),
+                'code' => $data->orderBy('code', Pagination::sortDesc()),
+                default => $data->orderBy('created_at', Pagination::sortDesc()),
+            };
         } else {
             $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
         }

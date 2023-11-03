@@ -389,20 +389,13 @@ class FacilityRepository
         );
 
         if ($request->sortBy) {
-            switch($request->sortBy) {
-                case 'name':
-                    $data->orderBy('name', Pagination::sortDesc());
-                    break;
-                case 'code':
-                    $data->orderBy('code', Pagination::sortDesc());
-                    break;
-                case 'npi':
-                    $data->orderBy('npi', Pagination::sortDesc());
-                    break;
-                default:
-                    $data->orderBy('created_at', Pagination::sortDesc());
-                    break;
-            }
+
+            match($request->sortBy) {
+                'name' => $data->orderBy('name', Pagination::sortDesc()),
+                'code' => $data->orderBy('code', Pagination::sortDesc()),
+                'npi' => $data->orderBy('npi', Pagination::sortDesc()),
+                default => $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
+            };
         } else {
             $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
         }
