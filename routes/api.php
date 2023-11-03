@@ -563,11 +563,13 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
-    Route::prefix('reports/be-os')->middleware(['auth:api'])->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
         Route::get('/detailed-patient-super-user', [\App\Http\Controllers\Reports\PatientReportController::class, 'detailedPatientSuperUser']);
         Route::get('/detailed-patient-billing-manager', [\App\Http\Controllers\Reports\PatientReportController::class, 'detailedPatientBillingManager']);
         Route::get('/general-patient', [\App\Http\Controllers\Reports\PatientReportController::class, 'generalPatient']);
         Route::get('/general-patient-billing-manager', [\App\Http\Controllers\Reports\PatientReportController::class, 'generalPatientBillingManager']);
+        Route::get('/facility-report', [\App\Http\Controllers\Reports\FacilityReportController::class, 'allFacility']);
+        Route::get('/facility-report-by-biling-company', [\App\Http\Controllers\Reports\FacilityReportController::class, 'facilityByBillingCompany']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

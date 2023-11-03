@@ -7,13 +7,12 @@ namespace App\Http\Controllers\Reports;
 use App\Http\Controllers\Controller;
 use App\Repositories\PatientReportRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 final class PatientReportController extends Controller
 {
     public function __construct(private PatientReportRepository $patientReportRepository){}
 
-    public function detailedPatientSuperUser()
+    public function detailedPatientSuperUser(): JsonResponse
     {
         try {
             $rs = $this->patientReportRepository->getAllPatient();
@@ -23,7 +22,7 @@ final class PatientReportController extends Controller
         }
     }
 
-    public function detailedPatientBillingManager()
+    public function detailedPatientBillingManager(): JsonResponse
     {
         try {
             $billingCompanyId = \Auth::user()->billing_company_id;
@@ -34,7 +33,7 @@ final class PatientReportController extends Controller
         }
     }
 
-    public function generalPatient()
+    public function generalPatient(): JsonResponse
     {
         try {
             $rs = $this->patientReportRepository->getAllGeneralPatient();
@@ -44,7 +43,7 @@ final class PatientReportController extends Controller
         }
     }
 
-    public function generalPatientBillingManager()
+    public function generalPatientBillingManager(): JsonResponse
     {
         try {
             $billingCompanyId = \Auth::user()->billing_company_id;
