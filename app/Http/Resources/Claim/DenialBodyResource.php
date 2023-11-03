@@ -280,6 +280,8 @@ final class DenialBodyResource extends JsonResource
 
     private function setNote($status, &$records, &$recordSubstatus): void
     {
+        $status->load('claimStatus', 'privateNotes.claimCheckStatus');
+
         foreach ($recordSubstatus as $subNote) {
             array_push(
                 $records,
@@ -294,14 +296,17 @@ final class DenialBodyResource extends JsonResource
                 ]
             );
         }
+
         $recordSubstatus = [];
         $notes = $status->privateNotes()
+            ->with('claimCheckStatus')
             ->orderBy('created_at', 'desc')
-            ->orderBy('id', 'desc')->get() ?? [];
+            ->orderBy('id', 'desc')
+            ->get() ?? [];
+
         foreach ($notes as $note) {
-            $check = ClaimCheckStatus::query()
-                ->where('private_note_id', $note->id)
-                ->first();
+            $check = $note->claimCheckStatus;
+
             array_push(
                 $records,
                 [
@@ -329,6 +334,7 @@ final class DenialBodyResource extends JsonResource
         $policyPrimary = $this->resource
             ->insurancePolicies()
             ->wherePivot('order', 1)
+            ->with(['insurancePlan.insuranceCompany', 'typeResponsibility'])
             ->first();
 
         return [
