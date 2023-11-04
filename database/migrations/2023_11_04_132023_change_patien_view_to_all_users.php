@@ -9,7 +9,7 @@ return new class() extends Migration {
     public function up(): void
     {
         DB::unprepared("
-            CREATE OR REPLACE VIEW patients_information AS
+            CREATE OR REPLACE VIEW view_patients_information AS
             SELECT
                 patients.id,
                 CASE
@@ -40,7 +40,7 @@ return new class() extends Migration {
     public function down(): void
     {
         DB::unprepared("
-            CREATE OR REPLACE VIEW patients_information AS
+            CREATE OR REPLACE VIEW view_patients_information AS
             SELECT
                 patients.id,
                 CASE
