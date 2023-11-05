@@ -93,7 +93,7 @@ final class JSONDictionary extends Dictionary
         return match ($this->claim->type) {
             ClaimType::PROFESSIONAL => [
                 'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
-                'ssn' => $subscriber->ssn,
+                'ssn' => str_replace('-', '', $subscriber->ssn ?? ''),
                 'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
                 // 'organizationName' => '',
                 // 'insuranceTypeCode' => '12',
@@ -127,7 +127,7 @@ final class JSONDictionary extends Dictionary
             ClaimType::INSTITUTIONAL => [
                 'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
                 'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
-                'ssn' => $subscriber->ssn,
+                'ssn' => str_replace('-', '', $subscriber->ssn ?? ''),
                 'firstName' => $subscriber->first_name,
                 'lastName' => $subscriber->last_name,
                 'middleName' => $subscriber->middle_name ?? null,
@@ -171,7 +171,7 @@ final class JSONDictionary extends Dictionary
                 'suffix' => $patient->profile?->nameSuffix?->code,
                 'gender' => strtoupper($patient->profile?->sex ?? 'U'),
                 'dateOfBirth' => str_replace('-', '', $patient->profile?->date_of_birth ?? ''),
-                'ssn' => $patient->profile?->ssn,
+                'ssn' => str_replace('-', '', $patient->profile?->ssn ?? ''),
                 'memberId' => $patient->code,
                 'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
                 'contactInformation' => [
@@ -198,7 +198,7 @@ final class JSONDictionary extends Dictionary
                 'suffix' => $patient->profile?->nameSuffix?->code,
                 'gender' => strtoupper($patient->profile?->sex ?? 'U'),
                 'dateOfBirth' => str_replace('-', '', $patient->profile?->date_of_birth ?? ''),
-                'ssn' => $patient->profile?->ssn,
+                'ssn' => str_replace('-', '', $patient->profile?->ssn ?? ''),
                 'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
                 'address' => [
                     'address1' => $patientAddress?->address,
@@ -268,10 +268,11 @@ final class JSONDictionary extends Dictionary
                 } elseif (3 == $dateInfo->field_id) {
                     $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date;
                     $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
-                } elseif (4 == $dateInfo->field_id) {
-                    $claimDateInfo['admissionDate'] = $dateInfo->from_date;
-                    $claimDateInfo['dischargeDate'] = $dateInfo->to_date;
                 }
+            }
+            if (4 == $dateInfo->field_id) {
+                $claimDateInfo['admissionDate'] = str_replace('-', '', $dateInfo?->from_date ?? '');
+                $claimDateInfo['dischargeDate'] = str_replace('-', '', $dateInfo->to_date ?? '');
             }
         }
         $serviceLines = [];
@@ -1939,7 +1940,7 @@ final class JSONDictionary extends Dictionary
         return [
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-            'ssn' => $billingProvider?->ssn,
+            'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
             'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
             // 'commercialNumber' => '',
             // 'locationNumber' => '',
