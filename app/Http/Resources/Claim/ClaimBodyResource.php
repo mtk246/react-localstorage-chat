@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Enums\Claim\ClaimType;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -343,8 +344,14 @@ final class ClaimBodyResource extends JsonResource
 
     private function getBillingProvider(): ?string
     {
-        $billing = $this->resource->demographicInformation?->healthProfessionals()
-            ->wherePivot('field_id', 5)
+        $billing = $this->resource->demographicInformation->healthProfessionals()
+            ->when(ClaimType::PROFESSIONAL == $this->resource->type, function ($query) {
+                $query->where('field_id', 5);
+            })
+            ->when(ClaimType::INSTITUTIONAL == $this->resource->type, function ($query) {
+                $query->where('field_id', 76)
+                    ->orWhere('field_id', 1);
+            })
             ->first();
 
         return !empty($billing)
