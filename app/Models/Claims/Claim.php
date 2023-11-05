@@ -388,7 +388,7 @@ class Claim extends Model implements Auditable
                 $claimService->services()->updateOrCreate(
                     [
                         'id' => $service['id'] ?? null,
-                        'claim_service_id' => $claimService->id
+                        'claim_service_id' => $claimService->id,
                     ],
                     $service
                 );
