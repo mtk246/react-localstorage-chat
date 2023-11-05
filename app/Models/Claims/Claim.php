@@ -367,14 +367,32 @@ class Claim extends Model implements Auditable
             );
 
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
-        $claimService->services()->upsert($services
-            ->getService()
-            ->map(function (array $service) use ($claimService) {
-                $service['claim_service_id'] = $claimService->id;
 
-                return $service;
+        $arrayIds = $services->getService()
+            ->filter(function ($objeto) {
+                return isset($objeto['id']);
             })
-            ->toArray(), ['id']);
+            ->pluck('id')
+            ->toArray();
+
+        $claimService->services()
+            ->whereNotIn('services.id', $arrayIds)
+            ->get()
+            ->each(function (Services $service) {
+                $service->delete();
+            });
+
+        $services
+            ->getService()
+            ->each(function (array $service) use ($claimService) {
+                $claimService->services()->updateOrCreate(
+                    [
+                        'id' => $service['id'] ?? null,
+                        'claim_service_id' => $claimService->id
+                    ],
+                    $service
+                );
+            });
     }
 
     public function setInsurancePolicies(Collection $insurancePolicies): void
