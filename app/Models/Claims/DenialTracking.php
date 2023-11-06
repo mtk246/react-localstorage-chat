@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
-use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Claims\DenialTracking
+ * DenialTracking model.
  *
  * @property int $id
  * @property int $interface_type
@@ -29,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $claim_id
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking query()
@@ -50,6 +50,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereTrackingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereTrackingNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 final class DenialTracking extends Model
@@ -76,11 +77,21 @@ final class DenialTracking extends Model
         'tracking_note',
     ];
 
+    /**
+     * Get the related claim for this denial tracking entry.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function claim()
     {
         return $this->belongsTo(Claim::class);
     }
 
+    /**
+     * Create a new denial tracking entry.
+     *
+     * @return static|null
+     */
     public static function createDenialTracking(array $data)
     {
         try {
@@ -92,6 +103,11 @@ final class DenialTracking extends Model
         }
     }
 
+    /**
+     * Update a denial tracking entry by ID.
+     *
+     * @return static|null
+     */
     public static function updateDenialTracking(array $data)
     {
         $denialId = $data['denial_id'];

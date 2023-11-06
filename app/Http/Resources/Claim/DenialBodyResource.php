@@ -60,7 +60,7 @@ final class DenialBodyResource extends JsonResource
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'denial_trackings' => $this->resource->getDenialTrackings(),
-            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap()
+            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
 
@@ -177,8 +177,8 @@ final class DenialBodyResource extends JsonResource
                 'call' => 0,
                 'website' => 1,
                 'email' => 2,
-                'other' => 3
-            ]
+                'other' => 3,
+            ],
         ];
 
         return $records;

@@ -10,7 +10,6 @@ use App\Http\Casts\Claims\AditionalInformationWrapper;
 use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
-use App\Models\Claims\DenialTracking;
 use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\User;
@@ -28,7 +27,7 @@ use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
- * App\Models\Claims\Claim
+ * App\Models\Claims\Claim.
  *
  * @property int $id
  * @property string|null $code

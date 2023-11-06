@@ -34,7 +34,7 @@ final class ClaimBodyResource extends JsonResource
             'claim_service' => new ClaimServiceResource(
                 $this->resource->service,
                 $this->resource->type->value,
-                $this->resource->demographicInformation->company_id ?? null,
+                $this->resource->demographicInformation->company_id ?? null
             ),
             'additional_information' => new AdditionalInformationResource(
                 $this->resource,
@@ -81,7 +81,7 @@ final class ClaimBodyResource extends JsonResource
                     'claim_id' => $denialTracking->claim_id,
                 ];
             }),
-            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap()
+            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
 
@@ -198,8 +198,8 @@ final class ClaimBodyResource extends JsonResource
                 'call' => 0,
                 'website' => 1,
                 'email' => 2,
-                'other' => 3
-            ]
+                'other' => 3,
+            ],
         ];
 
         return $records;
@@ -215,7 +215,7 @@ final class ClaimBodyResource extends JsonResource
         foreach ($history as $status) {
             match ($status->claim_status_type) {
                 ClaimSubStatus::class => $this->setSubstatus($status, $recordSubstatus),
-                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
+                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus)
             };
         }
 
