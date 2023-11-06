@@ -117,10 +117,12 @@ class ClaimController extends Controller
     {
         /**@todo Consultar clasificacion de procedures by revenue codes */
         $search = $request->search ?? '';
-        $company_id = $request->company_id ?? null;
+        $companyId = str_contains($request->company_id ?? '', '-')
+            ? explode('-', $request->company_id ?? '')[0]
+            : $request->company_id ?? null;
 
         return response()->json(
-            $this->claimRepository->getListRev($company_id, $search)
+            $this->claimRepository->getListRev($companyId, $search)
         );
     }
 
