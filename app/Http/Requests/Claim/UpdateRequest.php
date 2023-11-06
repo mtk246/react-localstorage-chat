@@ -66,7 +66,6 @@ final class UpdateRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
@@ -205,7 +204,6 @@ final class UpdateRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),

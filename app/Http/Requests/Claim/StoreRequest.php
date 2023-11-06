@@ -66,7 +66,6 @@ final class StoreRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
                 'nullable',
             ],
             'demographic_information.facility_id' => [
@@ -216,7 +215,6 @@ final class StoreRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
                 'nullable',
             ],
             'demographic_information.facility_id' => [
