@@ -26,7 +26,6 @@ return new class() extends Migration {
                         ELSE company_services.price
                     END
                 ) as price,
-                company_services.price as price,
                 billing_companies.name as billing_company
             FROM companies
             JOIN billing_company_company ON companies.id = billing_company_company.company_id
