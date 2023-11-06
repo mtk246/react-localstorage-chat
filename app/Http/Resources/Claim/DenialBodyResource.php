@@ -59,6 +59,8 @@ final class DenialBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'denial_trackings' => $this->resource->getDenialTrackings(),
+            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap()
         ];
     }
 
@@ -166,6 +168,20 @@ final class DenialBodyResource extends JsonResource
         }
 
         return array_merge($newStatuses, $records);
+    }
+
+    private function getDenialTrackingsDetailsMap(): array
+    {
+        $records = [
+            'interface_type' => [
+                'call' => 0,
+                'website' => 1,
+                'email' => 2,
+                'other' => 3
+            ]
+        ];
+
+        return $records;
     }
 
     private function getStatusHistory(): array

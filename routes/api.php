@@ -554,6 +554,8 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function () {
         Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
         Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
+        Route::post('/', [DenialController::class, 'createDenialTracking']);
+        Route::put('/', [DenialController::class, 'updateDenialTracking']);
     });
 
     Route::prefix('tableau')->middleware([

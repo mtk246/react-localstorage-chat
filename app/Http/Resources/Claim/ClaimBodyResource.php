@@ -59,6 +59,29 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'denial_trackings' => $this->resource->denialTrackings->map(function ($denialTracking) {
+                return [
+                    'denial_tracking_id' => $denialTracking->id,
+                    'interface_type' => $denialTracking->interface_type,
+                    'is_reprocess_claim' => $denialTracking->is_reprocess_claim,
+                    'is_contact_to_patient' => $denialTracking->is_contact_to_patient,
+                    'contact_through' => $denialTracking->contact_through,
+                    'rep_name' => $denialTracking->rep_name,
+                    'ref_number' => $denialTracking->ref_number,
+                    'status_claim' => $denialTracking->status_claim,
+                    'sub_status_claim' => $denialTracking->sub_status_claim,
+                    'tracking_date' => $denialTracking->tracking_date,
+                    'past_due_date' => $denialTracking->past_due_date,
+                    'follow_up' => $denialTracking->follow_up,
+                    'department_responsible' => $denialTracking->department_responsible,
+                    'policy_responsible' => $denialTracking->policy_responsible,
+                    'tracking_note' => $denialTracking->tracking_note,
+                    'created_at' => $denialTracking->created_at,
+                    'updated_at' => $denialTracking->updated_at,
+                    'claim_id' => $denialTracking->claim_id,
+                ];
+            }),
+            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap()
         ];
     }
 
@@ -166,6 +189,20 @@ final class ClaimBodyResource extends JsonResource
         }
 
         return array_merge($newStatuses, $records);
+    }
+
+    private function getDenialTrackingsDetailsMap(): array
+    {
+        $records = [
+            'interface_type' => [
+                'call' => 0,
+                'website' => 1,
+                'email' => 2,
+                'other' => 3
+            ]
+        ];
+
+        return $records;
     }
 
     private function getStatusHistory(): array
