@@ -22,7 +22,9 @@ final class DemographicInformationResource extends JsonResource
         $commonFields = [
             'validate' => $this->resource->validate,
             'automatic_eligibility' => $this->resource->automatic_eligibility,
-            'company_id' => $this->resource->company_id,
+            'company_id' => isset($this->resource->split_company_type)
+                ? $this->resource->company_id.'-'.$this->resource->split_company_type->value
+                : $this->resource->company_id,
             'bill_classification' => $this->resource->bill_classification,
             'company' => $this->resource->company->name ?? '',
             'facility_id' => $this->resource->facility_id,
