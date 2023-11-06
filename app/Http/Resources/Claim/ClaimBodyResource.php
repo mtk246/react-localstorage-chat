@@ -303,9 +303,16 @@ final class ClaimBodyResource extends JsonResource
             $check = ClaimCheckStatus::query()
                 ->where('private_note_id', $note->id)
                 ->first();
-            array_push(
-                $records,
-                [
+            $claimResponse = json_decode($this->claimTransmissionResponses()
+                ->whereDate('created_at', '>=', $status->created_at)
+                ->orderBy('created_at', 'asc')
+                ->first()?->response_details ?? '')?->response;
+            $moreinfo = isset($claimResponse->status) && ('SUCCESS' !== $claimResponse->status)
+                ? $claimResponse?->errors ?? $claimResponse
+                : $claimResponse?->errors ?? '';
+
+            if ('Rejected' === $status->claimStatus->status) {
+                $fields = [
                     'note' => $note->note,
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
@@ -320,7 +327,40 @@ final class ClaimBodyResource extends JsonResource
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
-                ]
+                    'more_information' => is_array($moreinfo)
+                        ? array_map(function ($info) {
+                            $index = strpos($info->description ?? '', "\n");
+                            $shortDescription = ($index > 0) ? substr($info->description ?? '', 0, $index) : $info->description ?? '';
+
+                            return [
+                                'field' => $info->field ?? '',
+                                'short_description' => $shortDescription ?? '',
+                                'description' => $info->description ?? '',
+                            ];
+                        }, $moreinfo)
+                        : $moreinfo,
+                ];
+            } else {
+                $fields = [
+                    'note' => $note->note,
+                    'created_at' => $note->created_at,
+                    'last_modified' => $note->last_modified,
+                    'check_status' => isset($check) ? [
+                        'response_details' => $check->response_details ?? '',
+                        'interface_type' => $check->interface_type ?? '',
+                        'interface' => $check->interface ?? '',
+                        'consultation_date' => $check->consultation_date ?? '',
+                        'resolution_time' => $check->resolution_time ?? '',
+                        'past_due_date' => $check->past_due_date ?? '',
+                    ] : null,
+                    'status' => $status->claimStatus->status ?? '',
+                    'status_background_color' => $status->claimStatus->background_color ?? '',
+                    'status_font_color' => $status->claimStatus->font_color ?? '',
+                ];
+            }
+            array_push(
+                $records,
+                $fields
             );
         }
     }
