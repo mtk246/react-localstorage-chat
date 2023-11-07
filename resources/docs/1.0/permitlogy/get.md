@@ -16,7 +16,7 @@
 | : ||   :-                 |  :                      |               |                    |  
 |1|GET|`Get list roles`|`/roles`|yes|Get all roles for the currect billing company|
 |2|GET|`Get single role`|`/roles/{role_id}`|yes|Get all permission for current role|
-|3|GET|`Get list permission`|`/roles/permissions`|yes|Get all permission for current role|
+|3|GET|`Get list permission`|`/permissions`|yes|Get all permission for current role|
 |4|GET|`Get user permission`|`/user/{user_id}/permissions`|yes|Get all permission for user|
 |5|GET|`Get roles types`|`/roles/types`|yes|Get roles types|
 

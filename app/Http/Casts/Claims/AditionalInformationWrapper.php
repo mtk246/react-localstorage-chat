@@ -33,4 +33,9 @@ final class AditionalInformationWrapper extends CastsRequest
     {
         return $this->getArray('patient_information');
     }
+
+    public function getId(): ?int
+    {
+        return $this->get('id');
+    }
 }
