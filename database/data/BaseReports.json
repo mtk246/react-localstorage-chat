@@ -42,5 +42,49 @@
         "range": "30",
         "configuration": [],
         "favorite": true
+    },
+    {
+        "id": "01HENMN75ETTNDRVZ9YNC3B9NK",
+        "name": "Company Records",
+        "description": "Use this report to visualize relevant information about the companies registered in the system.",
+        "type": 1,
+        "url": "https://prod-useast-a.online.tableau.com/t/begento/views/CompanyRecords/CompanyRecords",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": true
+    },
+    {
+        "id": "01HENMNVHTE0BCCN9KGDR67V3Q",
+        "name": "Health Professional Records",
+        "description": "Use this report to visualize relevant information about the health professionals registered in the system.",
+        "type": 1,
+        "url": "https://prod-useast-a.online.tableau.com/t/begento/views/HealthProfessionalRecords/HealthProfessionalRecords",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": true
+    },
+    {
+        "id": "01HENMNWJ61VB8AP471CWT7SZ6",
+        "name": "User Records",
+        "description": "Use this report to visualize relevant information about the users registered in the system.",
+        "type": 1,
+        "url": "https://prod-useast-a.online.tableau.com/t/begento/views/UserRecords/UserRecords",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": true
+    },
+    {
+        "id": "01HENMNXBGA26F78BG4MS4PXE5",
+        "name": "Patient Records",
+        "description": "Use this report to visualize relevant information about the patients registered in the system.",
+        "type": 1,
+        "url": "https://prod-useast-a.online.tableau.com/t/begento/views/PatientRecords/PatientRecords",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": true
     }
 ]
