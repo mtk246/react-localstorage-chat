@@ -458,4 +458,20 @@ class ClaimController extends Controller
             new EnumResource(collect(DepartmentResponsibility::cases()), TypeResource::class),
         );
     }
+
+    public function getListInsurancePolicies(Claim $claim): JsonResponse
+    {
+        return response()->json(
+            $claim->insurancePolicies()
+            ?->get()
+            ?->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'policy_number' => $item->policy_number,
+                    'type_responsibility' => $item->typeresponsibility->code,
+                ];
+            })
+            ?->toArray() ?? [],
+        );
+    }
 }

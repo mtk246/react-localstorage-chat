@@ -485,6 +485,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::get('/get-list-code-values', [\App\Http\Controllers\ClaimController::class, 'getListCodeValues']);
         Route::get('/get-list-department-responsibilities', [\App\Http\Controllers\ClaimController::class, 'getListDepartmentresponsibilities']);
+        Route::get('/get-list-insurance-policies/{claim}', [\App\Http\Controllers\ClaimController::class, 'getListInsurancePolicies']);
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);
