@@ -74,7 +74,7 @@ enum ClassificationType: int implements TypeInterface
     #[DescriptionAttribute('All Records')]
     #[BackgroundColorAttribute('#E6E6E6')]
     #[TextColorAttribute('#808080')]
-    #[IconAttribute('ico-records-reports')]
+    #[IconAttribute('ico-records')]
     #[PublicAttribute(true)]
     case RECORDS_REPORTS = 6;
 
