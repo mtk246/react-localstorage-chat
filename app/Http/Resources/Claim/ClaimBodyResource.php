@@ -231,10 +231,12 @@ final class ClaimBodyResource extends JsonResource
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
                         'department_responsibility_id' => $check->department_responsibility_id ?? '',
-                        'department_responsibility' => [
-                            'id' => $check->department_responsibility_id ?? '',
-                            'name' => $check->department_responsibility_id->getName() ?? '',
-                        ],
+                        'department_responsibility' => isset($check->department_responsibility_id)
+                            ? [
+                                'id' => $check->department_responsibility_id ?? '',
+                                'name' => $check->department_responsibility_id->getName() ?? '',
+                            ]
+                            : null,
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
@@ -339,10 +341,12 @@ final class ClaimBodyResource extends JsonResource
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
                         'department_responsibility_id' => $check->department_responsibility_id ?? '',
-                        'department_responsibility' => [
-                            'id' => $check->department_responsibility_id ?? '',
-                            'name' => $check->department_responsibility_id->getName() ?? '',
-                        ],
+                        'department_responsibility' => isset($check->department_responsibility_id)
+                            ? [
+                                'id' => $check->department_responsibility_id ?? '',
+                                'name' => $check->department_responsibility_id->getName() ?? '',
+                            ]
+                            : null,
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
@@ -382,10 +386,12 @@ final class ClaimBodyResource extends JsonResource
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
                         'department_responsibility_id' => $check->department_responsibility_id ?? '',
-                        'department_responsibility' => [
-                            'id' => $check->department_responsibility_id ?? '',
-                            'name' => $check->department_responsibility_id->getName() ?? '',
-                        ],
+                        'department_responsibility' => isset($check->department_responsibility_id)
+                            ? [
+                                'id' => $check->department_responsibility_id ?? '',
+                                'name' => $check->department_responsibility_id->getName() ?? '',
+                            ]
+                            : null,
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
