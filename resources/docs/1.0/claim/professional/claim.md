@@ -12,6 +12,7 @@
 - [Get list claim field information](#get-list-claim-field-informations)
 - [Get list qualifier by field](#get-list-qualifier)
 - [Get list clam services](#get-list-claim-services)
+- [Get list clam department responsibility](#get-list-claim-department-responsibility)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
@@ -42,6 +43,7 @@
 | 7  |GET     | `Get list claim field information`  | `/claim/get-list-claim-field-informations`     | yes            | Get list claim field informations |
 | 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
 | 9  |GET     | `Get list claim services`  | `/claim/get-list-claim-services`     | yes            | Get list claim services |
+| 10  |GET     | `Get list claim department responsibility`  | `/claim/get-list-department-responsibilities`     | yes            | Get list claim department responsibility |
 | 10  |GET     | `Get all claims server` | `/claim/get-all-server`     | yes            | Get all claims from server |
 | 11  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 12  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
@@ -774,6 +776,41 @@
 }
 ```
 
+#
+<a name="get-list-claim-department-responsibility"></a>
+## Get list claim department responsibilities
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Department responsibility found
+
+#
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Billing"
+  },
+  {
+    "id": 2,
+    "name": "Payment Posting"
+  },
+  {
+    "id": 3,
+    "name": "Collector"
+  }
+]
+```
 #
 
 <a name="get-list-status-claim"></a>
