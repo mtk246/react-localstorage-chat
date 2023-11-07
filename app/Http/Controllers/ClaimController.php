@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\Claim\ChangeStatusAction;
 use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
+use App\Actions\Claim\CreateCheckStatusAction;
 use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
 use App\Actions\Claim\GetCheckStatusAction;
@@ -19,6 +20,7 @@ use App\Actions\Claim\GetPatientStatusesAction;
 use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\UpdateClaimAction;
 use App\Enums\Claim\CodeValueFields;
+use App\Enums\DepartmentResponsibility;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
 use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
@@ -29,6 +31,7 @@ use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\Fields\CodeValueResource;
 use App\Http\Resources\Enums\EnumResource;
+use App\Http\Resources\Enums\TypeResource;
 use App\Models\BillClassification;
 use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
@@ -415,9 +418,13 @@ class ClaimController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function addCheckStatus(ClaimCheckStatusRequest $request, int $id): JsonResponse
+    public function addCheckStatus(
+        ClaimCheckStatusRequest $request,
+        CreateCheckStatusAction $create,
+        Claim $claim
+    ): JsonResponse
     {
-        $rs = $this->claimRepository->addCheckStatus($request->validated(), $id);
+        $rs = $create->invoke($claim, $request->casted());
 
         return $rs ? response()->json($rs) : response()->json(__('Error, check status claim'), 400);
     }
@@ -442,6 +449,13 @@ class ClaimController extends Controller
     {
         return response()->json(
             new EnumResource(collect(CodeValueFields::cases()), CodeValueResource::class),
+        );
+    }
+
+    public function getListDepartmentResponsibilities(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(DepartmentResponsibility::cases()), TypeResource::class),
         );
     }
 }
