@@ -11,7 +11,7 @@ return new class() extends Migration {
     {
         Schema::table('claim_check_statuses', function (Blueprint $table) {
             $table->date('follow_up_date')->nullable();
-            $table->unsignedSmallInteger('department_responsibility')->nullable();
+            $table->unsignedSmallInteger('department_responsibility_id')->nullable();
             $table->foreignId('insurance_policy_id')
                 ->nullable()
                 ->constrained()
@@ -24,7 +24,7 @@ return new class() extends Migration {
     {
         Schema::table('claim_check_statuses', function (Blueprint $table) {
             $table->dropForeign(['insurance_policy_id']);
-            $table->dropColumn(['follow_up_date', 'department_responsibility', 'insurance_policy_id']);
+            $table->dropColumn(['follow_up_date', 'department_responsibility_id', 'insurance_policy_id']);
         });
     }
 };

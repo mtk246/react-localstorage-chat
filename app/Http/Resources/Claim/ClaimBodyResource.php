@@ -230,7 +230,11 @@ final class ClaimBodyResource extends JsonResource
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
-                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'department_responsibility_id' => $check->department_responsibility_id ?? '',
+                        'department_responsibility' => [
+                            'id' => $check->department_responsibility_id ?? '',
+                            'name' => $check->department_responsibility_id->getName() ?? '',
+                        ],
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
@@ -238,7 +242,7 @@ final class ClaimBodyResource extends JsonResource
                                 'policy_number' => $check->insurancePolicy->policy_number ?? '',
                                 'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
                             ]
-                            : null
+                            : null,
                     ] : null,
                 ]
             );
@@ -334,7 +338,11 @@ final class ClaimBodyResource extends JsonResource
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
-                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'department_responsibility_id' => $check->department_responsibility_id ?? '',
+                        'department_responsibility' => [
+                            'id' => $check->department_responsibility_id ?? '',
+                            'name' => $check->department_responsibility_id->getName() ?? '',
+                        ],
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
@@ -342,7 +350,7 @@ final class ClaimBodyResource extends JsonResource
                                 'policy_number' => $check->insurancePolicy->policy_number ?? '',
                                 'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
                             ]
-                            : null
+                            : null,
                     ] : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
@@ -373,7 +381,11 @@ final class ClaimBodyResource extends JsonResource
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
                         'follow_up_date' => $check->follow_up_date ?? '',
-                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'department_responsibility_id' => $check->department_responsibility_id ?? '',
+                        'department_responsibility' => [
+                            'id' => $check->department_responsibility_id ?? '',
+                            'name' => $check->department_responsibility_id->getName() ?? '',
+                        ],
                         'insurance_policy_id' => $check->insurance_policy_id ?? '',
                         'insurance_policy' => isset($check->insurancePolicy)
                             ? [
@@ -381,7 +393,7 @@ final class ClaimBodyResource extends JsonResource
                                 'policy_number' => $check->insurancePolicy->policy_number ?? '',
                                 'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
                             ]
-                            : null
+                            : null,
                     ] : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',

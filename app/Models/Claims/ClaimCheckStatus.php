@@ -27,10 +27,11 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $follow_up_date
- * @property int|null $department_responsibility
- * @property int $insurance_policy_id
+ * @property DepartmentResponsibility|null $department_responsibility_id
+ * @property int|null $insurance_policy_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property InsurancePolicy|null $insurancePolicy
  * @property PrivateNote $privateNote
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus newModelQuery()
@@ -38,7 +39,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus query()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereConsultationDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereDepartmentResponsibility($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereDepartmentResponsibilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereFollowUpDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInsurancePolicyId($value)
@@ -65,13 +66,13 @@ final class ClaimCheckStatus extends Model implements Auditable
         'resolution_time',
         'past_due_date',
         'follow_up_date',
-        'department_responsibility',
+        'department_responsibility_id',
         'insurance_policy_id',
         'private_note_id',
     ];
 
     protected $casts = [
-        'department_responsibility' => DepartmentResponsibility::class,
+        'department_responsibility_id' => DepartmentResponsibility::class,
     ];
 
     /**

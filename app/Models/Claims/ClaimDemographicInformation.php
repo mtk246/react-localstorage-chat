@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $bill_classification
- * @property int|null $split_company_type
+ * @property SplitCompanyClaimType|null $split_company_type
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count

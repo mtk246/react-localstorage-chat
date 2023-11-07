@@ -1713,6 +1713,9 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
     "resolution_time": "2022-09-16", /** Optional */
     "past_due_date": "2022-09-16", /** Optional */
     "private_note": "Note private", /** Optional */
+    "follow_up_date": "2022-09-16", /** Required */
+    "department_responsibility_id": 1, /** Optional */
+    "insurance_policy_id": 1, /** Required */
 }
 ```
 

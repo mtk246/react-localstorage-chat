@@ -26,7 +26,7 @@ final class ClaimCheckStatusRequest extends FormRequest
             'past_due_date' => ['nullable', 'date'],
             'private_note' => ['required', 'string'],
             'follow_up_date' => ['required', 'date'],
-            'department_responsibility' => ['nullable', 'integer'],
+            'department_responsibility_id' => ['nullable', 'integer'],
             'insurance_policy_id' => ['required', 'integer'],
         ];
     }

@@ -18,7 +18,7 @@ final class CheckStatusRequestWrapper extends CastsRequest
             'resolution_time' => $this->get('resolution_time'),
             'past_due_date' => $this->get('past_due_date'),
             'follow_up_date' => $this->get('follow_up_date'),
-            'department_responsibility' => $this->get('department_responsibility'),
+            'department_responsibility_id' => $this->get('department_responsibility_id'),
             'insurance_policy_id' => $this->get('insurance_policy_id'),
         ];
     }
