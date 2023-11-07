@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Claims;
 
 use App\Enums\DepartmentResponsibility;
+use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -79,5 +80,10 @@ final class ClaimCheckStatus extends Model implements Auditable
     public function privateNote(): BelongsTo
     {
         return $this->belongsTo(PrivateNote::class);
+    }
+
+    public function insurancePolicy(): BelongsTo
+    {
+        return $this->belongsTo(InsurancePolicy::class);
     }
 }

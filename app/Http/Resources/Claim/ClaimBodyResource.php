@@ -229,6 +229,16 @@ final class ClaimBodyResource extends JsonResource
                         'consultation_date' => $check->consultation_date ?? '',
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
+                        'follow_up_date' => $check->follow_up_date ?? '',
+                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'insurance_policy_id' => $check->insurance_policy_id ?? '',
+                        'insurance_policy' => isset($check->insurancePolicy)
+                            ? [
+                                'id' => $check->insurance_policy_id,
+                                'policy_number' => $check->insurancePolicy->policy_number ?? '',
+                                'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
+                            ]
+                            : null
                     ] : null,
                 ]
             );
@@ -323,6 +333,16 @@ final class ClaimBodyResource extends JsonResource
                         'consultation_date' => $check->consultation_date ?? '',
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
+                        'follow_up_date' => $check->follow_up_date ?? '',
+                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'insurance_policy_id' => $check->insurance_policy_id ?? '',
+                        'insurance_policy' => isset($check->insurancePolicy)
+                            ? [
+                                'id' => $check->insurance_policy_id,
+                                'policy_number' => $check->insurancePolicy->policy_number ?? '',
+                                'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
+                            ]
+                            : null
                     ] : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
@@ -352,6 +372,16 @@ final class ClaimBodyResource extends JsonResource
                         'consultation_date' => $check->consultation_date ?? '',
                         'resolution_time' => $check->resolution_time ?? '',
                         'past_due_date' => $check->past_due_date ?? '',
+                        'follow_up_date' => $check->follow_up_date ?? '',
+                        'department_responsibility' => $check->department_responsibility ?? '',
+                        'insurance_policy_id' => $check->insurance_policy_id ?? '',
+                        'insurance_policy' => isset($check->insurancePolicy)
+                            ? [
+                                'id' => $check->insurance_policy_id,
+                                'policy_number' => $check->insurancePolicy->policy_number ?? '',
+                                'type_responsibility' => $check->insurancePolicy->typeResponsibility->code ?? '',
+                            ]
+                            : null
                     ] : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
