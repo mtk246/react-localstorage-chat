@@ -210,3 +210,10 @@ if (!function_exists('array_filter_recursive')) {
         });
     }
 }
+
+if (!function_exists('upperCaseColumns')) {
+    function upperCaseColumns($string): string
+    {
+        return ucwords(str_replace('_', ' ', $string));
+    }
+}

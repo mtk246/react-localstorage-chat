@@ -6,6 +6,28 @@ use App\Models\Reports\ViewDetailedPatientReport;
 
 final class PatientReportRepository
 {
+    public function getAllNamesClounms() {
+        $columns = \DB::select("
+            SELECT attname AS name, format_type(atttypid, atttypmod) AS type FROM pg_attribute WHERE  attrelid = 'public.view_detailed_patient_report'::regclass
+        ");
+        $response = [];
+
+        foreach ($columns as $column) {
+            if ($column->name != 'billing_companies_ids') {
+                array_push($response, [
+                    "name" => $column->name,
+                    "field" => $column->name,
+                    "align" => "left",
+                    "sortable" => true,
+                    "label" => upperCaseColumns($column->name),
+                    "type" => $column->type
+                ]);
+            }
+        }
+
+        return $response;
+    }
+
     public function getAllPatient(): array
     {
         return \DB::transaction(
