@@ -13,16 +13,17 @@ use Illuminate\Http\Request;
 final class HomeController extends Controller
 {
     public function __construct(
-        private PatientReportRepository $patientReportRepository, 
+        private PatientReportRepository $patientReportRepository,
         private FacilityReportRepository $facilityReportRepository
-    )
-    { }
+    ) {
+    }
 
     public function existingReports(): JsonResponse
     {
         try {
             $rs = [
                 'detailed patient' => $this->patientReportRepository->getAllNamesClounms(),
+                'general patient' => $this->patientReportRepository->getAllNamesClounms(),
                 'facility' => $this->facilityReportRepository->getAllNamesClounms(),
             ];
 
@@ -31,6 +32,27 @@ final class HomeController extends Controller
             return response()->json(['success' => true, "message" => "Columns list successfully.", 'data' => $rs]);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), 500);
+        }
+    }
+
+    public function report(Request $request)
+    {
+        switch ($request->module) {
+            case 'detailed patient':
+                return $this->patientReportRepository->getAllPatient();
+                break;
+
+            case 'general patient':
+                return $this->patientReportRepository->getAllGeneralPatient();
+                break;
+
+            case 'facility':
+                return $this->facilityReportRepository->getAllFacility();
+                break;
+
+            default:
+                return response()->json(__('Module not available'), 400);
+                break;
         }
     }
 }

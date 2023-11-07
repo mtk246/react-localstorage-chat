@@ -12,4 +12,59 @@ final class ViewDetailedPatientReport extends Model
 {
     use HasFactory;
     protected $table = 'view_detailed_patient_report';
+
+    public function scopeAllGeneralPatient($query) {
+        return $query->select([
+                'billing_companies',
+                'companies',
+                'medical_no',
+                'system_code',
+                'patiente_name',
+                'date_of_birth',
+                'sex',
+                'claims_processed',
+            ])->paginate()->toArray();
+    }
+
+    public function scopeAllPatientBillingManager($query)
+    {
+        return $query->select([
+            'billing_companies_ids',
+            'companies',
+            'medical_no',
+            'claims_processed',
+            'system_code',
+            'patiente_name',
+            'date_of_birth',
+            'sex',
+            'ssn',
+            'driver_license',
+            'language',
+            'name',
+            'phone',
+            'cell_phone',
+            'fax',
+            'email',
+            'type_address',
+            'address',
+            'apt_suite',
+            'zip',
+            'city',
+            'state',
+            'country'
+        ])->paginate()->toArray();
+    }
+
+    public function scopeAllGeneralPatientBillingManager($query)
+    {
+        return $query->select([
+            'companies',
+            'medical_no',
+            'system_code',
+            'patiente_name',
+            'date_of_birth',
+            'sex',
+            'claims_processed',
+        ])->paginate()->toArray();
+    }
 }

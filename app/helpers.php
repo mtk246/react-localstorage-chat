@@ -217,3 +217,30 @@ if (!function_exists('upperCaseColumns')) {
         return ucwords(str_replace('_', ' ', $string));
     }
 }
+
+if (!function_exists('responseReportlist')) {
+    function responseReportlist($data, $title): array
+    {
+        return [
+            "success" => true,
+            "message" => "$title list successfully.",
+            "data" => $data['data'],
+            "links" => [
+                "first" => $data['first_page_url'],
+                "last" => $data['last_page_url'],
+                "prev" => $data['prev_page_url'],
+                "next" => $data['next_page_url']
+            ],
+            "meta" => [
+                "current_page" => $data['current_page'],
+                "from" => $data['from'],
+                "last_page" => $data['last_page'],
+                "links" => $data['links'],
+                "path" => $data['path'],
+                "per_page" => $data['per_page'],
+                "to" => $data['to'],
+                "total" => $data['total']
+            ]
+        ];
+    }
+}

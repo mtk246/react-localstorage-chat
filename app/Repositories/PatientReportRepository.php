@@ -30,89 +30,56 @@ final class PatientReportRepository
 
     public function getAllPatient(): array
     {
-        return \DB::transaction(
-            fn () => ViewDetailedPatientReport::all()->toArray()
-        );
+        $billingCompanyId = \Auth::user()->billing_company_id;
+
+        if (!$billingCompanyId) {
+            return responseReportlist(ViewDetailedPatientReport::paginate()->toArray(), 'Detail Patient');
+        }
+
+        return $this->getAllPatientBillingManager($billingCompanyId);
     }
 
     public function getAllPatientBillingManager($billingCompanyId): array
     {
-        $query = \DB::transaction(
-            fn () => ViewDetailedPatientReport::select([
-                'billing_companies_ids',
-                'companies',
-                'medical_no',
-                'claims_processed',
-                'system_code',
-                'patiente_name',
-                'date_of_birth',
-                'sex',
-                'ssn',
-                'driver_license',
-                'language',
-                'name',
-                'phone',
-                'cell_phone',
-                'fax',
-                'email',
-                'type_address',
-                'address',
-                'apt_suite',
-                'zip',
-                'city',
-                'state',
-                'country'
-            ])->get()
-        );
+        $query = ViewDetailedPatientReport::allPatientBillingManager();
+        
         $response = [];
 
-        foreach($query as $item) {
-            if (in_array($billingCompanyId, json_decode($item->billing_companies_ids))) {
-                array_push($response, $item);
+        foreach($query['data'] as $item) {
+            if (in_array($billingCompanyId, explode(',', $item['billing_companies_ids']))) {
+                array_push($response, $item['system_code']);
             }
         }
 
-        return $response;
+        $data = ViewDetailedPatientReport::whereIn('system_code', $response)->paginate()->toArray();
+
+        return responseReportlist($data, 'Detail Patient');
     }
 
     public function getAllGeneralPatient()
     {
-        return \DB::transaction(
-            fn () => ViewDetailedPatientReport::select([
-                'billing_companies',
-                'companies',
-                'medical_no',
-                'system_code',
-                'patiente_name',
-                'date_of_birth',
-                'sex',
-                'claims_processed',
-            ])->get()
-        );
+        $billingCompanyId = \Auth::user()->billing_company_id;
+
+        if (!$billingCompanyId) {
+            return responseReportlist(ViewDetailedPatientReport::allGeneralPatient(), 'General Patient');
+        }
+
+        return $this->getAllGeneralPatientBillingManager($billingCompanyId);
     }
 
     public function getAllGeneralPatientBillingManager($billingCompanyId): array
     {
-        $query = \DB::transaction(
-            fn () => ViewDetailedPatientReport::select([
-                'billing_companies_ids',
-                'companies',
-                'medical_no',
-                'system_code',
-                'patiente_name',
-                'date_of_birth',
-                'sex',
-                'claims_processed',
-            ])->get()
-        );
+        $query = ViewDetailedPatientReport::allGeneralPatientBillingManager();
         $response = [];
 
-        foreach($query as $item) {
+        foreach($query['data'] as $item) {
             if (in_array($billingCompanyId, json_decode($item->billing_companies_ids))) {
-                array_push($response, $item);
+                array_push($response, $item['system_code']);
             }
         }
 
-        return $response;
+        $data = ViewDetailedPatientReport::whereIn('system_code', $response)->paginate()->toArray();
+
+        return responseReportlist($data, 'General Patient');
     }
 }

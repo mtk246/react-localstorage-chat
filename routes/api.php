@@ -574,6 +574,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/facility-report', [\App\Http\Controllers\Reports\FacilityReportController::class, 'allFacility']);
         Route::get('/facility-report-by-biling-company', [\App\Http\Controllers\Reports\FacilityReportController::class, 'facilityByBillingCompany']);
         Route::get('/existing-reports', [\App\Http\Controllers\Reports\HomeController::class, 'existingReports']);
+        Route::post('/report', [\App\Http\Controllers\Reports\HomeController::class, 'report']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

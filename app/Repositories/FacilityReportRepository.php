@@ -30,9 +30,11 @@ final class FacilityReportRepository
 
     public function getAllFacility(): array
     {
-        return \DB::transaction(
-            fn () => ViewFacilityReport::all()->toArray()
+        $data = \DB::transaction(
+            fn () => ViewFacilityReport::paginate()->toArray()
         );
+
+        return responseReportlist($data, 'Facility');
     }
 
     public function getFacilityByBillingCompany($billingCompanyId): array
