@@ -789,6 +789,8 @@ class PatientRepository
 
     public function getServerAllPatient(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.Patient::class.'.sortableAttributes');
+
         /** @var Builder|Patient $data */
         $data = Patient::search($request->query('query'))->when(
             Gate::denies('is-admin'),
@@ -815,8 +817,6 @@ class PatientRepository
                         'insurancePlans',
                         'insurancePlans.insuranceCompany',
                     ])
-                    ->select('patients.*')
-                    ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
                 );
             },
             fn (ScoutBuilder $query) => $query->query(fn (Builder $query) => $query
@@ -837,26 +837,14 @@ class PatientRepository
                     'insurancePlans',
                     'insurancePlans.insuranceCompany',
                 ])
-                ->select('patients.*')
-                ->join('profiles', 'patients.profile_id', '=', 'profiles.id')
             ),
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            function (ScoutBuilder $query) use ($request) {
+                $query->orderBy($request->sortBy, Pagination::sortDesc());
+            },
+            fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
         );
-
-        if ($request->sortBy) {
-            switch($request->sortBy) {
-                case 'name':
-                    $data = $data->orderBy('profiles.first_name', Pagination::sortDesc());
-                    break;
-                case 'dob':
-                    $data = $data->orderBy('profiles.date_of_birth', Pagination::sortDesc());
-                    break;
-                case 'code':
-                    $data->orderBy('patients.code', Pagination::sortDesc());
-                    break;
-            }
-        } else {
-            $data = $data->orderBy('id', Pagination::sortDesc());
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 

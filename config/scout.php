@@ -217,7 +217,14 @@ return [
                     'billingCompanies.id',
                     'billingCompanies.name',
                 ],
-                'sortableAttributes' => ['id', 'created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'name',
+                    'code',
+                    'npi',
+                    'ein',
+                    'created_at',
+                ],
             ],
             Facility::class => [
                 'filterableAttributes' => [
@@ -230,7 +237,13 @@ return [
                     'billingCompanies.id',
                     'billingCompanies.name',
                 ],
-                'sortableAttributes' => ['id', 'created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'name',
+                    'code',
+                    'npi',
+                    'created_at',
+                ],
             ],
             HealthProfessional::class => [
                 'filterableAttributes' => [
@@ -251,7 +264,14 @@ return [
                     'billingCompanies.id',
                     'billingCompanies.name',
                 ],
-                'sortableAttributes' => ['id', 'created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'profile.first_name',
+                    'profile.middle_name',
+                    'profile.last_name',
+                    'npi',
+                    'created_at',
+                ],
             ],
             Patient::class => [
                 'filterableAttributes' => [

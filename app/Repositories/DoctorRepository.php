@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Facades\Pagination;
 use App\Enums\User\RoleType;
 use App\Enums\User\UserType;
 use App\Http\Resources\Enums\EnumResource;
@@ -772,6 +773,8 @@ class DoctorRepository
 
     public function getServerAllDoctors(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.HealthProfessional::class.'.sortableAttributes');
+
         $data = HealthProfessional::search($request->query('query'))->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
@@ -822,21 +825,11 @@ class DoctorRepository
                 'healthProfessionalType',
                 'company',
             ]))
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            fn(ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
+            fn(ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())
         );
-
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'health_professionals.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } /**elseif (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy(
-                    Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } */ else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
