@@ -72,7 +72,7 @@ final class ClaimBodyResource extends JsonResource
                     'sub_status_claim' => $denialTracking->sub_status_claim,
                     'tracking_date' => $denialTracking->tracking_date,
                     'past_due_date' => $denialTracking->past_due_date,
-                    'follow_up' => $denialTracking->follow_up,
+                    'last_follow_up' => $denialTracking->follow_up,
                     'department_responsible' => $denialTracking->department_responsible,
                     'policy_responsible' => $denialTracking->policy_responsible,
                     'tracking_note' => $denialTracking->tracking_note,
@@ -375,6 +375,8 @@ final class ClaimBodyResource extends JsonResource
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
+            'eff_date' => $policyPrimary?->eff_date ?? '',
+            'end_date' => $policyPrimary?->end_date ?? '',
         ];
     }
 
