@@ -69,6 +69,15 @@ enum ClassificationType: int implements TypeInterface
     #[PublicAttribute(true)]
     case SHEET_REPORTS = 5;
 
+    #[UrlAttribute('ClaimsReportsPDFGenerator/DailyInsuranceResponsibilityAging')]
+    #[NameAttribute('Records')]
+    #[DescriptionAttribute('All Records')]
+    #[BackgroundColorAttribute('#E6E6E6')]
+    #[TextColorAttribute('#808080')]
+    #[IconAttribute('ico-records')]
+    #[PublicAttribute(true)]
+    case RECORDS_REPORTS = 6;
+
     public function getUrl(): string
     {
         return 'https://prod-useast-a.online.tableau.com/t/begento/views/'

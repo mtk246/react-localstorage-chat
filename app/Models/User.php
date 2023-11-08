@@ -300,7 +300,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         if (is_null($this->type)) {
             \Log::error("User type for user {$this->id} is null");
 
-            return $this->$this->userRoles();
+            return $this->userRoles();
         }
 
         try {
