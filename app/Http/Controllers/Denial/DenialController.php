@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Denial;
 
-use App\Actions\Claim\GetClaimAction;
 use App\Actions\Claim\GetDenialAction;
 use App\Models\Claims\Claim;
 use App\Models\Claims\DenialTracking;
@@ -23,9 +22,15 @@ final class DenialController extends Controller
     public function getServerAll(
         Request $request,
         Claim $claim,
-        GetClaimAction $getClaim
+        GetDenialAction $getDenial
     ): JsonResponse {
-        return response()->json($getClaim->all($claim, $request));
+        $status = ($request->has('status') && $request->status !== null) ?
+        json_decode($request->status, true) : [];
+
+        $subStatus = ($request->has('subStatus') && $request->subStatus !== null) ?
+        json_decode($request->subStatus, true) : [];
+
+        return response()->json($getDenial->all($claim, $request, $status, $subStatus));
     }
 
     public function getOneDenial(

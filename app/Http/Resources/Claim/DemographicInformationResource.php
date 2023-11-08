@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Models\CompanyPatient;
 use App\Models\Claims\ClaimDemographicInformation;
+use App\Models\CompanyPatient;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property ClaimDemographicInformation $resource */
@@ -38,7 +38,7 @@ final class DemographicInformationResource extends JsonResource
             'patient_profile_info_arr' => isset($this->resource->patient) && isset($this->resource->patient->profile)
                 ? array_merge([
                     'patient_id' => $this->resource->patient_id,
-                    'med_num' => $companyPatient->med_num
+                    'med_num' => $companyPatient->med_num,
                 ], $this->resource->patient->profile->toArray())
                 : [],
             'prior_authorization_number' => $this->resource->prior_authorization_number,
