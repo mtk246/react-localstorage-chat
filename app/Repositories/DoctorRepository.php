@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\BillingCompanyHealthProfessional;
 use Laravel\Scout\Builder as ScoutBuilder;
+use App\Events\User\StoreEvent;
 
 class DoctorRepository
 {
@@ -362,6 +363,8 @@ class DoctorRepository
             }
 
             \DB::commit();
+
+            event(new StoreEvent($user, $user->userkey));
 
             return new DoctorBodyResource($healthP);
         } catch (\Exception $e) {

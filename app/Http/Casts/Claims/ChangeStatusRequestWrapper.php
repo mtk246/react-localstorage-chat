@@ -10,7 +10,7 @@ final class ChangeStatusRequestWrapper extends CastsRequest
 {
     public function getStatus(): int
     {
-        return $this->get('status_id');
+        return $this->getInt('status_id');
     }
 
     public function getSubStatus(): ?int

@@ -572,4 +572,5 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
+    Route::get('roket/token', [\App\Http\Controllers\RocketChatController::class, 'getToken']);
 });
