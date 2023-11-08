@@ -68,4 +68,39 @@ enum ClassificationType: int implements ColorTypeInterface
     #[NameAttribute('Other')]
     #[PublicAttribute(true)]
     case OTHER = 11;
+
+    #[ColorAttribute('#808080')]
+    #[NameAttribute('Draft')]
+    #[PublicAttribute(true)]
+    const DRAFT = 'Draft';
+
+    #[ColorAttribute('#FEA54C')]
+    #[NameAttribute('Not submitted')]
+    #[PublicAttribute(true)]
+    const NOT_SUBMITTED = 'Not submitted';
+
+    #[ColorAttribute('#FFE18D')]
+    #[NameAttribute('Submitted')]
+    #[PublicAttribute(true)]
+    const SUBMITTED = 'Submitted';
+
+    #[ColorAttribute('#87F8BA')]
+    #[NameAttribute('Approved')]
+    #[PublicAttribute(true)]
+    const APPROVED = 'Approved';
+
+    #[ColorAttribute('#87F8BA')]
+    #[NameAttribute('Complete')]
+    #[PublicAttribute(true)]
+    const COMPLETE = 'Complete';
+
+    #[ColorAttribute('#FC8989')]
+    #[NameAttribute('Rejected')]
+    #[PublicAttribute(true)]
+    const REJECTED = 'Rejected';
+
+    #[ColorAttribute('#FC8989')]
+    #[NameAttribute('Denied')]
+    #[PublicAttribute(true)]
+    const DENIED = 'Denied';
 }

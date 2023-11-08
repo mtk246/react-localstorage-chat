@@ -14,6 +14,8 @@ final class GetDenialAction
 {
     public function single(Claim $claim): DenialBodyResource
     {
+        $claim->load('denialTrackings');
+
         return DenialBodyResource::make($claim);
     }
 

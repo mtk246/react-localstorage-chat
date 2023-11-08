@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Enums\InterfaceType;
+use App\Enums\Modifier\ClassificationType;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -115,15 +117,23 @@ final class ClaimBodyResource extends JsonResource
     private function getStatusMap(): array
     {
         $newStatuses = [];
-        $statusDefaultOrder = ['Draft', 'Not submitted', 'Submitted', 'Approved', 'Complete'];
+        $statusDefaultOrder = [
+            ClassificationType::DRAFT,
+            ClassificationType::NOT_SUBMITTED,
+            ClassificationType::SUBMITTED,
+            ClassificationType::APPROVED,
+            ClassificationType::COMPLETE,
+            ClassificationType::REJECTED,
+            ClassificationType::DENIED,
+        ];
         $statusColors = [
-            'Draft' => '#808080',
-            'Not submitted' => '#FEA54C',
-            'Submitted' => '#FFE18D',
-            'Approved' => '#87F8BA',
-            'Complete' => '#87F8BA',
-            'Rejected' => '#FC8989',
-            'Denied' => '#FC8989',
+            ClassificationType::DRAFT => '#808080',
+            ClassificationType::NOT_SUBMITTED => '#FEA54C',
+            ClassificationType::SUBMITTED => '#FFE18D',
+            ClassificationType::APPROVED => '#87F8BA',
+            ClassificationType::COMPLETE => '#87F8BA',
+            ClassificationType::REJECTED => '#FC8989',
+            ClassificationType::DENIED => '#FC8989',
         ];
 
         $this->claimStatusClaims()
@@ -195,10 +205,10 @@ final class ClaimBodyResource extends JsonResource
     {
         $records = [
             'interface_type' => [
-                'call' => 0,
-                'website' => 1,
-                'email' => 2,
-                'other' => 3,
+                InterfaceType::CALL => 0,
+                InterfaceType::WEBSITE => 1,
+                InterfaceType::EMAIL => 2,
+                InterfaceType::OTHER => 3,
             ],
         ];
 
