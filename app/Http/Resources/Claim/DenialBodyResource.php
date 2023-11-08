@@ -12,11 +12,24 @@ use App\Models\Claims\ClaimSubStatus;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-final class ClaimBodyResource extends JsonResource
+final class DenialBodyResource extends JsonResource
 {
     /** @return array<string, mixed> */
     public function toArray($request): array
     {
+        $data = $this->getStatus();
+        $subStatus = $this->resource->subStatus()
+            ->orderBy('claim_status_claim.id', 'desc')
+            ->first()
+            ?->setHidden(['pivot']);
+        $subStatuses = ClaimSubStatus::query()
+            ->whereHas('claimStatuses', function ($query) use ($data) {
+                $query->where('claim_status_id', $data->id ?? null);
+            })
+            ->get()
+            ->setVisible(['id', 'name'])
+            ->toArray() ?? [];
+
         return [
             'id' => $this->resource->id,
             'billing_company_id' => $this->resource->billing_company_id,
@@ -36,7 +49,7 @@ final class ClaimBodyResource extends JsonResource
             'claim_service' => new ClaimServiceResource(
                 $this->resource->service,
                 $this->resource->type->value,
-                $this->resource->demographicInformation->company_id ?? null
+                $this->resource->demographicInformation->company_id ?? null,
             ),
             'additional_information' => new AdditionalInformationResource(
                 $this->resource,
@@ -48,6 +61,9 @@ final class ClaimBodyResource extends JsonResource
             }),
             'last_modified' => $this->last_modified,
             'private_note' => $this->private_note,
+            'status' => $data,
+            'sub_status' => $subStatus,
+            'sub_statuses' => $subStatuses,
             'status' => $this->getStatus(),
             'status_map' => $this->getStatusMap(),
             'status_history' => $this->getStatusHistory(),
@@ -61,28 +77,7 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
-            'denial_trackings' => $this->resource->denialTrackings->map(function ($denialTracking) {
-                return [
-                    'denial_tracking_id' => $denialTracking->id,
-                    'interface_type' => $denialTracking->interface_type,
-                    'is_reprocess_claim' => $denialTracking->is_reprocess_claim,
-                    'is_contact_to_patient' => $denialTracking->is_contact_to_patient,
-                    'contact_through' => $denialTracking->contact_through,
-                    'rep_name' => $denialTracking->rep_name,
-                    'ref_number' => $denialTracking->ref_number,
-                    'status_claim' => $denialTracking->status_claim,
-                    'sub_status_claim' => $denialTracking->sub_status_claim,
-                    'tracking_date' => $denialTracking->tracking_date,
-                    'past_due_date' => $denialTracking->past_due_date,
-                    'last_follow_up' => $denialTracking->follow_up,
-                    'department_responsible' => $denialTracking->department_responsible,
-                    'policy_responsible' => $denialTracking->policy_responsible,
-                    'tracking_note' => $denialTracking->tracking_note,
-                    'created_at' => $denialTracking->created_at,
-                    'updated_at' => $denialTracking->updated_at,
-                    'claim_id' => $denialTracking->claim_id,
-                ];
-            }),
+            'denial_trackings' => $this->resource->getDenialTrackings(),
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
@@ -214,7 +209,7 @@ final class ClaimBodyResource extends JsonResource
         foreach ($history as $status) {
             match ($status->claim_status_type) {
                 ClaimSubStatus::class => $this->setSubstatus($status, $recordSubstatus),
-                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus)
+                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
             };
         }
 
@@ -316,6 +311,8 @@ final class ClaimBodyResource extends JsonResource
 
     private function setNote($status, &$records, &$recordSubstatus): void
     {
+        $status->load('claimStatus', 'privateNotes.claimCheckStatus');
+
         foreach ($recordSubstatus as $subNote) {
             array_push(
                 $records,
@@ -330,14 +327,17 @@ final class ClaimBodyResource extends JsonResource
                 ]
             );
         }
+
         $recordSubstatus = [];
         $notes = $status->privateNotes()
+            ->with('claimCheckStatus')
             ->orderBy('created_at', 'desc')
-            ->orderBy('id', 'desc')->get() ?? [];
+            ->orderBy('id', 'desc')
+            ->get() ?? [];
+
         foreach ($notes as $note) {
-            $check = ClaimCheckStatus::query()
-                ->where('private_note_id', $note->id)
-                ->first();
+            $check = $note->claimCheckStatus;
+
             array_push(
                 $records,
                 [
@@ -365,6 +365,7 @@ final class ClaimBodyResource extends JsonResource
         $policyPrimary = $this->resource
             ->insurancePolicies()
             ->wherePivot('order', 1)
+            ->with(['insurancePlan.insuranceCompany', 'typeResponsibility'])
             ->first();
 
         return [
@@ -374,8 +375,6 @@ final class ClaimBodyResource extends JsonResource
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
-            'eff_date' => $policyPrimary?->eff_date ?? '',
-            'end_date' => $policyPrimary?->end_date ?? '',
         ];
     }
 
