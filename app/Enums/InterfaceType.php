@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 use BenSampo\Enum\Enum;
@@ -11,8 +13,8 @@ use BenSampo\Enum\Enum;
  */
 final class InterfaceType extends Enum
 {
-    const CALL = 'call';
-    const WEBSITE = 'website';
-    const EMAIL = 'email';
-    const OTHER = 'other';
+    public const CALL = 'call';
+    public const WEBSITE = 'website';
+    public const EMAIL = 'email';
+    public const OTHER = 'other';
 }
