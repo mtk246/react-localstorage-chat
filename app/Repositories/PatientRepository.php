@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Builder as ScoutBuilder;
+use App\Events\User\StoreEvent;
 
 class PatientRepository
 {
@@ -333,6 +334,8 @@ class PatientRepository
             }
 
             DB::commit();
+
+            event(new StoreEvent($user, $user->userkey));
 
             return $this->getOnePatient($patient->id);
         } catch (\Exception $e) {

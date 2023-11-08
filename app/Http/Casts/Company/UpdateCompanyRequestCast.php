@@ -12,72 +12,54 @@ final class UpdateCompanyRequestCast extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
-            ? (int) $this->inputs['billing_company_id']
-            : $this->user->billingCompanies->first()?->id;
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
     }
 
     public function getNpi(): ?int
     {
-        return array_key_exists('npi', $this->inputs)
-            ? (int) $this->inputs['npi']
-            : null;
+        return $this->getInt('npi');
     }
 
     public function getEin(): ?string
     {
-        return array_key_exists('ein', $this->inputs)
-            ? $this->inputs['ein']
-            : null;
+        return $this->get('ein');
     }
 
     public function getOtherName(): ?string
     {
-        return array_key_exists('other_name', $this->inputs)
-            ? $this->inputs['other_name']
-            : null;
+        return $this->get('other_name');
     }
 
     public function getClia(): ?string
     {
-        return array_key_exists('clia', $this->inputs)
-            ? $this->inputs['clia']
-            : null;
+        return $this->get('clia');
     }
 
     public function getName(): ?string
     {
-        return array_key_exists('name', $this->inputs)
-            ? $this->inputs['name']
-            : null;
+        return $this->get('name');
     }
 
     public function getSplitCompanyClaim(): ?bool
     {
-        return array_key_exists('split_company_claim', $this->inputs)
-            ? $this->inputs['split_company_claim']
-            : false;
+        return $this->get('split_company_claim');
     }
 
     public function getNickname(): ?string
     {
-        return array_key_exists('nickname', $this->inputs)
-            ? $this->inputs['nickname']
-            : null;
+        return $this->get('nickname');
     }
 
     public function getAbbreviation(): ?string
     {
-        return array_key_exists('abbreviation', $this->inputs)
-            ? $this->inputs['abbreviation']
-            : null;
+        return $this->get('abbreviation');
     }
 
     public function getMiscellaneous(): ?string
     {
-        return array_key_exists('miscellaneous', $this->inputs)
-            ? $this->inputs['miscellaneous']
-            : null;
+        return $this->get('miscellaneous');
     }
 
     public function getClaimFormats(): array
