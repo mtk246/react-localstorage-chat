@@ -350,6 +350,8 @@ class FacilityRepository
 
     public function getServerAllFacilities(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.Facility::class.'.sortableAttributes');
+
         $data = Facility::search($request->query('query'))->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
@@ -386,19 +388,11 @@ class FacilityRepository
                 'facilityTypes',
                 'billingCompanies',
             ]))
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            fn (ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
+            fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
         );
-
-        if ($request->sortBy) {
-
-            match($request->sortBy) {
-                'name' => $data->orderBy('name', Pagination::sortDesc()),
-                'code' => $data->orderBy('code', Pagination::sortDesc()),
-                'npi' => $data->orderBy('npi', Pagination::sortDesc()),
-                default => $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc'),
-            };
-        } else {
-            $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 

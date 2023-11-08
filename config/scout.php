@@ -267,6 +267,8 @@ return [
                 'sortableAttributes' => [
                     'id',
                     'profile.first_name',
+                    'profile.middle_name',
+                    'profile.last_name',
                     'npi',
                     'created_at',
                 ],

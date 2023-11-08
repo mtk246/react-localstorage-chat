@@ -786,6 +786,8 @@ class PatientRepository
 
     public function getServerAllPatient(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.Patient::class.'.sortableAttributes');
+
         /** @var Builder|Patient $data */
         $data = Patient::search($request->query('query'))->when(
             Gate::denies('is-admin'),
@@ -833,18 +835,13 @@ class PatientRepository
                     'insurancePlans.insuranceCompany',
                 ])
             ),
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            function (ScoutBuilder $query) use ($request) {
+                $query->orderBy($request->sortBy, Pagination::sortDesc());
+            },
+            fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
         );
-
-        if ($request->sortBy) {
-            match($request->sortBy) {
-                'name' => $data->orderBy('profile.first_name', Pagination::sortDesc()),
-                'dob' => $data->orderBy('profile.date_of_birth', Pagination::sortDesc()),
-                'code' => $data->orderBy('code', Pagination::sortDesc()),
-                default => $data->orderBy('created_at', Pagination::sortDesc()),
-            };
-        } else {
-            $data = $data->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 

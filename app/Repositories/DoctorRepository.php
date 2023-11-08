@@ -770,6 +770,8 @@ class DoctorRepository
 
     public function getServerAllDoctors(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.HealthProfessional::class.'.sortableAttributes');
+
         $data = HealthProfessional::search($request->query('query'))->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
@@ -820,17 +822,11 @@ class DoctorRepository
                 'healthProfessionalType',
                 'company',
             ]))
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            fn(ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
+            fn(ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())
         );
-
-        if ($request->sortBy) {
-            match($request->sortBy) {
-                'name' => $data->orderBy('profile.first_name', Pagination::sortDesc()),
-                'npi' => $data->orderBy('npi', Pagination::sortDesc()),
-                default => $data->orderBy('created_at', Pagination::sortDesc()),
-            };
-        } else {
-            $data = $data->orderBy('created_at', Pagination::sortDesc());
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
