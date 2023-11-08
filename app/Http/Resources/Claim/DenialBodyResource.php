@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Enums\ClaimStatusType;
 use App\Enums\InterfaceType;
-use App\Enums\Modifier\ClassificationType;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -112,24 +112,13 @@ final class DenialBodyResource extends JsonResource
     private function getStatusMap(): array
     {
         $newStatuses = [];
-        $statusDefaultOrder = [
-            ClassificationType::DRAFT,
-            ClassificationType::NOT_SUBMITTED,
-            ClassificationType::SUBMITTED,
-            ClassificationType::APPROVED,
-            ClassificationType::COMPLETE,
-            ClassificationType::REJECTED,
-            ClassificationType::DENIED,
-        ];
-        $statusColors = [
-            ClassificationType::DRAFT => '#808080',
-            ClassificationType::NOT_SUBMITTED => '#FEA54C',
-            ClassificationType::SUBMITTED => '#FFE18D',
-            ClassificationType::APPROVED => '#87F8BA',
-            ClassificationType::COMPLETE => '#87F8BA',
-            ClassificationType::REJECTED => '#FC8989',
-            ClassificationType::DENIED => '#FC8989',
-        ];
+
+        foreach (ClaimStatusType::cases() as $status) {
+            $statusDefaultOrder[] = $status->value;
+            $statusColors[] = [
+                $status->value => $status->getColor(),
+            ];
+        }
 
         $this->claimStatusClaims()
             ->where('claim_status_type', ClaimStatus::class)
