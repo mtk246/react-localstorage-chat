@@ -33,7 +33,9 @@ final class GetCompany
 
     public function all(Request $request)
     {
-        return DB::transaction(function () use ($request) {
+        $config = config('scout.meilisearch.index-settings.'.Company::class.'.sortableAttributes');
+
+        return DB::transaction(function () use ($request, $config) {
             $companiesQuery = Company::search($request->query('query'))
                 ->when(
                     Gate::denies('is-admin'),
@@ -63,7 +65,13 @@ final class GetCompany
                             'billingCompanies',
                     ]))
                 )
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->when(
+                    isset($request->sortBy) && in_array($request->sortBy, $config),
+                    function (ScoutBuilder $query) use ($request) {
+                        $query->orderBy($request->sortBy, Pagination::sortDesc());
+                    },
+                    fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
+                )
                 ->paginate(Pagination::itemsPerPage());
 
             return [

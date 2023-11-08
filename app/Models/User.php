@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\User\UserType;
+use App\Events\User\UpdateEvent;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
 use App\Models\User\Role;
@@ -111,6 +112,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     use HasRoleAndPermission;
     use AuditableTrait;
     use Searchable;
+
+    /** @var array */
+    protected $dispatchesEvents = [
+        'updated' => UpdateEvent::class,
+    ];
 
     /**
      * The attributes that are mass assignable.

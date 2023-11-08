@@ -168,7 +168,7 @@ class ClaimController extends Controller
                                     .' - '
                                     .$facilityType->type
                                     .' / '
-                                    .$billClassification->name,  
+                                    .$billClassification->name,
                             ];
                         });
 

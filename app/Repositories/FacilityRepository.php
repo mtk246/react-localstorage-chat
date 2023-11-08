@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Facades\Pagination;
 use App\Http\Resources\Company\TaxonomiesResource;
 use App\Http\Resources\Facility\CompanyResource;
 use App\Models\Address;
@@ -51,7 +52,7 @@ class FacilityRepository
             if (isset($data['taxonomies'])) {
 
                 $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
@@ -351,6 +352,8 @@ class FacilityRepository
 
     public function getServerAllFacilities(Request $request)
     {
+        $config = config('scout.meilisearch.index-settings.'.Facility::class.'.sortableAttributes');
+
         $data = Facility::search($request->query('query'))->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
@@ -387,20 +390,11 @@ class FacilityRepository
                 'facilityTypes',
                 'billingCompanies',
             ]))
+        )->when(
+            $request->has('sortBy') && in_array($request->sortBy, $config),
+            fn (ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
+            fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
         );
-
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'facilities.billing_company_id'),
-                    (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc'
-                );
-            } else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
@@ -587,9 +581,9 @@ class FacilityRepository
         try {
             DB::beginTransaction();
             $facility = Facility::query()->find($id);
-            
+
             $facility->touch();
-            
+
             $facility->update([
                 'name' => $data['name'],
                 'npi' => $data['npi'],
@@ -610,7 +604,7 @@ class FacilityRepository
             if (isset($data['taxonomies'])) {
 
                 $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 

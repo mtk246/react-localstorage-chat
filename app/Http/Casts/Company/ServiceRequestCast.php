@@ -12,16 +12,12 @@ final class ServiceRequestCast extends CastsRequest
 {
     public function getId(): ?int
     {
-        return array_key_exists('id', $this->inputs)
-            ? (int) $this->inputs['id']
-            : null;
+        return $this->getInt('id');
     }
 
     public function getBillingCompanyId(): ?int
     {
-        return array_key_exists('billing_company_id', $this->inputs)
-            ? $this->inputs['billing_company_id']
-            : null;
+        return $this->getInt('billing_company_id');
     }
 
     public function getProcedureId(): ?int
@@ -41,44 +37,38 @@ final class ServiceRequestCast extends CastsRequest
 
     public function getPrice(): ?float
     {
-        return array_key_exists('price', $this->inputs)
-            ? (float) $this->inputs['price']
+        return $this->has('price')
+            ? (float) $this->get('price')
             : null;
     }
 
     public function getMac(): ?string
     {
-        return array_key_exists('state', $this->inputs)
-            ? $this->inputs['mac']
+        return $this->has('state')
+            ? $this->get('mac')
             : null;
     }
 
     public function getLocalityNumber(): ?string
     {
-        return array_key_exists('fsa', $this->inputs)
-            ? $this->inputs['locality_number']
+        return $this->has('fsa')
+            ? $this->get('locality_number')
             : null;
     }
 
     public function getState(): ?string
     {
-        return array_key_exists('state', $this->inputs)
-            ? $this->inputs['state']
-            : null;
+        return $this->get('state');
     }
 
     public function getFsa(): ?string
     {
-        return array_key_exists('fsa', $this->inputs)
-            ? $this->inputs['fsa']
-            : null;
+        return $this->get('fsa');
     }
 
     public function getCounties(): ?string
     {
-        return array_key_exists('counties', $this->inputs)
-            ? $this->inputs['counties']
-            : null;
+        return $this->get('counties');
     }
 
     public function getInsuranceLabelFeeId(): ?int
@@ -88,23 +78,17 @@ final class ServiceRequestCast extends CastsRequest
 
     public function getPricePercentage(): ?int
     {
-        return array_key_exists('price_percentage', $this->inputs)
-            ? (int) $this->inputs['price_percentage']
-            : null;
+        return $this->get('price_percentage');
     }
 
     public function getClia(): ?string
     {
-        return array_key_exists('clia', $this->inputs)
-            ? $this->inputs['clia']
-            : null;
+        return $this->get('clia');
     }
 
     public function getMedicationApplication(): bool
     {
-        return array_key_exists('medication_application', $this->inputs)
-            ? (bool) $this->inputs['medication_application']
-            : false;
+        return $this->getBool('medication_application');
     }
 
     public function getMedication(): ?MedicationRequestCast

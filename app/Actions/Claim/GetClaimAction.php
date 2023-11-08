@@ -34,7 +34,7 @@ final class GetClaimAction
                     $query->where('patient_id', $request->patient_id);
                 }),
             )
-            ->with('demographicInformation', 'service', 'insurancePolicies')
+            ->with('demographicInformation', 'service', 'insurancePolicies', 'denialTrackings')
             ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
