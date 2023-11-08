@@ -43,6 +43,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimBatch> $claimBatchs
+ * @property int|null $claim_batchs_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
@@ -169,6 +171,11 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claim');
     }
 
+    public function claimBatchs()
+    {
+        return $this->belongsToMany(ClaimBatch::class)->withTimestamps();
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query, $search) {
@@ -285,24 +292,20 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = (ClaimType::PROFESSIONAL == $this->type)
-            ? array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + ((float) $service['price'] ?? 0);
-            }, 0)
-            : array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
-            }, 0);
+        $billed = $this->service->services->reduce(function ($carry, $service) {
+            return $carry + ($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0);
+        }, 0);
 
         return number_format($billed, 2);
     }
 
     public function getAmountPaidAttribute()
     {
-        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+        $paid = $this->service->services->reduce(function ($carry, $service) {
             return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
-        return number_format($billed, 2);
+        return number_format($paid, 2);
     }
 
     public function getPastDueDateAttribute()
@@ -444,10 +447,24 @@ class Claim extends Model implements Auditable
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
+        $arrayIds = array_column(array_filter($aditionalInformation->getDateInformation(), function ($objeto) {
+            return isset($objeto['id']);
+        }), 'id');
+
+        $this->dateInformations()
+            ->whereNotIn('claim_date_informations.id', $arrayIds)
+            ->get()
+            ->each(function (ClaimDateInformation $dateInfo) {
+                $dateInfo->delete();
+            });
+
         foreach ($aditionalInformation->getDateInformation() as $data) {
             $this->dateInformations()
             ->updateOrCreate(
-                ['claim_id' => $this->id],
+                [
+                    'id' => $data['id'] ?? null,
+                    'claim_id' => $this->id,
+                ],
                 $data
             );
         }
