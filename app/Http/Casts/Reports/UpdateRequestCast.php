@@ -11,12 +11,12 @@ final class UpdateRequestCast extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && $this->get('billing_company_id')
-            ? (int) $this->get('billing_company_id')
-            : $this->user->billingCompanies->first()?->id;
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->get('name');
     }
@@ -28,15 +28,15 @@ final class UpdateRequestCast extends CastsRequest
 
     public function getClasification(): int
     {
-        return $this->get('clasification');
+        return $this->getInt('clasification');
     }
 
     public function getType(): int
     {
-        return $this->get('type');
+        return $this->getInt('type');
     }
 
-    public function getRange(): string
+    public function getRange(): ?string
     {
         return $this->get('range');
     }

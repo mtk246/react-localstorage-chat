@@ -12,15 +12,13 @@ final class CopayRequestCast extends CastsRequest
 {
     public function getId(): ?int
     {
-        return array_key_exists('id', $this->inputs)
-            ? (int) $this->inputs['id']
-            : null;
+        return $this->getInt('id');
     }
 
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
-            ? (int) $this->inputs['billing_company_id']
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
             : $this->user->billing_company_id;
     }
 
@@ -41,15 +39,13 @@ final class CopayRequestCast extends CastsRequest
 
     public function getCopay(): ?float
     {
-        return array_key_exists('copay', $this->inputs)
+        return $this->has('copay')
             ? (float) $this->inputs['copay']
             : null;
     }
 
     public function getPrivateNote(): ?string
     {
-        return array_key_exists('private_note', $this->inputs)
-            ? $this->inputs['private_note']
-            : null;
+        return $this->get('private_note');
     }
 }

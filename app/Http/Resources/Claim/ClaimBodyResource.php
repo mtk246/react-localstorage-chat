@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Enums\ClaimStatusType;
+use App\Enums\InterfaceType;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -34,7 +36,7 @@ final class ClaimBodyResource extends JsonResource
             'claim_service' => new ClaimServiceResource(
                 $this->resource->service,
                 $this->resource->type->value,
-                $this->resource->demographicInformation->company_id ?? null,
+                $this->resource->demographicInformation->company_id ?? null
             ),
             'additional_information' => new AdditionalInformationResource(
                 $this->resource,
@@ -59,6 +61,29 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'denial_trackings' => $this->resource->denialTrackings->map(function ($denialTracking) {
+                return [
+                    'denial_tracking_id' => $denialTracking->id,
+                    'interface_type' => $denialTracking->interface_type,
+                    'is_reprocess_claim' => $denialTracking->is_reprocess_claim,
+                    'is_contact_to_patient' => $denialTracking->is_contact_to_patient,
+                    'contact_through' => $denialTracking->contact_through,
+                    'rep_name' => $denialTracking->rep_name,
+                    'ref_number' => $denialTracking->ref_number,
+                    'status_claim' => $denialTracking->status_claim,
+                    'sub_status_claim' => $denialTracking->sub_status_claim,
+                    'tracking_date' => $denialTracking->tracking_date,
+                    'past_due_date' => $denialTracking->past_due_date,
+                    'last_follow_up' => $denialTracking->follow_up,
+                    'department_responsible' => $denialTracking->department_responsible,
+                    'policy_responsible' => $denialTracking->policy_responsible,
+                    'tracking_note' => $denialTracking->tracking_note,
+                    'created_at' => $denialTracking->created_at,
+                    'updated_at' => $denialTracking->updated_at,
+                    'claim_id' => $denialTracking->claim_id,
+                ];
+            }),
+            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
 
@@ -92,16 +117,13 @@ final class ClaimBodyResource extends JsonResource
     private function getStatusMap(): array
     {
         $newStatuses = [];
-        $statusDefaultOrder = ['Draft', 'Not submitted', 'Submitted', 'Approved', 'Complete'];
-        $statusColors = [
-            'Draft' => '#808080',
-            'Not submitted' => '#FEA54C',
-            'Submitted' => '#FFE18D',
-            'Approved' => '#87F8BA',
-            'Complete' => '#87F8BA',
-            'Rejected' => '#FC8989',
-            'Denied' => '#FC8989',
-        ];
+
+        foreach (ClaimStatusType::cases() as $status) {
+            $statusDefaultOrder[] = $status->value;
+            $statusColors[] = [
+                $status->value => $status->getColor(),
+            ];
+        }
 
         $this->claimStatusClaims()
             ->where('claim_status_type', ClaimStatus::class)
@@ -168,6 +190,20 @@ final class ClaimBodyResource extends JsonResource
         return array_merge($newStatuses, $records);
     }
 
+    private function getDenialTrackingsDetailsMap(): array
+    {
+        $records = [
+            'interface_type' => [
+                InterfaceType::CALL => 0,
+                InterfaceType::WEBSITE => 1,
+                InterfaceType::EMAIL => 2,
+                InterfaceType::OTHER => 3,
+            ],
+        ];
+
+        return $records;
+    }
+
     private function getStatusHistory(): array
     {
         $records = [];
@@ -178,7 +214,7 @@ final class ClaimBodyResource extends JsonResource
         foreach ($history as $status) {
             match ($status->claim_status_type) {
                 ClaimSubStatus::class => $this->setSubstatus($status, $recordSubstatus),
-                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus),
+                ClaimStatus::class => $this->setStatus($status, $records, $recordSubstatus)
             };
         }
 
@@ -338,6 +374,8 @@ final class ClaimBodyResource extends JsonResource
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
+            'eff_date' => $policyPrimary?->eff_date ?? '',
+            'end_date' => $policyPrimary?->end_date ?? '',
         ];
     }
 
