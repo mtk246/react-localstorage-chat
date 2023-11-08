@@ -86,4 +86,9 @@ class PrivateNote extends Model implements Auditable
             ];
         }
     }
+
+    public function claimCheckStatus()
+    {
+        return $this->hasOne(ClaimCheckStatus::class, 'private_note_id');
+    }
 }
