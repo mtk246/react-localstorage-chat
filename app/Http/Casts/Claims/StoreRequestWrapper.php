@@ -15,9 +15,9 @@ final class StoreRequestWrapper extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
-            ? (int) $this->inputs['billing_company_id']
-            : $this->user->billingCompanies->first()?->id;
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
     }
 
     public function getData(): array
