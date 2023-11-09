@@ -86,5 +86,49 @@
         "range": "30",
         "configuration": [],
         "favorite": true
+    },
+    {
+        "id": "01HDPRCFVYQYJ7JPSD-simple",
+        "name": "Detailed patient Report",
+        "description": "Use this report to display relevant information about the patients registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false
+    },
+    {
+        "id": "01HDPRCFVYQYJ7JPSG-simple",
+        "name": "General patient Report",
+        "description": "Use this report to view all information about patient registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false
+    },
+    {
+        "id": "01HDPRCFVYQYJ7JPSF-simple",
+        "name": "General Facility Report",
+        "description": "Use this report to view all information about facility professionals registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false
+    },
+    {
+        "id": "01HDPRCFVYQYJ7JPSH-simple",
+        "name": "General Healthcare Professional Report",
+        "description": "Use this report to view all information about healthcare professionals registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false
     }
 ]

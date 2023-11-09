@@ -7,22 +7,28 @@ use App\Models\Reports\ViewFacilityReport;
 final class FacilityReportRepository
 {
     public function getAllNamesClounms() {
-        $columns = \DB::select("
-            SELECT attname AS name, format_type(atttypid, atttypmod) AS type FROM pg_attribute WHERE  attrelid = 'public.view_facility_report'::regclass
-        ");
+        $columns = [
+            'billing_companies',
+            'companies',
+            'code',
+            'facility', 
+            'npi',
+            'primary_taxonomy',
+            'place_of_service',
+            'type_of_facility',
+            'bill_classifications',
+            'claims_processed'
+        ];
         $response = [];
 
         foreach ($columns as $column) {
-            if ($column->name != 'billing_companies_ids') {
-                array_push($response, [
-                    "name" => $column->name,
-                    "field" => $column->name,
-                    "align" => "left",
-                    "sortable" => true,
-                    "label" => upperCaseColumns($column->name),
-                    "type" => $column->type
-                ]);
-            }
+            array_push($response, [
+                "name" => $column,
+                "value" => $column,
+                "align" => "left",
+                "text" => upperCaseColumns($column),
+                "width" => "270px",
+            ]);
         }
 
         return $response;
@@ -41,8 +47,6 @@ final class FacilityReportRepository
     {
         $query = \DB::transaction(
             fn () => ViewFacilityReport::select([
-                'billing_companies_ids',
-                'billing_companies',
                 'companies',
                 'code',
                 'facility', 

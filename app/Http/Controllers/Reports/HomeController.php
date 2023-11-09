@@ -23,7 +23,7 @@ final class HomeController extends Controller
         try {
             $rs = [
                 'detailed patient' => $this->patientReportRepository->getAllNamesClounms(),
-                'general patient' => $this->patientReportRepository->getAllNamesClounms(),
+                'general patient' => $this->patientReportRepository->getGeneralNamesClounms(),
                 'facility' => $this->facilityReportRepository->getAllNamesClounms(),
             ];
 
@@ -39,15 +39,24 @@ final class HomeController extends Controller
     {
         switch ($request->module) {
             case 'detailed patient':
-                return $this->patientReportRepository->getAllPatient();
+                return [
+                    "result" => $this->patientReportRepository->getAllPatient(),
+                    "headers" => $this->patientReportRepository->getAllNamesClounms()
+                ];
                 break;
 
             case 'general patient':
-                return $this->patientReportRepository->getAllGeneralPatient();
+                return [
+                    "result" => $this->patientReportRepository->getAllGeneralPatient(),
+                    "headers" => $this->patientReportRepository->getGeneralNamesClounms()
+                ];
                 break;
 
-            case 'facility':
-                return $this->facilityReportRepository->getAllFacility();
+            case 'general facility':
+                return [
+                    "result" => $this->facilityReportRepository->getAllFacility(),
+                    "headers" => $this->facilityReportRepository->getAllNamesClounms()
+                ];
                 break;
 
             default:

@@ -14,15 +14,51 @@ final class PatientReportRepository
 
         foreach ($columns as $column) {
             if ($column->name != 'billing_companies_ids') {
+                // array_push($response, [
+                //     "name" => $column->name,
+                //     "field" => $column->name,
+                //     "align" => "left",
+                //     "sortable" => true,
+                //     "label" => upperCaseColumns($column->name),
+                //     "type" => $column->type
+                // ]);
                 array_push($response, [
                     "name" => $column->name,
-                    "field" => $column->name,
+                    "value" => $column->name,
                     "align" => "left",
-                    "sortable" => true,
-                    "label" => upperCaseColumns($column->name),
-                    "type" => $column->type
+                    "text" => upperCaseColumns($column->name),
+                    "width" => "270px",
                 ]);
+                
+                
             }
+        }
+
+        return $response;
+    }
+
+    public function getGeneralNamesClounms() {
+        $columns = [
+            'billing_companies',
+            'companies',
+            'medical_no',
+            'system_code',
+            'patiente_name',
+            'date_of_birth',
+            'sex',
+            'claims_processed',
+        ];
+
+        $response = [];
+
+        foreach ($columns as $column) {
+            array_push($response, [
+                "name" => $column,
+                "value" => $column,
+                "align" => "left",
+                "text" => upperCaseColumns($column),
+                "width" => "270px",
+            ]);
         }
 
         return $response;
