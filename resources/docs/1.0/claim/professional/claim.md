@@ -45,7 +45,7 @@
 | 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
 | 9  |GET     | `Get list claim services`  | `/claim/get-list-claim-services`     | yes            | Get list claim services |
 | 10  |GET     | `Get list claim department responsibility`  | `/claim/get-list-department-responsibilities`     | yes            | Get list claim department responsibility |
-| 10  |GET     | `Get list claim insurance policy`  | `/claim/get-list-insurnace-policies/{claimID}`     | yes            | Get list claim insurance policy |
+| 10  |GET     | `Get list claim insurance policy`  | `/claim/get-list-insurance-policies/{claimID}`     | yes            | Get list claim insurance policy |
 | 10  |GET     | `Get all claims server` | `/claim/get-all-server`     | yes            | Get all claims from server |
 | 11  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 12  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
@@ -800,15 +800,15 @@
 ```json
 [
   {
-    "id": 1,
+    "id": "Billing",
     "name": "Billing"
   },
   {
-    "id": 2,
+    "id": "Payment Posting",
     "name": "Payment Posting"
   },
   {
-    "id": 3,
+    "id": "Collector",
     "name": "Collector"
   }
 ]
@@ -844,9 +844,9 @@
 ```json
 [
   {
-    "id": 79,
-    "policy_number": "UL0038342",
-    "type_responsibility": "P"
+    "id": "P - UL0038342",
+    "name": "P - UL0038342",
+    "default": true,
   }
 ]
 ```
