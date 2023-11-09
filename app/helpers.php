@@ -253,28 +253,28 @@ if (!function_exists('getHealthcareType')) {
         foreach ($types as $type) {
             switch ($type) {
                 case 1:
-                    $response .= 'Medical doctor, ';
+                    $response .= "Medical doctor, ";
                     break;
                 case 2:
-                    $response .= 'Nurse practitioners, ';
+                    $response .= "Nurse practitioners, ";
                     break;
                 case 3:
-                    $response .= 'Physician assistants, ';
+                    $response .= "Physician assistants, ";
                     break;
                 case 4:
-                    $response .= 'Certified nurse specialists trained in a particular field such as E/R, pediatric or diabetic nursing, ';
+                    $response .= "Certified nurse specialists trained in a particular field such as E/R, pediatric or diabetic nursing, ";
                     break;
                 case 5:
-                    $response .= 'Certified nurse midwives, ';
+                    $response .= "Certified nurse midwives, ";
                     break;
                 case 6:
-                    $response .= 'Certified registered nurse anesthetists, ';
+                    $response .= "Certified registered nurse anesthetists, ";
                     break;
                 case 7:
-                    $response .= 'Clinical social worker, ';
+                    $response .= "Clinical social worker, ";
                     break;
                 case 8:
-                    $response .= 'Physical therapists, ';
+                    $response .= "Physical therapists, ";
                     break;
 
                 default:
@@ -295,13 +295,13 @@ if (!function_exists('getHealthcareAuthorization')) {
         foreach (explode(",", $dataTypes) as $type) {
             switch ($type) {
                 case 1:
-                    $response .= 'Service provider, ';
+                    $response .= "Service provider, ";
                     break;
                 case 2:
-                    $response .= 'Billing provider, ';
+                    $response .= "Billing provider, ";
                     break;
                 case 3:
-                    $response .= 'Referred, ';
+                    $response .= "Referred, ";
                     break;
 
                 default:

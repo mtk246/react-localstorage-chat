@@ -16,21 +16,22 @@ final class ViewDetailedPatientReport extends Model
     protected function claimsProcessed(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? $value: 0,
+            get: fn (string | null $value) => $value ? $value : 0,
         );
     }
 
-    public function scopeAllGeneralPatient($query) {
+    public function scopeAllGeneralPatient($query)
+    {
         return $query->select([
-                'billing_companies',
-                'companies',
-                'medical_no',
-                'system_code',
-                'patiente_name',
-                'date_of_birth',
-                'sex',
-                'claims_processed',
-            ])->paginate()->toArray();
+            'billing_companies',
+            'companies',
+            'medical_no',
+            'system_code',
+            'patiente_name',
+            'date_of_birth',
+            'sex',
+            'claims_processed',
+        ])->paginate()->toArray();
     }
 
     public function scopeAllPatientBillingManager($query)

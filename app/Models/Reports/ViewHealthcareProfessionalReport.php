@@ -30,7 +30,7 @@ final class ViewHealthcareProfessionalReport extends Model
     protected function claimsProcessed(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? $value: 0,
+            get: fn (string | null $value) => $value ? $value : 0,
         );
     }
 }
