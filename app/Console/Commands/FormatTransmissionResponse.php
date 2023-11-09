@@ -29,7 +29,7 @@ final class FormatTransmissionResponse extends Command
         ClaimTransmissionResponse::query()
         ->get()
         ->each(function (ClaimTransmissionResponse $resp) {
-            if (gettype($resp->response_details) === 'string') {
+            if ('string' === gettype($resp->response_details)) {
                 $details = json_decode($resp->response_details);
                 $resp->response_details = $details;
                 $resp->save();

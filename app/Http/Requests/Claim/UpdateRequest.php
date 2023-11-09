@@ -250,7 +250,7 @@ final class UpdateRequest extends FormRequest
             'claim_services.services.*.diagnostic_pointers' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
                 'nullable',
-                'array'
+                'array',
             ],
             'claim_services.services.*.days_or_units' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.services.*.price' => ['sometimes', 'nullable', 'numeric'],
