@@ -524,8 +524,8 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::patch('/change-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
-        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
-        Route::patch('/add-check-status-claim/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
+        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'addNoteCurrentStatus']);
+        Route::patch('/add-tracking-claim/{claim}', [\App\Http\Controllers\ClaimController::class, 'addTrackingClaim']);
     });
 
     Route::prefix('claim-sub-status')->middleware([

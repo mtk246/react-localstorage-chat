@@ -64,17 +64,24 @@ final class DenialTracking extends Model
         'is_reprocess_claim',
         'is_contact_to_patient',
         'contact_through',
-        'claim_id',
+        'claim_number',
         'rep_name',
         'ref_number',
-        'status_claim',
-        'sub_status_claim',
+        'claim_status',
+        'claim_sub_status',
         'tracking_date',
+        'resolution_time',
         'past_due_date',
         'follow_up',
         'department_responsible',
         'policy_responsible',
-        'tracking_note',
+        'response_details',
+        'private_note_id',
+        'claim_id',
+    ];
+
+    protected $casts = [
+        'response_details' => 'object',
     ];
 
     /**
