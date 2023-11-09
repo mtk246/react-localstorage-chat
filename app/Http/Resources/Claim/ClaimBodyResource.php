@@ -264,7 +264,7 @@ final class ClaimBodyResource extends JsonResource
                             'department_responsible' => $denialTracking->department_responsible ?? '',
                             'policy_responsible' => $denialTracking->policy_responsible ?? '',
                             'response_details' => $denialTracking->response_details ?? null,
-                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
                             'claim_id' => $denialTracking->claim_id ?? '',
                         ]
                         : null,
@@ -386,7 +386,7 @@ final class ClaimBodyResource extends JsonResource
                             'department_responsible' => $denialTracking->department_responsible ?? '',
                             'policy_responsible' => $denialTracking->policy_responsible ?? '',
                             'response_details' => $denialTracking->response_details ?? null,
-                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
                             'claim_id' => $denialTracking->claim_id ?? '',
                         ]
                         : null,
@@ -439,7 +439,7 @@ final class ClaimBodyResource extends JsonResource
                             'department_responsible' => $denialTracking->department_responsible ?? '',
                             'policy_responsible' => $denialTracking->policy_responsible ?? '',
                             'response_details' => $denialTracking->response_details ?? null,
-                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
                             'claim_id' => $denialTracking->claim_id ?? '',
                         ]
                         : null,
