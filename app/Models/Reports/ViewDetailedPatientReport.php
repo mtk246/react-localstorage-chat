@@ -16,7 +16,7 @@ final class ViewDetailedPatientReport extends Model
     protected function claimsProcessed(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? $value : 0,
+            get: fn (string|null $value) => $value ? $value : 0,
         );
     }
 
@@ -59,7 +59,7 @@ final class ViewDetailedPatientReport extends Model
             'zip',
             'city',
             'state',
-            'country'
+            'country',
         ])->paginate()->toArray();
     }
 

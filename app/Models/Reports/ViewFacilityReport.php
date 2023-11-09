@@ -38,28 +38,28 @@ final class ViewFacilityReport extends Model
     protected function placeOfService(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? json_decode($value) : [],
+            get: fn (string|null $value) => $value ? json_decode($value) : [],
         );
     }
 
     protected function typeOfFacility(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? json_decode($value) : [],
+            get: fn (string|null $value) => $value ? json_decode($value) : [],
         );
     }
 
     protected function billClassifications(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? json_decode($value) : [],
+            get: fn (string|null $value) => $value ? json_decode($value) : [],
         );
     }
 
     protected function claimsProcessed(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? $value : 0,
+            get: fn (string|null $value) => $value ? $value : 0,
         );
     }
 }
