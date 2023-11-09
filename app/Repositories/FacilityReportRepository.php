@@ -19,9 +19,8 @@ final class FacilityReportRepository
             'claims_processed'
         ];
         $response = [];
-        $billingCompanyId = \Auth::user()->billing_company_id;
 
-        if (!$billingCompanyId) {
+        if (!\Auth::user()->billing_company_id) {
             array_unshift($columns, 'billing_companies');
         }
 
@@ -40,17 +39,14 @@ final class FacilityReportRepository
 
     public function getAllFacility(): array
     {
-        $data = \DB::transaction(
-            fn () => ViewFacilityReport::paginate()->toArray()
-        );
+        $data = ViewFacilityReport::paginate(20)->toArray();
 
         return responseReportlist($data, 'Facility');
     }
 
     public function getFacilityByBillingCompany($billingCompanyId): array
     {
-        $query = \DB::transaction(
-            fn () => ViewFacilityReport::select([
+        $query = ViewFacilityReport::select([
                 'billing_companies_ids',
                 'companies',
                 'code',
@@ -61,8 +57,8 @@ final class FacilityReportRepository
                 'type_of_facility',
                 'bill_classifications',
                 'claims_processed'
-            ])->get()
-        );
+            ])->get();
+
         $response = [];
 
         foreach($query as $item) {
@@ -71,6 +67,6 @@ final class FacilityReportRepository
             }
         }
 
-        return $response;
+        return responseReportlist($response, 'Facility');
     }
 }

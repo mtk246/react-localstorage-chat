@@ -13,6 +13,13 @@ final class ViewDetailedPatientReport extends Model
     use HasFactory;
     protected $table = 'view_detailed_patient_report';
 
+    protected function claimsProcessed(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string | null $value) => $value ? $value: 0,
+        );
+    }
+
     public function scopeAllGeneralPatient($query) {
         return $query->select([
                 'billing_companies',

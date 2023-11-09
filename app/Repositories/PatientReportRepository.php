@@ -19,14 +19,6 @@ final class PatientReportRepository
 
         foreach ($columns as $column) {
             if ($column->name != 'billing_companies_ids') {
-                // array_push($response, [
-                //     "name" => $column->name,
-                //     "field" => $column->name,
-                //     "align" => "left",
-                //     "sortable" => true,
-                //     "label" => upperCaseColumns($column->name),
-                //     "type" => $column->type
-                // ]);
                 array_push($response, [
                     "name" => $column->name,
                     "value" => $column->name,
@@ -34,8 +26,6 @@ final class PatientReportRepository
                     "text" => upperCaseColumns($column->name),
                     "width" => "270px",
                 ]);
-                
-                
             }
         }
 
@@ -75,16 +65,14 @@ final class PatientReportRepository
 
     public function getAllPatient(): array
     {
-        $billingCompanyId = \Auth::user()->billing_company_id;
-
-        if (!$billingCompanyId) {
-            return responseReportlist(ViewDetailedPatientReport::paginate()->toArray(), 'Detail Patient');
+        if (!\Auth::user()->billing_company_id) {
+            return responseReportlist(ViewDetailedPatientReport::paginate(20)->toArray(), 'Detail Patient');
         }
 
-        return $this->getAllPatientBillingManager($billingCompanyId);
+        return $this->getAllPatientBillingManager(\Auth::user()->billing_company_id);
     }
 
-    public function getAllPatientBillingManager($billingCompanyId): array
+    private function getAllPatientBillingManager($billingCompanyId): array
     {
         $query = ViewDetailedPatientReport::allPatientBillingManager();
         
@@ -103,16 +91,14 @@ final class PatientReportRepository
 
     public function getAllGeneralPatient()
     {
-        $billingCompanyId = \Auth::user()->billing_company_id;
-
-        if (!$billingCompanyId) {
+        if (!\Auth::user()->billing_company_id) {
             return responseReportlist(ViewDetailedPatientReport::allGeneralPatient(), 'General Patient');
         }
 
-        return $this->getAllGeneralPatientBillingManager($billingCompanyId);
+        return $this->getAllGeneralPatientBillingManager(\Auth::user()->billing_company_id);
     }
 
-    public function getAllGeneralPatientBillingManager($billingCompanyId): array
+    private function getAllGeneralPatientBillingManager($billingCompanyId): array
     {
         $query = ViewDetailedPatientReport::allGeneralPatientBillingManager();
         $response = [];
@@ -123,7 +109,7 @@ final class PatientReportRepository
             }
         }
 
-        $data = ViewDetailedPatientReport::whereIn('system_code', $response)->paginate()->toArray();
+        $data = ViewDetailedPatientReport::whereIn('system_code', $response)->paginate(20)->toArray();
 
         return responseReportlist($data, 'General Patient');
     }

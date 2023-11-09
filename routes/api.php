@@ -578,12 +578,6 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::middleware(['auth:api'])->group(function () {
-        Route::get('/detailed-patient-super-user', [\App\Http\Controllers\Reports\PatientReportController::class, 'detailedPatientSuperUser'])->name('detailedPatient');
-        Route::get('/detailed-patient-billing-manager', [\App\Http\Controllers\Reports\PatientReportController::class, 'detailedPatientBillingManager']);
-        Route::get('/general-patient', [\App\Http\Controllers\Reports\PatientReportController::class, 'generalPatient']);
-        Route::get('/general-patient-billing-manager', [\App\Http\Controllers\Reports\PatientReportController::class, 'generalPatientBillingManager']);
-        Route::get('/facility-report', [\App\Http\Controllers\Reports\FacilityReportController::class, 'allFacility']);
-        Route::get('/facility-report-by-biling-company', [\App\Http\Controllers\Reports\FacilityReportController::class, 'facilityByBillingCompany']);
         Route::get('/existing-reports', [\App\Http\Controllers\Reports\HomeController::class, 'existingReports']);
         Route::post('/report', [\App\Http\Controllers\Reports\HomeController::class, 'report']);
     });

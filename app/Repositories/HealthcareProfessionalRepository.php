@@ -11,22 +11,13 @@ final class HealthcareProfessionalRepository
             SELECT attname AS name, format_type(atttypid, atttypmod) AS type FROM pg_attribute WHERE  attrelid = 'public.view_healthcare_professional_report'::regclass
         ");
         $response = [];
-        $billingCompanyId = \Auth::user()->billing_company_id;
 
-        if ($billingCompanyId) {
+        if (\Auth::user()->billing_company_id) {
             unset($columns[1]);
         }
 
         foreach ($columns as $column) {
             if ($column->name != 'billing_companies_ids') {
-                // array_push($response, [
-                //     "name" => $column->name,
-                //     "field" => $column->name,
-                //     "align" => "left",
-                //     "sortable" => true,
-                //     "label" => upperCaseColumns($column->name),
-                //     "type" => $column->type
-                // ]);
                 array_push($response, [
                     "name" => $column->name,
                     "value" => $column->name,
@@ -34,8 +25,6 @@ final class HealthcareProfessionalRepository
                     "text" => upperCaseColumns($column->name),
                     "width" => "270px",
                 ]);
-                
-                
             }
         }
 
@@ -44,17 +33,14 @@ final class HealthcareProfessionalRepository
 
     public function getHealthcareProfessional(): array
     {
-        $data = \DB::transaction(
-            fn () => ViewHealthcareProfessionalReport::paginate()->toArray()
-        );
+        $data = ViewHealthcareProfessionalReport::paginate(20)->toArray();
 
         return responseReportlist($data, 'Healthcare Professional');
     }
 
     public function getFacilityByBillingCompany($billingCompanyId): array
     {
-        $query = \DB::transaction(
-            fn () => ViewHealthcareProfessionalReport::select([
+        $query = ViewHealthcareProfessionalReport::select([
                 'companies',
                 'code',
                 'facility', 
@@ -64,8 +50,8 @@ final class HealthcareProfessionalRepository
                 'type_of_facility',
                 'bill_classifications',
                 'claims_processed'
-            ])->get()
-        );
+            ])->get();
+            
         $response = [];
 
         foreach($query as $item) {

@@ -26,4 +26,11 @@ final class ViewHealthcareProfessionalReport extends Model
             get: fn (string $value) => getHealthcareAuthorization($value),
         );
     }
+
+    protected function claimsProcessed(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string | null $value) => $value ? $value: 0,
+        );
+    }
 }
