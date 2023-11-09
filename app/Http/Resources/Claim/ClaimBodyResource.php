@@ -316,10 +316,10 @@ final class ClaimBodyResource extends JsonResource
                 ->where('private_note_id', $note->id)
                 ->first();
 
-            $claimResponse = json_decode($this->claimTransmissionResponses()
+            $claimResponse = $this->claimTransmissionResponses()
                 ->whereDate('created_at', '>=', $status->created_at)
                 ->orderBy('created_at', 'asc')
-                ->first()?->response_details ?? '')?->response;
+                ->first()?->response_details['response'];
             $moreinfo = isset($claimResponse->status) && ('SUCCESS' !== $claimResponse->status)
                 ? $claimResponse?->errors ?? $claimResponse
                 : $claimResponse?->errors ?? '';
