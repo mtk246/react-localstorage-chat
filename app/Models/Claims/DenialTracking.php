@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -99,6 +100,36 @@ final class DenialTracking extends Model
     public function claim()
     {
         return $this->belongsTo(Claim::class);
+    }
+
+    /**
+     * Get the related claimStatus for this denial tracking entry.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function claimStatus()
+    {
+        return $this->belongsTo(ClaimStatus::class, 'claim_status');
+    }
+
+    /**
+     * Get the related claimSubstatus for this denial tracking entry.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function claimSubStatus()
+    {
+        return $this->belongsTo(ClaimSubStatus::class, 'claim_sub_status');
+    }
+
+    /**
+     * Get the related claimSubstatus for this denial tracking entry.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function privateNote()
+    {
+        return $this->belongsTo(PrivateNote::class);
     }
 
     /**

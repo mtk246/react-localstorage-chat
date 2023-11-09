@@ -237,7 +237,36 @@ final class ClaimBodyResource extends JsonResource
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
                     'denial_tracking' => isset($denialTracking)
-                        ? $denialTracking
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
                         : null,
                 ]
             );
@@ -330,7 +359,36 @@ final class ClaimBodyResource extends JsonResource
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
                     'denial_tracking' => isset($denialTracking)
-                        ? $denialTracking
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
                         : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
@@ -354,7 +412,36 @@ final class ClaimBodyResource extends JsonResource
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
                     'denial_tracking' => isset($denialTracking)
-                        ? $denialTracking
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'private_note_id' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
                         : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
