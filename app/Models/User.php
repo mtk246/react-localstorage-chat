@@ -273,6 +273,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->hasMany(Device::class);
     }
 
+    public function presets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Preset::class);
+    }
+
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);

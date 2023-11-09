@@ -8,10 +8,12 @@ use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
+use App\Http\Controllers\PresetController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
 use App\Http\Controllers\User\KeyboardShortcutController as UserKeyboardShortcutController;
+use App\Models\Preset;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -580,6 +582,10 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/existing-reports', [\App\Http\Controllers\Reports\HomeController::class, 'existingReports']);
         Route::post('/report', [\App\Http\Controllers\Reports\HomeController::class, 'report']);
+    });
+
+    Route::middleware(['auth:api'])->group(function () {
+        Route::resource('preset', PresetController::class)->only(['store', 'show', 'update', 'destroy']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
