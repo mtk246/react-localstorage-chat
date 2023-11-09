@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\Claim\ChangeStatusAction;
 use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
-use App\Actions\Claim\CreateCheckStatusAction;
+use App\Actions\Claim\CreateDenialTrackingAction;
 use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
 use App\Actions\Claim\GetCheckStatusAction;
@@ -22,11 +22,11 @@ use App\Actions\Claim\UpdateClaimAction;
 use App\Enums\Claim\CodeValueFields;
 use App\Enums\DepartmentResponsibility;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
-use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\CreateNoteRequest;
+use App\Http\Requests\Claim\DenialTrackingRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\Fields\CodeValueResource;
@@ -418,15 +418,15 @@ class ClaimController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function addCheckStatus(
-        ClaimCheckStatusRequest $request,
-        CreateCheckStatusAction $create,
+    public function addTrackingClaim(
+        DenialTrackingRequest $request,
+        CreateDenialTrackingAction $create,
         Claim $claim
     ): JsonResponse
     {
         $rs = $create->invoke($claim, $request->casted());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, check status claim'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error, create tracking claim'), 400);
     }
 
     public function getCheckStatus(
@@ -466,9 +466,9 @@ class ClaimController extends Controller
             ?->get()
             ?->map(function ($item) {
                 return [
-                    'id' => $item->id,
-                    'policy_number' => $item->policy_number,
-                    'type_responsibility' => $item->typeresponsibility->code,
+                    'id' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                    'name' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                    'default' => ('P' == $item->typeresponsibility->code)
                 ];
             })
             ?->toArray() ?? [],

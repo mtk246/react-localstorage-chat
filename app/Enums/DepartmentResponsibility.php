@@ -9,19 +9,19 @@ use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\HasTypeAttributes;
 
-enum DepartmentResponsibility: int implements TypeInterface
+enum DepartmentResponsibility: string implements TypeInterface
 {
     use HasTypeAttributes;
 
     #[NameAttribute('Billing')]
     #[PublicAttribute(true)]
-    case BILLING = 1;
+    case BILLING = 'Billing';
 
     #[NameAttribute('Payment Posting')]
     #[PublicAttribute(true)]
-    case PAYMENT = 2;
+    case PAYMENT = 'Payment Posting';
 
     #[NameAttribute('Collector')]
     #[PublicAttribute(true)]
-    case COLLECTOR = 3;
+    case COLLECTOR = 'Collector';
 }
