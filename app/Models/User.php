@@ -62,7 +62,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $language
  * @property mixed $last_modified
  * @property \Illuminate\Support\Collection|null $permissions
- * @property \App\Models\Profile|null $profile
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property \App\Models\HealthProfessional|null $healthProfessional
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property int|null $ip_restrictions_count
@@ -71,12 +71,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Patient|null $patient
  * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property int|null $permits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property \App\Models\Profile|null $profile
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property int|null $tokens_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  * @property int|null $user_permissions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $userRoles
+ * @property int|null $user_roles_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()

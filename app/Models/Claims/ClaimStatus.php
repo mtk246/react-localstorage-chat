@@ -58,9 +58,4 @@ final class ClaimStatus extends Model
     {
         return $this->belongsToMany(ClaimSubStatus::class)->withTimestamps();
     }
-
-    public function privateNotes()
-    {
-        return $this->hasMany(PrivateNote::class);
-    }
 }

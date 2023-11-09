@@ -34,9 +34,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
  * @property \Illuminate\Database\Eloquent\Collection<int, Membership> $memberships
  * @property int|null $memberships_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
  * @property int|null $permissions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, User> $users
  * @property int|null $users_count

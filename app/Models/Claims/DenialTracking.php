@@ -8,31 +8,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * DenialTracking model.
+ * App\Models\Claims\DenialTracking.
  *
  * @property int $id
  * @property int $interface_type
  * @property bool $is_reprocess_claim
  * @property bool $is_contact_to_patient
- * @property string $contact_through
- * @property string $rep_name
- * @property string $ref_number
- * @property string $status_claim
- * @property string $sub_status_claim
+ * @property string|null $contact_through
+ * @property string|null $claim_number
+ * @property string|null $rep_name
+ * @property string|null $ref_number
+ * @property int $claim_status
+ * @property int|null $claim_sub_status
  * @property string $tracking_date
- * @property string $past_due_date
+ * @property string|null $resolution_time
+ * @property string|null $past_due_date
  * @property string $follow_up
- * @property string $department_responsible
+ * @property string|null $department_responsible
  * @property string $policy_responsible
- * @property string $tracking_note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property object|null $response_details
  * @property int $claim_id
+ * @property int $private_note_id
+ * @property \App\Models\Claims\Claim $claim
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking query()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereClaimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereClaimNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereClaimStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereClaimSubStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereContactThrough($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereDepartmentResponsible($value)
@@ -43,12 +50,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereIsReprocessClaim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePastDueDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePolicyResponsible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePrivateNoteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereRefNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereRepName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereStatusClaim($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereSubStatusClaim($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereResolutionTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereResponseDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereTrackingDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereTrackingNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereUpdatedAt($value)
  *
  * @mixin \Eloquent

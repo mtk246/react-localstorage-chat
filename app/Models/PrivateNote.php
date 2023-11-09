@@ -22,6 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\ClaimCheckStatus|null $claimCheckStatus
  * @property mixed $last_modified
  * @property Model|\Eloquent $publishable
  *
