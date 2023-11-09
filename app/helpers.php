@@ -27,7 +27,7 @@ function middleRedactor($string, $char)
     // Make sure single character strings get redacted
     $length = ($total > $tenth) ? ($total - $tenth) : 1;
 
-    return substr($string, 0, 1).str_pad(substr($substring, $length), $total, $char, STR_PAD_LEFT);
+    return substr($string, 0, 1) . str_pad(substr($substring, $length), $total, $char, STR_PAD_LEFT);
 }
 
 if (!function_exists('generateNewCode')) {
@@ -62,7 +62,7 @@ if (!function_exists('getPrefix')) {
         $prefix = '';
         $stringName = explode(' ', trim(str_replace([',', '.', '-'], '', strtoupper($name))));
         if (count($stringName) > 1) {
-            $prefix = ((1 == strlen($stringName[0])) ? $stringName[0] : substr($stringName[0], 0, 2)).((1 == strlen($stringName[1])) ? $stringName[1] : substr($stringName[1], 0, 2));
+            $prefix = ((1 == strlen($stringName[0])) ? $stringName[0] : substr($stringName[0], 0, 2)) . ((1 == strlen($stringName[1])) ? $stringName[1] : substr($stringName[1], 0, 2));
         } else {
             $prefix = (strlen($stringName[0]) <= 4) ? $stringName[0] : substr($stringName[0], -4, 4);
         }
@@ -85,9 +85,9 @@ if (!function_exists('getList')) {
                 if (isset($filters['orWhereHas'])) {
                     $relationship = $filters['orWhereHas']['relationship'];
                     $records = $model::has($exists, 0)->where($filters['where'])
-                                     ->orWhereHas($relationship, function ($q) use ($filters) {
-                                         $q->whereNotIn($filters['orWhereHas']['where'][0], $filters['orWhereHas']['where'][1]);
-                                     })->where($filters['where'])->get();
+                        ->orWhereHas($relationship, function ($q) use ($filters) {
+                            $q->whereNotIn($filters['orWhereHas']['where'][0], $filters['orWhereHas']['where'][1]);
+                        })->where($filters['where'])->get();
                 } else {
                     $records = $model::has($exists, 0)->where($filters['where'])->get();
                 }
@@ -155,7 +155,7 @@ if (!function_exists('getList')) {
 if (!function_exists('toModel')) {
     function toModel($entity, $namespace = '\App\Models')
     {
-        return $namespace.'\\'.implode('', array_map('ucfirst', explode('-', $entity)));
+        return $namespace . '\\' . implode('', array_map('ucfirst', explode('-', $entity)));
     }
 }
 
@@ -242,5 +242,73 @@ if (!function_exists('responseReportlist')) {
                 "total" => $data['total']
             ]
         ];
+    }
+}
+
+if (!function_exists('getHealthcareType')) {
+    function getHealthcareType($data): string
+    {
+        $response = '';
+        $types = explode(",", $data);
+        foreach ($types as $type) {
+            switch ($type) {
+                case 1:
+                    $response .= 'Medical doctor, ';
+                    break;
+                case 2:
+                    $response .= 'Nurse practitioners, ';
+                    break;
+                case 3:
+                    $response .= 'Physician assistants, ';
+                    break;
+                case 4:
+                    $response .= 'Certified nurse specialists trained in a particular field such as E/R, pediatric or diabetic nursing, ';
+                    break;
+                case 5:
+                    $response .= 'Certified nurse midwives, ';
+                    break;
+                case 6:
+                    $response .= 'Certified registered nurse anesthetists, ';
+                    break;
+                case 7:
+                    $response .= 'Clinical social worker, ';
+                    break;
+                case 8:
+                    $response .= 'Physical therapists, ';
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        return $response;
+    }
+}
+
+if (!function_exists('getHealthcareAuthorization')) {
+    function getHealthcareAuthorization($data): string
+    {
+        $response = '';
+        $types = str_replace("[", "", $data);
+        $dataTypes = str_replace("]", "", $types);
+        foreach (explode(",", $dataTypes) as $type) {
+            switch ($type) {
+                case 1:
+                    $response .= 'Service provider, ';
+                    break;
+                case 2:
+                    $response .= 'Billing provider, ';
+                    break;
+                case 3:
+                    $response .= 'Referred, ';
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        return $response;
     }
 }

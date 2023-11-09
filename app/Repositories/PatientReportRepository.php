@@ -11,6 +11,11 @@ final class PatientReportRepository
             SELECT attname AS name, format_type(atttypid, atttypmod) AS type FROM pg_attribute WHERE  attrelid = 'public.view_detailed_patient_report'::regclass
         ");
         $response = [];
+        $billingCompanyId = \Auth::user()->billing_company_id;
+
+        if ($billingCompanyId) {
+            unset($columns[1]);
+        }
 
         foreach ($columns as $column) {
             if ($column->name != 'billing_companies_ids') {
@@ -38,8 +43,8 @@ final class PatientReportRepository
     }
 
     public function getGeneralNamesClounms() {
+        $billingCompanyId = \Auth::user()->billing_company_id;
         $columns = [
-            'billing_companies',
             'companies',
             'medical_no',
             'system_code',
@@ -48,6 +53,10 @@ final class PatientReportRepository
             'sex',
             'claims_processed',
         ];
+
+        if (!$billingCompanyId) {
+            array_unshift($columns, 'billing_companies');
+        }
 
         $response = [];
 
@@ -109,7 +118,7 @@ final class PatientReportRepository
         $response = [];
 
         foreach($query['data'] as $item) {
-            if (in_array($billingCompanyId, json_decode($item->billing_companies_ids))) {
+            if (in_array($billingCompanyId, explode(',', $item['billing_companies_ids']))) {
                 array_push($response, $item['system_code']);
             }
         }

@@ -8,7 +8,6 @@ final class FacilityReportRepository
 {
     public function getAllNamesClounms() {
         $columns = [
-            'billing_companies',
             'companies',
             'code',
             'facility', 
@@ -20,6 +19,11 @@ final class FacilityReportRepository
             'claims_processed'
         ];
         $response = [];
+        $billingCompanyId = \Auth::user()->billing_company_id;
+
+        if (!$billingCompanyId) {
+            array_unshift($columns, 'billing_companies');
+        }
 
         foreach ($columns as $column) {
             array_push($response, [
@@ -47,6 +51,7 @@ final class FacilityReportRepository
     {
         $query = \DB::transaction(
             fn () => ViewFacilityReport::select([
+                'billing_companies_ids',
                 'companies',
                 'code',
                 'facility', 
@@ -61,7 +66,7 @@ final class FacilityReportRepository
         $response = [];
 
         foreach($query as $item) {
-            if (in_array($billingCompanyId, json_decode($item->billing_companies_ids))) {
+            if (in_array($billingCompanyId, explode(',', $item['billing_companies_ids']))){
                 array_push($response, $item);
             }
         }

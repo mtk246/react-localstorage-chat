@@ -88,7 +88,7 @@
         "favorite": true
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSD-simple",
+        "id": "01-detailed_patient",
         "name": "Detailed patient Report",
         "description": "Use this report to display relevant information about the patients registered in the system.",
         "type": 1,
@@ -99,7 +99,7 @@
         "favorite": false
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSG-simple",
+        "id": "01-general_patient",
         "name": "General patient Report",
         "description": "Use this report to view all information about patient registered in the system.",
         "type": 1,
@@ -110,7 +110,7 @@
         "favorite": false
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSF-simple",
+        "id": "01-general_facility",
         "name": "General Facility Report",
         "description": "Use this report to view all information about facility professionals registered in the system.",
         "type": 1,
@@ -121,7 +121,7 @@
         "favorite": false
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSH-simple",
+        "id": "01-general_healthcare",
         "name": "General Healthcare Professional Report",
         "description": "Use this report to view all information about healthcare professionals registered in the system.",
         "type": 1,

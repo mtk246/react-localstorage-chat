@@ -58,6 +58,7 @@ final class ViewDetailedPatientReport extends Model
     public function scopeAllGeneralPatientBillingManager($query)
     {
         return $query->select([
+            'billing_companies_ids',
             'companies',
             'medical_no',
             'system_code',
