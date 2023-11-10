@@ -13,7 +13,8 @@ final class ClaimServicesWrapper extends CastsRequest
     {
         return $this->getCollect('services')
             ->map(function (array $service) {
-                $model = [
+                return [
+                    'id' => $service['id'] ?? null,
                     'from_service' => $service['from_service'],
                     'to_service' => $service['to_service'],
                     'procedure_id' => $service['procedure_id'] ?? null,
@@ -22,19 +23,14 @@ final class ClaimServicesWrapper extends CastsRequest
                     'days_or_units' => $service['days_or_units'],
                     'total_charge' => $service['total_charge'] ?? 0,
                     'copay' => $service['copay'],
-                    'modifier_ids' => json_encode($service['modifier_ids'] ?? []),
+                    'modifier_ids' => $service['modifier_ids'] ?? [],
                     'place_of_service_id' => $service['place_of_service_id'] ?? null,
                     'type_of_service_id' => $service['type_of_service_id'] ?? null,
-                    'diagnostic_pointers' => json_encode($service['diagnostic_pointers'] ?? []),
+                    'diagnostic_pointers' => $service['diagnostic_pointers'] ?? [],
                     'emg' => $service['emg'] ?? null,
                     'epsdt_id' => $service['epsdt_id'] ?? null,
                     'family_planning_id' => $service['family_planning_id'] ?? null,
                 ];
-                if (!empty($service['id'])) {
-                    $model['id'] = $service['id'];
-                }
-
-                return $model;
             });
     }
 

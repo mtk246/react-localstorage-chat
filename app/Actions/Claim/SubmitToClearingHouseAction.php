@@ -65,7 +65,7 @@ final class SubmitToClearingHouseAction
                 config("claim.connections.{$claim->type->value}.url_submission"),
                 $body
             );
-            $responseData['response'] = json_decode($response->body());
+            $responseData['response'] = $response->json();
             $responseData['request'] = $body;
 
             if ($response->successful()) {
@@ -90,7 +90,7 @@ final class SubmitToClearingHouseAction
                 'claim_id' => $claim->id,
                 'claim_batch_id' => $batchId,
                 'claim_transmission_status_id' => $claimTransmissionStatus->id,
-                'response_details' => isset($responseData) ? json_encode($responseData) : null,
+                'response_details' => isset($responseData) ? $responseData : null,
             ]);
         });
     }

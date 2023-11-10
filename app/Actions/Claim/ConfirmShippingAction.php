@@ -20,10 +20,10 @@ final class ConfirmShippingAction
 
     public function invoke(ClaimBatch $batch): ClaimBatch
     {
-        return DB::transaction(function () use (&$batch, $token) {
+        return DB::transaction(function () use (&$batch) {
             $claimBatchStatus = ClaimBatchStatus::whereStatus('Submitted')->first();
             $batch->claims
-                ->map(fn (Claim $claim) => $this->claimSubmit($token, $claim->id, $batch->id));
+                ->map(fn (Claim $claim) => $this->claimSubmit($claim->id, $batch->id));
 
             $batch->update([
                 'claim_batch_status_id' => $claimBatchStatus->id,
@@ -34,7 +34,7 @@ final class ConfirmShippingAction
         });
     }
 
-    public function claimSubmit(?string $token, int $claimId, int $batchId)
+    public function claimSubmit(int $claimId, int $batchId)
     {
         return DB::transaction(function () use ($claimId, $batchId) {
             $claim = Claim::query()

@@ -1028,7 +1028,9 @@ class DoctorRepository
     public function getList(Request $request)
     {
         $billingCompanyId = $request->billing_company_id ?? null;
-        $companyId = $request->company_id ?? null;
+        $companyId = str_contains($request->company_id ?? '', '-')
+            ? explode('-', $request->company_id ?? '')[0]
+            : $request->company_id ?? null;
         $authorization = $request->authorization ?? 'false';
         $taxonomy = $request->withTaxonomy ?? 'false';
         $only = $request->only ?? null;

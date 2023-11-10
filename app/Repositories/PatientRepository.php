@@ -1540,7 +1540,9 @@ class PatientRepository
     {
         $records = [];
         $billingCompanyId = $request->billing_company_id ?? null;
-        $companyId = $request->company_id ?? null;
+        $companyId = str_contains($request->company_id ?? '', '-')
+            ? explode('-', $request->company_id ?? '')[0]
+            : $request->company_id ?? null;
 
         $billingCompany = Gate::allows('is-admin')
             ? $billingCompanyId

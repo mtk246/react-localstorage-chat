@@ -52,6 +52,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimDateInformation> $dateInformations
  * @property int|null $date_informations_count
  * @property \App\Models\Claims\ClaimDemographicInformation|null $demographicInformation
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\DenialTracking> $denialTrackings
+ * @property int|null $denial_trackings_count
  * @property mixed $amount_paid
  * @property mixed $billed_amount
  * @property mixed $date_of_service
@@ -372,14 +374,32 @@ class Claim extends Model implements Auditable
             );
 
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
-        $claimService->services()->upsert($services
-            ->getService()
-            ->map(function (array $service) use ($claimService) {
-                $service['claim_service_id'] = $claimService->id;
 
-                return $service;
+        $arrayIds = $services->getService()
+            ->filter(function ($objeto) {
+                return isset($objeto['id']);
             })
-            ->toArray(), ['id']);
+            ->pluck('id')
+            ->toArray();
+
+        $claimService->services()
+            ->whereNotIn('services.id', $arrayIds)
+            ->get()
+            ->each(function (Services $service) {
+                $service->delete();
+            });
+
+        $services
+            ->getService()
+            ->each(function (array $service) use ($claimService) {
+                $claimService->services()->updateOrCreate(
+                    [
+                        'id' => $service['id'] ?? null,
+                        'claim_service_id' => $claimService->id,
+                    ],
+                    $service
+                );
+            });
     }
 
     public function setInsurancePolicies(Collection $insurancePolicies): void
@@ -389,7 +409,7 @@ class Claim extends Model implements Auditable
             ->sync($insurancePolicies->toArray());
     }
 
-    public function setStates(int $status, ?int $subStatus, ?string $note): void
+    public function setStates(int $status, ?int $subStatus, ?string $note): PrivateNote
     {
         $defaultNote = '';
         $statusNew = ClaimStatus::find($status);
@@ -424,7 +444,7 @@ class Claim extends Model implements Auditable
             ]);
         }
         if (null === $subStatus) {
-            PrivateNote::create([
+            $note = PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
                 'publishable_id' => $claimStatus?->id ?? $statusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
@@ -436,13 +456,15 @@ class Claim extends Model implements Auditable
                 'claim_status_type' => ClaimSubStatus::class,
                 'claim_status_id' => $subStatus,
             ]);
-            PrivateNote::create([
+            $note = PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
                 'publishable_id' => $claimSubStatus?->id ?? $subStatusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
                 'note' => $note ?? $defaultNote,
             ]);
         }
+
+        return $note;
     }
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
