@@ -462,15 +462,11 @@ class ClaimController extends Controller
     public function getListInsurancePolicies(Claim $claim): JsonResponse
     {
         return response()->json(
-            $claim->insurancePolicies()
-            ?->get()
-            ?->map(function ($item) {
-                return [
-                    'id' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
-                    'name' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
-                    'default' => ('P' == $item->typeresponsibility->code)
-                ];
-            })
+            $claim->insurancePolicies()?->get()?->map(fn ($item) => [
+                'id' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                'name' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                'default' => ('P' == $item->typeresponsibility->code)
+            ])
             ?->toArray() ?? [],
         );
     }

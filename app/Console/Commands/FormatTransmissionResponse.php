@@ -27,14 +27,14 @@ final class FormatTransmissionResponse extends Command
     public function handle(): int
     {
         ClaimTransmissionResponse::query()
-        ->get()
-        ->each(function (ClaimTransmissionResponse $resp) {
-            if ('string' === gettype($resp->response_details)) {
-                $details = json_decode($resp->response_details);
-                $resp->response_details = $details;
-                $resp->save();
-            }
-        });
+            ->get()
+            ->each(function (ClaimTransmissionResponse $resp) {
+                if ('string' === gettype($resp->response_details)) {
+                    $details = json_decode($resp->response_details);
+                    $resp->response_details = $details;
+                    $resp->save();
+                }
+            });
 
         $this->info('Formatting completed successfully.');
 
