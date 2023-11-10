@@ -349,9 +349,9 @@ final class ClaimBodyResource extends JsonResource
                 ->whereDate('created_at', '>=', $status->created_at)
                 ->orderBy('created_at', 'asc')
                 ->first()?->response_details['response'] ?? null;
-            $moreinfo = isset($claimResponse->status) && ('SUCCESS' !== $claimResponse->status)
-                ? $claimResponse?->errors ?? $claimResponse
-                : $claimResponse?->errors ?? '';
+            $moreinfo = isset($claimResponse['status']) && ('SUCCESS' !== $claimResponse['status'])
+                ? $claimResponse['errors'] ?? $claimResponse
+                : $claimResponse['errors'] ?? '';
 
             if ('Rejected' === $status->claimStatus->status) {
                 $fields = [
@@ -395,13 +395,13 @@ final class ClaimBodyResource extends JsonResource
                     'status_font_color' => $status->claimStatus->font_color ?? '',
                     'more_information' => is_array($moreinfo)
                         ? array_map(function ($info) {
-                            $index = strpos($info->description ?? '', "\n");
-                            $shortDescription = ($index > 0) ? substr($info->description ?? '', 0, $index) : $info->description ?? '';
+                            $index = strpos($info['description'] ?? '', "\n");
+                            $shortDescription = ($index > 0) ? substr($info['description'] ?? '', 0, $index) : $info['description'] ?? '';
 
                             return [
-                                'field' => $info->field ?? '',
+                                'field' => $info['field'] ?? '',
                                 'short_description' => $shortDescription ?? '',
-                                'description' => $info->description ?? '',
+                                'description' => $info['description'] ?? '',
                             ];
                         }, $moreinfo)
                         : $moreinfo,
