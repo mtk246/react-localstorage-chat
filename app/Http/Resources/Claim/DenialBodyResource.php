@@ -35,6 +35,15 @@ final class DenialBodyResource extends JsonResource
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
+            'company_information' => new CompanyResource(
+                $this->resource->demographicInformation
+            ),
+            'facility_information' => new FacilityResource(
+                $this->resource->demographicInformation
+            ),
+            'health_professional_information' => new BillingProviderResource(
+                $this->resource->demographicInformation
+            ),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'claim_type' => upperCaseWords($this->resource->type->getName()),
