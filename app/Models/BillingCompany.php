@@ -219,10 +219,6 @@ class BillingCompany extends Model implements Auditable
 
     public function getLastModifiedAttribute()
     {
-        $record = [
-            'user' => '',
-            'roles' => [],
-        ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
@@ -232,8 +228,11 @@ class BillingCompany extends Model implements Auditable
         } else {
             $user = User::find($lastModified->user_id);
 
+            $firstName = $user->profile->first_name ?? '';
+            $lastName = $user->profile->last_name ?? '';
+
             return [
-                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'user' => $firstName.' '.$lastName,
                 'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
