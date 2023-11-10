@@ -348,7 +348,7 @@ final class ClaimBodyResource extends JsonResource
             $claimResponse = $this->claimTransmissionResponses()
                 ->whereDate('created_at', '>=', $status->created_at)
                 ->orderBy('created_at', 'asc')
-                ->first()?->response_details['response'];
+                ->first()?->response_details['response'] ?? null;
             $moreinfo = isset($claimResponse->status) && ('SUCCESS' !== $claimResponse->status)
                 ? $claimResponse?->errors ?? $claimResponse
                 : $claimResponse?->errors ?? '';
