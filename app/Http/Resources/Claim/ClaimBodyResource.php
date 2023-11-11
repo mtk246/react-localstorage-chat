@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Enums\ClaimStatusType;
+use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -96,11 +96,11 @@ final class ClaimBodyResource extends JsonResource
     {
         $newStatuses = [];
 
-        foreach (ClaimStatusType::cases() as $status) {
-            $statusDefaultOrder[] = $status->value;
-            $statusColors[] = [
-                $status->value => $status->getColor(),
-            ];
+        foreach (ClaimStatusMap::cases() as $status) {
+            if ($status->getPublic()) {
+                $statusDefaultOrder[] = $status->value;
+            }
+            $statusColors[$status->value] = $status->getColor();
         }
 
         $this->claimStatusClaims()
@@ -154,7 +154,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
         if (count($statusDefaultOrder) > 0) {
-            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+            foreach ($statusDefaultOrder as $value) {
                 $status = ClaimStatus::whereStatus($value)->first();
                 array_push($newStatuses, [
                     'status' => $status->status ?? '',
@@ -165,7 +165,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
 
-        return array_merge($newStatuses, $records);
+        return array_merge(array_reverse($records, true), $newStatuses);
     }
 
     private function getDenialTrackingsDetailsMap(): array
