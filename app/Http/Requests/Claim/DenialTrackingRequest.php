@@ -33,7 +33,7 @@ final class DenialTrackingRequest extends FormRequest
             'follow_up' => ['required', 'date'],
             'department_responsible' => ['nullable', 'string'],
             'policy_responsible' => ['required', 'string'],
-            'response_details' => ['nullable', 'string'],
+            'response_details' => ['nullable', 'array'],
             'tracking_note' => ['required', 'string'],
         ];
     }
