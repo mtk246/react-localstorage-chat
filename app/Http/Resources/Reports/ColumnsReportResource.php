@@ -6,6 +6,9 @@ namespace App\Http\Resources\Reports;
 
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
+use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
+use App\Enums\Reports\ColumnsBillingGeneralPatinetType;
+use App\Enums\Reports\ColumnsGeneralFacilityType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
@@ -32,12 +35,18 @@ final class ColumnsReportResource extends JsonResource
      */
     public function toArray($request)
     {   
-        match ($this->module) {
+        return match ($this->module) {
             TypeReportAllRecords::DETAILED_PATIENT => Gate::check('is-admin') 
                 ? new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
 
-            TypeReportAllRecords::GENERAL_PATIENT => new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+            TypeReportAllRecords::GENERAL_PATIENT => Gate::check('is-admin') 
+                ? new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::GENERAL_FACILITY => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }
 }
