@@ -581,11 +581,60 @@
         "description": "Generate Appeal"
     },
     {
-        "name": "Register Payment",
-        "slug": "payment.create",
+        "name": "View Batch",
+        "slug": "payment.view",
         "module": "Payments Management",
         "constraint": "",
-        "description": "Register Payment"
+        "description": "View Batch"
+    },
+    {
+        "name": "Create Batch",
+        "slug": "payment.create",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "Create Batch"
+    },
+    {
+        "name": "Show Batch",
+        "slug": "payment.show",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "Show Batch"
+    },
+    {
+        "name": "Edit Batch",
+        "slug": "payment.edit",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "Edit Batch"
+    },
+    {
+        "name": "View a Payment Change History",
+        "slug": "Payment.history",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "View a Payment Change History"
+    },
+    {
+        "name": "Close Batch",
+        "slug": "payment.close",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "Close Batch"
+    },
+    {
+        "name": "EOB",
+        "slug": "payment.eob",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "EOB"
+    },
+    {
+        "name": "Remove Batch",
+        "slug": "payment.remove",
+        "module": "Payments Management",
+        "constraint": "payment.view",
+        "description": "Remove Batch"
     },
     {
         "name": "Generate patient accounts statements",
@@ -794,21 +843,148 @@
         "name": "Edit Claim Rules",
         "slug": "claimrule.edit",
         "module": "Claim Rules Management",
-        "constraint": "claimrule.show",
+        "constraint": "claimrule.view",
         "description": "Edit Claim Rules"
     },
     {
         "name": "Disable Claim Rules",
         "slug": "claimrule.disable",
         "module": "Claim Rules Management",
-        "constraint": "claimrule.show",
+        "constraint": "claimrule.view",
         "description": "Disable Claim Rules"
+    },
+    {
+        "name": "Remove Claim Rules",
+        "slug": "claimrule.remove",
+        "module": "Claim Rules Management",
+        "constraint": "claimrule.view",
+        "description": "Remove Claim Rules"
+    },
+    {
+        "name": "Duplicate Claim Rules",
+        "slug": "claimrule.duplicate",
+        "module": "Claim Rules Management",
+        "constraint": "claimrule.view",
+        "description": "Duplicate Claim Rules"
     },
     {
         "name": "View a Claim Rules Change History",
         "slug": "claimrule.history",
         "module": "Claim Rules Management",
-        "constraint": "claimrule.show",
+        "constraint": "claimrule.view",
         "description": "View a Claim Rules Change History"
+    },
+    {
+        "name": "View Claim",
+        "slug": "denial.view",
+        "module": "Denial Management",
+        "constraint": "",
+        "description": "View Claim"
+    },
+    {
+        "name": "Show Claim",
+        "slug": "denial.show",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Show Claim"
+    },
+    {
+        "name": "Edit Claim",
+        "slug": "denial.edit",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Edit Claim"
+    },
+    {
+        "name": "Tracking Claim",
+        "slug": "denial.tracking.claim",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Tracking Claim"
+    },
+    {
+        "name": "Preview Claim",
+        "slug": "denial.preview.claim",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Preview Claim"
+    },
+    {
+        "name": "Status",
+        "slug": "denial.status",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Status"
+    },
+    {
+        "name": "EOB",
+        "slug": "denial.eob",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "EOB"
+    },
+    {
+        "name": "Refile",
+        "slug": "denial.refile",
+        "module": "Denial Management",
+        "constraint": "denial.view",
+        "description": "Refile"
+    },
+
+    {
+        "name": "View Ledger",
+        "slug": "ledger.view",
+        "module": "Ledger Management",
+        "constraint": "",
+        "description": "View Ledger"
+    },
+    {
+        "name": "Preview Claim",
+        "slug": "ledger.preview.claim",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Preview Claim"
+    },
+    {
+        "name": "Show Claim",
+        "slug": "ledger.show.claim",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Show Claim"
+    },
+    {
+        "name": "Show Payment",
+        "slug": "ledger.show.payment",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Show Payment"
+    },
+    {
+        "name": "Show Denial",
+        "slug": "ledger.show.denial",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Show Denial"
+    },
+    {
+        "name": "Show Patient",
+        "slug": "ledger.show.patient",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Show Patient"
+    },
+    {
+        "name": "EOB",
+        "slug": "ledger.eob",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "EOB"
+    },
+    {
+        "name": "Tracking Claim",
+        "slug": "ledger.tracking.claim",
+        "module": "Ledger Management",
+        "constraint": "ledger.view",
+        "description": "Tracking Claim"
     }
 ]
