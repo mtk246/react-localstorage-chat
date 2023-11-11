@@ -576,6 +576,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
         Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+        Route::post('reports/all-records', [ReportReSource::class, 'allRecords']);
     });
 
     Route::middleware(['auth:api'])->group(function () {

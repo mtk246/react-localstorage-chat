@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Actions\Reports\GetAllRecordsAction;
 use App\Actions\Reports\GetReportAction;
 use App\Actions\Reports\StoreReportAction;
 use App\Actions\Reports\UpdateReportAction;
 use App\Enums\Reports\ClassificationType;
+use App\Enums\Reports\ColumnsAdminDetailPatinetType;
 use App\Enums\Reports\ReportType;
-use App\Enums\Reports\TagType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
 use App\Http\Requests\Reports\StoreRequest;
@@ -15,8 +16,9 @@ use App\Http\Requests\Reports\UpdateRequest;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\Reports\ClassificationTypeResource;
-use App\Http\Resources\Reports\ReportTypeResource;
+use App\Http\Resources\Reports\ColumnsAdminDetailPatinetResource;
 use App\Models\Reports\Report;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -76,6 +78,12 @@ final class ReportReSource extends Controller
     {
         return response()->json(
             new EnumResource(collect(ReportType::cases()), TypeResource::class),
+        );
+    }
+
+    public function allRecords(Request $request, GetAllRecordsAction $get): JsonResponse {
+        return response()->json(
+            $get->getAllPatient($request->module, Auth::user())
         );
     }
 }
