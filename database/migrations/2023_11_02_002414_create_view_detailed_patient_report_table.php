@@ -133,7 +133,7 @@ return new class() extends Migration {
             left join (
                 select
                     patient_id,
-                    array_to_string(array_agg(bc.id), ', ', '') as billing_companies_ids
+                    json_agg(bc.id) as billing_companies_ids
                 from
                     company_patient cp
                     inner join billing_companies bc on cp.billing_company_id = bc.id

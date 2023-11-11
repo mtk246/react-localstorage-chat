@@ -50,9 +50,7 @@ final class AllRecordsResource extends JsonResource
                 'to' => $this->resource['to'],
                 'total' => $this->resource['total'],
             ],
-            'headers' => Gate::check('is-admin') 
-                ? new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
+            'headers' => new ColumnsReportResource($this->resource, $this->module),
         ];
     }
 }
