@@ -183,36 +183,39 @@ class Claim extends Model implements Auditable
         return $query->when($search, function ($query, $search) {
             return $query
                 ->where('code', 'LIKE', strtoupper("%$search%"))
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByUserProfile($query, $search);
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByCompany($query, $search);
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByClaimFormServices($query, $search);
-                })
+                ->orWhere(fn ($query) => $this->searchByUserProfile($query, $search))
+                ->orWhere(fn ($query) => $this->searchByCompany($query, $search))
+                ->orWhere(fn ($query) => $this->searchByClaimFormServices($query, $search))
                 ->orWhereHas('insurancePolicies', function ($q) use ($search) {
                     $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
                         $qq->where('code', 'LIKE', strtoupper("%$search%"));
                     });
                 })
-                ->orWhere(function ($query) use ($search) {
-                    $query->with('service.services')
-                        ->when(is_numeric($search), function ($query, $search) {
-                            $this->searchByClaimFormServicesTotalPrice($query, $search);
-                        });
-                });
+                ->orWhere(fn ($query) => $query->with('service.services')
+                    ->when(
+                        is_numeric($search),
+                        fn ($query) => $this->searchByClaimFormServicesTotalPrice($query, $search)
+                    )
+                );
         });
     }
 
     protected function searchByUserProfile($query, $search)
     {
+        $searchArray = explode(' ', $search);
         $query->with(['demographicInformation.patient.profile'])
-            ->whereHas('demographicInformation.patient.profile', function ($q) use ($search) {
-                $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
+            ->whereHas('demographicInformation.patient.profile', function ($q) use ($searchArray, $search) {
+                $q->where(function ($subQuery) use ($searchArray) {
+                    foreach ($searchArray as $searchTerm) {
+                        $searchTerm = trim($searchTerm);
+                        if (empty($searchTerm)) {
+                            continue;
+                        }
+                        $subQuery->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$searchTerm%")])
+                            ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$searchTerm%")]);
+                    }
+                })
+                ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
             });
     }
 
