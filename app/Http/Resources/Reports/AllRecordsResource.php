@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Reports;
 
-use App\Enums\Reports\ColumnsAdminDetailPatinetType;
-use App\Enums\Reports\ColumnsBillingDetailPatinetType;
-use App\Http\Resources\Enums\EnumResource;
-use Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class AllRecordsResource extends JsonResource
@@ -18,14 +14,15 @@ final class AllRecordsResource extends JsonResource
     {
         parent::__construct($resource);
         $this->resource = $resource;
-        
+
         $this->module = $module;
     }
 
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)

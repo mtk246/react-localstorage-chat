@@ -8,7 +8,6 @@ use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
-use App\Http\Controllers\PresetController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
@@ -577,15 +576,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
         Route::post('reports/all-records', [ReportReSource::class, 'allRecords']);
-    });
-
-    Route::middleware(['auth:api'])->group(function () {
-        Route::get('/existing-reports', [\App\Http\Controllers\Reports\HomeController::class, 'existingReports']);
-        Route::post('/report', [\App\Http\Controllers\Reports\HomeController::class, 'report']);
-    });
-
-    Route::middleware(['auth:api'])->group(function () {
-        Route::resource('preset', PresetController::class)->only(['store', 'show', 'update', 'destroy']);
+        Route::get('reports/columns', [ReportReSource::class, 'getColumnsReports']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

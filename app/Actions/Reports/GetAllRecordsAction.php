@@ -7,27 +7,25 @@ namespace App\Actions\Reports;
 use App\Facades\Pagination;
 use App\Http\Resources\Reports\AllRecordsResource;
 use App\Models\User;
-use Gate;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Str;
 
 final class GetAllRecordsAction
 {
     public function getAllPatient(string $module, User $user): AllRecordsResource
     {
-        $typeReport = Str::snake($module);
+        $typeReport = \Str::snake($module);
 
         $data = DB::transaction(function () use ($typeReport, $user): LengthAwarePaginator {
             return DB::table('view_'.$typeReport.'_report')
                 ->when(
-                    Gate::denies('is-admin'),
+                    \Gate::denies('is-admin'),
                     fn ($query) => $query->whereJsonContains('billing_id', $user->billing_company_id),
                 )
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         })->toArray();
-        
+
         return new AllRecordsResource($data, $module);
     }
 }

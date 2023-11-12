@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Enums\Reports;
 
 use App\Enums\Attributes\AlignAttribute;
-use App\Enums\Attributes\ValueAttribute;
-use App\Enums\Attributes\WidthAttribute;
 use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Attributes\TextAttribute;
 use App\Enums\Attributes\TypeAttribute;
+use App\Enums\Attributes\ValueAttribute;
+use App\Enums\Attributes\WidthAttribute;
 use App\Enums\Interfaces\TypeInterface;
 use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
@@ -94,7 +94,7 @@ enum ColumnsBillingGeneralPatinetType: string implements TypeInterface
     #[PublicAttribute(true)]
     case CLAIMS_PROCESSED = 'claims_processed';
 
-    static public function getValues(): array|null
+    public static function getValues(): array|null
     {
         $cases = [];
         foreach (self::cases() as $case) {

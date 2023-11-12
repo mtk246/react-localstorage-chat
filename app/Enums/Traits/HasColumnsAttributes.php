@@ -25,19 +25,23 @@ trait HasColumnsAttributes
         return $this->getAttribute(NameAttribute::class);
     }
 
-    public function getType(): string {
+    public function getType(): string
+    {
         return $this->getAttribute(TypeAttribute::class);
     }
 
-    public function getAlign(): string {
+    public function getAlign(): string
+    {
         return $this->getAttribute(AlignAttribute::class);
     }
 
-    public function getText(): string {
+    public function getText(): string
+    {
         return $this->getAttribute(TextAttribute::class);
     }
 
-    public function getWidth(): string {
+    public function getWidth(): string
+    {
         return $this->getAttribute(WidthAttribute::class);
     }
 
