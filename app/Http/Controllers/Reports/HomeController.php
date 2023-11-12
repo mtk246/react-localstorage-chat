@@ -27,7 +27,7 @@ final class HomeController extends Controller
                 'detailed patient' => $this->patientReportRepository->getAllNamesClounms(),
                 'general patient' => $this->patientReportRepository->getGeneralNamesClounms(),
                 'facility' => $this->facilityReportRepository->getAllNamesClounms(),
-                'general healthcare' => $this->healthcareProfessionalRepository->getAllNamesClounms(),
+                'general healthcare ' => $this->healthcareProfessionalRepository->getAllNamesClounms(),
             ];
 
             if (!$rs) return response()->json(__('Columns list not available'), 400);

@@ -9,5 +9,5 @@ final class TypeReportAllRecords extends Enum
     const DETAILED_PATIENT = 'detailed patient';
     const GENERAL_PATIENT = 'general patient';
     const GENERAL_FACILITY = 'general facility';
-    const GENERAL_HEALTHCARE_PROFESSIONAL = 'general Healthcare Professional';
+    const GENERAL_HEALTHCARE = 'general healthcare';
 }

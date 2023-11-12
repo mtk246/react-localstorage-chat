@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement("
-        CREATE OR REPLACE VIEW public.view_general_healthcare_professional_report
+        CREATE OR REPLACE VIEW public.view_general_healthcare_report
             AS select
                 hp.id,
                 billing_companies_ids,
@@ -138,6 +138,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('view_general_healthcare_professional_report');
+        Schema::dropIfExists('view_general_healthcare_report');
     }
 };

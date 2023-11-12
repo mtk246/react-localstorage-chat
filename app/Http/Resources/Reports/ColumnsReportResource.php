@@ -7,8 +7,10 @@ namespace App\Http\Resources\Reports;
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
+use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsBillingGeneralPatinetType;
 use App\Enums\Reports\ColumnsGeneralFacilityType;
+use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
@@ -46,7 +48,11 @@ final class ColumnsReportResource extends JsonResource
 
             TypeReportAllRecords::GENERAL_FACILITY => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::GENERAL_HEALTHCARE => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }
 }
