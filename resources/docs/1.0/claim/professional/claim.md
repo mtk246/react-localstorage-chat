@@ -12,6 +12,8 @@
 - [Get list claim field information](#get-list-claim-field-informations)
 - [Get list qualifier by field](#get-list-qualifier)
 - [Get list clam services](#get-list-claim-services)
+- [Get list clam department responsibility](#get-list-claim-department-responsibility)
+- [Get list clam insurance policies](#get-list-claim-insurance-policy)
 - [Get all claim](#get-all-claim)
 - [Get one claim](#get-one-claim)
 - [Update claim](#update-claim)
@@ -22,7 +24,7 @@
 - [Add note current status Claim](#add-note-current)
 - [Update note current status Claim](#update-note-current)
 - [Get list diagnoses](#get-list-diagnoses)
-- [Add check status Claim](#add-check-status)
+- [Add tracking Claim](#add-tracking-claim)
 - [Get check status Claim](#get-check-status)
 
 
@@ -42,6 +44,8 @@
 | 7  |GET     | `Get list claim field information`  | `/claim/get-list-claim-field-informations`     | yes            | Get list claim field informations |
 | 8  |GET     | `Get list claim qualifier`  | `/claim/get-list-qualifier-by-field/{field_id}`     | yes            | Get list claim field informations |
 | 9  |GET     | `Get list claim services`  | `/claim/get-list-claim-services`     | yes            | Get list claim services |
+| 10  |GET     | `Get list claim department responsibility`  | `/claim/get-list-department-responsibilities`     | yes            | Get list claim department responsibility |
+| 10  |GET     | `Get list claim insurance policy`  | `/claim/get-list-insurance-policies/{claimID}`     | yes            | Get list claim insurance policy |
 | 10  |GET     | `Get all claims server` | `/claim/get-all-server`     | yes            | Get all claims from server |
 | 11  |GET     | `Get one claim` | `/claim/{id}` | yes            | Get one claim |
 | 12  |PUT     | `Update claim`  | `/claim/{id}` | yes            | Update claim  |
@@ -55,8 +59,8 @@
 | 20 |PATCH | `Change status Claim`           | `/claim/change-status/{id}`|yes|Change status claim|
 | 21 |PATCH | `Add note current status Claim` | `/claim/add-note-current-status/{id}`|yes|Add note current status claim|
 | 22 |PATCH | `Update note current status Claim` | `/claim/update-note-current-status/{id}`|yes|Update note current status claim|
-| 23 |PATCH | `Add check status Claim` | `/claim/add-check-status-claim/{id}`|yes|Add check status claim|
-| 24 |GET | `Get check status Claim` | `/claim/get-check-status/{id}`|yes|Get check status claim|
+| 23 |PATCH | `Add tracking Claim` | `/claim/add-tracking-claim/{claimID}`|yes|Add tracking claim|
+| 24 |GET | `Get check status Claim` | `/claim/get-check-status/{claimID}`|yes|Get check status claim|
 
 <a name="data-another-module"></a>
 ## Data from another module to make request
@@ -774,6 +778,78 @@
 }
 ```
 
+#
+<a name="get-list-claim-department-responsibility"></a>
+## Get list claim department responsibilities
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 Department responsibility found
+
+#
+
+```json
+[
+  {
+    "id": "Billing",
+    "name": "Billing"
+  },
+  {
+    "id": "Payment Posting",
+    "name": "Payment Posting"
+  },
+  {
+    "id": "Collector",
+    "name": "Collector"
+  }
+]
+```
+#
+
+<a name="get-list-claim-insurance-policy"></a>
+## Get list claim insurance policy
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "id": <integer>
+}
+```
+
+## Response
+
+> {success} 200 insurance policy found
+
+#
+
+```json
+[
+  {
+    "id": "P - UL0038342",
+    "name": "P - UL0038342",
+    "default": true,
+  }
+]
+```
 #
 
 <a name="get-list-status-claim"></a>
@@ -1692,8 +1768,8 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
 ]
 ```
 
-<a name="add-check-status"></a>
-## Add check status of the claim
+<a name="add-tracking-claim"></a>
+## Add traking of the claim
 
 ## Param in path
 
@@ -1706,13 +1782,23 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
 
 ```json
 {
-    "response_details": "Response API", /** Optional */
-    "interface_type": "call", /** Optional Options:['call', 'email', 'website'] */
-    "interface": "+1432323212", /** Required if interface_type is not null */
-    "consultation_date": "2022-09-16", /** Optional */
+    "interface_type": 0, /** Required Options:['call' => '0', 'email' => '1', 'website' => '2', 'other' => '3'] */
+    "is_reprocess_claim": true, /** Optional default false*/
+    "is_contact_to_patient": true, /** Optional default false*/
+    "contact_through": "+1432323212", /** Optional */
+    "claim_number": "123543ASD", /** Optional */
+    "rep_name": "123543ASD", /** Optional */
+    "ref_number": "123543ASD", /** Optional */
+    "claim_status": 1, /** Required */
+    "claim_sub_status": 2, /** Optional */
+    "tracking_date": "2022-09-16", /** Required */
     "resolution_time": "2022-09-16", /** Optional */
     "past_due_date": "2022-09-16", /** Optional */
-    "private_note": "Note private", /** Optional */
+    "follow_up": "2022-09-16", /** Required */
+    "department_responsible": "Department 1", /** Optional */
+    "policy_responsible": "P - Policy 1", /** Required */
+    "response_details": "{claimData: response..}", /** Optional, If the API status verification is requested */
+    "tracking_note": "Note private of tracking claim", /** Required */
 }
 ```
 
@@ -1722,17 +1808,20 @@ except_ids optional <array>    //[1,2] Array with ids diagnoses selected
 
 ```json
 {
-    "id": 1,
-    "status_id": 1,
-    "subtatus_id": 1,
-    "response_details": "Response API",
-    "interface_type": "call",
-    "interface": "+1432323212",
-    "consultation_date": "2022-09-16",
-    "resolution_time": "2022-09-16",
-    "past_due_date": "2022-09-16",
-    "updated_at": "2022-09-16T13:23:19.000000Z",
-    "created_at": "2022-09-16T13:23:19.000000Z",
+  "id": 69,
+  "code": "01HDM4TW76431JJ1818S0XMHBZ",
+  "submitter_name": "Billing Company name",
+  "submitter_contact": "Contact name",
+  "submitter_phone": "3054878140",
+  "created_at": "2023-10-25T19:26:27.000000Z",
+  "updated_at": "2023-10-25T19:26:27.000000Z",
+  "billing_company_id": 2,
+  "type": 2,
+  "aditional_information": "[]",
+  "private_note": {...},
+  "demographic_information": {...},
+  "service": {...},
+  "insurance_policies": []
 }
 ```
 

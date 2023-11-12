@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Enums\Claim\SplitCompanyClaimType;
 use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\BillingCompany;
+use App\Models\Claims\Claim;
 use App\Models\Company;
 use App\Models\CompanyStatement;
 use App\Models\Contact;
@@ -197,12 +199,91 @@ class CompanyRepository
 
                     return $result;
                 }, []);
+            } elseif ($request->claim) {
+                $claim  = Claim::query()->find($request->claim_id ?? null);
+
+                return Company::query()
+                    ->whereHas('billingCompanies', function ($query) use ($billingCompany) {
+                        $query->where('billing_company_id', $billingCompany->id ?? $billingCompany);
+                    })
+                    ->get()
+                    ->map(function ($company) use ($billingCompany, $claim) {
+                        $companyBillingCompany = $company->billingCompanies
+                            ->first(function ($item) use ($billingCompany) {
+                                return $item->id == $billingCompany;
+                            })
+                            ?->pivot;
+                        $claimFormatIds = $companyBillingCompany?->claim_format_ids ?? [];
+                        $optionSplit = [
+                            [
+                                'id' => $company->id .'-'.SplitCompanyClaimType::PHYSICIAN->value,
+                                'name' => SplitCompanyClaimType::PHYSICIAN->getName() . ' ' . $company->name,
+                                'abbreviation' => $company->abbreviations->first(function ($item) use ($billingCompany) {
+                                    return $item->billing_company_id == $billingCompany;
+                                })?->abbreviation ?? '',
+                                'claim_format_ids' => $claimFormatIds,
+                                'claim_formats' => is_array($claimFormatIds)
+                                    ? TypeForm::query()
+                                        ->whereIn('id', $claimFormatIds)
+                                        ->select('id', 'form as name')
+                                        ->get()
+                                        ->toArray()
+                                    : null,
+                            ],
+                            [
+                                'id' => $company->id .'-' . SplitCompanyClaimType::HOSPITAL->value,
+                                'name' => SplitCompanyClaimType::HOSPITAL->getName() . ' ' . $company->name,
+                                'abbreviation' => $company->abbreviations->first(function ($item) use ($billingCompany) {
+                                    return $item->billing_company_id == $billingCompany;
+                                })?->abbreviation ?? '',
+                                'claim_format_ids' => $claimFormatIds,
+                                'claim_formats' => is_array($claimFormatIds)
+                                    ? TypeForm::query()
+                                        ->whereIn('id', $claimFormatIds)
+                                        ->select('id', 'form as name')
+                                        ->get()
+                                        ->toArray()
+                                    : null,
+                            ],
+                        ];
+                        $optionSingle = [
+                            [
+                                'id' => $company->id,
+                                'name' => $company->name,
+                                'abbreviation' => $company->abbreviations->first(function ($item) use ($billingCompany) {
+                                    return $item->billing_company_id == $billingCompany;
+                                })?->abbreviation ?? '',
+                                'claim_format_ids' => $claimFormatIds,
+                                'claim_formats' => is_array($claimFormatIds)
+                                    ? TypeForm::query()
+                                        ->whereIn('id', $claimFormatIds)
+                                        ->select('id', 'form as name')
+                                        ->get()
+                                        ->toArray()
+                                    : null,
+                            ]
+                        ];
+
+                        if ($companyBillingCompany?->split_company_claim ?? false) {
+                            if (isset($claim) && ($claim->demographicInformation?->company_id == $company->id)) {
+                                return isset($claim->demographicInformation?->split_company_type)
+                                    ? $optionSplit
+                                    : array_merge($optionSingle, $optionSplit);
+                            } else {
+                                return $optionSplit;
+                            }
+                        } else {
+                            return $optionSingle;
+                        }
+                    })
+                    ->flatten(1)
+                    ->toArray();
             } else {
                 if (isset($request->except_ids)) {
                     $except_ids = ((is_array($request->except_ids)) ? $request->except_ids : json_decode($request->except_ids)) ?? null;
                 }
 
-                $companies = getList(
+                return getList(
                     Company::class,
                     ['name'],
                     ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
@@ -210,15 +291,8 @@ class CompanyRepository
                     [],
                     [
                         'abbreviation' => ['relationship' => 'abbreviations', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]],
-                        'claim_format_ids' => ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]
                     ]
                 );
-                return array_map(function ($item) {
-                    $item['claim_formats'] = is_array($item['claim_format_ids'])
-                        ? TypeForm::query()->whereIn('id', $item['claim_format_ids'])->select('id', 'form as name')->get()->toArray()
-                        : null;
-                    return $item;
-                }, $companies);
             }
         } catch (\Exception $e) {
             return [];

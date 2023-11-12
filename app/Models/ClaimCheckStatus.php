@@ -23,6 +23,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $private_note_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $follow_up_date
+ * @property int|null $department_responsibility_id
+ * @property int|null $insurance_policy_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\PrivateNote $privateNote
@@ -32,7 +35,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus query()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereConsultationDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereDepartmentResponsibilityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereFollowUpDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInsurancePolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInterface($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus whereInterfaceType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimCheckStatus wherePastDueDate($value)

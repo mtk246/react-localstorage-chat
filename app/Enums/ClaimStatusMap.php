@@ -10,7 +10,7 @@ use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Interfaces\ColorTypeInterface;
 use App\Enums\Traits\HasColorAttributes;
 
-enum ClaimStatusType: string implements ColorTypeInterface
+enum ClaimStatusMap: string implements ColorTypeInterface
 {
     use HasColorAttributes;
 
@@ -41,11 +41,11 @@ enum ClaimStatusType: string implements ColorTypeInterface
 
     #[ColorAttribute('#FC8989')]
     #[NameAttribute('Rejected')]
-    #[PublicAttribute(true)]
+    #[PublicAttribute(false)]
     case REJECTED = 'Rejected';
 
     #[ColorAttribute('#FC8989')]
     #[NameAttribute('Denied')]
-    #[PublicAttribute(true)]
+    #[PublicAttribute(false)]
     case DENIED = 'Denied';
 }
