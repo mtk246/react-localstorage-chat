@@ -50,7 +50,7 @@ final class ColumnsReportResource extends JsonResource
                 ? new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
 
-            TypeReportAllRecords::GENERAL_HEALTHCARE => \Gate::check('is-admin')
+            TypeReportAllRecords::GENERAL_HEALTHCARE_PROFESSIONAL => \Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
         };

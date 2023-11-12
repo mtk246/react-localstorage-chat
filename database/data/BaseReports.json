@@ -96,7 +96,7 @@
         "tableu": true
     },
     {
-        "id": "01HENMNXBGA26F78BG4MS4PXDP",
+        "id": "01229C09819911EEB9620242AC",
         "name": "Detailed patient Report",
         "description": "Use this report to display relevant information about the patients registered in the system.",
         "type": 1,
@@ -108,7 +108,7 @@
         "tableu": false
     },
     {
-        "id": "01HENMNXBGA26F78BG4MS4PXGP",
+        "id": "01229C478819911EB9620242AC",
         "name": "General patient Report",
         "description": "Use this report to view all information about patient registered in the system.",
         "type": 1,
@@ -120,7 +120,7 @@
         "tableu": false
     },
     {
-        "id": "01HENMNXBGA26F78BG4MS4PXGF",
+        "id": "0129C5EA819911EEB9620242AC",
         "name": "General Facility Report",
         "description": "Use this report to view all information about facility professionals registered in the system.",
         "type": 1,
@@ -132,7 +132,7 @@
         "tableu": false
     },
     {
-        "id": "01HENMNXBGA26F78BG4MS4PXGH",
+        "id": "01229C734819911EEB20242ACS",
         "name": "General Healthcare Professional Report",
         "description": "Use this report to view all information about healthcare professionals registered in the system.",
         "type": 1,
