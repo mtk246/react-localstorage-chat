@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Denial;
 use App\Actions\Claim\GetDenialAction;
 use App\Models\Claims\Claim;
 use App\Models\Claims\DenialTracking;
+use App\Models\Claims\DenialRefile;
 use App\Http\Controllers\Controller;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
@@ -122,5 +123,56 @@ final class DenialController extends Controller
         $tracking = DenialTracking::updateDenialTracking($trackingData);
 
         return $tracking ? response()->json($tracking) : response()->json(__('Error updating denial tracking'), 400);
+    }
+
+    public function createDenialRefile(Request $request): JsonResponse
+    {
+        $claim = Claim::find($request->input('claim_id'));
+
+        if (!$claim) {
+            return response()->json(__('Error creating denial tracking'), 400);
+        }
+
+        $refileData = [
+            'refile_type' => $request->input('refile_type'),
+            'policy_number' => $request->input('policy_number'),
+            'is_cross_over' => $request->input('is_cross_over'),
+            'cross_over_date' => $request->input('cross_over_date'),
+            'note' => $request->input('note'),
+            'original_claim_id' => $request->input('original_claim_id'),
+            'refile_reason' => $request->input('refile_reason'),
+            'denial_tracking_id' => $request->input('denial_tracking_id'),
+            'claim_id' => $request->input('claim_id')
+        ];
+
+        $refile = DenialRefile::createDenialRefile($refileData);
+
+        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
+    }
+
+    public function updateDenialRefile(Request $request): JsonResponse
+    {
+        $claim = Claim::find($request->input('claim_id'));
+
+        if (!$claim) {
+            return response()->json(__('Error creating denial tracking'), 400);
+        }
+
+        $refileData = [
+            'refile_id' => $request->input('refile_id'),
+            'refile_type' => $request->input('refile_type'),
+            'policy_number' => $request->input('policy_number'),
+            'is_cross_over' => $request->input('is_cross_over'),
+            'cross_over_date' => $request->input('cross_over_date'),
+            'note' => $request->input('note'),
+            'original_claim_id' => $request->input('original_claim_id'),
+            'refile_reason' => $request->input('refile_reason'),
+            'denial_tracking_id' => $request->input('denial_tracking_id'),
+            'claim_id' => $request->input('claim_id')
+        ];
+
+        $refile = DenialRefile::updateDenialRefile($refileData);
+
+        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
     }
 }

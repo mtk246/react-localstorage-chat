@@ -6,6 +6,7 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\ClaimStatusType;
 use App\Enums\InterfaceType;
+use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -35,14 +36,15 @@ final class DenialBodyResource extends JsonResource
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
+            'transmission_count' => $this->claimTransmissionResponses->count(),
             'company_information' => new CompanyResource(
-                $this->resource->demographicInformation
+                $this->resource->demographicInformation->company
             ),
             'facility_information' => new FacilityResource(
-                $this->resource->demographicInformation
+                $this->resource->demographicInformation->facility
             ),
-            'health_professional_information' => new BillingProviderResource(
-                $this->resource->demographicInformation
+            'health_professional_information' => HealthProfessionalResource::collection(
+                $this->resource->demographicInformation->healthProfessionals
             ),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
@@ -88,6 +90,8 @@ final class DenialBodyResource extends JsonResource
             'updated_at' => $this->resource->updated_at,
             'denial_trackings' => $this->resource->getDenialTrackings(),
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
+            'denial_refile' => $this->resource->getDenialRefile(),
+            'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
         ];
     }
 
@@ -202,6 +206,19 @@ final class DenialBodyResource extends JsonResource
                 InterfaceType::WEBSITE => 1,
                 InterfaceType::EMAIL => 2,
                 InterfaceType::OTHER => 3,
+            ],
+        ];
+
+        return $records;
+    }
+
+    private function getDenialRefileDetailsMap(): array
+    {
+        $records = [
+            'refile_type' => [
+                InterfaceType::SECONDARY_INSURANCE => 0,
+                InterfaceType::CORRECTED_CLAIMS => 1,
+                InterfaceType::REFILE_ANOTHER_REASONS => 2,
             ],
         ];
 

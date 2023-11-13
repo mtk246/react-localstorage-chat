@@ -431,11 +431,14 @@ class Claim extends Model implements Auditable
             ->orderBy('id', 'desc')
             ->first() ?? null;
 
-        if (ClaimStatus::class == $currentType) {
+        $defaultNote = '';
+
+        if (ClaimStatus::class === $currentType && null !== $statusCurrent && null !== $statusCurrent->claimStatus) {
             $defaultNote = 'Status change successful, from '.$statusCurrent->claimStatus->status.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->status) : '');
-        } elseif (ClaimSubStatus::class == $currentType) {
+        } elseif (ClaimSubStatus::class === $currentType && null !== $statusCurrent && null !== $subStatusCurrent && null !== $subStatusCurrent->claimStatus) {
             $defaultNote = 'Substatus change successful, from '.$statusCurrent->claimStatus->status.' - '.$subStatusCurrent->claimStatus->name.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->name) : '');
         }
+
         if ($status !== $statusCurrent?->claim_status_id) {
             $claimStatus = ClaimStatusClaim::create([
                 'claim_id' => $this->id,
@@ -517,5 +520,10 @@ class Claim extends Model implements Auditable
     public function getDenialTrackings()
     {
         return $this->hasMany(DenialTracking::class, 'claim_id')->get();
+    }
+
+    public function getDenialRefile()
+    {
+        return $this->hasMany(DenialRefile::class, 'claim_id')->get();
     }
 }

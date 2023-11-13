@@ -20,7 +20,8 @@ final class DemographicInformationResource extends JsonResource
     /** @return array<string, mixed> */
     public function toArray($request): array
     {
-        $companyPatient = CompanyPatient::find($this->resource->patient_id);
+        $companyPatient = CompanyPatient::with(['patient', 'company', 'billingCompany'])
+        ->find($this->patient_id);
 
         $commonFields = [
             'validate' => $this->resource->validate,
@@ -41,6 +42,7 @@ final class DemographicInformationResource extends JsonResource
                 ? array_merge([
                     'patient_id' => $this->resource->patient_id,
                     'med_num' => $companyPatient?->med_num ?? '',
+                    'patient_code' => $this->resource->patient->code,
                 ], $this->resource->patient->profile->toArray())
                 : [],
             'prior_authorization_number' => $this->resource->prior_authorization_number,

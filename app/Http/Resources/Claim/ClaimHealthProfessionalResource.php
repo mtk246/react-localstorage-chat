@@ -8,11 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ClaimHealthProfessionalResource extends JsonResource
 {
-    public function __construct($resource)
-    {
-        parent::__construct($resource);
-    }
-
     /** @return array<string, mixed> */
     public function toArray($request): array
     {

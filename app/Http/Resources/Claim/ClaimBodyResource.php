@@ -23,6 +23,7 @@ final class ClaimBodyResource extends JsonResource
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
+            'transmission_count' => $this->claimTransmissionResponses->count(),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'claim_type' => upperCaseWords($this->resource->type->getName()),
@@ -62,7 +63,10 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'denial_trackings' => $this->resource->getDenialTrackings(),
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
+            'denial_refile' => $this->resource->getDenialRefile(),
+            'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
         ];
     }
 
@@ -176,6 +180,19 @@ final class ClaimBodyResource extends JsonResource
                 InterfaceType::WEBSITE => 1,
                 InterfaceType::EMAIL => 2,
                 InterfaceType::OTHER => 3,
+            ],
+        ];
+
+        return $records;
+    }
+
+    private function getDenialRefileDetailsMap(): array
+    {
+        $records = [
+            'refile_type' => [
+                InterfaceType::SECONDARY_INSURANCE => 0,
+                InterfaceType::CORRECTED_CLAIMS => 1,
+                InterfaceType::REFILE_ANOTHER_REASONS => 2,
             ],
         ];
 
