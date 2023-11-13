@@ -233,7 +233,7 @@ class InsuranceCompanyRepository
                 'fileMethod',
                 'billingCompanies',
                 'insurancePlans' => function($query) {
-                    $query->with(['planType', 'billingCompanies']);
+                    $query->with(['planTypes', 'billingCompanies']);
                 },
             ]);
         } else {
@@ -258,7 +258,7 @@ class InsuranceCompanyRepository
                 'fileMethod',
                 'insurancePlans' => function($query) use ($bC) {
                     $query->with([
-                        'planType',
+                        'planTypes',
                         'billingCompanies' => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },

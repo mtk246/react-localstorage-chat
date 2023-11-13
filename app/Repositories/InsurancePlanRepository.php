@@ -520,7 +520,7 @@ class InsurancePlanRepository
                 'nicknames',
                 'abbreviations',
                 'insType',
-                'planType',
+                'planTypes',
                 'insuranceCompany',
                 'billingCompanies',
             ]);
@@ -538,7 +538,7 @@ class InsurancePlanRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'insType',
-                'planType',
+                'planTypes',
                 'insuranceCompany',
             ]);
         }
