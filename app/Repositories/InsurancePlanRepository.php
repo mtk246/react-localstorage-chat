@@ -78,7 +78,21 @@ class InsurancePlanRepository
                 $insurancePlan->billingCompanies()->attach($billingCompany);
             }
 
-            $insurancePlan->planTypes()->sync($data['plan_type_ids']);
+            $insurancePlan->planTypes()
+                ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
+                    $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany);
+                })
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'])
+                ->detach();
+
+            foreach ($data['plan_type_ids'] as $planTypeId) {
+                if (is_null($insurancePlan->planTypes()
+                        ->wherePivot('billing_company_id', $billingCompany)->find($planTypeId))) {
+                    $insurancePlan->planTypes()->attach($planTypeId, [
+                        'billing_company_id' => $billingCompany,
+                    ]);
+                }
+            }
 
             if($data['format']) {
                 foreach ($data['format'] as $format) {
@@ -236,7 +250,21 @@ class InsurancePlanRepository
                 ]);
             }
 
-            $insurancePlan->planTypes()->sync($data['plan_type_ids']);
+            $insurancePlan->planTypes()
+                ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
+                    $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany->id ?? $billingCompany);
+                })
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'])
+                ->detach();
+
+            foreach ($data['plan_type_ids'] as $planTypeId) {
+                if (is_null($insurancePlan->planTypes()
+                        ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($planTypeId))) {
+                    $insurancePlan->planTypes()->attach($planTypeId, [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]);
+                }
+            }
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 EntityTimeFailed::updateOrCreate([

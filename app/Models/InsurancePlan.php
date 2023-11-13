@@ -62,8 +62,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $nicknames_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $planType
- * @property int|null $plan_type_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $planTypes
+ * @property int|null $plan_types_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
@@ -155,7 +155,7 @@ class InsurancePlan extends Model implements Auditable
      */
     public function planTypes()
     {
-        return $this->belongsToMany(TypeCatalog::class, 'insurance_plan_plan_type', 'insurance_plan_id', 'plan_type_id')->withTimestamps();
+        return $this->belongsToMany(TypeCatalog::class, 'insurance_plan_plan_type', 'insurance_plan_id', 'plan_type_id')->withPivot('billing_company_id')->withTimestamps();
     }
 
     public function copays(): BelongsToMany
