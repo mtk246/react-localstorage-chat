@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Enums\ClaimStatusType;
+use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
@@ -100,11 +100,11 @@ final class ClaimBodyResource extends JsonResource
     {
         $newStatuses = [];
 
-        foreach (ClaimStatusType::cases() as $status) {
-            $statusDefaultOrder[] = $status->value;
-            $statusColors[] = [
-                $status->value => $status->getColor(),
-            ];
+        foreach (ClaimStatusMap::cases() as $status) {
+            if ($status->getPublic()) {
+                $statusDefaultOrder[] = $status->value;
+            }
+            $statusColors[$status->value] = $status->getColor();
         }
 
         $this->claimStatusClaims()
@@ -158,7 +158,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
         if (count($statusDefaultOrder) > 0) {
-            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+            foreach ($statusDefaultOrder as $value) {
                 $status = ClaimStatus::whereStatus($value)->first();
                 array_push($newStatuses, [
                     'status' => $status->status ?? '',
@@ -169,7 +169,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
 
-        return array_merge($newStatuses, $records);
+        return array_merge(array_reverse($records, true), $newStatuses);
     }
 
     private function getDenialTrackingsDetailsMap(): array
@@ -366,9 +366,9 @@ final class ClaimBodyResource extends JsonResource
                 ->whereDate('created_at', '>=', $status->created_at)
                 ->orderBy('created_at', 'asc')
                 ->first()?->response_details['response'] ?? null;
-            $moreinfo = isset($claimResponse->status) && ('SUCCESS' !== $claimResponse->status)
-                ? $claimResponse?->errors ?? $claimResponse
-                : $claimResponse?->errors ?? '';
+            $moreinfo = isset($claimResponse['status']) && ('SUCCESS' !== $claimResponse['status'])
+                ? $claimResponse['errors'] ?? $claimResponse
+                : $claimResponse['errors'] ?? '';
 
             if ('Rejected' === $status->claimStatus->status) {
                 $fields = [
@@ -412,13 +412,13 @@ final class ClaimBodyResource extends JsonResource
                     'status_font_color' => $status->claimStatus->font_color ?? '',
                     'more_information' => is_array($moreinfo)
                         ? array_map(function ($info) {
-                            $index = strpos($info->description ?? '', "\n");
-                            $shortDescription = ($index > 0) ? substr($info->description ?? '', 0, $index) : $info->description ?? '';
+                            $index = strpos($info['description'] ?? '', "\n");
+                            $shortDescription = ($index > 0) ? substr($info['description'] ?? '', 0, $index) : $info['description'] ?? '';
 
                             return [
-                                'field' => $info->field ?? '',
+                                'field' => $info['field'] ?? '',
                                 'short_description' => $shortDescription ?? '',
-                                'description' => $info->description ?? '',
+                                'description' => $info['description'] ?? '',
                             ];
                         }, $moreinfo)
                         : $moreinfo,
