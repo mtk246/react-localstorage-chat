@@ -10,13 +10,13 @@ return new class() extends Migration {
         DB::statement("
             CREATE OR REPLACE VIEW public.view_detailed_patient_report
             AS select
-            patients.id as id,
-            billing_companies_ids as billing_id,
-            billing_companies,
-            companies,
-            medical_no,
-            coalesce(claims_processed, 0) as claims_processed,
-            patients.code as system_code,
+                patients.id as id,
+                billing_companies_ids as billing_id,
+                billing_companies,
+                companies,
+                medical_no,
+                coalesce(claims_processed, 0) as claims_processed,
+                patients.code as system_code,
             CASE
                 WHEN concat_ws(
                     ' ' :: text,
