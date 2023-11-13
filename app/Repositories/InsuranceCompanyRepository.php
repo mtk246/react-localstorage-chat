@@ -310,7 +310,7 @@ class InsuranceCompanyRepository
                 'publicNote',
                 'privateNotes',
                 'insurancePlans' => function($query) {
-                    $query->with(['planType', 'billingCompanies']);
+                    $query->with(['planTypes', 'billingCompanies']);
                 },
             ])->first();
         } else {
@@ -343,7 +343,7 @@ class InsuranceCompanyRepository
                 },
                 'insurancePlans' => function($query) use ($bC) {
                     $query->with([
-                        'planType',
+                        'planTypes',
                         'billingCompanies' => function ($query) use ($bC) {
                             $query->where('billing_company_id', $bC);
                         },
