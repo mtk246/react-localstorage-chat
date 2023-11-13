@@ -39,7 +39,6 @@ class InsurancePlanRepository
             if (isset($insurancePlan)) {
                 $insurancePlan->update([
                     'ins_type_id' => $data['ins_type_id'],
-                    'plan_type_id' => $data['plan_type_id'] ?? null,
                     'accept_assign' => $data['accept_assign'] ?? true,
                     'pre_authorization' => $data['pre_authorization'],
                     'file_zero_changes' => $data['file_zero_changes'],
@@ -56,7 +55,6 @@ class InsurancePlanRepository
                     'name' => $data['name'],
                     'payer_id' => $data['payer_id'],
                     'ins_type_id' => $data['ins_type_id'],
-                    'plan_type_id' => $data['plan_type_id'] ?? null,
                     'accept_assign' => $data['accept_assign'],
                     'pre_authorization' => $data['pre_authorization'],
                     'file_zero_changes' => $data['file_zero_changes'],
@@ -79,6 +77,8 @@ class InsurancePlanRepository
             if (is_null($insurancePlan->billingCompanies()->find($billingCompany))) {
                 $insurancePlan->billingCompanies()->attach($billingCompany);
             }
+
+            $insurancePlan->planTypes()->sync($data['plan_type_ids']);
 
             if($data['format']) {
                 foreach ($data['format'] as $format) {
@@ -184,7 +184,6 @@ class InsurancePlanRepository
                 'name' => $data['name'],
                 'payer_id' => $data['payer_id'],
                 'ins_type_id' => $data['ins_type_id'],
-                'plan_type_id' => $data['plan_type_id'],
                 'accept_assign' => $data['accept_assign'],
                 'pre_authorization' => $data['pre_authorization'],
                 'file_zero_changes' => $data['file_zero_changes'],
@@ -236,6 +235,8 @@ class InsurancePlanRepository
                     'status' => true,
                 ]);
             }
+
+            $insurancePlan->planTypes()->sync($data['plan_type_ids']);
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
                 EntityTimeFailed::updateOrCreate([
