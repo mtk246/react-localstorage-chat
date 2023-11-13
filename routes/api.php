@@ -566,7 +566,6 @@ Route::prefix('v1')/* ->middleware('audit') */
             'auth:api',
             // 'role:superuser|biller|billingmanager',
         ])->group(function () {
-            Route::get('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'getOneClaimBatch']);
             Route::post('/', [DenialController::class, 'createDenialRefile']);
             Route::put('/', [DenialController::class, 'updateDenialRefile']);
         });
