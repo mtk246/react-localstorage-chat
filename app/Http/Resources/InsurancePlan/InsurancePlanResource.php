@@ -35,8 +35,13 @@ final class InsurancePlanResource extends JsonResource
             'allow_attached_files' => $this->resource->allow_attached_files,
             'ins_type_id' => $this->resource->ins_type_id ?? '',
             'ins_type' => isset($this->resource->insType) ? ($this->resource->insType->code.' - '.$this->resource->insType->description) : '',
-            'plan_type_id' => $this->resource->plan_type_id ?? '',
-            'plan_type' => isset($this->resource->planType) ? ($this->resource->planType->code.' - '.$this->resource->planType->description) : '',
+            'plan_type_ids' => $this->resource->planTypes()->pluck('type_catalogs.id') ?? [],
+            'plan_types' => isset($this->resource->planTypes)
+                ? $this->resource->planTypes->map(fn ($planType) => [
+                    'id' => $planType->id,
+                    'name' => $planType->code.' - '.$planType->description,
+                ])
+                : [],
             'insurance_company_id' => $this->resource->insurance_company_id,
             'insurance_company' => !is_null($this->resource->insuranceCompany) ? $this->resource->insuranceCompany->name : null,
             'created_at' => $this->resource->created_at,
