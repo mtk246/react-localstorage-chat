@@ -14,6 +14,7 @@ use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Claim\ClaimFile;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -229,16 +230,24 @@ class Claim extends Model implements Auditable
 
     protected function searchByClaimFormServices($query, $search)
     {
+        $isDate = true;
+        $formattedDate = '';
+        try {
+            $formattedDate = Carbon::createFromFormat('m/d/Y', $search)?->format('Y-m-d');
+        } catch (\Throwable $th) {
+            $isDate = false;
+        }
+
         $query->with('service.services')
-            ->whereHas('service.services', function ($subQuery) use ($search) {
-                $subQuery->when($search, function ($query, $search) {
+            ->whereHas('service.services', function ($subQuery) use ($formattedDate, $isDate) {
+                $subQuery->when($isDate, function ($query) use ($formattedDate) {
                     $query->where(function ($query) {
                         $query->orderBy('from_service', 'asc')
                             ->orderBy('to_service', 'desc')
                             ->limit(1);
                     })
-                    ->where('from_service', 'LIKE', "%$search%")
-                    ->orWhere('to_service', 'LIKE', "%$search%");
+                    ->where('from_service', 'LIKE', "%$formattedDate%")
+                    ->orWhere('to_service', 'LIKE', "%$formattedDate%");
                 });
             })
             ->limit(1);
