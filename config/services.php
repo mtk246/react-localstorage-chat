@@ -33,7 +33,7 @@ return [
 
     'rocket_chat' => [
         'server' => env('ROCKET_CHAT_SERVER'),
-        'username' => env('ROCKET_CHAT_USERNAME'),
+        'email' => env('ROCKET_CHAT_EMAIL'),
         'password' => env('ROCKET_CHAT_PASSWORD'),
         'token_life_time' => env('ROCKET_CHAT_TOKEN_LIFE_TIME', 3600),
     ],
