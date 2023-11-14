@@ -42,7 +42,7 @@ final class GetDenialAction
         }
 
         $query->with('demographicInformation', 'service', 'insurancePolicies', 'denialTrackings', 'claimTransmissionResponses')
-          ->orderBy(Pagination::sortBy(), Pagination::sortDesc());
+            ->orderBy(Pagination::sortBy(), Pagination::sortDesc());
 
         $claimsQuery = $query->paginate(Pagination::itemsPerPage());
 

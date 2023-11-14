@@ -524,6 +524,6 @@ class Claim extends Model implements Auditable
 
     public function getDenialRefile()
     {
-        return $this->hasMany(DenialRefile::class, 'claim_id')->get();
+        return $this->hasMany(DenialRefile::class, 'claim_id')->with('refileReason')->get();
     }
 }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\RefileReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Claims\DenialRefile.
@@ -17,11 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $cross_over_date
  * @property string $note
  * @property string $original_claim_id
- * @property int $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $denial_tracking_id
  * @property int $claim_id
+ * @property int|null $refile_reason
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newQuery()
@@ -58,6 +60,11 @@ final class DenialRefile extends Model
         'denial_tracking_id',
         'claim_id',
     ];
+
+    public function refileReason(): BelongsTo
+    {
+        return $this->belongsTo(RefileReason::class, 'refile_reason');
+    }
 
     public static function createDenialRefile(array $data)
     {
