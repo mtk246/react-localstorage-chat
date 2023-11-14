@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Actions\Reports\GetAllRecordsAction;
 use App\Actions\Reports\GetReportAction;
 use App\Actions\Reports\StoreReportAction;
 use App\Actions\Reports\UpdateReportAction;
 use App\Enums\Reports\ClassificationType;
+use App\Enums\Reports\ColumnsAdminDetailPatinetType;
+use App\Enums\Reports\ColumnsBillingDetailPatinetType;
+use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
+use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
+use App\Enums\Reports\ColumnsBillingGeneralPatinetType;
+use App\Enums\Reports\ColumnsGeneralFacilityType;
+use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
+use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\ReportType;
-use App\Enums\Reports\TagType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
 use App\Http\Requests\Reports\StoreRequest;
@@ -15,8 +23,10 @@ use App\Http\Requests\Reports\UpdateRequest;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\Reports\ClassificationTypeResource;
-use App\Http\Resources\Reports\ReportTypeResource;
+use App\Http\Resources\Reports\ColumnsAdminDetailPatinetResource;
 use App\Models\Reports\Report;
+use Auth;
+use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -77,5 +87,34 @@ final class ReportReSource extends Controller
         return response()->json(
             new EnumResource(collect(ReportType::cases()), TypeResource::class),
         );
+    }
+
+    public function records(Request $request, GetAllRecordsAction $get): JsonResponse {
+        return response()->json(
+            $get->getAllPatient($request->module, Auth::user())
+        );
+    }
+
+    public function columnsReports(): JsonResponse
+    {
+        $rs = Gate::check('is-admin')
+            ? [
+                'detailed patient' => new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general patien' => new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general facility' => new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general healthcare professional' => 
+                    new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+            ]
+            : [
+                'detailed patient' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general patien' => new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general facility' => new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general healthcare professional' => 
+                    new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+            ];
+
+        if (!$rs) return response()->json(__('Columns list not available'), 400);
+
+        return response()->json(['success' => true, "message" => "Columns list successfully.", 'data' => $rs]);
     }
 }
