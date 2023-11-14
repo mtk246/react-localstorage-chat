@@ -14,8 +14,8 @@ final class StoreUserWrapper extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && $this->get('billing_company_id')
-            ? (int) $this->get('billing_company_id')
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
             : $this->user->billing_company_id;
     }
 
@@ -41,7 +41,7 @@ final class StoreUserWrapper extends CastsRequest
 
     public function getType(): UserType
     {
-        return UserType::tryFrom($this->get('user_type'));
+        return UserType::tryFrom($this->getInt('user_type'));
     }
 
     public function getRoles(): Collection
@@ -49,7 +49,7 @@ final class StoreUserWrapper extends CastsRequest
         return $this->getCollect('roles');
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->get('email');
     }

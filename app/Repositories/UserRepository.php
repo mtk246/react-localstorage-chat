@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\User\UserType;
+use App\Events\User\UpdatePasswordEvent;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\ImgProfileRequest;
 use App\Http\Requests\UserCreateRequest;
@@ -284,6 +285,7 @@ class UserRepository
             $fullName = $user->profile->first_name.' '.$user->profile->last_name;
 
             Mail::to($user->email)->send(new SendEmailChangePassword($fullName, $url));
+            event(new UpdatePasswordEvent($user, $request->input('password')));
         } catch (\Exception $exception) {
             return false;
         }

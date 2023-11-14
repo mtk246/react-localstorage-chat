@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
@@ -550,6 +551,16 @@ Route::prefix('v1')/* ->middleware('audit') */
         ]);
     });
 
+    Route::prefix('denial')->middleware([
+        'auth:api',
+        // 'role:superuser|biller|billingmanager',
+    ])->group(function () {
+        Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
+        Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
+        Route::post('/', [DenialController::class, 'createDenialTracking']);
+        Route::put('/', [DenialController::class, 'updateDenialTracking']);
+    });
+
     Route::prefix('tableau')->middleware([
         'auth:api',
         // 'role:superuser|billingmanager',
@@ -570,4 +581,5 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
+    Route::get('roket/token', [\App\Http\Controllers\RocketChatController::class, 'getToken']);
 });

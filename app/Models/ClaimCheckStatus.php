@@ -63,6 +63,6 @@ final class ClaimCheckStatus extends Model implements Auditable
      */
     public function privateNote(): BelongsTo
     {
-        return $this->belongsTo(PrivateNote::class);
+        return $this->belongsTo(PrivateNote::class, 'private_note_id');
     }
 }

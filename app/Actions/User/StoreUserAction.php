@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\User;
 
 use App\Enums\User\UserType;
+use App\Events\User\StoreEvent;
 use App\Http\Casts\User\StoreUserWrapper;
 use App\Http\Resources\User\UserResource;
 use App\Mail\GenerateNewPassword;
@@ -49,6 +50,8 @@ final class StoreUserAction
                         env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                     )
                 );
+
+                event(new StoreEvent($user, $user->userkey));
             })->refresh());
         });
     }

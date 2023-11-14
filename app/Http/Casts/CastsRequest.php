@@ -9,26 +9,57 @@ use Illuminate\Support\Collection;
 
 abstract class CastsRequest
 {
+    protected Collection $inputs;
+
     /**
-     * @param array<key, string|null> $inputs
      * @param array<key, string|null> $querys
      */
     public function __construct(
-        protected array $inputs,
-        protected array $querys,
-        protected ?User $user,
+        Collection|array $inputs,
+        protected ?array $querys = null,
+        protected ?User $user = null,
     ) {
+        $this->inputs = collect($inputs);
     }
 
-    /** @return string|int|null */
-    protected function get(string $input): mixed
+    protected function has(string $input): bool
     {
-        return $this->inputs[$input] ?? null;
+        return $this->inputs->has($input);
     }
 
-    protected function getArray(string $input): array
+    /**
+     * Get an item from the collection by key.
+     *
+     * @template TGetDefault
+     *
+     * @param TGetDefault|(\Closure(): TGetDefault) $default
+     *
+     * @return TValue|TGetDefault
+     */
+    protected function get(string $input, mixed $default = null): mixed
     {
-        return $this->inputs[$input] ?? [];
+        return $this->inputs->get($input, $default);
+    }
+
+    protected function getArray(string $input, mixed $default = null): array
+    {
+        $value = $this->get($input, $default);
+
+        return $value ? (array) $value : [];
+    }
+
+    protected function getBool(string $input, mixed $default = null): bool
+    {
+        $value = $this->get($input, $default);
+
+        return $value ? (bool) $value : false;
+    }
+
+    protected function getInt(string $input, mixed $default = null): ?int
+    {
+        $value = $this->get($input, $default);
+
+        return $value ? (int) $value : $value;
     }
 
     protected function getCollect(string $input): Collection
@@ -38,16 +69,16 @@ abstract class CastsRequest
 
     protected function cast(string $input, string $class): ?object
     {
-        return array_key_exists($input, $this->inputs)
-            ? new $class($this->inputs[$input], $this->querys, $this->user)
+        return $this->has($input)
+            ? new $class($this->inputs->get($input), $this->querys, $this->user)
             : null;
     }
 
     protected function castMany(string $input, string $class): ?Collection
     {
-        return array_key_exists($input, $this->inputs)
-            ? collect($this->inputs[$input])
-                ->map(fn (array $input) => new $class($input, $this->querys, $this->user))
+        return $this->get($input)
+            ? $this->getCollect($input)
+                ->map(fn (array $input) => new $class(collect($input), $this->querys, $this->user))
             : null;
     }
 }

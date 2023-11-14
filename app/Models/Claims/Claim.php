@@ -131,6 +131,11 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimService::class);
     }
 
+    public function denialTrackings()
+    {
+        return $this->hasMany(DenialTracking::class, 'claim_id');
+    }
+
     public function dateInformations(): HasMany
     {
         return $this->hasMany(ClaimDateInformation::class);
@@ -485,5 +490,10 @@ class Claim extends Model implements Auditable
             'billing_company_id' => $this->billing_company_id,
             'note' => $note,
         ]);
+    }
+
+    public function getDenialTrackings()
+    {
+        return $this->hasMany(DenialTracking::class, 'claim_id')->get();
     }
 }

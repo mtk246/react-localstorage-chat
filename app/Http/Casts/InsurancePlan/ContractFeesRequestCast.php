@@ -13,16 +13,14 @@ final class ContractFeesRequestCast extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && array_key_exists('billing_company_id', $this->inputs)
-            ? (int) $this->inputs['billing_company_id']
-            : $this->user->billingCompanies->first()?->id;
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
     }
 
     public function getId(): int
     {
-        return array_key_exists('id', $this->inputs)
-            ? (int) $this->inputs['id']
-            : 0;
+        return $this->getInt('id');
     }
 
     public function getCompanyId(): Collection
@@ -32,96 +30,72 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getTypeId(): ?int
     {
-        return array_key_exists('type_id', $this->inputs)
-            ? (int) $this->inputs['type_id']
-            : null;
+        return $this->get('type_id');
     }
 
     public function getStartDate(): ?string
     {
-        return array_key_exists('start_date', $this->inputs)
-            ? $this->inputs['start_date']
-            : null;
+        return $this->get('start_date');
     }
 
     public function getEndDate(): ?string
     {
-        return array_key_exists('end_date', $this->inputs)
-            ? $this->inputs['end_date']
-            : null;
+        return $this->get('end_date');
     }
 
     public function getProceduresIds(): Collection
     {
-        return collect($this->inputs['procedure_ids'] ?? []);
+        return $this->getCollect('procedure_ids');
     }
 
     public function getModifierIds(): Collection
     {
-        return collect($this->inputs['modifier_ids'] ?? []);
+        return $this->getCollect('modifier_ids');
     }
 
     public function getPrice(): ?float
     {
-        return array_key_exists('price', $this->inputs)
-            ? (float) $this->inputs['price']
-            : null;
+        return $this->get('price');
     }
 
     public function getMac(): ?string
     {
-        return array_key_exists('state', $this->inputs)
-            ? $this->inputs['mac']
-            : null;
+        return $this->get('state');
     }
 
     public function getLocalityNumber(): ?string
     {
-        return array_key_exists('fsa', $this->inputs)
-            ? $this->inputs['locality_number']
-            : null;
+        return $this->get('fsa');
     }
 
     public function getState(): ?string
     {
-        return array_key_exists('state', $this->inputs)
-            ? $this->inputs['state']
-            : null;
+        return $this->get('state');
     }
 
     public function getFsa(): ?string
     {
-        return array_key_exists('fsa', $this->inputs)
-            ? $this->inputs['fsa']
-            : null;
+        return $this->get('fsa');
     }
 
     public function getCounties(): ?string
     {
-        return array_key_exists('counties', $this->inputs)
-            ? $this->inputs['counties']
-            : null;
+        return $this->get('counties');
     }
 
     public function getInsuranceLabelFeeId(): ?int
     {
-        return array_key_exists('insurance_label_fee_id', $this->inputs)
-            ? (int) $this->inputs['insurance_label_fee_id']
-            : null;
+        return $this->get('insurance_label_fee_id');
     }
 
     public function getPricePercentage(): ?float
     {
-        return array_key_exists('price_percentage', $this->inputs)
-            ? (float) $this->inputs['price_percentage']
-            : null;
+        return $this->get('price_percentage');
     }
 
     public function getPrivateNote(): ?string
     {
-        return array_key_exists('private_note', $this->inputs)
-            ? $this->inputs['private_note']
-            : null;
+        return $this->get('private_note');
     }
 
     public function getMacLocality(): ?MacLocality
@@ -153,9 +127,7 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getHaveContractSpecifications(): bool
     {
-        return array_key_exists('have_contract_specifications', $this->inputs)
-            ? (bool) $this->inputs['have_contract_specifications']
-            : false;
+        return $this->getBool('have_contract_specifications', $this->inputs);
     }
 
     /**

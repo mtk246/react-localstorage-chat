@@ -6,6 +6,7 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
 use App\Models\Claims\ClaimDemographicInformation;
+use App\Models\CompanyPatient;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property ClaimDemographicInformation $resource */
@@ -19,6 +20,8 @@ final class DemographicInformationResource extends JsonResource
     /** @return array<string, mixed> */
     public function toArray($request): array
     {
+        $companyPatient = CompanyPatient::find($this->resource->patient_id);
+
         $commonFields = [
             'validate' => $this->resource->validate,
             'automatic_eligibility' => $this->resource->automatic_eligibility,
@@ -32,6 +35,12 @@ final class DemographicInformationResource extends JsonResource
             'patient' => isset($this->resource->patient->profile)
                 ? ($this->resource->patient->profile->first_name.' '.$this->resource->patient->profile->last_name)
                 : '',
+            'patient_profile_info_arr' => isset($this->resource->patient) && isset($this->resource->patient->profile)
+                ? array_merge([
+                    'patient_id' => $this->resource->patient_id,
+                    'med_num' => $companyPatient->med_num,
+                ], $this->resource->patient->profile->toArray())
+                : [],
             'prior_authorization_number' => $this->resource->prior_authorization_number,
             'accept_assignment' => $this->resource->accept_assignment,
             'patient_signature' => $this->resource->patient_signature,

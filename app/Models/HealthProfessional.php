@@ -104,7 +104,7 @@ class HealthProfessional extends Model implements Auditable
 
     public function profile(): BelongsTo
     {
-        return $this->belongsTo(Profile::class);
+        return $this->BelongsTo(Profile::class);
     }
 
     public function getUserAttribute(): ?User

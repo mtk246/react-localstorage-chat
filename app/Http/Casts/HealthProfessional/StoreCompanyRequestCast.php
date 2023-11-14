@@ -12,9 +12,9 @@ final class StoreCompanyRequestCast extends CastsRequest
 {
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && $this->get('billing_company_id')
-            ? (int) $this->get('billing_company_id')
-            : $this->user->billingCompanies->first()?->id;
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
     }
 
     public function getId(): ?int
@@ -24,7 +24,7 @@ final class StoreCompanyRequestCast extends CastsRequest
 
     public function getCompanyId(): int
     {
-        return $this->get('company_id');
+        return $this->getInt('company_id');
     }
 
     public function getAuthorization(): Collection

@@ -33,7 +33,7 @@ final class StoreRulesWrapper extends CastsRequest
 
     public function getInsurancePlan(): int
     {
-        return $this->get('insurance_plan_id');
+        return $this->getInt('insurance_plan_id');
     }
 
     private function getRules(): Collection

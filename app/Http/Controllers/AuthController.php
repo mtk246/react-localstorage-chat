@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Events\User\LoginEvent;
 
 /**
  * @todo change to protective programing pattern
@@ -192,6 +193,8 @@ class AuthController extends Controller
         $device->last_login = $user->last_login;
         $device->save();
         $user->save();
+
+        event(new LoginEvent($user, $dataValidated['password']));
 
         return $this->respondWithToken($token, $request->ip(), $request->userAgent());
     }
