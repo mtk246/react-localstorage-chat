@@ -488,6 +488,7 @@ final class ClaimBodyResource extends JsonResource
             'batch' => $policyPrimary?->batch ?? '',
             'eff_date' => $policyPrimary?->eff_date ?? '',
             'end_date' => $policyPrimary?->end_date ?? '',
+            'own' => $policyPrimary?->own ?? '',
         ];
     }
 

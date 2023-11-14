@@ -401,6 +401,9 @@ final class DenialBodyResource extends JsonResource
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
+            'eff_date' => $policyPrimary?->eff_date ?? '',
+            'end_date' => $policyPrimary?->end_date ?? '',
+            'own' => $policyPrimary?->own ?? '',
         ];
     }
 
