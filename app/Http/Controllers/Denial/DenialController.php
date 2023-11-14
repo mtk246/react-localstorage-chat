@@ -42,48 +42,81 @@ final class DenialController extends Controller
 
     public function createDenialTracking(Request $request): JsonResponse
     {
+        $claim = Claim::find($request->input('claim_id'));
+
+        if (!$claim) {
+            return response()->json(__('Error creating denial tracking'), 400);
+        }
+
+        $note = $claim->setStates(
+            $request->input('claim_status'),
+            $request->input('claim_sub_status'),
+            $request->input('tracking_note'),
+        );
+
         $trackingData = [
             'interface_type' => $request->input('interface_type'),
             'is_reprocess_claim' => $request->input('is_reprocess_claim'),
             'is_contact_to_patient' => $request->input('is_contact_to_patient'),
             'contact_through' => $request->input('contact_through'),
             'claim_id' => $request->input('claim_id'),
+            'claim_number' => $request->input('claim_number'),
             'rep_name' => $request->input('rep_name'),
             'ref_number' => $request->input('ref_number'),
-            'status_claim' => $request->input('status_claim'),
-            'sub_status_claim' => $request->input('sub_status_claim'),
+            'claim_status' => $request->input('claim_status'),
+            'claim_sub_status' => $request->input('claim_sub_status'),
             'tracking_date' => $request->input('tracking_date'),
+            'resolution_time' => $request->input('resolution_time'),
             'past_due_date' => $request->input('past_due_date'),
             'follow_up' => $request->input('follow_up'),
             'department_responsible' => $request->input('department_responsible'),
             'policy_responsible' => $request->input('policy_responsible'),
-            'tracking_note' => $request->input('tracking_note'),
+            'private_note_id' => $note->id,
+            'response_details' => $request->input('response_details'),
         ];
 
-        $tracking = DenialTracking::createDenialTracking($trackingData);
+        if (isset($note)) {
+            $tracking = DenialTracking::createDenialTracking($trackingData);
+        }
+
 
         return $tracking ? response()->json($tracking, 201) : response()->json(__('Error creating denial tracking'), 400);
     }
 
     public function updateDenialTracking(Request $request): JsonResponse
     {
+        $claim = Claim::find($request->input('claim_id'));
+
+        if (!$claim) {
+            return response()->json(__('Error updating denial tracking'), 400);
+        }
+
+        $note = $claim->setStates(
+            $request->input('claim_status'),
+            $request->input('claim_sub_status'),
+            $request->input('tracking_note'),
+        );
+
         $trackingData = [
+            'denial_id' => $request->input('denial_id'),
             'interface_type' => $request->input('interface_type'),
             'is_reprocess_claim' => $request->input('is_reprocess_claim'),
             'is_contact_to_patient' => $request->input('is_contact_to_patient'),
             'contact_through' => $request->input('contact_through'),
-            'denial_id' => $request->input('denial_id'),
             'claim_id' => $request->input('claim_id'),
+            'claim_number' => $request->input('claim_number'),
             'rep_name' => $request->input('rep_name'),
             'ref_number' => $request->input('ref_number'),
-            'status_claim' => $request->input('status_claim'),
-            'sub_status_claim' => $request->input('sub_status_claim'),
+            'claim_status' => $request->input('claim_status'),
+            'claim_sub_status' => $request->input('claim_sub_status'),
             'tracking_date' => $request->input('tracking_date'),
+            'resolution_time' => $request->input('resolution_time'),
             'past_due_date' => $request->input('past_due_date'),
             'follow_up' => $request->input('follow_up'),
             'department_responsible' => $request->input('department_responsible'),
             'policy_responsible' => $request->input('policy_responsible'),
-            'tracking_note' => $request->input('tracking_note'),
+            'private_note_id' => $note->id,
+            'response_details' => $request->input('response_details'),
         ];
 
         $tracking = DenialTracking::updateDenialTracking($trackingData);

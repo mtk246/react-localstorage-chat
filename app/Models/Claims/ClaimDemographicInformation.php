@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Enums\Claim\SplitCompanyClaimType;
 use App\Models\Company;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $bill_classification
+ * @property SplitCompanyClaimType|null $split_company_type
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
@@ -67,6 +69,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePatientSignature($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation wherePriorAuthorizationNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereSplitCompanyType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereTypeOfMedicalAssistance($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereValidate($value)
@@ -86,6 +89,7 @@ final class ClaimDemographicInformation extends Model
         'validate',
         'automatic_eligibility',
         'company_id',
+        'split_company_type',
         'facility_id',
         'patient_id',
         'prior_authorization_number',
@@ -98,6 +102,10 @@ final class ClaimDemographicInformation extends Model
         'auto_accident_related_condition',
         'auto_accident_place_state',
         'other_accident_related_condition',
+    ];
+
+    protected $casts = [
+        'split_company_type' => SplitCompanyClaimType::class,
     ];
 
     /**

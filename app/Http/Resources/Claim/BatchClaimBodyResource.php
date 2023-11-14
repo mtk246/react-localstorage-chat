@@ -282,7 +282,7 @@ final class BatchClaimBodyResource extends JsonResource
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')->first();
 
-        return json_decode($transmissionCurrent?->response_details ?? '');
+        return $transmissionCurrent?->response_details;
     }
 
     private function getBillingProvider(): ?string

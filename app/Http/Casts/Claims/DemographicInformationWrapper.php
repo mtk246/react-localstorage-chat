@@ -11,12 +11,20 @@ final class DemographicInformationWrapper extends CastsRequest
 {
     public function getData(): array
     {
+        $companyId = $this->get('company_id');
+        $splitCompanyType = null;
+
+        if (str_contains($companyId, '-')) {
+            [$companyId, $splitCompanyType] = explode('-', $companyId);
+        }
+
         return [
             'type_of_medical_assistance' => $this->get('type_of_medical_assistance'),
             'bill_classification' => $this->get('bill_classification'),
             'validate' => $this->get('validate'),
             'automatic_eligibility' => $this->get('automatic_eligibility'),
-            'company_id' => $this->get('company_id'),
+            'company_id' => $companyId,
+            'split_company_type' => $splitCompanyType,
             'facility_id' => $this->get('facility_id'),
             'patient_id' => $this->get('patient_id'),
             'prior_authorization_number' => $this->get('prior_authorization_number'),
