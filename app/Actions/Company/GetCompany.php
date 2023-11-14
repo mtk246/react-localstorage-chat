@@ -47,7 +47,7 @@ final class GetCompany
                         'billingCompanies.name',
                     ];
 
-                    if (isset($request->sortBy) && in_array($request->sortBy, $config)){
+                    if (isset($request->sortBy) && in_array($request->sortBy, $config)) {
                         $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
                     }
 
