@@ -82,10 +82,10 @@ class InsurancePlanRepository
                 ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
                     $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany);
                 })
-                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'])
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'] ?? [])
                 ->detach();
 
-            foreach ($data['plan_type_ids'] as $planTypeId) {
+            foreach ($data['plan_type_ids'] ?? [] as $planTypeId) {
                 if (is_null($insurancePlan->planTypes()
                         ->wherePivot('billing_company_id', $billingCompany)->find($planTypeId))) {
                     $insurancePlan->planTypes()->attach($planTypeId, [
@@ -254,10 +254,10 @@ class InsurancePlanRepository
                 ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
                     $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany->id ?? $billingCompany);
                 })
-                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'])
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'] ?? [])
                 ->detach();
 
-            foreach ($data['plan_type_ids'] as $planTypeId) {
+            foreach ($data['plan_type_ids'] ?? [] as $planTypeId) {
                 if (is_null($insurancePlan->planTypes()
                         ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($planTypeId))) {
                     $insurancePlan->planTypes()->attach($planTypeId, [
