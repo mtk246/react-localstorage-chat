@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 final class RocketChatService
 {
     private string $server;
-    private string $username;
+    private string $email;
     private string $password;
     private int $tokenLifeTime;
     private array $headers = [];
@@ -24,7 +24,7 @@ final class RocketChatService
     {
         $config = config('services.rocket_chat');
         $this->server = $config['server'];
-        $this->username = $config['username'];
+        $this->email = $config['email'];
         $this->password = $config['password'];
         $this->tokenLifeTime = (int) $config['token_life_time'];
 
@@ -57,13 +57,14 @@ final class RocketChatService
 
     public function asAdmin(): self
     {
-        $this->as($this->login($this->username, $this->password));
+        $this->as($this->login($this->email, $this->password));
 
         return $this;
     }
 
     public function send(string $url, array $payload, string $method = 'post'): ?Response
     {
+        /** @var Response $request */
         $request = Http::baseUrl($this->server)
             ->withHeaders($this->headers)
             ->{$method}($this->server.$url, $payload);
