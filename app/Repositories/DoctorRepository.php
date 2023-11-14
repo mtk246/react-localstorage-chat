@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\BillingCompanyHealthProfessional;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Meilisearch\Endpoints\Indexes;
 use App\Events\User\StoreEvent;
 
 class DoctorRepository
@@ -775,7 +776,26 @@ class DoctorRepository
     {
         $config = config('scout.meilisearch.index-settings.'.HealthProfessional::class.'.sortableAttributes');
 
-        $data = HealthProfessional::search($request->query('query'))->when(
+        $data = HealthProfessional::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
+                $options['attributesToSearchOn'] = [
+                    'profile.first_name',
+                    'profile.last_name',
+                    'profile.middle_name',
+                    'npi',
+                    'company.name',
+                    'billingCompanies.name'
+                ];
+
+                if (isset($request->sortBy) && in_array($request->sortBy, $config)){
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
+        ->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
                 $bC = auth()->user()->billing_company_id ?? null;
@@ -825,10 +845,6 @@ class DoctorRepository
                 'healthProfessionalType',
                 'company',
             ]))
-        )->when(
-            $request->has('sortBy') && in_array($request->sortBy, $config),
-            fn(ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
-            fn(ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())
         );
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
