@@ -27,8 +27,40 @@ final class FacilityResource extends JsonResource
                 $this->resource->taxonomies()->orderBy('id')->get()
             ),
             'place_of_services' => $this->resource->placeOfServices,
-            'facility_types' => $this->resource->facilityTypes,
-            'bill_classifications' => $this->resource->billClassifications,
+            'facility_types' => $this->resource->facilityTypes->map(function ($facilityType) {
+                $billClassificationsString = $facilityType->pivot->bill_classifications;
+
+                return [
+                    'id' => $facilityType->id,
+                    'type' => $facilityType->type,
+                    'pivot' => [
+                        'bill_classifications' => $billClassificationsString,
+                    ],
+                ];
+            }),
+            'facility_types_detail' => $this->resource->facilityTypes->map(function ($facilityType) {
+                $facilityType->load('billClasifications');
+
+                $billClassificationsString = $facilityType->pivot->bill_classifications;
+
+                $billClassificationsArray = json_decode($billClassificationsString, true);
+
+                return [
+                    'id' => $facilityType->id,
+                    'filtered_bill_classifications' => $facilityType->billClasifications
+                        ? $facilityType->billClasifications
+                            ->filter(function ($billClassification) use ($billClassificationsArray) {
+                                return in_array($billClassification->id, $billClassificationsArray);
+                            })
+                            ->map(function ($billClassification) {
+                                return [
+                                    'id' => $billClassification->id,
+                                    'name' => $billClassification->name,
+                                ];
+                            })->values()
+                        : [],
+                ];
+            }),
         ];
     }
 }
