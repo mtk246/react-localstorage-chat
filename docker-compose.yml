@@ -26,6 +26,7 @@ services:
         depends_on:
             - pgsql
             - redis
+            - rocketchat
     pgsql:
         image: 'postgres:15-alpine'
         ports:
@@ -94,6 +95,57 @@ services:
                 ]
             retries: 3
             timeout: 5s
+    rocketchat:
+        image: registry.rocket.chat/rocketchat/rocket.chat:${RELEASE:-latest}
+        restart: always
+        labels:
+            traefik.enable: "true"
+            traefik.http.routers.rocketchat.rule: Host(`${DOMAIN:-}`)
+            traefik.http.routers.rocketchat.tls: "true"
+            traefik.http.routers.rocketchat.entrypoints: https
+            traefik.http.routers.rocketchat.tls.certresolver: le
+        environment:
+            MONGO_URL: "${MONGO_URL:-mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/${MONGODB_DATABASE:-rocketchat}?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
+            MONGO_OPLOG_URL: "${MONGO_OPLOG_URL:-mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/local?replicaSet=${MONGODB_REPLICA_SET_NAME:-rs0}}"
+            ROOT_URL: ${ROOT_URL:-http://localhost:${HOST_PORT:-3000}}
+            PORT: ${PORT:-3000}
+            DEPLOY_METHOD: docker
+            DEPLOY_PLATFORM: ${DEPLOY_PLATFORM:-}
+            REG_TOKEN: ${REG_TOKEN:-}
+            ADMIN_NAME: "${ROCKET_CHAT_NAME:-admin user}"
+            ADMIN_USERNAME: ${ROCKET_CHAT_USER_NAME:-admin.user}
+            ADMIN_EMAIL: ${ROCKET_CHAT_EMAIL:-rocker.admin@localhost.com}
+            ADMIN_PASS: ${ROCKET_CHAT_PASSWORD:-rocker.secret}
+            OVERWRITE_SETTING_Show_Setup_Wizard: completed
+            MAIL_URL: smtp://localhost:${FORWARD_MAILHOG_PORT:-1025}
+        volumes:
+            - 'sail-rocket:/data'
+            - './.docker/rocketchat/uploads:/app/uploads'
+            - './.docker/rocketchat/avatars:/app/avatars'
+        depends_on:
+            - mongodb
+        expose:
+            - ${PORT:-3000}
+        ports:
+            - "${BIND_IP:-0.0.0.0}:${HOST_PORT:-3000}:${PORT:-3000}"
+        networks:
+            - sail
+    mongodb:
+        image: docker.io/bitnami/mongodb:${MONGODB_VERSION:-5.0}
+        restart: always
+        environment:
+            MONGODB_REPLICA_SET_MODE: primary
+            MONGODB_REPLICA_SET_NAME: ${MONGODB_REPLICA_SET_NAME:-rs0}
+            MONGODB_PORT_NUMBER: ${MONGODB_PORT_NUMBER:-27017}
+            MONGODB_INITIAL_PRIMARY_HOST: ${MONGODB_INITIAL_PRIMARY_HOST:-mongodb}
+            MONGODB_INITIAL_PRIMARY_PORT_NUMBER: ${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}
+            MONGODB_ADVERTISED_HOSTNAME: ${MONGODB_ADVERTISED_HOSTNAME:-mongodb}
+            MONGODB_ENABLE_JOURNAL: ${MONGODB_ENABLE_JOURNAL:-true}
+            ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD:-yes}
+        volumes:
+            - sail-mongodb:/bitnami/mongodb
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -103,4 +155,8 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
+        driver: local
+    sail-mongodb:
+        driver: local
+    sail-rocket:
         driver: local
