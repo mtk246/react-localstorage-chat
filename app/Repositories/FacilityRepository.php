@@ -219,7 +219,9 @@ class FacilityRepository
     public function getList(Request $request)
     {
         try {
-            $companyId = $request->company_id ?? null;
+            $companyId = str_contains($request->company_id ?? '', '-')
+                ? explode('-', $request->company_id ?? '')[0]
+                : $request->company_id ?? null;
 
             $billingCompany = Gate::check('is-admin')
                 ? $request->billing_company_id ?? null

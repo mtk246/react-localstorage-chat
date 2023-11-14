@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
-use App\Enums\ClaimStatusType;
+use App\Enums\Claim\ClaimType;
+use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
-use App\Models\Claims\ClaimCheckStatus;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\Claims\DenialTracking;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -61,28 +62,6 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
-            'denial_trackings' => $this->resource->denialTrackings->map(function ($denialTracking) {
-                return [
-                    'denial_tracking_id' => $denialTracking->id,
-                    'interface_type' => $denialTracking->interface_type,
-                    'is_reprocess_claim' => $denialTracking->is_reprocess_claim,
-                    'is_contact_to_patient' => $denialTracking->is_contact_to_patient,
-                    'contact_through' => $denialTracking->contact_through,
-                    'rep_name' => $denialTracking->rep_name,
-                    'ref_number' => $denialTracking->ref_number,
-                    'status_claim' => $denialTracking->status_claim,
-                    'sub_status_claim' => $denialTracking->sub_status_claim,
-                    'tracking_date' => $denialTracking->tracking_date,
-                    'past_due_date' => $denialTracking->past_due_date,
-                    'last_follow_up' => $denialTracking->follow_up,
-                    'department_responsible' => $denialTracking->department_responsible,
-                    'policy_responsible' => $denialTracking->policy_responsible,
-                    'tracking_note' => $denialTracking->tracking_note,
-                    'created_at' => $denialTracking->created_at,
-                    'updated_at' => $denialTracking->updated_at,
-                    'claim_id' => $denialTracking->claim_id,
-                ];
-            }),
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
@@ -97,8 +76,7 @@ final class ClaimBodyResource extends JsonResource
         $data['sub_statuses'] = ClaimSubStatus::query()
             ->whereHas('claimStatuses', function ($query) use ($data) {
                 $query->where('claim_status_id', $data->id ?? null);
-            }
-            )
+            })
             ->get()
             ->setVisible(['id', 'name'])
             ->toArray() ?? [];
@@ -118,11 +96,11 @@ final class ClaimBodyResource extends JsonResource
     {
         $newStatuses = [];
 
-        foreach (ClaimStatusType::cases() as $status) {
-            $statusDefaultOrder[] = $status->value;
-            $statusColors[] = [
-                $status->value => $status->getColor(),
-            ];
+        foreach (ClaimStatusMap::cases() as $status) {
+            if ($status->getPublic()) {
+                $statusDefaultOrder[] = $status->value;
+            }
+            $statusColors[$status->value] = $status->getColor();
         }
 
         $this->claimStatusClaims()
@@ -176,7 +154,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
         if (count($statusDefaultOrder) > 0) {
-            foreach (array_reverse($statusDefaultOrder, true) as $value) {
+            foreach ($statusDefaultOrder as $value) {
                 $status = ClaimStatus::whereStatus($value)->first();
                 array_push($newStatuses, [
                     'status' => $status->status ?? '',
@@ -187,7 +165,7 @@ final class ClaimBodyResource extends JsonResource
             }
         }
 
-        return array_merge($newStatuses, $records);
+        return array_merge(array_reverse($records, true), $newStatuses);
     }
 
     private function getDenialTrackingsDetailsMap(): array
@@ -248,23 +226,48 @@ final class ClaimBodyResource extends JsonResource
         $record = [];
         $notes = [];
         foreach ($status->privateNotes as $note) {
-            $check = ClaimCheckStatus::query()
+            $denialTracking = DenialTracking::query()
                 ->where('private_note_id', $note->id)
                 ->first();
+
             array_push(
                 $notes,
                 [
                     'note' => $note->note,
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
-                    'check_status' => isset($check) ? [
-                        'response_details' => $check->response_details ?? '',
-                        'interface_type' => $check->interface_type ?? '',
-                        'interface' => $check->interface ?? '',
-                        'consultation_date' => $check->consultation_date ?? '',
-                        'resolution_time' => $check->resolution_time ?? '',
-                        'past_due_date' => $check->past_due_date ?? '',
-                    ] : null,
+                    'denial_tracking' => isset($denialTracking)
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
+                        : null,
                 ]
             );
         }
@@ -301,6 +304,7 @@ final class ClaimBodyResource extends JsonResource
         $notes = $status->privateNotes()
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')->get() ?? [];
+
         foreach ($notes as $note) {
             array_push(
                 $recordSubstatus,
@@ -323,7 +327,7 @@ final class ClaimBodyResource extends JsonResource
                     'note' => $subNote['note'],
                     'created_at' => $subNote['created_at'],
                     'last_modified' => $subNote['last_modified'],
-                    'check_status' => null,
+                    'denial_tracking' => null,
                     'status' => $status->claimStatus->status.' - '.$subNote['status'],
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
@@ -333,29 +337,120 @@ final class ClaimBodyResource extends JsonResource
         $recordSubstatus = [];
         $notes = $status->privateNotes()
             ->orderBy('created_at', 'desc')
-            ->orderBy('id', 'desc')->get() ?? [];
+            ->orderBy('id', 'desc')
+            ->get() ?? [];
+
         foreach ($notes as $note) {
-            $check = ClaimCheckStatus::query()
+            $denialTracking = DenialTracking::query()
                 ->where('private_note_id', $note->id)
                 ->first();
-            array_push(
-                $records,
-                [
+
+            $claimResponse = $this->claimTransmissionResponses()
+                ->whereDate('created_at', '>=', $status->created_at)
+                ->orderBy('created_at', 'asc')
+                ->first()?->response_details['response'] ?? null;
+            $moreinfo = isset($claimResponse['status']) && ('SUCCESS' !== $claimResponse['status'])
+                ? $claimResponse['errors'] ?? $claimResponse
+                : $claimResponse['errors'] ?? '';
+
+            if ('Rejected' === $status->claimStatus->status) {
+                $fields = [
                     'note' => $note->note,
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
-                    'check_status' => isset($check) ? [
-                        'response_details' => $check->response_details ?? '',
-                        'interface_type' => $check->interface_type ?? '',
-                        'interface' => $check->interface ?? '',
-                        'consultation_date' => $check->consultation_date ?? '',
-                        'resolution_time' => $check->resolution_time ?? '',
-                        'past_due_date' => $check->past_due_date ?? '',
-                    ] : null,
+                    'denial_tracking' => isset($denialTracking)
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
+                        : null,
                     'status' => $status->claimStatus->status ?? '',
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
-                ]
+                    'more_information' => is_array($moreinfo)
+                        ? array_map(function ($info) {
+                            $index = strpos($info['description'] ?? '', "\n");
+                            $shortDescription = ($index > 0) ? substr($info['description'] ?? '', 0, $index) : $info['description'] ?? '';
+
+                            return [
+                                'field' => $info['field'] ?? '',
+                                'short_description' => $shortDescription ?? '',
+                                'description' => $info['description'] ?? '',
+                            ];
+                        }, $moreinfo)
+                        : $moreinfo,
+                ];
+            } else {
+                $fields = [
+                    'note' => $note->note,
+                    'created_at' => $note->created_at,
+                    'last_modified' => $note->last_modified,
+                    'denial_tracking' => isset($denialTracking)
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
+                        : null,
+                    'status' => $status->claimStatus->status ?? '',
+                    'status_background_color' => $status->claimStatus->background_color ?? '',
+                    'status_font_color' => $status->claimStatus->font_color ?? '',
+                ];
+            }
+            array_push(
+                $records,
+                $fields
             );
         }
     }
@@ -381,8 +476,14 @@ final class ClaimBodyResource extends JsonResource
 
     private function getBillingProvider(): ?string
     {
-        $billing = $this->resource->demographicInformation?->healthProfessionals()
-            ->wherePivot('field_id', 5)
+        $billing = $this->resource->demographicInformation->healthProfessionals()
+            ->when(ClaimType::PROFESSIONAL == $this->resource->type, function ($query) {
+                $query->where('field_id', 5);
+            })
+            ->when(ClaimType::INSTITUTIONAL == $this->resource->type, function ($query) {
+                $query->where('field_id', 76)
+                    ->orWhere('field_id', 1);
+            })
             ->first();
 
         return !empty($billing)

@@ -25,7 +25,9 @@ final class DemographicInformationResource extends JsonResource
         $commonFields = [
             'validate' => $this->resource->validate,
             'automatic_eligibility' => $this->resource->automatic_eligibility,
-            'company_id' => $this->resource->company_id,
+            'company_id' => isset($this->resource->split_company_type)
+                ? $this->resource->company_id.'-'.$this->resource->split_company_type->value
+                : $this->resource->company_id,
             'bill_classification' => $this->resource->bill_classification,
             'company' => $this->resource->company->name ?? '',
             'facility_id' => $this->resource->facility_id,
@@ -38,7 +40,7 @@ final class DemographicInformationResource extends JsonResource
             'patient_profile_info_arr' => isset($this->resource->patient) && isset($this->resource->patient->profile)
                 ? array_merge([
                     'patient_id' => $this->resource->patient_id,
-                    'med_num' => $companyPatient->med_num,
+                    'med_num' => $companyPatient?->med_num ?? '',
                 ], $this->resource->patient->profile->toArray())
                 : [],
             'prior_authorization_number' => $this->resource->prior_authorization_number,

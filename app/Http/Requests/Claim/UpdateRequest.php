@@ -66,7 +66,6 @@ final class UpdateRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
@@ -205,7 +204,6 @@ final class UpdateRequest extends FormRequest
             'demographic_information.automatic_eligibility' => ['nullable', 'boolean'],
             'demographic_information.company_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
-                'integer',
             ],
             'demographic_information.facility_id' => [
                 Rule::requiredIf(fn () => false === $this->input('draft', false)),
@@ -249,7 +247,11 @@ final class UpdateRequest extends FormRequest
             'claim_services.services.*.modifier_ids' => ['sometimes', 'nullable', 'array'],
             'claim_services.services.*.place_of_service_id' => ['sometimes', 'nullable', 'integer'],
             'claim_services.services.*.type_of_service_id' => ['sometimes', 'nullable', 'integer'],
-            'claim_services.services.*.diagnostic_pointers' => ['sometimes', 'nullable', 'array'],
+            'claim_services.services.*.diagnostic_pointers' => [
+                Rule::requiredIf(fn () => false === $this->input('draft', false)),
+                'nullable',
+                'array',
+            ],
             'claim_services.services.*.days_or_units' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.services.*.price' => ['sometimes', 'nullable', 'numeric'],
             'claim_services.services.*.copay' => ['sometimes', 'nullable', 'numeric'],
