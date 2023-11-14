@@ -793,7 +793,8 @@ class PatientRepository
         $config = config('scout.meilisearch.index-settings.'.Patient::class.'.sortableAttributes');
 
         /** @var Builder|Patient $data */
-        $data = Patient::search($request->query('query') ?? '',
+        $data = Patient::search(
+            $request->query('query', ''),
             function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
                 $options['attributesToSearchOn'] = [
                     'profile.first_name',

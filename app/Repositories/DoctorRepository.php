@@ -776,7 +776,8 @@ class DoctorRepository
     {
         $config = config('scout.meilisearch.index-settings.'.HealthProfessional::class.'.sortableAttributes');
 
-        $data = HealthProfessional::search($request->query('query') ?? '',
+        $data = HealthProfessional::search(
+            $request->query('query', ''),
             function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
                 $options['attributesToSearchOn'] = [
                     'profile.first_name',

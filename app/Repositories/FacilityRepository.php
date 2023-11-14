@@ -355,7 +355,8 @@ class FacilityRepository
     {
         $config = config('scout.meilisearch.index-settings.'.Facility::class.'.sortableAttributes');
 
-        $data = Facility::search($request->query('query') ?? '',
+        $data = Facility::search(
+            $request->query('query', ''),
             function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
                 $options['attributesToSearchOn'] = [
                     'name',

@@ -37,7 +37,8 @@ final class GetCompany
         $config = config('scout.meilisearch.index-settings.'.Company::class.'.sortableAttributes');
 
         return DB::transaction(function () use ($request, $config) {
-            $companiesQuery = Company::search($request->query('query') ?? '',
+            $companiesQuery = Company::search(
+                $request->query('query', ''),
                 function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
                     $options['attributesToSearchOn'] = [
                         'name',
