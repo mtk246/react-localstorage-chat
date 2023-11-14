@@ -22,8 +22,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     use HasAttributes;
     use HasColumnsAttributes;
 
-    #[NameAttribute('id')]
-    #[ValueAttribute('id')]
     #[TypeAttribute('string')]
     #[TextAttribute('Id')]
     #[AlignAttribute('center')]
@@ -31,8 +29,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case ID = 'id';
 
-    #[NameAttribute('billing_companies')]
-    #[ValueAttribute('billing_companies')]
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
     #[TextAttribute('Billing companies')]
@@ -40,8 +36,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case BILLING_COMPANIES = 'billing_companies';
 
-    #[NameAttribute('companies')]
-    #[ValueAttribute('companies')]
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
     #[TextAttribute('Companies')]
@@ -49,8 +43,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case COMPANIES = 'companies';
 
-    #[NameAttribute('code')]
-    #[ValueAttribute('code')]
     #[TypeAttribute('string')]
     #[TextAttribute('Code')]
     #[AlignAttribute('center')]
@@ -58,8 +50,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case CODE = 'code';
 
-    #[NameAttribute('facility')]
-    #[ValueAttribute('facility')]
     #[TypeAttribute('string')]
     #[TextAttribute('Facility')]
     #[AlignAttribute('left')]
@@ -67,8 +57,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case FACILITY = 'facility';
 
-    #[NameAttribute('npi')]
-    #[ValueAttribute('npi')]
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
     #[TextAttribute('NPI')]
@@ -76,8 +64,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case NPI = 'npi';
 
-    #[NameAttribute('primary_taxonomy')]
-    #[ValueAttribute('primary_taxonomy')]
     #[TypeAttribute('string')]
     #[TextAttribute('Primary taxonomy')]
     #[AlignAttribute('center')]
@@ -85,8 +71,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case PRIMARY_TAXONOMY = 'primary_taxonomy';
 
-    #[NameAttribute('place_of_serice')]
-    #[ValueAttribute('place_of_serice')]
     #[TypeAttribute('string')]
     #[TextAttribute('Place of serice')]
     #[AlignAttribute('center')]
@@ -94,8 +78,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case PLACE_OF_SERVICE = 'place_of_serice';
 
-    #[NameAttribute('type_of_facility')]
-    #[ValueAttribute('type_of_facility')]
     #[TypeAttribute('string')]
     #[TextAttribute('Type of facility')]
     #[AlignAttribute('center')]
@@ -103,8 +85,6 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case TYPE_OF_FACILITY = 'type_of_facility';
 
-    #[NameAttribute('bill_classifications')]
-    #[ValueAttribute('bill_classifications')]
     #[TypeAttribute('string')]
     #[TextAttribute('Bill classifications')]
     #[AlignAttribute('center')]
@@ -112,22 +92,10 @@ enum ColumnsGeneralFacilityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case BILL_CLASSIFICATIONS = 'bill_classifications';
 
-    #[NameAttribute('claims_processed')]
-    #[ValueAttribute('claims_processed')]
     #[TypeAttribute('string')]
     #[TextAttribute('Claims processed')]
     #[AlignAttribute('center')]
     #[WidthAttribute('170px')]
     #[PublicAttribute(true)]
     case CLAIMS_PROCESSED = 'claims_processed';
-
-    public static function getValues(): array|null
-    {
-        $cases = [];
-        foreach (self::cases() as $case) {
-            array_push($cases, $case->value);
-        }
-
-        return $cases;
-    }
 }

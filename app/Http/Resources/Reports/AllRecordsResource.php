@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Resources\Reports;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+/**
+ *
+ * @todo: Refactor when upgrading to laravel 10
+ */
 final class AllRecordsResource extends JsonResource
 {
     private string $module;

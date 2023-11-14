@@ -576,9 +576,9 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function () {
         Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
         Route::get('/reports/types', [ReportReSource::class, 'types']);
+        Route::post('reports/records', [ReportReSource::class, 'records']);
+        Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-        Route::post('reports/all-records', [ReportReSource::class, 'allRecords']);
-        Route::get('reports/columns', [ReportReSource::class, 'getColumnsReports']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

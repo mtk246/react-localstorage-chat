@@ -16,7 +16,6 @@ use App\Enums\Reports\ColumnsGeneralFacilityType;
 use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\ReportType;
-use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
 use App\Http\Requests\Reports\StoreRequest;
@@ -90,31 +89,29 @@ final class ReportReSource extends Controller
         );
     }
 
-    public function allRecords(Request $request, GetAllRecordsAction $get): JsonResponse {
+    public function records(Request $request, GetAllRecordsAction $get): JsonResponse {
         return response()->json(
             $get->getAllPatient($request->module, Auth::user())
         );
     }
 
-    public function getColumnsReports(): JsonResponse
+    public function columnsReports(): JsonResponse
     {
-        $rs = [
-            TypeReportAllRecords::DETAILED_PATIENT => Gate::check('is-admin') 
-            ? new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
-            : new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
-
-            TypeReportAllRecords::GENERAL_PATIENT => Gate::check('is-admin') 
-                ? new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
-
-            TypeReportAllRecords::GENERAL_FACILITY => Gate::check('is-admin')
-                ? new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
-
-            TypeReportAllRecords::GENERAL_HEALTHCARE_PROFESSIONAL => Gate::check('is-admin')
-            ? new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
-            : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
-        ];
+        $rs = Gate::check('is-admin')
+            ? [
+                'detailed patient' => new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general patien' => new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general facility' => new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general healthcare professional' => 
+                    new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+            ]
+            : [
+                'detailed patient' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general patien' => new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general facility' => new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'general healthcare professional' => 
+                    new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+            ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);
 

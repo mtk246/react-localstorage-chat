@@ -16,15 +16,22 @@ return new class() extends Migration {
                 billing_companies,
                 companies,
                 system_code,
-                concat(
-                    p.first_name,
-                    ' ',
-                    p.name_suffix_id,
-                    ', ',
-                    p.first_name,
-                    ' ',
-                    p.middle_name
-                ) as healthcare_professional,
+                CASE
+                    WHEN concat_ws(
+                        ' ' :: text,
+                        COALESCE(p.last_name, '' :: character varying),
+                        COALESCE(type_catalogs.code, '' :: character varying),
+                        COALESCE(p.first_name, '' :: character varying),
+                        COALESCE(p.middle_name, '' :: character varying)
+                    ) = ' ' :: text THEN 'Console' :: text
+                    ELSE concat_ws(
+                        ' ' :: text,
+                        COALESCE(p.last_name, '' :: character varying),
+                        COALESCE(type_catalogs.code, '' :: character varying),
+                        COALESCE(p.first_name, '' :: character varying),
+                        COALESCE(p.middle_name, '' :: character varying)
+                    )
+                END AS healthcare_professional,
                 hp.npi,
                 concat(t.tax_id, ' ', t.name) as primary_taxonomy,
                 health_professional_type,
@@ -33,6 +40,7 @@ return new class() extends Migration {
             from
                 health_professionals hp
                 left join profiles p on hp.profile_id = p.id
+                left join type_catalogs on p.name_suffix_id = type_catalogs.id
                 left join health_professional_taxonomy hpt on hpt.health_professional_id = hp.id
                 left join taxonomies t on hpt.taxonomy_id = t.id
                 left join (

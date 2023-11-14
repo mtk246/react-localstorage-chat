@@ -8,8 +8,8 @@ use BenSampo\Enum\Enum;
 
 final class TypeReportAllRecords extends Enum
 {
-    public const DETAILED_PATIENT = 'detailed patient';
-    public const GENERAL_PATIENT = 'general patient';
-    public const GENERAL_FACILITY = 'general facility';
-    public const GENERAL_HEALTHCARE_PROFESSIONAL = 'general healthcare professional';
+    public const DETAILED_PATIENT = 'detailed_patient';
+    public const GENERAL_PATIENT = 'general_patient';
+    public const GENERAL_FACILITY = 'general_facility';
+    public const GENERAL_HEALTHCARE_PROFESSIONAL = 'general_healthcare_professional';
 }

@@ -14,6 +14,7 @@ use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
+use Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ColumnsReportResource extends JsonResource

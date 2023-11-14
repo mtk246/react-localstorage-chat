@@ -19,8 +19,8 @@ final class ColumnsAdminDetailPatinetResource extends JsonResource
     {
         return [
             'id' => $this->resource->value,
-            'name' => $this->resource->getName(),
-            'value' => $this->resource->getName(),
+            'name' => $this->resource->value,
+            'value' => $this->resource->value,
             'type' => $this->resource->getType(),
             'align' => $this->resource->getAlign(),
             'text' => $this->resource->getText(),
