@@ -106,11 +106,13 @@ final class RocketChatService
 
     public function createUser(User $user, string $password): ?Response
     {
+        $userName = $user->profile->first_name.' '.$user->profile->middle_name;
+
         return $this->post('/api/v1/users.create', [
             'email' => $user->email,
-            'name' => $user->profile->first_name.' '.$user->profile->middle_name,
+            'name' => $userName,
             'password' => $password,
-            'username' => Str::snake($user->usercode, '.'),
+            'username' => Str::snake($user->usercode ?? $userName, '.'),
             'joinDefaultChannels' => true,
             'verified' => true,
         ]);
