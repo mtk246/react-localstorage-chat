@@ -14,8 +14,8 @@ use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
-use Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 final class ColumnsReportResource extends JsonResource
 {
@@ -39,19 +39,19 @@ final class ColumnsReportResource extends JsonResource
     public function toArray($request)
     {
         return match ($this->module) {
-            TypeReportAllRecords::DETAILED_PATIENT => \Gate::check('is-admin')
+            TypeReportAllRecords::DETAILED_PATIENT => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
 
-            TypeReportAllRecords::GENERAL_PATIENT => \Gate::check('is-admin')
+            TypeReportAllRecords::GENERAL_PATIENT => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
 
-            TypeReportAllRecords::GENERAL_FACILITY => \Gate::check('is-admin')
+            TypeReportAllRecords::GENERAL_FACILITY => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
 
-            TypeReportAllRecords::GENERAL_HEALTHCARE_PROFESSIONAL => \Gate::check('is-admin')
+            TypeReportAllRecords::GENERAL_HEALTHCARE_PROFESSIONAL => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
         };
