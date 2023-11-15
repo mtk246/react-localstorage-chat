@@ -44,6 +44,8 @@ class PolicyRequest extends FormRequest
             'release_info' => ['required', 'boolean'],
             'assign_benefits' => ['required', 'boolean'],
             'own_insurance' => ['required', 'boolean'],
+            'dual_plan' => ['nullable', 'boolean'],
+            'complementary_policy_id' => ['nullable', 'integer'],
 
             'subscriber' => ['nullable', 'required_if:own_insurance,false', 'array'],
             'subscriber.id' => ['nullable', 'integer'],
