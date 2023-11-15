@@ -35,7 +35,7 @@ class PolicyRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'policy_number' => ['required', 'string'],
-            'insurance_plan' => ['required', 'numeric'],
+            'insurance_plan' => ['required', 'string'],
             'group_number' => ['nullable', 'string'],
             'eff_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
