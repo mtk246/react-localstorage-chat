@@ -18,13 +18,12 @@ final class ColumnsAdminDetailPatinetResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->resource->value,
             'name' => $this->resource->value,
-            'value' => $this->resource->value,
-            'type' => $this->resource->getType(),
+            'field' => $this->resource->value,
             'align' => $this->resource->getAlign(),
-            'text' => $this->resource->getText(),
-            'width' => $this->resource->getWidth(),
+            'sortable' => true,
+            'label' => $this->resource->getText(),
+            'type' => $this->resource->getType(),
         ];
     }
 }

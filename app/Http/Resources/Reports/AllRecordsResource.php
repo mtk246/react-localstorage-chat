@@ -50,7 +50,7 @@ final class AllRecordsResource extends JsonResource
                 'to' => $this->resource['to'],
                 'total' => $this->resource['total'],
             ],
-            'headers' => new ColumnsReportResource($this->resource, $this->module),
+            'colums' => new ColumnsReportResource($this->resource, $this->module),
         ];
     }
 }
