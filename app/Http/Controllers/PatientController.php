@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\InsurancePlan\GetInsurancePolicyAction;
 use App\Enums\AddressType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Patient\AddCompaniesRequest;
@@ -12,6 +13,7 @@ use App\Http\Requests\Patient\UpdateRequest;
 use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Resources\Enums\AddressTypeResource;
 use App\Http\Resources\Enums\EnumResource;
+use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -107,6 +109,13 @@ class PatientController extends Controller
     public function getPolicies(Request $request, int $patient_id): JsonResponse
     {
         return $this->patientRepository->getPolicies($request, $patient_id);
+    }
+
+    public function getListPolicies(Request $request, Patient $patient, GetInsurancePolicyAction $getPolicy): JsonResponse
+    {
+        $rs = $getPolicy->allPrimary($patient, $request->input(), $request->user());
+
+        return response()->json($rs);
     }
 
     public function editPolicy(PolicyRequest $request, int $patient_id, int $insurance_policy_id): JsonResponse
