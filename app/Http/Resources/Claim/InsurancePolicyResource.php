@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Models\Contact;
+use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class InsurancePolicyResource extends JsonResource
@@ -16,6 +19,16 @@ final class InsurancePolicyResource extends JsonResource
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')
             ->first();
+
+        $insuranceContactInfo = Contact::where('contactable_id', $this->resource->insurancePlan->insurance_company_id)
+            ->where('contactable_type', InsuranceCompany::class)
+            ->first();
+
+        if (!$insuranceContactInfo) {
+            $insuranceContactInfo = Contact::where('contactable_id', $this->resource->insurance_plan_id)
+                ->where('contactable_type', InsurancePlan::class)
+                ->first();
+        }
 
         return [
             'id' => $this->resource->id,
@@ -35,6 +48,7 @@ final class InsurancePolicyResource extends JsonResource
                 'id' => $this->resource->insurancePlan->insurance_company_id,
                 'name' => $this->resource->insurancePlan->insuranceCompany->name,
                 'payer_id' => $this->resource->insurancePlan->insuranceCompany->payer_id,
+                'contact' => $insuranceContactInfo->toArray(),
             ],
             'insurance_plan_id' => $this->resource->insurance_plan_id,
             'insurance_plan' => $this->resource->insurancePlan->name,
