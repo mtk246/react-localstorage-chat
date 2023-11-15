@@ -32,6 +32,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $patient_id
  * @property bool $status
  * @property bool $own
+ * @property int|null $plan_type_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
@@ -68,6 +69,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePayerResponsibilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePaymentResponsibilityLevelCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePlanTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePolicyNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereReleaseInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereStatus($value)
@@ -90,6 +92,7 @@ class InsurancePolicy extends Model implements Auditable
         'assign_benefits',
         'policy_number',
         'group_number',
+        'plan_type_id',
         'insurance_plan_id',
         'insurance_policy_type_id',
         'type_responsibility_id',
@@ -160,6 +163,16 @@ class InsurancePolicy extends Model implements Auditable
     public function insurancePlan()
     {
         return $this->belongsTo(InsurancePlan::class);
+    }
+
+    /**
+     * InsurancePolicy belongs to PlanType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function planType()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
     }
 
     /**
