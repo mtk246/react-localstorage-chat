@@ -331,12 +331,12 @@ class PatientRepository
                             env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                         )
                     );
+
+                    event(new StoreEvent($user, $user->userkey));
                 }
             }
 
             DB::commit();
-
-            event(new StoreEvent($user, $user->userkey));
 
             return $this->getOnePatient($patient->id);
         } catch (\Exception $e) {
