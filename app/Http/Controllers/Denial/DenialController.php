@@ -6,10 +6,6 @@ namespace App\Http\Controllers\Denial;
 
 use App\Actions\Claim\GetDenialAction;
 use App\Models\Claims\Claim;
-use App\Models\Claims\DenialTracking;
-use App\Models\Claims\DenialRefile;
-use App\Http\Casts\Claims\DenialRefileWrapper;
-use App\Http\Casts\Claims\DenialTrackingWrapper;
 use App\Http\Controllers\Controller;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
