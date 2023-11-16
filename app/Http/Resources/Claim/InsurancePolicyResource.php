@@ -20,15 +20,9 @@ final class InsurancePolicyResource extends JsonResource
             ->orderBy('id', 'asc')
             ->first();
 
-        $insuranceContactInfo = Contact::where('contactable_id', $this->resource->insurancePlan->insurance_company_id)
-            ->where('contactable_type', InsuranceCompany::class)
+        $insurancePlanContactInfo = Contact::where('contactable_id', $this->resource->insurance_plan_id)
+            ->where('contactable_type', InsurancePlan::class)
             ->first();
-
-        if (!$insuranceContactInfo) {
-            $insuranceContactInfo = Contact::where('contactable_id', $this->resource->insurance_plan_id)
-                ->where('contactable_type', InsurancePlan::class)
-                ->first();
-        }
 
         return [
             'id' => $this->resource->id,
@@ -48,8 +42,8 @@ final class InsurancePolicyResource extends JsonResource
                 'id' => $this->resource->insurancePlan->insurance_company_id,
                 'name' => $this->resource->insurancePlan->insuranceCompany->name,
                 'payer_id' => $this->resource->insurancePlan->insuranceCompany->payer_id,
-                'contact' => $insuranceContactInfo ? $insuranceContactInfo->toArray() : [],
             ],
+            'contact' => $insurancePlanContactInfo ? $insurancePlanContactInfo->toArray() : [],
             'insurance_plan_id' => $this->resource->insurance_plan_id,
             'insurance_plan' => $this->resource->insurancePlan->name,
             'type_responsibility_id' => $this->resource->type_responsibility_id ?? '',
