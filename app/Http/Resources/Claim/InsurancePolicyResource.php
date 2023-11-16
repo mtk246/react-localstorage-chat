@@ -48,7 +48,7 @@ final class InsurancePolicyResource extends JsonResource
                 'id' => $this->resource->insurancePlan->insurance_company_id,
                 'name' => $this->resource->insurancePlan->insuranceCompany->name,
                 'payer_id' => $this->resource->insurancePlan->insuranceCompany->payer_id,
-                'contact' => $insuranceContactInfo->toArray(),
+                'contact' => $insuranceContactInfo ? $insuranceContactInfo->toArray() : [],
             ],
             'insurance_plan_id' => $this->resource->insurance_plan_id,
             'insurance_plan' => $this->resource->insurancePlan->name,
