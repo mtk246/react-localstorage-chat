@@ -34,6 +34,7 @@ final class ReportResource extends JsonResource
             'end_date' => now(),
             'configuration' => $this->resource->configuration,
             'favorite' => $this->resource->favorite,
+            'tableu' => $this->resource->tableu,
         ];
     }
 }

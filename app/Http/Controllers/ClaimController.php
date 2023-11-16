@@ -82,10 +82,9 @@ class ClaimController extends Controller
 
     public function getServerAll(
         Request $request,
-        Claim $claim,
         GetClaimAction $getClaim
     ): JsonResponse {
-        return response()->json($getClaim->all($claim, $request));
+        return response()->json($getClaim->all($request));
     }
 
     public function getOneClaim(
