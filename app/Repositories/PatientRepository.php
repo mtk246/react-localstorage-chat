@@ -419,6 +419,9 @@ class PatientRepository
                 'billing_company' => $patient_policy->billingCompany->name ?? '',
                 'policy_number' => $patient_policy->policy_number,
                 'group_number' => $patient_policy->group_number,
+                'dual_plan' => $patient_policy->dual_plan,
+                'complementary_policy_id' => $patient_policy->complementary_policy_id ?? '',
+                'complementary_policy' => $patient_policy->complementaryPolicy->policy_number ?? '',
                 'insurance_company_id' => $patient_policy->insurancePlan->insurance_company_id ?? '',
                 'insurance_company' => ($patient_policy
                     ->insurancePlan
@@ -670,6 +673,9 @@ class PatientRepository
                         'id' => $patient_policy->id,
                         'policy_number' => $patient_policy->policy_number,
                         'group_number' => $patient_policy->group_number,
+                        'dual_plan' => $patient_policy->dual_plan,
+                        'complementary_policy_id' => $patient_policy->complementary_policy_id ?? '',
+                        'complementary_policy' => $patient_policy->complementaryPolicy->policy_number ?? '',
                         'insurance_company_id' => $patient_policy->insurancePlan->insurance_company_id ?? '',
                         'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
                         'insurance_plan_id' => ($patient_policy->plan_type_id)
@@ -1263,6 +1269,7 @@ class PatientRepository
 
             $insurancePolicy = InsurancePolicy::create([
                 'own' => $data['own_insurance'] ?? false,
+                'dual_plan' => $data['dual_plan'] ?? false,
                 'policy_number' => $data['policy_number'],
                 'group_number' => $data['group_number'] ?? '',
                 'eff_date' => $data['eff_date'] ?? null,
@@ -1275,6 +1282,7 @@ class PatientRepository
                 'insurance_plan_id' => $insurancePlanId,
                 'plan_type_id' => $planTypeId,
                 'billing_company_id' => $billingCompany->id ?? $data['billing_company_id'],
+                'complementary_policy_id' => $data['complementary_policy_id'] ?? null,
             ]);
 
             if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
@@ -1469,6 +1477,9 @@ class PatientRepository
             'id' => $insurancePolicy->id,
             'policy_number' => $insurancePolicy->policy_number,
             'group_number' => $insurancePolicy->group_number,
+            'dual_plan' => $insurancePolicy->dual_plan,
+            'complementary_policy_id' => $insurancePolicy->complementary_policy_id ?? '',
+            'complementary_policy' => $insurancePolicy->complementaryPolicy->policy_number ?? '',
             'insurance_company_id' => $insurancePolicy->insurancePlan->insurance_company_id ?? '',
             'insurance_company' => ($insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$insurancePolicy->insurancePlan->insuranceCompany->name ?? '',
             'insurance_plan_id' => isset($insurancePolicy->plan_type_id)
@@ -1532,6 +1543,8 @@ class PatientRepository
             'id' => $policy->id,
             'policy_number' => $policy->policy_number,
             'group_number' => $policy->group_number,
+            'dual_plan' => $policy->dual_plan,
+            'complementary_policy_id' => $policy->complementary_policy_id ?? '',
             'insurance_company_id' => $policy->insurancePlan->insurance_company_id ?? '',
             'insurance_company' => ($policy
                 ->insurancePlan
