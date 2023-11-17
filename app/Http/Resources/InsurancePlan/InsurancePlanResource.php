@@ -35,8 +35,6 @@ final class InsurancePlanResource extends JsonResource
             'allow_attached_files' => $this->resource->allow_attached_files,
             'ins_type_id' => $this->resource->ins_type_id ?? '',
             'ins_type' => isset($this->resource->insType) ? ($this->resource->insType->code.' - '.$this->resource->insType->description) : '',
-            'plan_type_id' => $this->resource->plan_type_id ?? '',
-            'plan_type' => isset($this->resource->planType) ? ($this->resource->planType->code.' - '.$this->resource->planType->description) : '',
             'insurance_company_id' => $this->resource->insurance_company_id,
             'insurance_company' => !is_null($this->resource->insuranceCompany) ? $this->resource->insuranceCompany->name : null,
             'created_at' => $this->resource->created_at,
@@ -64,6 +62,10 @@ final class InsurancePlanResource extends JsonResource
                         'private_note' => $this->getPrivateNote($bC->id),
                         'address' => $this->getAddress($bC->id, 1),
                         'contact' => $this->getContact($bC->id),
+                        'plan_type_ids' => $this->resource->planTypes()->where([
+                                'billing_company_id' => $bC->id,
+                            ])->pluck('type_catalogs.id') ?? [],
+                        'plan_types' => $this->getPlanTypes($bC->id),
                         'insurance_plan_time_failed' => $this->getTimeFailed($bC->id),
                         'eff_date' => $private_insurance_plans[0]->eff_date,
                     ];
@@ -78,6 +80,17 @@ final class InsurancePlanResource extends JsonResource
         return $this->resource->insurancePlanPrivate()->where([
             'billing_company_id' => $billingCompanyId,
         ])->get();
+    }
+
+    private function getPlanTypes(int $billingCompanyId)
+    {
+        return $this->resource->planTypes()
+            ->where([
+                'billing_company_id' => $billingCompanyId,
+            ])->get()->map(fn ($planType) => [
+                'id' => $planType->id,
+                'name' => $planType->code.' - '.$planType->description,
+            ]);
     }
 
     private function getNickname(int $billingCompanyId)

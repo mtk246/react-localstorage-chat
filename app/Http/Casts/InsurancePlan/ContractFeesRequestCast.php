@@ -18,7 +18,7 @@ final class ContractFeesRequestCast extends CastsRequest
             : $this->user->billing_company_id;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->getInt('id');
     }
