@@ -8,7 +8,8 @@
         "clasification": 3,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNT",
@@ -19,7 +20,8 @@
         "clasification": 4,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNV",
@@ -30,7 +32,8 @@
         "clasification": 3,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNW",
@@ -41,7 +44,8 @@
         "clasification": 1,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HENMN75ETTNDRVZ9YNC3B9NK",
@@ -52,7 +56,8 @@
         "clasification": 6,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HENMNVHTE0BCCN9KGDR67V3Q",
@@ -63,7 +68,8 @@
         "clasification": 6,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HENMNWJ61VB8AP471CWT7SZ6",
@@ -74,7 +80,8 @@
         "clasification": 6,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
     },
     {
         "id": "01HENMNXBGA26F78BG4MS4PXE5",
@@ -85,6 +92,55 @@
         "clasification": 6,
         "range": "30",
         "configuration": [],
-        "favorite": true
+        "favorite": true,
+        "tableu": true
+    },
+    {
+        "id": "01229C09819911EEB9620242AC",
+        "name": "Detailed patient Report",
+        "description": "Use this report to display relevant information about the patients registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01229C478819911EB9620242AC",
+        "name": "General patient Report",
+        "description": "Use this report to view all information about patient registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "0129C5EA819911EEB9620242AC",
+        "name": "General Facility Report",
+        "description": "Use this report to view all information about facility professionals registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01229C734819911EEB20242ACS",
+        "name": "General Healthcare Professional Report",
+        "description": "Use this report to view all information about healthcare professionals registered in the system.",
+        "type": 1,
+        "url": "",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
     }
 ]

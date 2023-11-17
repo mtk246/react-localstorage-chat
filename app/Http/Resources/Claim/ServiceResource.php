@@ -20,6 +20,9 @@ final class ServiceResource extends JsonResource
     /** @return array<string, mixed> */
     public function toArray($request): array
     {
+        $medication = $this->resource->procedure?->companyServices
+            ->firstWhere('company_id', $this->company_id)?->medication ?? null;
+
         $commonFields = [
             'id' => $this->resource->id,
             'from_service' => $this->resource->from_service,
@@ -37,11 +40,12 @@ final class ServiceResource extends JsonResource
                                 $this->company_id
                             )
                             ?->price ?? 0,
-                        'is_medication' => isset($this->resource->procedure?->companyServices
-                            ->firstWhere('company_id', $this->company_id)?->medication),
+                        'units_limit' => $medication?->units_limit ? (int) $medication?->units_limit : null,
+                        'is_medication' => isset($medication),
                     ],
                 ]
                 : [],
+            'units_limit' => $medication?->units_limit ? (int) $medication?->units_limit : null,
             'price' => $this->resource->price,
             'days_or_units' => $this->resource->days_or_units,
             'copay' => $this->resource->copay,

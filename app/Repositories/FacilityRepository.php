@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Meilisearch\Endpoints\Indexes;
 
 class FacilityRepository
 {
@@ -354,7 +355,26 @@ class FacilityRepository
     {
         $config = config('scout.meilisearch.index-settings.'.Facility::class.'.sortableAttributes');
 
-        $data = Facility::search($request->query('query'))->when(
+        $data = Facility::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
+                $options['attributesToSearchOn'] = [
+                    'name',
+                    'abbreviations.abbreviation',
+                    'npi',
+                    'companies',
+                    'facilityTypes',
+                    'billingCompanies.name'
+                ];
+
+                if (isset($request->sortBy) && in_array($request->sortBy, $config)){
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
+        ->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
                 $bC = auth()->user()->billing_company_id ?? null;
@@ -390,10 +410,6 @@ class FacilityRepository
                 'facilityTypes',
                 'billingCompanies',
             ]))
-        )->when(
-            $request->has('sortBy') && in_array($request->sortBy, $config),
-            fn (ScoutBuilder $query) => $query->orderBy($request->sortBy, Pagination::sortDesc()),
-            fn (ScoutBuilder $query) => $query->orderBy('created_at', Pagination::sortDesc())->orderBy('id', 'asc')
         );
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
