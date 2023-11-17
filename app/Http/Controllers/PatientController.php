@@ -91,14 +91,6 @@ class PatientController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error add policy to patient'), 400);
     }
 
-    /** @todo check if method is still neded */
-    public function removePolicy(int $patient_id, int $insurance_policy_id): JsonResponse
-    {
-        $rs = $this->patientRepository->removePolicy($insurance_policy_id, $patient_id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error remove policy to patient'), 400);
-    }
-
     public function getPolicy(int $patient_id, int $insurance_policy_id): JsonResponse
     {
         $rs = $this->patientRepository->getPolicy($insurance_policy_id, $patient_id);
