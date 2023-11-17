@@ -53,7 +53,7 @@ final class InsurancePolicyResource extends JsonResource
             'insurance_policy_type_id' => $this->resource->insurance_policy_type_id ?? '',
             'insurance_policy_type_code' => $this->resource->insurancePolicyType?->code ?? '',
             'insurance_policy_type_name' => $this->resource->insurancePolicyType?->description ?? '',
-            'insurance_plan_type' => $this->resource->insurancePlan->planType ? $this->resource->insurancePlan->planType->toArray() : [],
+            'insurance_plan_type' => $this->resource->insurancePlan->planTypes ? $this->resource->insurancePlan->planTypes : [],
             'insurance_policy_id' => $this->resource->id ?? '',
             'order' => $this->resource->pivot->order,
             'created_at' => $this->resource->created_at,
