@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Models\Contact;
+use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -45,14 +46,15 @@ final class InsurancePolicyResource extends JsonResource
             'contact' => $insurancePlanContactInfo ? $insurancePlanContactInfo->toArray() : [],
             'insurance_plan_id' => $this->resource->insurance_plan_id,
             'insurance_plan' => $this->resource->insurancePlan->name,
-            'insurance_plan_type' => $this->resource->insurancePlan->planType ? $this->resource->insurancePlan->planType->toArray() : [],
             'type_responsibility_id' => $this->resource->type_responsibility_id ?? '',
             'type_responsibility' => $this->resource->typeResponsibility?->code ?? '',
             'payer_responsibility_id' => $this->resource->payer_responsibility_id ?? '',
             'payer_responsibility' => $this->resource->payerResponsibility?->code ?? '',
             'payment_responsibility_level_code' => $this->resource->payment_responsibility_level_code ?? '',
+            'insurance_policy_type_id' => $this->resource->insurance_policy_type_id ?? '',
             'insurance_policy_type_code' => $this->resource->insurancePolicyType?->code ?? '',
             'insurance_policy_type_name' => $this->resource->insurancePolicyType?->description ?? '',
+            'insurance_plan_type' => $this->resource->insurancePlan->planType ? $this->resource->insurancePlan->planType->toArray() : [],
             'insurance_policy_id' => $this->resource->id ?? '',
             'order' => $this->resource->pivot->order,
             'created_at' => $this->resource->created_at,
