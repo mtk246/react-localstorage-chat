@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Models\Contact;
-use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
