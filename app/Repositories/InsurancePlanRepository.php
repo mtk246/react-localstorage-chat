@@ -213,7 +213,7 @@ class InsurancePlanRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             if($data['format']) {
@@ -353,7 +353,7 @@ class InsurancePlanRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -603,7 +603,7 @@ class InsurancePlanRepository
 
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -817,7 +817,7 @@ class InsurancePlanRepository
     {
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;
@@ -857,7 +857,7 @@ class InsurancePlanRepository
     {
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;
