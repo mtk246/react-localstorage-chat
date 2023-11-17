@@ -35,7 +35,11 @@ class UpdateRequest extends FormRequest
             'abbreviation' => ['nullable', 'string'],
             'insurance_company_id' => ['required', 'integer'],
             'ins_type_id' => ['required', 'integer'],
-            'plan_type_id' => ['nullable', 'integer'],
+            'plan_type_ids' => ['nullable', 'array'],
+            'plan_type_ids.*' => [
+                'integer',
+                'exists:\App\Models\TypeCatalog,id',
+            ],
             'eff_date' => ['nullable', 'date'],
 
             'accept_assign' => ['required', 'boolean'],
