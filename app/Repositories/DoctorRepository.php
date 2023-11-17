@@ -362,11 +362,11 @@ class DoctorRepository
                         env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                     )
                 );
+
+                event(new StoreEvent($user, $user->userkey));
             }
 
             \DB::commit();
-
-            event(new StoreEvent($user, $user->userkey));
 
             return new DoctorBodyResource($healthP);
         } catch (\Exception $e) {
