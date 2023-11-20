@@ -561,6 +561,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
         Route::post('/', [DenialController::class, 'createDenialTracking']);
         Route::put('/', [DenialController::class, 'updateDenialTracking']);
+
+        Route::prefix('/refile')->middleware([
+            'auth:api',
+            // 'role:superuser|biller|billingmanager',
+        ])->group(function () {
+            Route::post('/', [DenialController::class, 'createDenialRefile']);
+            Route::put('/', [DenialController::class, 'updateDenialRefile']);
+        });
     });
 
     Route::prefix('tableau')->middleware([
