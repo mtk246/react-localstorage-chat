@@ -8,11 +8,14 @@ use App\Enums\User\UserType;
 use App\Events\User\UpdateEvent;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
+use App\Models\Reports\Present;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -278,6 +281,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    public function presents(): HasMany
+    {
+        return $this->hasMany(Present::class);
     }
 
     public function permissions(): ?Collection
