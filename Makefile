@@ -49,10 +49,13 @@ scout: ## Sync scout models
 	./vendor/bin/sail artisan scout:import-all -m
 
 upgrade: ## Upgrade client containers and enviroment
+	./.env.example .env
 	./vendor/bin/sail down
 	./vendor/bin/sail up -d
 	./vendor/bin/sail composer update
 	./vendor/bin/sail composer upgrade
+	./vendor/bin/sail artisan key:generate
+	./vendor/bin/sail artisan jwt:secret
 	./vendor/bin/sail artisan migrate
 	./vendor/bin/sail artisan db:seed
 	./vendor/bin/sail artisan scout:sync-index-settings
