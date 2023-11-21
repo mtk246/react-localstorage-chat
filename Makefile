@@ -49,7 +49,7 @@ scout: ## Sync scout models
 	./vendor/bin/sail artisan scout:import-all -m
 
 upgrade: ## Upgrade client containers and enviroment
-	./.env.example .env
+	cp ./.env.example .env
 	./vendor/bin/sail down
 	./vendor/bin/sail up -d
 	./vendor/bin/sail composer update
