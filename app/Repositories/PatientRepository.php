@@ -1249,7 +1249,7 @@ class PatientRepository
      */
     public function addPolicy(array $data, int $id)
     {
-        //try {
+        try {
             DB::beginTransaction();
 
             $insurancePlanId = $data['insurance_plan'];
@@ -1336,11 +1336,11 @@ class PatientRepository
             DB::commit();
 
             return $this->getOnePatient($patient->id);
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             return null;
-        }*/
+        }
     }
 
     public function changeStatusPolicy(array $data, int $insurance_policy_id, int $patient_id)
