@@ -14,6 +14,12 @@ final class UpdateClaimRuleAction
     {
         $rules->update($rulesWrapper->getRuleData());
 
+        if ($rulesWrapper->hasResponsibilities()) {
+            $rulesWrapper->getResponsibilities()->each(function ($responsibility) use ($rules) {
+                $rules->typesOfResponsibilities()->attach($responsibility);
+            });
+        }
+
         return new RuleResource($rules->refresh());
     }
 }

@@ -27,6 +27,8 @@ final class StoreRulesRequest extends FormRequest
                 'required',
                 new Enum(RuleFormatType::class),
             ],
+            'responsibilities' => 'nullable|array',
+            'responsibilities.*' => 'required|integer|exists:type_catalogs,id',
             'rules.file' => 'required|array',
             'rules.file.*' => [
                 'required',
