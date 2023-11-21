@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('presents', function (Blueprint $table) {
+        Schema::create('presets', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name', 100);
             $table->string('description', 255);

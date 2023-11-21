@@ -283,9 +283,9 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function presents(): HasMany
+    public function presets(): HasMany
     {
-        return $this->hasMany(Present::class);
+        return $this->hasMany(Preset::class);
     }
 
     public function permissions(): ?Collection
