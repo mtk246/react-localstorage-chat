@@ -6,7 +6,6 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
 use App\Enums\ClaimStatusMap;
-use App\Enums\InterfaceType;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use App\Models\Claims\DenialTracking;
@@ -62,7 +61,6 @@ final class ClaimBodyResource extends JsonResource
             'user_created' => $this->user_created,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
-            'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
         ];
     }
 
@@ -166,20 +164,6 @@ final class ClaimBodyResource extends JsonResource
         }
 
         return array_merge(array_reverse($records, true), $newStatuses);
-    }
-
-    private function getDenialTrackingsDetailsMap(): array
-    {
-        $records = [
-            'interface_type' => [
-                InterfaceType::CALL => 0,
-                InterfaceType::WEBSITE => 1,
-                InterfaceType::EMAIL => 2,
-                InterfaceType::OTHER => 3,
-            ],
-        ];
-
-        return $records;
     }
 
     private function getStatusHistory(): array
@@ -471,6 +455,7 @@ final class ClaimBodyResource extends JsonResource
             'batch' => $policyPrimary?->batch ?? '',
             'eff_date' => $policyPrimary?->eff_date ?? '',
             'end_date' => $policyPrimary?->end_date ?? '',
+            'own' => $policyPrimary?->own ?? '',
         ];
     }
 

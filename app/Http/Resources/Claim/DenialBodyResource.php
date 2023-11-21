@@ -6,9 +6,10 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
-use App\Models\Claims\ClaimCheckStatus;
+use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\Claims\DenialTracking;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -35,6 +36,16 @@ final class DenialBodyResource extends JsonResource
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_company' => $this->billingCompany,
             'billing_provider' => $this->getBillingProvider(),
+            'transmission_count' => $this->claimTransmissionResponses->count(),
+            'company_information' => new CompanyResource(
+                $this->resource->demographicInformation->company
+            ),
+            'facility_information' => new FacilityResource(
+                $this->resource->demographicInformation->facility
+            ),
+            'health_professional_information' => HealthProfessionalResource::collection(
+                $this->resource->demographicInformation->healthProfessionals
+            ),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'claim_type' => upperCaseWords($this->resource->type->getName()),
@@ -78,7 +89,20 @@ final class DenialBodyResource extends JsonResource
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
             'denial_trackings' => $this->resource->getDenialTrackings(),
+            'claim_number' => $this->getDenialTrackings()->last()->claim_number ?? '',
+            'follow_up' => $this->resource->getDenialTrackings()->last()->follow_up ?? '',
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
+            'denial_refile' => $this->resource->getDenialRefile(),
+            'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
+            'eob' => [
+                [
+                    'filename' => '',
+                    'dos' => $this->getDateOfServiceAttribute(),
+                    'payment' => [],
+                    'associated_batch' => [],
+                    'insurance_plan' => [],
+                ],
+            ],
         ];
     }
 
@@ -199,6 +223,19 @@ final class DenialBodyResource extends JsonResource
         return $records;
     }
 
+    private function getDenialRefileDetailsMap(): array
+    {
+        $records = [
+            'refile_type' => [
+                InterfaceType::SECONDARY_INSURANCE => 0,
+                InterfaceType::CORRECTED_CLAIMS => 1,
+                InterfaceType::REFILE_ANOTHER_REASONS => 2,
+            ],
+        ];
+
+        return $records;
+    }
+
     private function getStatusHistory(): array
     {
         $records = [];
@@ -243,23 +280,48 @@ final class DenialBodyResource extends JsonResource
         $record = [];
         $notes = [];
         foreach ($status->privateNotes as $note) {
-            $check = ClaimCheckStatus::query()
+            $denialTracking = DenialTracking::query()
                 ->where('private_note_id', $note->id)
                 ->first();
+
             array_push(
                 $notes,
                 [
                     'note' => $note->note,
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
-                    'check_status' => isset($check) ? [
-                        'response_details' => $check->response_details ?? '',
-                        'interface_type' => $check->interface_type ?? '',
-                        'interface' => $check->interface ?? '',
-                        'consultation_date' => $check->consultation_date ?? '',
-                        'resolution_time' => $check->resolution_time ?? '',
-                        'past_due_date' => $check->past_due_date ?? '',
-                    ] : null,
+                    'denial_tracking' => isset($denialTracking)
+                        ? [
+                            'interface_type' => $denialTracking->interface_type ?? '',
+                            'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                            'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                            'contact_through' => $denialTracking->contact_through ?? '',
+                            'claim_number' => $denialTracking->claim_number ?? '',
+                            'rep_name' => $denialTracking->rep_name ?? '',
+                            'ref_number' => $denialTracking->ref_number ?? '',
+                            'claim_status' => isset($denialTracking->claimStatus)
+                                ? [
+                                    'id' => $denialTracking->claimStatus->id,
+                                    'status' => $denialTracking->claimStatus->status ?? '',
+                                ]
+                                : null,
+                            'claim_sub_status' => isset($denialTracking->claimSubStatus)
+                            ? [
+                                'id' => $denialTracking->claimSubStatus->id,
+                                'status' => $denialTracking->claimSubStatus->name ?? '',
+                            ]
+                            : null,
+                            'tracking_date' => $denialTracking->tracking_date ?? '',
+                            'resolution_time' => $denialTracking->resolution_time ?? '',
+                            'past_due_date' => $denialTracking->past_due_date ?? '',
+                            'follow_up' => $denialTracking->follow_up ?? '',
+                            'department_responsible' => $denialTracking->department_responsible ?? '',
+                            'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                            'response_details' => $denialTracking->response_details ?? null,
+                            'tracking_note' => $denialTracking->privateNote->note ?? '',
+                            'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
+                        : null,
                 ]
             );
         }
@@ -375,6 +437,9 @@ final class DenialBodyResource extends JsonResource
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
             'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
+            'eff_date' => $policyPrimary?->eff_date ?? '',
+            'end_date' => $policyPrimary?->end_date ?? '',
+            'own' => $policyPrimary?->own ?? '',
         ];
     }
 

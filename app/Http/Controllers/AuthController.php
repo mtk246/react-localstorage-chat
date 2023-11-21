@@ -273,6 +273,7 @@ class AuthController extends Controller
         $menu_app = [
             'Claims Process' => [
                 'Claims Management', 'Claim Rules Management', 'Payments Management', 'Patient Management',
+                'Denial Management', 'Ledger Management',
             ],
             'Administration' => [
                 'Health Care Professional Management', 'Insurance Management', 'Company Management',

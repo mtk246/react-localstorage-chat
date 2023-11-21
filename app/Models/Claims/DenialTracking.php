@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $claim_id
  * @property int $private_note_id
  * @property \App\Models\Claims\Claim $claim
+ * @property \App\Models\Claims\ClaimStatus|null $claimStatus
+ * @property \App\Models\Claims\ClaimSubStatus|null $claimSubStatus
+ * @property PrivateNote $privateNote
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newQuery()
