@@ -45,7 +45,7 @@ final class Preset extends Model
     {
         return new Attribute(
             get: fn (string $value) => json_decode($value),
-            // set: fn (string $value) => json_encode($value),
+            set: fn (string $value) => json_encode($value),
         );
     }
 }

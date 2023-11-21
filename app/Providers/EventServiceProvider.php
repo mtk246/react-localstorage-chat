@@ -41,9 +41,9 @@ class EventServiceProvider extends ServiceProvider
         UpdateUserEvent::class => [
             UpdateRokectChatUserListener::class,
         ],
-        // LoginUserEvent::class => [
-        //     LoginRokectChatUserListener::class,
-        // ],
+        LoginUserEvent::class => [
+            LoginRokectChatUserListener::class,
+        ],
         UpdatePasswordEvent::class => [
             UpdateUserPasswordListener::class,
         ],
