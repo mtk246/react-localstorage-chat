@@ -25,7 +25,9 @@ class LoginUserListener
         Log::info(sprintf('Logging in rocketchat user for %s', $event->user->email));
 
         if (!$this->rocketChatService->userExist($event->user->email)) {
-            Log::info(sprintf('User %s dont have a roket chat user', $event->user->email));
+            Log::info(sprintf('User %s dont have a roket chat user, new user created', $event->user->email));
+
+            $this->rocketChatService->createUser($event->user, $event->password)->json();
 
             return;
         }
