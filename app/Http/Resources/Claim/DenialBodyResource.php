@@ -101,7 +101,7 @@ final class DenialBodyResource extends JsonResource
                     'payment' => [],
                     'associated_batch' => [],
                     'insurance_plan' => [],
-                ]
+                ],
             ],
         ];
     }
