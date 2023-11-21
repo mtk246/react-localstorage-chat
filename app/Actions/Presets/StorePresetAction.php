@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 namespace App\Actions\Presets;
 
-use App\Http\Casts\Presets\StoreRequestCast;
 use App\Models\Reports\Preset;
-use Auth;
-use Gate;
 use Illuminate\Support\Facades\DB;
 
 final class StorePresetAction
 {
-    public function invoke(StoreRequestCast $preset): Array
+    public function invoke(array $preset): array
     {
-        return DB::transaction(function () use ($preset): Array {
+        return DB::transaction(function () use ($preset): array {
             $preset = tap(Preset::create([
-                    'name' => $preset->getName(),
-                    'description' => $preset->getDescription(),
-                    'filter' => $preset->getFilter(),
+                    'name' => $preset['name'],
+                    'description' => $preset['description'],
+                    'filter' => json_encode($preset['filter']),
                     'version' => 'v1',
-               ]), function (Preset $presetModel) use ($preset): void {
-                    $presetModel->billingCompanies()->associate(Auth::user()->billing_company_id)->save();
-                    $presetModel->users()->associate(Auth::user()->id)->save();
-                    $presetModel->reports()->associate($preset->getBaseReport())->save();
-                });
+                    'billing_company_id' => \Auth::user()->billing_company_id ? \Auth::user()->billing_company_id : null,
+                    'user_id' => \Auth::user()->id,
+                    'report_id' => $preset['reportId'],
+               ]));
+
             return [
                 'success' => true,
-                'message' => "List successfully.",
+                'message' => 'List successfully.',
                 'data' => $preset,
             ];
         });

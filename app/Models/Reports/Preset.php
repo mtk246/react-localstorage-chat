@@ -16,8 +16,6 @@ final class Preset extends Model
     use HasFactory;
     use HasUlids;
 
-    protected $table = 'presents';
-
     protected $fillable = [
         'name',
         'description',

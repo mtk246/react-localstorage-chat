@@ -6,7 +6,6 @@ namespace App\Http\Casts\Presets;
 
 use App\Http\Casts\CastsRequest;
 use App\Models\Reports\Report;
-use Illuminate\Support\Facades\Gate;
 
 final class StoreRequestCast extends CastsRequest
 {

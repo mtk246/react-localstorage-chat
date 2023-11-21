@@ -8,13 +8,11 @@ use App\Enums\User\UserType;
 use App\Events\User\UpdateEvent;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
-use App\Models\Reports\Present;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -265,7 +263,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User has many FailedLoginAttempts.
      */
-    public function failedLoginAttempts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function failedLoginAttempts(): HasMany
     {
         return $this->hasMany(FailedLoginAttempt::class);
     }
@@ -273,7 +271,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User has many Devices.
      */
-    public function devices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function devices(): HasMany
     {
         return $this->hasMany(Device::class);
     }
