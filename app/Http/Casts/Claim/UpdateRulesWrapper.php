@@ -36,6 +36,16 @@ final class UpdateRulesWrapper extends CastsRequest
         return $this->getInt('insurance_plan_id');
     }
 
+    public function hasResponsibilities(): bool
+    {
+        return $this->has('responsibilities');
+    }
+
+    public function getResponsibilities(): Collection
+    {
+        return $this->getCollect('responsibilities');
+    }
+
     private function getRules(): Collection
     {
         return $this->getCollect('rules');

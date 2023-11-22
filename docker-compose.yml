@@ -118,6 +118,7 @@ services:
             ADMIN_PASS: ${ROCKET_CHAT_PASSWORD:-rocker.secret}
             OVERWRITE_SETTING_Show_Setup_Wizard: completed
             MAIL_URL: smtp://localhost:${FORWARD_MAILHOG_PORT:-1025}
+            CREATE_TOKENS_FOR_USERS: true
         volumes:
             - 'sail-rocket:/data'
             - './.docker/rocketchat/uploads:/app/uploads'

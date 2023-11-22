@@ -94,6 +94,15 @@ final class DenialBodyResource extends JsonResource
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
             'denial_refile' => $this->resource->getDenialRefile(),
             'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
+            'eob' => [
+                [
+                    'filename' => '',
+                    'dos' => $this->getDateOfServiceAttribute(),
+                    'payment' => [],
+                    'associated_batch' => [],
+                    'insurance_plan' => [],
+                ],
+            ],
         ];
     }
 
@@ -377,6 +386,7 @@ final class DenialBodyResource extends JsonResource
                     'status' => $status->claimStatus->status.' - '.$subNote['status'],
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
+                    'denial_tracking' => $this->resource->getDenialTrackings(),
                 ]
             );
         }

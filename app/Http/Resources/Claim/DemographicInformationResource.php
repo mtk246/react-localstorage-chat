@@ -44,7 +44,7 @@ final class DemographicInformationResource extends JsonResource
                     'med_num' => $companyPatient?->med_num ?? '',
                     'patient_code' => $this->resource->patient->code,
                     'patient_address' => $this->resource->patient->mainAddress,
-                    'contact' => $companyPatient->contact->toArray(),
+                    'contact' => $companyPatient->contact,
                 ], $this->resource->patient->profile->toArray())
                 : [],
             'prior_authorization_number' => $this->resource->prior_authorization_number,
