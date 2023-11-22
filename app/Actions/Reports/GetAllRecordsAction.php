@@ -22,6 +22,7 @@ final class GetAllRecordsAction
                     fn ($query) => $query->where('billing_id', $user->billing_company_id),
                 )->get();
         })->toArray();
+
         return new AllRecordsResource($data, $this->getModuleReport($module));
     }
 

@@ -6,8 +6,6 @@ namespace App\Http\Casts\Presets;
 
 use App\Enums\Presets\VersionPresets;
 use App\Http\Casts\CastsRequest;
-use Auth;
-use Gate;
 
 final class StoreRequestCast extends CastsRequest
 {
@@ -27,7 +25,10 @@ final class StoreRequestCast extends CastsRequest
 
     public function getVersion($basePreset): string
     {
-        if (!$basePreset) return VersionPresets::getValue('V1');
+        if (!$basePreset) {
+            return VersionPresets::getValue('V1');
+        }
+
         return match ($basePreset) {
             VersionPresets::V1 => 'v1.1',
             VersionPresets::V1_1 => 'v1.2',
@@ -55,7 +56,7 @@ final class StoreRequestCast extends CastsRequest
 
     public function getBillingCompanyId(): ?int
     {
-        return Gate::allows('is-admin') && $this->has('billing_company_id')
+        return \Gate::allows('is-admin') && $this->has('billing_company_id')
             ? $this->getInt('billing_company_id')
             : $this->user->billing_company_id;
     }
@@ -75,14 +76,14 @@ final class StoreRequestCast extends CastsRequest
         return $this->get('description');
     }
 
-    public function getIsPrivate(): Bool
+    public function getIsPrivate(): bool
     {
         return $this->getBool('is_private');
     }
 
     public function getUserId(): int
     {
-        return Auth::user()->id;
+        return \Auth::user()->id;
     }
 
     public function getReporId()

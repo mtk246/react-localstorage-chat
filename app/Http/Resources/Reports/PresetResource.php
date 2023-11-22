@@ -28,7 +28,7 @@ final class PresetResource extends JsonResource
     {
         return [
             'success' => true,
-            'message' => "Operation successfully.",
+            'message' => 'Operation successfully.',
             'data' => $this->resource,
         ];
     }

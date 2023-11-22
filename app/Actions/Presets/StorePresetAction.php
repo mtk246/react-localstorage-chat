@@ -15,6 +15,7 @@ final class StorePresetAction
     {
         return DB::transaction(function () use ($request): PresetResource {
             $preset = Preset::create($request->getData());
+
             return new PresetResource($preset);
         });
     }
