@@ -7,10 +7,12 @@ namespace App\Models\Claims;
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
 use App\Models\InsurancePlan;
+use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
 
 /**
@@ -28,6 +30,8 @@ use Laravel\Scout\Searchable;
  * @property int|null $insurance_plan_id
  * @property BillingCompany|null $billingCompany
  * @property InsurancePlan|null $insurancePlan
+ * @property \Illuminate\Database\Eloquent\Collection<int, TypeCatalog> $typesOfResponsibilities
+ * @property int|null $types_of_responsibilities_count
  *
  * @method static \Database\Factories\Claims\RulesFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newModelQuery()
@@ -78,6 +82,11 @@ final class Rules extends Model
     public function insurancePlan(): BelongsTo
     {
         return $this->belongsTo(InsurancePlan::class);
+    }
+
+    public function typesOfResponsibilities(): BelongsToMany
+    {
+        return $this->belongsToMany(TypeCatalog::class, 'claim_rule_type_responsibility')->withTimestamps();
     }
 
     public function toSearchableArray(): array
