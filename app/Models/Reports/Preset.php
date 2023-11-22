@@ -21,6 +21,7 @@ final class Preset extends Model
         'description',
         'filter',
         'version',
+        'is_private',
         'report_id',
         'user_id',
         'billing_company_id',
@@ -45,7 +46,7 @@ final class Preset extends Model
     {
         return new Attribute(
             get: fn (string $value) => json_decode($value),
-            set: fn (string $value) => json_encode($value),
+            // set: fn (string $value) => json_encode($value),
         );
     }
 }

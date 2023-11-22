@@ -32,8 +32,6 @@ Route::prefix('v1')/* ->middleware('audit') */
         return response()->json(['message' => 'Api Running']);
     });
 
-    Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
-
     Route::post('audit-all', [\App\Http\Controllers\AuditController::class, 'getAuditAll'])->middleware('auth:api');
     Route::get('audit-all', [\App\Http\Controllers\AuditController::class, 'getAudit'])->middleware('auth:api');
     Route::patch('audit-all-by-entity/{entity}/{id}', [\App\Http\Controllers\AuditController::class, 'getAuditAllByEntity'])->middleware('auth:api');
@@ -589,7 +587,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::post('reports/records', [ReportReSource::class, 'records']);
         Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
-        // Route::resource('presents', PresentsController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+        Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 

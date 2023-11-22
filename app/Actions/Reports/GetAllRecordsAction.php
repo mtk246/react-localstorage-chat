@@ -19,11 +19,9 @@ final class GetAllRecordsAction
             return DB::table($this->getViewReport($module))
                 ->when(
                     Gate::denies('is-admin'),
-                    fn ($query) => $query->whereJsonContains('billing_id', $user->billing_company_id),
+                    fn ($query) => $query->where('billing_id', $user->billing_company_id),
                 )->get();
         })->toArray();
-        \Log::info($this->getModuleReport($module));
-
         return new AllRecordsResource($data, $this->getModuleReport($module));
     }
 

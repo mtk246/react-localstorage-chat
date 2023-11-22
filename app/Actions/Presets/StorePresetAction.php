@@ -15,6 +15,7 @@ final class StorePresetAction
             $preset = tap(Preset::create([
                     'name' => $preset['name'],
                     'description' => $preset['description'],
+                    'is_private' => $preset['is_private'],
                     'filter' => json_encode($preset['filter']),
                     'version' => 'v1',
                     'billing_company_id' => \Auth::user()->billing_company_id ? \Auth::user()->billing_company_id : null,
