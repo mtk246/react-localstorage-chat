@@ -21,7 +21,7 @@ final class UpdatePresetAction
             }
 
             if (Auth::user()->id != $preset->user_id) {
-                Preset::create($request->getData());
+                Preset::create($request->getData($preset->version));
             }
             
             return new PresetResource($preset);
