@@ -58,6 +58,7 @@ final class GetInsurancePlanAction
                         ->first()
                         ?->abbreviation,
                     'group_values' => $model->insurancePlans->map(function (InsurancePlan $modelPlan) {
+                        $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
                         return $modelPlan->planTypes->map(fn ($planType) => [
                             'id' => (string) $modelPlan->id.'-'.$planType->id,
                             'name' => $modelPlan->name,
