@@ -8,6 +8,7 @@ use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
+use App\Http\Controllers\Payments\PaymentResource;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
@@ -587,6 +588,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('reports/records', [ReportReSource::class, 'records']);
         Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    });
+
+    Route::prefix('payment')->middleware([
+        'auth:api',
+        // 'role:superuser|billingmanager',
+    ])->group(function () {
+        Route::get('/eob/{eob_file}', [PaymentResource::class, 'showEob'])->name('payment.eob.show');
+        Route::resource('batch', PaymentResource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
