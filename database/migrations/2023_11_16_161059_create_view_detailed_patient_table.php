@@ -190,6 +190,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('view_detailed_patient');
+        DB::statement('DROP VIEW IF EXISTS view_detailed_patient');
     }
 };

@@ -145,6 +145,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('view_general_healthcare_report');
+        DB::statement('DROP VIEW IF EXISTS view_general_healthcare_report');
     }
 };
