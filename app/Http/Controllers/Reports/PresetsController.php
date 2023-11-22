@@ -12,6 +12,7 @@ use App\Http\Requests\Presets\StoreRequest;
 use App\Models\Reports\Preset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 final class PresetsController extends Controller
 {
@@ -23,17 +24,21 @@ final class PresetsController extends Controller
 
     public function store(StoreRequest $request, StorePresetAction $store): JsonResponse {
         return response()->json(
-            $store->invoke($request->toArray())
+            $store->invoke($request->casted())
         );
     }
 
-    public function update(Request $request, Preset $preset, UpdatePresetAction $action) {
+    public function update(StoreRequest $request, Preset $preset, UpdatePresetAction $action) {
         return response()->json(
-            $action->invoke($request, $preset)
+            $action->invoke($request->casted(), $preset)
         );
     }
 
     public function destroy(Preset $preset): JsonResponse {
+        if ($preset->user_id != Auth::user()->id) {
+            return response()->json(['error' => __('You are not allowed to perform this action')], 401);
+        }
+        
         $preset->delete();
         return response()->json(['message' => 'Report deleted successfully.']);
     }

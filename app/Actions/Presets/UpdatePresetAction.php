@@ -4,31 +4,27 @@ declare(strict_types=1);
 
 namespace App\Actions\Presets;
 
+use App\Http\Casts\Presets\StoreRequestCast;
+use App\Http\Resources\Reports\PresetResource;
 use App\Models\Reports\Preset;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 final class UpdatePresetAction
 {
-    public function invoke(Request $request, Preset $preset): array
+    public function invoke(StoreRequestCast $request, Preset $preset): PresetResource
     {
-        return DB::transaction(function () use ($preset, $request): array {
-            $preset->name = $request->name;
-            $preset->description = $request->description;
-            $preset->filter = json_encode($request->filter);
-            $preset->version = $request->version ? $request->version : 'v1';
-            $preset->report_id = $request->reportId;
-            $preset->is_private = $request->is_private;
-            $preset->user_id = Auth::user()->id;
-            $preset->billing_company_id = Auth::user()->billing_company_id ? Auth::user()->billing_company_id : 1;
-            $preset->update();
+        return DB::transaction(function () use ($preset, $request): PresetResource {
+            
+            if (Auth::user()->id == $preset->user_id) {
+                $preset->update($request->getData());
+            }
 
-            return [
-                'success' => true,
-                'message' => 'List successfully.',
-                'data' => $preset,
-            ];
+            if (Auth::user()->id != $preset->user_id) {
+                Preset::create($request->getData());
+            }
+            
+            return new PresetResource($preset);
         });
     }
 }

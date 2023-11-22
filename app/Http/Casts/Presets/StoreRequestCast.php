@@ -5,29 +5,59 @@ declare(strict_types=1);
 namespace App\Http\Casts\Presets;
 
 use App\Http\Casts\CastsRequest;
-use App\Models\Reports\Report;
+use Auth;
+use Gate;
 
 final class StoreRequestCast extends CastsRequest
 {
-    public function getName(): ?string
+    public function getData(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'is_private' => $this->getIsPrivate(),
+            'filter' => $this->getFilter(),
+            'version' => '1',
+            'user_id' => $this->getUserId(),
+            'report_id' => $this->getReporId(),
+            'billing_company_id' => $this->getBillingCompanyId(),
+        ];
+    }
+
+    public function getBillingCompanyId(): ?int
+    {
+        return Gate::allows('is-admin') && $this->has('billing_company_id')
+            ? $this->getInt('billing_company_id')
+            : $this->user->billing_company_id;
+    }
+
+    public function getName(): mixed
     {
         return $this->get('name');
     }
 
-    public function getDescription(): ?string
+    public function getFilter(): mixed
+    {
+        return json_encode($this->get('filter'));
+    }
+
+    public function getDescription(): mixed
     {
         return $this->get('description');
     }
 
-    public function getFilter(): array
+    public function getIsPrivate(): Bool
     {
-        return $this->getArray('filter');
+        return $this->getBool('is_private');
     }
 
-    public function getBaseReport(): ?Report
+    public function getUserId(): int
     {
-        return $this->get('base_report_id')
-            ? Report::findOrFail($this->get('base_report_id'))
-            : null;
+        return Auth::user()->id;
+    }
+
+    public function getReporId()
+    {
+        return $this->get('reportId');
     }
 }

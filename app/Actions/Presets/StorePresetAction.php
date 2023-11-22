@@ -4,30 +4,18 @@ declare(strict_types=1);
 
 namespace App\Actions\Presets;
 
+use App\Http\Casts\Presets\StoreRequestCast;
+use App\Http\Resources\Reports\PresetResource;
 use App\Models\Reports\Preset;
 use Illuminate\Support\Facades\DB;
 
 final class StorePresetAction
 {
-    public function invoke(array $preset): array
+    public function invoke(StoreRequestCast $request): PresetResource
     {
-        return DB::transaction(function () use ($preset): array {
-            $preset = tap(Preset::create([
-                    'name' => $preset['name'],
-                    'description' => $preset['description'],
-                    'is_private' => $preset['is_private'],
-                    'filter' => json_encode($preset['filter']),
-                    'version' => 'v1',
-                    'billing_company_id' => \Auth::user()->billing_company_id ? \Auth::user()->billing_company_id : null,
-                    'user_id' => \Auth::user()->id,
-                    'report_id' => $preset['reportId'],
-               ]));
-
-            return [
-                'success' => true,
-                'message' => 'List successfully.',
-                'data' => $preset,
-            ];
+        return DB::transaction(function () use ($request): PresetResource {
+            $preset = Preset::create($request->getData());
+            return new PresetResource($preset);
         });
     }
 }
