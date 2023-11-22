@@ -35,7 +35,7 @@ class PolicyRequest extends FormRequest
                 'exists:\App\Models\BillingCompany,id',
             ],
             'policy_number' => ['required', 'string'],
-            'insurance_plan' => ['required', 'numeric'],
+            'insurance_plan' => ['required', 'string'],
             'group_number' => ['nullable', 'string'],
             'eff_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
@@ -44,6 +44,8 @@ class PolicyRequest extends FormRequest
             'release_info' => ['required', 'boolean'],
             'assign_benefits' => ['required', 'boolean'],
             'own_insurance' => ['required', 'boolean'],
+            'dual_plan' => ['nullable', 'boolean'],
+            'complementary_policy_id' => ['nullable', 'integer'],
 
             'subscriber' => ['nullable', 'required_if:own_insurance,false', 'array'],
             'subscriber.id' => ['nullable', 'integer'],

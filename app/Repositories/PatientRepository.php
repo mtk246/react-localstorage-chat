@@ -416,9 +416,12 @@ class PatientRepository
             return [
                 'id' => $patient_policy->id,
                 'billing_company_id' => $patient_policy->billing_company_id,
-                'billing_company' => BillingCompany::find($patient_policy->billing_company_id)->name ?? '',
+                'billing_company' => $patient_policy->billingCompany->name ?? '',
                 'policy_number' => $patient_policy->policy_number,
                 'group_number' => $patient_policy->group_number,
+                'dual_plan' => $patient_policy->dual_plan,
+                'complementary_policy_id' => $patient_policy->complementary_policy_id ?? '',
+                'complementary_policy' => $patient_policy->complementaryPolicy->policy_number ?? '',
                 'insurance_company_id' => $patient_policy->insurancePlan->insurance_company_id ?? '',
                 'insurance_company' => ($patient_policy
                     ->insurancePlan
@@ -428,7 +431,9 @@ class PatientRepository
                     ->first()
                     ?->abbreviation ?? ''
                 ).' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
-                'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
+                'insurance_plan_id' => ($patient_policy->plan_type_id)
+                    ? $patient_policy->insurance_plan_id . '-' . $patient_policy->plan_type_id
+                    : $patient_policy->insurance_plan_id,
                 'insurance_plan' => ($patient_policy
                     ->insurancePlan
                     ->abbreviations
@@ -437,6 +442,7 @@ class PatientRepository
                     ?->abbreviation ?? ''
                 ).' - '.$patient_policy->insurancePlan->name ?? '',
                 'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                'insurance_plan_type' => $patient_policy->planType->code ?? '',
                 'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                 'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
                 'insurance_policy_type_id' => $patient_policy->insurance_policy_type_id ?? '',
@@ -520,7 +526,7 @@ class PatientRepository
             $employments = $patient->employments()
                 ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
             $social_medias = $patient->profile->socialMedias()
-            ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
+                ->where('billing_company_id', $billingCompany->id ?? $billingCompany)->get();
 
             if (isset($social_medias)) {
                 $patient_social_medias = [];
@@ -667,11 +673,17 @@ class PatientRepository
                         'id' => $patient_policy->id,
                         'policy_number' => $patient_policy->policy_number,
                         'group_number' => $patient_policy->group_number,
+                        'dual_plan' => $patient_policy->dual_plan,
+                        'complementary_policy_id' => $patient_policy->complementary_policy_id ?? '',
+                        'complementary_policy' => $patient_policy->complementaryPolicy->policy_number ?? '',
                         'insurance_company_id' => $patient_policy->insurancePlan->insurance_company_id ?? '',
                         'insurance_company' => ($patient_policy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$patient_policy->insurancePlan->insuranceCompany->name ?? '',
-                        'insurance_plan_id' => $patient_policy->insurance_plan_id ?? '',
+                        'insurance_plan_id' => ($patient_policy->plan_type_id)
+                            ? $patient_policy->insurance_plan_id . '-' . $patient_policy->plan_type_id
+                            : $patient_policy->insurance_plan_id,
                         'insurance_plan' => $patient_policy->insurancePlan->name ?? '',
                         'insurance_plan_code' => $patient_policy->insurancePlan->code ?? '',
+                        'insurance_plan_type' => $patient_policy->planType->code ?? '',
                         'insurance_plan_nickname' => $patient_policy->insurancePlan->nicknames()?->where('billing_company_id', $patient_policy->billing_company_id)?->nickname ?? '',
                         'type_responsibility_id' => $patient_policy->type_responsibility_id ?? '',
                         'type_responsibility' => $patient_policy->typeResponsibility->code ?? '',
@@ -1240,16 +1252,24 @@ class PatientRepository
         try {
             DB::beginTransaction();
 
+            $insurancePlanId = $data['insurance_plan'];
+            $planTypeId = null;
+
+            if (str_contains($insurancePlanId, '-')) {
+                [$insurancePlanId, $planTypeId] = explode('-', $insurancePlanId);
+            }
+
             $patient = Patient::find($id);
             if (!Gate::allows('is-admin')) {
                 $billingCompany = auth()->user()->billingCompanies->first();
             }
 
             /** Attached patient to insurance plan */
-            $insurancePlan = InsurancePlan::find($data['insurance_plan']);
+            $insurancePlan = InsurancePlan::find($insurancePlanId);
 
             $insurancePolicy = InsurancePolicy::create([
                 'own' => $data['own_insurance'] ?? false,
+                'dual_plan' => $data['dual_plan'] ?? false,
                 'policy_number' => $data['policy_number'],
                 'group_number' => $data['group_number'] ?? '',
                 'eff_date' => $data['eff_date'] ?? null,
@@ -1259,8 +1279,10 @@ class PatientRepository
                 'release_info' => $data['release_info'],
                 'assign_benefits' => $data['assign_benefits'],
                 'patient_id' => $patient->id,
-                'insurance_plan_id' => $insurancePlan->id,
+                'insurance_plan_id' => $insurancePlanId,
+                'plan_type_id' => $planTypeId,
                 'billing_company_id' => $billingCompany->id ?? $data['billing_company_id'],
+                'complementary_policy_id' => $data['complementary_policy_id'] ?? null,
             ]);
 
             if (is_null($patient->insurancePlans()->find($insurancePlan->id))) {
@@ -1337,13 +1359,21 @@ class PatientRepository
         $patient = Patient::find($patient_id);
         $insurancePolicy = InsurancePolicy::find($insurance_policy_id);
 
+        $insurancePlanId = $data['insurance_plan'];
+        $planTypeId = null;
+
+        if (str_contains($insurancePlanId, '-')) {
+            [$insurancePlanId, $planTypeId] = explode('-', $insurancePlanId);
+        }
+
         if (!Gate::allows('is-admin')) {
             $billingCompany = auth()->user()->billingCompanies->first();
         }
 
         $insurancePolicy->update([
             'policy_number' => $data['policy_number'],
-            'insurance_plan_id' => $data['insurance_plan'],
+            'insurance_plan_id' => $insurancePlanId,
+            'plan_type_id' => $planTypeId,
             'group_number' => $data['group_number'] ?? '',
             'eff_date' => $data['eff_date'] ?? null,
             'end_date' => $data['end_date'] ?? null,
@@ -1443,15 +1473,21 @@ class PatientRepository
         }
         $record = [
             'billing_company_id' => $insurancePolicy->billing_company_id,
-            'billing_company' => BillingCompany::find($insurancePolicy->billing_company_id)->name ?? '',
+            'billing_company' => $insurancePolicy->billingCompany->name ?? '',
             'id' => $insurancePolicy->id,
             'policy_number' => $insurancePolicy->policy_number,
             'group_number' => $insurancePolicy->group_number,
+            'dual_plan' => $insurancePolicy->dual_plan,
+            'complementary_policy_id' => $insurancePolicy->complementary_policy_id ?? '',
+            'complementary_policy' => $insurancePolicy->complementaryPolicy->policy_number ?? '',
             'insurance_company_id' => $insurancePolicy->insurancePlan->insurance_company_id ?? '',
             'insurance_company' => ($insurancePolicy->insurancePlan->insuranceCompany->payer_id ?? '').' - '.$insurancePolicy->insurancePlan->insuranceCompany->name ?? '',
-            'insurance_plan_id' => $insurancePolicy->insurance_plan_id ?? '',
+            'insurance_plan_id' => isset($insurancePolicy->plan_type_id)
+                ? $insurancePolicy->insurance_plan_id.'-'.$insurancePolicy->plan_type_id
+                : $insurancePolicy->insurance_plan_id,
             'insurance_plan' => $insurancePolicy->insurancePlan->name ?? '',
             'insurance_plan_code' => $insurancePolicy->insurancePlan->code ?? '',
+            'insurance_plan_type' => $insurancePolicy->planType?->code ?? '',
             'insurance_plan_nickname' => $insurancePolicy->insurancePlan->nicknames()?->where('billing_company_id', $insurancePolicy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $insurancePolicy->type_responsibility_id ?? '',
             'type_responsibility' => $insurancePolicy->typeResponsibility->code ?? '',
@@ -1507,6 +1543,8 @@ class PatientRepository
             'id' => $policy->id,
             'policy_number' => $policy->policy_number,
             'group_number' => $policy->group_number,
+            'dual_plan' => $policy->dual_plan,
+            'complementary_policy_id' => $policy->complementary_policy_id ?? '',
             'insurance_company_id' => $policy->insurancePlan->insurance_company_id ?? '',
             'insurance_company' => ($policy
                 ->insurancePlan
@@ -1516,7 +1554,9 @@ class PatientRepository
                 ->first()
                 ?->abbreviation ?? ''
             ).' - '.$policy->insurancePlan->insuranceCompany->name ?? '',
-            'insurance_plan_id' => $policy->insurance_plan_id ?? '',
+            'insurance_plan_id' => isset($policy->plan_type_id)
+                ? $policy->insurance_plan_id.'-'.$policy->plan_type_id
+                : $policy->insurance_plan_id,
             'insurance_plan' => ($policy
                 ->insurancePlan
                 ->abbreviations
@@ -1525,6 +1565,7 @@ class PatientRepository
                 ?->abbreviation ?? ''
             ).' - '.$policy->insurancePlan->name ?? '',
             'insurance_plan_code' => $policy->insurancePlan->code ?? '',
+            'insurance_plan_type' => $policy->planType?->code ?? '',
             'insurance_plan_nickname' => $policy->insurancePlan->nicknames()?->where('billing_company_id', $policy->billing_company_id)?->nickname ?? '',
             'type_responsibility_id' => $policy->type_responsibility_id ?? '',
             'type_responsibility' => $policy->typeResponsibility->code ?? '',
