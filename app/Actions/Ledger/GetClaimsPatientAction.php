@@ -6,7 +6,6 @@ namespace App\Actions\Ledger;
 
 use App\Http\Resources\Ledger\ClaimPatientDetailResource;
 use App\Models\Patient;
-use Illuminate\Http\Request;
 
 final class GetClaimsPatientAction
 {

@@ -591,7 +591,7 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('ledger')->middleware([
         'auth:api',
-        //'role:superuser|billingmanager|biller|paymentprocessor|collector|accountmanager|billingauditor|superauditor|developmentsupport',
+        // 'role:superuser|billingmanager|biller|paymentprocessor|collector|accountmanager|billingauditor|superauditor|developmentsupport',
     ])->group(function () {
         Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search']);
         Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims']);
