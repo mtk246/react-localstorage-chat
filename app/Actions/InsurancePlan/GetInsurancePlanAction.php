@@ -58,19 +58,13 @@ final class GetInsurancePlanAction
                         ->first()
                         ?->abbreviation,
                     'group_values' => $model->insurancePlans->map(function (InsurancePlan $modelPlan) {
-                        $values = [];
-                        $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
-                        $modelPlan->planTypes->map(function ($planType) use (&$values, $abbreviation, $modelPlan) {
-                            $values[] = [
-                                'id' => (string) $modelPlan->id.'-'.$planType->id,
-                                'name' => $modelPlan->name,
-                                'plan_type' => $planType?->code ?? '',
-                                'abbreviation' => $abbreviation ?? '',
-                            ];
-                        });
-
-                        return $values;
-                    })->flatten(1),
+                        return $modelPlan->planTypes->map(fn ($planType) => [
+                            'id' => (string) $modelPlan->id.'-'.$planType->id,
+                            'name' => $modelPlan->name,
+                            'plan_type' => $planType?->code ?? '',
+                            'abbreviation' => $abbreviation ?? '',
+                        ])->toArray();
+                    })->flatten(1)->toArray(),
                 ]);
         } else {
             $query = InsurancePlan::query()
