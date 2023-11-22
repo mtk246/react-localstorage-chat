@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property ClassificationType $clasification
  * @property string|null $url
+ * @property bool $tableu
  * @property BillingCompany|null $billingCompany
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
@@ -41,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereRange($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereTableu($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUrl($value)
