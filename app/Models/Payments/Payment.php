@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models\Payments;
+
+use App\Enums\Payments\MethodType;
+use App\Enums\Payments\SourceType;
+use App\Models\InsuranceCompany;
+use Cknow\Money\Casts\MoneyDecimalCast;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+/**
+ * App\Models\Payments\Payment.
+ *
+ * @property int $id
+ * @property SourceType $source
+ * @property \Illuminate\Support\Carbon $payment_date
+ * @property string $currency
+ * @property \Cknow\Money\Money|null $total_amount
+ * @property string $payment_method
+ * @property string|null $reference
+ * @property bool $statement
+ * @property string $note
+ * @property int $payment_batch_id
+ * @property int $insurance_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property MethodType $method
+ * @property \App\Models\Payments\Batch $batch
+ * @property \App\Models\Payments\Card|null $card
+ * @property \App\Models\Payments\Eob|null $eobs
+ * @property InsuranceCompany $insuranceCompany
+ *
+ * @method static \Database\Factories\Payments\PaymentFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentBatchId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTotalAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
+final class Payment extends Model
+{
+    use HasFactory;
+
+    /** @var string[] */
+    protected $fillable = [
+        'source',
+        'payment_date',
+        'currency',
+        'total_amount',
+        'payment_method',
+        'reference',
+        'statement',
+        'note',
+        'payment_batch_id',
+        'insurance_company_id',
+    ];
+
+    /** @var array<string, string> */
+    protected $casts = [
+        'payment_date' => 'date',
+        'total_amount' => MoneyDecimalCast::class.':currency',
+        'statement' => 'boolean',
+        'source' => SourceType::class,
+        'method' => MethodType::class,
+    ];
+
+    public function batch(): BelongsTo
+    {
+        return $this->belongsTo(Batch::class, 'payment_batch_id');
+    }
+
+    public function insuranceCompany(): BelongsTo
+    {
+        return $this->belongsTo(InsuranceCompany::class);
+    }
+
+    public function card(): HasOne
+    {
+        return $this->hasOne(Card::class);
+    }
+
+    public function eobs(): HasOne
+    {
+        return $this->hasOne(Eob::class);
+    }
+}
