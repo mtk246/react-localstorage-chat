@@ -32,6 +32,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $patient_id
  * @property bool $status
  * @property bool $own
+ * @property int|null $plan_type_id
+ * @property bool $dual_plan
+ * @property int|null $complementary_policy_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\BillingCompany|null $billingCompany
@@ -48,6 +51,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\TypeCatalog|null $insurancePolicyType
  * @property \App\Models\Patient|null $patient
  * @property \App\Models\PayerResponsibility|null $payerResponsibility
+ * @property \App\Models\TypeCatalog|null $planType
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
  * @property \App\Models\TypeCatalog|null $typeResponsibility
@@ -57,7 +61,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy query()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereAssignBenefits($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereComplementaryPolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereDualPlan($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereEffDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereGroupNumber($value)
@@ -68,6 +74,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePatientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePayerResponsibilityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePaymentResponsibilityLevelCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePlanTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy wherePolicyNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereReleaseInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy whereStatus($value)
@@ -90,6 +97,7 @@ class InsurancePolicy extends Model implements Auditable
         'assign_benefits',
         'policy_number',
         'group_number',
+        'plan_type_id',
         'insurance_plan_id',
         'insurance_policy_type_id',
         'type_responsibility_id',
@@ -97,6 +105,8 @@ class InsurancePolicy extends Model implements Auditable
         'payment_responsibility_level_code',
         'patient_id',
         'billing_company_id',
+        'complementary_policy_id',
+        'dual_plan',
     ];
 
     protected $with = ['insurancePlan'];
@@ -163,6 +173,16 @@ class InsurancePolicy extends Model implements Auditable
     }
 
     /**
+     * InsurancePolicy belongs to PlanType.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function planType()
+    {
+        return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
+    }
+
+    /**
      * InsurancePolicy belongs to TypeResponsibility.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -190,6 +210,16 @@ class InsurancePolicy extends Model implements Auditable
     public function payerResponsibility()
     {
         return $this->belongsTo(PayerResponsibility::class);
+    }
+
+    /**
+     * InsurancePolicy belongs to ComplementaryPolicy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function complementaryPolicy()
+    {
+        return $this->belongsTo(InsurancePolicy::class, 'complementary_policy_id');
     }
 
     public function getInsuranceCompanyNameAttribute()
