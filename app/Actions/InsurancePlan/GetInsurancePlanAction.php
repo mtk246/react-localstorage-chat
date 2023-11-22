@@ -64,7 +64,7 @@ final class GetInsurancePlanAction
                             'name' => $modelPlan->name,
                             'plan_type' => $planType?->code ?? '',
                             'abbreviation' => $abbreviation ?? '',
-                        ])->toArray();
+                        ]);
                     })->flatten(1)->toArray(),
                 ]);
         } else {
