@@ -57,9 +57,11 @@ final class Eob extends Model
     /** @var string[] */
     protected $appends = ['file_url'];
 
-    public function getFileUrlAttribute(): string
+    public function getFileUrlAttribute(): ?string
     {
-        return route('payment.eob.show', ['file' => $this->file_name]);
+        return $this->file_name && !empty($this->file_name)
+            ? route('payments.eob.show', ['eob_file' => $this->file_name])
+            : null;
     }
 
     public function payments(): BelongsTo
