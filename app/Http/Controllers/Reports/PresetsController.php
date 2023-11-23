@@ -17,21 +17,15 @@ use Illuminate\Support\Facades\Auth;
 final class PresetsController extends Controller
 {
     public function index(Request $request, GetAllPresetAction $action) {
-        return response()->json(
-            $action->invoke($request->id)
-        );
+        return response()->json($action->invoke($request->id));
     }
 
     public function store(StoreRequest $request, StorePresetAction $store): JsonResponse {
-        return response()->json(
-            $store->invoke($request->casted())
-        );
+        return response()->json($store->invoke($request->casted()));
     }
 
     public function update(StoreRequest $request, Preset $preset, UpdatePresetAction $action) {
-        return response()->json(
-            $action->invoke($request->casted(), $preset)
-        );
+        return response()->json($action->invoke($request->casted(), $preset));
     }
 
     public function destroy(Preset $preset): JsonResponse {

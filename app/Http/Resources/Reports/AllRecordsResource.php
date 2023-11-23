@@ -32,7 +32,7 @@ final class AllRecordsResource extends JsonResource
     {
         return [
             'success' => true,
-            'message' => "$this->module List successfully.",
+            'message' => "List successfully.",
             'data' => $this->resource,
             'colums' => new ColumnsReportResource($this->resource, $this->module),
         ];

@@ -106,26 +106,10 @@ final class ReportReSource extends Controller
                     new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
             ]
             : [
-                'PGFOODVKOC' => new EnumResource(
-                    collect(
-                        ColumnsBillingDetailPatinetType::cases()), 
-                        ColumnsAdminDetailPatinetResource::class
-                    ),
-                'JBEPEUZRBK' => new EnumResource(
-                    collect(
-                        ColumnsBillingGeneralPatinetType::cases()), 
-                        ColumnsAdminDetailPatinetResource::class
-                    ),
-                'QVHZFWCVGJ' => new EnumResource(
-                    collect(
-                        ColumnsBillingGeneralFacilityType::cases()), 
-                        ColumnsAdminDetailPatinetResource::class
-                    ),
-                'QNSJADXODC' => new EnumResource(
-                    collect(
-                        ColumnsBillingGeneralHealthcareProfessionalType::cases()), 
-                        ColumnsAdminDetailPatinetResource::class
-                    ),
+                'PGFOODVKOC' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'JBEPEUZRBK' => new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'QVHZFWCVGJ' => new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'QNSJADXODC' => new EnumResource( collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
             ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);

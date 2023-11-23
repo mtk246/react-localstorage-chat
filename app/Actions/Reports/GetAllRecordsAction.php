@@ -13,36 +13,16 @@ use Illuminate\Support\Facades\Gate;
 
 final class GetAllRecordsAction
 {
-    public function getAllPatient(string $module, User $user): AllRecordsResource
+    public function getAllPatient(string $module, User $user)
     {
         $data = DB::transaction(function () use ($module, $user): Collection {
-            return DB::table($this->getViewReport($module))
+            return DB::table(TypeReportAll::from($module)->getText())
                 ->when(
                     Gate::denies('is-admin'),
                     fn ($query) => $query->where('billing_id', $user->billing_company_id),
                 )->get();
         })->toArray();
 
-        return new AllRecordsResource($data, $this->getModuleReport($module));
-    }
-
-    private function getViewReport($module)
-    {
-        return match ($module) {
-            TypeReportAll::PGFOODVKOC => 'view_detailed_patient',
-            TypeReportAll::JBEPEUZRBK => 'view_general_patient',
-            TypeReportAll::QVHZFWCVGJ => 'view_general_facility',
-            TypeReportAll::QNSJADXODC => 'view_general_healthcare_professional',
-        };
-    }
-
-    private function getModuleReport($module)
-    {
-        return match ($module) {
-            TypeReportAll::PGFOODVKOC => 'detailed_patient',
-            TypeReportAll::JBEPEUZRBK => 'general_patient',
-            TypeReportAll::QVHZFWCVGJ => 'general_facility',
-            TypeReportAll::QNSJADXODC => 'general_healthcare_professional',
-        };
+        return new AllRecordsResource($data, TypeReportAll::from($module)->getName());
     }
 }
