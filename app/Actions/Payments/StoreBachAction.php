@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Payments;
 
 use App\Enums\Payments\MethodType;
+use App\Http\Casts\Payments\EobWrapper;
 use App\Http\Casts\Payments\PaymentWrapper;
 use App\Http\Casts\Payments\StoreBatchWrapper;
 use App\Http\Resources\Payments\BatchResource;
@@ -24,12 +25,12 @@ final class StoreBachAction
                     ]);
                     $payment = Payment::query()->create($paymentData);
 
-                    if (MethodType::COMPLETED === $paymentRequest->getMethod()) {
+                    if (MethodType::CREDIT_CARD === $paymentRequest->getMethod()) {
                         $payment->card()->create($paymentRequest->getCardData());
                     }
 
                     if ($paymentRequest->hasEob()) {
-                        $paymentRequest->getEobs()->each(function ($eobRequest) use ($payment) {
+                        $paymentRequest->getEobs()->each(function (EobWrapper $eobRequest) use ($payment) {
                             $payment->eobs()->create($eobRequest->getEobData());
                         });
                     }
