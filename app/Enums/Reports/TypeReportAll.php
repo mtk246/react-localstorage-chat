@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Enums\Reports;
 
-use App\Enums\Interfaces\TypeInterface;
-use App\Enums\Traits\HasColumnsAttributes;
+use App\Enums\Attributes\NameAttribute;
 use App\Enums\Attributes\PublicAttribute;
 use App\Enums\Attributes\TextAttribute;
-use App\Enums\Attributes\NameAttribute;
+use App\Enums\Interfaces\TypeInterface;
+use App\Enums\Traits\HasColumnsAttributes;
 
 enum TypeReportAll: string implements TypeInterface
 {

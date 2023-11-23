@@ -14,8 +14,8 @@ final class UpdatePresetAction
     {
         return DB::transaction(function () use ($preset, $request): Preset {
             $preset->updateOrCreate([
-                "user_id" => $request->getUserId(),
-                "id" => $preset->id
+                'user_id' => $request->getUserId(),
+                'id' => $preset->id,
             ], $request->getData());
 
             return $preset;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Presets;
 
-use App\Http\Resources\Reports\PresetResource;
 use App\Models\Reports\Preset;
 use Illuminate\Support\Facades\DB;
 

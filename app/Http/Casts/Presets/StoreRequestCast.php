@@ -6,8 +6,6 @@ namespace App\Http\Casts\Presets;
 
 use App\Enums\Presets\VersionPresets;
 use App\Http\Casts\CastsRequest;
-use App\Models\Reports\Preset;
-use Auth;
 
 final class StoreRequestCast extends CastsRequest
 {
@@ -54,7 +52,7 @@ final class StoreRequestCast extends CastsRequest
 
     public function getUserId(): int
     {
-        return Auth::user()->id;
+        return \Auth::user()->id;
     }
 
     public function getReporId()
