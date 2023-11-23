@@ -346,48 +346,6 @@ final class DenialBodyResource extends JsonResource
             ->orderBy('id', 'desc')->get() ?? [];
 
         foreach ($history as $status) {
-            $privateNote = $status->privateNotes()->first();
-
-            if ($privateNote) {
-                $denialTracking = DenialTracking::query()
-                    ->where('private_note_id', $privateNote->id ?? '')
-                    ->first();
-
-                $denialData = [
-                    'note' => $privateNote->note,
-                    'created_at' => $privateNote->created_at,
-                    'last_modified' => $privateNote->last_modified,
-                    'denial_tracking' => isset($denialTracking) ? [
-                        'interface_type' => $denialTracking->interface_type ?? '',
-                        'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
-                        'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
-                        'contact_through' => $denialTracking->contact_through ?? '',
-                        'claim_number' => $denialTracking->claim_number ?? '',
-                        'rep_name' => $denialTracking->rep_name ?? '',
-                        'ref_number' => $denialTracking->ref_number ?? '',
-                        'claim_status' => isset($denialTracking->claimStatus) ? [
-                            'id' => $denialTracking->claimStatus->id,
-                            'status' => $denialTracking->claimStatus->status ?? '',
-                        ] : null,
-                        'claim_sub_status' => isset($denialTracking->claimSubStatus) ? [
-                            'id' => $denialTracking->claimSubStatus->id,
-                            'status' => $denialTracking->claimSubStatus->name ?? '',
-                        ] : null,
-                        'tracking_date' => $denialTracking->tracking_date ?? '',
-                        'resolution_time' => $denialTracking->resolution_time ?? '',
-                        'past_due_date' => $denialTracking->past_due_date ?? '',
-                        'follow_up' => $denialTracking->follow_up ?? '',
-                        'department_responsible' => $denialTracking->department_responsible ?? '',
-                        'policy_responsible' => $denialTracking->policy_responsible ?? '',
-                        'response_details' => $denialTracking->response_details ?? null,
-                        'tracking_note' => $denialTracking->privateNote->note ?? '',
-                        'claim_id' => $denialTracking->claim_id ?? '',
-                    ] : null,
-                ];
-
-                $this->setNote($status, $records, $recordSubstatus, $denialData);
-            }
-
             match ($status->claim_status_type) {
                 ClaimSubStatus::class => $this->setSubNote($status, $recordSubstatus),
                 ClaimStatus::class => $this->setNote($status, $records, $recordSubstatus),
@@ -416,15 +374,51 @@ final class DenialBodyResource extends JsonResource
         }
     }
 
-    private function setNote($status, &$records, &$recordSubstatus, $denialData = null): void
+    private function setNote($status, &$records, &$recordSubstatus): void
     {
         $status->load('claimStatus', 'privateNotes.claimCheckStatus');
 
-        foreach ($recordSubstatus as $subNote) {
-            if ($denialData) {
-                $subNote = array_merge($subNote, $denialData);
-            }
+        $statusData = [
+            'status' => optional($status->claimStatus)->status ?? '',
+            'status_background_color' => $status->claimStatus->background_color ?? '',
+            'status_font_color' => $status->claimStatus->font_color ?? '',
+        ];
 
+        $privateNote = $status->privateNotes()->first();
+        if ($privateNote) {
+            $denialTracking = DenialTracking::query()
+                ->where('claim_id', $status->claim_id ?? '')
+                ->first();
+
+            $statusData['denial_tracking'] = isset($denialTracking) ? [
+                'interface_type' => $denialTracking->interface_type ?? '',
+                'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                'contact_through' => $denialTracking->contact_through ?? '',
+                'claim_number' => $denialTracking->claim_number ?? '',
+                'rep_name' => $denialTracking->rep_name ?? '',
+                'ref_number' => $denialTracking->ref_number ?? '',
+                'claim_status' => isset($denialTracking->claimStatus) ? [
+                    'id' => $denialTracking->claimStatus->id,
+                    'status' => $denialTracking->claimStatus->status ?? '',
+                ] : null,
+                'claim_sub_status' => isset($denialTracking->claimSubStatus) ? [
+                    'id' => $denialTracking->claimSubStatus->id,
+                    'status' => $denialTracking->claimSubStatus->name ?? '',
+                ] : null,
+                'tracking_date' => $denialTracking->tracking_date ?? '',
+                'resolution_time' => $denialTracking->resolution_time ?? '',
+                'past_due_date' => $denialTracking->past_due_date ?? '',
+                'follow_up' => $denialTracking->follow_up ?? '',
+                'department_responsible' => $denialTracking->department_responsible ?? '',
+                'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                'response_details' => $denialTracking->response_details ?? null,
+                'tracking_note' => $denialTracking->privateNote->note ?? '',
+                'claim_id' => $denialTracking->claim_id ?? '',
+            ] : null;
+        }
+
+        foreach ($recordSubstatus as $subNote) {
             array_push(
                 $records,
                 [
@@ -432,9 +426,10 @@ final class DenialBodyResource extends JsonResource
                     'created_at' => $subNote['created_at'],
                     'last_modified' => $subNote['last_modified'],
                     'check_status' => null,
-                    'status' => optional($status->claimStatus)->status.' - '.$subNote['status'],
-                    'status_background_color' => $status->claimStatus->background_color ?? '',
-                    'status_font_color' => $status->claimStatus->font_color ?? '',
+                    'status' => $statusData['status'].' - '.$subNote['status'],
+                    'status_background_color' => $statusData['status_background_color'],
+                    'status_font_color' => $statusData['status_font_color'],
+                    'denial_tracking' => isset($statusData['denial_tracking']) ? $statusData['denial_tracking'] : null,
                 ]
             );
         }
@@ -461,14 +456,11 @@ final class DenialBodyResource extends JsonResource
                     'resolution_time' => $check->resolution_time ?? '',
                     'past_due_date' => $check->past_due_date ?? '',
                 ] : null,
-                'status' => $status->claimStatus->status ?? '',
-                'status_background_color' => $status->claimStatus->background_color ?? '',
-                'status_font_color' => $status->claimStatus->font_color ?? '',
+                'status' => $statusData['status'],
+                'status_background_color' => $statusData['status_background_color'],
+                'status_font_color' => $statusData['status_font_color'],
+                'denial_tracking' => isset($statusData['denial_tracking']) ? $statusData['denial_tracking'] : null,
             ];
-
-            if ($denialData) {
-                $recordData = array_merge($recordData, $denialData);
-            }
 
             array_push($records, $recordData);
         }
