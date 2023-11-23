@@ -8,7 +8,12 @@ use App\Http\Casts\CastsRequest;
 
 final class EobWrapper extends CastsRequest
 {
-    public function getData(): array
+    public function getId(): int
+    {
+        return $this->getInt('id', 0);
+    }
+
+    public function getEobData(): array
     {
         return [
             'name' => $this->get('name'),

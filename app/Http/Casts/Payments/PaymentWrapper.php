@@ -10,6 +10,11 @@ use Illuminate\Support\Collection;
 
 final class PaymentWrapper extends CastsRequest
 {
+    public function getId(): int
+    {
+        return $this->getInt('id', 0);
+    }
+
     public function getPaymentdata(): array
     {
         return [
