@@ -10,7 +10,9 @@ use App\Models\Claims\ClaimBatch;
 use App\Models\Claims\Rules;
 use App\Models\Company;
 use App\Models\InsurancePlan;
+use App\Models\InsurancePolicy;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -173,6 +175,17 @@ abstract class Dictionary implements DictionaryInterface
             ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan->id)
             ->where('billing_company_id', $this->claim->billing_company_id)
             ->where('format', $this->claim->format)
+            ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
+                ->insurancePolicies
+                ->where('billing_company_id', $this->claim->billing_company_id)
+                ->map(fn (InsurancePolicy $policy) => $policy
+                    ->typeResponsibility
+                    ?->code
+                )
+                ->unique()
+                ->filter()
+            ))
+            ->orDoesntHave('typesOfResponsibilities')
             ->first()
             ?->rules;
 

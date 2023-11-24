@@ -62,4 +62,9 @@ final class CompanyPatient extends Model
     {
         return $this->belongsTo(BillingCompany::class);
     }
+
+    public function contact(): BelongsTo
+    {
+        return $this->belongsTo(Contact::class, 'patient_id', 'contactable_id');
+    }
 }

@@ -40,6 +40,10 @@ final class FacilityFacilityType extends Pivot implements Auditable
     use HasFactory;
     use AuditableTrait;
 
+    protected $casts = [
+        'bill_classifications' => 'json',
+    ];
+
     public $incrementing = true;
 
     public function facilityType()

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Claim;
 
+use App\Models\Contact;
+use App\Models\InsurancePlan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class InsurancePolicyResource extends JsonResource
@@ -15,6 +17,10 @@ final class InsurancePolicyResource extends JsonResource
             ->claimEligibilities()
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')
+            ->first();
+
+        $insurancePlanContactInfo = Contact::where('contactable_id', $this->resource->insurance_plan_id)
+            ->where('contactable_type', InsurancePlan::class)
             ->first();
 
         return [
@@ -36,6 +42,7 @@ final class InsurancePolicyResource extends JsonResource
                 'name' => $this->resource->insurancePlan->insuranceCompany->name,
                 'payer_id' => $this->resource->insurancePlan->insuranceCompany->payer_id,
             ],
+            'contact' => $insurancePlanContactInfo ? $insurancePlanContactInfo->toArray() : [],
             'insurance_plan_id' => $this->resource->insurance_plan_id,
             'insurance_plan' => $this->resource->insurancePlan->name,
             'type_responsibility_id' => $this->resource->type_responsibility_id ?? '',
@@ -44,6 +51,9 @@ final class InsurancePolicyResource extends JsonResource
             'payer_responsibility' => $this->resource->payerResponsibility?->code ?? '',
             'payment_responsibility_level_code' => $this->resource->payment_responsibility_level_code ?? '',
             'insurance_policy_type_id' => $this->resource->insurance_policy_type_id ?? '',
+            'insurance_policy_type_code' => $this->resource->insurancePolicyType?->code ?? '',
+            'insurance_policy_type_name' => $this->resource->insurancePolicyType?->description ?? '',
+            'insurance_plan_type' => $this->resource->insurancePlan->planTypes ? $this->resource->insurancePlan->planTypes : [],
             'insurance_policy_id' => $this->resource->id ?? '',
             'order' => $this->resource->pivot->order,
             'created_at' => $this->resource->created_at,
