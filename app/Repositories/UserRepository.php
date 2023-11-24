@@ -267,7 +267,7 @@ class UserRepository
      */
     public function changePassword(Request $request, string $token)
     {
-        try {
+//        try {
             $strData = \Crypt::decrypt($token);
             $dataSplit = explode('@#@#$', $strData);
 
@@ -285,10 +285,11 @@ class UserRepository
             $fullName = $user->profile->first_name.' '.$user->profile->last_name;
 
             Mail::to($user->email)->send(new SendEmailChangePassword($fullName, $url));
-//            event(new UpdatePasswordEvent($user, $request->input('password')));
-        } catch (\Exception $exception) {
-            return false;
-        }
+            event(new UpdatePasswordEvent($user, $request->input('password')));
+//        } catch (\Exception $exception) {
+//            dd("Prueba captura catch");
+//            return false;
+//        }
 
         return true;
     }
