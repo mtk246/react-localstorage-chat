@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
+use App\Enums\Claim\ClaimType;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
 use App\Services\ClearingHouse\ClearingHouseAPI;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -64,33 +66,66 @@ final class ClaimPreviewController extends Controller
         }
     }
 
-    public function showBatchReport(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview, int $id)
+    public function showBatchReport(Request $request, ClaimPreviewService $preview, int $id)
     {
-        $claims = Claim::query()
-            ->select('id', 'type')
-            ->whereHas('claimBatchs', function ($query) use ($id) {
-                $query->where('claim_batch_id', $id);
+        $batch = ClaimBatch::query()->find($id);
+        $claimsByPlan = $batch->claims
+            ->groupBy(function ($claim) {
+                return $claim->insurancePolicies()
+                    ->wherePivot('order', 1)
+                    ->first()
+                    ?->insurancePlan->name;
             })
-            ->get();
+            ->map(function ($claims, $insurancePlan) {
+                return [
+                    'insurancePlan' => $insurancePlan,
+                    'claims' => $claims->map(function ($claim) {
+                        return [
+                            'code' => $claim->code,
+                            'patientNumber' => $claim->demographicInformation->patient?->companies()
+                                ?->wherePivot('billing_company_id', $claim->billing_company_id)
+                                ?->wherePivot('company_id', $claim->demographicInformation->company_id)
+                                ->first()
+                                ?->pivot?->med_num ?? '',
+                            'patientName' => $claim->demographicInformation->patient->profile->fullName(),
+                            'healthProfessional' => match ($claim->type) {
+                                ClaimType::INSTITUTIONAL => $claim->attending()?->profile?->fullName() ?? '',
+                                ClaimType::PROFESSIONAL => $claim->billingProvider()?->profile?->fullName() ?? '',
+                            },
+                            'facility' => $claim->demographicInformation->facility->name,
+                            'date_of_service' => empty($claim->date_of_service) ? '-' : Carbon::createFromFormat('Y-m-d', $claim->date_of_service)->format('m/d/Y'),
+                            'amount' => $claim->billed_amount,
+                        ];
+                    }),
+                ];
+            });
+        $shipping_date = Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y');
+        $preview->setConfig([
+            'urlVerify' => 'www.nucc.org',
+            'isTransmissionResponse' => true,
+            'reportDate' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y H:i:s A'),
+        ]);
+        $preview->setHeader(
+            'Claims processed on',
+            'Processed claims for period ending on'
+        );
+        $preview->setFooter($batch->last_modified['user'] ?? '');
 
-        $total = count($claims);
-        foreach ($claims as $key => $claim) {
-            $preview->setConfig([
-                'urlVerify' => 'www.nucc.org',
-                'print' => (bool) ($request->print ?? false),
-                'typeFormat' => $claim->type->value ?? null,
-                'data' => $claimPreview->single(['id' => $claim->id], $request->user()),
-            ]);
-            $preview->setHeader();
-
-            if (($total - 1) == $key) {
-                return explode("\n\r\n", $preview->setBody('pdf.837P', true, [
+        return explode(
+            "\n\r\n",
+            $preview->setBody(
+                'pdf.batch_report',
+                true,
+                [
                     'pdf' => $preview,
-                ], 'E', true))[1];
-            } else {
-                $preview->setBody('pdf.837P', true, ['pdf' => $preview], 'E', false);
-            }
-        }
+                    'shipping_date' => $shipping_date,
+                    'claimsByPlan' => $claimsByPlan
+                ],
+                'E',
+                true,
+                true
+            )
+        )[1];
     }
 
     public function showResponses(Request $request)

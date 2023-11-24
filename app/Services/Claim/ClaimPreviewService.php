@@ -11,6 +11,7 @@ use App\Repositories\Contracts\ReportInterface;
 use Carbon\Carbon;
 use Elibyy\TCPDF\TCPDF as PDF;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
 final class ClaimPreviewService implements ReportInterface
 {
@@ -70,7 +71,7 @@ final class ClaimPreviewService implements ReportInterface
      */
     public function setConfig(array $params = []): void
     {
-        $this->reportDate = $params['reportDate'] ?? Carbon::now()->format('d-m-Y');
+        $this->reportDate = $params['reportDate'] ?? Carbon::now()->format('d/m/Y H:i:s A');
         $this->orientation = $params['orientation'] ?? config('tcpdf.page_orientation');
         $this->format = $params['format'] ?? config('tcpdf.page_format');
         $this->fontFamily = $params['fontFamily'] ?? config('tcpdf.font_family');
@@ -91,7 +92,7 @@ final class ClaimPreviewService implements ReportInterface
 
         $this->pdf->SetAuthor(__('BegentoOS - :app', ['app' => config('app.name')]));
         $this->pdf->SetSubject($params['subject'] ?? '');
-        $this->pdf->SetMargins(0, 0, 0);
+        $this->pdf->SetMargins(7, 20, 7);
         $this->pdf->SetHeaderMargin(0);
         $this->pdf->SetFooterMargin(0);
         $this->pdf->SetFontSubsetting(false);
@@ -104,7 +105,7 @@ final class ClaimPreviewService implements ReportInterface
      * @param bool $hasQR If the QR code is present
      * @param bool $hasBarCode If the Barcode is present
      */
-    public function setHeader(bool $hasQR = true, bool $hasBarCode = false): void
+    public function setHeader(string $title = '', string $subTitle = '', bool $hasQR = true, bool $hasBarCode = false): void
     {
         $pdf = $this->pdf;
         $print = $this->print;
@@ -112,7 +113,7 @@ final class ClaimPreviewService implements ReportInterface
         $qrCodeStyle = $this->qrCodeStyle;
         $hasQR = ('CMS-1500 / 837P' === $this->typeForm) ?: false;
 
-        $pdf->setHeaderCallback(function ($pdf) use ($print, $hasQR, $urlVerify, $qrCodeStyle): void {
+        $pdf->setHeaderCallback(function ($pdf) use ($print, $hasQR, $urlVerify, $qrCodeStyle, $title, $subTitle): void {
             $pdf->SetAutoPageBreak(false, 0);
             if (!$print) {
                 $imgFile = ('' !== $this->backgroundFile) ? storage_path('pictures').'/'.$this->backgroundFile : null;
@@ -133,6 +134,52 @@ final class ClaimPreviewService implements ReportInterface
                         'T',
                     );
                 }
+            }
+            if (!empty($title)) {
+                /* Configuración de la fuente para el título del reporte */
+                $pdf->SetFont($this->fontFamily, 'B', 12);
+                /* Título del reporte */
+                $pdf->MultiCell(
+                    $pdf->getPageWidth(),
+                    7,
+                    Str::upper($title).' '.$this->reportDate,
+                    0,
+                    'L',
+                    false,
+                    1,
+                    10,
+                    8,
+                    true,
+                    0,
+                    false,
+                    true,
+                    0,
+                    'T',
+                    true
+                );
+            }
+            if (!empty($subTitle)) {
+                /* Configuración de la fuente para la breve descripción del reporte */
+                $pdf->SetFont($this->fontFamily, 'I', 8);
+                /* Descripción breve del reporte */
+                $pdf->MultiCell(
+                    $pdf->getPageWidth(),
+                    4,
+                    upperCaseWords($subTitle).' '.$this->reportDate,
+                    0,
+                    'L',
+                    false,
+                    1,
+                    10,
+                    15,
+                    true,
+                    1,
+                    false,
+                    true,
+                    0,
+                    'T',
+                    true
+                );
             }
         });
     }
@@ -156,8 +203,12 @@ final class ClaimPreviewService implements ReportInterface
         array $htmlParams = [],
         string $storeAction = 'E',
         bool $end = true,
+        bool $isTransmissionResponse = false
     ): object|string|null {
         $this->pdf->AddPage($this->orientation, $this->format);
+        if ($isTransmissionResponse) {
+            $this->pdf->SetAutoPageBreak(true, 20);
+        }
 
         $previewFields = ('CMS-1500 / 837P' === $this->typeForm)
             ? config('claim.preview_837p')
@@ -220,26 +271,43 @@ final class ClaimPreviewService implements ReportInterface
      *
      * @param bool $pages whether to include page numbers or not
      */
-    public function setFooter($pages = true): void
+    public function setFooter($user = '', $pages = true, $currentDate = true): void
     {
-        $this->pdf->setFooterCallback(function ($pdf) use ($pages): void {
+        $this->pdf->setFooterCallback(function ($pdf) use ($pages, $currentDate, $user): void {
             $pdf->SetY(-14);
             $pdf->SetFont($this->fontFamily, 'I', 8);
 
-            if ($pages) {
-                $pageNumber = __('Pág. ').$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages();
-                $pdf->MultiCell(20, 4, $pageNumber, 0, 'R', false, 0, 185, -8, true, 1, false, true, 1, 'T', true);
+            if ($currentDate) {
+                $pdf->MultiCell(
+                    $pdf->getPageWidth() / 3,
+                    8,
+                    $this->reportDate,
+                    0,
+                    'L',
+                    false,
+                    0,
+                    7,
+                    -12,
+                    true,
+                    1,
+                    true,
+                    true,
+                    0,
+                    'T',
+                    true,
+                );
             }
 
             $pdf->MultiCell(
-                $pdf->getPageWidth() - PDF_MARGIN_RIGHT,
+                $pdf->getPageWidth() - 14,
                 8,
-                '',
+                empty($user) ? '' : 'By '.$user,
                 0,
                 'C',
                 false,
                 0,
-                7, -12,
+                7,
+                -12,
                 true,
                 1,
                 true,
@@ -249,7 +317,29 @@ final class ClaimPreviewService implements ReportInterface
                 true,
             );
 
-            $pdf->Line(7, 265, 205, 265, $this->lineStyle);
+            if ($pages) {
+                $pageNumber = __('Pág. ').$pdf->getAliasNumPage().'/'.$pdf->getAliasNbPages();
+                $pdf->MultiCell(
+                    $pdf->getPageWidth() - 7,
+                    8,
+                    $pageNumber,
+                    0,
+                    'R',
+                    false,
+                    0,
+                    7,
+                    -12,
+                    true,
+                    1,
+                    true,
+                    true,
+                    0,
+                    'T',
+                    true,
+                );
+            }
+
+            $pdf->Line(7, 265, $pdf->getPageWidth() - 7, 265, $this->lineStyle);
         });
     }
 
