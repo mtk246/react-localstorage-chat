@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     public function up(): void
@@ -53,6 +52,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('view_general_patient');
+        DB::statement('DROP VIEW IF EXISTS view_general_patient');
     }
 };
