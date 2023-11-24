@@ -218,8 +218,6 @@ class UserController extends Controller
 
             $rs = $this->userRepository->changePassword($request, $token);
 
-            dd($rs);
-
             if (is_null($rs)) {
                 return response()->json(__('Token is Invalid'), 403);
             }
@@ -413,7 +411,7 @@ class UserController extends Controller
         );
     }
 
-    public function updatePassword(UpdatePasswordRequest $request)
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
         $rs = $this->userRepository->updatePassword($request->validated());
 
