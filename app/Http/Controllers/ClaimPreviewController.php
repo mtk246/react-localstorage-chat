@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
-use App\Enums\Claim\ClaimType;
+use App\Actions\Claim\GetClaimTransmissionReportAction;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
@@ -66,49 +66,20 @@ final class ClaimPreviewController extends Controller
         }
     }
 
-    public function showBatchReport(Request $request, ClaimPreviewService $preview, int $id)
+    public function showBatchReport(Request $request, ClaimPreviewService $preview, GetClaimTransmissionReportAction $claimReport, int $id)
     {
         $batch = ClaimBatch::query()->find($id);
-        $claimsByPlan = $batch->claims
-            ->groupBy(function ($claim) {
-                return $claim->insurancePolicies()
-                    ->wherePivot('order', 1)
-                    ->first()
-                    ?->insurancePlan->name;
-            })
-            ->map(function ($claims, $insurancePlan) {
-                return [
-                    'insurancePlan' => $insurancePlan,
-                    'claims' => $claims->map(function ($claim) {
-                        return [
-                            'code' => $claim->code,
-                            'patientNumber' => $claim->demographicInformation->patient?->companies()
-                                ?->wherePivot('billing_company_id', $claim->billing_company_id)
-                                ?->wherePivot('company_id', $claim->demographicInformation->company_id)
-                                ->first()
-                                ?->pivot?->med_num ?? '',
-                            'patientName' => $claim->demographicInformation->patient->profile->fullName(),
-                            'healthProfessional' => match ($claim->type) {
-                                ClaimType::INSTITUTIONAL => $claim->attending()?->profile?->fullName() ?? '',
-                                ClaimType::PROFESSIONAL => $claim->billingProvider()?->profile?->fullName() ?? '',
-                            },
-                            'facility' => $claim->demographicInformation->facility->name,
-                            'date_of_service' => empty($claim->date_of_service) ? '-' : Carbon::createFromFormat('Y-m-d', $claim->date_of_service)->format('m/d/Y'),
-                            'amount' => $claim->billed_amount,
-                        ];
-                    }),
-                ];
-            });
-        $shipping_date = Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y');
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'isTransmissionResponse' => true,
             'reportDate' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y H:i:s A'),
         ]);
+
         $preview->setHeader(
             'Claims processed on',
             'Processed claims for period ending on'
         );
+
         $preview->setFooter($batch->last_modified['user'] ?? '');
 
         return explode(
@@ -118,8 +89,8 @@ final class ClaimPreviewController extends Controller
                 true,
                 [
                     'pdf' => $preview,
-                    'shipping_date' => $shipping_date,
-                    'claimsByPlan' => $claimsByPlan
+                    'shipping_date' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y'),
+                    'claimsByPlan' => $claimReport->invoke($batch),
                 ],
                 'E',
                 true,
