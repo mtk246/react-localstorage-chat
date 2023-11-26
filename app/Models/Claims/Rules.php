@@ -86,7 +86,12 @@ final class Rules extends Model
 
     public function typesOfResponsibilities(): BelongsToMany
     {
-        return $this->belongsToMany(TypeCatalog::class, 'claim_rule_type_responsibility')->withTimestamps();
+        return $this->belongsToMany(
+            TypeCatalog::class,
+            'claim_rule_type_responsibility',
+            'claim_rule_id',
+            'type_responsibility_id',
+        )->withTimestamps();
     }
 
     public function toSearchableArray(): array
