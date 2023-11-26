@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -136,6 +137,11 @@ class BillingCompany extends Model implements Auditable
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('status')->withTimestamps();
+    }
+
+    public function presents(): HasMany
+    {
+        return $this->hasMany(Present::class);
     }
 
     /**

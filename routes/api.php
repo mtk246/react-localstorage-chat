@@ -10,7 +10,7 @@ use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Payments\BatchResource;
 use App\Http\Controllers\Payments\PaymentClaimResource;
-use App\Http\Controllers\Payments\PaymentResource;
+use App\Http\Controllers\Reports\PresetsController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
@@ -590,6 +590,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/reports/types', [ReportReSource::class, 'types']);
         Route::post('reports/records', [ReportReSource::class, 'records']);
         Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
+        Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
