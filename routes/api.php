@@ -602,9 +602,8 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/methods', [BatchResource::class, 'getMethods'])->name('payments.methods');
         Route::get('/eob/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eob.show');
         Route::resource('batch', BatchResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->name('batch', 'payments.batch');
-        Route::resource('batch.payment', PaymentResource::class)->only(['index', 'show'])->name('payment', 'payments.payment');
-        Route::resource('batch.payment.claims', PaymentClaimResource::class)->only(['index', 'update'])->name('claims', 'payments.claims');
-        Route::resource('batch.payment.claims.services', PaymentClaimResource::class)->only(['index', 'update'])->name('services', 'payments.services');
+        Route::resource('batch.claims', PaymentClaimResource::class)->only(['index', 'update'])->name('claims', 'payments.claims');
+        Route::resource('batch.services', PaymentClaimResource::class)->only(['index', 'update'])->name('services', 'payments.services');
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
