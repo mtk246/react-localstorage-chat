@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Facades\Pagination;
+use App\Http\Resources\Claim\Batch\ClaimBatchBodyResource;
 use App\Http\Resources\Claim\BatchClaimBodyResource;
 use App\Http\Resources\Claim\ClaimBodyResource;
-use App\Http\Resources\Company\CompanyDataResource;
 use App\Models\Billingcompany;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
@@ -68,12 +67,28 @@ class ClaimBatchRepository
      */
     public function getServerAllClaims(Request $request)
     {
-        $status = ClaimStatus::where('status', 'Not submitted')->first();
+        $status = ClaimStatus::query()
+            ->where('status', 'Not submitted')
+            ->toBase()
+            ->first();
+        $batchStatus = ClaimBatchStatus::query()
+            ->where('status','Not submitted')
+            ->toBase()
+            ->first();
+
         $claimsQuery = Claim::query()
             ->whereHas('claimStatusClaims', function ($query) use ($status) {
                 $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
                     ->where('claim_status_claim.claim_status_id', $status->id)
                     ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+            })
+            ->where(function ($query) use ($batchStatus) {
+                $query->whereDoesntHave('claimBatchs')
+                ->orWhereHas('claimBatchs', function ($query) use ($batchStatus) {
+                    $query
+                        ->whereRaw('claim_claim_batch.created_at = (SELECT MAX(created_at) FROM claim_claim_batch WHERE claim_claim_batch.claim_id = claims.id)')
+                        ->where('claim_batch_status_id', '<>', $batchStatus?->id);
+                });
             })
             ->when(
                 Gate::denies('is-admin'),
@@ -154,6 +169,8 @@ class ClaimBatchRepository
                 'id' => $claimBatch->id,
                 'code' => $claimBatch->code,
                 'name' => $claimBatch->name,
+                'type' => $claimBatch->claims->first()?->type->value,
+                'claim_type' => upperCaseWords($claimBatch->claims->first()?->type->getName()),
                 'claim_batch_status' => $claimBatch->claimBatchStatus,
                 'claim_batch_status_id' => $claimBatch->claim_batch_status_id,
                 'shipping_date' => $claimBatch->shipping_date,
@@ -248,7 +265,7 @@ class ClaimBatchRepository
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
         return response()->json([
-            'data' => $data->items(),
+            'data' => ClaimBatchBodyResource::collection($data->items()),
             'numberOfPages' => $data->lastPage(),
             'count' => $data->total(),
         ], 200);

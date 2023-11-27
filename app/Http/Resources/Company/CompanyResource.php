@@ -100,7 +100,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return ExceptionInsuranceResource::collection($exceptions)->resource;
@@ -114,7 +114,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('company_patient.billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return CompanyPatientResource::collection($patients)->resource;
@@ -128,7 +128,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return StatementResource::collection($statements)->resource;
@@ -142,7 +142,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('company_facility.billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return FacilityResource::collection($facilities)->resource;
@@ -157,7 +157,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return ServiceResource::collection($companyServices)->resource;
@@ -173,7 +173,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return CopayResource::collection($copays)->resource;
@@ -195,7 +195,7 @@ final class CompanyResource extends JsonResource
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $bC)
             )
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+            ->orderBy('id', Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         return ContractFeeResource::collection($contractFees)->resource;

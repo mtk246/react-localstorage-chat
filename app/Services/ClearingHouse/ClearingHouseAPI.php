@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\ClearingHouse;
 
 use App\Enums\Claim\ClaimType;
+use App\Models\BillingCompany;
 use App\Models\ClearingHouse\AvailablePayer;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
@@ -53,6 +54,7 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
 
     public function getByPayerID(string $payerID, array $request, User $user): ?array
     {
+        $edit = $request['edit'] ?? false;
         $payers = AvailablePayer::query()
             ->with('payerInformation')
             ->where(
@@ -65,7 +67,7 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
             return null;
         }
 
-        return $payers->filter(function ($payer) use ($payerID, $user, $request) {
+        return $payers->filter(function ($payer) use ($payerID, $user, $request, $edit) {
             $insurance = InsurancePlan::query()
                 ->whereRaw('UPPER(payer_id) = ?', [Str::upper($payerID)])
                 ->whereRaw('UPPER(name) = ?', [Str::upper($payer->name)])
@@ -80,8 +82,8 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
                 ->pluck('id')
                 ->toArray();
 
-            $billingCompanies = $insurance->insuranceCompany
-                ->billingCompanies()
+            $billingCompanies = BillingCompany::query()
+                ->where('status', true)
                 ->when(Gate::denies('is-admin'), function ($query) use ($user) {
                     $billingCompaniesUser = [$user->billing_company_id];
 
@@ -92,14 +94,16 @@ class ClearingHouseAPI implements ClearingHouseAPIInterface
 
                     return $query->whereIn('billing_companies.id', $billingCompaniesUser ?? []);
                 })
-                ->whereNotIn('billing_companies.id', $billingCompaniesException ?? [])
+                ->when(in_array($edit, ['false', false]), function ($query) use ($billingCompaniesException) {
+                    return $query->whereNotIn('billing_companies.id', $billingCompaniesException ?? []);
+                })
                 ->get()
                 ->pluck('id')
                 ->toArray();
 
             return !empty($billingCompanies);
         })
-            ->map(fn ($payer) => [
+        ->map(fn ($payer) => [
             'id' => upperCaseWords($payer->name),
             'name' => upperCaseWords($payer->name),
             'public_note' => $payer->payerInformation?->first()?->portal ?? '',

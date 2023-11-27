@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -138,6 +139,11 @@ class BillingCompany extends Model implements Auditable
         return $this->belongsToMany(User::class)->withPivot('status')->withTimestamps();
     }
 
+    public function presents(): HasMany
+    {
+        return $this->hasMany(Present::class);
+    }
+
     /**
      * The companies that belong to the BillingCompany.
      */
@@ -219,10 +225,6 @@ class BillingCompany extends Model implements Auditable
 
     public function getLastModifiedAttribute()
     {
-        $record = [
-            'user' => '',
-            'roles' => [],
-        ];
         $lastModified = $this->audits()->latest()->first();
         if (!isset($lastModified->user_id)) {
             return [
@@ -232,8 +234,11 @@ class BillingCompany extends Model implements Auditable
         } else {
             $user = User::find($lastModified->user_id);
 
+            $firstName = $user->profile->first_name ?? '';
+            $lastName = $user->profile->last_name ?? '';
+
             return [
-                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'user' => $firstName.' '.$lastName,
                 'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }

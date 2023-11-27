@@ -30,4 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
+    'rocket_chat' => [
+        'server' => env('ROCKET_CHAT_SERVER'),
+        'email' => env('ROCKET_CHAT_EMAIL'),
+        'password' => env('ROCKET_CHAT_PASSWORD'),
+        'token_life_time' => env('ROCKET_CHAT_TOKEN_LIFE_TIME', 3600),
+    ],
 ];

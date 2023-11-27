@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\InsurancePlan\GetInsurancePolicyAction;
 use App\Enums\AddressType;
 use App\Http\Requests\ChangeStatusRequest;
 use App\Http\Requests\Patient\AddCompaniesRequest;
@@ -12,6 +13,7 @@ use App\Http\Requests\Patient\UpdateRequest;
 use App\Http\Requests\ValidateSearchRequest;
 use App\Http\Resources\Enums\AddressTypeResource;
 use App\Http\Resources\Enums\EnumResource;
+use App\Models\Patient;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -89,14 +91,6 @@ class PatientController extends Controller
         return $rs ? response()->json($rs) : response()->json(__('Error add policy to patient'), 400);
     }
 
-    /** @todo check if method is still neded */
-    public function removePolicy(int $patient_id, int $insurance_policy_id): JsonResponse
-    {
-        $rs = $this->patientRepository->removePolicy($insurance_policy_id, $patient_id);
-
-        return $rs ? response()->json($rs) : response()->json(__('Error remove policy to patient'), 400);
-    }
-
     public function getPolicy(int $patient_id, int $insurance_policy_id): JsonResponse
     {
         $rs = $this->patientRepository->getPolicy($insurance_policy_id, $patient_id);
@@ -107,6 +101,13 @@ class PatientController extends Controller
     public function getPolicies(Request $request, int $patient_id): JsonResponse
     {
         return $this->patientRepository->getPolicies($request, $patient_id);
+    }
+
+    public function getListPolicies(Request $request, Patient $patient, GetInsurancePolicyAction $getPolicy): JsonResponse
+    {
+        $rs = $getPolicy->allPrimary($patient, $request->input(), $request->user());
+
+        return response()->json($rs);
     }
 
     public function editPolicy(PolicyRequest $request, int $patient_id, int $insurance_policy_id): JsonResponse

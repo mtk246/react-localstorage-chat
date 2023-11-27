@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Casts\Claim\FieldCast;
 use App\Models\TypeCatalog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $from_date
  * @property string|null $to_date
  * @property string|null $description
- * @property int|null $field_id
+ * @property \App\Enums\Interfaces\RelatedEnumsInterface|null $field_id
  * @property int|null $qualifier_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -60,6 +61,10 @@ final class ClaimDateInformation extends Model implements Auditable
         'qualifier_id',
         'amount',
         'claim_id',
+    ];
+
+    protected $casts = [
+        'field_id' => FieldCast::class,
     ];
 
     protected $with = ['qualifier'];

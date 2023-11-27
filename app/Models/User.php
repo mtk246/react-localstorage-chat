@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\User\UserType;
+use App\Events\User\UpdateEvent;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
 use App\Models\User\Role;
@@ -12,6 +13,7 @@ use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -61,7 +63,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $language
  * @property mixed $last_modified
  * @property \Illuminate\Support\Collection|null $permissions
- * @property \App\Models\Profile|null $profile
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
  * @property \App\Models\HealthProfessional|null $healthProfessional
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\IpRestriction> $ipRestrictions
  * @property int|null $ip_restrictions_count
@@ -70,12 +72,14 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Patient|null $patient
  * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property int|null $permits_count
- * @property \Illuminate\Database\Eloquent\Collection<int, Role> $roles
+ * @property \App\Models\Profile|null $profile
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property int|null $tokens_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Roles\Models\Permission> $userPermissions
  * @property int|null $user_permissions_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Role> $userRoles
+ * @property int|null $user_roles_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
@@ -111,6 +115,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     use HasRoleAndPermission;
     use AuditableTrait;
     use Searchable;
+
+    /** @var array */
+    protected $dispatchesEvents = [
+        'updated' => UpdateEvent::class,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -254,7 +263,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User has many FailedLoginAttempts.
      */
-    public function failedLoginAttempts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function failedLoginAttempts(): HasMany
     {
         return $this->hasMany(FailedLoginAttempt::class);
     }
@@ -262,7 +271,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     /**
      * User has many Devices.
      */
-    public function devices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function devices(): HasMany
     {
         return $this->hasMany(Device::class);
     }
@@ -270,6 +279,11 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     public function billingCompany(): BelongsTo
     {
         return $this->belongsTo(BillingCompany::class);
+    }
+
+    public function presets(): HasMany
+    {
+        return $this->hasMany(Preset::class);
     }
 
     public function permissions(): ?Collection
@@ -300,7 +314,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
         if (is_null($this->type)) {
             \Log::error("User type for user {$this->id} is null");
 
-            return $this->$this->userRoles();
+            return $this->userRoles();
         }
 
         try {

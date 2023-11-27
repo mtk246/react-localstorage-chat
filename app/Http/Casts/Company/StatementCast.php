@@ -10,8 +10,8 @@ final class StatementCast extends CastsRequest
 {
     public function getId(): ?int
     {
-        return array_key_exists('id', $this->inputs)
-            ? (int) $this->inputs['id']
+        return $this->has('id', $this->inputs)
+            ? $this->getInt('id')
             : 0;
     }
 

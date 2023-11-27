@@ -24,6 +24,10 @@ final class RuleResource extends JsonResource
             'description' => $this->resource->description,
             'insurance_plan' => $this->resource->insurancePlan,
             'format' => $this->resource->format,
+            'responsibilities' => $this->resource->typesOfResponsibilities?->map(fn ($type) => [
+                'id' => $type->id,
+                'name' => $type->code,
+            ]),
             'rules' => collect(config('claim.formats.'.(RuleFormatType::INSTITUTIONAL == $this->resource->format ? '2' : '1')))
                 ->map(fn ($format, $formatKey) => collect($format)
                     ->mapWithKeys(function (array $rule, $key) use ($formatKey) {

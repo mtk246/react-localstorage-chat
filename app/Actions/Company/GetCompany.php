@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Meilisearch\Endpoints\Indexes;
 
 /** @todo finish the refactoring, only a partial refactoring was done */
 final class GetCompany
@@ -33,8 +34,26 @@ final class GetCompany
 
     public function all(Request $request)
     {
-        return DB::transaction(function () use ($request) {
-            $companiesQuery = Company::search($request->query('query'))
+        $config = config('scout.meilisearch.index-settings.'.Company::class.'.sortableAttributes');
+
+        return DB::transaction(function () use ($request, $config) {
+            $companiesQuery = Company::search(
+                $request->query('query', ''),
+                function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
+                    $options['attributesToSearchOn'] = [
+                        'name',
+                        'npi',
+                        'ein',
+                        'abbreviations.abbreviation',
+                        'billingCompanies.name',
+                    ];
+
+                    if (isset($request->sortBy) && in_array($request->sortBy, $config)) {
+                        $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                    }
+
+                    return $searchEngine->search($query, $options);
+                })
                 ->when(
                     Gate::denies('is-admin'),
                     function (ScoutBuilder $query) use ($request) {
@@ -63,7 +82,6 @@ final class GetCompany
                             'billingCompanies',
                     ]))
                 )
-                ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
 
             return [

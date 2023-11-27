@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Facades\Pagination;
 use App\Enums\User\RoleType;
 use App\Enums\User\UserType;
 use App\Http\Resources\Enums\EnumResource;
@@ -39,6 +40,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\BillingCompanyHealthProfessional;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Meilisearch\Endpoints\Indexes;
+use App\Events\User\StoreEvent;
 
 class DoctorRepository
 {
@@ -359,6 +362,8 @@ class DoctorRepository
                         env('URL_FRONT').'/#/newCredentials?mcctoken='.$token
                     )
                 );
+
+                event(new StoreEvent($user, $user->userkey));
             }
 
             \DB::commit();
@@ -769,7 +774,28 @@ class DoctorRepository
 
     public function getServerAllDoctors(Request $request)
     {
-        $data = HealthProfessional::search($request->query('query'))->when(
+        $config = config('scout.meilisearch.index-settings.'.HealthProfessional::class.'.sortableAttributes');
+
+        $data = HealthProfessional::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
+                $options['attributesToSearchOn'] = [
+                    'profile.first_name',
+                    'profile.last_name',
+                    'profile.middle_name',
+                    'npi',
+                    'company.name',
+                    'billingCompanies.name'
+                ];
+
+                if (isset($request->sortBy) && in_array($request->sortBy, $config)){
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
+        ->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
                 $bC = auth()->user()->billing_company_id ?? null;
@@ -820,20 +846,6 @@ class DoctorRepository
                 'company',
             ]))
         );
-
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'health_professionals.billing_company_id'), (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } /**elseif (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy(
-                    Contact::select('email')->whereColumn('contats.id', 'companies.billing_company_id'), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            } */ else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
@@ -1032,7 +1044,9 @@ class DoctorRepository
     public function getList(Request $request)
     {
         $billingCompanyId = $request->billing_company_id ?? null;
-        $companyId = $request->company_id ?? null;
+        $companyId = str_contains($request->company_id ?? '', '-')
+            ? explode('-', $request->company_id ?? '')[0]
+            : $request->company_id ?? null;
         $authorization = $request->authorization ?? 'false';
         $taxonomy = $request->withTaxonomy ?? 'false';
         $only = $request->only ?? null;

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Actions\Claim\ChangeStatusAction;
 use App\Actions\Claim\CreateAction;
 use App\Actions\Claim\CreateCheckEligibilityAction;
+use App\Actions\Claim\CreateDenialTrackingAction;
 use App\Actions\Claim\CreateNoteAction;
 use App\Actions\Claim\GetBillClassificationAction;
 use App\Actions\Claim\GetCheckStatusAction;
@@ -19,16 +20,18 @@ use App\Actions\Claim\GetPatientStatusesAction;
 use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\UpdateClaimAction;
 use App\Enums\Claim\CodeValueFields;
+use App\Enums\DepartmentResponsibility;
 use App\Http\Requests\Claim\ClaimChangeStatusRequest;
-use App\Http\Requests\Claim\ClaimCheckStatusRequest;
 use App\Http\Requests\Claim\ClaimCreateRequest;
 use App\Http\Requests\Claim\ClaimEligibilityRequest;
 use App\Http\Requests\Claim\ClaimVerifyRequest;
 use App\Http\Requests\Claim\CreateNoteRequest;
+use App\Http\Requests\Claim\DenialTrackingRequest;
 use App\Http\Requests\Claim\StoreRequest;
 use App\Http\Requests\Claim\UpdateRequest;
 use App\Http\Resources\Claim\Fields\CodeValueResource;
 use App\Http\Resources\Enums\EnumResource;
+use App\Http\Resources\Enums\TypeResource;
 use App\Models\BillClassification;
 use App\Models\Claims\Claim;
 use App\Models\ClaimStatus;
@@ -79,10 +82,9 @@ class ClaimController extends Controller
 
     public function getServerAll(
         Request $request,
-        Claim $claim,
         GetClaimAction $getClaim
     ): JsonResponse {
-        return response()->json($getClaim->all($claim, $request));
+        return response()->json($getClaim->all($request));
     }
 
     public function getOneClaim(
@@ -117,10 +119,12 @@ class ClaimController extends Controller
     {
         /**@todo Consultar clasificacion de procedures by revenue codes */
         $search = $request->search ?? '';
-        $company_id = $request->company_id ?? null;
+        $companyId = str_contains($request->company_id ?? '', '-')
+            ? explode('-', $request->company_id ?? '')[0]
+            : $request->company_id ?? null;
 
         return response()->json(
-            $this->claimRepository->getListRev($company_id, $search)
+            $this->claimRepository->getListRev($companyId, $search)
         );
     }
 
@@ -163,7 +167,7 @@ class ClaimController extends Controller
                                     .' - '
                                     .$facilityType->type
                                     .' / '
-                                    .$billClassification->name,  
+                                    .$billClassification->name,
                             ];
                         });
 
@@ -413,11 +417,15 @@ class ClaimController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function addCheckStatus(ClaimCheckStatusRequest $request, int $id): JsonResponse
+    public function addTrackingClaim(
+        DenialTrackingRequest $request,
+        CreateDenialTrackingAction $create,
+        Claim $claim
+    ): JsonResponse
     {
-        $rs = $this->claimRepository->addCheckStatus($request->validated(), $id);
+        $rs = $create->invoke($claim, $request->casted());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error, check status claim'), 400);
+        return $rs ? response()->json($rs) : response()->json(__('Error, create tracking claim'), 400);
     }
 
     public function getCheckStatus(
@@ -440,6 +448,25 @@ class ClaimController extends Controller
     {
         return response()->json(
             new EnumResource(collect(CodeValueFields::cases()), CodeValueResource::class),
+        );
+    }
+
+    public function getListDepartmentResponsibilities(): JsonResponse
+    {
+        return response()->json(
+            new EnumResource(collect(DepartmentResponsibility::cases()), TypeResource::class),
+        );
+    }
+
+    public function getListInsurancePolicies(Claim $claim): JsonResponse
+    {
+        return response()->json(
+            $claim->insurancePolicies()?->get()?->map(fn ($item) => [
+                'id' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                'name' => $item->typeresponsibility->code . ' - ' . $item->policy_number,
+                'default' => ('P' == $item->typeresponsibility->code)
+            ])
+            ?->toArray() ?? [],
         );
     }
 }

@@ -62,7 +62,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $nicknames_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
- * @property \App\Models\TypeCatalog|null $planType
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\TypeCatalog> $planTypes
+ * @property int|null $plan_types_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PrivateNote> $privateNotes
  * @property int|null $private_notes_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Procedure> $procedures
@@ -119,7 +120,6 @@ class InsurancePlan extends Model implements Auditable
         'allow_attached_files',
         'eff_date',
         'ins_type_id',
-        'plan_type_id',
         'insurance_company_id',
     ];
 
@@ -151,11 +151,11 @@ class InsurancePlan extends Model implements Auditable
     /**
      * InsurancePlan belongs to PlanType.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function planType()
+    public function planTypes()
     {
-        return $this->belongsTo(TypeCatalog::class, 'plan_type_id');
+        return $this->belongsToMany(TypeCatalog::class, 'insurance_plan_plan_type', 'insurance_plan_id', 'plan_type_id')->withPivot('billing_company_id')->withTimestamps();
     }
 
     public function copays(): BelongsToMany
@@ -353,7 +353,7 @@ class InsurancePlan extends Model implements Auditable
     {
         $query->when($notFromInsurance, function ($query) use ($search) {
             return $query->whereRaw('LOWER(payer_id) LIKE (?)', [strtolower("%$search%")])
-                ->orWhereHas('planType', function ($q) use ($search) {
+                ->orWhereHas('planTypes', function ($q) use ($search) {
                     $q->whereRaw('code LIKE (?)', [strtoupper("%$search%")]);
                 });
         }, function ($query) use ($search) {

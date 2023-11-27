@@ -39,7 +39,6 @@ class InsurancePlanRepository
             if (isset($insurancePlan)) {
                 $insurancePlan->update([
                     'ins_type_id' => $data['ins_type_id'],
-                    'plan_type_id' => $data['plan_type_id'] ?? null,
                     'accept_assign' => $data['accept_assign'] ?? true,
                     'pre_authorization' => $data['pre_authorization'],
                     'file_zero_changes' => $data['file_zero_changes'],
@@ -56,7 +55,6 @@ class InsurancePlanRepository
                     'name' => $data['name'],
                     'payer_id' => $data['payer_id'],
                     'ins_type_id' => $data['ins_type_id'],
-                    'plan_type_id' => $data['plan_type_id'] ?? null,
                     'accept_assign' => $data['accept_assign'],
                     'pre_authorization' => $data['pre_authorization'],
                     'file_zero_changes' => $data['file_zero_changes'],
@@ -78,6 +76,22 @@ class InsurancePlanRepository
 
             if (is_null($insurancePlan->billingCompanies()->find($billingCompany))) {
                 $insurancePlan->billingCompanies()->attach($billingCompany);
+            }
+
+            $insurancePlan->planTypes()
+                ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
+                    $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany);
+                })
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'] ?? [])
+                ->detach();
+
+            foreach ($data['plan_type_ids'] ?? [] as $planTypeId) {
+                if (is_null($insurancePlan->planTypes()
+                        ->wherePivot('billing_company_id', $billingCompany)->find($planTypeId))) {
+                    $insurancePlan->planTypes()->attach($planTypeId, [
+                        'billing_company_id' => $billingCompany,
+                    ]);
+                }
             }
 
             if($data['format']) {
@@ -184,7 +198,6 @@ class InsurancePlanRepository
                 'name' => $data['name'],
                 'payer_id' => $data['payer_id'],
                 'ins_type_id' => $data['ins_type_id'],
-                'plan_type_id' => $data['plan_type_id'],
                 'accept_assign' => $data['accept_assign'],
                 'pre_authorization' => $data['pre_authorization'],
                 'file_zero_changes' => $data['file_zero_changes'],
@@ -200,7 +213,7 @@ class InsurancePlanRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()->billing_company_id;
             }
 
             if($data['format']) {
@@ -235,6 +248,22 @@ class InsurancePlanRepository
                 $insurancePlan->billingCompanies()->updateExistingPivot($billingCompany->id ?? $billingCompany, [
                     'status' => true,
                 ]);
+            }
+
+            $insurancePlan->planTypes()
+                ->when(Gate::denies('is-admin'), function ($query) use ($billingCompany) {
+                    $query->where('insurance_plan_plan_types.billing_company_id', $billingCompany->id ?? $billingCompany);
+                })
+                ->whereNotIn('insurance_plan_plan_types.plan_type_id', $data['plan_type_ids'] ?? [])
+                ->detach();
+
+            foreach ($data['plan_type_ids'] ?? [] as $planTypeId) {
+                if (is_null($insurancePlan->planTypes()
+                        ->wherePivot('billing_company_id', $billingCompany->id ?? $billingCompany)->find($planTypeId))) {
+                    $insurancePlan->planTypes()->attach($planTypeId, [
+                        'billing_company_id' => $billingCompany->id ?? $billingCompany,
+                    ]);
+                }
             }
 
             if (isset($data['time_failed']['days']) || isset($data['time_failed']['from_id'])) {
@@ -324,7 +353,7 @@ class InsurancePlanRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -519,7 +548,7 @@ class InsurancePlanRepository
                 'nicknames',
                 'abbreviations',
                 'insType',
-                'planType',
+                'planTypes',
                 'insuranceCompany',
                 'billingCompanies',
             ]);
@@ -537,7 +566,7 @@ class InsurancePlanRepository
                     $query->where('billing_company_id', $bC);
                 },
                 'insType',
-                'planType',
+                'planTypes',
                 'insuranceCompany',
             ]);
         }
@@ -574,7 +603,7 @@ class InsurancePlanRepository
 
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billing_company_id;
         if (is_null($billingCompany)) {
             return null;
         }
@@ -788,7 +817,7 @@ class InsurancePlanRepository
     {
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;
@@ -828,7 +857,7 @@ class InsurancePlanRepository
     {
         $insurancePlan = InsurancePlan::find($id);
         $records = [];
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()->billingCompany;
         if (Gate::denies('is-admin')) {
             if (is_null($billingCompany)) {
                 return null;

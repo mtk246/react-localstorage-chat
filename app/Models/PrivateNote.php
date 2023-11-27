@@ -22,6 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\ClaimCheckStatus|null $claimCheckStatus
  * @property mixed $last_modified
  * @property Model|\Eloquent $publishable
  *
@@ -85,5 +86,10 @@ class PrivateNote extends Model implements Auditable
                 'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
+    }
+
+    public function claimCheckStatus()
+    {
+        return $this->hasOne(ClaimCheckStatus::class, 'private_note_id');
     }
 }

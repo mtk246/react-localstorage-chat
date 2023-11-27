@@ -18,14 +18,14 @@ final class WorkbookFilterCast extends CastsRequest
     public function getType(): ?WorkbookType
     {
         return $this->get('type')
-            ? WorkbookType::tryFrom($this->get('type'))
+            ? WorkbookType::tryFrom($this->get('type') ?? 0)
             : null;
     }
 
     public function getGroup(): ?WorkbookGroupType
     {
         return $this->get('group')
-            ? WorkbookGroupType::tryFrom($this->get('group'))
+            ? WorkbookGroupType::tryFrom($this->get('group') ?? 0)
             : null;
     }
 }
