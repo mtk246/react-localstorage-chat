@@ -21,6 +21,7 @@ final class BatchResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'posting_date' => $this->resource->posting_date,
             'currency' => $this->resource->currency,
