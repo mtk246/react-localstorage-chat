@@ -44,7 +44,7 @@ class UserFactory extends Factory
         });
     }
 
-    public function hasType(UserType $type, ?BillingCompany $billingCompany = null): self
+    public function hasType(UserType $type, BillingCompany $billingCompany = null): self
     {
         return $this->state(function (array $attributes) use ($type, $billingCompany) {
             return [
@@ -133,7 +133,7 @@ class UserFactory extends Factory
             );
     }
 
-    public function withBillingCompany(?BillingCompany $billingCompany = null): self
+    public function withBillingCompany(BillingCompany $billingCompany = null): self
     {
         return $this->state(function (array $attributes) use ($billingCompany) {
             return [
