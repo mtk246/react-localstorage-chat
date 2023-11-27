@@ -10,7 +10,11 @@ use App\Actions\Payments\UpdateBachAction;
 use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Payments\storeBatchRequest;
+use App\Http\Requests\Payments\StoreBatchRequest;
+use App\Actions\Payments\AddClaimsToBachAction;
+use App\Actions\Payments\AddServicesToBachAction;
+use App\Http\Requests\Payments\AddClaimToBatchRequest;
+use App\Http\Requests\Payments\AddServicesToBatchRequest;
 use App\Http\Resources\Enums\ColorTypeResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
@@ -27,7 +31,7 @@ final class BatchResource extends Controller
         return response()->json($get->all($request));
     }
 
-    public function store(storeBatchRequest $request, StoreBachAction $store): JsonResponse
+    public function store(StoreBatchRequest $request, StoreBachAction $store): JsonResponse
     {
         return response()->json($store->invoke($request->casted()));
     }
@@ -71,5 +75,20 @@ final class BatchResource extends Controller
     public function showEob(Eob $eobFile)
     {
         return response()->file($eobFile->file_name);
+    }
+
+    public function close(Batch $batch): JsonResponse
+    {
+        return response()->json(new BatchApiResource($batch->close()));
+    }
+
+    public function storeClaims(AddClaimToBatchRequest $request, AddClaimsToBachAction $add, Batch $batch): JsonResponse
+    {
+        return response()->json($add->invoke($batch, $request->castedCollect('payments')));
+    }
+
+    public function storeServices(AddServicesToBatchRequest $request, AddServicesToBachAction $add, Batch $batch): JsonResponse
+    {
+        return response()->json($add->invoke($batch, $request->castedCollect('payments')));
     }
 }
