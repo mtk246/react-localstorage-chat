@@ -42,7 +42,7 @@ final class BatchResource extends Controller
         return response()->json(new BatchApiResource($batch));
     }
 
-    public function update(Request $request, Batch $batch, UpdateBachAction $update): JsonResponse
+    public function update(StoreBatchRequest $request, Batch $batch, UpdateBachAction $update): JsonResponse
     {
         return response()->json($update->invoke($batch, $request->casted()));
     }
