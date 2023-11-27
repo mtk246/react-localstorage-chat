@@ -11,6 +11,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\Reports\Preset.
+ *
+ * @property string $id
+ * @property string $name
+ * @property string|null $description
+ * @property bool $is_private
+ * @property string|null $version
+ * @property mixed $filter
+ * @property string|null $report_id
+ * @property int|null $user_id
+ * @property int $billing_company_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property BillingCompany|null $billingCompanies
+ * @property \App\Models\Reports\Report|null $reports
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereFilter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereIsPrivate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereReportId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Preset whereVersion($value)
+ *
+ * @mixin \Eloquent
+ */
 final class Preset extends Model
 {
     use HasFactory;
