@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \App\Models\Payments\Batch|null $batch
- * @property string $file_url
+ * @property string|null $file_url
  * @property \App\Models\Payments\Payment|null $payments
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newModelQuery()
