@@ -11,11 +11,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\Payments\Card.
  *
- * @property \App\Models\Payments\Payment|null $payment
+ * @property int $id
+ * @property int|null $card_number
+ * @property \Illuminate\Support\Carbon|null $expiration_date
+ * @property int $payment_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Models\Payments\Payment $payment
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Card newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Card newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Card query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Card whereCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Card whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Card whereExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Card whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Card wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Card whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
