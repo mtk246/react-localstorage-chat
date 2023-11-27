@@ -6,11 +6,13 @@ namespace App\Models\Payments;
 
 use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
+use App\Models\Claims\Claim;
 use App\Models\InsuranceCompany;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -32,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property MethodType $method
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
+ * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claims
+ * @property int|null $claims_count
  * @property \App\Models\Payments\Eob|null $eobs
  * @property InsuranceCompany $insuranceCompany
  *
@@ -100,5 +104,14 @@ final class Payment extends Model
     public function eobs(): HasOne
     {
         return $this->hasOne(Eob::class);
+    }
+
+    public function claims(): BelongsToMany
+    {
+        return $this->belongsToMany(Claim::class, 'claim_payment')
+            ->using(ClaimPayment::class)
+            ->withPivot(['id'])
+            ->withTimestamps()
+            ->as('payments');
     }
 }
