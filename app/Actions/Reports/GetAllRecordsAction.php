@@ -24,6 +24,7 @@ final class GetAllRecordsAction
                 )->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         })->toArray();
+
         return new AllRecordsResource($data, TypeReportAll::from($module)->getName());
     }
 }
