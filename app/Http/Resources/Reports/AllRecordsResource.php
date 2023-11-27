@@ -31,23 +31,7 @@ final class AllRecordsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'data' => $this->resource['data'],
-            'links' => [
-                'first' => $this->resource['first_page_url'],
-                'last' => $this->resource['last_page_url'],
-                'next' => $this->resource['next_page_url'],
-                'prev' => $this->resource['prev_page_url'],
-            ],
-            'meta' => [
-                'current_page' => $this->resource['current_page'],
-                'from' => $this->resource['from'],
-                'last_page' => $this->resource['last_page'],
-                'links' => $this->resource['links'],
-                'path' => $this->resource['path'],
-                'per_page' => $this->resource['per_page'],
-                'to' => $this->resource['to'],
-                'total' => $this->resource['total'],
-            ],
+            'data' => $this->resource,
             'columns' => new ColumnsReportResource($this->resource, $this->module),
         ];
     }
