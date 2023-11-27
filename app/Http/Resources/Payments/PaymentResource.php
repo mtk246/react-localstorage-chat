@@ -20,6 +20,7 @@ final class PaymentResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->resource->id,
             'source' => $this->resource->source,
             'payment_date' => $this->resource->payment_date,
             'total_amount' => $this->resource->total_amount->getAmount(),
@@ -31,6 +32,7 @@ final class PaymentResource extends JsonResource
             'note' => $this->resource->note,
             'eobs' => new EobResource($this->resource->eobs),
             'insurance_company' => $this->resource->insuranceCompany,
+            'claims' => ClaimResource::collection($this->resource->claims),
         ];
     }
 }
