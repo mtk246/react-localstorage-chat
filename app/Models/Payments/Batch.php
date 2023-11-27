@@ -101,6 +101,13 @@ final class Batch extends Model implements Auditable
         return $this->hasManyThrough(Eob::class, Payment::class);
     }
 
+    public function close(): self
+    {
+        $this->status = BatchStateType::COMPLETED->value;
+
+        return $this;
+    }
+
     /** @return array<key, string> */
     public function getLastModifiedAttribute(): array
     {
