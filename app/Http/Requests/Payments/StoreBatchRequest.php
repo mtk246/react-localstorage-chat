@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 /** @method StoreBatchWrapper casted() */
-final class storeBatchRequest extends FormRequest
+final class StoreBatchRequest extends FormRequest
 {
     use HasCastedClass;
 
