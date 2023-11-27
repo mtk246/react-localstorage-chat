@@ -41,7 +41,7 @@ class CompanyTest extends TestCase
 
     public function testItReturnsAJsonResponseForListStatementWhen()
     {
-        $companyRepository = new CompanyRepository();
+        $companyRepository = $this->createMock(CompanyRepository::class);
 
         $controller = new CompanyController($companyRepository);
 
@@ -54,7 +54,7 @@ class CompanyTest extends TestCase
 
     public function testItReturnsAJsonResponseForStatementApplyToList()
     {
-        $companyRepository = new CompanyRepository();
+        $companyRepository = $this->createMock(CompanyRepository::class);
 
         $controller = new CompanyController($companyRepository);
 
@@ -67,7 +67,7 @@ class CompanyTest extends TestCase
 
     public function testItReturnsJsonResponseForNameSuffixLists()
     {
-        $companyRepository = new CompanyRepository();
+        $companyRepository = $this->createMock(CompanyRepository::class);
 
         $controller = new CompanyController($companyRepository);
 
@@ -80,7 +80,7 @@ class CompanyTest extends TestCase
 
     public function testItReturnsJsonResponseForContractFeeTypesLists()
     {
-        $companyRepository = new CompanyRepository();
+        $companyRepository = $this->createMock(CompanyRepository::class);
 
         $controller = new CompanyController($companyRepository);
 
@@ -104,7 +104,7 @@ class CompanyTest extends TestCase
 
     public function testItReturnsJsonResponseForAllCompany()
     {
-        $companyRepository = new CompanyRepository();
+        $companyRepository = $this->createMock(CompanyRepository::class);
 
         $controller = new CompanyController($companyRepository);
 
