@@ -25,8 +25,6 @@ final class RecoveryUserRequestCast extends CastsRequest
 
     public function getSsn(): ?string
     {
-        return array_key_exists('ssn', $this->inputs)
-            ? $this->inputs['ssn']
-            : null;
+        return $this->get('ssn');
     }
 }

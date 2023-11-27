@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Facades\Pagination;
 use App\Http\Resources\Company\TaxonomiesResource;
 use App\Http\Resources\Facility\CompanyResource;
 use App\Models\Address;
@@ -23,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Meilisearch\Endpoints\Indexes;
 
 class FacilityRepository
 {
@@ -51,7 +53,7 @@ class FacilityRepository
             if (isset($data['taxonomies'])) {
 
                 $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 
@@ -217,7 +219,9 @@ class FacilityRepository
     public function getList(Request $request)
     {
         try {
-            $companyId = $request->company_id ?? null;
+            $companyId = str_contains($request->company_id ?? '', '-')
+                ? explode('-', $request->company_id ?? '')[0]
+                : $request->company_id ?? null;
 
             $billingCompany = Gate::check('is-admin')
                 ? $request->billing_company_id ?? null
@@ -349,7 +353,28 @@ class FacilityRepository
 
     public function getServerAllFacilities(Request $request)
     {
-        $data = Facility::search($request->query('query'))->when(
+        $config = config('scout.meilisearch.index-settings.'.Facility::class.'.sortableAttributes');
+
+        $data = Facility::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request, $config) {
+                $options['attributesToSearchOn'] = [
+                    'name',
+                    'abbreviations.abbreviation',
+                    'npi',
+                    'companies',
+                    'facilityTypes',
+                    'billingCompanies.name'
+                ];
+
+                if (isset($request->sortBy) && in_array($request->sortBy, $config)){
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
+        ->when(
             Gate::denies('is-admin'),
             function (ScoutBuilder $query) {
                 $bC = auth()->user()->billing_company_id ?? null;
@@ -386,19 +411,6 @@ class FacilityRepository
                 'billingCompanies',
             ]))
         );
-
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'billingcompany')) {
-                $data = $data->orderBy(
-                    BillingCompany::select('name')->whereColumn('billing_companies.id', 'facilities.billing_company_id'),
-                    (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc'
-                );
-            } else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-            }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
 
         $data = $data->paginate($request->itemsPerPage ?? 10);
 
@@ -585,9 +597,9 @@ class FacilityRepository
         try {
             DB::beginTransaction();
             $facility = Facility::query()->find($id);
-            
+
             $facility->touch();
-            
+
             $facility->update([
                 'name' => $data['name'],
                 'npi' => $data['npi'],
@@ -608,7 +620,7 @@ class FacilityRepository
             if (isset($data['taxonomies'])) {
 
                 $facility->taxonomies()->wherePivot('billing_company_id', $billingCompany)->detach();
-                
+
                 foreach ($data['taxonomies'] as $taxonomy) {
                     $tax = Taxonomy::updateOrCreate(['tax_id' => $taxonomy['tax_id']], $taxonomy);
 

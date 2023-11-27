@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Claim\ConfirmShippingAction;
 use App\Actions\Claim\GetSecurityAuthorizationAction;
 use App\Actions\Claim\SubmitToClearingHouseAction;
 use App\Http\Requests\Claim\ClaimBatchRequest;
@@ -90,5 +91,14 @@ class ClaimBatchController extends Controller
         $rs = $submitAction->invoke($token ?? '', $batch);
 
         return $rs ? response()->json($rs) : response()->json(__('Error submitting claim batch'), 400);
+    }
+
+    public function confirmShipping(
+        ClaimBatch $batch,
+        ConfirmShippingAction $confirmAction,
+    ) {
+        $rs = $confirmAction->invoke($batch);
+
+        return $rs ? response()->json($rs) : response()->json(__('Error confirm shipping claim batch'), 400);
     }
 }

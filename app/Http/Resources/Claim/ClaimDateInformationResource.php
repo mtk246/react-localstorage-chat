@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\ClaimType;
-use App\Enums\Claim\FieldInformationInstitutional;
-use App\Enums\Claim\FieldInformationProfessional;
+use App\Models\Claims\ClaimDateInformation;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @property ClaimDateInformation $resource */
 final class ClaimDateInformationResource extends JsonResource
 {
     public function __construct($resource, protected int $type)
@@ -21,21 +21,8 @@ final class ClaimDateInformationResource extends JsonResource
     {
         $commonFields = [
             'id' => $this->resource->id,
-            'field_id' => $this->resource->field_id,
-            'field' => match ($this->resource->field_id) {
-                FieldInformationInstitutional::FIELD_31->value => FieldInformationInstitutional::FIELD_31->getName(),
-                FieldInformationInstitutional::FIELD_32->value => FieldInformationInstitutional::FIELD_32->getName(),
-                FieldInformationInstitutional::FIELD_33->value => FieldInformationInstitutional::FIELD_33->getName(),
-                FieldInformationInstitutional::FIELD_34->value => FieldInformationInstitutional::FIELD_34->getName(),
-                FieldInformationInstitutional::FIELD_35->value => FieldInformationInstitutional::FIELD_35->getName(),
-                FieldInformationInstitutional::FIELD_36->value => FieldInformationInstitutional::FIELD_36->getName(),
-                FieldInformationProfessional::FIELD_14->value => FieldInformationProfessional::FIELD_14->getName(),
-                FieldInformationProfessional::FIELD_15->value => FieldInformationProfessional::FIELD_15->getName(),
-                FieldInformationProfessional::FIELD_16->value => FieldInformationProfessional::FIELD_16->getName(),
-                FieldInformationProfessional::FIELD_18->value => FieldInformationProfessional::FIELD_18->getName(),
-                FieldInformationProfessional::FIELD_19->value => FieldInformationProfessional::FIELD_19->getName(),
-                default => '',
-            },
+            'field_id' => $this->resource->field_id?->value ?? '',
+            'field' => $this->resource->field_id?->getName() ?? '',
             'qualifier_id' => $this->resource->qualifier_id,
             'qualifier' => $this->resource->qualifier?->code,
             'from_date' => $this->resource->from_date,

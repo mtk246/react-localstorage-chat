@@ -1138,6 +1138,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1151,11 +1153,13 @@ return [
     ],
     '43' => [
         'type' => RuleType::SINGLE_ARRAY->value,
-        'description' => 'claim services - procedure description',
-        'value' => 'claimServices:procedure_description',
+        'description' => 'claim services - revenue code description',
+        'value' => 'claimServices:revenue_code_description',
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1174,6 +1178,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1192,6 +1198,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1210,6 +1218,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1228,6 +1238,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],
@@ -1246,6 +1258,8 @@ return [
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
+                ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
+                ['name' => 'revenue code short description', 'id' => 'claimServices:revenue_code_short_description'],
                 ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
                 ['name' => 'procedure description', 'id' => 'claimServices:procedure_description'],
                 ['name' => 'procedure short description', 'id' => 'claimServices:procedure_short_description'],

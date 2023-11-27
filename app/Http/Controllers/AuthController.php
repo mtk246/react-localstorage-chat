@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Events\User\LoginEvent;
 
 /**
  * @todo change to protective programing pattern
@@ -193,6 +194,8 @@ class AuthController extends Controller
         $device->save();
         $user->save();
 
+        event(new LoginEvent($user, $dataValidated['password']));
+
         return $this->respondWithToken($token, $request->ip(), $request->userAgent());
     }
 
@@ -270,6 +273,7 @@ class AuthController extends Controller
         $menu_app = [
             'Claims Process' => [
                 'Claims Management', 'Claim Rules Management', 'Payments Management', 'Patient Management',
+                'Denial Management', 'Ledger Management',
             ],
             'Administration' => [
                 'Health Care Professional Management', 'Insurance Management', 'Company Management',

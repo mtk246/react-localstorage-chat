@@ -10,12 +10,10 @@ final class MedicationRequestCast extends CastsRequest
 {
     public function getId(): ?int
     {
-        return array_key_exists('id', $this->inputs)
-            ? (int) $this->inputs['id']
-            : null;
+        return $this->getInt('id');
     }
 
-    public function getDrugCode(): string
+    public function getDrugCode(): ?string
     {
         return $this->get('drug_code');
     }
@@ -32,30 +30,22 @@ final class MedicationRequestCast extends CastsRequest
 
     public function getUnitsLimit(): ?int
     {
-        return array_key_exists('units_limit', $this->inputs)
-            ? (int) $this->inputs['units_limit']
-            : null;
+        return $this->getInt('units_limit');
     }
 
     public function getLinkSequenceNumber(): ?string
     {
-        return array_key_exists('link_sequence_number', $this->inputs)
-            ? $this->inputs['link_sequence_number']
-            : null;
+        return $this->get('link_sequence_number');
     }
 
     public function getPharmacyPrescriptionNumber(): ?string
     {
-        return array_key_exists('pharmacy_prescription_number', $this->inputs)
-            ? $this->inputs['pharmacy_prescription_number']
-            : null;
+        return $this->get('pharmacy_prescription_number');
     }
 
     public function getRepackagedNDC(): bool
     {
-        return array_key_exists('repackaged_NDC', $this->inputs)
-            ? (bool) $this->inputs['repackaged_NDC']
-            : false;
+        return $this->getBool('repackaged_NDC');
     }
 
     public function getCodeNDC(): string
@@ -67,9 +57,7 @@ final class MedicationRequestCast extends CastsRequest
 
     public function getClaimNoteRequired(): bool
     {
-        return array_key_exists('claim_note_required', $this->inputs)
-            ? (bool) $this->inputs['claim_note_required']
-            : false;
+        return $this->getBool('claim_note_required');
     }
 
     public function getNote(): ?string

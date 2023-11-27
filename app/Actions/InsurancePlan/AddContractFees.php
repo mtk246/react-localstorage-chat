@@ -30,7 +30,7 @@ final class AddContractFees
                     'id' => $contractFee->getId(),
                     'billing_company_id' => $contractFee->getBillingCompanyId(),
                 ], [
-                    'mac_locality_id' => $contractFee->getMacLocality()->id,
+                    'mac_locality_id' => $contractFee->getMacLocality()?->id,
                     'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
                     'contract_fee_type_id' => $contractFee->getTypeId(),
                     'start_date' => $contractFee->getStartDate(),

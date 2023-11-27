@@ -14,6 +14,7 @@ use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Claim\ClaimFile;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +44,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimBatch> $claimBatchs
+ * @property int|null $claim_batchs_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $claimTransmissionResponses
@@ -50,6 +53,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimDateInformation> $dateInformations
  * @property int|null $date_informations_count
  * @property \App\Models\Claims\ClaimDemographicInformation|null $demographicInformation
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\DenialTracking> $denialTrackings
+ * @property int|null $denial_trackings_count
  * @property mixed $amount_paid
  * @property mixed $billed_amount
  * @property mixed $date_of_service
@@ -129,6 +134,11 @@ class Claim extends Model implements Auditable
         return $this->hasOne(ClaimService::class);
     }
 
+    public function denialTrackings()
+    {
+        return $this->hasMany(DenialTracking::class, 'claim_id');
+    }
+
     public function dateInformations(): HasMany
     {
         return $this->hasMany(ClaimDateInformation::class);
@@ -164,41 +174,49 @@ class Claim extends Model implements Auditable
         return $this->morphedByMany(ClaimSubStatus::class, 'claim_status', 'claim_status_claim');
     }
 
+    public function claimBatchs()
+    {
+        return $this->belongsToMany(ClaimBatch::class)->withTimestamps();
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query, $search) {
             return $query
                 ->where('code', 'LIKE', strtoupper("%$search%"))
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByUserProfile($query, $search);
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByCompany($query, $search);
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $this->searchByClaimFormServices($query, $search);
-                })
+                ->orWhere(fn ($query) => $this->searchByUserProfile($query, $search))
+                ->orWhere(fn ($query) => $this->searchByCompany($query, $search))
+                ->orWhere(fn ($query) => $this->searchByClaimFormServices($query, $search))
                 ->orWhereHas('insurancePolicies', function ($q) use ($search) {
                     $q->where('order', 1)->whereHas('typeResponsibility', function ($qq) use ($search) {
                         $qq->where('code', 'LIKE', strtoupper("%$search%"));
                     });
                 })
-                ->orWhere(function ($query) use ($search) {
-                    $query->with('service.services')
-                        ->when(is_numeric($search), function ($query, $search) {
-                            $this->searchByClaimFormServicesTotalPrice($query, $search);
-                        });
-                });
+                ->orWhere(fn ($query) => $query->with('service.services')
+                    ->when(
+                        is_numeric($search),
+                        fn ($query) => $this->searchByClaimFormServicesTotalPrice($query, $search)
+                    )
+                );
         });
     }
 
     protected function searchByUserProfile($query, $search)
     {
+        $searchArray = explode(' ', $search);
         $query->with(['demographicInformation.patient.profile'])
-            ->whereHas('demographicInformation.patient.profile', function ($q) use ($search) {
-                $q->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$search%")])
-                    ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
+            ->whereHas('demographicInformation.patient.profile', function ($q) use ($searchArray, $search) {
+                $q->where(function ($subQuery) use ($searchArray) {
+                    foreach ($searchArray as $searchTerm) {
+                        $searchTerm = trim($searchTerm);
+                        if (empty($searchTerm)) {
+                            continue;
+                        }
+                        $subQuery->whereRaw('LOWER(first_name) LIKE ?', [strtolower("%$searchTerm%")])
+                            ->orWhereRaw('LOWER(last_name) LIKE ?', [strtolower("%$searchTerm%")]);
+                    }
+                })
+                ->orWhereRaw('LOWER(ssn) LIKE ?', [strtolower("%$search%")]);
             });
     }
 
@@ -212,16 +230,24 @@ class Claim extends Model implements Auditable
 
     protected function searchByClaimFormServices($query, $search)
     {
+        $isDate = true;
+        $formattedDate = '';
+        try {
+            $formattedDate = Carbon::createFromFormat('m/d/Y', $search)?->format('Y-m-d');
+        } catch (\Throwable $th) {
+            $isDate = false;
+        }
+
         $query->with('service.services')
-            ->whereHas('service.services', function ($subQuery) use ($search) {
-                $subQuery->when($search, function ($query, $search) {
+            ->whereHas('service.services', function ($subQuery) use ($formattedDate, $isDate) {
+                $subQuery->when($isDate, function ($query) use ($formattedDate) {
                     $query->where(function ($query) {
                         $query->orderBy('from_service', 'asc')
                             ->orderBy('to_service', 'desc')
                             ->limit(1);
                     })
-                    ->where('from_service', 'LIKE', "%$search%")
-                    ->orWhere('to_service', 'LIKE', "%$search%");
+                    ->where('from_service', 'LIKE', "%$formattedDate%")
+                    ->orWhere('to_service', 'LIKE', "%$formattedDate%");
                 });
             })
             ->limit(1);
@@ -280,24 +306,20 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = (ClaimType::PROFESSIONAL == $this->type)
-            ? array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + ((float) $service['price'] ?? 0);
-            }, 0)
-            : array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
-                return $carry + (($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0));
-            }, 0);
+        $billed = $this->service->services->reduce(function ($carry, $service) {
+            return $carry + ($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0);
+        }, 0);
 
         return number_format($billed, 2);
     }
 
     public function getAmountPaidAttribute()
     {
-        $billed = array_reduce($this->service?->services?->toArray() ?? [], function ($carry, $service) {
+        $paid = $this->service->services->reduce(function ($carry, $service) {
             return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
-        return number_format($billed, 2);
+        return number_format($paid, 2);
     }
 
     public function getPastDueDateAttribute()
@@ -364,14 +386,32 @@ class Claim extends Model implements Auditable
             );
 
         $claimService->diagnoses()->sync($services->getDiagnoses()->toArray());
-        $claimService->services()->upsert($services
-            ->getService()
-            ->map(function (array $service) use ($claimService) {
-                $service['claim_service_id'] = $claimService->id;
 
-                return $service;
+        $arrayIds = $services->getService()
+            ->filter(function ($objeto) {
+                return isset($objeto['id']);
             })
-            ->toArray(), ['id']);
+            ->pluck('id')
+            ->toArray();
+
+        $claimService->services()
+            ->whereNotIn('services.id', $arrayIds)
+            ->get()
+            ->each(function (Services $service) {
+                $service->delete();
+            });
+
+        $services
+            ->getService()
+            ->each(function (array $service) use ($claimService) {
+                $claimService->services()->updateOrCreate(
+                    [
+                        'id' => $service['id'] ?? null,
+                        'claim_service_id' => $claimService->id,
+                    ],
+                    $service
+                );
+            });
     }
 
     public function setInsurancePolicies(Collection $insurancePolicies): void
@@ -381,7 +421,7 @@ class Claim extends Model implements Auditable
             ->sync($insurancePolicies->toArray());
     }
 
-    public function setStates(int $status, ?int $subStatus, ?string $note): void
+    public function setStates(int $status, ?int $subStatus, ?string $note): PrivateNote
     {
         $defaultNote = '';
         $statusNew = ClaimStatus::find($status);
@@ -403,11 +443,12 @@ class Claim extends Model implements Auditable
             ->orderBy('id', 'desc')
             ->first() ?? null;
 
-        if (ClaimStatus::class == $currentType) {
+        if (ClaimStatus::class === $currentType && null !== $statusCurrent && null !== $statusCurrent->claimStatus) {
             $defaultNote = 'Status change successful, from '.$statusCurrent->claimStatus->status.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->status) : '');
-        } elseif (ClaimSubStatus::class == $currentType) {
+        } elseif (ClaimSubStatus::class === $currentType && null !== $statusCurrent && null !== $subStatusCurrent && null !== $subStatusCurrent->claimStatus) {
             $defaultNote = 'Substatus change successful, from '.$statusCurrent->claimStatus->status.' - '.$subStatusCurrent->claimStatus->name.' to '.$statusNew->status.(($subStatusNew) ? (' - '.$subStatusNew->name) : '');
         }
+
         if ($status !== $statusCurrent?->claim_status_id) {
             $claimStatus = ClaimStatusClaim::create([
                 'claim_id' => $this->id,
@@ -416,7 +457,7 @@ class Claim extends Model implements Auditable
             ]);
         }
         if (null === $subStatus) {
-            PrivateNote::create([
+            $note = PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
                 'publishable_id' => $claimStatus?->id ?? $statusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
@@ -428,21 +469,37 @@ class Claim extends Model implements Auditable
                 'claim_status_type' => ClaimSubStatus::class,
                 'claim_status_id' => $subStatus,
             ]);
-            PrivateNote::create([
+            $note = PrivateNote::create([
                 'publishable_type' => ClaimStatusClaim::class,
                 'publishable_id' => $claimSubStatus?->id ?? $subStatusCurrent->id,
                 'billing_company_id' => $this->billing_company_id,
                 'note' => $note ?? $defaultNote,
             ]);
         }
+
+        return $note;
     }
 
     public function setAdditionalInformation(AditionalInformationWrapper $aditionalInformation): void
     {
+        $arrayIds = array_column(array_filter($aditionalInformation->getDateInformation(), function ($objeto) {
+            return isset($objeto['id']);
+        }), 'id');
+
+        $this->dateInformations()
+            ->whereNotIn('claim_date_informations.id', $arrayIds)
+            ->get()
+            ->each(function (ClaimDateInformation $dateInfo) {
+                $dateInfo->delete();
+            });
+
         foreach ($aditionalInformation->getDateInformation() as $data) {
             $this->dateInformations()
             ->updateOrCreate(
-                ['claim_id' => $this->id],
+                [
+                    'id' => $data['id'] ?? null,
+                    'claim_id' => $this->id,
+                ],
                 $data
             );
         }
@@ -468,5 +525,15 @@ class Claim extends Model implements Auditable
             'billing_company_id' => $this->billing_company_id,
             'note' => $note,
         ]);
+    }
+
+    public function getDenialTrackings()
+    {
+        return $this->hasMany(DenialTracking::class, 'claim_id')->orderBy('created_at')->get();
+    }
+
+    public function getDenialRefile()
+    {
+        return $this->hasMany(DenialRefile::class, 'claim_id')->with('refileReason')->get();
     }
 }

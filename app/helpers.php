@@ -85,9 +85,9 @@ if (!function_exists('getList')) {
                 if (isset($filters['orWhereHas'])) {
                     $relationship = $filters['orWhereHas']['relationship'];
                     $records = $model::has($exists, 0)->where($filters['where'])
-                                     ->orWhereHas($relationship, function ($q) use ($filters) {
-                                         $q->whereNotIn($filters['orWhereHas']['where'][0], $filters['orWhereHas']['where'][1]);
-                                     })->where($filters['where'])->get();
+                        ->orWhereHas($relationship, function ($q) use ($filters) {
+                            $q->whereNotIn($filters['orWhereHas']['where'][0], $filters['orWhereHas']['where'][1]);
+                        })->where($filters['where'])->get();
                 } else {
                     $records = $model::has($exists, 0)->where($filters['where'])->get();
                 }

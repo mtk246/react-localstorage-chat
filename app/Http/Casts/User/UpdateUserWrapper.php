@@ -33,6 +33,7 @@ final class UpdateUserWrapper extends CastsRequest
                 ? null
                 : $this->getBillingCompanyId(),
             'status' => true,
+            'type' => $this->getType()->value,
         ]);
     }
 

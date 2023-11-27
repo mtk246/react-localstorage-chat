@@ -356,5 +356,33 @@
             "date_of_birth": "1990-04-01"
         },
         "type": 1
+    },
+    {
+        "email": "es@ciph3r.co",
+        "password": "$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q",
+        "role": "superuser",
+        "profile": {
+            "ssn": "125485263",
+            "first_name": "Eduardo",
+            "middle_name": "",
+            "last_name": "Saes",
+            "sex": "M",
+            "date_of_birth": "1990-04-01"
+        },
+        "type": 1
+    },
+    {
+        "email": "pd@ciph3r.co",
+        "password": "$2y$10$TQXo7iYTqVeO.ojMjDIMDO74CSkyFwjZOFp9PUuAG4CYaPNsihp.q",
+        "role": "superuser",
+        "profile": {
+            "ssn": "125485264",
+            "first_name": "Paola",
+            "middle_name": "",
+            "last_name": "Duran",
+            "sex": "F",
+            "date_of_birth": "1990-04-01"
+        },
+        "type": 1
     }
 ]

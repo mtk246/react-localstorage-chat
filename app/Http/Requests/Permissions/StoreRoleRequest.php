@@ -6,6 +6,7 @@ namespace App\Http\Requests\Permissions;
 
 use App\Http\Casts\Permissions\StoreMembershipWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
+use App\Rules\RoleTypeRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -29,6 +30,7 @@ final class StoreRoleRequest extends FormRequest
             'name' => 'required|string',
             'note' => 'nullable|string',
             'permissions' => 'required|array|exists:permissions,id',
+            'type' => ['required', 'integer', new RoleTypeRule()],
         ];
     }
 }

@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             BillClassificationSeeder::class,
             ConditionCodeSeeder::class,
             DiagnosisRelatedGroupSeeder::class,
+            ReportSeeder::class,
         ];
 
         if ('production' !== env('APP_ENV', 'local')) {

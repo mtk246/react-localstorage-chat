@@ -32,7 +32,9 @@ final class UserResource extends JsonResource
             'language' => $this->resource->language,
             'last_modified' => $this->resource->last_modified,
             'type' => $this->resource->type->value,
-            'roles' => RoleResource::collection($this->resource->roles),
+            'roles' => $this->resource->roles
+                ? RoleResource::collection($this->resource->roles)
+                : null,
             'billing_company_id' => $this->resource->billing_company_id,
             'billing_companies' => $this->resource->billingCompanies
                 ->map(function ($model) {

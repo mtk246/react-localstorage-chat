@@ -6,7 +6,9 @@ use App\Http\Controllers\BillingCompany\BillingCompanyController;
 use App\Http\Controllers\BillingCompany\KeyboardShortcutController;
 use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
+use App\Http\Controllers\Reports\PresetsController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Tableau\AuthController;
@@ -57,6 +59,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/search', [\App\Http\Controllers\UserController::class, 'search']);
         Route::post('/', [\App\Http\Controllers\UserController::class, 'createUser']);
         Route::get('/', [\App\Http\Controllers\UserController::class, 'getAllUsers'])->middleware(['auth:api']);
+        Route::resource('{user}/permissions', \App\Http\Controllers\User\PermissionResource::class)->only(['index', 'update', 'destroy'])->middleware(['auth:api']);
         Route::get('{user}', [\App\Http\Controllers\UserController::class, 'getOneUser'])->middleware(['auth:api']);
         Route::post('send-email-rescue-pass', [\App\Http\Controllers\UserController::class, 'sendEmailRescuePass']);
         Route::post('recovery-user', [\App\Http\Controllers\UserController::class, 'recoveryUser']);
@@ -76,7 +79,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::post('update-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->middleware(['auth:api']);
     });
 
+    Route::get('permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'getPermissions'])->middleware('auth:api');
     Route::put('roles/{role}/permissions', [\App\Http\Controllers\Permissions\RoleResource::class, 'updatePermissions'])->middleware('auth:api');
+    Route::get('roles/types', [\App\Http\Controllers\Permissions\RoleResource::class, 'getTypes'])->middleware('auth:api');
     Route::resource('roles', \App\Http\Controllers\Permissions\RoleResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->middleware('auth:api');
 
     /*Route::prefix('permission')->middleware('auth:api')->group(function () {
@@ -348,6 +353,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::patch('/{patient_id}/edit-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'editPolicy']);
         Route::get('/{patient_id}/get-policy/{policy_id}', [\App\Http\Controllers\PatientController::class, 'getPolicy']);
         Route::get('/{patient_id}/get-policies', [\App\Http\Controllers\PatientController::class, 'getPolicies']);
+        Route::get('/{patient}/get-list-policies', [\App\Http\Controllers\PatientController::class, 'getListPolicies']);
     });
 
     Route::prefix('taxonomy')->middleware([
@@ -470,14 +476,19 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::get('/get-all-server', [\App\Http\Controllers\ClaimBatchController::class, 'getServerAll']);
             Route::get('/get-all-server-claims', [\App\Http\Controllers\ClaimBatchController::class, 'getServerClaims']);
             Route::get('show-batch-preview/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatch']);
+            Route::get('show-batch-report/{id}', [\App\Http\Controllers\ClaimPreviewController::class, 'showBatchReport']);
+            Route::get('show-response-preview', [\App\Http\Controllers\ClaimPreviewController::class, 'showResponses']);
             Route::get('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'getOneClaimBatch']);
             Route::post('/', [\App\Http\Controllers\ClaimBatchController::class, 'createBatch']);
             Route::put('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'updateBatch']);
             Route::delete('/{id}', [\App\Http\Controllers\ClaimBatchController::class, 'deleteBatch']);
             Route::patch('/submit-to-clearing-house/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'submitToClearingHouse']);
+            Route::patch('/confirm-shipping/{batch}', [\App\Http\Controllers\ClaimBatchController::class, 'confirmShipping']);
         });
 
         Route::get('/get-list-code-values', [\App\Http\Controllers\ClaimController::class, 'getListCodeValues']);
+        Route::get('/get-list-department-responsibilities', [\App\Http\Controllers\ClaimController::class, 'getListDepartmentresponsibilities']);
+        Route::get('/get-list-insurance-policies/{claim}', [\App\Http\Controllers\ClaimController::class, 'getListInsurancePolicies']);
         Route::get('/get-list-claim-services', [\App\Http\Controllers\ClaimController::class, 'getListClaimServices']);
         Route::get('/get-list-type-of-services', [\App\Http\Controllers\ClaimController::class, 'getListTypeOfServices']);
         Route::get('/get-list-place-of-services', [\App\Http\Controllers\ClaimController::class, 'getListPlaceOfServices']);
@@ -515,8 +526,8 @@ Route::prefix('v1')/* ->middleware('audit') */
 
         Route::patch('/change-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'changeStatus']);
         Route::patch('/update-note-current-status/{id}', [\App\Http\Controllers\ClaimController::class, 'updateNoteCurrentStatus']);
-        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'AddNoteCurrentStatus']);
-        Route::patch('/add-check-status-claim/{id}', [\App\Http\Controllers\ClaimController::class, 'AddCheckStatus']);
+        Route::patch('/add-note-current-status/{claim}', [\App\Http\Controllers\ClaimController::class, 'addNoteCurrentStatus']);
+        Route::patch('/add-tracking-claim/{claim}', [\App\Http\Controllers\ClaimController::class, 'addTrackingClaim']);
     });
 
     Route::prefix('claim-sub-status')->middleware([
@@ -544,6 +555,24 @@ Route::prefix('v1')/* ->middleware('audit') */
         ]);
     });
 
+    Route::prefix('denial')->middleware([
+        'auth:api',
+        // 'role:superuser|biller|billingmanager',
+    ])->group(function () {
+        Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
+        Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
+        Route::post('/', [DenialController::class, 'createDenialTracking']);
+        Route::put('/', [DenialController::class, 'updateDenialTracking']);
+
+        Route::prefix('/refile')->middleware([
+            'auth:api',
+            // 'role:superuser|biller|billingmanager',
+        ])->group(function () {
+            Route::post('/', [DenialController::class, 'createDenialRefile']);
+            Route::put('/', [DenialController::class, 'updateDenialRefile']);
+        });
+    });
+
     Route::prefix('tableau')->middleware([
         'auth:api',
         // 'role:superuser|billingmanager',
@@ -557,6 +586,9 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function () {
         Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
         Route::get('/reports/types', [ReportReSource::class, 'types']);
+        Route::post('reports/records', [ReportReSource::class, 'records']);
+        Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
+        Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
@@ -564,4 +596,5 @@ Route::prefix('v1')/* ->middleware('audit') */
     Route::get('/search/{query}', [SearchController::class, 'search'])->middleware('auth:api')->name('search');
     Route::get('npi/{npi}', [\App\Http\Controllers\ApiController::class, 'getNpi']);
     Route::post('usps', [\App\Http\Controllers\ApiController::class, 'getZipCode']);
+    Route::get('roket/token', [\App\Http\Controllers\RocketChatController::class, 'getToken']);
 });

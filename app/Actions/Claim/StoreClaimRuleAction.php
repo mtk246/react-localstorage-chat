@@ -14,7 +14,15 @@ final class StoreClaimRuleAction
     public function invoke(StoreRulesWrapper $rulesWrapper): RuleResource
     {
         return DB::transaction(function () use ($rulesWrapper) {
-            return new RuleResource(Rules::query()->create($rulesWrapper->getRuleData()));
+            $rule = Rules::query()->create($rulesWrapper->getRuleData());
+
+            if ($rulesWrapper->hasResponsibilities()) {
+                $rulesWrapper->getResponsibilities()->each(function ($responsibility) use ($rule) {
+                    $rule->typesOfResponsibilities()->attach($responsibility);
+                });
+            }
+
+            return new RuleResource($rule);
         });
     }
 }

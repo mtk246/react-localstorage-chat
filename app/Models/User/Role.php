@@ -34,9 +34,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
  * @property \Illuminate\Database\Eloquent\Collection<int, Membership> $memberships
  * @property int|null $memberships_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
  * @property int|null $permissions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, User> $users
  * @property int|null $users_count
@@ -65,7 +65,14 @@ final class Role extends Model implements Auditable
     use AuditableTrait;
 
     /** @var array */
-    protected $fillable = ['name', 'slug', 'description', 'billing_company_id', 'level'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'billing_company_id',
+        'level',
+        'type',
+    ];
 
     /** @var array<string, string> */
     protected $casts = [

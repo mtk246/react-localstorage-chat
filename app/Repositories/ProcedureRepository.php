@@ -694,14 +694,17 @@ class ProcedureRepository
                     }])
                     ->get()
                     ->map(function ($procedure) use ($company_id) {
+                        $medication = $procedure?->companyServices
+                            ->firstWhere('company_id', $company_id)?->medication ?? null;
+
                         return [
                             'id' => $procedure->id,
                             'name' => $procedure->code,
                             'description' => $procedure->description,
                             'price' => (float) $procedure->companyServices
                                 ->firstWhere('company_id', $company_id)?->price ?? 0,
-                            'is_medication' => isset($procedure?->companyServices
-                            ->firstWhere('company_id', $company_id)?->medication),
+                            'units_limit' => $medication?->units_limit ? (int) $medication?->units_limit : null,
+                            'is_medication' => isset($medication),
                         ];
                     })
                     ->sortByDesc('price')

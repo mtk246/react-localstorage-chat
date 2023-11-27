@@ -203,7 +203,7 @@ class Facility extends Model implements Auditable
      */
     public function billClassifications(): BelongsToMany
     {
-        return $this->belongsToMany(BillClassification::class);
+        return $this->belongsToMany(BillClassification::class)->withPivot('bill_classifications');
     }
 
     /**

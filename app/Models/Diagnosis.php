@@ -27,7 +27,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $end_date
  * @property bool $injury_date_required
  * @property DiagnosesType|null $type
- * @property mixed|null $clasifications
+ * @property |null $clasifications
  * @property string|null $description_long
  * @property string|null $age
  * @property string|null $age_end

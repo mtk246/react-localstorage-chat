@@ -16,7 +16,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * App\Models\HealthProfessionalType.
  *
  * @property int $id
- * @property mixed $type
+ * @property $type
  * @property int|null $health_professional_id
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
