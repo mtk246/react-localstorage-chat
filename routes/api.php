@@ -9,7 +9,6 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
 use App\Http\Controllers\Payments\BatchResource;
-use App\Http\Controllers\Payments\PaymentClaimResource;
 use App\Http\Controllers\Reports\PresetsController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
@@ -602,9 +601,10 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/sources', [BatchResource::class, 'getSources'])->name('payments.sources');
         Route::get('/methods', [BatchResource::class, 'getMethods'])->name('payments.methods');
         Route::get('/eob/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eob.show');
+        Route::get('/batch/{batch}/close', [BatchResource::class, 'close'])->name('batch.close');
+        Route::post('/batch/{batch}/claims', [BatchResource::class, 'storeClaims'])->name('batch.claims');
+        Route::post('/batch/{batch}/services', [BatchResource::class, 'storeServices'])->name('batch.services');
         Route::resource('batch', BatchResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->name('batch', 'payments.batch');
-        Route::resource('batch.claims', PaymentClaimResource::class)->only(['index', 'update'])->name('claims', 'payments.claims');
-        Route::resource('batch.services', PaymentClaimResource::class)->only(['index', 'update'])->name('services', 'payments.services');
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');
