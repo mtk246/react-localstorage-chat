@@ -13,9 +13,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Payments\StoreBatchRequest;
 use App\Actions\Payments\AddClaimsToBachAction;
 use App\Actions\Payments\AddServicesToBachAction;
+use App\Enums\Payments\BatchStateType;
 use App\Http\Requests\Payments\AddClaimToBatchRequest;
 use App\Http\Requests\Payments\AddServicesToBatchRequest;
-use App\Http\Resources\Enums\ColorTypeResource;
+use App\Http\Resources\Enums\ColorsTypeResource;
 use App\Http\Resources\Enums\EnumResource;
 use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\Payments\BatchResource as BatchApiResource;
@@ -54,7 +55,7 @@ final class BatchResource extends Controller
     public function getStates(): JsonResponse
     {
         return response()->json(
-            new EnumResource(collect(MethodType::cases()), ColorTypeResource::class),
+            new EnumResource(collect(BatchStateType::cases()), ColorsTypeResource::class),
         );
     }
 
