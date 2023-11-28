@@ -8,6 +8,7 @@ use App\Enums\User\UserType;
 use App\Events\User\UpdateEvent;
 use App\Models\BillingCompany\Membership;
 use App\Models\Permissions\Permission;
+use App\Models\Reports\Preset;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Database\Eloquent\Casts\Attribute;

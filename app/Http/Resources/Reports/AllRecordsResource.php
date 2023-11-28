@@ -31,10 +31,8 @@ final class AllRecordsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'success' => true,
-            'message' => 'List successfully.',
             'data' => $this->resource,
-            'colums' => new ColumnsReportResource($this->resource, $this->module),
+            'columns' => new ColumnsReportResource($this->resource, $this->module),
         ];
     }
 }

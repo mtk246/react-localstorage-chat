@@ -6,6 +6,7 @@ namespace App\Models\Claims;
 
 use App\Models\BillingCompany;
 use App\Models\Company;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -207,5 +208,75 @@ final class ClaimBatch extends Model implements Auditable
                 'roles' => $user->roles()?->get(['name'])->pluck('name'),
             ];
         }
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query, $search) {
+            return $query
+                ->where(function ($query) use ($search) {
+                    $this->searchByBatch($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByCompany($query, $search);
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $this->searchByStatus($query, $search);
+                });
+        });
+    }
+
+    protected function searchByBatch($query, $search)
+    {
+        $isDate = true;
+        $formattedDate = '';
+        try {
+            $formattedDate = Carbon::createFromFormat('m/d/Y', $search)?->format('Y-m-d');
+        } catch (\Throwable $th) {
+            $isDate = false;
+        }
+
+        $query->where('code', 'LIKE', "%$search%")
+            ->orWhereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")])
+            ->orWhere(function ($query) use ($formattedDate, $isDate) {
+                $query->when($isDate, function ($query) use ($formattedDate) {
+                    $query->where('shipping_date', 'LIKE', "%$formattedDate%");
+                });
+            })
+            ->orWhere(function ($query) use ($search) {
+                $query->when(in_array($search, ['1500', 'UB04']), function ($query) use ($search) {
+                    $query->whereHas('claims', function ($q) use ($search) {
+                        $subSearch = match ($search) {
+                            '1500' => 1,
+                            'UB04' => 2,
+                        };
+                        $q->where('type', $subSearch);
+                    });
+                });
+            })
+            ->orWhere(function ($query) use ($search) {
+                $query->when(in_array(strtoupper($search), ['P', 'E']), function ($query) use ($search) {
+                    $query->where('fake_transmission', match (strtoupper($search)) {
+                        'P' => true,
+                        'E' => false,
+                    });
+                });
+            });
+    }
+
+    protected function searchByCompany($query, $search)
+    {
+        $query->with(['company'])
+            ->whereHas('company', function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', [strtolower("%$search%")]);
+            });
+    }
+
+    protected function searchByStatus($query, $search)
+    {
+        $query->with(['claimBatchStatus'])
+            ->whereHas('claimBatchStatus', function ($q) use ($search) {
+                $q->whereRaw('LOWER(status) LIKE ?', [strtolower("%$search%")]);
+            });
     }
 }
