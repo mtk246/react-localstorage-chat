@@ -36,10 +36,11 @@ final class ClaimResource extends JsonResource
                     $patient->middle_name,
                 ])->filter()->join(' '),
             'insurance_plan' => $this->resource
-                ->insurancePolicies
+                ->insurancePolicies()
+                ->wherePivot('order', 1)
                 ->first()
-                ->insurancePlan
-                ->name,
+                ?->insurancePlan
+                ?->name,
             'billed_amount' => $this->resource->billed_amount,
             'paid_amount' => $this->resource->paid_amount,
             'services' => $this->resource->service->services->map(function ($service) {
