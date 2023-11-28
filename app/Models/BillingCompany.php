@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Reports\Preset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -139,9 +140,9 @@ class BillingCompany extends Model implements Auditable
         return $this->belongsToMany(User::class)->withPivot('status')->withTimestamps();
     }
 
-    public function presents(): HasMany
+    public function presets(): HasMany
     {
-        return $this->hasMany(Present::class);
+        return $this->hasMany(Preset::class);
     }
 
     /**
