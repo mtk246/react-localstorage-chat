@@ -10,7 +10,7 @@ return [
         'length' => 30,
         'description' => 'Company Name',
         'value' => [
-            'demographicInformation.company.name',
+            ['name' => 'main company name', 'id' => 'demographicInformation.company.name'],
         ],
         'values' => [
             'common' => [
@@ -30,14 +30,12 @@ return [
         'glue' => ' ',
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:address|1',
-            'companyAddress:apt_suite|1',
+            ['name' => 'main company address', 'id' => 'companyAddress:address|1'],
+            ['name' => 'main company apt suite', 'id' => 'companyAddress:apt_suite|1'],
         ],
         'values' => [
             'common' => [
                 ['name' => 'main company name', 'id' => 'demographicInformation.company.name'],
-                ['name' => 'main company apt suite', 'id' => 'companyAddress:apt_suite|1'],
-                ['name' => 'main company address', 'id' => 'companyAddress:address|1'],
                 ['name' => 'main company city', 'id' => 'companyAddress:city|1'],
                 ['name' => 'main company state', 'id' => 'companyAddress:state|1'],
                 ['name' => 'main company zip', 'id' => 'companyAddress:zip|1'],
@@ -51,11 +49,11 @@ return [
         'length' => 24,
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:city|1',
-            '|, ',
-            'companyAddress:state_code|1',
-            '| ',
-            'companyAddress:zip|1',
+            ['name' => 'main company city', 'id' => 'companyAddress:city|1'],
+            ['name' => ', ', 'id' => '|, '],
+            ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|1'],
+            ['name' => ' ', 'id' => '| '],
+            ['name' => 'main company zip', 'id' => 'companyAddress:zip|1'],
         ],
         'values' => [
             'common' => [
@@ -75,11 +73,12 @@ return [
         'glue' => ' ',
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:other_country|1',
-            'companyContact:phone_fax|0',
+            ['name' => 'Other Country name', 'id' => 'companyAddress:other_country|1'],
+            ['name' => 'secondary company phone', 'id' => 'companyContact:phone_fax|0'],
         ],
         'values' => [
             'common' => [
+                ['name' => 'main company other Country name', 'id' => 'companyAddress:other_country|1'],
                 ['name' => 'main company name', 'id' => 'demographicInformation.company.name'],
                 ['name' => 'main company apt suite', 'id' => 'companyAddress:apt_suite|1'],
                 ['name' => 'main company address', 'id' => 'companyAddress:address|1'],
@@ -96,7 +95,7 @@ return [
         'length' => 30,
         'description' => 'Company Name',
         'value' => [
-            'demographicInformation.company.name',
+            ['name' => 'secondary company name', 'id' => 'demographicInformation.company.name'],
         ],
         'values' => [
             'common' => [
@@ -116,8 +115,8 @@ return [
         'glue' => ' ',
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:address|3',
-            'companyAddress:apt_suite|3',
+            ['name' => 'secondary company address', 'id' => 'companyAddress:address|3'],
+            ['name' => 'secondary company apt suite', 'id' => 'companyAddress:apt_suite|3'],
         ],
         'values' => [
             'common' => [
@@ -137,11 +136,11 @@ return [
         'length' => 24,
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:city|3',
-            '|, ',
-            'companyAddress:state_code|3',
-            '| ',
-            'companyAddress:zip|3',
+            ['name' => 'secondary company city', 'id' => 'companyAddress:city|3'],
+            ['name' => ', ', 'id' => '|, '],
+            ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|3'],
+            ['name' => ' ', 'id' => '| '],
+            ['name' => 'secondary company zip', 'id' => 'companyAddress:zip|3'],
         ],
         'values' => [
             'common' => [
@@ -161,11 +160,12 @@ return [
         'glue' => ' ',
         'description' => 'Company Address',
         'value' => [
-            'companyAddress:other_country|3',
-            'companyContact:phone_fax|3',
+            ['name' => 'secondary company other Country name', 'id' => 'companyAddress:other_country|3'],
+            ['name' => 'secondary company phone', 'id' => 'companyContact:phone_fax|3'],
         ],
         'values' => [
             'common' => [
+                ['name' => 'secondary company other Country name', 'id' => 'companyAddress:other_country|3'],
                 ['name' => 'secondary company name', 'id' => 'demographicInformation.company.name'],
                 ['name' => 'secondary company apt suite', 'id' => 'companyAddress:apt_suite|3'],
                 ['name' => 'secondary company address', 'id' => 'companyAddress:address|3'],
@@ -182,7 +182,7 @@ return [
         'length' => 30,
         'description' => 'Patient name',
         'value' => [
-            'demographicInformation.patient.code',
+            ['name' => 'Patient code', 'id' => 'demographicInformation.patient.code'],
         ],
         'values' => [
             'common' => [
@@ -195,7 +195,7 @@ return [
         'length' => 30,
         'description' => 'medical number',
         'value' => [
-            'patientCompany:med_num',
+            ['name' => 'patient medical number', 'id' => 'patientCompany:med_num'],
         ],
         'values' => [
             'common' => [
@@ -208,9 +208,9 @@ return [
         'length' => 30,
         'description' => 'Bill Classification',
         'value' => [
-            '|0',
-            'demographicInformation.bill_classification',
-            'patientInformation.billClassification.code',
+            ['name' => '0', 'id' => '|0'],
+            ['name' => 'bill classification', 'id' => 'demographicInformation.bill_classification'],
+            ['name' => 'bill classification code', 'id' => 'patientInformation.billClassification.code'],
         ],
         'values' => [
             'common' => [
@@ -224,7 +224,7 @@ return [
         'length' => 30,
         'description' => 'company ein',
         'value' => [
-            'company:ein',
+            ['name' => 'company ein', 'id' => 'company:ein'],
         ],
         'values' => [
             'common' => [
@@ -236,7 +236,7 @@ return [
     '6a' => [
         'type' => RuleType::DATE->value,
         'description' => 'service from',
-        'value' => 'service.from|mdY',
+        'value' => ['name' => 'mdY', 'id' => 'service.from|mdY'],
         'values' => [
             'common' => [
                 ['name' => 'm/d/y', 'id' => 'service.from|m/d/y'],
@@ -248,7 +248,7 @@ return [
     '6b' => [
         'type' => RuleType::DATE->value,
         'description' => 'service to',
-        'value' => 'service.to|mdY',
+        'value' => ['name' => 'mdY', 'id' => 'service.to|mdY'],
         'values' => [
             'common' => [
                 ['name' => 'm/d/y', 'id' => 'service.to|m/d/y'],
@@ -269,7 +269,7 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Patient code',
         'value' => [
-            'demographicInformation.patient.code',
+            ['name' => 'patient code', 'id' => 'demographicInformation.patient.code'],
         ],
         'values' => [
             'common' => [
@@ -281,9 +281,9 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Patient name',
         'value' => [
-            'patientProfile:last_name',
-            'patientProfile:first_name',
-            'patientProfile:middle_name',
+            ['name' => 'patient last name', 'id' => 'patientProfile:last_name'],
+            ['name' => 'patient first name', 'id' => 'patientProfile:first_name'],
+            ['name' => 'patient middle name', 'id' => 'patientProfile:middle_name'],
         ],
         'values' => [
             'common' => [
@@ -298,7 +298,7 @@ return [
         'length' => 28,
         'description' => 'Patient Address',
         'value' => [
-            'patientAddress:address',
+            ['name' => 'patient address', 'id' => 'patientAddress:address'],
         ],
         'values' => [
             'common' => [
@@ -314,7 +314,7 @@ return [
         'length' => 24,
         'description' => 'Patient City',
         'value' => [
-            'patientAddress:city',
+            ['name' => 'patient city', 'id' => 'patientAddress:city'],
         ],
         'values' => [
             'common' => [
@@ -330,7 +330,7 @@ return [
         'length' => 3,
         'description' => 'Patient State',
         'value' => [
-            'patientAddress:state',
+            ['name' => 'patient state', 'id' => 'patientAddress:state'],
         ],
         'values' => [
             'common' => [
@@ -346,7 +346,7 @@ return [
         'length' => 12,
         'description' => 'Patient Zip',
         'value' => [
-            'patientAddress:zip',
+            ['name' => 'patient zip', 'id' => 'patientAddress:zip'],
         ],
         'values' => [
             'common' => [
@@ -375,7 +375,7 @@ return [
         'type' => RuleType::DATE->value,
         'length' => 30,
         'description' => 'patient date of birth',
-        'value' => 'demographicInformation.patient.profile.date_of_birth|mdY',
+        'value' => ['name' => 'mdY', 'id' => 'demographicInformation.patient.profile.date_of_birth|mdY'],
         'values' => [
             'common' => [
                 ['name' => 'm/d/y', 'id' => 'demographicInformation.patient.profile.date_of_birth|m/d/y'],
@@ -388,7 +388,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 27,
         'description' => 'Patient sex',
-        'value' => 'patientProfile:sex',
+        'value' => ['name' => 'sex', 'id' => 'patientProfile:sex'],
         'values' => [
             'common' => [
                 ['name' => 'sex', 'id' => 'patientProfile:sex'],
@@ -399,7 +399,7 @@ return [
         'type' => RuleType::DATE->value,
         'length' => 30,
         'description' => 'Patient Admission Date',
-        'value' => 'patientInformation.admission_date|mdY',
+        'value' => ['name' => 'mdY', 'id' => 'patientInformation.admission_date|mdY'],
         'values' => [
             'common' => [
                 ['name' => 'm/d/y', 'id' => 'patientInformation.admission_date|m/d/y'],
@@ -412,7 +412,7 @@ return [
         'type' => RuleType::DATE->value,
         'length' => 30,
         'description' => 'Patient Admission Time',
-        'value' => 'patientInformation.admission_time|H|H:m:s',
+        'value' => ['name' => 'H:m:s', 'id' => 'patientInformation.admission_time|H|H:m:s'],
         'values' => [
             'common' => [
                 ['name' => 's:m:H', 'id' => 'patientInformation.admission_time|H|s:m:H'],
@@ -425,7 +425,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Admission Type',
-        'value' => 'patientInformation.admissionType.code',
+        'value' => ['name' => 'code', 'id' => 'patientInformation.admissionType.code'],
         'values' => [
             'common' => [
                 ['name' => 'code', 'id' => 'patientInformation.admissionType.code'],
@@ -436,7 +436,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Admission Source',
-        'value' => 'patientInformation.admissionSource.code',
+        'value' => ['name' => 'code', 'id' => 'patientInformation.admissionSource.code'],
         'values' => [
             'common' => [
                 ['name' => 'code', 'id' => 'patientInformation.admissionSource.code'],
@@ -447,7 +447,7 @@ return [
         'type' => RuleType::DATE->value,
         'length' => 30,
         'description' => 'Patient Discharge Time',
-        'value' => 'patientInformation.discharge_time|H|H:m:s',
+        'value' => ['name' => 'H:m:s', 'id' => 'patientInformation.discharge_time|H|H:m:s'],
         'values' => [
             'common' => [
                 ['name' => 's:m:H', 'id' => 'patientInformation.discharge_time|H|s:m:H'],
@@ -460,7 +460,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Status',
-        'value' => 'patientInformation.patientStatus.code',
+        'value' => ['name' => 'status code', 'id' => 'patientInformation.patientStatus.code'],
         'values' => [
             'common' => [
                 ['name' => 'status code', 'id' => 'patientInformation.patientStatus.code'],
@@ -471,7 +471,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:0',
+        'value' => ['name' => 'condition code a', 'id' => 'patientConditionCodes:0'],
         'values' => [
             'common' => [
                 ['name' => 'condition code a', 'id' => 'patientConditionCodes:0'],
@@ -482,7 +482,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:1',
+        'value' => ['name' => 'condition code 1', 'id' => 'patientConditionCodes:1'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 1', 'id' => 'patientConditionCodes:1'],
@@ -493,7 +493,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:2',
+        'value' => ['name' => 'condition code 2', 'id' => 'patientConditionCodes:2'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 2', 'id' => 'patientConditionCodes:2'],
@@ -504,7 +504,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:3',
+        'value' => ['name' => 'condition code 3', 'id' => 'patientConditionCodes:3'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 3', 'id' => 'patientConditionCodes:3'],
@@ -515,7 +515,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:4',
+        'value' => ['name' => 'condition code 4', 'id' => 'patientConditionCodes:4'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 4', 'id' => 'patientConditionCodes:4'],
@@ -526,7 +526,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:5',
+        'value' => ['name' => 'condition code 5', 'id' => 'patientConditionCodes:5'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 5', 'id' => 'patientConditionCodes:5'],
@@ -537,7 +537,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:6',
+        'value' => ['name' => 'condition code 6', 'id' => 'patientConditionCodes:6'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 6', 'id' => 'patientConditionCodes:6'],
@@ -548,7 +548,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:7',
+        'value' => ['name' => 'condition code 7', 'id' => 'patientConditionCodes:7'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 7', 'id' => 'patientConditionCodes:7'],
@@ -559,7 +559,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:8',
+        'value' => ['name' => 'condition code 8', 'id' => 'patientConditionCodes:8'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 8', 'id' => 'patientConditionCodes:8'],
@@ -570,7 +570,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:9',
+        'value' => ['name' => 'condition code 9', 'id' => 'patientConditionCodes:9'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 9', 'id' => 'patientConditionCodes:9'],
@@ -581,7 +581,7 @@ return [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Patient Condition Codes',
-        'value' => 'patientConditionCodes:10',
+        'value' => ['name' => 'condition code 10', 'id' => 'patientConditionCodes:10'],
         'values' => [
             'common' => [
                 ['name' => 'condition code 10', 'id' => 'patientConditionCodes:10'],
@@ -870,7 +870,7 @@ return [
     '38a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'name',
-        'value' => 'HigherInsuranceCompany:name',
+        'value' => ['name' => 'name', 'id' => 'HigherInsuranceCompany:name'],
         'values' => [
             'common' => [
                 ['name' => 'name', 'id' => 'HigherInsuranceCompany:name'],
@@ -884,7 +884,7 @@ return [
     '38b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Address 1',
-        'value' => 'HigherInsuranceCompany:address',
+        'value' => ['name' => 'address', 'id' => 'HigherInsuranceCompany:address'],
         'values' => [
             'common' => [
                 ['name' => 'name', 'id' => 'HigherInsuranceCompany:name'],
@@ -899,11 +899,11 @@ return [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Address 2',
         'value' => [
-            'HigherInsuranceCompany:city',
-            '|, ',
-            'HigherInsuranceCompany:state',
-            '| ',
-            'HigherInsuranceCompany:zip',
+            ['name' => 'city', 'id' => 'HigherInsuranceCompany:city'],
+            ['name' => ', ', 'id' => '|, '],
+            ['name' => 'state', 'id' => 'HigherInsuranceCompany:state'],
+            ['name' => ' ', 'id' => '| '],
+            ['name' => 'zip', 'id' => 'HigherInsuranceCompany:zip'],
         ],
         'values' => [
             'common' => [
@@ -1134,7 +1134,7 @@ return [
     '42' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - revenue code',
-        'value' => 'claimServices:revenue_code',
+        'value' => ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1154,7 +1154,7 @@ return [
     '43' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - revenue code description',
-        'value' => 'claimServices:revenue_code_description',
+        'value' => ['name' => 'revenue code description', 'id' => 'claimServices:revenue_code_description'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1174,7 +1174,7 @@ return [
     '44' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - procedure code',
-        'value' => 'claimServices:procedure_code',
+        'value' => ['name' => 'procedure code', 'id' => 'claimServices:procedure_code'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1194,7 +1194,7 @@ return [
     '45' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - start date',
-        'value' => 'claimServices:start_date',
+        'value' => ['name' => 'start date', 'id' => 'claimServices:start_date'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1214,7 +1214,7 @@ return [
     '46' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - days or units',
-        'value' => 'claimServices:days_or_units',
+        'value' => ['name' => 'days or units', 'id' => 'claimServices:days_or_units'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1234,7 +1234,7 @@ return [
     '47' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - total charge',
-        'value' => 'claimServices:total_charge',
+        'value' => ['name' => 'total charge', 'id' => 'claimServices:total_charge'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1254,7 +1254,7 @@ return [
     '48' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'claim services - non covered charges',
-        'value' => 'claimServices:non_covered_charges',
+        'value' => ['name' => 'non covered charges', 'id' => 'claimServices:non_covered_charges'],
         'values' => [
             'common' => [
                 ['name' => 'revenue code', 'id' => 'claimServices:revenue_code'],
@@ -1333,7 +1333,7 @@ return [
     '50' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'Insurance Company - Name',
-        'value' => 'insuranceCompanies:name',
+        'value' => ['name' => 'name', 'id' => 'insuranceCompanies:name'],
         'values' => [
             'common' => [
                 ['name' => 'name', 'id' => 'insuranceCompanies:name'],
@@ -1344,7 +1344,7 @@ return [
     '51' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'Insurance Policies - Payer ID',
-        'value' => 'InsurancePolicies:payer_id',
+        'value' => ['name' => 'insurance policies payer_id', 'id' => 'InsurancePolicies:payer_id'],
         'values' => [
             'common' => [
                 ['name' => 'insurance company name', 'id' => 'insuranceCompanies:name'],
@@ -1358,7 +1358,7 @@ return [
     '52' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'Insurance Policies - Release Info',
-        'value' => 'insurancePolicies:release_info',
+        'value' => ['name' => 'insurance policies release info', 'id' => 'insurancePolicies:release_info'],
         'values' => [
             'common' => [
                 ['name' => 'insurance company name', 'id' => 'insuranceCompanies:name'],
@@ -1372,7 +1372,7 @@ return [
     '53' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'Insurance Policies - Assign Benefits',
-        'value' => 'insurancePolicies:assign_benefits',
+        'value' => ['name' => 'insurance policies assing benefits', 'id' => 'insurancePolicies:assign_benefits'],
         'values' => [
             'common' => [
                 ['name' => 'insurance company name', 'id' => 'insuranceCompanies:name'],
@@ -1386,7 +1386,7 @@ return [
     '56' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'company - npi',
-        'value' => 'company:npi',
+        'value' => ['name' => 'npi', 'id' => 'company:npi'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'company:npi'],
@@ -1397,7 +1397,7 @@ return [
     '57a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'company - ein',
-        'value' => 'company:ein',
+        'value' => ['name' => 'ein', 'id' => 'company:ein'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'company:npi'],
@@ -1410,8 +1410,8 @@ return [
         'glue' => ', ',
         'description' => 'insurance policy subscriber - name',
         'value' => [
-            'insurancePoliciesSubscriber:last_name',
-            'insurancePoliciesSubscriber:first_name',
+            ['name' => 'subscriber last name', 'id' => 'insurancePoliciesSubscriber:last_name'],
+            ['name' => 'subscriber first name', 'id' => 'insurancePoliciesSubscriber:first_name'],
         ],
         'values' => [
             'common' => [
@@ -1427,7 +1427,7 @@ return [
     '59' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'insurance policy subscriber - relationship code',
-        'value' => 'insurancePoliciesSubscriber:relationship_code',
+        'value' => ['name' => 'subscriber relationship code', 'id' => 'insurancePoliciesSubscriber:relationship_code'],
         'values' => [
             'common' => [
                 ['name' => 'subscriber last name', 'id' => 'insurancePoliciesSubscriber:last_name'],
@@ -1442,7 +1442,7 @@ return [
     '60' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'insurance policy - policy number',
-        'value' => 'insurancePolicies:policy_number',
+        'value' => ['name' => 'policy number', 'id' => 'insurancePolicies:policy_number'],
         'values' => [
             'common' => [
                 ['name' => 'subscriber last name', 'id' => 'insurancePoliciesSubscriber:last_name'],
@@ -1457,7 +1457,7 @@ return [
     '61' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'insurance policy - plan name',
-        'value' => 'insurancePolicies:plan_name',
+        'value' => ['name' => 'plan name', 'id' => 'insurancePolicies:plan_name'],
         'values' => [
             'common' => [
                 ['name' => 'subscriber last name', 'id' => 'insurancePoliciesSubscriber:last_name'],
@@ -1472,7 +1472,7 @@ return [
     '62' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'insurance policy - group number',
-        'value' => 'insurancePolicies:group_number',
+        'value' => ['name' => 'group number', 'id' => 'insurancePolicies:group_number'],
         'values' => [
             'common' => [
                 ['name' => 'subscriber last name', 'id' => 'insurancePoliciesSubscriber:last_name'],
@@ -1488,7 +1488,7 @@ return [
         'type' => RuleType::MULTIPLE_ARRAY->value,
         'description' => 'prior authorization number',
         'value' => [
-            'demographicInformation.prior_authorization_number',
+            ['name' => 'subscriber last name', 'id' => 'demographicInformation.prior_authorization_number'],
         ],
         'values' => [
             'common' => [
@@ -1517,7 +1517,7 @@ return [
     '66' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'dx - type',
-        'value' => 'claimDiagnosisDx:type',
+        'value' => ['name' => 'dx type', 'id' => 'claimDiagnosisDx:type'],
         'values' => [
             'common' => [
                 ['name' => 'dx type', 'id' => 'claimDiagnosisDx:type'],
@@ -1530,7 +1530,7 @@ return [
     '67' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'dx - code poa',
-        'value' => 'claimDiagnosisDx:code_poa',
+        'value' => ['name' => 'dx code poa', 'id' => 'claimDiagnosisDx:code_poa'],
         'values' => [
             'common' => [
                 ['name' => 'dx type', 'id' => 'claimDiagnosisDx:type'],
@@ -1543,7 +1543,7 @@ return [
     '67l' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'diagnosis - code poa',
-        'value' => 'ClaimDiagnosis:code_poa',
+        'value' => ['name' => 'diagnosis code poa', 'id' => 'ClaimDiagnosis:code_poa'],
         'values' => [
             'common' => [
                 ['name' => 'diagnosis code poa', 'id' => 'ClaimDiagnosis:code_poa'],
@@ -1553,7 +1553,7 @@ return [
     '69' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'dx - conditional code',
-        'value' => 'claimDiagnosisDx:cond_code',
+        'value' => ['name' => 'dx conditional code', 'id' => 'claimDiagnosisDx:cond_code'],
         'values' => [
             'common' => [
                 ['name' => 'dx type', 'id' => 'claimDiagnosisDx:type'],
@@ -1566,7 +1566,7 @@ return [
     '76a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
-        'value' => 'healthProfessional:npi|76',
+        'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
@@ -1579,7 +1579,7 @@ return [
     '76b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
-        'value' => 'healthProfessional:qualifier|76',
+        'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|76'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
@@ -1592,7 +1592,7 @@ return [
     '76c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
-        'value' => 'healthProfessional:first_name|76',
+        'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|76'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
@@ -1605,7 +1605,7 @@ return [
     '76d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
-        'value' => 'healthProfessional:last_name|76',
+        'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|76'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
@@ -1618,7 +1618,7 @@ return [
     '77a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
-        'value' => 'healthProfessional:npi|77',
+        'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
@@ -1631,7 +1631,7 @@ return [
     '77b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
-        'value' => 'healthProfessional:qualifier|77',
+        'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|77'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
@@ -1644,7 +1644,7 @@ return [
     '77c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
-        'value' => 'healthProfessional:first_name|77',
+        'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|77'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
@@ -1657,7 +1657,7 @@ return [
     '77d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
-        'value' => 'healthProfessional:last_name|77',
+        'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|77'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
@@ -1670,7 +1670,7 @@ return [
     '78a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
-        'value' => 'healthProfessional:npi|78',
+        'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
@@ -1683,7 +1683,7 @@ return [
     '78b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
-        'value' => 'healthProfessional:qualifier|78',
+        'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|78'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
@@ -1696,7 +1696,7 @@ return [
     '78c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
-        'value' => 'healthProfessional:first_name|78',
+        'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|78'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
@@ -1709,7 +1709,7 @@ return [
     '78d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
-        'value' => 'healthProfessional:last_name|78',
+        'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|78'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
@@ -1722,7 +1722,7 @@ return [
     '79a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
-        'value' => 'healthProfessional:npi|79',
+        'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
@@ -1735,7 +1735,7 @@ return [
     '79b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
-        'value' => 'healthProfessional:qualifier|79',
+        'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|79'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
@@ -1748,7 +1748,7 @@ return [
     '79c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
-        'value' => 'healthProfessional:first_name|79',
+        'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|79'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
@@ -1761,7 +1761,7 @@ return [
     '79d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
-        'value' => 'healthProfessional:last_name|79',
+        'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|79'],
         'values' => [
             'common' => [
                 ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
