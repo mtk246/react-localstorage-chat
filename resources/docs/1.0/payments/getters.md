@@ -272,7 +272,8 @@
 > {success} 200 data retorned
 
 #
-```json{
+```json
+{
   "id": 16,
   "name": "test",
   "posting_date": "2015-10-05T00:00:00.000000Z",
@@ -320,82 +321,7 @@
           "insurance_plan": "Connect 1500 Gold",
           "billed_amount": "600.00",
           "paid_amount": null,
-          "services": [
-            {
-              "id": 1,
-              "claim_service_id": 1,
-              "procedure_id": 11,
-              "modifier_ids": [],
-              "diagnostic_pointers": [],
-              "from_service": "2022-07-05",
-              "to_service": "2022-07-05",
-              "price": "200",
-              "total_charge": "200",
-              "copay": "200",
-              "revenue_code_id": "11",
-              "place_of_service_id": null,
-              "type_of_service_id": null,
-              "days_or_units": "1.5",
-              "emg": null,
-              "epsdt_id": null,
-              "family_planning_id": null,
-              "created_at": "2023-11-26T18:29:29.000000Z",
-              "updated_at": "2023-11-26T18:29:29.000000Z",
-              "payment": null,
-              "modifiers": []
-            },
-            {
-              "id": 2,
-              "claim_service_id": 1,
-              "procedure_id": 15,
-              "modifier_ids": [],
-              "diagnostic_pointers": [],
-              "from_service": "2022-07-05",
-              "to_service": "2022-07-05",
-              "price": "200",
-              "total_charge": "200",
-              "copay": "200",
-              "revenue_code_id": "11",
-              "place_of_service_id": null,
-              "type_of_service_id": null,
-              "days_or_units": "1.5",
-              "emg": null,
-              "epsdt_id": null,
-              "family_planning_id": null,
-              "created_at": "2023-11-26T18:29:29.000000Z",
-              "updated_at": "2023-11-26T18:29:29.000000Z",
-              "payment": {
-                "payment_id": 1,
-                "service_id": 2,
-                "id": 1,
-                "claim_id": 3,
-                "currency": "USD",
-                "payment": "0",
-                "exp_adj": "0",
-                "remain": "0",
-                "ins_amount": "0",
-                "resp_insurance": "1",
-                "pt_resp": "0",
-                "reason": "1",
-                "denial_reason": "1",
-                "note": "as dasw wwa sw asd was awds aw sa aw",
-                "created_at": "2023-11-27T13:39:29.000000Z",
-                "updated_at": "2023-11-27T13:39:29.000000Z",
-                "adjustments": [
-                  {
-                    "id": 1,
-                    "payment_service_id": 1,
-                    "currency": "USD",
-                    "amount": "0",
-                    "adj_reason": "11",
-                    "created_at": "2023-11-27T13:39:29.000000Z",
-                    "updated_at": "2023-11-27T13:39:29.000000Z"
-                  }
-                ]
-              },
-              "modifiers": []
-            }
-          ]
+          "services": [...]
         }
       ]
     }
@@ -413,272 +339,15 @@
     "created_at": "2023-11-21T13:37:33.000000Z",
     "updated_at": "2023-11-21T13:37:33.000000Z",
     "public_note": "",
-    "last_modified": {
-      "user": "Console",
-      "roles": []
-    },
-    "taxonomies": [
-      {
-        "tax_id": "207RC0000X",
-        "name": "Internal Medicine, Cardiovascular Disease",
-        "primary": false,
-        "created_at": "2023-11-21T13:37:33.000000Z",
-        "updated_at": "2023-11-21T13:37:33.000000Z"
-      },
-      {
-        "tax_id": "207Q00000X",
-        "name": "Family Medicine",
-        "primary": false,
-        "created_at": "2023-11-21T13:37:33.000000Z",
-        "updated_at": "2023-11-21T13:37:33.000000Z"
-      }
-    ],
-    "facilities": {
-      "current_page": 1,
-      "data": [
-        {
-          "billing_company_id": null,
-          "facility_id": 1,
-          "billing_company": "",
-          "facility": "Caring Family Corp",
-          "facility_types": []
-        },
-        {
-          "billing_company_id": null,
-          "facility_id": 1,
-          "billing_company": "",
-          "facility": "Caring Family Corp",
-          "facility_types": []
-        },
-        {
-          "billing_company_id": null,
-          "facility_id": 1,
-          "billing_company": "",
-          "facility": "Caring Family Corp",
-          "facility_types": []
-        },
-        {
-          "billing_company_id": null,
-          "facility_id": 1,
-          "billing_company": "",
-          "facility": "Caring Family Corp",
-          "facility_types": []
-        }
-      ],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": 1,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": 4,
-      "total": 4
-    },
-    "services": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
-    "copays": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
-    "contract_fees": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
-    "exception_insurance_companies": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
-    "patients": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
-    "statements": {
-      "current_page": 1,
-      "data": [],
-      "first_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "from": null,
-      "last_page": 1,
-      "last_page_url": "http://localhost/api/v1/payments/batch/16?page=1",
-      "links": [
-        {
-          "url": null,
-          "label": "&laquo; Previous",
-          "active": false
-        },
-        {
-          "url": "http://localhost/api/v1/payments/batch/16?page=1",
-          "label": "1",
-          "active": true
-        },
-        {
-          "url": null,
-          "label": "Next &raquo;",
-          "active": false
-        }
-      ],
-      "next_page_url": null,
-      "path": "http://localhost/api/v1/payments/batch/16",
-      "per_page": 10,
-      "prev_page_url": null,
-      "to": null,
-      "total": 0
-    },
+    "last_modified": {...},
+    "taxonomies": [...],
+    "facilities": {...},
+    "services": {..},
+    "copays": {...},
+    "contract_fees": {...},
+    "exception_insurance_companies": {...},
+    "patients": {...},
+    "statements": {...},
     "abbreviations": [
       "NEXUS"
     ],
@@ -693,41 +362,15 @@
           "miscellaneous": "",
           "split_company_claim": false,
           "claim_format_ids": [],
-          "claim_formats": [
-            {
-              "id": 1,
-              "name": "CMS-1500 / 837P"
-            },
-            {
-              "id": 2,
-              "name": "UB-04 / 837I"
-            }
-          ],
+          "claim_formats": [...],
           "edit_name": false,
           "nickname": "",
           "abbreviation": "NEXUS",
           "private_note": "",
-          "taxonomy": [],
-          "address": {
-            "address": "1914 Northwest 84th Avenue",
-            "city": "Doral",
-            "state": "FL - Florida",
-            "zip": "331261030",
-            "country": null,
-            "apt_suite": "",
-            "created_at": "2023-11-21T13:37:33.000000Z",
-            "updated_at": "2023-11-21T13:37:33.000000Z"
-          },
+          "taxonomy": [...],
+          "address": {...},
           "payment_address": null,
-          "contact": {
-            "phone": "3052548900",
-            "fax": "3052548902",
-            "email": "info@nexus.com",
-            "mobile": "3052548900",
-            "contact_name": "",
-            "created_at": "2023-11-21T13:37:33.000000Z",
-            "updated_at": "2023-11-21T13:37:33.000000Z"
-          }
+          "contact": {...}
         }
       }
     ]
@@ -746,70 +389,10 @@
       "user": "Console",
       "roles": []
     },
-    "contact": {
-      "id": 1,
-      "phone": "7862089235",
-      "fax": "8003341041",
-      "email": "sales@mccondemand.net",
-      "billing_company_id": 1,
-      "created_at": "2023-11-21T13:36:18.000000Z",
-      "updated_at": "2023-11-21T13:36:18.000000Z",
-      "mobile": "7862089235",
-      "contactable_type": "App\\Models\\BillingCompany",
-      "contactable_id": 1,
-      "contact_name": null
-    },
-    "address": {
-      "id": 1,
-      "address": "780 Northwest Le Jeune Road",
-      "city": "Miami",
-      "state": "FL - Florida",
-      "zip": "331265540",
-      "billing_company_id": 1,
-      "created_at": "2023-11-21T13:36:18.000000Z",
-      "updated_at": "2023-11-21T13:36:18.000000Z",
-      "addressable_type": "App\\Models\\BillingCompany",
-      "addressable_id": 1,
-      "address_type_id": null,
-      "country": null,
-      "country_subdivision_code": null,
-      "apt_suite": "",
-      "state_code": "FL"
-    },
-    "contacts": [
-      {
-        "id": 1,
-        "phone": "7862089235",
-        "fax": "8003341041",
-        "email": "sales@mccondemand.net",
-        "billing_company_id": 1,
-        "created_at": "2023-11-21T13:36:18.000000Z",
-        "updated_at": "2023-11-21T13:36:18.000000Z",
-        "mobile": "7862089235",
-        "contactable_type": "App\\Models\\BillingCompany",
-        "contactable_id": 1,
-        "contact_name": null
-      }
-    ],
-    "addresses": [
-      {
-        "id": 1,
-        "address": "780 Northwest Le Jeune Road",
-        "city": "Miami",
-        "state": "FL - Florida",
-        "zip": "331265540",
-        "billing_company_id": 1,
-        "created_at": "2023-11-21T13:36:18.000000Z",
-        "updated_at": "2023-11-21T13:36:18.000000Z",
-        "addressable_type": "App\\Models\\BillingCompany",
-        "addressable_id": 1,
-        "address_type_id": null,
-        "country": null,
-        "country_subdivision_code": null,
-        "apt_suite": "",
-        "state_code": "FL"
-      }
-    ]
+    "contact": {...},
+    "address": {...},
+    "contacts": [...],
+    "addresses": [...]
   }
 }
 ```
