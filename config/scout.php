@@ -15,6 +15,7 @@ use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Patient;
+use App\Models\Payments\Batch as PaymentsBatch;
 use App\Models\Procedure;
 use App\Models\User;
 
@@ -34,6 +35,7 @@ return [
         SearchFilterType::MODIFIER->value => Modifier::class,
         SearchFilterType::USER->value => User::class,
         SearchFilterType::CLEARING_HOUSE->value => ClearingHouse::class,
+        SearchFilterType::PAYMENT_BATCH->value => PaymentsBatch::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -375,6 +377,37 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+            ],
+            PaymentsBatch::class => [
+                'filterableAttributes' => [
+                    'name',
+                    'posting_date',
+                    'currency',
+                    'amount',
+                    'status',
+                    'payments',
+                    'created_at',
+                    'updated_at',
+                    'company.name',
+                    'company.code',
+                    'company.npi',
+                    'company.ein',
+                    'company.clia',
+                    'billing_company.id',
+                    'billing_company.name',
+                ],
+                'sortableAttributes' => [
+                    'name',
+                    'posting_date',
+                    'currency',
+                    'amount',
+                    'status',
+                    'payments',
+                    'company.name',
+                    'company.code',
+                    'billing_company.name',
+                    'created_at',
+                ],
             ],
         ],
     ],
