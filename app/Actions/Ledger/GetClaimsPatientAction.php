@@ -19,7 +19,9 @@ final class GetClaimsPatientAction
             },
             'claimDemographics.claim.service',
             'claimDemographics.healthProfessionals' => function ($query) {
-                $query->wherePivot('field_id', 5);
+                $query->wherePivot('field_id', 5)
+                    ->orWherePivot('field_id', 1)
+                    ->orWherePivot('field_id', 76);
             },
             'claimDemographics.claim.insurancePolicies.insurancePlan',
             'claimDemographics.company',

@@ -591,10 +591,10 @@ Route::prefix('v1')/* ->middleware('audit') */
 
     Route::prefix('ledger')->middleware([
         'auth:api',
-        // 'role:superuser|billingmanager|biller|paymentprocessor|collector|accountmanager|billingauditor|superauditor|developmentsupport',
     ])->group(function () {
-        Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search']);
-        Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims']);
+        Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search'])->name('ledger.search');
+        Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims'])
+            ->name('ledger.patients.claims');
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

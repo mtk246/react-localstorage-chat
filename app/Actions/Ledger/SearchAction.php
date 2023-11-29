@@ -18,11 +18,7 @@ final class SearchAction
                 ->whereHas('claimDemographics.claim', fn ($q) => $q->where('code', $filters['claim_number']));
         }
 
-        if (isset($filters['first_name'])
-            || isset($filters['last_name'])
-            || isset($filters['dob'])
-            || isset($filters['ssn'])
-        ) {
+        if (array_key_exists(['first_name', 'last_name', 'dob', 'ssn'], $filters)) {
             $query->with('profile')
                 ->whereHas('profile', function ($q) use ($filters): void {
                     $q->when(isset($filters['first_name']), fn ($query) => $query->whereRaw(
@@ -48,7 +44,7 @@ final class SearchAction
                         isset($filters['start_date']),
                         fn ($query) => $query->where('from', '>=', $filters['start_date'])
                     )
-                        ->when(isset($filters['end_date']), fn ($query) => $query->where('to', '<=', $filters['end_date']));
+                    ->when(isset($filters['end_date']), fn ($query) => $query->where('to', '<=', $filters['end_date']));
                 });
         }
 
