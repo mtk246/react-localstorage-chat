@@ -386,6 +386,7 @@ final class DenialBodyResource extends JsonResource
                     'status' => $status->claimStatus->status.' - '.$subNote['status'],
                     'status_background_color' => $status->claimStatus->background_color ?? '',
                     'status_font_color' => $status->claimStatus->font_color ?? '',
+                    'denial_tracking' => $this->resource->getDenialTrackings(),
                 ]
             );
         }
