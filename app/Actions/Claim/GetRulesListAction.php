@@ -22,11 +22,18 @@ final class GetRulesListAction
             $items = config('claim.formats.'.$claimType->value);
             $name = $claimType->getName();
 
-            return $this->getRuleListFormated($items, $name);
+            return collect($items)->map(function ($item) use ($name) {
+                return $this->getToGroups($item, $name);
+            });
+
+        // return $this->getRuleListFormated($items, $name);
         } else {
-            return collect(config('claim.formats'))->mapWithKeys(function ($item, $key) {
+            return collect(config('claim.formats'))->mapWithKeys(function ($items, $key) {
                 $name = ClaimType::tryFrom($key)->getName();
-                $formated = $this->getRuleListFormated($item, $name);
+                // $formated = $this->getRuleListFormated($items, $name);
+                $formated = collect($items)->map(function ($item) use ($name) {
+                    return $this->getToGroups($item, $name);
+                });
 
                 return [$name => $formated];
             });
@@ -54,5 +61,38 @@ final class GetRulesListAction
                         : $item->first();
                 })->values();
         });
+    }
+
+    private function getToGroups(array $array, string $name): array
+    {
+        $matriz = [];
+
+        array_map(function ($indice, $valor) use (&$matriz, $name) {
+            $niveles = explode('.', (string) $indice);
+
+            $grupo = &$matriz;
+            $ultimoNivel = end($niveles);
+
+            foreach ($niveles as $nivel) {
+                if (!isset($grupo[$nivel])) {
+                    if ($nivel === $ultimoNivel) {
+                        $grupo[$nivel] = $valor;
+                    } else {
+                        $grupo[$nivel] = [
+                            'type' => 'group',
+                            'description' => __("claim.rules.{$name}.group.{$nivel}"),
+                            'values' => [],
+                        ];
+                    }
+                }
+                if ($nivel === $ultimoNivel) {
+                    $grupo = &$grupo[$nivel];
+                } else {
+                    $grupo = &$grupo[$nivel]['values'];
+                }
+            }
+        }, array_keys($array), $array);
+
+        return $matriz;
     }
 }
