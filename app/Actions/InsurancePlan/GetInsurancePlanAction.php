@@ -44,30 +44,44 @@ final class GetInsurancePlanAction
                     })
                 )
                 ->get()
-                ->map(fn (InsuranceCompany $model) => [
-                    'id' => $model->id,
-                    'code' => $model->code,
-                    'nicknames' => $model->nicknames->when(
-                        Gate::denies('is-admin'),
-                        fn ($query) => $query->where('billing_company_id', $billingCompanyId),
-                    )->pluck('name')->toArray(),
-                    'name' => $model->name,
-                    'abbreviation' => $model
-                        ->abbreviations
-                        ?->where('billing_company_id', $billingCompanyId)
-                        ->first()
-                        ?->abbreviation,
-                    'group_values' => $model->insurancePlans->map(function (InsurancePlan $modelPlan) {
-                        $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
+                ->map(function (InsuranceCompany $model) use ($billingCompanyId) {
+                    $gruopValues = (request()->simple ?? false === true)
+                        ? $model->insurancePlans->map(function (InsurancePlan $modelPlan) {
+                            $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
 
-                        return $modelPlan->planTypes->map(fn ($planType) => [
-                            'id' => (string) $modelPlan->id.'-'.$planType->id,
-                            'name' => $modelPlan->name,
-                            'plan_type' => $planType?->code ?? '',
-                            'abbreviation' => $abbreviation ?? '',
-                        ]);
-                    })->flatten(1)->toArray(),
-                ]);
+                            return [
+                                'id' => (string) $modelPlan->id,
+                                'name' => $modelPlan->name,
+                                'abbreviation' => $abbreviation ?? '',
+                            ];
+                        })->toArray()
+                        : $model->insurancePlans->map(function (InsurancePlan $modelPlan) {
+                            $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
+
+                            return $modelPlan->planTypes->map(fn ($planType) => [
+                                'id' => (string) $modelPlan->id.'-'.$planType->id,
+                                'name' => $modelPlan->name,
+                                'plan_type' => $planType?->code ?? '',
+                                'abbreviation' => $abbreviation ?? '',
+                            ]);
+                        })->flatten(1)->toArray();
+
+                    return [
+                        'id' => $model->id,
+                        'code' => $model->code,
+                        'nicknames' => $model->nicknames->when(
+                            Gate::denies('is-admin'),
+                            fn ($query) => $query->where('billing_company_id', $billingCompanyId),
+                        )->pluck('name')->toArray(),
+                        'name' => $model->name,
+                        'abbreviation' => $model
+                            ->abbreviations
+                            ?->where('billing_company_id', $billingCompanyId)
+                            ->first()
+                            ?->abbreviation,
+                        'group_values' => $gruopValues,
+                    ];
+                });
         } else {
             $query = InsurancePlan::query()
                 ->whereNotIn('id', $request['exclude'] ?? [])
