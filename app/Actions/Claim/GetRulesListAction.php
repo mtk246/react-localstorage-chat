@@ -6,7 +6,6 @@ namespace App\Actions\Claim;
 
 use App\Enums\Claim\ClaimType;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 final class GetRulesListAction
 {
@@ -23,16 +22,13 @@ final class GetRulesListAction
             $name = $claimType->getName();
 
             return collect($items)->map(function ($item) use ($name) {
-                return $this->getToGroups($item, $name);
+                return $this->getRuleListFormated($item, $name);
             });
-
-        // return $this->getRuleListFormated($items, $name);
         } else {
             return collect(config('claim.formats'))->mapWithKeys(function ($items, $key) {
                 $name = ClaimType::tryFrom($key)->getName();
-                // $formated = $this->getRuleListFormated($items, $name);
                 $formated = collect($items)->map(function ($item) use ($name) {
-                    return $this->getToGroups($item, $name);
+                    return $this->getRuleListFormated($item, $name);
                 });
 
                 return [$name => $formated];
@@ -40,59 +36,33 @@ final class GetRulesListAction
         }
     }
 
-    private function getRuleListFormated(array $item, string $name): Collection
+    private function getRuleListFormated(array $array, string $name): array
     {
-        return collect($item)->map(function ($item) use ($name) {
-            return collect($item)
-                ->mapToGroups(function ($item, $key) {
-                    $group = Str::onlyNumbers($key);
-                    $item['code'] = $key;
+        return array_reduce(array_keys($array), function ($result, $index) use ($array, $name) {
+            $levels = explode('.', (string) $index);
 
-                    return [$group => $item];
-                })
-                ->map(function ($item, $key) use ($name) {
-                    return count($item) > 1
-                        ? [
-                            'code' => $key,
-                            'type' => 'group',
-                            'description' => __("claim.rules.{$name}.group.{$key}"),
-                            'values' => $item->values(),
-                        ]
-                        : $item->first();
-                })->values();
-        });
-    }
+            $group = &$result;
+            $lastLevel = end($levels);
 
-    private function getToGroups(array $array, string $name): array
-    {
-        $matriz = [];
-
-        array_map(function ($indice, $valor) use (&$matriz, $name) {
-            $niveles = explode('.', (string) $indice);
-
-            $grupo = &$matriz;
-            $ultimoNivel = end($niveles);
-
-            foreach ($niveles as $nivel) {
-                if (!isset($grupo[$nivel])) {
-                    if ($nivel === $ultimoNivel) {
-                        $grupo[$nivel] = $valor;
-                    } else {
-                        $grupo[$nivel] = [
-                            'type' => 'group',
-                            'description' => __("claim.rules.{$name}.group.{$nivel}"),
-                            'values' => [],
-                        ];
-                    }
+            foreach ($levels as $level) {
+                if (!isset($group[$level])) {
+                    $group[$level] = ($level !== $lastLevel) ? [
+                        'type' => 'group',
+                        'description' => __("claim.rules.{$name}.group.{$level}"),
+                        'values' => [],
+                    ] : $array[$index];
+                    continue;
                 }
-                if ($nivel === $ultimoNivel) {
-                    $grupo = &$grupo[$nivel];
-                } else {
-                    $grupo = &$grupo[$nivel]['values'];
+
+                if ($level === $lastLevel) {
+                    $group = &$group[$level];
+                    continue;
                 }
+
+                $group = &$group[$level]['values'];
             }
-        }, array_keys($array), $array);
 
-        return $matriz;
+            return $result;
+        }, []);
     }
 }
