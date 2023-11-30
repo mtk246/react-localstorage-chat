@@ -30,8 +30,10 @@ return [
         'description' => 'Organization name',
         'value' => ['id' => 'claim:submitter.organizationName', 'name' => 'Submitter organization name'],
         'values' => [
-            'id' => 'claim:submitter.organizationName',
-            'name' => 'Submitter organization name',
+            [
+                'id' => 'claim:submitter.organizationName',
+                'name' => 'Submitter organization name',
+            ],
         ],
     ],
     'submitter.lastName' => [
@@ -57,8 +59,10 @@ return [
         'description' => 'Submitter contact information name',
         'value' => ['id' => 'claim:submitter.contactInformation.name', 'name' => 'Submitter contact information name'],
         'values' => [
-            'id' => 'claim:submitter.contactInformation.name',
-            'name' => 'Submitter contact information name',
+            [
+                'id' => 'claim:submitter.contactInformation.name',
+                'name' => 'Submitter contact information name',
+            ],
         ],
     ],
     'submitter.contactInformation.phoneNumber' => [
@@ -66,8 +70,10 @@ return [
         'description' => 'Submitter contact information phone number',
         'value' => ['id' => 'claim:submitter.contactInformation.phoneNumber', 'name' => 'Submitter contact information phone number'],
         'values' => [
-            'id' => 'claim:submitter.contactInformation.phoneNumber',
-            'name' => 'Submitter contact information phone number',
+            [
+                'id' => 'claim:submitter.contactInformation.phoneNumber',
+                'name' => 'Submitter contact information phone number',
+            ],
         ],
     ],
     'submitter.contactInformation.faxNumber' => [
@@ -75,8 +81,10 @@ return [
         'description' => 'Submitter contact information fax number',
         'value' => ['id' => 'claim:submitter.contactInformation.faxNumber', 'name' => 'Submitter contact information fax number'],
         'values' => [
-            'id' => 'claim:submitter.contactInformation.faxNumber',
-            'name' => 'Submitter contact information fax number',
+            [
+                'id' => 'claim:submitter.contactInformation.faxNumber',
+                'name' => 'Submitter contact information fax number',
+            ],
         ],
     ],
     'submitter.contactInformation.email' => [
@@ -84,8 +92,10 @@ return [
         'description' => 'Submitter contact information email',
         'value' => ['id' => 'claim:submitter.contactInformation.email', 'name' => 'Submitter contact information email'],
         'values' => [
-            'id' => 'claim:submitter.contactInformation.email',
-            'name' => 'Submitter contact information email',
+            [
+                'id' => 'claim:submitter.contactInformation.email',
+                'name' => 'Submitter contact information email',
+            ],
         ],
     ],
     'submitter.contactInformation.phoneExtension' => [
