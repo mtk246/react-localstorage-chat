@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enums\Claim\RuleType;
 
 return [
-    '1a' => [
+    '1.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Company Name',
@@ -25,7 +25,7 @@ return [
             ],
         ],
     ],
-    '1b' => [
+    '1.b' => [
         'type' => RuleType::MULTIPLE->value,
         'glue' => ' ',
         'description' => 'Company Address',
@@ -44,7 +44,7 @@ return [
             ],
         ],
     ],
-    '1c' => [
+    '1.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 24,
         'description' => 'Company Address',
@@ -68,7 +68,7 @@ return [
             ],
         ],
     ],
-    '1d' => [
+    '1.d' => [
         'type' => RuleType::MULTIPLE->value,
         'glue' => ' ',
         'description' => 'Company Address',
@@ -90,7 +90,7 @@ return [
             ],
         ],
     ],
-    '2a' => [
+    '2.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Company Name',
@@ -110,7 +110,7 @@ return [
             ],
         ],
     ],
-    '2b' => [
+    '2.b' => [
         'type' => RuleType::MULTIPLE->value,
         'glue' => ' ',
         'description' => 'Company Address',
@@ -131,7 +131,7 @@ return [
             ],
         ],
     ],
-    '2c' => [
+    '2.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 24,
         'description' => 'Company Address',
@@ -155,7 +155,7 @@ return [
             ],
         ],
     ],
-    '2d' => [
+    '2.d' => [
         'type' => RuleType::MULTIPLE->value,
         'glue' => ' ',
         'description' => 'Company Address',
@@ -177,7 +177,7 @@ return [
             ],
         ],
     ],
-    '3a' => [
+    '3.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Patient name',
@@ -190,7 +190,7 @@ return [
             ],
         ],
     ],
-    '3b' => [
+    '3.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'medical number',
@@ -233,7 +233,7 @@ return [
             ],
         ],
     ],
-    '6a' => [
+    '6.a' => [
         'type' => RuleType::DATE->value,
         'description' => 'service from',
         'value' => ['name' => 'mdY', 'id' => 'service.from|mdY'],
@@ -245,7 +245,7 @@ return [
             ],
         ],
     ],
-    '6b' => [
+    '6.b' => [
         'type' => RuleType::DATE->value,
         'description' => 'service to',
         'value' => ['name' => 'mdY', 'id' => 'service.to|mdY'],
@@ -265,7 +265,7 @@ return [
         'values' => [
         ],
     ],
-    '8a' => [
+    '8.a' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Patient code',
         'value' => [
@@ -277,7 +277,7 @@ return [
             ],
         ],
     ],
-    '8b' => [
+    '8.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Patient name',
         'value' => [
@@ -293,7 +293,7 @@ return [
             ],
         ],
     ],
-    '9a' => [
+    '9.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 28,
         'description' => 'Patient Address',
@@ -309,7 +309,7 @@ return [
             ],
         ],
     ],
-    '9b' => [
+    '9.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 24,
         'description' => 'Patient City',
@@ -325,7 +325,7 @@ return [
             ],
         ],
     ],
-    '9c' => [
+    '9.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 3,
         'description' => 'Patient State',
@@ -341,7 +341,7 @@ return [
             ],
         ],
     ],
-    '9d' => [
+    '9.d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 12,
         'description' => 'Patient Zip',
@@ -357,7 +357,7 @@ return [
             ],
         ],
     ],
-    '9e' => [
+    '9.e' => [
         'type' => RuleType::NONE->value,
         'length' => 27,
         'description' => 'Patient Address',
@@ -606,7 +606,7 @@ return [
             'common' => [],
         ],
     ],
-    '31a' => [
+    '31.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -615,7 +615,7 @@ return [
             'common' => [],
         ],
     ],
-    '31b' => [
+    '31.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -624,7 +624,7 @@ return [
             'common' => [],
         ],
     ],
-    '31c' => [
+    '31.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -633,7 +633,7 @@ return [
             'common' => [],
         ],
     ],
-    '31d' => [
+    '31.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -642,7 +642,7 @@ return [
             'common' => [],
         ],
     ],
-    '32a' => [
+    '32.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -651,7 +651,7 @@ return [
             'common' => [],
         ],
     ],
-    '32b' => [
+    '32.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -660,7 +660,7 @@ return [
             'common' => [],
         ],
     ],
-    '32c' => [
+    '32.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -669,7 +669,7 @@ return [
             'common' => [],
         ],
     ],
-    '32d' => [
+    '32.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -678,7 +678,7 @@ return [
             'common' => [],
         ],
     ],
-    '33a' => [
+    '33.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -687,7 +687,7 @@ return [
             'common' => [],
         ],
     ],
-    '33b' => [
+    '33.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -696,7 +696,7 @@ return [
             'common' => [],
         ],
     ],
-    '33c' => [
+    '33.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -705,7 +705,7 @@ return [
             'common' => [],
         ],
     ],
-    '33d' => [
+    '33.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -714,7 +714,7 @@ return [
             'common' => [],
         ],
     ],
-    '34a' => [
+    '34.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -723,7 +723,7 @@ return [
             'common' => [],
         ],
     ],
-    '34b' => [
+    '34.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -732,7 +732,7 @@ return [
             'common' => [],
         ],
     ],
-    '34c' => [
+    '34.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -741,7 +741,7 @@ return [
             'common' => [],
         ],
     ],
-    '34d' => [
+    '34.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -750,7 +750,7 @@ return [
             'common' => [],
         ],
     ],
-    '35a' => [
+    '35.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -759,7 +759,7 @@ return [
             'common' => [],
         ],
     ],
-    '35b' => [
+    '35.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -768,7 +768,7 @@ return [
             'common' => [],
         ],
     ],
-    '35c' => [
+    '35.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -777,7 +777,7 @@ return [
             'common' => [],
         ],
     ],
-    '35d' => [
+    '35.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -786,7 +786,7 @@ return [
             'common' => [],
         ],
     ],
-    '35e' => [
+    '35.e' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -795,7 +795,7 @@ return [
             'common' => [],
         ],
     ],
-    '35f' => [
+    '35.f' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -804,7 +804,7 @@ return [
             'common' => [],
         ],
     ],
-    '36a' => [
+    '36.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -813,7 +813,7 @@ return [
             'common' => [],
         ],
     ],
-    '36b' => [
+    '36.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -822,7 +822,7 @@ return [
             'common' => [],
         ],
     ],
-    '36c' => [
+    '36.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -831,7 +831,7 @@ return [
             'common' => [],
         ],
     ],
-    '36d' => [
+    '36.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -840,7 +840,7 @@ return [
             'common' => [],
         ],
     ],
-    '36e' => [
+    '36.e' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -849,7 +849,7 @@ return [
             'common' => [],
         ],
     ],
-    '36f' => [
+    '36.f' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -867,7 +867,7 @@ return [
             'common' => [],
         ],
     ],
-    '38a' => [
+    '38.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'name',
         'value' => ['name' => 'name', 'id' => 'HigherInsuranceCompany:name'],
@@ -881,7 +881,7 @@ return [
             ],
         ],
     ],
-    '38b' => [
+    '38.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Address 1',
         'value' => ['name' => 'address', 'id' => 'HigherInsuranceCompany:address'],
@@ -895,7 +895,7 @@ return [
             ],
         ],
     ],
-    '38c' => [
+    '38.c' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Address 2',
         'value' => [
@@ -915,7 +915,7 @@ return [
             ],
         ],
     ],
-    '39a' => [
+    '39.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -924,7 +924,7 @@ return [
             'common' => [],
         ],
     ],
-    '39b' => [
+    '39.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -933,7 +933,7 @@ return [
             'common' => [],
         ],
     ],
-    '39c' => [
+    '39.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -942,7 +942,7 @@ return [
             'common' => [],
         ],
     ],
-    '39d' => [
+    '39.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -951,7 +951,7 @@ return [
             'common' => [],
         ],
     ],
-    '39e' => [
+    '39.e' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -960,7 +960,7 @@ return [
             'common' => [],
         ],
     ],
-    '39f' => [
+    '39.f' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -969,7 +969,7 @@ return [
             'common' => [],
         ],
     ],
-    '39g' => [
+    '39.g' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -978,7 +978,7 @@ return [
             'common' => [],
         ],
     ],
-    '39h' => [
+    '39.h' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -987,7 +987,7 @@ return [
             'common' => [],
         ],
     ],
-    '40a' => [
+    '40.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -996,7 +996,7 @@ return [
             'common' => [],
         ],
     ],
-    '40b' => [
+    '40.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1005,7 +1005,7 @@ return [
             'common' => [],
         ],
     ],
-    '40c' => [
+    '40.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1014,7 +1014,7 @@ return [
             'common' => [],
         ],
     ],
-    '40d' => [
+    '40.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1023,7 +1023,7 @@ return [
             'common' => [],
         ],
     ],
-    '40e' => [
+    '40.e' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1032,7 +1032,7 @@ return [
             'common' => [],
         ],
     ],
-    '40f' => [
+    '40.f' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1041,7 +1041,7 @@ return [
             'common' => [],
         ],
     ],
-    '40g' => [
+    '40.g' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1050,7 +1050,7 @@ return [
             'common' => [],
         ],
     ],
-    '40h' => [
+    '40.h' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1059,7 +1059,7 @@ return [
             'common' => [],
         ],
     ],
-    '41a' => [
+    '41.a' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1068,7 +1068,7 @@ return [
             'common' => [],
         ],
     ],
-    '41b' => [
+    '41.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1077,7 +1077,7 @@ return [
             'common' => [],
         ],
     ],
-    '41c' => [
+    '41.c' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1086,7 +1086,7 @@ return [
             'common' => [],
         ],
     ],
-    '41d' => [
+    '41.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1095,7 +1095,7 @@ return [
             'common' => [],
         ],
     ],
-    '41e' => [
+    '41.e' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1104,7 +1104,7 @@ return [
             'common' => [],
         ],
     ],
-    '41f' => [
+    '41.f' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1113,7 +1113,7 @@ return [
             'common' => [],
         ],
     ],
-    '41g' => [
+    '41.g' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1122,7 +1122,7 @@ return [
             'common' => [],
         ],
     ],
-    '41h' => [
+    '41.h' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [
@@ -1280,7 +1280,7 @@ return [
             'common' => [],
         ],
     ],
-    'ta' => [
+    't.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
         'value' => '|001',
@@ -1288,7 +1288,7 @@ return [
             'common' => [],
         ],
     ],
-    'tb1' => [
+    't.b.1' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
         'value' => '|1',
@@ -1296,7 +1296,7 @@ return [
             'common' => [],
         ],
     ],
-    'tb2' => [
+    't.b.2' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
         'value' => '|1',
@@ -1304,7 +1304,7 @@ return [
             'common' => [],
         ],
     ],
-    'tc' => [
+    't.c' => [
         'type' => RuleType::DATE->value,
         'description' => null,
         'value' => 'created_at|mdY',
@@ -1312,7 +1312,7 @@ return [
             'common' => [],
         ],
     ],
-    'td' => [
+    't.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
         'value' => '|02222222',
@@ -1320,7 +1320,7 @@ return [
             'common' => [],
         ],
     ],
-    'te' => [
+    't.e' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
         'value' => 'claimServicesTotal',
@@ -1394,7 +1394,7 @@ return [
             ],
         ],
     ],
-    '57a' => [
+    '57.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'company - ein',
         'value' => ['name' => 'ein', 'id' => 'company:ein'],
@@ -1563,7 +1563,7 @@ return [
             ],
         ],
     ],
-    '76a' => [
+    '76.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
         'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|76'],
@@ -1576,7 +1576,7 @@ return [
             ],
         ],
     ],
-    '76b' => [
+    '76.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
         'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|76'],
@@ -1589,7 +1589,7 @@ return [
             ],
         ],
     ],
-    '76c' => [
+    '76.c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
         'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|76'],
@@ -1602,7 +1602,7 @@ return [
             ],
         ],
     ],
-    '76d' => [
+    '76.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
         'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|76'],
@@ -1615,7 +1615,7 @@ return [
             ],
         ],
     ],
-    '77a' => [
+    '77.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
         'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|77'],
@@ -1628,7 +1628,7 @@ return [
             ],
         ],
     ],
-    '77b' => [
+    '77.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
         'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|77'],
@@ -1641,7 +1641,7 @@ return [
             ],
         ],
     ],
-    '77c' => [
+    '77.c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
         'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|77'],
@@ -1654,7 +1654,7 @@ return [
             ],
         ],
     ],
-    '77d' => [
+    '77.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
         'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|77'],
@@ -1667,7 +1667,7 @@ return [
             ],
         ],
     ],
-    '78a' => [
+    '78.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
         'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|78'],
@@ -1680,7 +1680,7 @@ return [
             ],
         ],
     ],
-    '78b' => [
+    '78.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
         'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|78'],
@@ -1693,7 +1693,7 @@ return [
             ],
         ],
     ],
-    '78c' => [
+    '78.c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
         'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|78'],
@@ -1706,7 +1706,7 @@ return [
             ],
         ],
     ],
-    '78d' => [
+    '78.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
         'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|78'],
@@ -1719,7 +1719,7 @@ return [
             ],
         ],
     ],
-    '79a' => [
+    '79.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - npi',
         'value' => ['name' => 'npi', 'id' => 'healthProfessional:npi|79'],
@@ -1732,7 +1732,7 @@ return [
             ],
         ],
     ],
-    '79b' => [
+    '79.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - qualifier',
         'value' => ['name' => 'qualifier', 'id' => 'healthProfessional:qualifier|79'],
@@ -1745,7 +1745,7 @@ return [
             ],
         ],
     ],
-    '79c' => [
+    '79.c' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - first name',
         'value' => ['name' => 'first name', 'id' => 'healthProfessional:first_name|79'],
@@ -1758,7 +1758,7 @@ return [
             ],
         ],
     ],
-    '79d' => [
+    '79.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'health professional - last name',
         'value' => ['name' => 'last name', 'id' => 'healthProfessional:last_name|79'],
