@@ -587,7 +587,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function () {
         Route::get('/reports/classifications', [ReportReSource::class, 'classifications']);
         Route::get('/reports/types', [ReportReSource::class, 'types']);
-        Route::post('reports/records', [ReportReSource::class, 'records']);
+        Route::get('reports/records', [ReportReSource::class, 'records']);
         Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
         Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);

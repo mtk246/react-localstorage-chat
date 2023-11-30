@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Reports;
 
 use App\Models\BillingCompany;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
