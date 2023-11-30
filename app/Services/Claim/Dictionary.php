@@ -63,8 +63,8 @@ abstract class Dictionary implements DictionaryInterface
     protected function getMultipleArrayFormat(array $values, string $glue): array
     {
         return Collect($values)
-            ->reduce(function (?Collection $carry, string $value) use ($glue) {
-                $items = $this->getSingleFormat($value);
+            ->reduce(function (?Collection $carry, object $value) use ($glue) {
+                $items = $this->getSingleFormat($value->id);
                 $items = $items instanceof Collection ? $items : Collect([$items]);
 
                 if (is_null($carry)) {
@@ -83,20 +83,20 @@ abstract class Dictionary implements DictionaryInterface
     protected function getMultipleFormat(array $values, string $glue): string
     {
         return Collect($values)
-            ->map(fn (string $value) => (string) $this->getSingleFormat($value))
+            ->map(fn (object $value) => (string) $this->getSingleFormat($value->id))
             ->filter(fn (string $value) => !empty($value))
             ->implode($glue);
     }
 
-    protected function getSingleArrayFormat(string $value): array
+    protected function getSingleArrayFormat(object $value): array
     {
-        return $this->getSingleFormat($value)
+        return $this->getSingleFormat($value->id)
             ->toArray();
     }
 
-    protected function getSingleFormat(string $value): string|Collection
+    protected function getSingleFormat(object $value): string|Collection
     {
-        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
+        list($key, $default) = Str::of($value->id)->explode('|')->pad(2, null)->toArray();
 
         list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
         $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
@@ -106,9 +106,9 @@ abstract class Dictionary implements DictionaryInterface
             : $this->getClaimData($key, $default);
     }
 
-    protected function getDateFormat(string $value): string
+    protected function getDateFormat(object $value): string
     {
-        list($key, $format, $rawFormat, $default) = Str::of($value)->explode('|')->pad(4, null)->toArray();
+        list($key, $format, $rawFormat, $default) = Str::of($value->id)->explode('|')->pad(4, null)->toArray();
 
         $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
@@ -125,9 +125,9 @@ abstract class Dictionary implements DictionaryInterface
             : '';
     }
 
-    protected function getBooleanFormat(string $value): bool
+    protected function getBooleanFormat(object $value): bool
     {
-        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
+        list($key, $default) = Str::of($value->id)->explode('|')->pad(2, null)->toArray();
 
         list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
         $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
