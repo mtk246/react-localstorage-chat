@@ -411,7 +411,7 @@ class UserController extends Controller
         );
     }
 
-    public function updatePassword(UpdatePasswordRequest $request)
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
         $rs = $this->userRepository->updatePassword($request->validated());
 
