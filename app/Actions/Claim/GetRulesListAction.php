@@ -6,7 +6,6 @@ namespace App\Actions\Claim;
 
 use App\Enums\Claim\ClaimType;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 final class GetRulesListAction
 {
@@ -23,76 +22,51 @@ final class GetRulesListAction
             $name = $claimType->getName();
 
             return collect($items)->map(function ($item) use ($name) {
-                return $this->getToGroups($item, $name);
-            });
-
-        // return $this->getRuleListFormated($items, $name);
-        } else {
-            return collect(config('claim.formats'))->mapWithKeys(function ($items, $key) {
-                $name = ClaimType::tryFrom($key)->getName();
-                // $formated = $this->getRuleListFormated($items, $name);
-                $formated = collect($items)->map(function ($item) use ($name) {
-                    return $this->getToGroups($item, $name);
-                });
-
-                return [$name => $formated];
+                return $this->mapToGroups($item, $name);
             });
         }
-    }
 
-    private function getRuleListFormated(array $item, string $name): Collection
-    {
-        return collect($item)->map(function ($item) use ($name) {
-            return collect($item)
-                ->mapToGroups(function ($item, $key) {
-                    $group = Str::onlyNumbers($key);
-                    $item['code'] = $key;
+        return collect(config('claim.formats'))->mapWithKeys(function ($items, $key) {
+            $name = ClaimType::tryFrom($key)->getName();
+            $formated = collect($items)->map(function ($item) use ($name) {
+                return $this->mapToGroups($item, $name);
+            });
 
-                    return [$group => $item];
-                })
-                ->map(function ($item, $key) use ($name) {
-                    return count($item) > 1
-                        ? [
-                            'code' => $key,
-                            'type' => 'group',
-                            'description' => __("claim.rules.{$name}.group.{$key}"),
-                            'values' => $item->values(),
-                        ]
-                        : $item->first();
-                })->values();
+            return [$name => $formated];
         });
     }
 
-    private function getToGroups(array $array, string $name): array
+    private function mapToGroups(array $values, string $name): array
     {
-        $matriz = [];
+        return array_reduce(array_keys($values), function ($result, $indice) use ($name, $values) {
+            $levels = explode('.', (string) $indice);
 
-        array_map(function ($indice, $valor) use (&$matriz, $name) {
-            $niveles = explode('.', (string) $indice);
+            return $this->mapGroup($name, $result, $levels, $values[$indice]);
+        }, []);
+    }
 
-            $grupo = &$matriz;
-            $ultimoNivel = end($niveles);
+    private function mapGroup(string $name, array $result, array $levels, $value)
+    {
+        $level = array_shift($levels);
 
-            foreach ($niveles as $nivel) {
-                if (!isset($grupo[$nivel])) {
-                    if ($nivel === $ultimoNivel) {
-                        $grupo[$nivel] = $valor;
-                    } else {
-                        $grupo[$nivel] = [
-                            'type' => 'group',
-                            'description' => __("claim.rules.{$name}.group.{$nivel}"),
-                            'values' => [],
-                        ];
-                    }
-                }
-                if ($nivel === $ultimoNivel) {
-                    $grupo = &$grupo[$nivel];
-                } else {
-                    $grupo = &$grupo[$nivel]['values'];
-                }
-            }
-        }, array_keys($array), $array);
+        if (empty($levels)) {
+            $result[$level] = $value;
 
-        return $matriz;
+            return $result;
+        }
+
+        $groupName = "{$name}.group.{$level}";
+
+        if (!isset($result[$level])) {
+            $result[$level] = [
+                'type' => 'group',
+                'description' => __("claim.rules.{$groupName}"),
+                'values' => [],
+            ];
+        }
+
+        $result[$level]['values'] = $this->mapGroup($groupName, $result[$level]['values'], $levels, $value);
+
+        return $result;
     }
 }
