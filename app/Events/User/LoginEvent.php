@@ -20,6 +20,6 @@ final class LoginEvent
     public function __construct(public readonly User $user, string $password)
     {
         Log::info(sprintf('User %s Login', $this->user->email));
-        $this->password = Crypt::encryptString($password);
+        $this->password = Crypt::encrypt($password);
     }
 }
