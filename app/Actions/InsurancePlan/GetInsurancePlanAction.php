@@ -50,7 +50,7 @@ final class GetInsurancePlanAction
                             $abbreviation = $modelPlan->abbreviations->first()?->abbreviation;
 
                             return [
-                                'id' => (string) $modelPlan->id,
+                                'id' => $modelPlan->id,
                                 'name' => $modelPlan->name,
                                 'abbreviation' => $abbreviation ?? '',
                             ];
