@@ -24,26 +24,31 @@ final class AddContractFees
         return DB::transaction(function () use ($contractFees, $company, $user): Collection {
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
-            return $contractFees->map(fn (ContractFeesRequestCast $contractFee) => tap(
-                ContractFee::query()->updateOrCreate([
-                    'id' => $contractFee->getId(),
-                    'billing_company_id' => $contractFee->getBillingCompanyId(),
-                ], [
-                    'mac_locality_id' => $contractFee->getMacLocality()->id,
-                    'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
-                    'contract_fee_type_id' => $contractFee->getTypeId(),
-                    'start_date' => $contractFee->getStartDate(),
-                    'private_note' => $contractFee->getPrivateNote(),
-                    'end_date' => $contractFee->getEndDate(),
-                    'price' => $contractFee->getPrice(),
-                    'price_percentage' => $contractFee->getPricePercentage(),
-                ]),
-                fn (ContractFee $model) => $this->afterCreate(
-                    $model,
-                    $company,
-                    $contractFee,
-                )
-            ))
+            return $contractFees->map(function(ContractFeesRequestCast $contractFee) use ($company) {
+
+                if ( !$this->checkExistContract($contractFee) ) {
+                    tap(
+                        ContractFee::query()->updateOrCreate([
+                            'id' => $contractFee->getId(),
+                            'billing_company_id' => $contractFee->getBillingCompanyId(),
+                        ], [
+                            'mac_locality_id' => $contractFee->getMacLocality()->id,
+                            'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
+                            'contract_fee_type_id' => $contractFee->getTypeId(),
+                            'start_date' => $contractFee->getStartDate(),
+                            'private_note' => $contractFee->getPrivateNote(),
+                            'end_date' => $contractFee->getEndDate(),
+                            'price' => $contractFee->getPrice(),
+                            'price_percentage' => $contractFee->getPricePercentage(),
+                        ]),
+                        fn (ContractFee $model) => $this->afterCreate(
+                            $model,
+                            $company,
+                            $contractFee,
+                        )
+                    );
+                }
+            })
             ->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
                 'patients',
@@ -119,5 +124,23 @@ final class AddContractFees
                 $contractFee->insurancePlans()->detach();
                 $company->contractFees()->detach($contractFee->id);
             });
+    }
+
+    private function checkExistContract(ContractFeesRequestCast $contractFee): bool
+    {
+        $contract = ContractFee::whereHas('insurancePlans', function(Builder $query) use ($contractFee) {
+            $query->whereIn('insurance_plan_id', $contractFee->getInsurancePlanIds());
+        })->whereHas('procedures', function(Builder $query) use ($contractFee) {
+            $query->whereIn('procedure_id', $contractFee->getProceduresIds());
+        })->whereHas('modifiers', function (Builder $query) use ($contractFee) {
+            $query->whereIn('modifier_id', $contractFee->getModifierIds());
+        })->where([
+            'billing_company_id' => $contractFee->getBillingCompanyId(),
+            'contract_fee_type_id' => $contractFee->getTypeId(),
+            'start_date' => $contractFee->getStartDate(),
+            'end_date' => $contractFee->getEndDate(),
+        ])->get();
+
+        return $contract->count() > 0;
     }
 }
