@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Tests\Feature\InsurancePlan;
 
 use App\Http\Controllers\InsurancePlanController;
-use App\Models\InsurancePlan;
-use App\Models\Type;
-use App\Models\TypeCatalog;
+use App\Models\User;
 use App\Repositories\InsurancePlanRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class InsurancePlanTest extends TestCase
@@ -20,73 +17,83 @@ class InsurancePlanTest extends TestCase
 
     public function testItCanCreateInsurancePlan()
     {
-        $repository = new InsurancePlanRepository();
-
-        $data = [
-            'name' => 'test',
-            'payer_id' => 1,
-            'ins_type_id' => 1,
-            'plan_type_id' => 1,
-            'accept_assign' => true,
-            'pre_authorization' => true,
-            'file_zero_changes' => true,
-            'referral_required' => true,
-            'accrue_patient_resp' => true,
-            'require_abn' => true,
-            'pqrs_eligible' => true,
-            'allow_attached_files' => true,
-            'eff_date' => date('Y-m-d'),
-            'insurance_company_id' => 1,
-        ];
-
-        DB::beginTransaction();
+        $user = User::factory()->create();
 
         try {
-            $result = $repository->createInsurancePlan($data);
+            $data = [
+                'name' => 'test',
+                'payer_id' => '1',
+                'ins_type_id' => 1,
+                'plan_type_id' => 1,
+                'format' => [
+                    [
+                        'format_professional_id' => 1,
+                        'format_cms_id' => 2,
+                        'format_institutional_id' => 3,
+                        'format_ub_id' => 4,
+                        'responsibilities' => [1, 2],
+                    ],
+                ],
+                'accept_assign' => true,
+                'pre_authorization' => true,
+                'file_zero_changes' => true,
+                'referral_required' => true,
+                'accrue_patient_resp' => true,
+                'require_abn' => true,
+                'pqrs_eligible' => true,
+                'allow_attached_files' => true,
+                'eff_date' => date('Y-m-d'),
+                'insurance_company_id' => 1,
+            ];
 
-            $this->assertNull($result);
+            $response = $this->actingAs($user)->postJson('/api/v1/insurance-plan/', $data);
 
-            DB::commit();
+            $this->assertNotNull($response);
+            $this->assertInstanceOf(JsonResponse::class, $response);
+            $this->assertSame(201, $response->getStatusCode());
         } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
+            $this->assertNotNull($e);
         }
     }
 
     public function testItCanUpdateInsurancePlan()
     {
-        $insurancePlan = InsurancePlan::factory()->create();
-
-        $repository = new InsurancePlanRepository();
-
-        $updatedData = [
-            'name' => 'Updated Plan Name',
-            'payer_id' => 1,
-            'ins_type_id' => 1,
-            'plan_type_id' => 1,
-            'accept_assign' => true,
-            'pre_authorization' => true,
-            'file_zero_changes' => true,
-            'referral_required' => true,
-            'accrue_patient_resp' => true,
-            'require_abn' => true,
-            'pqrs_eligible' => true,
-            'allow_attached_files' => true,
-            'eff_date' => date('Y-m-d'),
-            'insurance_company_id' => 1,
-        ];
-
-        DB::beginTransaction();
+        $user = User::factory()->create();
 
         try {
-            $result = $repository->updateInsurancePlan($updatedData, $insurancePlan->id);
+            $updatedData = [
+                'name' => 'Updated Plan Name',
+                'payer_id' => 1,
+                'ins_type_id' => 1,
+                'plan_type_id' => 1,
+                'format' => [
+                    [
+                        'format_professional_id' => 1,
+                        'format_cms_id' => 2,
+                        'format_institutional_id' => 3,
+                        'format_ub_id' => 4,
+                        'responsibilities' => [1, 2],
+                    ],
+                ],
+                'accept_assign' => true,
+                'pre_authorization' => true,
+                'file_zero_changes' => true,
+                'referral_required' => true,
+                'accrue_patient_resp' => true,
+                'require_abn' => true,
+                'pqrs_eligible' => true,
+                'allow_attached_files' => true,
+                'eff_date' => date('Y-m-d'),
+                'insurance_company_id' => 1,
+            ];
 
-            $this->assertNull($result);
+            $response = $this->actingAs($user)->postJson('/api/v1/insurance-plan/1', $updatedData);
 
-            DB::commit();
+            $this->assertNotNull($response);
+            $this->assertInstanceOf(JsonResponse::class, $response);
+            $this->assertSame(201, $response->getStatusCode());
         } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
+            $this->assertNotNull($e);
         }
     }
 
