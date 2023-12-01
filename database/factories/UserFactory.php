@@ -46,11 +46,14 @@ class UserFactory extends Factory
 
     public function hasType(UserType $type, BillingCompany $billingCompany = null): self
     {
-        return $this->state(function (array $attributes) use ($type, $billingCompany) {
+        $this->type = $type;
+
+        return $this->state(function (array $attributes) use ($type) {
             return [
-                'type' => $type->value,
-                'billing_company_id' => $billingCompany ? $billingCompany->id : BillingCompany::factory(),
+                'type' => $type,
             ];
+        })->when($billingCompany, function (self $user, $billingCompany) {
+            return $user->hasBillingCompany($billingCompany);
         });
     }
 
@@ -68,13 +71,11 @@ class UserFactory extends Factory
     public function whithRole(Role $role = null): self
     {
         return $this->afterCreating(function (User $user) use ($role) {
-            $userTypeValue = $user->type->value ?? UserType::BILLING->value;
-            match ($userTypeValue) {
+            match ($user->type->value) {
                 UserType::BILLING->value => $this->setBillingRole($user, $role),
                 UserType::ADMIN->value => $this->setAdminRole($user, $role),
                 UserType::DOCTOR->value => $this->setDoctorRole($user, $role),
                 UserType::PATIENT->value => $this->setPatientRole($user, $role),
-                default => throw new \InvalidArgumentException("Unhandled user type: $userTypeValue"),
             };
         });
     }
@@ -131,14 +132,5 @@ class UserFactory extends Factory
                 ['rollable_type' => PatientMembership::class],
                 false
             );
-    }
-
-    public function withBillingCompany(BillingCompany $billingCompany = null): self
-    {
-        return $this->state(function (array $attributes) use ($billingCompany) {
-            return [
-                'billing_company_id' => $billingCompany->id ?? BillingCompany::factory(),
-            ];
-        });
     }
 }

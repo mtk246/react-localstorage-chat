@@ -30,9 +30,6 @@ class CompanyTest extends TestCase
 
     public function testItReturnsAJsonResponseForListStatementRules()
     {
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
-
         $response = $this->json('GET', '/api/v1/company/get-list-statement-rules');
 
         $response->assertStatus(200);
@@ -93,9 +90,6 @@ class CompanyTest extends TestCase
 
     public function testItReturnsJsonResponseForBillingCompaniesLists()
     {
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
-
         $response = $this->json('GET', '/api/v1/company/get-list-billing-companies');
 
         $response->assertStatus(200);

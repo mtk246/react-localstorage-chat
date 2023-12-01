@@ -73,10 +73,6 @@ final class GetBilllingProviderAction
 
         $company = Company::query()->find($companyId);
 
-        if (!$company) {
-            return $healthProfessionals;
-        }
-
         $taxIdOptions = [];
         if (!empty($company->ein)) {
             $taxIdOptions[] = [
