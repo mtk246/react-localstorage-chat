@@ -18,24 +18,6 @@ class InsurancePlanTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        Type::factory()->create([
-            'description' => 'Ins type',
-        ]);
-
-        TypeCatalog::factory()->create([
-            'type_id' => Type::first()->id,
-            'code' => 'CI',
-            'description' => 'Commercial Insurance',
-        ]);
-
-        $user = $this->createUser('superuser');
-        $this->actingAs($user);
-    }
-
     public function testItCanCreateInsurancePlan()
     {
         $repository = new InsurancePlanRepository();
