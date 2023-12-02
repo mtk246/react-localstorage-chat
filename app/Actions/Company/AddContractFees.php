@@ -32,7 +32,6 @@ final class AddContractFees
                             'id' => $contractFee->getId(),
                             'billing_company_id' => $contractFee->getBillingCompanyId(),
                         ], [
-                            'mac_locality_id' => $contractFee->getMacLocality()->id,
                             'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
                             'contract_fee_type_id' => $contractFee->getTypeId(),
                             'start_date' => $contractFee->getStartDate(),
@@ -49,14 +48,15 @@ final class AddContractFees
                     );
                 }
             })
-            ->map(fn (ContractFee $contractFee) => $contractFee->load([
-                'procedures',
-                'patients',
-                'modifiers',
-                'macLocality',
-                'insurancePlans',
-                'contractFeeSpecifications',
-            ]));
+            ->map(function ($contractFee) {
+                $contractFee?->load([
+                    'insurancePlans',
+                    'procedures',
+                    'modifiers',
+                    'patients',
+                    'contractFeeSpecifications',
+                ]);
+            });
         });
     }
 
@@ -126,21 +126,20 @@ final class AddContractFees
             });
     }
 
-    private function checkExistContract(ContractFeesRequestCast $contractFee): bool
+    private function checkExistContract(ContractFeesRequestCast $contractFee): int
     {
         $contract = ContractFee::whereHas('insurancePlans', function(Builder $query) use ($contractFee) {
             $query->whereIn('insurance_plan_id', $contractFee->getInsurancePlanIds());
-        })->whereHas('procedures', function(Builder $query) use ($contractFee) {
+        })->orWhereHas('procedures', function(Builder $query) use ($contractFee) {
             $query->whereIn('procedure_id', $contractFee->getProceduresIds());
-        })->whereHas('modifiers', function (Builder $query) use ($contractFee) {
+        })->orWhereHas('modifiers', function (Builder $query) use ($contractFee) {
             $query->whereIn('modifier_id', $contractFee->getModifierIds());
-        })->where([
-            'billing_company_id' => $contractFee->getBillingCompanyId(),
-            'contract_fee_type_id' => $contractFee->getTypeId(),
-            'start_date' => $contractFee->getStartDate(),
-            'end_date' => $contractFee->getEndDate(),
-        ])->get();
+        })->orWhere('billing_company_id', $contractFee->getBillingCompanyId())
+            ->orWhere('contract_fee_type_id', $contractFee->getTypeId())
+            ->orWhere('start_date', $contractFee->getStartDate())
+            ->orWhere('end_date', $contractFee->getEndDate())
+            ->get();
 
-        return $contract->count() > 0;
+        return $contract->count();
     }
 }
