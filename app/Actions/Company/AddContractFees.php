@@ -26,14 +26,17 @@ final class AddContractFees
 
             return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
 
-                $contract = ContractFee::where([
-                    'id' => $contractFee->getId(),
+                $contract = ContractFee::query()->where([
                     'billing_company_id' => $contractFee->getBillingCompanyId(),
                     'contract_fee_type_id' => $contractFee->getTypeId(),
                     'start_date' => $contractFee->getStartDate(),
                     'end_date' => $contractFee->getEndDate()
-                ])->first();
+                ])->when(
+                    $contractFee->getId() != 0,
+                    fn(Builder $query) => $query->where('id', $contractFee->getId())
+                )->first();
 
+                dd($contract);
                 if ($contract) {
                     $contract->update([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
