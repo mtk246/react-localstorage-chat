@@ -9,7 +9,9 @@ use App\Enums\InterfaceType;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
+use App\Models\RefileReason;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -94,6 +96,7 @@ final class DenialBodyResource extends JsonResource
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
             'denial_refile' => $this->resource->getDenialRefile(),
             'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
+            'refile_reasons' => $this->getRefileReasons(),
             'eob' => [
                 [
                     'filename' => '',
@@ -284,6 +287,9 @@ final class DenialBodyResource extends JsonResource
                 ->where('private_note_id', $note->id)
                 ->first();
 
+            $denialRefile = DenialRefile::where('denial_tracking_id', $denialTracking->id ?? 0)
+                ->first();
+
             array_push(
                 $notes,
                 [
@@ -320,6 +326,20 @@ final class DenialBodyResource extends JsonResource
                             'response_details' => $denialTracking->response_details ?? null,
                             'tracking_note' => $denialTracking->privateNote->note ?? '',
                             'claim_id' => $denialTracking->claim_id ?? '',
+                        ]
+                        : null,
+                    'denial_refile' => isset($denialRefile)
+                        ? [
+                            'refile_type' => $denialRefile->refile_type ?? '',
+                            'policy_number' => $denialRefile->policy_number ?? '',
+                            'is_cross_over' => $denialRefile->is_cross_over ?? '',
+                            'cross_over_date' => $denialRefile->cross_over_date ?? '',
+                            'is_contact_to_patient' => $denialRefile->is_contact_to_patient ?? '',
+                            'note' => $denialRefile->note ?? '',
+                            'original_claim_id' => $denialRefile->original_claim_id ?? '',
+                            'refile_reason' => $denialRefile->refile_reason ?? '',
+                            'denial_tracking_id' => $denialRefile->denial_tracking_id ?? '',
+                            'claim_id' => $denialRefile->claim_id ?? '',
                         ]
                         : null,
                 ]
@@ -513,5 +533,12 @@ final class DenialBodyResource extends JsonResource
         return !empty($billing)
             ? $billing->profile->first_name.' '.$billing->profile->last_name
             : '';
+    }
+
+    private function getRefileReasons(): ?array
+    {
+        $refileReasons = RefileReason::all();
+
+        return $refileReasons->toArray();
     }
 }

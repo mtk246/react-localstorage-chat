@@ -92,4 +92,9 @@ final class DenialRefile extends Model
 
         return null;
     }
+
+    public function denialTracking(): BelongsTo
+    {
+        return $this->belongsTo(DenialTracking::class, 'id');
+    }
 }

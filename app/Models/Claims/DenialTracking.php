@@ -7,6 +7,7 @@ namespace App\Models\Claims;
 use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Claims\DenialTracking.
@@ -169,5 +170,10 @@ final class DenialTracking extends Model
         }
 
         return null;
+    }
+
+    public function denialRefile(): BelongsTo
+    {
+        return $this->belongsTo(DenialRefile::class, 'denial_tracking_id');
     }
 }
