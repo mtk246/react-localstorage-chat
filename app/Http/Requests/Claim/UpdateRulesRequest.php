@@ -21,7 +21,8 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_id' => 'required|integer|exists:insurance_plans,id',
+            'insurance_plan_ids' => 'required|array',
+            'insurance_plan_ids.*' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [
                 'required',
@@ -41,6 +42,7 @@ final class UpdateRulesRequest extends FormRequest
             ],
             'parameters' => 'nullable|array',
             'active' => 'nullable|boolean',
+            'note' => 'nullable|string',
         ];
     }
 }
