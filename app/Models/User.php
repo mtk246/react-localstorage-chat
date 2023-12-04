@@ -73,6 +73,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property \App\Models\Patient|null $patient
  * @property \Illuminate\Database\Eloquent\Collection<int, Permission> $permits
  * @property int|null $permits_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
+ * @property int|null $presets_count
  * @property \App\Models\Profile|null $profile
  * @property int|null $roles_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
