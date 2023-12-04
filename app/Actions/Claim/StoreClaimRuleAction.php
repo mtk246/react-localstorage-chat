@@ -22,6 +22,8 @@ final class StoreClaimRuleAction
                 });
             }
 
+            $rule->insurancePlans()->attach($$rulesWrapper->getInsurancePlans());
+
             return new RuleResource($rule);
         });
     }
