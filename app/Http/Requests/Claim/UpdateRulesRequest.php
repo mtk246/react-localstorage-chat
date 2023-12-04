@@ -40,6 +40,7 @@ final class UpdateRulesRequest extends FormRequest
                 new RuleFormatRule($this->get('format', '')),
             ],
             'parameters' => 'nullable|array',
+            'active' => 'nullable|boolean',
         ];
     }
 }
