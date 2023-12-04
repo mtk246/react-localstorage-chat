@@ -22,7 +22,7 @@ final class RuleResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'description' => $this->resource->description,
-            'insurance_plan' => $this->resource->insurancePlan,
+            'insurance_plans' => $this->resource->insurancePlans,
             'format' => $this->resource->format,
             'responsibilities' => $this->resource->typesOfResponsibilities?->map(fn ($type) => [
                 'id' => $type->id,
@@ -38,6 +38,7 @@ final class RuleResource extends JsonResource
                 ),
             'parameters' => $this->resource->parameters,
             'active' => $this->resource->active,
+            'note' => $this->resource->note,
         ];
     }
 }
