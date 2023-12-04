@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')/* ->middleware('audit') */
 ->middleware(['lastActivity'])->group(function () {
     Route::get('/', function () {
+        \Log::info(Str::ulid());
         return response()->json(['message' => 'Api Running']);
     });
 
