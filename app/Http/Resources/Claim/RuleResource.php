@@ -37,6 +37,7 @@ final class RuleResource extends JsonResource
                     })
                 ),
             'parameters' => $this->resource->parameters,
+            'active' => $this->resource->active,
         ];
     }
 }
