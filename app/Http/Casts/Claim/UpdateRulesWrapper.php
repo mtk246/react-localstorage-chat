@@ -21,6 +21,7 @@ final class UpdateRulesWrapper extends CastsRequest
             'insurance_plan_id' => $this->getInsurancePlan(),
             'rules' => $this->getRules()->toArray(),
             'parameters' => $this->getParameters()->toJson(),
+            'active' => $this->getBool('active', true),
         ];
     }
 
