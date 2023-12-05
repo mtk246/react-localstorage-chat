@@ -10,7 +10,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('claim_rules', function (Blueprint $table) {
-            $table->boolean('note')->default(true);
+            $table->string('note')->nullable();
             $table->dropForeign(['insurance_plan_id']);
             $table->dropColumn('insurance_plan_id');
         });
