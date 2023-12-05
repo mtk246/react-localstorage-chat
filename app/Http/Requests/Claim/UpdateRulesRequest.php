@@ -22,7 +22,7 @@ final class UpdateRulesRequest extends FormRequest
     {
         return [
             'insurance_plan_ids' => 'required|array',
-            'insurance_plan_ids.*' => 'required|string|exists:insurance_plans,id',
+            'insurance_plan_ids.*' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [
                 'required',
