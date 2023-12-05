@@ -34,7 +34,7 @@ final class RuleResource extends JsonResource
                     ]);
                 }
 
-                $carry->first(fn ($item) => $item['id'] === $plan->insurance_company_id)['plans']->push([
+                $carry->first(fn ($item) => $item['id'] === $plan->insurance_company_id)['group_values']->push([
                     'id' => $plan->id,
                     'name' => $plan->name,
                     'abbreviation' => $plan
