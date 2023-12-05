@@ -20,6 +20,7 @@ final class StoreRulesWrapper extends CastsRequest
             'billing_company_id' => $this->getBillingCompanyId(),
             'rules' => $this->getRules()->toArray(),
             'parameters' => $this->getParameters()->toJson(),
+            'active' => $this->getBool('active', true),
             'note' => $this->get('note', ''),
         ];
     }
