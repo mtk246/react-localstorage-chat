@@ -20,7 +20,7 @@ final class UpdateClaimRuleAction
             });
         }
 
-        $rules->insurancePlans()->sync($$rulesWrapper->getInsurancePlans());
+        $rules->insurancePlans()->sync($rulesWrapper->getInsurancePlans());
 
         return new RuleResource($rules->refresh());
     }
