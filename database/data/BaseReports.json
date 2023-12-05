@@ -144,11 +144,23 @@
         "tableu": false
     },
     {
-        "id": "01HGTY50579NV7YCTM087CSYSD",
+        "id": "01229C734819911EEB20243ACS",
         "name": "Payer mix by Company",
         "description": "Use this report to view all information about Payer mix registered in the system.",
         "type": 1,
         "url": "HHSUUILJFV",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01229C734819911EEB20223ACS",
+        "name": "Professional Productivity",
+        "description": "Use this report to view all information about Professional Productivity registered in the system.",
+        "type": 1,
+        "url": "TPEMOBKSKL",
         "clasification": 6,
         "range": "30",
         "configuration": [],
