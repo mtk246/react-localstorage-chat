@@ -287,7 +287,7 @@ final class DenialBodyResource extends JsonResource
                 ->where('private_note_id', $note->id)
                 ->first();
 
-            $denialRefile = DenialRefile::where('denial_tracking_id', $denialTracking->id ?? 0)
+            $denialRefile = DenialRefile::where('claim_id', $denialTracking->claim_id ?? 0)
                 ->first();
 
             array_push(
