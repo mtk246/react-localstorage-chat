@@ -29,11 +29,11 @@ use Laravel\Scout\Searchable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property bool $active
- * @property bool $note
+ * @property string|null $note
  * @property BillingCompany|null $billingCompany
- * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePlan> $insurancePlans
+ * @property Collection<int, InsurancePlan> $insurancePlans
  * @property int|null $insurance_plans_count
- * @property \Illuminate\Database\Eloquent\Collection<int, TypeCatalog> $typesOfResponsibilities
+ * @property Collection<int, TypeCatalog> $typesOfResponsibilities
  * @property int|null $types_of_responsibilities_count
  *
  * @method static \Database\Factories\Claims\RulesFactory factory($count = null, $state = [])
@@ -92,7 +92,11 @@ final class Rules extends Model
 
     public function insurancePlans(): BelongsToMany
     {
-        return $this->belongsToMany(InsurancePlan::class)->withTimestamps();
+        return $this->BelongsToMany(
+            InsurancePlan::class,
+            'claim_rule_insurance_plan',
+            'claim_rule_id',
+        )->withTimestamps();
     }
 
     public function toSearchableArray(): array
@@ -103,7 +107,7 @@ final class Rules extends Model
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
             'billing_company' => $this->billingCompany->only(['id', 'code', 'name', 'abbreviation']),
-            'insurance_plans' => $this->insurancePlans->map(function (Collection $insurancePlan) {
+            'insurance_plans' => $this->insurancePlans->map(function (InsurancePlan $insurancePlan) {
                 return $insurancePlan->only(['id', 'code', 'name', 'eff_date']);
             }),
         ];
