@@ -28,8 +28,9 @@ final class RuleResource extends JsonResource
                 if (!$carry->contains(fn ($item) => $item['id'] === $plan->insurance_company_id)) {
                     $carry->push([
                         'id' => $plan->insurance_company_id,
+                        'code' => $plan->insuranceCompany->code,
                         'name' => $plan->insuranceCompany->name,
-                        'plans' => collect(),
+                        'group_values' => collect(),
                     ]);
                 }
 
