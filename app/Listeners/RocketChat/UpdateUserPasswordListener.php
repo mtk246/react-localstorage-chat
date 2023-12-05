@@ -32,7 +32,9 @@ class UpdateUserPasswordListener
 
         $this->rocketChatService->updateUser([
             'userId' => $this->rocketChatService->getUserList(['emails.address' => $event->user->email])[0]['_id'],
-            'data.password' => $event->password,
+            'data' => [
+                'password' => $event->password,
+            ],
         ]);
     }
 }
