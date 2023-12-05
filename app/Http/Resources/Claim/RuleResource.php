@@ -24,6 +24,7 @@ final class RuleResource extends JsonResource
             'id' => $this->resource->id,
             'name' => $this->resource->name,
             'description' => $this->resource->description,
+            'billing_company' => $this->resource->billingCompany->only(['id', 'name', 'code', 'logo', 'abbreviation']),
             'insurance_plans' => $this->resource->insurancePlans->reduce(function (Collection $carry, InsurancePlan $plan) {
                 if (!$carry->contains(fn ($item) => $item['id'] === $plan->insurance_company_id)) {
                     $carry->push([
