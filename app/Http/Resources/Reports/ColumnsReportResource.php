@@ -62,7 +62,7 @@ final class ColumnsReportResource extends JsonResource
             TypeReportAllRecords::PAYER_MIX => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsAdminPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
-            
+
             TypeReportAllRecords::PROFESSIONAL_PRODUCTIVITY => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsAdminProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class)

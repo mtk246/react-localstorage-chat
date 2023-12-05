@@ -69,7 +69,6 @@ enum ColumnsAdminProfessionalProductivityType: string implements TypeInterface
     #[PublicAttribute(true)]
     case CLAIMS_PROCESSED = 'claims_processed';
 
-
     #[TypeAttribute('string')]
     #[TextAttribute('Charges amount')]
     #[AlignAttribute('left')]
@@ -89,7 +88,7 @@ enum ColumnsAdminProfessionalProductivityType: string implements TypeInterface
     #[AlignAttribute('left')]
     #[WidthAttribute('370px')]
     #[PublicAttribute(true)]
-    case DISTINCT_CHARGE_COUNT = 'distinct_charge_count';    
+    case DISTINCT_CHARGE_COUNT = 'distinct_charge_count';
 
     #[TypeAttribute('string')]
     #[TextAttribute('Total payments')]
