@@ -28,7 +28,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property ClassificationType $clasification
  * @property string|null $url
+ * @property bool $tableu
  * @property BillingCompany|null $billingCompany
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reports\Preset> $presets
+ * @property int|null $presets_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
@@ -42,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereRange($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Report whereTableu($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Report whereUrl($value)
