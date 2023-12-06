@@ -50,7 +50,10 @@ final class GetRulesListAction
         $level = array_shift($levels);
 
         if (empty($levels)) {
-            $result[$level] = $value;
+            $result[$level] = [
+                ...$value,
+                'code' => $level,
+            ];
 
             return $result;
         }
