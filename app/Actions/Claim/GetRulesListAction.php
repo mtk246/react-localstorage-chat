@@ -60,6 +60,7 @@ final class GetRulesListAction
         if (!isset($result[$level])) {
             $result[$level] = [
                 'type' => 'group',
+                'code' => $level,
                 'description' => __("claim.rules.{$groupName}"),
                 'values' => [],
             ];
