@@ -356,6 +356,28 @@ final class DenialBodyResource extends JsonResource
             };
         }
 
+        $claimIds = array_column($history->toArray(), 'claim_id');
+
+        $denialRefile = DenialRefile::whereIn('claim_id', $claimIds)->get() ?? [];
+
+        foreach ($denialRefile as $denial) {
+            array_push(
+                $records,
+                [
+                    'id' => $denial->id,
+                    'note' => $denial->note,
+                    'refile_type' => $denial->refile_type,
+                    'is_cross_over' => $denial->is_cross_over,
+                    'cross_over_date' => $denial->cross_over_date,
+                    'original_claim_id' => $denial->original_claim_id,
+                    'refile_reason' => $denial->refile_reason,
+                    'claim_id' => $denial->claim_id,
+                    'created_at' => $denial->created_at,
+                    'last_modified' => $denial->updated_at,
+                ]
+            );
+        }
+
         return $records;
     }
 
@@ -394,9 +416,6 @@ final class DenialBodyResource extends JsonResource
                 ->where('private_note_id', $subNote['id'] ?? null)
                 ->first();
 
-            $denialRefile = DenialRefile::where('private_note_id', $subNote['id'] ?? null)
-                ->first();
-
             $statusData['denial_tracking'] = isset($denialTracking) ? [
                 'interface_type' => $denialTracking->interface_type ?? '',
                 'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
@@ -424,22 +443,17 @@ final class DenialBodyResource extends JsonResource
                 'claim_id' => $denialTracking->claim_id ?? '',
             ] : null;
 
-            $statusData['denial_refile'] = isset($denialRefile)
-                ? $denialRefile
-                : null;
-
             array_push(
                 $records,
                 [
+                    'id' => $subNote['id'],
                     'note' => $subNote['note'],
                     'created_at' => $subNote['created_at'],
                     'last_modified' => $subNote['last_modified'],
                     'status' => $statusData['status'].' - '.$subNote['status'],
                     'status_background_color' => $statusData['status_background_color'],
                     'status_font_color' => $statusData['status_font_color'],
-                    'policy_number' => isset($statusData['denial_refile']) ? $denialRefile->policy_number : null,
                     'denial_tracking' => isset($statusData['denial_tracking']) ? $statusData['denial_tracking'] : null,
-                    'denial_refile' => isset($statusData['denial_refile']) ? $statusData['denial_refile'] : null,
                 ]
             );
         }

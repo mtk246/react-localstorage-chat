@@ -58,9 +58,7 @@ final class DenialRefile extends Model
         'note',
         'original_claim_id',
         'refile_reason',
-        'denial_tracking_id',
         'claim_id',
-        'private_note_id',
     ];
 
     public function refileReason(): BelongsTo
