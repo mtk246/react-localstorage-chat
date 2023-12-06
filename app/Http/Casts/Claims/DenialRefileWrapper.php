@@ -21,6 +21,7 @@ final class DenialRefileWrapper extends CastsRequest
             'refile_reason' => $this->get('refile_reason'),
             'denial_tracking_id' => $this->get('denial_tracking_id'),
             'claim_id' => $this->get('claim_id'),
+            'private_note_id' => $this->get('private_note_id'),
         ];
 
         return [
