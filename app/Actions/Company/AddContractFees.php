@@ -19,26 +19,25 @@ use Illuminate\Support\Facades\Gate;
 
 final class AddContractFees
 {
-    public function invoke(Collection $contractFees, Company $company, User $user): Collection
+    public function invoke(Collection $contractFees, Company $company, User $user)
     {
         return DB::transaction(function () use ($contractFees, $company, $user): Collection {
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
-            return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
-
-                $contract = ContractFee::query()->where([
-                    'billing_company_id' => $contractFee->getBillingCompanyId(),
-                    'contract_fee_type_id' => $contractFee->getTypeId(),
-                    'start_date' => $contractFee->getStartDate(),
-                    'end_date' => $contractFee->getEndDate()
-                ])->when(
-                    $contractFee->getId() != 0,
-                    fn(Builder $query) => $query->where('id', $contractFee->getId())
-                )->first();
-
-                dd($contract);
-                if ($contract) {
-                    $contract->update([
+            return $contractFees->map(function (ContractFeesRequestCast $contractFee) {
+                if (!$contractFee->getId()) {
+                    return ContractFee::create([
+                        'billing_company_id' => $contractFee->getBillingCompanyId(),
+                        'contract_fee_type_id' => $contractFee->getTypeId(),
+                        'start_date' => $contractFee->getStartDate(),
+                        'end_date' => $contractFee->getEndDate(),
+                        'insurance_label_fee_d' => $contractFee->getInsuranceLabelFeeId(),
+                        'private_note' => $contractFee->getPrivateNote(),
+                        'price' => $contractFee->getPrice(),
+                        'price_percentage' => $contractFee->getPricePercentage(),
+                    ]);
+                } else {
+                    ContractFee::find($contractFee->getId())->update([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
                         'contract_fee_type_id' => $contractFee->getTypeId(),
                         'start_date' => $contractFee->getStartDate(),
@@ -48,29 +47,10 @@ final class AddContractFees
                         'price' => $contractFee->getPrice(),
                         'price_percentage' => $contractFee->getPricePercentage(),
                     ]);
-                }
-                else {
-                    $contract = ContractFee::create([
-                        'billing_company_id' => $contractFee->getBillingCompanyId(),
-                        'contract_fee_type_id' => $contractFee->getTypeId(),
-                        'start_date' => $contractFee->getStartDate(),
-                        'end_date' => $contractFee->getEndDate(),
-                        'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
-                        'private_note' => $contractFee->getPrivateNote(),
-                        'price' => $contractFee->getPrice(),
-                        'price_percentage' => $contractFee->getPricePercentage(),
-                    ]);
-                }
 
-                $this->afterCreate(
-                    $contract,
-                    $company,
-                    $contractFee,
-                );
-
-                return $contract;
-            })
-            ->map(fn (ContractFee $contractFee) => $contractFee->load([
+                    return ContractFee::find($contractFee->getId());
+                }
+            })->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
                 'patients',
                 'modifiers',
