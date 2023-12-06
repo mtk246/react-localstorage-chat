@@ -10,18 +10,18 @@ final class DuplicityValidationRule implements Rule
 {
     public function passes($attribute, $value)
     {
-        $filterInsurancePlanIds = $this->hasDuplicateArrayIds($value, "insurance_plan_ids");
-        $filterModifierIds = $this->hasDuplicateArrayIds($value, "procedure_ids");
-        $filterProcedureIds = $this->hasDuplicateArrayIds($value, "modifier_ids");
+        $filterInsurancePlanIds = $this->hasDuplicateArrayIds($value, 'insurance_plan_ids');
+        $filterModifierIds = $this->hasDuplicateArrayIds($value, 'procedure_ids');
+        $filterProcedureIds = $this->hasDuplicateArrayIds($value, 'modifier_ids');
 
-        //search duplicity in billing_company_id and type_id
+        // search duplicity in billing_company_id and type_id
         $duplicateFound = $this->hasDuplicateBillingAndTypeIds($value);
 
-        //search overlapping dates
+        // search overlapping dates
         $overlappingDates = $this->hasOverlappingDates($value);
 
-        //if no duplicity found, go to validate overlapping dates
-        if ( $filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound ) {
+        // if no duplicity found, go to validate overlapping dates
+        if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
             if ($overlappingDates) {
                 return false;
             }
@@ -34,7 +34,6 @@ final class DuplicityValidationRule implements Rule
     {
         return 'There cannot be equal contracts, verify the information';
     }
-
 
     private function hasDuplicateArrayIds(array $contractFees, string $attribute): bool
     {
@@ -56,7 +55,7 @@ final class DuplicityValidationRule implements Rule
         $contractFeesCollection = collect($contractFees);
 
         $duplicates = $contractFeesCollection->groupBy(function ($item) {
-            return $item['billing_company_id'] . '-' . $item['type_id'];
+            return $item['billing_company_id'].'-'.$item['type_id'];
         })->filter(function ($group) {
             return $group->count() > 1;
         });
