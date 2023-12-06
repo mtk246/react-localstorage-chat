@@ -19,11 +19,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $cross_over_date
  * @property string $note
  * @property string $original_claim_id
+ * @property int $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $denial_tracking_id
  * @property int $claim_id
- * @property int|null $refile_reason
+ * @property RefileReason|null $refileReason
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newQuery()
