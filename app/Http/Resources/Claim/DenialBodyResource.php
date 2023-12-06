@@ -394,8 +394,7 @@ final class DenialBodyResource extends JsonResource
                 ->where('private_note_id', $subNote['id'] ?? null)
                 ->first();
 
-            $denialRefile = DenialRefile::where('claim_id', $denialTracking->claim_id ?? 0)
-                ->first();
+            $denialRefile = DenialRefile::where('claim_id', $denialTracking->claim_id ?? 0)->get()->toArray();
 
             $statusData['denial_tracking'] = isset($denialTracking) ? [
                 'interface_type' => $denialTracking->interface_type ?? '',
@@ -425,18 +424,7 @@ final class DenialBodyResource extends JsonResource
             ] : null;
 
             $statusData['denial_refile'] = isset($denialRefile)
-                ? [
-                    'refile_type' => $denialRefile->refile_type ?? '',
-                    'policy_number' => $denialRefile->policy_number ?? '',
-                    'is_cross_over' => $denialRefile->is_cross_over ?? '',
-                    'cross_over_date' => $denialRefile->cross_over_date ?? '',
-                    'is_contact_to_patient' => $denialRefile->is_contact_to_patient ?? '',
-                    'note' => $denialRefile->note ?? '',
-                    'original_claim_id' => $denialRefile->original_claim_id ?? '',
-                    'refile_reason' => $denialRefile->refile_reason ?? '',
-                    'denial_tracking_id' => $denialRefile->denial_tracking_id ?? '',
-                    'claim_id' => $denialRefile->claim_id ?? '',
-                ]
+                ? $denialRefile
                 : null;
 
             array_push(
