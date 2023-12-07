@@ -80,16 +80,16 @@ final class DuplicityValidationRule implements Rule
                 $otherEndDate = $otherContractFee['end_date'] ?? null;
 
                 // Check if both dates are null or only one date is present
-                if (($currentStartDate === null && $currentEndDate === null) || ($otherStartDate === null && $otherEndDate === null)) {
+                if ((null === $currentStartDate && null === $currentEndDate) || (null === $otherStartDate && null === $otherEndDate)) {
                     return false; // No overlap if both ranges are entirely null
                 }
 
-                if ($currentStartDate === null || $currentEndDate === null) {
-                    return $otherStartDate === null || $otherEndDate === null || ($currentEndDate >= $otherStartDate && $otherEndDate >= $currentEndDate);
+                if (null === $currentStartDate || null === $currentEndDate) {
+                    return null === $otherStartDate || null === $otherEndDate || ($currentEndDate >= $otherStartDate && $otherEndDate >= $currentEndDate);
                 }
 
-                if ($otherStartDate === null || $otherEndDate === null) {
-                    return $currentStartDate === null || $currentEndDate === null || ($otherEndDate >= $currentStartDate && $currentEndDate >= $otherStartDate);
+                if (null === $otherStartDate || null === $otherEndDate) {
+                    return null === $currentStartDate || null === $currentEndDate || ($otherEndDate >= $currentStartDate && $currentEndDate >= $otherStartDate);
                 }
 
                 return ($currentStartDate <= $otherEndDate) && ($currentEndDate >= $otherStartDate);
