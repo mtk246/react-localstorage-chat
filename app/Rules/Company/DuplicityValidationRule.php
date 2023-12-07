@@ -11,8 +11,8 @@ final class DuplicityValidationRule implements Rule
     public function passes($attribute, $value)
     {
         $filterInsurancePlanIds = $this->hasDuplicateArrayIds($value, 'insurance_plan_ids');
-        $filterModifierIds = $this->hasDuplicateArrayIds($value, 'procedure_ids');
-        $filterProcedureIds = $this->hasDuplicateArrayIds($value, 'modifier_ids');
+        $filterModifierIds = $this->hasDuplicateArrayIds($value, 'modifier_ids');
+        $filterProcedureIds = $this->hasDuplicateArrayIds($value, 'procedure_ids');
 
         // search duplicity in billing_company_id and type_id
         $duplicateFound = $this->hasDuplicateBillingAndTypeIds($value);
@@ -26,7 +26,6 @@ final class DuplicityValidationRule implements Rule
                 return false;
             }
         }
-
         return true;
     }
 
@@ -41,6 +40,10 @@ final class DuplicityValidationRule implements Rule
 
         foreach ($allElementsIds as $key => $currentElementsIds) {
             $otherElementsIds = $allElementsIds->except($key)->flatten()->unique();
+
+            if (is_null($currentElementsIds) && $otherElementsIds->every(fn ($item) => $item === null)) {
+                return true;
+            }
 
             if ($otherElementsIds->intersect($currentElementsIds)->isNotEmpty()) {
                 return true;
@@ -79,20 +82,16 @@ final class DuplicityValidationRule implements Rule
                 $otherStartDate = $otherContractFee['start_date'] ?? null;
                 $otherEndDate = $otherContractFee['end_date'] ?? null;
 
-                // Check if both dates are null or only one date is present
                 if ((null === $currentStartDate && null === $currentEndDate) || (null === $otherStartDate && null === $otherEndDate)) {
                     return false; // No overlap if both ranges are entirely null
                 }
 
-                if (null === $currentStartDate || null === $currentEndDate) {
-                    return null === $otherStartDate || null === $otherEndDate || ($currentEndDate >= $otherStartDate && $otherEndDate >= $currentEndDate);
+                if (null === $currentStartDate || null === $currentEndDate || null === $otherStartDate || null === $otherEndDate) {
+                    return false; // No overlap if any range is entirely null
                 }
 
-                if (null === $otherStartDate || null === $otherEndDate) {
-                    return null === $currentStartDate || null === $currentEndDate || ($otherEndDate >= $currentStartDate && $currentEndDate >= $otherStartDate);
-                }
-
-                return ($currentStartDate <= $otherEndDate) && ($currentEndDate >= $otherStartDate);
+                return ($currentStartDate <= $otherStartDate && $otherEndDate <= $currentEndDate) ||
+                    ($otherStartDate <= $currentStartDate && $currentEndDate <= $otherEndDate);
             });
 
             return !$overlapping; // Stop iteration if overlapping found
