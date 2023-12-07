@@ -7,23 +7,59 @@ use App\Enums\Claim\RuleType;
 return [
     'controlNumber' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
-        'value' => 'claim:controlNumber',
+        'description' => 'Claim control number',
+        'value' => [
+            'id' => 'claim:controlNumber',
+            'name' => 'Claim control number',
+        ],
+        'values' => [
+            [
+                'id' => 'claim:controlNumber',
+                'name' => 'Claim control number',
+            ],
+        ],
     ],
     'tradingPartnerServiceId' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
-        'value' => 'claim:tradingPartnerServiceId',
+        'description' => 'Claim trading partner service id',
+        'value' => [
+            'id' => 'claim:tradingPartnerServiceId',
+            'name' => 'Claim trading partner service id',
+        ],
+        'values' => [
+            [
+                'id' => 'claim:tradingPartnerServiceId',
+                'name' => 'Claim trading partner service id',
+            ],
+        ],
     ],
     'tradingPartnerName' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
-        'value' => 'claim:tradingPartnerName',
+        'description' => 'Claim trading partner service id',
+        'value' => [
+            'id' => 'claim:tradingPartnerName',
+            'name' => 'Claim trading partner service id',
+        ],
+        'values' => [
+            [
+                'id' => 'claim:tradingPartnerName',
+                'name' => 'Claim trading partner service id',
+            ],
+        ],
     ],
     'usageIndicator' => [
         'type' => RuleType::SINGLE->value,
-        'description' => null,
-        'value' => 'claim:usageIndicator',
+        'description' => 'Claim usage indicator',
+        'value' => [
+            'id' => 'claim:usageIndicator',
+            'name' => 'Claim usage indicator',
+        ],
+        'values' => [
+            [
+                'id' => 'claim:usageIndicator',
+                'name' => 'Claim usage indicator',
+            ],
+        ],
     ],
     'submitter.organizationName' => [
         'type' => RuleType::SINGLE->value,
