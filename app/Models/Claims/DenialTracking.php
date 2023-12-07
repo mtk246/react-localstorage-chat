@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -90,6 +91,7 @@ final class DenialTracking extends Model
         'response_details',
         'private_note_id',
         'claim_id',
+        'policy_id',
     ];
 
     protected $casts = [
@@ -143,13 +145,9 @@ final class DenialTracking extends Model
      */
     public static function createDenialTracking(array $data)
     {
-        try {
-            $denial = DenialTracking::create($data);
+        $denial = DenialTracking::create($data);
 
-            return $denial;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $denial;
     }
 
     /**
@@ -172,8 +170,8 @@ final class DenialTracking extends Model
         return null;
     }
 
-    public function denialRefile(): BelongsTo
+    public function insurancePolicy(): BelongsTo
     {
-        return $this->belongsTo(DenialRefile::class, 'denial_tracking_id');
+        return $this->belongsTo(InsurancePolicy::class, 'policy_id');
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\InsurancePolicy;
+use App\Models\PrivateNote;
 use App\Models\RefileReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,13 +54,14 @@ final class DenialRefile extends Model
 
     protected $fillable = [
         'refile_type',
-        'policy_number',
+        'policy_id',
         'is_cross_over',
         'cross_over_date',
         'note',
         'original_claim_id',
         'refile_reason',
         'claim_id',
+        'private_note_id',
     ];
 
     public function refileReason(): BelongsTo
@@ -68,13 +71,9 @@ final class DenialRefile extends Model
 
     public static function createDenialRefile(array $data)
     {
-        try {
-            $denial = DenialRefile::create($data);
+        $denial = DenialRefile::create($data);
 
-            return $denial;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $denial;
     }
 
     public static function updateDenialRefile(array $data)
@@ -92,8 +91,13 @@ final class DenialRefile extends Model
         return null;
     }
 
-    public function denialTracking(): BelongsTo
+    public function insurancePolicy(): BelongsTo
     {
-        return $this->belongsTo(DenialTracking::class, 'id');
+        return $this->belongsTo(InsurancePolicy::class, 'policy_id');
+    }
+
+    public function privateNotes(): BelongsTo
+    {
+        return $this->belongsTo(PrivateNote::class, 'private_note_id');
     }
 }

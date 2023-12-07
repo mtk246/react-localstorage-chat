@@ -13,7 +13,7 @@ final class DenialRefileWrapper extends CastsRequest
         $refileData = [
             'refile_id' => $this->get('refile_id') ?? null,
             'refile_type' => $this->get('refile_type'),
-            'policy_number' => $this->get('policy_number'),
+            'policy_id' => (string) $this->get('policy_id'),
             'is_cross_over' => $this->get('is_cross_over'),
             'cross_over_date' => $this->get('cross_over_date'),
             'note' => $this->get('note'),

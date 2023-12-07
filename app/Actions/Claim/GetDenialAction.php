@@ -11,6 +11,7 @@ use App\Http\Resources\Claim\DenialBodyResource;
 use App\Models\Claims\Claim;
 use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
+use App\Models\PrivateNote;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -118,10 +119,19 @@ final class GetDenialAction
         }
 
         $denialRefileWrapper = new DenialRefileWrapper($request->all());
-
         $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
 
         $refile = DenialRefile::createDenialRefile($refileData);
+
+        $note = PrivateNote::create([
+            'publishable_type' => DenialRefile::class,
+            'publishable_id' => $refile->id,
+            'note' => $denialRefileWrapper->getData()['denial_refile_data']['note'],
+        ]);
+
+        $refile->private_note_id = $note->id;
+
+        $refile->save();
 
         return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
     }
