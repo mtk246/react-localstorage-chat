@@ -70,14 +70,27 @@ final class DuplicityValidationRule implements Rule
         $overlapping = false;
 
         $contractFeesCollection->each(function ($contractFee, $index) use ($contractFeesCollection, &$overlapping) {
-            $currentStartDate = $contractFee['start_date'];
-            $currentEndDate = $contractFee['end_date'];
+            $currentStartDate = $contractFee['start_date'] ?? null;
+            $currentEndDate = $contractFee['end_date'] ?? null;
 
             $otherFees = $contractFeesCollection->except($index);
 
             $overlapping = $otherFees->contains(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
-                $otherStartDate = $otherContractFee['start_date'];
-                $otherEndDate = $otherContractFee['end_date'];
+                $otherStartDate = $otherContractFee['start_date'] ?? null;
+                $otherEndDate = $otherContractFee['end_date'] ?? null;
+
+                // Check if both dates are null or only one date is present
+                if (($currentStartDate === null && $currentEndDate === null) || ($otherStartDate === null && $otherEndDate === null)) {
+                    return false; // No overlap if both ranges are entirely null
+                }
+
+                if ($currentStartDate === null || $currentEndDate === null) {
+                    return $otherStartDate === null || $otherEndDate === null || ($currentEndDate >= $otherStartDate && $otherEndDate >= $currentEndDate);
+                }
+
+                if ($otherStartDate === null || $otherEndDate === null) {
+                    return $currentStartDate === null || $currentEndDate === null || ($otherEndDate >= $currentStartDate && $currentEndDate >= $otherStartDate);
+                }
 
                 return ($currentStartDate <= $otherEndDate) && ($currentEndDate >= $otherStartDate);
             });

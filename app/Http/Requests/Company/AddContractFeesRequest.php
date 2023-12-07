@@ -64,12 +64,10 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.start_date' => [
                 'nullable',
                 'date',
-                'before:contract_fees.*.end_date',
             ],
             'contract_fees.*.end_date' => [
                 'nullable',
                 'date',
-                'after:contract_fees.*.start_date',
             ],
             'contract_fees.*.mac' => ['nullable', 'string'],
             'contract_fees.*.locality_number' => ['nullable', 'numeric'],
