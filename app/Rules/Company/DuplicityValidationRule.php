@@ -20,7 +20,7 @@ final class DuplicityValidationRule implements Rule
         // search overlapping dates
         $overlappingDates = $this->hasOverlappingDates($value);
 
-        dd($filterInsurancePlanIds, $filterModifierIds, $filterProcedureIds, $duplicateFound, $overlappingDates);
+        var_dump($filterInsurancePlanIds, $filterModifierIds, $filterProcedureIds, $duplicateFound, $overlappingDates);
 
         // if no duplicity found, go to validate overlapping dates
         if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
