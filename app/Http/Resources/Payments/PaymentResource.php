@@ -31,7 +31,8 @@ final class PaymentResource extends JsonResource
             'statement' => $this->resource->statement,
             'note' => $this->resource->note,
             'eobs' => new EobResource($this->resource->eobs),
-            'insurance_company' => $this->resource->insuranceCompany,
+            'insurance_plan' => $this->resource->insurancePlan,
+            'insurance_company' => $this->resource->insurancePlan->insuranceCompany,
             'claims' => ClaimResource::collection($this->resource->claims),
         ];
     }
