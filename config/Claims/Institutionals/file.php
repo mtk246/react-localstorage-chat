@@ -50,9 +50,9 @@ return [
         'description' => 'Company Address',
         'value' => [
             ['name' => 'main company city', 'id' => 'companyAddress:city|1'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|1'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'main company zip', 'id' => 'companyAddress:zip|1'],
         ],
         'values' => [
@@ -137,9 +137,9 @@ return [
         'description' => 'Company Address',
         'value' => [
             ['name' => 'secondary company city', 'id' => 'companyAddress:city|3'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|3'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'secondary company zip', 'id' => 'companyAddress:zip|3'],
         ],
         'values' => [
@@ -900,9 +900,9 @@ return [
         'description' => 'Address 2',
         'value' => [
             ['name' => 'city', 'id' => 'HigherInsuranceCompany:city'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'state', 'id' => 'HigherInsuranceCompany:state'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'zip', 'id' => 'HigherInsuranceCompany:zip'],
         ],
         'values' => [
