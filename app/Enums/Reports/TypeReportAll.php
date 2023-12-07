@@ -33,4 +33,14 @@ enum TypeReportAll: string implements TypeInterface
     #[NameAttribute('general_healthcare_professional')]
     #[PublicAttribute(true)]
     case QNSJADXODC = 'QNSJADXODC';
+
+    #[TextAttribute('view_payer_mix')]
+    #[NameAttribute('payer_mix')]
+    #[PublicAttribute(true)]
+    case HHSUUILJFV = 'HHSUUILJFV';
+
+    #[TextAttribute('view_professional_productivity')]
+    #[NameAttribute('professional_productivity')]
+    #[PublicAttribute(true)]
+    case TPEMOBKSKL = 'TPEMOBKSKL';
 }
