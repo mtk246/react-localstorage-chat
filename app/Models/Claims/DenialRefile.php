@@ -16,13 +16,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $refile_type
  * @property string $policy_number
  * @property bool $is_cross_over
- * @property string $cross_over_date
+ * @property string|null $cross_over_date
  * @property string $note
- * @property string $original_claim_id
- * @property int $refile_reason
+ * @property string|null $original_claim_id
+ * @property int|null $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $denial_tracking_id
+ * @property int|null $denial_tracking_id
  * @property int $claim_id
  * @property RefileReason|null $refileReason
  *
