@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Casts;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 abstract class CastsRequest
 {
     protected Collection $inputs;
 
-    /**
-     * @param array<key, string|null> $querys
-     */
     public function __construct(
         Collection|array $inputs,
-        protected ?array $querys = null,
+        protected ?Request $request = null,
         protected ?User $user = null,
     ) {
         $this->inputs = collect($inputs);
@@ -67,10 +66,36 @@ abstract class CastsRequest
         return collect($this->getArray($input));
     }
 
+    protected function getFileByName(string $input, string $name, array $allowedfileExtension): ?UploadedFile
+    {
+        if (!$this->request->hasFile($input)) {
+            return null;
+        }
+
+        /** @var UploadedFile[] $files */
+        $files = $this->request->file($input);
+
+        foreach ($files as $file) {
+            if ($name !== $file->getClientOriginalName()) {
+                continue;
+            }
+
+            $extension = $file->getClientOriginalExtension();
+
+            if (!in_array($extension, $allowedfileExtension)) {
+                throw new \Exception('Invalid file type');
+            }
+
+            return $file;
+        }
+
+        return null;
+    }
+
     protected function cast(string $input, string $class): ?object
     {
         return $this->has($input)
-            ? new $class($this->inputs->get($input), $this->querys, $this->user)
+            ? new $class($this->inputs->get($input), $this->request, $this->user)
             : null;
     }
 
@@ -78,7 +103,7 @@ abstract class CastsRequest
     {
         return $this->get($input)
             ? $this->getCollect($input)
-                ->map(fn (array $input) => new $class(collect($input), $this->querys, $this->user))
+                ->map(fn (array $input) => new $class(collect($input), $this->request, $this->user))
             : null;
     }
 }
