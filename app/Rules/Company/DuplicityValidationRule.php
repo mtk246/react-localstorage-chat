@@ -41,7 +41,7 @@ final class DuplicityValidationRule implements Rule
         foreach ($allElementsIds as $key => $currentElementsIds) {
             $otherElementsIds = $allElementsIds->except($key)->flatten()->unique();
 
-            if (is_null($currentElementsIds) && $otherElementsIds->every(fn ($item) => $item === null)) {
+            if (empty($currentElementsIds) && $otherElementsIds->isEmpty()) {
                 return true;
             }
 
