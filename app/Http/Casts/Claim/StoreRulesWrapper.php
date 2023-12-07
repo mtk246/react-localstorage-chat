@@ -18,9 +18,10 @@ final class StoreRulesWrapper extends CastsRequest
             'format' => $this->get('format'),
             'description' => $this->get('description') ?? '',
             'billing_company_id' => $this->getBillingCompanyId(),
-            'insurance_plan_id' => $this->getInsurancePlan(),
             'rules' => $this->getRules()->toArray(),
             'parameters' => $this->getParameters()->toJson(),
+            'active' => $this->getBool('active', true),
+            'note' => $this->get('note', ''),
         ];
     }
 
@@ -31,9 +32,9 @@ final class StoreRulesWrapper extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
-    public function getInsurancePlan(): int
+    public function getInsurancePlans(): array
     {
-        return $this->getInt('insurance_plan_id');
+        return $this->getArray('insurance_plan_ids');
     }
 
     public function hasResponsibilities(): bool

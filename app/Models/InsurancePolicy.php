@@ -43,6 +43,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\ClaimEligibility|null $claimLastEligibility
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\ClaimValidation> $claimValidations
  * @property int|null $claim_validations_count
+ * @property InsurancePolicy|null $complementaryPolicy
  * @property mixed $insurance_company_id
  * @property mixed $insurance_company_name
  * @property mixed $payer_id

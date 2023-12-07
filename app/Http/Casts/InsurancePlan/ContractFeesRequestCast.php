@@ -139,7 +139,7 @@ final class ContractFeesRequestCast extends CastsRequest
     public function getPatients(): Collection
     {
         return collect($this->inputs['patients'] ?? [])
-            ->map(fn (array $inputs) => new ContractFeePatiensCast($inputs, $this->querys, $this->user));
+            ->map(fn (array $inputs) => new ContractFeePatiensCast($inputs, $this->request, $this->user));
     }
 
     public function getContractSpecifications(): Collection
@@ -149,6 +149,6 @@ final class ContractFeesRequestCast extends CastsRequest
                 ? $this->inputs['contract_specifications'] ?? []
                 : []
         )
-            ->map(fn (array $inputs) => new ContractFeeSpecificationWrapper($inputs, $this->querys, $this->user));
+            ->map(fn (array $inputs) => new ContractFeeSpecificationWrapper($inputs, $this->request, $this->user));
     }
 }

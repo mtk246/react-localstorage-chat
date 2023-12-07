@@ -21,7 +21,8 @@ final class StoreRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_id' => 'required|integer|exists:insurance_plans,id',
+            'insurance_plan_ids' => 'required|array',
+            'insurance_plan_ids.*' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [
                 'required',
@@ -40,6 +41,7 @@ final class StoreRulesRequest extends FormRequest
                 new RuleFormatRule($this->get('format', '')),
             ],
             'parameters' => 'nullable|array',
+            'note' => 'nullable|string',
         ];
     }
 }

@@ -168,7 +168,8 @@
           ...
         "json": {...}
       }
-    }
+    },
+    "active": false
   ],
   "first_page_url": "http://localhost/api/v1/claim/rules?page=1",
   "from": 1,
@@ -279,6 +280,7 @@
       },
       ...
     "json": {...}
-  }
+  },
+  "active": true
 }
 ```

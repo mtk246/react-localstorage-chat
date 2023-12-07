@@ -50,7 +50,10 @@ final class GetRulesListAction
         $level = array_shift($levels);
 
         if (empty($levels)) {
-            $result[$level] = $value;
+            $result[$level] = [
+                ...$value,
+                'code' => $level,
+            ];
 
             return $result;
         }
@@ -60,6 +63,7 @@ final class GetRulesListAction
         if (!isset($result[$level])) {
             $result[$level] = [
                 'type' => 'group',
+                'code' => $level,
                 'description' => __("claim.rules.{$groupName}"),
                 'values' => [],
             ];
