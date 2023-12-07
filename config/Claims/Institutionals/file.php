@@ -208,7 +208,7 @@ return [
         'length' => 30,
         'description' => 'Bill Classification',
         'value' => [
-            ['name' => '0', 'id' => '|0'],
+            ['name' => '0', 'id' => '|0|1'],
             ['name' => 'bill classification', 'id' => 'demographicInformation.bill_classification'],
             ['name' => 'bill classification code', 'id' => 'patientInformation.billClassification.code'],
         ],
@@ -1283,7 +1283,7 @@ return [
     't.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|001',
+        'value' => '|001|1',
         'values' => [
             'common' => [],
         ],
@@ -1291,7 +1291,7 @@ return [
     't.b.1' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|1',
+        'value' => '|1|1',
         'values' => [
             'common' => [],
         ],
@@ -1299,7 +1299,7 @@ return [
     't.b.2' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|1',
+        'value' => '|1|1',
         'values' => [
             'common' => [],
         ],
@@ -1315,7 +1315,7 @@ return [
     't.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|02222222',
+        'value' => '|02222222|1',
         'values' => [
             'common' => [],
         ],
