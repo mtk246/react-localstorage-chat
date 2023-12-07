@@ -38,7 +38,7 @@ final class StoreBatchRequest extends FormRequest
             'amount' => 'required|numeric',
             'payments' => 'required|array',
             'payments.*.source_id' => 'required|integer',
-            'paiments.*.insurance_company_id' => 'required|integer',
+            'paiments.*.insurance_plan_id' => 'required|integer|exists:\App\Models\InsuranceCompany,id',
             'payments.*.payment_date' => 'required|date',
             'payments.*.currency' => 'required|string',
             'payments.*.amount' => 'required|numeric',
