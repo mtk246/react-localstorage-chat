@@ -600,7 +600,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims'])
             ->name('ledger.patients.claims');
     });
-    
+
     Route::prefix('payments')->middleware([
         'auth:api',
         // 'role:superuser|billingmanager',
