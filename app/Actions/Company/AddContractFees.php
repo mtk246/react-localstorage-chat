@@ -24,9 +24,7 @@ final class AddContractFees
         return DB::transaction(function () use ($contractFees, $company, $user): Collection {
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
-
-            return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company){
-
+            return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
                 if (!$contractFee->getId()) {
                     $contract = ContractFee::create([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
@@ -60,7 +58,6 @@ final class AddContractFees
                 );
 
                 return $contract;
-                
             })->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
                 'patients',

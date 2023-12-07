@@ -20,14 +20,13 @@ final class DuplicityValidationRule implements Rule
         // search overlapping dates
         $overlappingDates = $this->hasOverlappingDates($value);
 
-        dd($filterInsurancePlanIds, $filterModifierIds, $filterProcedureIds, $duplicateFound, $overlappingDates);
-
         // if no duplicity found, go to validate overlapping dates
         if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
             if ($this->hasOverlappingDates($value)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -96,8 +95,8 @@ final class DuplicityValidationRule implements Rule
                     return true; // Overlap if current range starts before other range ends
                 }
 
-                return ($currentStartDate <= $otherStartDate && $otherEndDate <= $currentEndDate) ||
-                    ($otherStartDate <= $currentStartDate && $currentEndDate <= $otherEndDate);
+                return ($currentStartDate <= $otherStartDate && $otherEndDate <= $currentEndDate)
+                    || ($otherStartDate <= $currentStartDate && $currentEndDate <= $otherEndDate);
             });
 
             return !$overlapping; // Stop iteration if overlapping found
