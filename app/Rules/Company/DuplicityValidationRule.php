@@ -20,9 +20,11 @@ final class DuplicityValidationRule implements Rule
         // search overlapping dates
         $overlappingDates = $this->hasOverlappingDates($value);
 
+        dd($filterInsurancePlanIds, $filterModifierIds, $filterProcedureIds, $duplicateFound, $overlappingDates);
+
         // if no duplicity found, go to validate overlapping dates
         if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
-            if ($overlappingDates) {
+            if ($this->hasOverlappingDates($value)) {
                 return false;
             }
         }
@@ -83,11 +85,15 @@ final class DuplicityValidationRule implements Rule
                 $otherEndDate = $otherContractFee['end_date'] ?? null;
 
                 if ((null === $currentStartDate && null === $currentEndDate) || (null === $otherStartDate && null === $otherEndDate)) {
-                    return false; // No overlap if both ranges are entirely null
+                    return true; // No overlap if both ranges are entirely null
                 }
 
-                if (null === $currentStartDate || null === $currentEndDate || null === $otherStartDate || null === $otherEndDate) {
-                    return false; // No overlap if any range is entirely null
+                if ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate) {
+                    return true; // Overlap if current range is contained in other range
+                }
+
+                if (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate)) {
+                    return true; // Overlap if current range starts before other range ends
                 }
 
                 return ($currentStartDate <= $otherStartDate && $otherEndDate <= $currentEndDate) ||
