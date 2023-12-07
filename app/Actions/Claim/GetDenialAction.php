@@ -141,14 +141,23 @@ final class GetDenialAction
         $claim = Claim::find($request->input('claim_id'));
 
         if (!$claim) {
-            return response()->json(__('Error creating denial tracking'), 400);
+            return response()->json(__('Error updating denial refile'), 400);
         }
 
         $denialRefileWrapper = new DenialRefileWrapper($request->all());
-
         $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
 
         $refile = DenialRefile::updateDenialRefile($refileData);
+
+        $note = PrivateNote::create([
+            'publishable_type' => DenialRefile::class,
+            'publishable_id' => $refile->id,
+            'note' => $denialRefileWrapper->getData()['denial_refile_data']['note'],
+        ]);
+
+        $refile->private_note_id = $note->id;
+
+        $refile->save();
 
         return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
     }

@@ -366,6 +366,10 @@ final class DenialBodyResource extends JsonResource
             $privateNote = $denial->privateNotes->note ?? '';
 
             if (!empty($privateNoteId) && !empty($privateNote)) {
+                $insurancePolicy = $denial->insurancePolicy;
+                $policyId = $denial->policy_id ?? '';
+                $policyNumber = optional($insurancePolicy)->policy_number ?? '';
+
                 array_push(
                     $records,
                     [
@@ -373,7 +377,7 @@ final class DenialBodyResource extends JsonResource
                         'note' => $privateNote,
                         'created_at' => $denial->created_at,
                         'last_modified' => $denial->updated_at,
-                        'policy_number' => $denial->insurancePolicy->policy_number,
+                        'policy_number' => $policyNumber,
                         'denial_refile' => [
                             'refile_type' => $denial->refile_type,
                             'is_cross_over' => $denial->is_cross_over,
@@ -382,8 +386,8 @@ final class DenialBodyResource extends JsonResource
                             'refile_reason' => $denial->refile_reason,
                             'claim_id' => $denial->claim_id,
                             'created_at' => $denial->created_at,
-                            'policy_id' => $denial->policy_id ?? '',
-                            'policy_number' => $denial->insurancePolicy->policy_number ?? '',
+                            'policy_id' => $policyId,
+                            'policy_number' => $policyNumber,
                         ],
                     ]
                 );
