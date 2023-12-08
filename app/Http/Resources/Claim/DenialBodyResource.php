@@ -567,12 +567,12 @@ final class DenialBodyResource extends JsonResource
             ->wherePivot('order', 1)
             ->first();
 
-        return [
+        return isset($insurancePolicy) ? [
             'insurance_plan_id' => optional($insurancePolicy->insurancePlan)->id ?? '',
             'insurance_company_id' => optional($insurancePolicy->insurancePlan->insuranceCompany)->id ?? '',
             'insurance_company' => optional($insurancePolicy->insurancePlan->insuranceCompany)->name ?? '',
             'policy_id' => $insurancePolicy->id ?? '',
             'policy_number' => $insurancePolicy->policy_number ?? '',
-        ];
+        ] : [];
     }
 }
