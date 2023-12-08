@@ -50,9 +50,9 @@ return [
         'description' => 'Company Address',
         'value' => [
             ['name' => 'main company city', 'id' => 'companyAddress:city|1'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|1'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'main company zip', 'id' => 'companyAddress:zip|1'],
         ],
         'values' => [
@@ -137,9 +137,9 @@ return [
         'description' => 'Company Address',
         'value' => [
             ['name' => 'secondary company city', 'id' => 'companyAddress:city|3'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'secondary company state code', 'id' => 'companyAddress:state_code|3'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'secondary company zip', 'id' => 'companyAddress:zip|3'],
         ],
         'values' => [
@@ -208,7 +208,7 @@ return [
         'length' => 30,
         'description' => 'Bill Classification',
         'value' => [
-            ['name' => '0', 'id' => '|0'],
+            ['name' => '0', 'id' => '|0|1'],
             ['name' => 'bill classification', 'id' => 'demographicInformation.bill_classification'],
             ['name' => 'bill classification code', 'id' => 'patientInformation.billClassification.code'],
         ],
@@ -900,9 +900,9 @@ return [
         'description' => 'Address 2',
         'value' => [
             ['name' => 'city', 'id' => 'HigherInsuranceCompany:city'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'state', 'id' => 'HigherInsuranceCompany:state'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'zip', 'id' => 'HigherInsuranceCompany:zip'],
         ],
         'values' => [
@@ -1283,7 +1283,7 @@ return [
     't.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|001',
+        'value' => '|001|1',
         'values' => [
             'common' => [],
         ],
@@ -1291,7 +1291,7 @@ return [
     't.b.1' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|1',
+        'value' => '|1|1',
         'values' => [
             'common' => [],
         ],
@@ -1299,7 +1299,7 @@ return [
     't.b.2' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|1',
+        'value' => '|1|1',
         'values' => [
             'common' => [],
         ],
@@ -1315,7 +1315,7 @@ return [
     't.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => '|02222222',
+        'value' => '|02222222|1',
         'values' => [
             'common' => [],
         ],

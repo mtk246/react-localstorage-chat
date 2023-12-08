@@ -600,7 +600,7 @@ return [
     '11b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
-        'value' => '| ',
+        'value' => null,
         'values' => [],
     ],
     '11c' => [
@@ -1095,9 +1095,9 @@ return [
         'length' => 2,
         'value' => [
             ['name' => 'Claim from date additional information', 'id' => 'claimDateAdditionalInformation:from_date'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |1'],
             ['name' => 'Claim to date additional information', 'id' => 'claimDateAdditionalInformation:to_date'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |2'],
             ['name' => 'Claim description additional information', 'id' => 'claimDateAdditionalInformation:description'],
         ],
         'values' => [
@@ -1445,7 +1445,7 @@ return [
         'glue' => ' ',
         'value' => [
             ['name' => 'Facility city', 'id' => 'facilityAddress:city|0'],
-            ['name' => ' ', 'id' => '| '],
+            ['name' => ' ', 'id' => '| |1'],
             ['name' => 'Facility state', 'id' => 'facilityAddress:state|0'],
             ['name' => 'Facility zip', 'id' => 'facilityAddress:zip|0'],
         ],
@@ -1530,7 +1530,7 @@ return [
         'glue' => ' ',
         'value' => [
             ['name' => 'Billing provider city', 'id' => 'companyAddress:city|0'],
-            ['name' => ', ', 'id' => '|, '],
+            ['name' => ', ', 'id' => '|, |1'],
             ['name' => 'Billing provider state', 'id' => 'companyAddress:state|0'],
             ['name' => 'Billing provider zip', 'id' => 'companyAddress:zip|0'],
         ],
