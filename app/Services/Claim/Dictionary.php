@@ -39,10 +39,10 @@ abstract class Dictionary implements DictionaryInterface
         $config = (object) $this->config[$key];
 
         return match ($config->type) {
-            RuleType::DATE->value => $this->getDateFormat($config->value),
-            RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
-            RuleType::SINGLE->value => $this->getSingleFormat($config->value),
-            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value),
+            RuleType::DATE->value => $this->getDateFormat((object) $config->value),
+            RuleType::BOOLEAN->value => $this->getBooleanFormat((object) $config->value),
+            RuleType::SINGLE->value => $this->getSingleFormat((object) $config->value),
+            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat((object) $config->value),
             RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
             RuleType::MULTIPLE_ARRAY->value => $this->getMultipleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
@@ -63,8 +63,8 @@ abstract class Dictionary implements DictionaryInterface
     protected function getMultipleArrayFormat(array $values, string $glue): array
     {
         return Collect($values)
-            ->reduce(function (?Collection $carry, object $value) use ($glue) {
-                $items = $this->getSingleFormat($value->id);
+            ->reduce(function (?Collection $carry, array $value) use ($glue) {
+                $items = $this->getSingleFormat((object) $value);
                 $items = $items instanceof Collection ? $items : Collect([$items]);
 
                 if (is_null($carry)) {
@@ -83,14 +83,14 @@ abstract class Dictionary implements DictionaryInterface
     protected function getMultipleFormat(array $values, string $glue): string
     {
         return Collect($values)
-            ->map(fn (object $value) => (string) $this->getSingleFormat($value->id))
+            ->map(fn ($value) => (string) $this->getSingleFormat((object) $value))
             ->filter(fn (string $value) => !empty($value))
             ->implode($glue);
     }
 
     protected function getSingleArrayFormat(object $value): array
     {
-        return $this->getSingleFormat($value->id)
+        return $this->getSingleFormat($value)
             ->toArray();
     }
 
@@ -172,18 +172,18 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
-            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan->id)
+            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan?->id)
             ->where('billing_company_id', $this->claim->billing_company_id)
             ->where('format', $this->claim->format)
             ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
-                ->insurancePolicies
+                ?->insurancePolicies
                 ->where('billing_company_id', $this->claim->billing_company_id)
                 ->map(fn (InsurancePolicy $policy) => $policy
                     ->typeResponsibility
                     ?->code
                 )
                 ->unique()
-                ->filter()
+                ->filter() ?? []
             ))
             ->orDoesntHave('typesOfResponsibilities')
             ->first()
