@@ -132,14 +132,14 @@ class Claim extends Model implements Auditable
                 $patientProfile = $this->demographicInformation->patient?->profile;
 
                 return (!empty($abbreviationCompany)
-                    ? $abbreviationCompany . '-'
-                    : '') .
-                    (!empty($this->date_of_service)
-                        ? Carbon::createFromFormat('Y-m-d', $this->date_of_service)?->format('mdY') . '-'
-                        : '') .
-                    (!empty($patientProfile)
-                        ? Str::upper((Str::substr($patientProfile->first_name, 0, 1) . '' . Str::substr($patientProfile->last_name, 0, 1)))
-                        : '') . Str::padLeft($this->id, 6, '0');
+                    ? $abbreviationCompany.'-'
+                    : '')
+                    .(!empty($this->date_of_service)
+                        ? Carbon::createFromFormat('Y-m-d', $this->date_of_service)?->format('mdY').'-'
+                        : '')
+                    .(!empty($patientProfile)
+                        ? Str::upper(Str::substr($patientProfile->first_name, 0, 1).''.Str::substr($patientProfile->last_name, 0, 1))
+                        : '').Str::padLeft($this->id, 6, '0');
             },
         );
     }
