@@ -157,7 +157,7 @@ class ClaimController extends Controller
                 ?->facilityTypes
                 ->reduce(function (array $response, FacilityType $facilityType) {
                     BillClassification::query()
-                        ->whereIn('id', json_decode($facilityType->pivot->bill_classifications))
+                        ->whereIn('id', $facilityType->pivot?->bill_classifications ?? [])
                         ->get()
                         ->each(function (BillClassification $billClassification) use (&$response, $facilityType){
                             $response[] = [
