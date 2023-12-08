@@ -10,8 +10,10 @@ return [
         'length' => 30,
         'description' => 'Higher insurance company name',
         'value' => [
-            'id' => 'higherInsuranceCompany:name',
-            'name' => 'Higher insurance company name',
+            [
+                'id' => 'higherInsuranceCompany:name',
+                'name' => 'Higher insurance company name',
+            ],
         ],
         'values' => [
             'common' => [
