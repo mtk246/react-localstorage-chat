@@ -96,7 +96,6 @@ final class ClaimPreviewController extends Controller
                 true,
                 [
                     'pdf' => $preview,
-                    'shipping_date' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y'),
                     'claimsByPlan' => $claimReport->invoke($batch),
                 ],
                 'E',
