@@ -39,7 +39,7 @@ final class JSONDictionary extends Dictionary
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
             'tradingPartnerServiceId' => $this->getByApi('cpid'),
             'tradingPartnerName' => $this->getByApi('name'),
-            'usageIndicator' => 'T',  /* Caso de prueba */
+            'usageIndicator' => ('production' == config('app.env')) ? '' : 'T',
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -1978,7 +1978,7 @@ final class JSONDictionary extends Dictionary
                     '',
                     $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
                 ) ?? null,
-                'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
+                // 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
                 // 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],
