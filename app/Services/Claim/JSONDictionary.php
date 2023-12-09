@@ -39,7 +39,7 @@ final class JSONDictionary extends Dictionary
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
             'tradingPartnerServiceId' => $this->getByApi('cpid'),
             'tradingPartnerName' => $this->getByApi('name'),
-            'usageIndicator' => 'T',  /* Caso de prueba */
+            'usageIndicator' => ('production' == config('app.env')) ? '' : 'T',
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -263,14 +263,14 @@ final class JSONDictionary extends Dictionary
         foreach ($this->claim->dateInformations ?? [] as $dateInfo) {
             $qualifier = $dateInfo?->qualifier?->code ?? '';
             if (isset($qualifierFields[$qualifier])) {
-                if ((1 == $dateInfo->field_id) || (2 == $dateInfo->field_id)) {
+                if ((1 == $dateInfo->field_id->value) || (2 == $dateInfo->field_id->value)) {
                     $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date;
-                } elseif (3 == $dateInfo->field_id) {
+                } elseif (3 == $dateInfo->field_id->value) {
                     $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date;
                     $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
                 }
             }
-            if (4 == $dateInfo->field_id) {
+            if (4 == $dateInfo->field_id->value) {
                 $claimDateInfo['admissionDate'] = str_replace('-', '', $dateInfo?->from_date ?? '');
                 $claimDateInfo['dischargeDate'] = str_replace('-', '', $dateInfo->to_date ?? '');
             }
@@ -1978,7 +1978,7 @@ final class JSONDictionary extends Dictionary
                     '',
                     $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
                 ) ?? null,
-                'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
+                // 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
                 // 'email' => $billingProviderContact->email,
                 // 'phoneExtension' => ''
             ],

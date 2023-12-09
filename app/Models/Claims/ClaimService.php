@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimService.
@@ -43,9 +45,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimService extends Model
+final class ClaimService extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'claim_id',

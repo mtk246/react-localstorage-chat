@@ -7,6 +7,8 @@ namespace App\Models\Claims;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimTransmissionStatus.
@@ -32,9 +34,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimTransmissionStatus extends Model
+final class ClaimTransmissionStatus extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'status', 'background_color', 'font_color',

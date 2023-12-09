@@ -11,7 +11,7 @@ trait HasCastedClass
     public function castedCollect(string $input): Collection
     {
         return collect($this->get($input))
-            ->map(fn (mixed $item) => new $this->castedClass($item, $this->query(), $this->user()));
+            ->map(fn (mixed $item) => new $this->castedClass($item, $this, $this->user()));
     }
 
     public function casted(string $input = null): mixed
@@ -20,7 +20,7 @@ trait HasCastedClass
             $input
                 ? $this->input($input, [])
                 : $this->all(),
-            $this->query(),
+            $this,
             $this->user(),
         );
     }

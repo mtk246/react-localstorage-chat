@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Resources\Reports;
 
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
+use App\Enums\Reports\ColumnsAdminPayerMixType;
+use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -12,6 +14,8 @@ use App\Enums\Reports\ColumnsBillingGeneralPatinetType;
 use App\Enums\Reports\ColumnsGeneralFacilityType;
 use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
+use App\Enums\Reports\ColumnsPayerMixType;
+use App\Enums\Reports\ColumnsProfessionalProductivityType;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -53,7 +57,15 @@ final class ColumnsReportResource extends JsonResource
 
             TypeReportAllRecords::GENERAL_HEALTHCARE_PROFESSIONAL => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::PAYER_MIX => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsAdminPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::PROFESSIONAL_PRODUCTIVITY => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsAdminProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }
 }
