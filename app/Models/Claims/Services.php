@@ -67,6 +67,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereTypeOfServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @mixin \Eloquent
  */
 final class Services extends Model implements Auditable

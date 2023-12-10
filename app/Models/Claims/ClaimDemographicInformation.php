@@ -76,6 +76,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation whereValidate($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @mixin \Eloquent
  */
 final class ClaimDemographicInformation extends Model implements Auditable

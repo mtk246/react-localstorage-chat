@@ -66,6 +66,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereTrackingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property InsurancePolicy|null $insurancePolicy
+ *
  * @mixin \Eloquent
  */
 final class DenialTracking extends Model implements Auditable

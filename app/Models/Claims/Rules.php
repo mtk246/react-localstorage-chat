@@ -48,6 +48,12 @@ use Laravel\Scout\Searchable;
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereRules($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereUpdatedAt($value)
  *
+ * @property bool $active
+ * @property string|null $note
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereNote($value)
+ *
  * @mixin \Eloquent
  */
 final class Rules extends Model

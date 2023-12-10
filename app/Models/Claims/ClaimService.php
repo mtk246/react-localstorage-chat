@@ -43,6 +43,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ *
  * @mixin \Eloquent
  */
 final class ClaimService extends Model implements Auditable

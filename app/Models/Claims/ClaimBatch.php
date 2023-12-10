@@ -58,6 +58,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereShippingDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch search($search)
  *
  * @mixin \Eloquent
  */
