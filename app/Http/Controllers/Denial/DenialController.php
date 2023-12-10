@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Denial;
 
+use App\Actions\Claim\Denial\StoreRefileAction;
+use App\Actions\Claim\Denial\UpdateRefileAction;
 use App\Actions\Claim\GetDenialAction;
 use App\Models\Claims\Claim;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Denial\StoreRefileRequest;
 use App\Repositories\ClaimRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,13 +52,13 @@ final class DenialController extends Controller
         return $getDenialAction->updateDenialTracking($request);
     }
 
-    public function createDenialRefile(Request $request, GetDenialAction $getDenialAction)
+    public function createDenialRefile(StoreRefileRequest $request, StoreRefileAction $store)
     {
-        return $getDenialAction->createDenialRefile($request);
+        return  response()->json($store->invoke($request->validate()));
     }
 
-    public function updateDenialRefile(Request $request, GetDenialAction $getDenialAction)
+    public function updateDenialRefile(StoreRefileRequest $request, UpdateRefileAction $update)
     {
-        return $getDenialAction->updateDenialRefile($request);
+        return response()->json($update->invoke($request->validate()));
     }
 }
