@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @property array<key, string> $resource */
 final class RuleListResource extends JsonResource
 {
-    public function __construct($resource, protected string $key)
+    public function __construct($resource, protected readonly string $key, protected readonly array $custom = [])
     {
         parent::__construct((array) $resource);
     }
@@ -24,7 +24,13 @@ final class RuleListResource extends JsonResource
         return array_reduce(array_keys($this->resource), function ($result, $indice) {
             $levels = explode('.', (string) $indice);
 
-            return $this->mapGroup($this->key, $result, $levels, $this->resource[$indice]);
+            $data = $this->resource[$indice];
+
+            if (array_key_exists($indice, $this->custom)) {
+                $data['value'] = $this->custom[$indice];
+            }
+
+            return $this->mapGroup($this->key, $result, $levels, $data);
         }, []);
     }
 
