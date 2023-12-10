@@ -142,7 +142,7 @@ final class ClaimPreviewService implements ReportInterface
                 $pdf->MultiCell(
                     $pdf->getPageWidth(),
                     7,
-                    Str::upper($title).' '.$this->reportDate,
+                    Str::upper($title).' - '.$this->reportDate,
                     0,
                     'L',
                     false,
@@ -165,7 +165,7 @@ final class ClaimPreviewService implements ReportInterface
                 $pdf->MultiCell(
                     $pdf->getPageWidth(),
                     4,
-                    upperCaseWords($subTitle).' '.$this->reportDate,
+                    upperCaseWords($subTitle),
                     0,
                     'L',
                     false,

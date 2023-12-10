@@ -15,6 +15,7 @@ use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Claim\ClaimFile;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -115,6 +117,32 @@ class Claim extends Model implements Auditable
         'last_modified', 'private_note', 'billed_amount', 'amount_paid',
         'past_due_date', 'date_of_service', 'status_date', 'user_created',
     ];
+
+    /**
+     * Get the user's first name.
+     */
+    protected function code(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value) {
+                $abbreviationCompany = $this->demographicInformation->company?->abbreviations()
+                    ->where('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->abbreviation ?? '';
+                $patientProfile = $this->demographicInformation->patient?->profile;
+
+                return (!empty($abbreviationCompany)
+                    ? $abbreviationCompany.'-'
+                    : '')
+                    .(!empty($this->date_of_service)
+                        ? Carbon::createFromFormat('Y-m-d', $this->date_of_service)?->format('mdY').'-'
+                        : '')
+                    .(!empty($patientProfile)
+                        ? Str::upper(Str::substr($patientProfile->first_name, 0, 1).''.Str::substr($patientProfile->last_name, 0, 1))
+                        : '').Str::padLeft($this->id, 6, '0');
+            },
+        );
+    }
 
     /**
      * The insurance policies that belong to the Claim.
