@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Facades\Pagination;
-use App\Http\Casts\Claims\DenialRefileWrapper;
 use App\Http\Casts\Claims\DenialTrackingWrapper;
 use App\Http\Resources\Claim\DenialBodyResource;
 use App\Models\Claims\Claim;
-use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
-use App\Models\PrivateNote;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -123,70 +120,6 @@ final class GetDenialAction
         return $tracking ? response()->json($tracking) : response()->json(__('Error updating denial tracking'), 400);
     }
 
-    public function createDenialRefile(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), $this->validateDenialRefileWrapper());
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
-
-        $claim = Claim::find($request->input('claim_id'));
-
-        if (!$claim) {
-            return response()->json(__('Claim ID not found'), 400);
-        }
-
-        $denialRefileWrapper = new DenialRefileWrapper($request->all());
-        $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
-
-        $refile = DenialRefile::createDenialRefile($refileData);
-
-        $note = PrivateNote::create([
-            'publishable_type' => DenialRefile::class,
-            'publishable_id' => $refile->id,
-            'note' => $denialRefileWrapper->getData()['denial_refile_data']['note'],
-        ]);
-
-        $refile->private_note_id = $note->id;
-
-        $refile->save();
-
-        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
-    }
-
-    public function updateDenialRefile(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), $this->validateDenialRefileWrapper());
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        }
-
-        $claim = Claim::find($request->input('claim_id'));
-
-        if (!$claim) {
-            return response()->json(__('Claim ID not found'), 400);
-        }
-
-        $denialRefileWrapper = new DenialRefileWrapper($request->all());
-        $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
-
-        $refile = DenialRefile::updateDenialRefile($refileData);
-
-        $note = PrivateNote::create([
-            'publishable_type' => DenialRefile::class,
-            'publishable_id' => $refile->id,
-            'note' => $denialRefileWrapper->getData()['denial_refile_data']['note'],
-        ]);
-
-        $refile->private_note_id = $note->id;
-
-        $refile->save();
-
-        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
-    }
-
     private function validateDenialTrackingWrapper(): array
     {
         $validationRules = [
@@ -207,23 +140,6 @@ final class GetDenialAction
             'follow_up' => 'nullable|string',
             'department_responsible' => 'required|string',
             'policy_responsible' => 'required|string',
-        ];
-
-        return $validationRules;
-    }
-
-    private function validateDenialRefileWrapper(): array
-    {
-        $validationRules = [
-            'refile_id' => 'nullable|numeric',
-            'refile_type' => 'required|numeric',
-            'policy_id' => 'nullable',
-            'is_cross_over' => 'nullable|boolean',
-            'cross_over_date' => 'nullable|date',
-            'note' => 'required|string',
-            'original_claim_id' => 'nullable',
-            'refile_reason' => 'nullable|numeric',
-            'claim_id' => 'required|numeric',
         ];
 
         return $validationRules;
