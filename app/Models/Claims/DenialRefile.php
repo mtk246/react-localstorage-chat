@@ -46,6 +46,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereRefileType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property InsurancePolicy|null $insurancePolicy
+ * @property PrivateNote $privateNotes
+ * @property Claim $claim
+ *
  * @mixin \Eloquent
  */
 final class DenialRefile extends Model implements Auditable
@@ -72,28 +78,6 @@ final class DenialRefile extends Model implements Auditable
         return $this->belongsTo(RefileReason::class, 'refile_reason');
     }
 
-    public static function createDenialRefile(array $data)
-    {
-        $denial = DenialRefile::create($data);
-
-        return $denial;
-    }
-
-    public static function updateDenialRefile(array $data)
-    {
-        $denialId = $data['refile_id'];
-
-        $denial = DenialRefile::where('id', $denialId)->first();
-
-        if ($denial) {
-            $denial->update($data);
-
-            return $denial;
-        }
-
-        return null;
-    }
-
     public function insurancePolicy(): BelongsTo
     {
         return $this->belongsTo(InsurancePolicy::class, 'policy_id');
@@ -102,5 +86,10 @@ final class DenialRefile extends Model implements Auditable
     public function privateNotes(): BelongsTo
     {
         return $this->belongsTo(PrivateNote::class, 'private_note_id');
+    }
+
+    public function claim(): BelongsTo
+    {
+        return $this->belongsTo(claim::class, 'claim_id');
     }
 }
