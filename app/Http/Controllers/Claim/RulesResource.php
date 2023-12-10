@@ -10,6 +10,7 @@ use App\Actions\Claim\StoreClaimRuleAction;
 use App\Actions\Claim\UpdateClaimRuleAction;
 use App\Enums\Claim\ClaimType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Claim\GetRulesListRequest;
 use App\Http\Requests\Claim\StoreRulesRequest;
 use App\Http\Requests\Claim\UpdateRulesRequest;
 use App\Http\Resources\Claim\RuleResource;
@@ -21,9 +22,9 @@ use Illuminate\Support\Str;
 
 final class RulesResource extends Controller
 {
-    public function getList(GetRulesListAction $rules): JsonResponse
+    public function getList(GetRulesListRequest $request, GetRulesListAction $rules): JsonResponse
     {
-        return response()->json($rules->invoke());
+        return response()->json($rules->invoke($request));
     }
 
     public function getTypes(): JsonResponse

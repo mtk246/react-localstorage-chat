@@ -1283,7 +1283,7 @@ return [
     't.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => ['id' => '|001|1'],
+        'value' => ['name' => '001', 'id' => '|001|1'],
         'values' => [
             'common' => [],
         ],
@@ -1291,7 +1291,7 @@ return [
     't.b.1' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => ['id' => '|1|1'],
+        'value' => ['name' => '1', 'id' => '|1|1'],
         'values' => [
             'common' => [],
         ],
@@ -1299,7 +1299,7 @@ return [
     't.b.2' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => ['id' => '|1|1'],
+        'value' => ['name' => '1', 'id' => '|1|1'],
         'values' => [
             'common' => [],
         ],
@@ -1307,7 +1307,7 @@ return [
     't.c' => [
         'type' => RuleType::DATE->value,
         'description' => null,
-        'value' => ['id' => 'created_at|mdY'],
+        'value' => ['name' => 'mdy', 'id' => 'created_at|mdY'],
         'values' => [
             'common' => [],
         ],
@@ -1315,7 +1315,7 @@ return [
     't.d' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => ['id' => '|02222222|1'],
+        'value' => ['name' => '02222222', 'id' => '|02222222|1'],
         'values' => [
             'common' => [],
         ],
@@ -1323,10 +1323,10 @@ return [
     't.e' => [
         'type' => RuleType::SINGLE->value,
         'description' => null,
-        'value' => ['id' => 'claimServicesTotal'],
+        'value' => ['name' => 'services total', 'id' => 'claimServicesTotal'],
         'values' => [
             'common' => [
-                'claimServicesTotal',
+                ['name' => 'services total', 'id' => 'claimServicesTotal'],
             ],
         ],
     ],

@@ -5,72 +5,20 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Enums\Claim\ClaimType;
+use App\Http\Requests\Claim\GetRulesListRequest;
+use App\Http\Resources\Claim\RuleListResource;
 use Illuminate\Support\Collection;
 
 final class GetRulesListAction
 {
-    public function invoke(): Collection
+    public function invoke(GetRulesListRequest $request): Collection
     {
-        $claimType = match (request()->input('type')) {
-            'professional' => ClaimType::PROFESSIONAL,
-            'institutional' => ClaimType::INSTITUTIONAL,
-            default => null,
-        };
+        return collect(config('claim.formats'))
+            ->when($type = $request->get('type'), fn (Collection $collection) => $collection->only($type))
+            ->mapWithKeys(function (array $items, $key) {
+                $name = ClaimType::tryFrom($key)->getName();
 
-        if ($claimType) {
-            $items = config('claim.formats.'.$claimType->value);
-            $name = $claimType->getName();
-
-            return collect($items)->map(function ($item) use ($name) {
-                return $this->mapToGroups($item, $name);
+                return [$name => collect($items)->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey))];
             });
-        }
-
-        return collect(config('claim.formats'))->mapWithKeys(function ($items, $key) {
-            $name = ClaimType::tryFrom($key)->getName();
-            $formated = collect($items)->map(function ($item) use ($name) {
-                return $this->mapToGroups($item, $name);
-            });
-
-            return [$name => $formated];
-        });
-    }
-
-    private function mapToGroups(array $values, string $name): array
-    {
-        return array_reduce(array_keys($values), function ($result, $indice) use ($name, $values) {
-            $levels = explode('.', (string) $indice);
-
-            return $this->mapGroup($name, $result, $levels, $values[$indice]);
-        }, []);
-    }
-
-    private function mapGroup(string $name, array $result, array $levels, $value)
-    {
-        $level = array_shift($levels);
-
-        if (empty($levels)) {
-            $result[$level] = [
-                ...$value,
-                'code' => $level,
-            ];
-
-            return $result;
-        }
-
-        $groupName = "{$name}.group.{$level}";
-
-        if (!isset($result[$level])) {
-            $result[$level] = [
-                'type' => 'group',
-                'code' => $level,
-                'description' => __("claim.rules.{$groupName}"),
-                'values' => [],
-            ];
-        }
-
-        $result[$level]['values'] = $this->mapGroup($groupName, $result[$level]['values'], $levels, $value);
-
-        return $result;
     }
 }
