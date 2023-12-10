@@ -448,7 +448,7 @@ final class DenialBodyResource extends JsonResource
             );
         }
 
-        $denialRefile = DenialRefile::with('insurancePolicy', 'privateNotes')
+        $denialRefile = DenialRefile::with('insurancePolicy', 'privateNotes', 'refileReason')
             ->whereIn('claim_id', [$status->claim_id])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -457,10 +457,12 @@ final class DenialBodyResource extends JsonResource
             $privateNoteId = $denial->privateNotes->id ?? '';
             $privateNote = $denial->privateNotes->note ?? '';
             $insurancePolicyInfo = $this->getInsurancePolicyInfo($denial);
+            $refile_description = null !== $denial->refile_reason && '' != $denial->refile_reason ? 'Refile Type: '.$denial->refile_reason.' ('.$denial->refileReason->description.') successfully completed, Claim assigned to Status-Substatus.' : '';
 
             $denialRefileData = [
                 'id' => $privateNoteId,
                 'note' => $privateNote,
+                'note_2' => $refile_description,
                 'created_at' => $denial->created_at,
                 'last_modified' => $denial->updated_at,
                 'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
@@ -478,7 +480,7 @@ final class DenialBodyResource extends JsonResource
 
             $existingIndex = array_search($denial->id, array_column($records, 'id'));
 
-            if ($existingIndex === false) {
+            if (false === $existingIndex) {
                 array_push(
                     $records,
                     [
