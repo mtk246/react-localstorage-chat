@@ -7,6 +7,7 @@ namespace App\Http\Resources\Claim;
 use App\Enums\Claim\RuleFormatType;
 use App\Models\Claims\Rules;
 use App\Models\InsurancePlan;
+use App\Models\TypeCatalog;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 
@@ -48,9 +49,9 @@ final class RuleResource extends JsonResource
                 return $carry;
             }, collect()),
             'format' => $this->resource->format,
-            'responsibilities' => $this->resource->typesOfResponsibilities?->map(fn ($type) => [
+            'responsibilities' => $this->resource->typesOfResponsibilities?->map(fn (TypeCatalog $type) => [
                 'id' => $type->id,
-                'name' => $type->code,
+                'name' => $type->code.' - '.$type->description,
             ]),
             'rules' => collect(config('claim.formats.'.(RuleFormatType::INSTITUTIONAL == $this->resource->format ? '2' : '1')))
                 ->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey)),
