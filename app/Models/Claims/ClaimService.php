@@ -24,6 +24,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $from
  * @property string|null $to
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, Diagnosis> $diagnoses
  * @property int|null $diagnoses_count
@@ -42,9 +44,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereNonCoveredCharges($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
  *
  * @mixin \Eloquent
  */

@@ -20,6 +20,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $background_color
  * @property string|null $font_color
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $claimSubStatuses
@@ -34,9 +36,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimStatus whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
  *
  * @mixin \Eloquent
  */

@@ -35,6 +35,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $family_planning_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\ClaimService|null $claimService
  * @property TypeCatalog|null $epsdt
  * @property TypeCatalog|null $familyPlanning
@@ -66,9 +68,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereTotalCharge($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereTypeOfServiceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Services whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
  *
  * @mixin \Eloquent
  */

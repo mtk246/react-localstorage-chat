@@ -55,6 +55,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $ip_restrictions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
+ * @property int|null $presets_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property int|null $users_count
  *
@@ -72,9 +74,6 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static Builder|BillingCompany whereStatus($value)
  * @method static Builder|BillingCompany whereTaxId($value)
  * @method static Builder|BillingCompany whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
- * @property int|null $presets_count
  *
  * @mixin \Eloquent
  */

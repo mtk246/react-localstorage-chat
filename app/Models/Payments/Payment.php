@@ -28,9 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $statement
  * @property string $note
  * @property int $payment_batch_id
- * @property int $insurance_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $insurance_plan_id
  * @property MethodType $method
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
@@ -39,14 +39,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \App\Models\Payments\Eob|null $eobs
  * @property InsuranceCompany $insuranceCompany
  *
- * @method static \Database\Factories\Payments\PaymentFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCurrency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsuranceCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentBatchId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentDate($value)
@@ -56,10 +55,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereStatement($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
- *
- * @property int|null $insurance_plan_id
- *
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsurancePlanId($value)
  *
  * @mixin \Eloquent
  */

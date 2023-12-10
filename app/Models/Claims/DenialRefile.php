@@ -18,16 +18,21 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property int $refile_type
- * @property string $policy_number
- * @property bool $is_cross_over
- * @property string $cross_over_date
+ * @property string|null $policy_id
+ * @property bool|null $is_cross_over
+ * @property string|null $cross_over_date
  * @property string $note
  * @property string|null $original_claim_id
  * @property int|null $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $denial_tracking_id
  * @property int $claim_id
+ * @property int|null $private_note_id
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
+ * @property \App\Models\Claims\Claim $claim
+ * @property InsurancePolicy|null $insurancePolicy
+ * @property PrivateNote|null $privateNotes
  * @property RefileReason|null $refileReason
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newModelQuery()
@@ -36,21 +41,15 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereClaimId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereCrossOverDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereDenialTrackingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereIsCrossOver($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereOriginalClaimId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile wherePolicyNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile wherePolicyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile wherePrivateNoteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereRefileReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereRefileType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile whereUpdatedAt($value)
- *
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
- * @property int|null $audits_count
- * @property InsurancePolicy|null $insurancePolicy
- * @property PrivateNote $privateNotes
- * @property Claim $claim
  *
  * @mixin \Eloquent
  */
@@ -90,6 +89,6 @@ final class DenialRefile extends Model implements Auditable
 
     public function claim(): BelongsTo
     {
-        return $this->belongsTo(claim::class, 'claim_id');
+        return $this->belongsTo(Claim::class, 'claim_id');
     }
 }
