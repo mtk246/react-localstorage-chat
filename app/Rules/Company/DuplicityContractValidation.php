@@ -6,9 +6,9 @@ namespace App\Rules\Company;
 
 use Illuminate\Contracts\Validation\Rule;
 
-final class DuplicityValidationRule implements Rule
+final class DuplicityContractValidation implements Rule
 {
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $filterInsurancePlanIds = $this->hasDuplicateArrayIds($value, 'insurance_plan_ids');
         $filterModifierIds = $this->hasDuplicateArrayIds($value, 'modifier_ids');
@@ -16,9 +16,6 @@ final class DuplicityValidationRule implements Rule
 
         // search duplicity in billing_company_id and type_id
         $duplicateFound = $this->hasDuplicateBillingAndTypeIds($value);
-
-        // search overlapping dates
-        $overlappingDates = $this->hasOverlappingDates($value);
 
         // if no duplicity found, go to validate overlapping dates
         if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
@@ -30,7 +27,7 @@ final class DuplicityValidationRule implements Rule
         return true;
     }
 
-    public function message()
+    public function message(): string
     {
         return 'There cannot be equal contracts, verify the information';
     }
