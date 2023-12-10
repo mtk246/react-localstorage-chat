@@ -18,12 +18,12 @@ final class StoreRefileAction
                 $claim = $refile->claim;
                 $note = $claim->setStates(2, 1, __('claim.denial.refile.store.note', [
                     'refile_type' => $refile->refile_type,
-                    'status' => $claim->status->last()->status,
-                    'sub_status' => $claim->subStatus->last()->status,
+                    'status' => $claim->status->last()?->status,
+                    'sub_status' => $claim->subStatus->last()?->status,
                 ]));
 
                 $refile->privateNotes()->associate($note->id);
             },
-        )->refres());
+        )->refresh());
     }
 }
