@@ -57,6 +57,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereTotalAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
  *
+ * @property int|null $insurance_plan_id
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsurancePlanId($value)
+ *
  * @mixin \Eloquent
  */
 final class Payment extends Model

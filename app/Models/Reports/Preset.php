@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Preset whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Preset whereVersion($value)
  *
+ * @property User|null $users
+ *
  * @mixin \Eloquent
  */
 final class Preset extends Model

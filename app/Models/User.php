@@ -106,6 +106,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsercode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserkey($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
+ * @property int|null $presets_count
+ *
  * @mixin \Eloquent
  */
 final class User extends Authenticatable implements JWTSubject, Auditable

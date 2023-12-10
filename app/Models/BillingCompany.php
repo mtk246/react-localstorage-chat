@@ -73,6 +73,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static Builder|BillingCompany whereTaxId($value)
  * @method static Builder|BillingCompany whereUpdatedAt($value)
  *
+ * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
+ * @property int|null $presets_count
+ *
  * @mixin \Eloquent
  */
 class BillingCompany extends Model implements Auditable
