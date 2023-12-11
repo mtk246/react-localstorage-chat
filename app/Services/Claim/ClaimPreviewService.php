@@ -11,7 +11,6 @@ use App\Repositories\Contracts\ReportInterface;
 use Carbon\Carbon;
 use Elibyy\TCPDF\TCPDF as PDF;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Str;
 
 final class ClaimPreviewService implements ReportInterface
 {
@@ -142,7 +141,7 @@ final class ClaimPreviewService implements ReportInterface
                 $pdf->MultiCell(
                     $pdf->getPageWidth(),
                     7,
-                    Str::upper($title).' - '.$this->reportDate,
+                    $title.' - '.$this->reportDate,
                     0,
                     'L',
                     false,
@@ -165,7 +164,7 @@ final class ClaimPreviewService implements ReportInterface
                 $pdf->MultiCell(
                     $pdf->getPageWidth(),
                     4,
-                    upperCaseWords($subTitle),
+                    $subTitle,
                     0,
                     'L',
                     false,
