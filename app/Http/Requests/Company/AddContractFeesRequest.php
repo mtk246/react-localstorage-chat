@@ -10,7 +10,7 @@ use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Procedure;
-use App\Rules\Company\DuplicityValidationRule;
+use App\Rules\Company\DuplicityContractValidation;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -31,7 +31,7 @@ final class AddContractFeesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_fees' => ['nullable', 'array', new DuplicityValidationRule()],
+            'contract_fees' => ['nullable', 'array', new DuplicityContractValidation()],
             'contract_fees.*.billing_company_id' => [
                 Rule::excludeIf(Gate::denies('is-admin')),
                 'required',
