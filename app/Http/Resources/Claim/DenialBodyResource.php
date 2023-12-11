@@ -402,6 +402,12 @@ final class DenialBodyResource extends JsonResource
                 ->orderBy('created_at', 'desc')
                 ->first();
 
+            $denialRefile = DenialRefile::with('insurancePolicy', 'privateNotes', 'refileReason')
+                ->whereIn('claim_id', [$status->claim_id])
+                ->where('private_note_id', $subNote['id'] ?? null)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
             $statusData['denial_tracking'] = isset($denialTracking) ? [
                 'interface_type' => $denialTracking->interface_type ?? '',
                 'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
@@ -431,6 +437,18 @@ final class DenialBodyResource extends JsonResource
                 'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
             ] : null;
 
+            $statusData['denial_refile'] = isset($denialRefile) ? [
+                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
+                'refile_type' => $denialRefile->refile_type ?? '',
+                'is_cross_over' => $denialRefile->is_cross_over ?? '',
+                'cross_over_date' => $denialRefile->cross_over_date ?? '',
+                'original_claim_id' => $denialRefile->original_claim_id ?? '',
+                'refile_reason' => $denialRefile->refile_reason ?? '',
+                'claim_id' => $denialRefile->claim_id ?? '',
+                'note' => $denialRefile->note ?? '',
+            ] : null;
+
             array_push(
                 $records,
                 [
@@ -444,62 +462,9 @@ final class DenialBodyResource extends JsonResource
                     'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
                     'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
                     'denial_tracking' => $statusData['denial_tracking'],
+                    'denial_refile' => $statusData['denial_refile'],
                 ]
             );
-        }
-
-        $denialRefile = DenialRefile::with('insurancePolicy', 'privateNotes', 'refileReason')
-            ->whereIn('claim_id', [$status->claim_id])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        foreach ($denialRefile as $denial) {
-            $privateNoteId = $denial->privateNotes->id ?? '';
-            $privateNote = $denial->privateNotes->note ?? '';
-            $insurancePolicyInfo = $this->getInsurancePolicyInfo($denial);
-            $refile_description = null !== $denial->refile_reason && '' != $denial->refile_reason ? 'Refile Type: '.$denial->refile_reason.' ('.$denial->refileReason->description.') successfully completed, Claim assigned to Status-Substatus.' : '';
-
-            $denialRefileData = [
-                'id' => $privateNoteId,
-                'note' => $privateNote,
-                'note_2' => $refile_description,
-                'created_at' => $denial->created_at,
-                'last_modified' => $denial->updated_at,
-                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
-                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
-                'refile_type' => $denial->refile_type,
-                'is_cross_over' => $denial->is_cross_over,
-                'cross_over_date' => $denial->cross_over_date,
-                'original_claim_id' => $denial->original_claim_id,
-                'refile_reason' => $denial->refile_reason,
-                'claim_id' => $denial->claim_id,
-                'created_at' => $denial->created_at,
-                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
-                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
-            ];
-
-            $existingIndex = array_search($denial->id, array_column($records, 'id'));
-
-            if (false === $existingIndex) {
-                array_push(
-                    $records,
-                    [
-                        'id' => $denial->id,
-                        'note' => $privateNote,
-                        'created_at' => $denial->created_at,
-                        'last_modified' => $denial->updated_at,
-                        'status' => $statusData['status'] ?? '',
-                        'status_background_color' => $statusData['status_background_color'] ?? '',
-                        'status_font_color' => $statusData['status_font_color'] ?? '',
-                        'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
-                        'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
-                        'denial_tracking' => $statusData['denial_tracking'] ?? null,
-                        'denial_refile' => $denialRefileData,
-                    ]
-                );
-            } else {
-                $records[$existingIndex]['denial_refile'] = $denialRefileData;
-            }
         }
 
         $recordSubstatus = [];
