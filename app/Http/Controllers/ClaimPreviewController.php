@@ -81,10 +81,10 @@ final class ClaimPreviewController extends Controller
         ]);
 
         $preview->setHeader(
-            'Claim Transmission report',
+            'Claims Transmission report',
             (empty($abbreviationCompany)
                 ? $batch->company->name
-                : $abbreviationCompany . ' - ' . $batch->company->name) . ' / N° Claims: ' . $batch->total_claims
+                : Str::upper($abbreviationCompany) . ' - ' . $batch->company->name) . ' / N° Claims: ' . $batch->total_claims
         );
 
         $preview->setFooter($batch->last_modified['user'] ?? '');
