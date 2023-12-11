@@ -23,6 +23,7 @@ final class StoreRefileAction
                 ]));
 
                 $refile->privateNotes()->associate($note->id);
+                $refile->save();
             },
         )->refresh());
     }
