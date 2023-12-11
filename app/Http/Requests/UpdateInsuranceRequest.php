@@ -31,7 +31,7 @@ class UpdateInsuranceRequest extends FormRequest
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'insurance' => ['required', 'array'],
             'insurance.payer_id' => ['required', 'string', 'max:20'],
-            'insurance.name' => ['required', 'string', new NameUniqueRule($this->input('insurance.payer_id', $this->route('id')))],
+            'insurance.name' => ['required', 'string', new NameUniqueRule($this->input('insurance.payer_id', (int) $this->route('id')))],
             'insurance.abbreviation' => ['required', 'string', 'max:20'],
             'insurance.naic' => ['nullable', 'string'],
             'insurance.file_method_id' => ['required', 'integer'],
