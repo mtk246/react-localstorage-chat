@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $payment_method
  * @property string|null $reference
  * @property bool $statement
- * @property string $note
+ * @property string|null $note
  * @property int $payment_batch_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
