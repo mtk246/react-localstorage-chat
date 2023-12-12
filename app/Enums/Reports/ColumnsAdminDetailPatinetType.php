@@ -154,6 +154,13 @@ enum ColumnsAdminDetailPatinetType: string implements TypeInterface
     case TYPE_ADDRESS = 'type_address';
 
     #[TypeAttribute('string')]
+    #[TextAttribute('Address')]
+    #[AlignAttribute('left')]
+    #[WidthAttribute('270px')]
+    #[PublicAttribute(true)]
+    case ADDRESS = 'address';
+
+    #[TypeAttribute('string')]
     #[AlignAttribute('left')]
     #[TextAttribute('Apt / Other')]
     #[WidthAttribute('270px')]
