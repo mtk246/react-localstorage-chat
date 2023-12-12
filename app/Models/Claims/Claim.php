@@ -62,7 +62,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property mixed $date_of_service
  * @property mixed $last_modified
  * @property mixed $past_due_date
- * @property \Illuminate\Database\Eloquent\Casts\Attribute $private_note
+ * @property Attribute $private_note
  * @property mixed $status_date
  * @property mixed $user_created
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies

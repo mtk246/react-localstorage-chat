@@ -34,6 +34,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property object|null $response_details
  * @property int $claim_id
  * @property int $private_note_id
+ * @property int|null $policy_id
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property \App\Models\Claims\ClaimStatus|null $claimStatus
  * @property \App\Models\Claims\ClaimSubStatus|null $claimSubStatus
@@ -55,6 +58,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereIsContactToPatient($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereIsReprocessClaim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePastDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePolicyResponsible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePrivateNoteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereRefNumber($value)
