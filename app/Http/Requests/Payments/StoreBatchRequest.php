@@ -33,7 +33,7 @@ final class StoreBatchRequest extends FormRequest
                 'exists:\App\Models\Company,id',
             ],
             'name' => 'required|string',
-            'posting_date' => 'required|date',
+            'posting_date' => 'nullable|date',
             'currency' => 'required|string',
             'amount' => 'required|numeric',
             'payments' => 'required|array',
