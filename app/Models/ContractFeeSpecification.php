@@ -99,4 +99,12 @@ final class ContractFeeSpecification extends Model implements Auditable
     {
         return $this->belongsTo(Taxonomy::class);
     }
+
+    /**
+     * Get the billingProvider that owns the ContractFeeSpecification.
+     */
+    public function billingProvider(): BelongsTo
+    {
+        return $this->morphTo();
+    }
 }
