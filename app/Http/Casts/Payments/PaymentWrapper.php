@@ -44,10 +44,10 @@ final class PaymentWrapper extends CastsRequest
 
     public function hasEob(): bool
     {
-        return $this->has('eobs');
+        return $this->hasArray('eobs');
     }
 
-    public function getEobs(): Collection
+    public function getEobs(): ?Collection
     {
         return $this->castMany('eobs', EobWrapper::class);
     }
