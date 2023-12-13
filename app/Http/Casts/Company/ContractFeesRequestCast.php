@@ -117,30 +117,6 @@ final class ContractFeesRequestCast extends CastsRequest
                 fn ($query) => $query->where('mac', $this->getMac()),
                 fn ($query) => $query->whereNull('mac')
             )->first();
-
-//        $query = MacLocality::query();
-//
-//        if ($this->getMac()) {
-//            $query = $query->where('mac', $this->getMac());
-//        }
-//
-//        if ($this->getLocalityNumber()) {
-//            $query = $query->where('locality_number', $this->getLocalityNumber());
-//        }
-//
-//        if ($this->getState()) {
-//            $query = $query->where('state', $this->getState());
-//        }
-//
-//        if ($this->getFsa()) {
-//            $query = $query->where('fsa', $this->getFsa());
-//        }
-//
-//        if ($this->getCounties()) {
-//            $query = $query->where('counties', $this->getCounties());
-//        }
-//
-//        return $query->first() ?? null;
     }
 
     public function getHaveContractSpecifications(): bool
