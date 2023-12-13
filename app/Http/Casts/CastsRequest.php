@@ -26,6 +26,11 @@ abstract class CastsRequest
         return $this->inputs->has($input);
     }
 
+    protected function hasArray(string $input, int $count = 1): bool
+    {
+        return $this->inputs->has($input) && $count < count($this->inputs->get($input));
+    }
+
     /**
      * Get an item from the collection by key.
      *
