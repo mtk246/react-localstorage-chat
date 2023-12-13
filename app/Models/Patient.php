@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimDemographicInformation;
 use App\Models\Patient\Membership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -296,6 +297,14 @@ class Patient extends Model implements Auditable
     public function insurancePolicies(): HasMany
     {
         return $this->hasMany(InsurancePolicy::class);
+    }
+
+    /*
+     * Get all claimDemographics for the Patient.
+     */
+    public function claimDemographics(): HasMany
+    {
+        return $this->hasMany(ClaimDemographicInformation::class);
     }
 
     /*
