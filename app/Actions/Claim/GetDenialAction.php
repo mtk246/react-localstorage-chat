@@ -44,8 +44,16 @@ final class GetDenialAction
             $query->where('billing_company_id', $request->user()->billing_company_id);
         }
 
-        $query->with('demographicInformation', 'service', 'insurancePolicies', 'denialTrackings', 'claimTransmissionResponses')
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc());
+        $query->with([
+            'demographicInformation',
+            'service',
+            'insurancePolicies',
+            'denialTrackings',
+            'claimTransmissionResponses',
+            'claimStatusClaims' => function ($query) {
+                $query->whereNotIn('claim_status_id', [1, 2]);
+            },
+        ])->orderBy(Pagination::sortBy(), Pagination::sortDesc());
 
         $claimsQuery = $query->paginate(Pagination::itemsPerPage());
 
