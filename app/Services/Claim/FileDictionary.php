@@ -534,7 +534,7 @@ final class FileDictionary extends Dictionary
     {
         $model = $this->claim
             ?->dateInformations
-            ?->first(fn ($dateInformation) => $dateInformation->field_id == $field);
+            ?->first(fn ($dateInformation) => $dateInformation->field_id?->value == $field);
 
         return match ($key) {
             'year_of_from_date' => explode('-', $model?->from_date ?? '')[0] ?? '',
