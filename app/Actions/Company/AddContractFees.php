@@ -25,7 +25,6 @@ final class AddContractFees
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
             return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
-                dd($contractFee->getMacLocality());
                 if (!$contractFee->getId()) {
                     $contract = ContractFee::create([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
