@@ -17,7 +17,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $facility_id
  * @property int $facility_type_id
- * @property mixed|null $bill_classifications
+ * @property array|null $bill_classifications
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \App\Models\Facility $facility

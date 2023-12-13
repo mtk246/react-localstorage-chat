@@ -8,6 +8,8 @@ use App\Models\RefileReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\DenialRefile.
@@ -19,11 +21,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $cross_over_date
  * @property string $note
  * @property string $original_claim_id
+ * @property int $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $denial_tracking_id
  * @property int $claim_id
- * @property int|null $refile_reason
+ * @property RefileReason|null $refileReason
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newQuery()
@@ -43,9 +46,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
-final class DenialRefile extends Model
+final class DenialRefile extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $table = 'denial_refile';
 

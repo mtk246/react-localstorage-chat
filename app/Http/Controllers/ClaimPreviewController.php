@@ -69,6 +69,11 @@ final class ClaimPreviewController extends Controller
     public function showBatchReport(Request $request, ClaimPreviewService $preview, GetClaimTransmissionReportAction $claimReport, int $id)
     {
         $batch = ClaimBatch::query()->find($id);
+        $abbreviationCompany = $batch->company->abbreviations()
+            ->where('billing_company_id', $batch->billing_company_id)
+            ->first()
+            ?->abbreviation ?? '';
+
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'isTransmissionResponse' => true,
@@ -76,8 +81,10 @@ final class ClaimPreviewController extends Controller
         ]);
 
         $preview->setHeader(
-            'Claims processed on',
-            'Processed claims for period ending on'
+            'CLAIMS TRANSMISSION REPORT',
+            (empty($abbreviationCompany)
+                ? upperCaseWords($batch->company->name)
+                : Str::upper($abbreviationCompany) . ' - ' . upperCaseWords($batch->company->name)) . ' / N° Claims: ' . $batch->total_claims
         );
 
         $preview->setFooter($batch->last_modified['user'] ?? '');
@@ -89,7 +96,6 @@ final class ClaimPreviewController extends Controller
                 true,
                 [
                     'pdf' => $preview,
-                    'shipping_date' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y'),
                     'claimsByPlan' => $claimReport->invoke($batch),
                 ],
                 'E',

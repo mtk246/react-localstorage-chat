@@ -8,6 +8,7 @@ use App\Http\Controllers\Claim\RulesResource;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Denial\DenialController;
 use App\Http\Controllers\HealthProfessional\CompanyResource as HPCompanyResource;
+use App\Http\Controllers\Payments\BatchResource;
 use App\Http\Controllers\Reports\PresetsController;
 use App\Http\Controllers\Reports\ReportReSource;
 use App\Http\Controllers\SearchController;
@@ -590,6 +591,28 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('reports/columns', [ReportReSource::class, 'columnsReports']);
         Route::resource('presets', PresetsController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    });
+
+    Route::prefix('ledger')->middleware([
+        'auth:api',
+    ])->group(function () {
+        Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search'])->name('ledger.search');
+        Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims'])
+            ->name('ledger.patients.claims');
+    });
+
+    Route::prefix('payments')->middleware([
+        'auth:api',
+        // 'role:superuser|billingmanager',
+    ])->group(function () {
+        Route::get('batch/states', [BatchResource::class, 'getStates'])->name('batch.states');
+        Route::get('/sources', [BatchResource::class, 'getSources'])->name('payments.sources');
+        Route::get('/methods', [BatchResource::class, 'getMethods'])->name('payments.methods');
+        Route::get('/eob/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eob.show');
+        Route::get('/batch/{batch}/close', [BatchResource::class, 'close'])->name('batch.close');
+        Route::post('/batch/{batch}/claims', [BatchResource::class, 'storeClaims'])->name('batch.claims');
+        Route::post('/batch/{batch}/services', [BatchResource::class, 'storeServices'])->name('batch.services');
+        Route::resource('batch', BatchResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->name('batch', 'payments.batch');
     });
 
     Route::get('/search-filters', [SearchController::class, 'filters'])->middleware('auth:api')->name('search.filters');

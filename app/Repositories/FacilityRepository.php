@@ -186,7 +186,7 @@ class FacilityRepository
                 foreach ($data['types'] as $value) {
 
                     $facility->facilityTypes()->attach($value['id'], [
-                        'bill_classifications' => json_encode($value['bill_classifications'])
+                        'bill_classifications' => $value['bill_classifications']
                     ]);
                 }
             }
@@ -493,7 +493,7 @@ class FacilityRepository
             ];
 
             foreach ($facility->facilityTypes as $key => $facilityType) {
-                $bill_classifications_ids = json_decode($facilityType->pivot->bill_classifications);
+                $bill_classifications_ids = $facilityType->pivot->bill_classifications;
                 $record['facility_types'][$key]['bill_classifications'] = BillClassification::whereIn('id', $bill_classifications_ids)->get();
             }
 
@@ -759,7 +759,7 @@ class FacilityRepository
                 foreach ($data['types'] as $value) {
 
                     $facility->facilityTypes()->attach($value['id'], [
-                        'bill_classifications' => json_encode($value['bill_classifications'])
+                        'bill_classifications' => $value['bill_classifications']
                     ]);
                 }
             }

@@ -11,6 +11,8 @@ use App\Models\HealthProfessional;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimDemographicInformation.
@@ -76,9 +78,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-final class ClaimDemographicInformation extends Model
+final class ClaimDemographicInformation extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $table = 'claim_demographic';
 
