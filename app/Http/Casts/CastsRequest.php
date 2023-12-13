@@ -28,7 +28,7 @@ abstract class CastsRequest
 
     protected function hasArray(string $input, int $count = 1): bool
     {
-        return $this->inputs->has($input) && $count < count($this->inputs->get($input));
+        return $this->inputs->has($input) && $count <= count($this->inputs->get($input));
     }
 
     /**
