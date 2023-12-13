@@ -98,8 +98,8 @@ final class Rules extends Model
             'name' => $this->name,
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
-            'billing_company' => $this->billingCompany->only(['code', 'name', 'abbreviation']),
-            'insurance_plans' => $this->insurancePlan->only(['code', 'name', 'eff_date']),
+            'billing_company' => $this->billingCompany?->only(['code', 'name', 'abbreviation']),
+            'insurance_plans' => $this->insurancePlan?->only(['code', 'name', 'eff_date']),
         ];
     }
 }
