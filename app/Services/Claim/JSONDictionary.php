@@ -2011,96 +2011,95 @@ final class JSONDictionary extends Dictionary
                     // 'phoneExtension' => ''
                 ],
             ];
-        } else {
-            $billingProvider = $contractFeeSpecification->billingProvider;
+        }
+        $billingProvider = $contractFeeSpecification->billingProvider;
 
-            if (Company::class === $contractFeeSpecification->billing_provider_type) {
-                $billingProviderAddress = $billingProvider
-                    ->addresses()
-                    ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                    ->where('address_type_id', 1)
-                    ?->first() ?? null;
-                $billingProviderContact = $billingProvider
-                    ->contacts()
-                    ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                    ?->first() ?? null;
+        if (Company::class === $contractFeeSpecification->billing_provider_type) {
+            $billingProviderAddress = $billingProvider
+                ->addresses()
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->where('address_type_id', 1)
+                ?->first() ?? null;
+            $billingProviderContact = $billingProvider
+                ->contacts()
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ?->first() ?? null;
 
-                return [
-                    'providerType' => 'BillingProvider',
-                    'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-                    'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
-                    'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-                    'organizationName' => $billingProvider?->name,
-                    'address' => [
-                        'address1' => $billingProviderAddress?->address,
-                        'address2' => null,
-                        'city' => $billingProviderAddress?->city,
-                        'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
-                        'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                        'countryCode' => ('US' !== $billingProviderAddress?->country)
-                            ? $billingProviderAddress?->country
-                            : '',
-                        'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                            ? $billingProviderAddress?->country_subdivision_code
-                            : '',
-                    ],
-                    'contactInformation' => [
-                        'name' => ('' === $billingProviderContact->phone ?? '')
-                            ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
-                            : $billingProviderContact->contact_name ?? $billingProvider->name,
-                        'phoneNumber' => str_replace(
-                            '-',
-                            '',
-                            $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-                        ) ?? null,
-                    ],
-                ];
-            } elseif (HealthProfessional::class === $contractFeeSpecification->billing_provider_type) {
-                $billingProviderAddress = $billingProvider->profile->addresses
-                    ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                    ->first();
-                $billingProviderContact = $billingProvider->profile->contacts
-                    ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                    ->first();
+            return [
+                'providerType' => 'BillingProvider',
+                'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
+                'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
+                'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
+                'organizationName' => $billingProvider?->name,
+                'address' => [
+                    'address1' => $billingProviderAddress?->address,
+                    'address2' => null,
+                    'city' => $billingProviderAddress?->city,
+                    'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
+                    'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
+                    'countryCode' => ('US' !== $billingProviderAddress?->country)
+                        ? $billingProviderAddress?->country
+                        : '',
+                    'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
+                        ? $billingProviderAddress?->country_subdivision_code
+                        : '',
+                ],
+                'contactInformation' => [
+                    'name' => ('' === $billingProviderContact->phone ?? '')
+                        ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
+                        : $billingProviderContact->contact_name ?? $billingProvider->name,
+                    'phoneNumber' => str_replace(
+                        '-',
+                        '',
+                        $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+                    ) ?? null,
+                ],
+            ];
+        } elseif (HealthProfessional::class === $contractFeeSpecification->billing_provider_type) {
+            $billingProviderAddress = $billingProvider->profile->addresses
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
+            $billingProviderContact = $billingProvider->profile->contacts
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
 
-                return [
-                    'providerType' => 'BillingProvider',
-                    'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-                    'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
-                    'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-                    'firstName' => $billingProvider?->profile?->first_name,
-                    'lastName' => $billingProvider?->profile?->last_name,
-                    'middleName' => $billingProvider?->profile?->middle_name,
-                    'suffix' => $billingProvider?->profile?->nameSuffix?->code,
-                    'address' => [
-                        'address1' => $billingProviderAddress?->address,
-                        'address2' => null,
-                        'city' => $billingProviderAddress?->city,
-                        'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
-                        'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                        'countryCode' => ('US' !== $billingProviderAddress?->country)
-                            ? $billingProviderAddress?->country
-                            : '',
-                        'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                            ? $billingProviderAddress?->country_subdivision_code
-                            : '',
-                    ],
-                    'contactInformation' => [
-                        'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
-                            .(!empty($billingProvider->profile?->nameSuffix?->code)
-                                ? ' '.$billingProvider->profile?->nameSuffix?->code
-                                : '')
-                            .(!empty($billingProvider->profile?->middle_name)
-                                ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
-                                : ''),
-                        'phoneNumber' => str_replace(
-                            '-',
-                            '',
-                            $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-                        ) ?? null,
-                    ],
-                ];
-            }
+            return [
+                'providerType' => 'BillingProvider',
+                'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
+                'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
+                'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
+                'firstName' => $billingProvider?->profile?->first_name,
+                'lastName' => $billingProvider?->profile?->last_name,
+                'middleName' => $billingProvider?->profile?->middle_name,
+                'suffix' => $billingProvider?->profile?->nameSuffix?->code,
+                'address' => [
+                    'address1' => $billingProviderAddress?->address,
+                    'address2' => null,
+                    'city' => $billingProviderAddress?->city,
+                    'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
+                    'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
+                    'countryCode' => ('US' !== $billingProviderAddress?->country)
+                        ? $billingProviderAddress?->country
+                        : '',
+                    'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
+                        ? $billingProviderAddress?->country_subdivision_code
+                        : '',
+                ],
+                'contactInformation' => [
+                    'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
+                        .(!empty($billingProvider->profile?->nameSuffix?->code)
+                            ? ' '.$billingProvider->profile?->nameSuffix?->code
+                            : '')
+                        .(!empty($billingProvider->profile?->middle_name)
+                            ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
+                            : ''),
+                    'phoneNumber' => str_replace(
+                        '-',
+                        '',
+                        $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+                    ) ?? null,
+                ],
+            ];
         }
     }
 
