@@ -593,6 +593,14 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::resource('reports', ReportReSource::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     });
 
+    Route::prefix('ledger')->middleware([
+        'auth:api',
+    ])->group(function () {
+        Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search'])->name('ledger.search');
+        Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims'])
+            ->name('ledger.patients.claims');
+    });
+
     Route::prefix('payments')->middleware([
         'auth:api',
         // 'role:superuser|billingmanager',
