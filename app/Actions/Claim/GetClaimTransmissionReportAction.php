@@ -19,12 +19,31 @@ final class GetClaimTransmissionReportAction
                     return $claim->insurancePolicies()
                         ->wherePivot('order', 1)
                         ->first()
-                        ?->insurancePlan->name;
+                        ?->insurancePlan
+                        ?->insuranceCompany->name;
                 })
-                ->map(function ($claims, $insurancePlan) {
+                ->map(function ($claims, $insuranceCompany) {
                     return [
-                        'insurancePlan' => $insurancePlan,
+                        'insuranceCompany' => $insuranceCompany,
                         'claims' => $claims->map(function ($claim) {
+                            $patientProfile = $claim->demographicInformation->patient->profile;
+                            $healthcareProfile = match ($claim->type) {
+                                ClaimType::INSTITUTIONAL => $claim->attending()?->profile,
+                                ClaimType::PROFESSIONAL => $claim->billingProvider()?->profile,
+                            };
+                            $insurancePlan = $claim->insurancePolicies()
+                                ->wherePivot('order', 1)
+                                ->first()
+                                ?->insurancePlan;
+                            $abbreviationInsurance = $insurancePlan->abbreviations()
+                                ->where('billing_company_id', $claim->billing_company_id)
+                                ->first()
+                                ?->abbreviation ?? '';
+                            $abbreviationFacility = $claim->demographicInformation->facility->abbreviations()
+                                ->where('billing_company_id', $claim->billing_company_id)
+                                ->first()
+                                ?->abbreviation ?? '';
+
                             return [
                                 'code' => $claim->code,
                                 'patientNumber' => $claim->demographicInformation->patient?->companies()
@@ -32,12 +51,22 @@ final class GetClaimTransmissionReportAction
                                     ?->wherePivot('company_id', $claim->demographicInformation->company_id)
                                     ->first()
                                     ?->pivot?->med_num ?? '',
-                                'patientName' => $claim->demographicInformation->patient->profile->fullName(),
-                                'healthProfessional' => match ($claim->type) {
-                                    ClaimType::INSTITUTIONAL => $claim->attending()?->profile?->fullName() ?? '',
-                                    ClaimType::PROFESSIONAL => $claim->billingProvider()?->profile?->fullName() ?? '',
-                                },
-                                'facility' => $claim->demographicInformation->facility->name,
+                                'patientName' => $patientProfile->last_name
+                                    .(!empty($patientProfile->nameSuffix?->code ?? '')
+                                        ? (' '.$patientProfile->nameSuffix->code)
+                                        : '')
+                                    .(', '.$patientProfile->first_name.' '.$patientProfile->middle_name),
+                                'healthProfessional' => $healthcareProfile->last_name
+                                    .(!empty($healthcareProfile->nameSuffix?->code ?? '')
+                                        ? (' '.$healthcareProfile->nameSuffix->code)
+                                        : '')
+                                    .(', '.$healthcareProfile->first_name.' '.$healthcareProfile->middle_name),
+                                'insurancePlan' => !empty($abbreviationInsurance)
+                                    ? $abbreviationInsurance.' - '.$insurancePlan->name
+                                    : $insurancePlan->name,
+                                'facility' => !empty($abbreviationFacility)
+                                    ? $abbreviationFacility.' - '.$claim->demographicInformation->facility->name
+                                    : $claim->demographicInformation->facility->name,
                                 'date_of_service' => empty($claim->date_of_service)
                                     ? '-'
                                     : Carbon::createFromFormat('Y-m-d', $claim->date_of_service)->format('m/d/Y'),
