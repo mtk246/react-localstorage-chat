@@ -7,10 +7,9 @@ namespace App\Actions\Claim;
 use App\Facades\Pagination;
 use App\Http\Resources\Claim\ClaimBodyResource;
 use App\Models\Claims\Claim;
-use App\Models\Claims\ClaimStatus;
-use App\Models\Claims\ClaimSubStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Meilisearch\Endpoints\Indexes;
 
 final class GetClaimAction
 {
@@ -21,47 +20,26 @@ final class GetClaimAction
 
     public function all(Request $request)
     {
-        $status = ((is_array($request->status))
-            ? $request->status
-            : json_decode($request->status ?? '[]'));
+        $claimsQuery = Claim::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request) {
+                $config = config('scout.meilisearch.index-settings.'.Claim::class);
 
-        $subStatus = ((is_array($request->substatus))
-            ? $request->substatus
-            : json_decode($request->substatus ?? '[]'));
+                if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
 
-        $claimsQuery = Claim::query()
-            ->when(count($status) > 0, function ($query) use ($status) {
-                $query->whereHas('claimStatusClaims', function ($query) use ($status) {
-                    $query
-                        ->where('claim_status_claim.claim_status_type', ClaimStatus::class)
-                        ->whereIn('claim_status_claim.claim_status_id', $status)
-                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
-                });
-            })
-            ->when(count($subStatus) > 0, function ($query) use ($subStatus) {
-                $query->whereHas('claimStatusClaims', function ($query) use ($subStatus) {
-                    $query
-                        ->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
-                        ->whereIn('claim_status_claim.claim_status_id', $subStatus)
-                        ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
-                });
-            })
+                if (isset($request->filter)) {
+                    $options['filter'] = $request->filter;
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
             ->when(
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $request->user()->billing_company_id),
             )
-            ->when(
-                !empty($request->query('query')) && '{}' !== $request->query('query'),
-                fn ($query) => $query->search($request->query('query')),
-            )
-            ->when(
-                !empty($request->patient_id),
-                fn ($query) => $query->whereHas('demographicInformation', function ($query) use ($request) {
-                    $query->where('patient_id', $request->patient_id);
-                }),
-            )
-            ->with('demographicInformation', 'service', 'insurancePolicies', 'denialTrackings')
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
             ->paginate(Pagination::itemsPerPage());
 
         $data = [
