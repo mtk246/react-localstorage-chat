@@ -51,7 +51,7 @@ final class GetDenialAction
             'denialTrackings',
             'claimTransmissionResponses',
             'claimStatusClaims' => function ($query) {
-                $query->whereNotIn('claim_status_id', [1, 2]);
+                $query->whereNotIn('claim_status_id', [1, 2, 7]);
             },
         ])->orderBy(Pagination::sortBy(), Pagination::sortDesc());
 
