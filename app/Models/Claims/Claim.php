@@ -564,4 +564,38 @@ class Claim extends Model implements Auditable
     {
         return $this->hasMany(DenialRefile::class, 'claim_id')->with('refileReason')->get();
     }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'code' => $this->code,
+            'type' => $this->type,
+            'submitter_name' => $this->submitter_name,
+            'submitter_contact' => $this->submitter_contact,
+            'submitter_phone' => $this->submitter_phone,
+            'billing_company' => $this->billingCompany->only(['code', 'name', 'abbreviation']),
+            'billing_company.code' => $this->billingCompany->code,
+            'billing_company.name' => $this->billingCompany->name,
+            'billing_company.abbreviation' => $this->billingCompany->abbreviation,
+            'aditional_information' => $this->aditional_information,
+            'icon' => $this->billingCompany->logo,
+            'last_modified' => $this->last_modified,
+            'billed_amount' => $this->billed_amount,
+            'amount_paid' => $this->amount_paid,
+            'past_due_date' => $this->past_due_date,
+            'date_of_service' => $this->date_of_service,
+            'status' => $this->status()
+                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
+                ->first()
+                ?->status,
+            'sub_status' => $this->subStatus()
+                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
+                ->first()
+                ?->status,
+            'user_created' => $this->user_created,
+        ];
+    }
 }
