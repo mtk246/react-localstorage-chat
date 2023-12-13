@@ -25,9 +25,11 @@ final class AddContractFees
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
             return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
+                dd($contractFee->getMacLocality());
                 if (!$contractFee->getId()) {
                     $contract = ContractFee::create([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
+                        'mac_locality_id' => $contractFee->getMacLocality()?->id,
                         'contract_fee_type_id' => $contractFee->getTypeId(),
                         'start_date' => $contractFee->getStartDate(),
                         'end_date' => $contractFee->getEndDate(),
@@ -39,6 +41,7 @@ final class AddContractFees
                 } else {
                     ContractFee::find($contractFee->getId())->update([
                         'billing_company_id' => $contractFee->getBillingCompanyId(),
+                        'mac_locality_id' => $contractFee->getMacLocality()?->id,
                         'contract_fee_type_id' => $contractFee->getTypeId(),
                         'start_date' => $contractFee->getStartDate(),
                         'end_date' => $contractFee->getEndDate(),
